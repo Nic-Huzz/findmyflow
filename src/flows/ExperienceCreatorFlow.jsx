@@ -18,6 +18,7 @@ import careerModelsData from '../../public/data/careerModels.json'
 import growthData from '../../public/data/experienceCreatorGrowthStrategies.json'
 import remarkableData from '../../public/data/experienceCreatorRemarkableAnalysis.json'
 import offerMapData from '../../public/data/experienceCreatorOfferMap.json'
+import revenueData from '../../public/data/creatorEarlyRevenueModels.json'
 import playSkillData from '../../public/data/nonFounderPlaySkills.json'
 
 // ── Category definitions ──
@@ -474,6 +475,15 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
   const remarkableCreators = remarkableData?.creators || {}
   const offerCreators = offerMapData?.creators || {}
   const growthCreators = growthData?.creators || {}
+  const revenueCreators = revenueData?.creators || {}
+
+  const REVENUE_LABELS = {
+    day_job_side_project: '💼 Day Job + Side Project',
+    one_on_one_service: '🤝 1:1 Service',
+    free_events_paid_elsewhere: '🎁 Free Events, Paid Elsewhere',
+    small_group_paid: '🎪 Small Group Paid',
+    institutional_salary: '🏛️ Institutional Salary',
+  }
 
   // Helper for blurred text
   const BlurredText = ({ width = 120 }) => (
@@ -503,14 +513,24 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
             </div>
             <p className="ecf-teaser-sub">Before they blew up, they had to survive. Here's how.</p>
             {selectedCreators.map(c => {
+              const rev = revenueCreators[c.name]
               const g = growthCreators[c.name]
               return (
                 <div key={c.name} className="ecf-creator-row">
                   <img className="ecf-creator-avatar" src={c.image} alt={c.name} onError={e => { e.target.style.display = 'none' }} />
                   <div className="ecf-creator-info">
                     <div className="ecf-creator-name">{c.name}</div>
-                    {showAnswers && g?.early_growth ? (
-                      <div className="ecf-answer-text">{g.early_growth}</div>
+                    {showAnswers ? (
+                      rev ? (
+                        <>
+                          <span className="ecf-revenue-pill">{REVENUE_LABELS[rev.early_revenue_model] || rev.early_revenue_model}</span>
+                          <div className="ecf-answer-text">{rev.early_revenue_description}</div>
+                        </>
+                      ) : g?.early_growth ? (
+                        <div className="ecf-answer-text">{g.early_growth}</div>
+                      ) : (
+                        <BlurredText width={160} />
+                      )
                     ) : (
                       <BlurredText width={160} />
                     )}

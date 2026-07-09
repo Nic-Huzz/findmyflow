@@ -914,6 +914,18 @@
   margin-bottom: 4px;
 }
 
+/* Revenue model pill */
+.ecf-revenue-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: rgba(233,162,59,0.2);
+  color: #E9A23B;
+  margin: 4px 0 2px;
+}
+
 /* Revealed answer text (for paid users) */
 .ecf-answer-text {
   font-size: 13px;
