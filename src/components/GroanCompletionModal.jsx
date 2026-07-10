@@ -10,6 +10,12 @@ import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
 import './GroanCompletionModal.css'
 
+// Auto-skip component (avoids setState during render)
+function CrossPollinationSkip({ onSkip }) {
+  useEffect(() => { onSkip() }, [])
+  return null
+}
+
 const PLAY_LIST_POINTS = 7
 
 // Wahoo classification → scary/wahoo score mapping (4 states)
@@ -25,7 +31,7 @@ const WAHOO_SCORES = {
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'three_percent' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -54,6 +60,24 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
+
+  // Cross-pollination
+  const [crossQuests, setCrossQuests] = useState([]) // user's other active quests
+  const [sourceQuestId, setSourceQuestId] = useState(null) // quest this challenge belongs to
+  const [selectedCrossQuests, setSelectedCrossQuests] = useState([]) // quest IDs this challenge also fed
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('quests').select('id, label, predicted_state')
+      .eq('user_id', userId).eq('status', 'active')
+      .then(({ data }) => { if (data) setCrossQuests(data) })
+    // Find which quest this challenge belongs to
+    if (challenge?.id) {
+      supabase.from('quest_tasks').select('quest_id')
+        .eq('groan_challenge_id', challenge.id).eq('user_id', userId)
+        .maybeSingle()
+        .then(({ data }) => { if (data?.quest_id) setSourceQuestId(data.quest_id) })
+    }
+  }, [userId, challenge?.id])
 
   // 3% reflection
   const [reflection, setReflection] = useState('')
@@ -181,6 +205,21 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           .eq('user_id', userId)
       } catch (e) {
         console.warn('Error syncing quest task:', e)
+      }
+
+      // 5c. Save cross-pollination signals
+      if (selectedCrossQuests.length > 0 && sourceQuestId) {
+        try {
+          const rows = selectedCrossQuests.map(targetId => ({
+            user_id: userId,
+            source_quest_id: sourceQuestId,
+            target_quest_id: targetId,
+            groan_challenge_id: challenge.id,
+          }))
+          await supabase.from('quest_cross_pollination').insert(rows)
+        } catch (e) {
+          console.warn('Error saving cross-pollination:', e)
+        }
       }
 
       // 6. Append challenge id to user_level_progress.courage_challenge_ids for current level
@@ -348,12 +387,45 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <button
               className="gcm-gold-btn"
               disabled={!expectationResult}
-              onClick={() => setStep('three_percent')}
+              onClick={() => setStep('cross_pollination')}
             >
               Continue
             </button>
           </>
         )}
+
+        {step === 'cross_pollination' && (() => {
+          const otherQuests = crossQuests.filter(q => q.id !== sourceQuestId && q.label !== 'Healing Work')
+
+          // Skip if no other quests to cross-pollinate with
+          if (otherQuests.length === 0) return <CrossPollinationSkip onSkip={() => setStep('three_percent')} />
+
+          return (
+            <>
+              <h2 className="gcm-title">Did this also feed another path?</h2>
+              <p className="gcm-subtitle">Tap any paths this experience helped</p>
+              <div className="gcm-cross-quests">
+                {otherQuests.map(q => {
+                  const selected = selectedCrossQuests.includes(q.id)
+                  return (
+                    <button key={q.id}
+                      className={`gcm-cross-quest-btn ${selected ? 'selected' : ''}`}
+                      onClick={() => {
+                        setSelectedCrossQuests(prev =>
+                          selected ? prev.filter(id => id !== q.id) : [...prev, q.id]
+                        )
+                      }}>
+                      {q.label}
+                    </button>
+                  )
+                })}
+              </div>
+              <button className="gcm-gold-btn" onClick={() => setStep('three_percent')}>
+                {selectedCrossQuests.length > 0 ? 'Continue' : 'None, continue'}
+              </button>
+            </>
+          )
+        })()}
 
         {step === 'three_percent' && (
           <>

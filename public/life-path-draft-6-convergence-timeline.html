@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft 6 — Nic's Convergence Timeline (Real Data)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f5f0; color: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; min-height: 100vh; }
+  .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 24px 16px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(0,0,0,0.35); text-align: center; margin-bottom: 4px; font-weight: 700; }
+  .subtitle { font-size: 14px; color: rgba(0,0,0,0.5); text-align: center; margin-bottom: 20px; font-weight: 500; }
+  svg { width: 100%; display: block; border-radius: 16px; }
+  svg text { font-family: 'Inter', -apple-system, sans-serif; user-select: none; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 16px 0 8px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: rgba(0,0,0,0.4); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .concept { margin-top: 16px; padding: 14px; border-radius: 12px; background: rgba(94,23,235,0.04); border: 1px solid rgba(94,23,235,0.08); font-size: 12px; color: rgba(0,0,0,0.5); line-height: 1.7; }
+  .concept strong { color: rgba(0,0,0,0.7); }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Nic's Curiosity Convergence</h2>
+  <div class="subtitle">4 lines becoming 1 over 2.5 years</div>
+
+  <svg viewBox="0 0 500 650">
+    <rect width="500" height="650" rx="16" fill="#f5f5f0"/>
+
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <radialGradient id="mergeGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Timeline axis -->
+    <line x1="60" y1="80" x2="60" y2="600" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+
+    <!-- Year markers (bottom = past, top = future) -->
+    <text x="52" y="575" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="600" text-anchor="end">Feb '24</text>
+    <line x1="56" y1="572" x2="64" y2="572" stroke="rgba(0,0,0,0.1)"/>
+
+    <text x="52" y="465" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="600" text-anchor="end">Mid '24</text>
+    <line x1="56" y1="462" x2="64" y2="462" stroke="rgba(0,0,0,0.1)"/>
+
+    <text x="52" y="345" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="600" text-anchor="end">Early '25</text>
+    <line x1="56" y1="342" x2="64" y2="342" stroke="rgba(0,0,0,0.1)"/>
+
+    <text x="52" y="225" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="600" text-anchor="end">Early '26</text>
+    <line x1="56" y1="222" x2="64" y2="222" stroke="rgba(0,0,0,0.1)"/>
+
+    <text x="52" y="135" fill="rgba(0,0,0,0.3)" font-size="8" font-weight="700" text-anchor="end">Jul '26</text>
+    <line x1="56" y1="132" x2="64" y2="132" stroke="rgba(0,0,0,0.15)"/>
+
+    <!-- Phase labels -->
+    <text x="280" y="590" fill="rgba(0,0,0,0.08)" font-size="10" font-weight="800" text-anchor="middle" letter-spacing="2">EXPLORE</text>
+    <text x="280" y="360" fill="rgba(0,0,0,0.08)" font-size="10" font-weight="800" text-anchor="middle" letter-spacing="2">GROW</text>
+    <text x="280" y="115" fill="rgba(0,0,0,0.08)" font-size="10" font-weight="800" text-anchor="middle" letter-spacing="2">CONVERGE</text>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 1: Silent Disco → Dance Events (green)            -->
+    <!-- Starts small bottom-left, grows and curves to merge    -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- Early thin portion -->
+    <path d="M 140 570 C 145 530, 150 490, 155 455
+             C 160 420, 168 380, 180 340"
+          fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <!-- Growing thicker -->
+    <path d="M 180 340 C 195 300, 215 260, 235 220
+             C 250 190, 260 160, 265 130
+             C 268 110, 268 95, 265 85"
+          fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 180 340 C 195 300, 215 260, 235 220
+             C 250 190, 260 160, 265 130
+             C 268 110, 268 95, 265 85"
+          fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" opacity="0.06" filter="url(#glow)"/>
+
+    <!-- Label at start -->
+    <text x="140" y="588" fill="#10b981" font-size="9" font-weight="700" opacity="0.6" text-anchor="middle">Silent Disco</text>
+
+    <!-- Groan dots -->
+    <circle cx="140" cy="565" r="3" fill="#10b981" opacity="0.5"/>
+    <text x="152" y="568" fill="rgba(0,0,0,0.3)" font-size="6">Bondi</text>
+
+    <circle cx="155" cy="455" r="3" fill="#10b981" opacity="0.5"/>
+    <text x="167" y="458" fill="rgba(0,0,0,0.3)" font-size="6">Opera House</text>
+
+    <circle cx="170" cy="370" r="3" fill="#10b981" opacity="0.55"/>
+    <text x="182" y="373" fill="rgba(0,0,0,0.3)" font-size="6">Koh Phangan</text>
+
+    <circle cx="210" cy="270" r="3.5" fill="#10b981" opacity="0.65"/>
+    <text x="222" y="273" fill="rgba(0,0,0,0.35)" font-size="6">Hostel mission</text>
+
+    <circle cx="245" cy="200" r="4" fill="#10b981" opacity="0.8"/>
+    <text x="257" y="203" fill="rgba(0,0,0,0.4)" font-size="7">Buy 100 headsets</text>
+
+    <circle cx="255" cy="170" r="4" fill="#10b981" opacity="0.8"/>
+    <text x="267" y="173" fill="rgba(0,0,0,0.4)" font-size="7">Monument Discos</text>
+
+    <circle cx="262" cy="145" r="4" fill="#10b981" opacity="0.8"/>
+    <text x="274" y="148" fill="rgba(0,0,0,0.4)" font-size="7">Flash mobs EU</text>
+
+    <!-- Rename marker -->
+    <text x="250" y="232" fill="#10b981" font-size="7" font-weight="600" opacity="0.5" font-style="italic">→ Dance Events</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 2: Coaching → Digital Product (blue)               -->
+    <!-- Starts bottom-right, curves toward merge                -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <path d="M 370 570 C 365 530, 355 490, 345 450
+             C 335 410, 320 370, 305 330
+             C 290 290, 280 250, 275 210
+             C 272 180, 270 150, 268 120
+             C 267 105, 266 95, 265 85"
+          fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+    <path d="M 305 330 C 290 290, 280 250, 275 210
+             C 272 180, 270 150, 268 120
+             C 267 105, 266 95, 265 85"
+          fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 305 330 C 290 290, 280 250, 275 210
+             C 272 180, 270 150, 268 120"
+          fill="none" stroke="#3b82f6" stroke-width="8" stroke-linecap="round" opacity="0.05" filter="url(#glow)"/>
+
+    <!-- Label at start -->
+    <text x="370" y="588" fill="#3b82f6" font-size="9" font-weight="700" opacity="0.6" text-anchor="middle">Coaching</text>
+
+    <!-- Groan dots -->
+    <circle cx="370" cy="565" r="3" fill="#3b82f6" opacity="0.45"/>
+    <text x="348" y="568" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">New framework</text>
+
+    <circle cx="355" cy="480" r="3" fill="#3b82f6" opacity="0.45"/>
+    <text x="333" y="483" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Mentor call</text>
+
+    <circle cx="330" cy="370" r="3" fill="#3b82f6" opacity="0.5"/>
+    <text x="308" y="373" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Sprouter sales</text>
+
+    <circle cx="290" cy="270" r="3.5" fill="#3b82f6" opacity="0.6"/>
+    <text x="268" y="273" fill="rgba(0,0,0,0.3)" font-size="6" text-anchor="end">Creator guide</text>
+
+    <circle cx="275" cy="200" r="4" fill="#3b82f6" opacity="0.7"/>
+    <text x="253" y="203" fill="rgba(0,0,0,0.35)" font-size="7" text-anchor="end">Published app</text>
+
+    <!-- Rename marker -->
+    <text x="300" y="310" fill="#3b82f6" font-size="7" font-weight="600" opacity="0.5" font-style="italic">→ Vibe Rise Digital</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 3: Breathwork (red)                                -->
+    <!-- Emerges mid-timeline, feeds into physical               -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <path d="M 200 440 C 210 400, 225 360, 240 320
+             C 250 290, 258 260, 263 230
+             C 266 200, 267 170, 266 140
+             C 265 120, 265 100, 265 85"
+          fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 240 320 C 250 290, 258 260, 263 230
+             C 266 200, 267 170, 266 140"
+          fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" opacity="0.04" filter="url(#glow)"/>
+
+    <!-- Label at emergence -->
+    <text x="200" y="458" fill="#ef4444" font-size="9" font-weight="700" opacity="0.55" text-anchor="middle">Breathwork</text>
+    <text x="200" y="470" fill="#ef4444" font-size="6" opacity="0.3" text-anchor="middle">(emerged mid '24)</text>
+
+    <!-- Groan dots -->
+    <circle cx="200" cy="435" r="3" fill="#ef4444" opacity="0.45"/>
+    <text x="183" y="430" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Training</text>
+
+    <circle cx="215" cy="395" r="3" fill="#ef4444" opacity="0.45"/>
+    <text x="198" y="390" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Daily videos</text>
+
+    <circle cx="230" cy="350" r="3" fill="#ef4444" opacity="0.5"/>
+    <text x="213" y="345" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Water rebirthing</text>
+
+    <circle cx="255" cy="250" r="3.5" fill="#ef4444" opacity="0.6"/>
+    <text x="238" y="245" fill="rgba(0,0,0,0.3)" font-size="6" text-anchor="end">Krislin retreat</text>
+
+    <circle cx="264" cy="185" r="3.5" fill="#ef4444" opacity="0.65"/>
+    <text x="247" y="180" fill="rgba(0,0,0,0.35)" font-size="7" text-anchor="end">Vibe Rise Fest</text>
+
+    <!-- Merge note -->
+    <text x="258" y="155" fill="#ef4444" font-size="6" font-weight="600" opacity="0.4" font-style="italic">→ feeds sessions</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 4: Tuk Tuk / Travel Games (teal)                   -->
+    <!-- Starts separately, curves toward merge                  -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <path d="M 420 500 C 400 460, 370 420, 340 380
+             C 310 340, 290 300, 280 260
+             C 272 230, 268 200, 266 170
+             C 265 145, 265 120, 265 85"
+          fill="none" stroke="#14b8a6" stroke-width="1.8" stroke-linecap="round" opacity="0.45"/>
+    <path d="M 280 260 C 272 230, 268 200, 266 170
+             C 265 145, 265 120, 265 85"
+          fill="none" stroke="#14b8a6" stroke-width="6" stroke-linecap="round" opacity="0.04" filter="url(#glow)"/>
+
+    <!-- Label at start -->
+    <text x="425" y="518" fill="#14b8a6" font-size="8" font-weight="700" opacity="0.5">Tuk Tuks +</text>
+    <text x="425" y="530" fill="#14b8a6" font-size="8" font-weight="700" opacity="0.5">Travel Games</text>
+
+    <!-- Groan dots -->
+    <circle cx="405" cy="470" r="3" fill="#14b8a6" opacity="0.4"/>
+    <text x="393" y="467" fill="rgba(0,0,0,0.2)" font-size="6" text-anchor="end">Presentation</text>
+
+    <circle cx="340" cy="380" r="3" fill="#14b8a6" opacity="0.45"/>
+    <text x="328" y="377" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Landing page</text>
+
+    <circle cx="285" cy="275" r="3" fill="#14b8a6" opacity="0.5"/>
+    <text x="273" y="270" fill="rgba(0,0,0,0.25)" font-size="6" text-anchor="end">Bike suppliers</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- MERGE POINT at top                                      -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <circle cx="265" cy="80" r="35" fill="url(#mergeGlow)"/>
+    <circle cx="265" cy="80" r="8" fill="#5e17eb" opacity="0.15"/>
+    <circle cx="265" cy="80" r="5" fill="#5e17eb" opacity="0.25"/>
+    <circle cx="265" cy="80" r="10" fill="none" stroke="#5e17eb" stroke-width="1" opacity="0.1">
+      <animate attributeName="r" values="10;22;10" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.1;0;0.1" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+    <text x="265" y="58" fill="#5e17eb" font-size="7" font-weight="700" text-anchor="middle" opacity="0.4" letter-spacing="1">YOUR FLOW</text>
+    <text x="265" y="72" fill="#5e17eb" font-size="12" font-weight="800" text-anchor="middle" opacity="0.5">?</text>
+
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Silent Disco → Dance Events</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Coaching → Vibe Rise Digital</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Breathwork</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#14b8a6"></div>Tuk Tuks + Travel Games</div>
+  </div>
+
+  <div class="concept">
+    <strong>Bottom = past, top = future.</strong> Four curiosity lines start spread across the bottom (Feb 2024), grow independently through the middle, and converge toward "Your Flow" at the top.<br><br>
+    <strong>Silent Disco</strong> started as 2 groans (Bondi, Opera House) and became Dance Events with 10+ groans. The line thickens as momentum grows.<br><br>
+    <strong>Breathwork</strong> emerged mid-2024 (didn't exist at the start) and now feeds Vibe Rise Sessions.<br><br>
+    <strong>Coaching + Product</strong> merged into Vibe Rise Digital (app + creator portal).<br><br>
+    <strong>All four lines converge</strong> toward a single point at the top. That point doesn't have a name yet.
+  </div>
+</div>
+</body>
+</html>

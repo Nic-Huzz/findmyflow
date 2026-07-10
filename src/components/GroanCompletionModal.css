@@ -53,6 +53,23 @@
 .gcm-toggle.active.yes { background: #d1fae5; border-color: #34d399; color: #059669; }
 .gcm-toggle.active.no { background: #fce7f3; border-color: #f472b6; color: #db2777; }
 
+/* ── Cross-pollination quest picker ── */
+.gcm-cross-quests {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 16px;
+}
+.gcm-cross-quest-btn {
+  padding: 12px 16px;
+  border: 2px solid #eef0f3; border-radius: 12px;
+  background: #f8f8fa; color: #1a1a2e;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  text-align: left; font-family: inherit;
+}
+.gcm-cross-quest-btn.selected {
+  border-color: #5e17eb; background: rgba(94,23,235,0.06); color: #5e17eb;
+}
+
 .gcm-form textarea {
   width: 100%; padding: 12px;
   border: 2px solid #eef0f3; border-radius: 14px;
