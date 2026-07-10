@@ -93,9 +93,8 @@ export default function TryLifePaths() {
 
   // ── Save ──
   const saveSession = useCallback(async (overrides = {}) => {
-    const name = overrides.client_name || clientName
+    const name = overrides.client_name || clientName || 'User'
     const email = overrides.client_email || clientEmail
-    if (!name?.trim()) return
     const data = {
       client_name: name.trim(),
       client_email: email?.trim() || null,

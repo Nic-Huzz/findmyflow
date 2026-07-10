@@ -44,7 +44,7 @@ export default function LifePathFlow() {
   const [introSlide, setIntroSlide] = useState(0)
   const [introFading, setIntroFading] = useState(false)
   const [currentCareer, setCurrentCareer] = useState(null)
-  const [theme, setTheme] = useState('dark')
+  const [theme, setTheme] = useState('light')
   const [careers, setCareers] = useState([])
   const [safety, setSafety] = useState(0)
   const [input, setInput] = useState('')
@@ -391,7 +391,7 @@ export default function LifePathFlow() {
   const isTagStep = step === STEPS.TAG || step === STEPS.TAG_NEW
   const trunkY = currentCareer?.state ? stateY(currentCareer.state) : undefined
 
-  if (loading) return <div className="flp-page dark" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><div style={{ opacity: 0.3 }}>Loading...</div></div>
+  if (loading) return <div className="flp-page light" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><div style={{ opacity: 0.3 }}>Loading...</div></div>
 
   return (
     <div className={`flp-page ${theme} ${isReading ? 'flp-reading-mode' : ''}`}>

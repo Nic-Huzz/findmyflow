@@ -1,0 +1,186 @@
+/* ── QuestPathMap — scoped under .qpm- prefix ── */
+
+.qpm-overlay {
+  position: fixed; inset: 0;
+  background: #f5f5f0;
+  z-index: 1100;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+.qpm-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none;
+  font-size: 28px; color: rgba(0,0,0,0.3);
+  cursor: pointer; z-index: 2;
+}
+
+/* ── Dots ── */
+.qpm-dots {
+  display: flex; justify-content: center; gap: 6px;
+  padding: 52px 0 6px;
+  z-index: 1;
+}
+.qpm-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  transition: all 0.3s;
+}
+.qpm-dot.active {
+  width: 18px; border-radius: 4px;
+}
+
+/* ── Slides ── */
+.qpm-slides {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.qpm-slides::-webkit-scrollbar { display: none; }
+
+.qpm-slide {
+  min-width: 100%;
+  scroll-snap-align: start;
+  display: flex; flex-direction: column;
+  padding: 0 16px;
+  overflow-y: auto;
+}
+
+.qpm-slide-title {
+  text-align: center; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 2px; color: rgba(0,0,0,0.55);
+  padding: 6px 0 2px; font-weight: 700;
+}
+
+.qpm-state-journey {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 13px; color: rgba(0,0,0,0.45); padding: 2px 0 6px; font-weight: 500;
+}
+.qpm-arrow { opacity: 0.3; }
+
+/* ── SVG canvas ── */
+.qpm-canvas {
+  flex-shrink: 0;
+}
+.qpm-canvas svg {
+  width: 100%; display: block;
+}
+.qpm-canvas svg text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  user-select: none;
+}
+
+/* ── Footer ── */
+.qpm-footer {
+  padding: 10px 0 16px;
+}
+
+.qpm-progress-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+}
+.qpm-progress-bg {
+  flex: 1; height: 4px; background: rgba(0,0,0,0.08);
+  border-radius: 2px; overflow: hidden; position: relative;
+}
+.qpm-progress-done {
+  position: absolute; left: 0; top: 0; height: 100%;
+  background: rgba(0,0,0,0.18); border-radius: 2px;
+}
+.qpm-progress-safe {
+  position: absolute; left: 0; top: 0; height: 100%;
+  border-radius: 2px;
+}
+
+.qpm-progress-labels {
+  display: flex; justify-content: flex-end; gap: 16px;
+  font-size: 10px; color: rgba(0,0,0,0.25);
+  margin-bottom: 10px;
+}
+
+/* ── Action cards ── */
+.qpm-action {
+  border-radius: 12px; padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px; border: 1px solid;
+}
+.qpm-action-icon { font-size: 18px; }
+.qpm-action-body { flex: 1; }
+.qpm-action-label {
+  font-size: 9px; text-transform: uppercase;
+  letter-spacing: 1px; font-weight: 600;
+}
+.qpm-action-text {
+  font-size: 13px; color: rgba(0,0,0,0.8);
+  margin-top: 2px; font-weight: 500;
+}
+.qpm-action-sub {
+  font-size: 11px; color: rgba(0,0,0,0.45);
+  margin-top: 2px;
+}
+.qpm-action-arrow { opacity: 0.35; font-size: 16px; color: rgba(0,0,0,0.3); }
+
+/* ── Add courage step ── */
+.qpm-add-row {
+  display: flex; gap: 8px; margin-top: 8px; margin-bottom: 8px;
+}
+.qpm-add-input {
+  flex: 1; padding: 10px 12px;
+  border: 1.5px solid rgba(0,0,0,0.1); border-radius: 10px;
+  background: white; font-size: 13px; font-family: inherit;
+  color: #1a1a2e; outline: none;
+}
+.qpm-add-input:focus { border-color: #5e17eb; }
+.qpm-add-input::placeholder { color: rgba(0,0,0,0.3); }
+.qpm-add-btn {
+  padding: 10px 14px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  color: white; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+}
+.qpm-add-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Healing prompt ── */
+.qpm-healing-prompt {
+  background: rgba(94,23,235,0.04); border: 1px solid rgba(94,23,235,0.1);
+  border-radius: 12px; padding: 12px; margin-bottom: 8px; text-align: center;
+}
+.qpm-healing-prompt-text {
+  font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.7); margin-bottom: 8px;
+}
+.qpm-healing-prompt-actions { display: flex; gap: 8px; justify-content: center; }
+.qpm-healing-yes, .qpm-healing-no, .qpm-healing-later {
+  padding: 8px 16px; border-radius: 10px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.qpm-healing-yes { background: rgba(94,23,235,0.08); color: #5e17eb; }
+.qpm-healing-no { background: rgba(233,162,59,0.08); color: #E9A23B; }
+.qpm-healing-later { background: rgba(0,0,0,0.04); color: rgba(0,0,0,0.5); }
+.qpm-healing-hint {
+  font-size: 11px; color: rgba(0,0,0,0.3); margin-top: 6px;
+}
+
+.qpm-swipe-hint {
+  text-align: center; font-size: 11px;
+  color: rgba(0,0,0,0.15);
+  padding: 6px 0 env(safe-area-inset-bottom, 12px);
+}
+
+/* ── Locked card (for gate) ── */
+.quest-locked-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; padding: 20px; text-align: center;
+}
+.quest-locked-link {
+  color: #E9A23B; font-weight: 600; text-decoration: none;
+  font-size: 14px;
+}
+.quest-soft-prompt {
+  text-align: center; font-size: 12px; color: rgba(0,0,0,0.4);
+  padding: 8px 0;
+}
+.quest-soft-prompt a {
+  color: #E9A23B; text-decoration: none; font-weight: 500;
+}
+

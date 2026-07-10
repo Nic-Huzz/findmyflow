@@ -10,6 +10,7 @@ import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import HealingFlowModal from './HealingFlowModal'
+import GroanCompletionModal from './GroanCompletionModal'
 import './QuestBoardCard.css'
 
 export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
@@ -24,6 +25,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [healingPromptStep, setHealingPromptStep] = useState('ask') // 'ask' | 'when'
   const [healingIntentions, setHealingIntentions] = useState({}) // { taskId: healingIntention }
   const [outcomeTaskId, setOutcomeTaskId] = useState(null) // show outcome prompt after completion
+  const [groanModalChallenge, setGroanModalChallenge] = useState(null) // courage completion modal
   const inputRef = useRef(null)
 
   const stateMeta = STATE_META[quest.predicted_state]
@@ -119,8 +121,31 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
 
   const toggleTask = async (task) => {
     const newDone = !task.done
+
+    // Intercept: courage challenge completion → open GroanCompletionModal
+    if (newDone && task.is_courage_challenge && task.groan_challenge_id) {
+      if (groanModalChallenge) return // already handling a completion
+      try {
+        const { data: gc } = await supabase
+          .from('groan_challenges').select('*')
+          .eq('id', task.groan_challenge_id).single()
+        if (gc && gc.status !== 'completed') {
+          setGroanModalChallenge(gc)
+          return // modal handles all DB updates (done, safety_status, RP, etc.)
+        }
+      } catch (e) {
+        console.warn('Error fetching groan challenge:', e)
+        return // don't silently complete without classification
+      }
+    }
+
     const { error } = await supabase.from('quest_tasks')
-      .update({ done: newDone, completed_at: newDone ? new Date().toISOString() : null })
+      .update({
+        done: newDone,
+        completed_at: newDone ? new Date().toISOString() : null,
+        // Clear safety_status when un-completing a courage task
+        ...((!newDone && task.is_courage_challenge) ? { safety_status: null } : {}),
+      })
       .eq('id', task.id)
     if (error) console.error('Toggle task error:', error)
 
@@ -348,6 +373,16 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           questTaskId={healingTaskId}
           onComplete={() => { setHealingTaskId(null); setHealingTaskText(''); onUpdate?.() }}
           onClose={() => { setHealingTaskId(null); setHealingTaskText('') }}
+        />
+      )}
+
+      {/* Courage Completion Modal */}
+      {groanModalChallenge && (
+        <GroanCompletionModal
+          challenge={groanModalChallenge}
+          userId={userId}
+          onComplete={() => { setGroanModalChallenge(null); onUpdate?.() }}
+          onClose={() => setGroanModalChallenge(null)}
         />
       )}
     </div>

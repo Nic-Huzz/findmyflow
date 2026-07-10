@@ -25,7 +25,7 @@ const WAHOO_SCORES = {
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'three_percent' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'three_percent' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -51,6 +51,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Wahoo classification
   const [wahooClassification, setWahooClassification] = useState(null)
   const [identityStatement, setIdentityStatement] = useState('')
+
+  // Expectation check
+  const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
 
   // 3% reflection
   const [reflection, setReflection] = useState('')
@@ -89,8 +92,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         .update({ scary_score: scores.scary, wahoo_score: scores.wahoo })
         .eq('id', challenge.id)
 
-      // 2. Insert quest_completions record
+      // 2. Upsert quest_completions record (delete old first to prevent RP farming)
       const questId = `play_list_challenge_${challenge.id}`
+      await supabase.from('quest_completions').delete()
+        .eq('user_id', userId).eq('quest_id', questId).catch(() => {})
       const { error: questError } = await supabase.from('quest_completions').insert({
         user_id: userId,
         challenge_instance_id: null,
@@ -108,6 +113,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           after_state: afterState,
           wahoo_classification: wahooClassification,
           identity_statement: identityStatement || null,
+          expectation_result: expectationResult,
           reflection,
         }),
       })
@@ -158,6 +164,23 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           .eq('reference_id', challenge.id)
       } catch (e) {
         console.warn('Error removing weekly pick:', e)
+      }
+
+      // 5b. Sync linked quest_tasks — mark as done + set safety_status
+      const isSafe = ['vibe', 'peace'].includes(wahooClassification)
+        && ['better', 'expected'].includes(expectationResult)
+      try {
+        await supabase
+          .from('quest_tasks')
+          .update({
+            done: true,
+            completed_at: new Date().toISOString(),
+            safety_status: isSafe ? 'safe' : 'not_safe',
+          })
+          .eq('groan_challenge_id', challenge.id)
+          .eq('user_id', userId)
+      } catch (e) {
+        console.warn('Error syncing quest task:', e)
       }
 
       // 6. Append challenge id to user_level_progress.courage_challenge_ids for current level
@@ -286,6 +309,45 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <button
               className="gcm-gold-btn"
               disabled={!wahooClassification}
+              onClick={() => setStep('expectation')}
+            >
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 'expectation' && (
+          <>
+            <h2 className="gcm-title">Did it go...</h2>
+            <div className="gcm-wahoo-options">
+              <button
+                className={`gcm-wahoo-btn ${expectationResult === 'better' ? 'selected' : ''}`}
+                onClick={() => setExpectationResult('better')}
+                style={expectationResult === 'better' ? { borderColor: '#E9A23B', background: 'rgba(233,162,59,0.06)', color: '#E9A23B' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">✨</span>
+                <span className="gcm-wahoo-label">Better than expected</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${expectationResult === 'expected' ? 'selected' : ''}`}
+                onClick={() => setExpectationResult('expected')}
+                style={expectationResult === 'expected' ? { borderColor: '#5e17eb', background: 'rgba(94,23,235,0.06)', color: '#5e17eb' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">👌</span>
+                <span className="gcm-wahoo-label">As expected</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${expectationResult === 'worse' ? 'selected' : ''}`}
+                onClick={() => setExpectationResult('worse')}
+                style={expectationResult === 'worse' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">😬</span>
+                <span className="gcm-wahoo-label">Worse than expected</span>
+              </button>
+            </div>
+            <button
+              className="gcm-gold-btn"
+              disabled={!expectationResult}
               onClick={() => setStep('three_percent')}
             >
               Continue

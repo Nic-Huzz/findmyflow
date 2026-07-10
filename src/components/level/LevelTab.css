@@ -784,6 +784,40 @@
   line-height: 1.4;
 }
 
+/* ── Life Path Progress button ── */
+.quest-path-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 18px;
+  margin: 12px 0;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.9), rgba(233, 162, 59, 0.9));
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  box-shadow: 0 2px 12px rgba(94, 23, 235, 0.15);
+}
+.quest-path-btn:hover {
+  box-shadow: 0 4px 18px rgba(94, 23, 235, 0.25);
+  transform: translateY(-1px);
+}
+.quest-path-btn:active {
+  transform: translateY(0);
+}
+.quest-path-btn-icon {
+  font-size: 18px;
+}
+.quest-path-btn-arrow {
+  margin-left: auto;
+  opacity: 0.7;
+}
+
 .quest-add-btn {
   display: block;
   width: 100%;

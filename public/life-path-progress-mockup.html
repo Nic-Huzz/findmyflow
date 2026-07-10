@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Path Progress — Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a14; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .container { width: 100%; max-width: 420px; padding: 20px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #5e17eb; margin-bottom: 16px; text-align: center; }
+  .legend { display: flex; gap: 16px; justify-content: center; margin-bottom: 20px; font-size: 11px; color: rgba(255,255,255,0.5); }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Your Life Paths</h2>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#E9A23B"></span> Courage</span>
+    <span><span class="legend-dot" style="background:#ef4444"></span> Block</span>
+    <span><span class="legend-dot" style="background:#10b981"></span> Healed</span>
+    <span><span class="legend-dot" style="background:#6b7280"></span> To do</span>
+  </div>
+
+  <svg viewBox="0 0 400 520" style="width:100%; border-radius:16px;">
+    <!-- Dark background -->
+    <rect width="400" height="520" rx="16" fill="#0a0a14"/>
+
+    <!-- State bands (subtle horizontal zones) -->
+    <text x="390" y="75" fill="rgba(233,162,59,0.15)" font-size="10" font-weight="800" text-anchor="end">VIBE RISE</text>
+    <text x="390" y="195" fill="rgba(16,185,129,0.15)" font-size="10" font-weight="800" text-anchor="end">FUN</text>
+    <text x="390" y="335" fill="rgba(239,68,68,0.15)" font-size="10" font-weight="800" text-anchor="end">PRESSURE</text>
+    <text x="390" y="465" fill="rgba(107,114,128,0.15)" font-size="10" font-weight="800" text-anchor="end">UNINTERESTED</text>
+
+    <line x1="0" y1="140" x2="400" y2="140" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <line x1="0" y1="260" x2="400" y2="260" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    <line x1="0" y1="400" x2="400" y2="400" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+
+    <!-- Trunk (current position) -->
+    <circle cx="40" cy="320" r="10" fill="#5e17eb" opacity="0.8"/>
+    <circle cx="40" cy="320" r="14" fill="none" stroke="#5e17eb" stroke-width="2" opacity="0.3">
+      <animate attributeName="r" values="14;20;14" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="40" y="350" fill="rgba(255,255,255,0.5)" font-size="9" text-anchor="middle" font-weight="600">YOU</text>
+
+    <!-- QUEST 1: Festival Creator (Vibe Rise zone) -->
+    <!-- Path from trunk to destination -->
+    <path d="M 50 320 C 100 320, 120 280, 160 240 C 200 200, 240 140, 280 80 C 300 55, 330 50, 360 60"
+          fill="none" stroke="rgba(233,162,59,0.25)" stroke-width="2" stroke-dasharray="none"/>
+
+    <!-- Progress fill (how far along the path) — 60% done -->
+    <path d="M 50 320 C 100 320, 120 280, 160 240 C 200 200, 240 140, 260 100"
+          fill="none" stroke="#E9A23B" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Courage nodes (completed steps) -->
+    <circle cx="100" cy="300" r="5" fill="#E9A23B"/>
+    <text x="100" y="290" fill="rgba(255,255,255,0.4)" font-size="7" text-anchor="middle">hosted pop-up</text>
+
+    <circle cx="160" cy="240" r="5" fill="#E9A23B"/>
+    <text x="160" y="230" fill="rgba(255,255,255,0.4)" font-size="7" text-anchor="middle">sold tickets</text>
+
+    <circle cx="210" cy="175" r="5" fill="#E9A23B"/>
+    <text x="210" y="165" fill="rgba(255,255,255,0.4)" font-size="7" text-anchor="middle">venue partner</text>
+
+    <!-- Healing block (current obstacle) -->
+    <rect x="245" y="125" width="30" height="14" rx="7" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1"/>
+    <text x="260" y="135" fill="#ef4444" font-size="7" text-anchor="middle" font-weight="700">💚</text>
+    <text x="260" y="115" fill="rgba(239,68,68,0.5)" font-size="7" text-anchor="middle">scared of</text>
+    <text x="260" y="107" fill="rgba(239,68,68,0.5)" font-size="7" text-anchor="middle">charging</text>
+
+    <!-- Future tasks (not yet reached) -->
+    <circle cx="310" cy="70" r="4" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+    <text x="310" y="60" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle">buy headsets</text>
+
+    <!-- Destination label -->
+    <text x="360" y="55" fill="#E9A23B" font-size="10" font-weight="700" text-anchor="middle">Festival</text>
+    <text x="360" y="67" fill="#E9A23B" font-size="10" font-weight="700" text-anchor="middle">Creator</text>
+    <circle cx="360" cy="78" r="3" fill="#E9A23B" opacity="0.5"/>
+
+
+    <!-- QUEST 2: Dance Event Hosts (Fun zone) -->
+    <path d="M 50 320 C 80 310, 100 290, 140 270 C 180 250, 220 220, 280 200 C 310 190, 340 185, 365 190"
+          fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="2"/>
+
+    <!-- Progress fill — 30% done -->
+    <path d="M 50 320 C 80 310, 100 290, 130 275"
+          fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Courage node -->
+    <circle cx="90" cy="295" r="5" fill="#10b981"/>
+    <text x="90" y="285" fill="rgba(255,255,255,0.4)" font-size="7" text-anchor="middle">first disco</text>
+
+    <!-- Healed block (was an obstacle, now cleared) -->
+    <circle cx="140" cy="270" r="6" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="140" y="260" fill="rgba(16,185,129,0.4)" font-size="7" text-anchor="middle" style="text-decoration: line-through;">fear of crowds</text>
+
+    <!-- Future nodes -->
+    <circle cx="200" cy="235" r="4" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+    <circle cx="260" cy="205" r="4" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+    <!-- Healing block -->
+    <rect x="290" y="190" width="30" height="14" rx="7" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1"/>
+    <text x="305" y="200" fill="#ef4444" font-size="7" text-anchor="middle" font-weight="700">💚</text>
+
+    <!-- Destination -->
+    <text x="365" y="185" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">Dance</text>
+    <text x="365" y="197" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">Events</text>
+
+
+    <!-- QUEST 3: Keynote Speaker (Pressure zone — aspirational) -->
+    <path d="M 50 320 C 80 330, 120 340, 180 350 C 220 355, 280 355, 340 350"
+          fill="none" stroke="rgba(239,68,68,0.15)" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+    <!-- No progress yet — just the path -->
+    <circle cx="340" cy="350" r="3" fill="none" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+    <text x="340" y="340" fill="rgba(239,68,68,0.3)" font-size="9" font-weight="600" text-anchor="middle">Keynote</text>
+    <text x="340" y="370" fill="rgba(255,255,255,0.15)" font-size="7" text-anchor="middle">no tasks yet</text>
+
+
+    <!-- Cone of safety (what feels reachable) -->
+    <path d="M 40 320 L 380 40 L 380 280 Z" fill="url(#coneGrad)" opacity="0.06"/>
+
+    <defs>
+      <linearGradient id="coneGrad" x1="40" y1="320" x2="380" y2="160" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#E9A23B"/>
+        <stop offset="100%" stop-color="#E9A23B" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Character marker on path (animated) -->
+    <g>
+      <circle cx="260" cy="100" r="3" fill="#fff" opacity="0.8"/>
+      <circle cx="260" cy="100" r="6" fill="none" stroke="#fff" stroke-width="1" opacity="0.3">
+        <animate attributeName="r" values="6;10;6" dur="1.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0;0.3" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+  </svg>
+
+  <div style="margin-top:20px; text-align:center;">
+    <p style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;">
+      <strong style="color:#E9A23B">⚡ Courage</strong> moves you forward along the path.<br>
+      <strong style="color:#ef4444">💚 Blocks</strong> are fears holding you back.<br>
+      <strong style="color:#10b981">✓ Healed</strong> blocks dissolve when you complete the healing flow.<br>
+      The <span style="color:#E9A23B">cone</span> shows what feels safe right now. It expands as you progress.
+    </p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft 3 — All Paths + Swipe to Focus</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a14; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  .phone { width: 100%; max-width: 420px; margin: 0 auto; min-height: 100vh; position: relative; }
+
+  /* ── Slide container ── */
+  .slides {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .slides::-webkit-scrollbar { display: none; }
+
+  .slide {
+    min-width: 100%;
+    scroll-snap-align: start;
+    padding: 16px 16px 0;
+    flex-shrink: 0;
+  }
+
+  /* ── Dot indicators ── */
+  .dots {
+    display: flex; justify-content: center; gap: 6px;
+    padding: 52px 0 8px;
+  }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); transition: all 0.3s;
+  }
+  .dot.active { width: 18px; border-radius: 4px; }
+  .dot[data-color="all"] { background: rgba(94,23,235,0.4); }
+  .dot[data-color="all"].active { background: #5e17eb; }
+  .dot[data-color="gold"] { background: rgba(233,162,59,0.25); }
+  .dot[data-color="gold"].active { background: #E9A23B; }
+  .dot[data-color="green"] { background: rgba(16,185,129,0.25); }
+  .dot[data-color="green"].active { background: #10b981; }
+  .dot[data-color="red"] { background: rgba(239,68,68,0.2); }
+  .dot[data-color="red"].active { background: #ef4444; }
+
+  .slide-title {
+    text-align: center; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 2px; color: rgba(255,255,255,0.25); padding: 6px 0 4px;
+    font-weight: 600;
+  }
+
+  svg { width: 100%; border-radius: 16px; }
+
+  /* ── Focus slide footer ── */
+  .focus-footer { padding: 12px 16px 0; }
+
+  .progress-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .progress-bar-bg {
+    flex: 1; height: 4px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-bar-fill { height: 100%; border-radius: 2px; }
+  .progress-pct { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.4); min-width: 32px; text-align: right; }
+
+  .action-card {
+    border-radius: 12px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .action-card.courage {
+    background: rgba(233,162,59,0.06); border: 1px solid rgba(233,162,59,0.12);
+  }
+  .action-card.healing {
+    background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.1);
+  }
+  .action-card.courage-green {
+    background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.12);
+  }
+  .action-icon { font-size: 18px; }
+  .action-content { flex: 1; }
+  .action-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; opacity: 0.5; }
+  .action-text { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 2px; font-weight: 500; }
+  .action-arrow { opacity: 0.3; font-size: 16px; }
+
+  .action-card.courage .action-label { color: #E9A23B; }
+  .action-card.healing .action-label { color: #ef4444; }
+  .action-card.courage-green .action-label { color: #10b981; }
+
+  /* ── State journey badge ── */
+  .state-journey {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 11px; color: rgba(255,255,255,0.3); padding: 4px 0 8px;
+  }
+  .state-journey .arrow { opacity: 0.3; }
+
+  /* ── Concept note ── */
+  .concept-note {
+    margin: 16px; padding: 14px; border-radius: 12px;
+    background: rgba(94,23,235,0.06); border: 1px solid rgba(94,23,235,0.12);
+    font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.6;
+  }
+  .concept-note strong { color: rgba(255,255,255,0.6); }
+
+  .swipe-hint {
+    text-align: center; font-size: 11px; color: rgba(255,255,255,0.12);
+    padding: 10px 0 6px;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Dot indicators -->
+  <div class="dots" id="dots">
+    <div class="dot active" data-color="all"></div>
+    <div class="dot" data-color="gold"></div>
+    <div class="dot" data-color="green"></div>
+    <div class="dot" data-color="red"></div>
+  </div>
+
+  <div class="swipe-hint">← swipe →</div>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- SLIDES                                                       -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="slides" id="slides">
+
+    <!-- ─── SLIDE 0: ALL PATHS (Overview) ─── -->
+    <div class="slide">
+      <div class="slide-title">Your Life Paths</div>
+
+      <svg viewBox="0 0 400 480">
+        <rect width="400" height="480" rx="16" fill="#0a0a14"/>
+
+        <defs>
+          <filter id="glow0" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <radialGradient id="tGlow0" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- State labels -->
+        <text x="385" y="68" fill="rgba(233,162,59,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">VIBE RISE</text>
+        <text x="385" y="170" fill="rgba(16,185,129,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">FUN</text>
+        <text x="385" y="290" fill="rgba(239,68,68,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">PRESSURE</text>
+        <text x="385" y="410" fill="rgba(107,114,128,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">UNINTERESTED</text>
+
+        <line x1="30" y1="115" x2="380" y2="115" stroke="rgba(255,255,255,0.02)"/>
+        <line x1="30" y1="225" x2="380" y2="225" stroke="rgba(255,255,255,0.02)"/>
+        <line x1="30" y1="345" x2="380" y2="345" stroke="rgba(255,255,255,0.02)"/>
+
+        <!-- Quest 1: Festival Creator (60%) -->
+        <path d="M 45 285 C 100 285, 130 240, 170 195 C 210 150, 250 100, 300 72 C 330 55, 355 52, 370 56"
+              fill="none" stroke="rgba(233,162,59,0.07)" stroke-width="2" stroke-dasharray="6,8" stroke-linecap="round"/>
+        <path d="M 45 285 C 100 285, 130 240, 170 195 C 210 150, 240 112, 260 92"
+              fill="none" stroke="#E9A23B" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+        <path d="M 45 285 C 100 285, 130 240, 170 195 C 210 150, 240 112, 260 92"
+              fill="none" stroke="#E9A23B" stroke-width="7" stroke-linecap="round" opacity="0.08" filter="url(#glow0)"/>
+        <circle cx="260" cy="92" r="3.5" fill="#fff" opacity="0.9"/>
+        <circle cx="260" cy="92" r="7" fill="none" stroke="#fff" stroke-width="1" opacity="0.12">
+          <animate attributeName="r" values="7;12;7" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.12;0;0.12" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="370" y="48" fill="rgba(233,162,59,0.3)" font-size="9" font-weight="700" text-anchor="middle">Festival Creator</text>
+
+        <!-- Healing gap on Festival path -->
+        <rect x="296" y="60" width="32" height="16" rx="8" fill="rgba(239,68,68,0.05)" stroke="rgba(239,68,68,0.15)" stroke-width="0.8"/>
+        <text x="312" y="72" fill="rgba(239,68,68,0.4)" font-size="7" text-anchor="middle">fear</text>
+
+        <!-- Quest 2: Dance Events (30%) -->
+        <path d="M 45 285 C 90 278, 120 255, 170 225 C 220 195, 270 175, 320 168 C 350 162, 365 160, 375 163"
+              fill="none" stroke="rgba(16,185,129,0.06)" stroke-width="2" stroke-dasharray="6,8" stroke-linecap="round"/>
+        <path d="M 45 285 C 90 278, 110 262, 130 248"
+              fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+        <path d="M 45 285 C 90 278, 110 262, 130 248"
+              fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" opacity="0.06" filter="url(#glow0)"/>
+        <circle cx="130" cy="248" r="3" fill="#fff" opacity="0.8"/>
+        <circle cx="130" cy="248" r="6" fill="none" stroke="#fff" stroke-width="1" opacity="0.1">
+          <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.1;0;0.1" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="375" y="155" fill="rgba(16,185,129,0.25)" font-size="9" font-weight="700" text-anchor="middle">Dance Events</text>
+
+        <!-- Healed block on Dance path -->
+        <circle cx="175" cy="223" r="6" fill="rgba(16,185,129,0.04)" stroke="#10b981" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.3"/>
+
+        <!-- Quest 3: Keynote (0%) -->
+        <path d="M 45 285 C 80 295, 130 305, 190 310 C 250 315, 310 310, 365 300"
+              fill="none" stroke="rgba(239,68,68,0.05)" stroke-width="1.5" stroke-dasharray="4,10" stroke-linecap="round"/>
+        <text x="365" y="293" fill="rgba(239,68,68,0.13)" font-size="9" font-weight="600" text-anchor="middle">Keynote Speaker</text>
+
+        <!-- Trunk -->
+        <circle cx="45" cy="285" r="25" fill="url(#tGlow0)"/>
+        <circle cx="45" cy="285" r="7" fill="#5e17eb" opacity="0.9"/>
+        <circle cx="45" cy="285" r="3.5" fill="#fff" opacity="0.6"/>
+        <circle cx="45" cy="285" r="7" fill="none" stroke="#5e17eb" stroke-width="1.5" opacity="0.15">
+          <animate attributeName="r" values="7;18;7" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.15;0;0.15" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="45" y="268" fill="rgba(239,68,68,0.35)" font-size="8" text-anchor="middle">😰 Pressure</text>
+        <text x="45" y="312" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle" font-weight="600">YOU</text>
+      </svg>
+    </div>
+
+
+    <!-- ─── SLIDE 1: Festival Creator (Focus) ─── -->
+    <div class="slide">
+      <div class="slide-title" style="color: rgba(233,162,59,0.5);">Festival Creator</div>
+      <div class="state-journey">
+        <span style="color:rgba(239,68,68,0.6)">😰 Pressure</span>
+        <span class="arrow">→</span>
+        <span style="color:rgba(233,162,59,0.6)">🔥 Vibe Rise</span>
+      </div>
+
+      <svg viewBox="0 0 400 380">
+        <rect width="400" height="380" rx="16" fill="#0a0a14"/>
+
+        <defs>
+          <filter id="glow1" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="lineGrad1" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#5e17eb"/>
+            <stop offset="100%" stop-color="#E9A23B"/>
+          </linearGradient>
+          <radialGradient id="tGlow1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Ghost path -->
+        <path d="M 35 300 C 80 295, 110 260, 150 215
+                 C 190 170, 230 115, 270 80
+                 C 300 58, 330 48, 365 52"
+              fill="none" stroke="rgba(233,162,59,0.06)" stroke-width="2.5"
+              stroke-dasharray="5,10" stroke-linecap="round"/>
+
+        <!-- Healing gap -->
+        <line x1="285" y1="70" x2="320" y2="50" stroke="#0a0a14" stroke-width="8"/>
+        <path d="M 282 72 L 323 48" stroke="rgba(239,68,68,0.18)" stroke-width="1.5" stroke-dasharray="2,4"/>
+        <text x="302" y="42" fill="rgba(239,68,68,0.35)" font-size="8" text-anchor="middle">charging money</text>
+
+        <!-- Materialised path (60%) -->
+        <path d="M 35 300 C 80 295, 110 260, 150 215
+                 C 190 170, 220 130, 245 100"
+              fill="none" stroke="url(#lineGrad1)" stroke-width="3.5" stroke-linecap="round">
+          <animate attributeName="stroke-opacity" values="0.85;1;0.85" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M 35 300 C 80 295, 110 260, 150 215
+                 C 190 170, 220 130, 245 100"
+              fill="none" stroke="#E9A23B" stroke-width="12" stroke-linecap="round" opacity="0.06" filter="url(#glow1)"/>
+
+        <!-- Completed milestones -->
+        <circle cx="90" cy="280" r="4.5" fill="#E9A23B" opacity="0.7"/>
+        <text x="90" y="270" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">hosted pop-up</text>
+
+        <circle cx="155" cy="210" r="4.5" fill="#E9A23B" opacity="0.7"/>
+        <text x="155" y="200" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">sold 20 tickets</text>
+
+        <circle cx="210" cy="140" r="4.5" fill="#E9A23B" opacity="0.7"/>
+        <text x="210" y="130" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">venue partner</text>
+
+        <!-- Character marker -->
+        <circle cx="245" cy="100" r="5" fill="#fff" opacity="0.95"/>
+        <circle cx="245" cy="100" r="10" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.12">
+          <animate attributeName="r" values="10;18;10" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Future task -->
+        <circle cx="310" cy="55" r="3" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <text x="310" y="70" fill="rgba(255,255,255,0.1)" font-size="7" text-anchor="middle">buy headsets</text>
+
+        <!-- Destination -->
+        <circle cx="365" cy="52" r="6" fill="rgba(233,162,59,0.1)" stroke="rgba(233,162,59,0.2)" stroke-width="1"/>
+        <text x="365" y="38" fill="rgba(233,162,59,0.3)" font-size="10" text-anchor="middle">🔥</text>
+
+        <!-- Origin -->
+        <circle cx="35" cy="300" r="22" fill="url(#tGlow1)"/>
+        <circle cx="35" cy="300" r="6" fill="#5e17eb" opacity="0.85"/>
+        <circle cx="35" cy="300" r="3" fill="#fff" opacity="0.5"/>
+        <text x="35" y="325" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-weight="600">YOU</text>
+      </svg>
+
+      <!-- Footer: progress + actions -->
+      <div class="focus-footer">
+        <div class="progress-row">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:60%; background: linear-gradient(90deg, #5e17eb, #E9A23B);"></div>
+          </div>
+          <div class="progress-pct">60%</div>
+        </div>
+
+        <div class="action-card courage">
+          <div class="action-icon">⚡</div>
+          <div class="action-content">
+            <div class="action-label">Next courage step</div>
+            <div class="action-text">Buy first set of headsets</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </div>
+
+        <div class="action-card healing">
+          <div class="action-icon">💚</div>
+          <div class="action-content">
+            <div class="action-label">Fear blocking your path</div>
+            <div class="action-text">Scared of charging money</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ─── SLIDE 2: Dance Events (Focus) ─── -->
+    <div class="slide">
+      <div class="slide-title" style="color: rgba(16,185,129,0.5);">Dance Events</div>
+      <div class="state-journey">
+        <span style="color:rgba(239,68,68,0.6)">😰 Pressure</span>
+        <span class="arrow">→</span>
+        <span style="color:rgba(16,185,129,0.6)">😌 Fun</span>
+      </div>
+
+      <svg viewBox="0 0 400 380">
+        <rect width="400" height="380" rx="16" fill="#0a0a14"/>
+
+        <defs>
+          <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="lineGrad2" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#5e17eb"/>
+            <stop offset="100%" stop-color="#10b981"/>
+          </linearGradient>
+          <radialGradient id="tGlow2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Ghost path -->
+        <path d="M 35 290 C 80 280, 120 250, 170 220
+                 C 220 190, 270 170, 320 158
+                 C 345 152, 360 150, 370 153"
+              fill="none" stroke="rgba(16,185,129,0.06)" stroke-width="2.5"
+              stroke-dasharray="5,10" stroke-linecap="round"/>
+
+        <!-- Healed block (dissolved fear) -->
+        <circle cx="190" cy="210" r="8" fill="rgba(16,185,129,0.04)" stroke="#10b981" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/>
+        <text x="190" y="198" fill="rgba(16,185,129,0.25)" font-size="8" text-anchor="middle" text-decoration="line-through">fear of crowds</text>
+
+        <!-- Materialised path (30%) -->
+        <path d="M 35 290 C 80 280, 110 262, 140 242"
+              fill="none" stroke="url(#lineGrad2)" stroke-width="3.5" stroke-linecap="round" opacity="0.85"/>
+        <path d="M 35 290 C 80 280, 110 262, 140 242"
+              fill="none" stroke="#10b981" stroke-width="12" stroke-linecap="round" opacity="0.05" filter="url(#glow2)"/>
+
+        <!-- Completed milestone -->
+        <circle cx="95" cy="272" r="4.5" fill="#10b981" opacity="0.7"/>
+        <text x="95" y="262" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">first silent disco</text>
+
+        <!-- Character marker -->
+        <circle cx="140" cy="242" r="5" fill="#fff" opacity="0.95"/>
+        <circle cx="140" cy="242" r="10" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.12">
+          <animate attributeName="r" values="10;18;10" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Future tasks -->
+        <circle cx="220" cy="195" r="3" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <text x="220" y="185" fill="rgba(255,255,255,0.1)" font-size="7" text-anchor="middle">weekly event</text>
+
+        <circle cx="280" cy="168" r="3" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <text x="280" y="158" fill="rgba(255,255,255,0.1)" font-size="7" text-anchor="middle">partner venue</text>
+
+        <circle cx="330" cy="157" r="3" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+
+        <!-- Destination -->
+        <circle cx="370" cy="153" r="6" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+        <text x="370" y="140" fill="rgba(16,185,129,0.3)" font-size="10" text-anchor="middle">😌</text>
+
+        <!-- Origin -->
+        <circle cx="35" cy="290" r="22" fill="url(#tGlow2)"/>
+        <circle cx="35" cy="290" r="6" fill="#5e17eb" opacity="0.85"/>
+        <circle cx="35" cy="290" r="3" fill="#fff" opacity="0.5"/>
+        <text x="35" y="315" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-weight="600">YOU</text>
+      </svg>
+
+      <div class="focus-footer">
+        <div class="progress-row">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:30%; background: linear-gradient(90deg, #5e17eb, #10b981);"></div>
+          </div>
+          <div class="progress-pct">30%</div>
+        </div>
+
+        <div class="action-card courage-green">
+          <div class="action-icon">⚡</div>
+          <div class="action-content">
+            <div class="action-label">Next courage step</div>
+            <div class="action-text">Host a weekly silent disco</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ─── SLIDE 3: Keynote Speaker (Focus — not started) ─── -->
+    <div class="slide">
+      <div class="slide-title" style="color: rgba(239,68,68,0.4);">Keynote Speaker</div>
+      <div class="state-journey">
+        <span style="color:rgba(239,68,68,0.6)">😰 Pressure</span>
+        <span class="arrow">→</span>
+        <span style="color:rgba(239,68,68,0.5)">😰 Pressure</span>
+      </div>
+
+      <svg viewBox="0 0 400 380">
+        <rect width="400" height="380" rx="16" fill="#0a0a14"/>
+
+        <defs>
+          <radialGradient id="tGlow3" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Ghost path only — nothing materialised -->
+        <path d="M 35 240 C 80 245, 140 255, 200 260
+                 C 260 265, 320 260, 370 250"
+              fill="none" stroke="rgba(239,68,68,0.06)" stroke-width="2"
+              stroke-dasharray="4,12" stroke-linecap="round"/>
+
+        <!-- Destination -->
+        <circle cx="370" cy="250" r="5" fill="none" stroke="rgba(239,68,68,0.15)" stroke-width="1.5"/>
+        <text x="370" y="238" fill="rgba(239,68,68,0.2)" font-size="10" font-weight="600" text-anchor="middle">😰</text>
+
+        <!-- Origin -->
+        <circle cx="35" cy="240" r="22" fill="url(#tGlow3)"/>
+        <circle cx="35" cy="240" r="6" fill="#5e17eb" opacity="0.85"/>
+        <circle cx="35" cy="240" r="3" fill="#fff" opacity="0.5"/>
+        <text x="35" y="265" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-weight="600">YOU</text>
+
+        <!-- "Not started" prompt -->
+        <text x="200" y="220" fill="rgba(255,255,255,0.12)" font-size="11" text-anchor="middle" font-weight="500">This path hasn't begun yet</text>
+        <text x="200" y="238" fill="rgba(255,255,255,0.08)" font-size="9" text-anchor="middle">Add your first courage step to light the way</text>
+      </svg>
+
+      <div class="focus-footer">
+        <div class="progress-row">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:0%;"></div>
+          </div>
+          <div class="progress-pct">0%</div>
+        </div>
+
+        <div class="action-card courage" style="border-style: dashed; opacity: 0.6;">
+          <div class="action-icon">⚡</div>
+          <div class="action-content">
+            <div class="action-label">Add first step</div>
+            <div class="action-text">What's the smallest thing you could do?</div>
+          </div>
+          <div class="action-arrow">+</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <div class="concept-note">
+    <strong>Concept:</strong> First slide = all paths overview (Draft 1 style). Swipe right to focus on individual quests (Draft 2 style).
+    Each focus slide shows: the path zoomed in with milestones, a progress bar, next courage step (tappable),
+    and any healing blocks to clear. Empty quests invite you to add your first step.
+    Dot colour matches the quest's destination state.
+  </div>
+
+</div>
+
+<script>
+  // Sync dot indicators with scroll position
+  const slides = document.getElementById('slides')
+  const dots = document.querySelectorAll('.dot')
+
+  slides.addEventListener('scroll', () => {
+    const index = Math.round(slides.scrollLeft / slides.offsetWidth)
+    dots.forEach((d, i) => d.classList.toggle('active', i === index))
+  })
+</script>
+</body>
+</html>

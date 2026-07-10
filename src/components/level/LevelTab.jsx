@@ -25,6 +25,7 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
+import QuestPathMap from './QuestPathMap'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
 
@@ -49,6 +50,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasLifePaths, setHasLifePaths] = useState(false)
   const [lifePathCareers, setLifePathCareers] = useState([]) // careers from life_path_sessions
+  const [lifePathCurrentState, setLifePathCurrentState] = useState(null)
+  const [lifePathSafety, setLifePathSafety] = useState(0)
+  const [showPathMap, setShowPathMap] = useState(false)
 
   // Quest board state
   const [quests, setQuests] = useState([])
@@ -251,19 +255,21 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           setHasWoundMap(true)
         }
       })
-    // Check if life paths session exists
+    // Check if life paths session exists (must have careers tagged)
     if (user?.email) {
       supabase
         .from('life_path_sessions')
-        .select('id, careers, current_career, current_state')
+        .select('id, careers, current_career, current_state, safety')
         .eq('client_email', user.email)
         .order('updated_at', { ascending: false })
         .limit(1)
         .maybeSingle()
         .then(({ data }) => {
-          if (data) {
+          if (data?.careers?.length) {
             setHasLifePaths(true)
-            if (data.careers?.length) setLifePathCareers(data.careers)
+            setLifePathCareers(data.careers)
+            if (data.current_state) setLifePathCurrentState(data.current_state)
+            setLifePathSafety(data.safety ?? 0)
           }
         })
     }
@@ -345,7 +351,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           setHasPlaylistCompletion(true)
         }
       })
-  }, [userId, currentLevel])
+  }, [userId, currentLevel, user?.email])
 
   const levelQuests = [
     ...(config.zones ? [{ label: 'Zone Diagnosis', done: !!selectedZone }] : []),
@@ -473,6 +479,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         </div>
       )}
 
+      {/* Life Path Progress button */}
+      {hasLifePaths && quests.filter(q => q.status === 'active').length > 0 && (
+        <button className="quest-path-btn" onClick={() => setShowPathMap(true)}>
+          <span className="quest-path-btn-icon">✦</span>
+          <span>Your Life Paths</span>
+          <span className="quest-path-btn-arrow">→</span>
+        </button>
+      )}
+
       {/* Active Quests */}
       <div className="quest-section">
         <div className="quest-section-header">
@@ -480,15 +495,28 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           <span className="quest-section-title">Active Quests</span>
         </div>
         <p className="quest-section-sub">Life paths you're actively pursuing right now.</p>
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && (
-          <div className="quest-empty">Complete your Life Paths exercise to identify quests, or add one manually.</div>
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && !hasLifePaths && (
+          <div className="quest-empty quest-locked-card">
+            <span style={{ fontSize: 20 }}>🔒</span>
+            <p>Map your life paths first, then add quests along them</p>
+            <a href="/try/life-paths" className="quest-locked-link">Start Life Paths →</a>
+          </div>
+        )}
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && hasLifePaths && (
+          <div className="quest-empty">No active quests yet. Add one from your life paths below.</div>
+        )}
+        {!hasLifePaths && quests.length > 0 && (
+          <div className="quest-soft-prompt">
+            <a href="/try/life-paths">Complete Life Paths</a> to see your progress map
+          </div>
         )}
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').map(q => (
           <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={loadQuests} />
         ))}
-        {!showAddQuest ? (
+        {hasLifePaths && !showAddQuest && (
           <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>
-        ) : (
+        )}
+        {hasLifePaths && showAddQuest && (
           <div className="quest-add-modal">
             <div className="quest-add-title">What life path are you pursuing?</div>
             {lifePathCareers.length > 0 && !addQuestCustom ? (
@@ -953,6 +981,20 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         />
       )}
       </div>{/* end hidden wrapper */}
+
+      {/* Life Path Progress Map */}
+      {showPathMap && (
+        <QuestPathMap
+          quests={quests}
+          questTasks={questTasks}
+          trunkState={lifePathCurrentState}
+          safety={lifePathSafety}
+          careers={lifePathCareers}
+          userId={userId}
+          onUpdate={loadQuests}
+          onClose={() => setShowPathMap(false)}
+        />
+      )}
     </div>
   )
 }

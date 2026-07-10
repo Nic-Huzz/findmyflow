@@ -54,11 +54,7 @@ export default function LifePathMap({
 
   return (
     <div className="lpm-wrap" data-punchline={showPunchline ? 'true' : 'false'} data-theme={theme}>
-      <div className="lpm-rotate-prompt">
-        <span className="lpm-rotate-icon">📱</span>
-        <span className="lpm-rotate-text">Turn your phone sideways for the full picture</span>
-      </div>
-      <svg viewBox="-10 0 860 600" preserveAspectRatio="xMidYMid meet" overflow="visible">
+      <svg viewBox="-80 0 930 600" preserveAspectRatio="xMidYMid meet" overflow="visible">
         <defs>
           {/* Hand-drawn wobble */}
           <filter id={`${uid}wobble`} x="-5%" y="-5%" width="110%" height="110%">
@@ -111,12 +107,12 @@ export default function LifePathMap({
               <line x1={TRUNK_X} y1={m.y} x2={CAREER_X + 120} y2={m.y}
                     stroke={m.color} strokeWidth={T.guideWidth} opacity={T.guideLine}
                     strokeDasharray="4,8" />
-              <text x={TRUNK_X - 8} y={m.y - 10} textAnchor="end" fill={m.color}
-                    fontSize="11" fontWeight="700" opacity={T.stateLabel} letterSpacing="1">
+              <text x={TRUNK_X - 12} y={m.y - 12} textAnchor="end" fill={m.color}
+                    fontSize="16" fontWeight="700" opacity={T.stateLabel} letterSpacing="1">
                 {m.label.toUpperCase()}
               </text>
-              <text x={TRUNK_X - 8} y={m.y + 5} textAnchor="end" fill={m.color}
-                    fontSize="9" opacity={T.feltLabel}>
+              <text x={TRUNK_X - 12} y={m.y + 6} textAnchor="end" fill={m.color}
+                    fontSize="12" opacity={T.feltLabel}>
                 {m.felt}
               </text>
             </g>
