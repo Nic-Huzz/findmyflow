@@ -51,6 +51,14 @@ const ProfileHub = () => {
     },
     ...(isAdmin ? [
       {
+        id: 'ceo',
+        icon: '📊',
+        title: 'CEO Dashboard',
+        description: 'Multi-project command center',
+        path: '/crm/ceo',
+        color: '#0a0a1a'
+      },
+      {
         id: 'crm',
         icon: '🏰',
         title: 'CRM Command Center',

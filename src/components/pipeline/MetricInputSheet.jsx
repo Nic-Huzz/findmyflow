@@ -45,7 +45,7 @@ const ATTRACT_METHODS = [
 const NODE_FIELDS = {
   capture: [
     { key: 'clicks', label: 'Link clicks', type: 'number' },
-    { key: 'signups', label: 'Signups / expressions of interest', type: 'number' },
+    { key: 'signups', label: 'Expressions of interest', type: 'number' },
   ],
   convert: [
     { key: 'tickets', label: 'Tickets sold', type: 'number' },

@@ -142,6 +142,32 @@ These three statements form the narrative arc of the entire book:
 2. **The Wound:** The body stores these wounds (nervous system). Our frequency drops. We chase external fixes that never change the internal.
 3. **The Return:** Healing = restoring the river's flow. Safety + Expression = Vibe Rise. The mission: make people safe to return to themselves.
 
+### The Mechanism: Curiosity → Safety → Experience (Jul 2026)
+
+The book's thesis distilled to three words. The narrative spine (Crack/Flood/Diagonal) tells the STORY. This chain is the MECHANISM underneath it.
+
+```
+CURIOSITY (mind)      → You already know what you want.
+NERVOUS SYSTEM (body) → Your body won't let you go get it.
+EXPERIENCE (life)     → When the cone expands, curiosity becomes lived experience.
+                        Purpose emerges FROM experiences, not before them.
+```
+
+| Book Part | Chain Layer | What happens |
+|---|---|---|
+| Part 1: The Crack | Why curiosities got BURIED | Installation blocked them |
+| Part 2: The Flood | Curiosities RESURFACE but NS won't let you act | Head Full of Dreams |
+| Part 3: The Diagonal | Expanding the cone turns curiosities into EXPERIENCES | Flow emerges |
+
+**Positioning against the Two Enemies:**
+- Self-help attacks Curiosity ("find your passion") — wrong, you already know
+- Education attacks Experience ("specialise") — wrong, the merge IS the flow
+- Neither addresses the NS in the middle — the actual bottleneck
+
+**Positioning statement:** "You already know the life you want. Your body won't let you go get it."
+
+See: Obsidian `Frameworks/Curiosity-Safety-Experience Chain.md`
+
 ### The Epigraph Idea
 
 Each chapter opens with the raw, dated thought entry that seeded its concept. Like epigraphs from your own journal. The reader sees the seed, then the universal argument, then your story as proof.

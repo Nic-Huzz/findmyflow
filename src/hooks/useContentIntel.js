@@ -2,7 +2,46 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 
-export default function useContentIntel() {
+/**
+ * Content Score formula:
+ * 1. Skip Rate Gate: >35% = score 0 (hook failure)
+ * 2. WES = (likes x 1) + (comments x 2) + (saves x 3) + (shares x 4)
+ * 3. Retention Multiplier (avg_watch_time in ms):
+ *    >8s = 1.5x | 5-8s = 1.0x | 3-5s = 0.6x | <3s = 0.3x
+ * 4. Score = (WES / views) x multiplier x 1000
+ */
+function computeContentScore(reel) {
+  const skipRate = reel.skip_rate !== null ? Number(reel.skip_rate) : null
+  const avgWatch = reel.avg_watch_time !== null ? Number(reel.avg_watch_time) / 1000 : null // ms → s
+  const views = reel.views || 0
+
+  // Gate: skip rate > 35% = hook failure
+  const hookFailed = skipRate !== null && skipRate > 35
+
+  // WES
+  const wes = (reel.like_count || 0) * 1
+    + (reel.comments_count || 0) * 2
+    + (reel.saves || 0) * 3
+    + (reel.shares || 0) * 4
+
+  if (views === 0 || wes === 0) return { score: 0, wes, hookFailed, retentionMult: null }
+
+  // Retention multiplier
+  let retentionMult = 1.0
+  if (avgWatch !== null) {
+    if (avgWatch > 8) retentionMult = 1.5
+    else if (avgWatch >= 5) retentionMult = 1.0
+    else if (avgWatch >= 3) retentionMult = 0.6
+    else retentionMult = 0.3
+  }
+
+  const raw = (wes / views) * retentionMult * 1000
+  const score = hookFailed ? 0 : Math.round(raw * 10) / 10
+
+  return { score, wes, hookFailed, retentionMult }
+}
+
+export default function useContentIntel(refreshKey) {
   const { user } = useAuth()
   const [reels, setReels] = useState([])
   const [loading, setLoading] = useState(true)
@@ -25,7 +64,7 @@ export default function useContentIntel() {
     setLoading(false)
   }, [user?.id])
 
-  useEffect(() => { loadReels() }, [loadReels])
+  useEffect(() => { loadReels() }, [loadReels, refreshKey])
 
   const analyzeReel = useCallback(async (igMediaId) => {
     const { data: { session } } = await supabase.auth.getSession()
@@ -147,14 +186,18 @@ export default function useContentIntel() {
     }
   }, [reels])
 
-  // Sort and filter
+  // Compute scores and sort/filter
   const sortedReels = useMemo(() => {
-    let filtered = filterHookType
+    const filtered = filterHookType
       ? reels.filter(r => r.ai_analysis?.hook_type === filterHookType)
       : reels
 
-    const sorted = [...filtered].sort((a, b) => {
+    // Attach content score to each reel
+    const scored = filtered.map(r => ({ ...r, _score: computeContentScore(r) }))
+
+    const sorted = [...scored].sort((a, b) => {
       switch (sortBy) {
+        case 'score': return (b._score.score || 0) - (a._score.score || 0)
         case 'views': return (b.views || 0) - (a.views || 0)
         case 'skip_rate': return (a.skip_rate ?? 100) - (b.skip_rate ?? 100)
         case 'avg_watch_time': return (b.avg_watch_time || 0) - (a.avg_watch_time || 0)

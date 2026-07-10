@@ -4,6 +4,7 @@ const SLIDES = [
   // ============================================================
   { type: 'title', section: 'intro' },
   { type: 'framework', section: 'intro' },
+  { type: 'mechanism', section: 'intro' },
 
   // ============================================================
   // SECTION 1: THE CRACK
@@ -271,12 +272,14 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-08-18', text: 'I believe we all have a purpose, a mission, a change to create in this life. The problem is school and university teaches us the knowledge to work but never teaches us the self-knowledge that empowers us to identify what that purpose, mission, change is.' },
       { date: '2022-10-21', text: 'My role: taking life\'s wisdom and communicating them in digestible ways. Helping people upgrade their mental model.' },
-      { date: '2024-09-16', text: 'Purpose is to be. Fulfilment is satisfying any motivations that supports that being. Mission is service of others. Meaning is what comes from fulfilling it.' }
+      { date: '2024-09-16', text: 'Purpose is to be. Fulfilment is satisfying any motivations that supports that being. Mission is service of others. Meaning is what comes from fulfilling it.' },
+      { date: '2026-07-10', text: 'Purpose emerges FROM experiences, not before them. You don\'t find purpose and then act. You act (have experiences) and purpose reveals itself through the ones that light you up most. Direction isn\'t a career plan. It\'s the EXPERIENCES you\'re drawn to. Curiosities point toward those experiences. The cone of safety determines which ones you actually pursue.' }
     ],
     connects: [
       { ch: 'Ch 6', num: '06', text: 'Essence is who, direction is where' },
       { ch: 'Ch 34', num: '34', text: 'Problems that break your heart reveal direction' },
-      { ch: 'Ch 37', num: '37', text: 'The intersection of skills, problems, people' }
+      { ch: 'Ch 37', num: '37', text: 'The intersection of skills, problems, people' },
+      { ch: 'Ch 78', num: '78', text: 'The path reveals itself through action, not planning' }
     ],
     beats: {
       scene: 'Watching a mate struggle after university. Same degree, same debt, same confusion. And I felt the pull. Not to fix them. To change the system that failed them.',
@@ -995,12 +998,14 @@ const SLIDES = [
     rawEntries: [
       { date: '2023-11-18', text: 'Intellectual understanding doesn\'t connect to an emotional pattern.' },
       { date: '2022-10-21', text: 'What do I want to build? Self-knowledge movement with a lens of the ego?' },
-      { date: '2024-06-21', text: 'Difference between me and most: I have ambitions to change a system.' }
+      { date: '2024-06-21', text: 'Difference between me and most: I have ambitions to change a system.' },
+      { date: '2026-07-10', text: 'Self-help says it\'s a clarity problem. "Find your passion. Discover your purpose. Take this test. Read this book." The assumption: you don\'t know what you want, so you can\'t act. But you already know. You\'ve known for years. $30K on 52 courses didn\'t produce action. One scary thing a week did. The bottleneck was never clarity. It was safety.' }
     ],
     connects: [
       { ch: 'Ch 23', num: '23', text: 'The flood that feeds the trap' },
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams: the destination of the trap' },
-      { ch: 'Ch 43', num: '43', text: 'The healing trap: another version' }
+      { ch: 'Ch 43', num: '43', text: 'The healing trap: another version' },
+      { ch: 'Ch 53', num: '53', text: 'One scary thing a week: what actually worked' }
     ],
     beats: {
       scene: '$30,000. Fifty-two courses. Three years. Sitting on my bed in Bali surrounded by notebooks, certificates, and frameworks. More clarity than ever. Same life.',
@@ -1036,7 +1041,8 @@ const SLIDES = [
       { date: '2025-01-09', text: 'Limiting belief = fear. Why is it a limiting belief? We don\'t feel safe.' },
       { date: '2024-12-23', text: 'Self-development levels: Level 1: learning the tools. Level 2: deploying the tools. Level 3: not becoming dis-regulated no matter the environment.', protoIp: 'The 7-stage Vibe Rise Journey' },
       { date: '2026-06-28', text: 'The average person cycles through contemplation 3-7 times before reaching action. That\'s not failure. That\'s the nervous system testing whether the identity shift is survivable. Each cycle is a reconnaissance mission.', protoIp: 'Identity Bridge — contemplation cycling' },
-      { date: '2026-06-28', text: 'Each person has a thermostat setting for how much success, aliveness, and visibility they\'ll allow themselves. When identity expansion approaches that limit, the system generates self-sabotage to return to the familiar zone. Head Full of Dreams IS the thermostat doing its job.' }
+      { date: '2026-06-28', text: 'Each person has a thermostat setting for how much success, aliveness, and visibility they\'ll allow themselves. When identity expansion approaches that limit, the system generates self-sabotage to return to the familiar zone. Head Full of Dreams IS the thermostat doing its job.' },
+      { date: '2026-07-05', text: 'You already know the life you want. Your body won\'t let you go get it. Every convenience made life easier AND made your nervous system weaker. The range of lives that feel possible got smaller, not bigger.' }
     ],
     connects: [
       { ch: 'Ch 24', num: '24', text: 'The knowledge trap leads here' },
@@ -1312,7 +1318,8 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-09-07', text: 'What makes us unique? The combination of things that we love. There\'s no one on earth with your combination.' },
       { date: '2024-08-08', text: 'Career Clarity Game: gamify identifying this remarkableness. How to monetise it.' },
-      { date: '2024-08-07', text: 'To get paid you need to be remarkable. We\'re all unique so we\'re all remarkable. Never taught who we are so don\'t know our remarkableness.' }
+      { date: '2024-08-07', text: 'To get paid you need to be remarkable. We\'re all unique so we\'re all remarkable. Never taught who we are so don\'t know our remarkableness.' },
+      { date: '2026-07-10', text: 'Your skills aren\'t what you were trained in. They\'re what you\'re CURIOUS about. Look at your bookshelf, your podcast queue, your YouTube history. That\'s your content consumption telling you what your essence is drawn to. The things you read about at midnight when nobody is watching are closer to your real skills than anything on your CV.' }
     ],
     connects: [
       { ch: 'Ch 33', num: '33', text: 'The kid knew: childhood skills' },
@@ -1507,12 +1514,18 @@ const SLIDES = [
     rawEntries: [
       { date: '2022-10-12', text: 'Combining 3 skills: experience design, facilitating. Criteria for a job: personal connection, critical thinking, create change I believe in, craft I can refine.' },
       { date: '2024-08-08', text: 'Career Clarity Game: gamify identifying this remarkableness. How to monetise it.' },
-      { date: '2022-10-21', text: 'What do I want to build? Self-knowledge movement with a lens of the ego?' }
+      { date: '2022-10-21', text: 'What do I want to build? Self-knowledge movement with a lens of the ego?' },
+      { date: '2026-07-09', text: 'The most remarkable creators didn\'t specialise. They pursued multiple genuine curiosities until those curiosities collided into something nobody else could create. Your intersection might not be ONE thing. It might be the MERGE of multiple curiosities. The wider your cone of safety, the more branches you can hold, the more unique your convergence.' },
+      { date: '2026-07-10', text: 'Purpose emerges FROM experiences, not before them. You don\'t find your intersection by thinking. You find it by DOING. Have enough experiences that light you up and the intersection reveals itself. The intersection isn\'t a destination you plan for. It\'s a convergence that emerges from action.' },
+      { date: '2026-07-10', text: 'Education says "specialise, pick one lane." But your weird combination of curiosities IS your competitive advantage. The rule break lives at the merge point. You can\'t get there by staying in one lane.' }
     ],
     connects: [
       { ch: 'Ch 32', num: '32', text: 'Skills: the first circle' },
       { ch: 'Ch 34', num: '34', text: 'Problems: the second circle' },
-      { ch: 'Ch 36', num: '36', text: 'People: the third circle' }
+      { ch: 'Ch 36', num: '36', text: 'People: the third circle' },
+      { ch: 'Ch 7', num: '07', text: 'Direction: purpose emerges from experiences' },
+      { ch: 'Ch 77', num: '77', text: 'Silent discos: proof of polymath convergence' },
+      { ch: 'Ch 78', num: '78', text: 'The path reveals itself through action' }
     ],
     beats: {
       scene: 'Drawing three circles on a whiteboard. Skills. Problems. People. The centre where they overlap started glowing. Not metaphorically. It was the first time my direction felt clear.',
@@ -1784,7 +1797,7 @@ const SLIDES = [
       { date: '2025-02-22', text: 'Use conscious mind to observe patterns and trauma wounds / responses.' }
     ],
     connects: [
-      { ch: 'Ch 45', num: '45', text: 'Release: the second step' },
+      { ch: 'Ch 45', num: '45', text: 'Reconnect: the second step (activate it in the body)' },
       { ch: 'Ch 14', num: '14', text: 'The four responses to recognise' },
       { ch: 'Ch 19', num: '19', text: 'Software, not identity' }
     ],
@@ -1808,36 +1821,37 @@ const SLIDES = [
     type: 'chapter',
     section: 'flood',
     number: '45',
-    title: 'Release',
-    epigraph: 'Emotions are your body\'s communication mechanism.',
-    epigraphDate: '2022-10-12',
-    description: 'The second step: let the body process what the mind already knows.\n\nAn emotion takes 90 seconds to pass through your nervous system. Most people interrupt it at second 4 with a thought, a distraction, a scroll. Let the 90 seconds finish.',
+    title: 'Reconnect',
+    epigraph: 'Notes from slowing down: feel like every action has intention. Feels like I can move energy. I feel the impact of every movement. Feel nausea as my body releases.',
+    epigraphDate: '2024-04-19',
+    description: 'The second step: activate it in the body. Open the file in edit mode.\n\nYou\'ve named the pattern. Now feel it. Not think about it. Not analyse it. Feel it. Where does it live? What does it weigh? What temperature is it?\n\nYou can\'t rewrite a file that isn\'t open. Memory reconsolidation requires the encoding to be LIVE before the mismatch can rewrite it.',
     screenshotLine: null,
-    imageConcept: 'A wave. Not crashing. Just passing through.',
+    imageConcept: 'A person with their hand on their chest, eyes closed. Something glowing beneath the hand, activated.',
     branch: 'Healing = return to flow',
     branchColor: '#4ade80',
     confidence: 90,
     rawEntries: [
-      { date: '2022-10-12', text: 'Emotions are your body\'s communication mechanism. Cycle of suffering: can\'t escape it but we try to. Stories you tell yourself add to the suffering.' },
-      { date: '2023-05-15', text: 'The reason when someone feels shit all we need to do is hold space and not "fix" the problem is because the body heals itself. It doesn\'t need outside intervention.' },
-      { date: '2024-04-19', text: 'Notes from slowing down: feel like every action has intention. Feel nausea as my body releases. Slow down to turn default mode network off, make conscious.' }
+      { date: '2023-06-05', text: 'Humans are constant wave of emotions. Self-knowledge is simply understanding the different containers where the troughs and dips of emotions emerge. We\'re emotional beings that think. Not thinking beings with emotions.' },
+      { date: '2024-04-19', text: 'Notes from slowing down: feel like every action has intention. Feels like I can move energy. I feel the impact of every movement. Feel nausea as my body releases. Slow down to turn default mode network off, make conscious.' },
+      { date: '2024-04-29', text: 'The black nut/rock inside is part of me that doesn\'t feel safe to be myself. Fear of hurting others is also a fear of stepping into my power.' },
+      { date: '2026-07-09', text: 'Reconnect moved to step 2 (updated Jul 2026). The old order had people trying to release energy from an encoding they hadn\'t fully activated. Memory reconsolidation requires the encoding to be LIVE before the mismatch can rewrite it. Reconnect = activation = opening the file in edit mode.' }
     ],
     connects: [
-      { ch: 'Ch 44', num: '44', text: 'Recognise: the first step' },
-      { ch: 'Ch 46', num: '46', text: 'Rewire: the third step' },
-      { ch: 'Ch 48', num: '48', text: 'The River: where release gets blocked' }
+      { ch: 'Ch 44', num: '44', text: 'Recognise: the first step (see the pattern)' },
+      { ch: 'Ch 46', num: '46', text: 'Release: the third step (let it discharge)' },
+      { ch: 'Ch 6', num: '06', text: 'Essence: what you\'re reconnecting TO' }
     ],
     beats: {
-      scene: 'A breathwork session. The facilitator says: "Don\'t think about it. Just feel it. Let the wave pass." Ninety seconds of pure sensation. Then: peace. The body did what no amount of thinking could.',
-      tension: 'We interrupt emotions at second four because the body\'s communication feels dangerous. We scroll, think, distract. The emotion doesn\'t disappear. It stores.',
-      turn: 'Ninety seconds. That\'s all an emotion needs to pass through your nervous system. If you let it. Most people have never let it.',
-      land: 'An emotion takes 90 seconds to pass through your nervous system. Let the 90 seconds finish.',
+      scene: 'A somatic session. The facilitator says: "You\'ve named it. Now find it. Where does it live in your body? Put your hand there. Don\'t fix it. Just be with it." My hand goes to my chest. Something heavy. Something old. Something that\'s been waiting.',
+      tension: 'Intellectual understanding doesn\'t connect to an emotional pattern. You can name your wound perfectly and still not feel it. Reconnect closes that gap. It opens the file in edit mode.',
+      turn: 'You can\'t rewrite a file that isn\'t open. The encoding has to be LIVE, in the body, felt, before anything can change. This is why talking about it never worked.',
+      land: 'You can\'t rewrite a file that isn\'t open.',
       fiveC: {
-        context: 'Healing step two: release.',
-        catalyst: 'Let the body process what the mind already knows.',
-        complication: 'We\'ve been interrupting emotions our entire lives.',
-        change: null,
-        consequence: 'Ninety seconds of feeling. Then peace.'
+        context: 'Healing step two: reconnect.',
+        catalyst: 'Feel it in the body. Not think about it. Feel it.',
+        complication: 'We\'ve spent years understanding the wound intellectually without ever activating it somatically.',
+        change: 'The encoding goes live. The file opens in edit mode.',
+        consequence: 'Now the body can process what the mind already knows.'
       }
     }
   },
@@ -1847,36 +1861,37 @@ const SLIDES = [
     type: 'chapter',
     section: 'flood',
     number: '46',
-    title: 'Rewire',
-    epigraph: 'Crossing the chasm: this is what coaching is? Creating new beliefs and helping cross the chasm? The egoic mind is completely conditioned by the past.',
-    epigraphDate: '2022-10-24',
-    description: 'The third step: replace the old story.\n\n"I\'m not ready" becomes "I\'ll never feel ready, and that\'s fine."\n"Who am I to do this" becomes "Who am I not to."\n\nNot affirmations. Lived rewrites. You have to do the thing to rewrite the belief about the thing.',
+    title: 'Release',
+    epigraph: 'Emotions are your body\'s communication mechanism.',
+    epigraphDate: '2022-10-12',
+    description: 'The third step: let the body discharge what it\'s been holding.\n\nAn emotion takes 90 seconds to pass through your nervous system. Most people interrupt it at second 4 with a thought, a distraction, a scroll. Let the 90 seconds finish.\n\nThe file is open. Now let the frozen energy complete what it couldn\'t finish. Trembling, breath, tears, movement.',
     screenshotLine: null,
-    imageConcept: 'A sentence being crossed out. A new one written underneath in different handwriting.',
+    imageConcept: 'A wave. Not crashing. Just passing through.',
     branch: 'Healing = return to flow',
     branchColor: '#4ade80',
     confidence: 90,
     rawEntries: [
-      { date: '2022-10-24', text: 'Crossing the chasm: this is what coaching is? Creating new beliefs and helping cross the chasm? The egoic mind is completely conditioned by the past. Crossing the chasm is creating a new ego structure to identify with.' },
-      { date: '2023-04-03', text: 'If all we are is experience. And that the past is simply stories. Then there\'s no inherent sense of self. Only the stories we tell ourselves. Change the story. Change yourself.' },
-      { date: '2023-08-21', text: 'Rather than giving yourself a statement, removing the trauma that causes you to need the statement.' }
+      { date: '2022-10-12', text: 'Emotions are your body\'s communication mechanism. Cycle of suffering: can\'t escape it but we try to. Stories you tell yourself add to the suffering.' },
+      { date: '2023-05-15', text: 'The reason when someone feels shit all we need to do is hold space and not "fix" the problem is because the body heals itself. It doesn\'t need outside intervention.' },
+      { date: '2024-04-19', text: 'Notes from slowing down: feel like every action has intention. Feel nausea as my body releases. Slow down to turn default mode network off, make conscious.' },
+      { date: '2025-05-23', text: 'If healing is about the response to situations, meditation is so effective because it helps create space between stimulus and response.' }
     ],
     connects: [
-      { ch: 'Ch 45', num: '45', text: 'Release: the second step' },
-      { ch: 'Ch 47', num: '47', text: 'Reclaim: the fourth step' },
-      { ch: 'Ch 31', num: '31', text: 'One test changes the belief' }
+      { ch: 'Ch 45', num: '45', text: 'Reconnect: the file is now open' },
+      { ch: 'Ch 47', num: '47', text: 'Rewire: the fourth step (rewrite the file)' },
+      { ch: 'Ch 48', num: '48', text: 'The River: where release gets blocked' }
     ],
     beats: {
-      scene: 'Writing in my journal: "I\'m not ready." Then crossing it out. Writing underneath: "I\'ll never feel ready, and that\'s fine." The handwriting was different. Bolder. Not an affirmation. A lived rewrite.',
-      tension: 'Affirmations don\'t work because the body doesn\'t believe what the mouth says. Lived rewrites work because the body just survived the thing it was told would kill it.',
-      turn: 'You have to do the thing to rewrite the belief about the thing. No amount of journaling replaces one moment of evidence.',
-      land: 'Not affirmations. Lived rewrites.',
+      scene: 'A breathwork session. The facilitator says: "Don\'t think about it. The file is open. Just let it move." Ninety seconds of trembling, tears, breath. Then: peace. The body did what no amount of thinking could.',
+      tension: 'We interrupt emotions at second four because the body\'s communication feels dangerous. We scroll, think, distract. The emotion doesn\'t disappear. It stores. Now that the encoding is live (Reconnect), the stored energy can finally complete its journey.',
+      turn: 'Ninety seconds. That\'s all an emotion needs to pass through your nervous system. If you let it. Most people have never let it.',
+      land: 'An emotion takes 90 seconds to pass through your nervous system. Let the 90 seconds finish.',
       fiveC: {
-        context: 'Healing step three: rewire.',
-        catalyst: 'Replace the old story with a new one.',
-        complication: 'Affirmations don\'t work. The body needs evidence, not words.',
-        change: null,
-        consequence: 'Lived rewrites: you have to do the thing to change the belief about the thing.'
+        context: 'Healing step three: release.',
+        catalyst: 'The encoding is live (from Reconnect). Now let the frozen energy discharge.',
+        complication: 'We\'ve been interrupting emotions our entire lives. Trembling, tears, breath feel dangerous.',
+        change: 'The body completes what it couldn\'t finish when the wound first happened.',
+        consequence: 'Ninety seconds of feeling. Then peace.'
       }
     }
   },
@@ -1886,37 +1901,39 @@ const SLIDES = [
     type: 'chapter',
     section: 'flood',
     number: '47',
-    title: 'Reclaim',
-    epigraph: 'To reach higher states of consciousness we need to re-embody states of the child.',
-    epigraphDate: '2025-03-17',
-    description: 'The fourth step: reconnect to the kid.\n\nNot metaphorically. Actually ask: what did seven-year-old me love? What did they dream about? What did they build when nobody was watching?\n\nThat kid is still in there. They\'ve just been waiting for the protective voice to stop talking.',
+    title: 'Rewire',
+    epigraph: 'Crossing the chasm: this is what coaching is? Creating new beliefs and helping cross the chasm? The egoic mind is completely conditioned by the past.',
+    epigraphDate: '2022-10-24',
+    description: 'The fourth step: the mismatch.\n\nThe file is open (Reconnect). The energy has discharged (Release). Now the body encounters something that contradicts its prediction while the prediction is live. The brain detects "these can\'t both be true" and rewrites the file.\n\n"I\'m not ready" becomes "I\'ll never feel ready, and that\'s fine."\n\nNot affirmations. Lived rewrites. You have to do the thing to rewrite the belief about the thing. Edit window: about 5 hours.',
     screenshotLine: null,
-    imageConcept: 'An adult sitting next to a child version of themselves. Both looking at the same sunset.',
-    branch: 'FLAGGED',
-    branchColor: '#666',
-    confidence: 65,
+    imageConcept: 'A sentence being crossed out. A new one written underneath in different handwriting. Bolder.',
+    branch: 'Healing = return to flow',
+    branchColor: '#4ade80',
+    confidence: 90,
     rawEntries: [
-      { date: '2025-03-17', text: 'Kid software = love, joy, carefree. Conditioning removes it. To reach higher states of consciousness we need to re-embody states of the child.' },
-      { date: '2024-12-07', text: 'How I feel myself softening and opening up. Opening myself up to dreaming again. Opening myself up to expressing. Opening myself up to feeling good.' },
-      { date: '2023-06-01', text: 'Children are the way they are because they don\'t fear consequences. Over-coming fear is the secret to being more child-like.' }
+      { date: '2022-10-24', text: 'Crossing the chasm: this is what coaching is? Creating new beliefs and helping cross the chasm? The egoic mind is completely conditioned by the past. Crossing the chasm is creating a new ego structure to identify with.' },
+      { date: '2023-04-03', text: 'If all we are is experience. And the past is simply stories. Then there\'s no inherent sense of self. Only the stories we tell ourselves. Change the story. Change yourself.' },
+      { date: '2023-08-21', text: 'Rather than giving yourself a statement, removing the trauma that causes you to need the statement.' },
+      { date: '2023-11-18', text: 'Intellectual understanding doesn\'t connect to an emotional pattern.' },
+      { date: '2026-07-09', text: 'Rewire = juxtaposition/mismatch. Body encounters something contradicting its prediction while the prediction is live. Brain detects "these can\'t both be true" and rewrites the file. Edit window ~5 hours. This is memory reconsolidation (Ecker, van der Kolk, Levine).' }
     ],
     connects: [
-      { ch: 'Ch 46', num: '46', text: 'Rewire: the third step' },
-      { ch: 'Ch 5', num: '05', text: 'The kid before the crack' },
-      { ch: 'Ch 33', num: '33', text: 'The kid knew' },
-      { ch: 'Ch 21', num: '21', text: 'The essence is still there' }
+      { ch: 'Ch 46', num: '46', text: 'Release: energy discharged, file still open' },
+      { ch: 'Ch 31', num: '31', text: 'One test changes the belief (the mismatch)' },
+      { ch: 'Ch 5', num: '05', text: 'The kid before the crack (what you\'re rewiring TOWARD)' },
+      { ch: 'Ch 53', num: '53', text: 'One scary thing a week (lived rewrites in action)' }
     ],
     beats: {
-      scene: 'Sitting on a beach in Bali. Asking out loud: "What did seven-year-old me love?" The answer was instant. Games. Building things. Making people laugh. It was always there. I just stopped asking.',
-      tension: 'Reclaiming the kid sounds soft. It\'s not. It requires confronting every reason you stopped being them. Every "grow up." Every "that\'s not a real job."',
-      turn: 'The kid is still in there. They\'ve been waiting for the protective voice to stop talking. Reclaiming them is the final step of healing.',
-      land: 'That kid is still in there. They\'ve just been waiting for the protective voice to stop talking.',
+      scene: 'After a breathwork release, the facilitator says: "Now do the thing you were told you couldn\'t." I stand up. I share something real with the group. The file is still open. The body predicted rejection. It received connection. Mismatch. Rewrite.',
+      tension: 'Affirmations don\'t work because the body doesn\'t believe what the mouth says. The body needs to predict one thing and experience another. That\'s the mismatch. That\'s what rewrites the file.',
+      turn: 'You have to do the thing to rewrite the belief about the thing. The file has to be open. The energy has to have moved. Then the mismatch lands. Edit window: about 5 hours.',
+      land: 'Not affirmations. Lived rewrites.',
       fiveC: {
-        context: 'Healing step four: reclaim.',
-        catalyst: 'Reconnect to seven-year-old you. Not metaphorically.',
-        complication: 'Every "grow up" and "that\'s not real" stands between you and the kid.',
-        change: null,
-        consequence: 'The kid has been waiting. The protective voice just needs to get quiet enough.'
+        context: 'Healing step four: rewire.',
+        catalyst: 'The file is open (Reconnect) and discharged (Release). Now create the mismatch.',
+        complication: 'The body predicted danger. It experienced safety. "These can\'t both be true."',
+        change: 'The brain rewrites the file. The old belief updates. Memory reconsolidation.',
+        consequence: 'The belief changes. Not through words. Through evidence the body can\'t deny.'
       }
     }
   },
@@ -3093,10 +3110,12 @@ const SLIDES = [
     rawEntries: [
       { date: '2025-01-18', text: 'I never understand quotes like "do what sets your heart on fire" until I came across disco\'s.' },
       { date: '2025-03-12', text: 'External flow aligns with capitalistic opportunities which aligns with growing the edges of consciousness. Is Disco\'s what flowed for me because it\'s what put me in the highest frequency state?' },
-      { date: '2024-06-28', text: 'Game shop owner image: always knew I loved games. How it manifested is crazy.' }
+      { date: '2024-06-28', text: 'Game shop owner image: always knew I loved games. How it manifested is crazy.' },
+      { date: '2026-07-09', text: 'Dance events + travel games + tuk tuk tournaments + experience creation. These look like separate careers. But they share the same skill (creating group experiences that shift state), the same audience (people who want to feel alive), and the same rule break (experiences don\'t need alcohol or stages to be remarkable). The convergence IS the thing nobody else can create.' }
     ],
     connects: [
       { ch: 'Ch 53', num: '53', text: 'One scary thing a week: the origin' },
+      { ch: 'Ch 37', num: '37', text: 'The Intersection: where multiple curiosities merge' },
       { ch: 'Ch 78', num: '78', text: 'The path reveals itself' },
       { ch: 'Ch 39', num: '39', text: 'Essence voice: scared AND excited' }
     ],
@@ -3132,12 +3151,16 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-06-24', text: 'Secret is aligning what makes you enter flow state with the external environment that is flowing.' },
       { date: '2023-09-03', text: 'If life flows then the universe has influence over the order. What is it to completely flow? Destiny?' },
-      { date: '2025-03-25', text: 'What I\'m beginning to see is my understanding of spectrum of possibilities, combining with probabilities, combining with systems that lead to certain outcomes.' }
+      { date: '2025-03-25', text: 'What I\'m beginning to see is my understanding of spectrum of possibilities, combining with probabilities, combining with systems that lead to certain outcomes.' },
+      { date: '2026-07-10', text: 'The curiosities you pursue now may merge later in ways you can\'t predict. Dance events + travel games + experience design looked like three separate interests. They converged into something nobody else could create. The convergence IS finding your flow. You can\'t see the merge point until both branches are inside your cone of safety.' },
+      { date: '2026-07-10', text: 'Purpose emerges FROM experiences, not before them. You don\'t find purpose and then act. You act and purpose reveals itself through the experiences that light you up most. The path doesn\'t reveal a destination. It reveals a direction. And the direction keeps adjusting as you move.' }
     ],
     connects: [
       { ch: 'Ch 77', num: '77', text: 'Silent discos: proof the path reveals itself' },
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams: the trap of needing the whole map' },
-      { ch: 'Ch 55', num: '55', text: 'Essence Zone: the compass for each step' }
+      { ch: 'Ch 37', num: '37', text: 'The Intersection: where curiosities converge' },
+      { ch: 'Ch 55', num: '55', text: 'Essence Zone: the compass for each step' },
+      { ch: 'Ch 7', num: '07', text: 'Direction: purpose from experiences, not before them' }
     ],
     beats: {
       scene: 'A path in fog. Three steps visible. Lit. The rest: invisible. And the realisation that every step I\'ve taken so far was taken with the same visibility. Three steps. Never more.',

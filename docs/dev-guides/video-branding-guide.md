@@ -100,7 +100,7 @@ box-shadow: 0 8px 40px rgba(0,0,0,0.6)
 
 ## Overlay Components (Remotion)
 
-Located at `vibe-rise-videos/src/overlays/`:
+Located at `content-drafts/vibe-rise-videos/src/overlays/`:
 
 | Component | Usage | Position |
 |-----------|-------|----------|
@@ -153,7 +153,7 @@ Portrait of [NAME], [DESCRIPTION — age, ethnicity, distinguishing features, cl
 | Series | Badge Text | Emoji |
 |--------|-----------|-------|
 | How They Paid Rent | HOW THEY PAID RENT | (none, text only) |
-| What Made Them Remarkable | THE 4 INGREDIENTS | (none) |
+| What Made Them Remarkable | THE 5 INGREDIENTS | (none) |
 | The Rule They Broke | THE RULE THEY BROKE | (none) |
 | Trust Years | TRUST YEARS | (none) |
 
@@ -175,9 +175,10 @@ All series badges use: gold text, letter-spacing 10px, 42px font, glass card bac
 ## Progress Indicators
 
 **Progress dots** (for list/model videos):
-- 4 dots, horizontal, top of screen (24px from top)
-- Inactive: 12px wide, `rgba(255,255,255,0.15)`
-- Active: 32px wide (pill shape), gold with glow
+- 4 dots for "How They Paid Rent" (4 models), 5 dots for "What Made Them Remarkable" (5 ingredients)
+- Horizontal, top of screen (24px from top)
+- Inactive: 10-12px wide, `rgba(255,255,255,0.15)`
+- Active: 28-32px wide (pill shape), gold with glow
 - Visible only during the list section, hidden during hook/CTA
 
 ---
@@ -186,11 +187,15 @@ All series badges use: gold text, letter-spacing 10px, 42px font, glass card bac
 
 | Asset | Path |
 |-------|------|
-| Remotion project | `/Users/nichuzz/creations/vibe-rise-videos/` |
-| Overlay components | `vibe-rise-videos/src/overlays/` |
-| Common styles/colors | `vibe-rise-videos/src/common.ts` |
-| Creator portraits | `vibe-rise-videos/public/images/` |
-| Canonical creator data | `vibe-rise-videos/public/experienceCreatorCanonical.json` |
-| Rendered outputs | `vibe-rise-videos/out/` |
-| Brand voice (app copy) | `Findmyflow/docs/BRAND_VOICE.md` |
-| Page design guide (app) | `Findmyflow/docs/page-component-design-guide.md` |
+| Remotion project | `content-drafts/vibe-rise-videos/` |
+| Overlay components | `content-drafts/vibe-rise-videos/src/overlays/` |
+| Common styles/colors | `content-drafts/vibe-rise-videos/src/common.ts` |
+| Creator portraits | `content-drafts/vibe-rise-videos/public/images/` |
+| Canonical creator data | `content-drafts/vibe-rise-videos/public/experienceCreatorCanonical.json` |
+| Source footage | `content-drafts/vibe-rise-videos/source-footage/` |
+| Rendered outputs | `content-drafts/vibe-rise-videos/out/` |
+| Brand voice (app copy) | `docs/BRAND_VOICE.md` |
+| Page design guide (app) | `docs/page-component-design-guide.md` |
+| Video branding guide | `docs/dev-guides/video-branding-guide.md` |
+| Newsletter outlines | `docs/content-drafts/docs/newsletter-10-outlines.md` |
+| Blog post draft | `docs/content-drafts/content/blog-5-ingredients-remarkable.md` |

@@ -3,7 +3,7 @@
 .ips-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(26, 26, 46, 0.45);
   z-index: 1000;
   display: flex;
   align-items: flex-end;
@@ -15,7 +15,7 @@
   width: 100%;
   max-width: 480px;
   max-height: 80vh;
-  background: #1a1a2e;
+  background: #ffffff;
   border-radius: 16px 16px 0 0;
   display: flex;
   flex-direction: column;
@@ -27,25 +27,25 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 16px 16px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid #e9ecef;
 }
 
 .ips-title {
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: #1a1a2e;
 }
 
 .ips-summary {
   font-size: 11px;
-  color: var(--gold, #E9A23B);
+  color: #c88520;
   margin-top: 3px;
 }
 
 .ips-close {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.3);
+  color: #adb5bd;
   font-size: 16px;
   cursor: pointer;
   padding: 4px;
@@ -62,7 +62,7 @@
 .ips-empty {
   text-align: center;
   padding: 32px 16px;
-  color: rgba(255, 255, 255, 0.3);
+  color: #adb5bd;
   font-size: 12px;
 }
 
@@ -77,7 +77,7 @@
 }
 
 .ips-post:active {
-  background: rgba(255, 255, 255, 0.04);
+  background: #f8f9fa;
 }
 
 .ips-post.tagged {
@@ -93,7 +93,7 @@
   height: 48px;
   border-radius: 6px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
+  background: #f8f9fa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,7 +114,7 @@
 
 .ips-caption {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #1a1a2e;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -122,13 +122,13 @@
 
 .ips-meta {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.25);
+  color: #adb5bd;
   margin-top: 2px;
 }
 
 .ips-stats {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.35);
+  color: #6c757d;
   margin-top: 1px;
 }
 
@@ -153,7 +153,7 @@
 
 .ips-suggest {
   font-size: 9px;
-  color: var(--gold, #E9A23B);
+  color: #c88520;
   background: rgba(233, 162, 59, 0.15);
   padding: 2px 6px;
   border-radius: 4px;
@@ -161,13 +161,13 @@
 
 .ips-other {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.2);
+  color: #adb5bd;
 }
 
 .ips-footer {
   padding: 12px 16px;
   padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid #e9ecef;
 }
 
 .ips-done {

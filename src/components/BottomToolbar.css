@@ -171,25 +171,25 @@ body.project-selector-active .bottom-toolbar {
   background: var(--toolbar-active-bg);
 }
 
-/* Create portal toolbar - Dark theme */
+/* Create portal toolbar - Light theme */
 .bottom-toolbar.create-toolbar {
-  background: #0a0a12;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+  background: #ffffff;
+  border-top: 1px solid #e9ecef;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
 }
 
 .create-toolbar .toolbar-item {
-  color: rgba(255, 255, 255, 0.45);
+  color: #adb5bd;
 }
 
 .create-toolbar .toolbar-item:hover {
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.05);
+  color: #6c757d;
+  background: rgba(94, 23, 235, 0.05);
 }
 
 .create-toolbar .toolbar-item.active {
-  color: #E9A23B;
-  background: rgba(233, 162, 59, 0.1);
+  color: #5e17eb;
+  background: rgba(94, 23, 235, 0.08);
 }
 
 /* Main app toolbar - Same white styling */

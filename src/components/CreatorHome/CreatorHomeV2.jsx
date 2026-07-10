@@ -17,6 +17,9 @@ import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { hapticLight } from '../../lib/haptics'
 import PositioningSummary from '../PositioningSummary'
 import BlowUpBrandCard from './BlowUpBrandCard'
+import FillNextEvent from './FillNextEvent'
+import CreatorShareCard from './CreatorShareCard'
+import { fetchTicketsSold } from '../../hooks/useExperiencePipeline'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
@@ -99,6 +102,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [showSkillsExpanded, setShowSkillsExpanded] = useState(false)
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
+  const [showShareCard, setShowShareCard] = useState(false)
   const [showAllPast, setShowAllPast] = useState(false)
   const [igRefreshKey, setIgRefreshKey] = useState(0)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
@@ -171,6 +175,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
 
   const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0 })
   const [checklistCounts, setChecklistCounts] = useState({})
+  const [ticketCounts, setTicketCounts] = useState({})
   const [activePlays, setActivePlays] = useState([])
   const [bridgeCount, setBridgeCount] = useState({ total: 0, contacted: 0 })
 
@@ -209,6 +214,13 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       setChecklistCounts(counts)
     })()
   }, [upcomingIds, userId])
+
+  // Fetch tickets sold for upcoming experiences (spots bars).
+  // selectedExperienceId in deps so counts refresh after metrics are entered in the pipeline.
+  useEffect(() => {
+    if (!upcomingIds || !userId || selectedExperienceId) return
+    fetchTicketsSold(userId, upcomingIds.split(',')).then(setTicketCounts)
+  }, [upcomingIds, userId, selectedExperienceId])
 
   async function loadData() {
     setLoading(true)
@@ -349,6 +361,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       {/* Hero — sits above the content area, flush to edges */}
       {activeTab === 'identity' && (
         <div className="ch2-id-hero">
+          <button
+            className="ch2-hero-share"
+            title="Share your card"
+            onClick={() => { hapticLight(); setShowShareCard(true) }}
+          >⤴</button>
           <div className="ch2-id-hero-main">
             {essenceAvatar ? (
               <div className="ch2-id-avatar">
@@ -751,6 +768,14 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             />
           ) : (
           <>
+          {/* Fill this event — nearest upcoming */}
+          {upcoming.length > 0 && (
+            <FillNextEvent
+              experience={upcoming[0]}
+              onOpen={(id) => setSelectedExperienceId(id)}
+            />
+          )}
+
           {/* Upcoming */}
           {upcoming.length > 0 && (
             <>
@@ -763,6 +788,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 // Mini pipeline dot statuses
                 const mPct = marketingItems.total > 0 ? marketingItems.done / marketingItems.total * 100 : 0
                 const oPct = orgItems.total > 0 ? orgItems.done / orgItems.total * 100 : 0
+                // Spots bar (only when capacity is set)
+                const tickets = ticketCounts[exp.id] ?? 0
+                const hasCapacity = exp.capacity != null && exp.capacity > 0
+                const fillPct = hasCapacity ? Math.min(100, Math.round(tickets / exp.capacity * 100)) : null
+                const spotsLow = hasCapacity && fillPct < 50
 
                 return (
                   <div key={exp.id} className="ch2-exp-card" onClick={() => setSelectedExperienceId(exp.id)}>
@@ -777,6 +807,15 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       </div>
                       <div style={{ fontSize: 10, fontWeight: 700, color: '#5e17eb' }}>Open →</div>
                     </div>
+                    {/* Spots bar */}
+                    {hasCapacity && (
+                      <div className="ch2-exp-spots">
+                        <div className="ch2-exp-spots-bar">
+                          <div className={`ch2-exp-spots-fill${spotsLow ? ' low' : ''}`} style={{ width: `${fillPct}%` }} />
+                        </div>
+                        <span className={`ch2-exp-spots-label${spotsLow ? ' low' : ''}`}>{tickets} / {exp.capacity} spots</span>
+                      </div>
+                    )}
                     {/* Mini pipeline dots */}
                     <div style={{ display: 'flex', gap: 3, marginTop: 8 }}>
                       <div style={{ width: 7, height: 7, borderRadius: '50%', background: mPct >= 60 ? '#22c55e' : mPct >= 20 ? '#eab308' : '#e9ecef' }} title="Attract" />
@@ -1059,6 +1098,17 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             )}
           </div>
         </div>
+      )}
+
+      {/* Creator Card share modal */}
+      {showShareCard && (
+        <CreatorShareCard
+          essenceName={essenceName}
+          archetypeLabel={archetypeLabel}
+          ruleBreak={remarkableAngle?.ai_rule_statement || null}
+          avatarUrl={essenceAvatar || null}
+          onClose={() => setShowShareCard(false)}
+        />
       )}
     </div>
   )

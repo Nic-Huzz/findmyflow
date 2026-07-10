@@ -197,6 +197,7 @@ const CompetitorSnapshotFlow = lazyRetry(() => import('./flows/CompetitorSnapsho
 const VoiceTraining = lazyRetry(() => import('./flows/VoiceTraining'))
 
 // Lazy-loaded pages - CRM
+const CEODashboard = lazyRetry(() => import('./pages/crm/CEODashboard'))
 const Dashboard = lazyRetry(() => import('./pages/crm/Dashboard'))
 const Marketing = lazyRetry(() => import('./pages/crm/Marketing'))
 const Sales = lazyRetry(() => import('./pages/crm/Sales'))
@@ -1239,6 +1240,11 @@ function AppRouter() {
             } />
 
             {/* CRM Tower - Command Center */}
+            <Route path="/crm/ceo" element={
+              <AuthGate>
+                <CEODashboard />
+              </AuthGate>
+            } />
             <Route path="/crm" element={
               <AuthGate>
                 <CRMLayout><Dashboard /></CRMLayout>

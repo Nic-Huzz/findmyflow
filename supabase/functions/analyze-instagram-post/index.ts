@@ -1,9 +1,9 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
-const COMPOSIO_API_KEY = Deno.env.get('COMPOSIO_API_KEY')
+const COMPOSIO_API_KEY = Deno.env.get('COMPOSIO_API_KEY')!
 const COMPOSIO_BASE = 'https://backend.composio.dev/api/v3.1'
-const GOOGLE_API_KEY = Deno.env.get('GOOGLE_API_KEY')
+const GOOGLE_API_KEY = Deno.env.get('GOOGLE_API_KEY')!
 const GEMINI_MODEL = 'gemini-2.5-flash'
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com'
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
@@ -35,6 +35,16 @@ const ANALYSIS_PROMPT = `Analyze this Instagram Reel and return a JSON object wi
 17. uniqueness_factors: array of strings describing what makes this reel distinctive
 18. opening_line_type: classify the first spoken sentence. One of: bold_claim, vulnerable_confession, contrarian_take, relatable_pain, curiosity_gap, direct_address, statistic, none (if no spoken words)
 19. storytelling_framework: classify the overall narrative structure. One of: origin_story, lesson_learned, before_after, day_in_life, challenge_journey, analogy, myth_busting, direct_advice, none (if no clear narrative)
+20. story_stages: timestamp each story stage that appears in the reel. Return an array of objects, each with "stage", "start_s" (start second), and "end_s" (end second). Only include stages that are actually present. Use these stage names:
+    - normal: the old, stuck, or "before" version of the creator/viewer
+    - desire_challenge: what they wanted deep down and the thing blocking it, or a bigger idea/argument
+    - enter_unfamiliar: the decision to do the scary thing, naming the fear and risk
+    - adapt_adversity: the messy hard middle, broke/lost/awkward/exposed
+    - attain_desire: getting what they wanted but it cost something real (comfort, ego, safety, old identity)
+    - return_changed: return to the same place/situation, now different
+    - new_normal: who they are now, stated simply
+    - turn_to_viewer: a reminder, question, or invitation to the audience
+    If the reel has no clear story arc, return an empty array.
 
 Return ONLY valid JSON, no markdown formatting or explanation.`
 
@@ -208,7 +218,7 @@ serve(async (req) => {
       const uploadData = await uploadRes.json()
       fileUri = uploadData.file?.uri
       fileName = uploadData.file?.name
-      if (!fileUri) throw new Error('No file URI returned')
+      if (!fileUri || !fileName) throw new Error('No file URI or name returned')
     } catch (e) {
       return new Response(
         JSON.stringify({ error: 'analysis_failed', detail: `Gemini upload: ${e.message}` }),

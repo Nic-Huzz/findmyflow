@@ -20,9 +20,9 @@ export default function BrandPulseCard() {
       <div className="ch2-card" style={{ border: `1px solid rgba(94, 23, 235, 0.2)` }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <div className="ch2-label" style={{ margin: 0 }}>Brand Pulse</div>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)' }}>Building baseline...</div>
+          <div style={{ fontSize: 10, color: '#adb5bd' }}>Building baseline...</div>
         </div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', lineHeight: 1.5 }}>
+        <div style={{ fontSize: 11, color: '#6c757d', lineHeight: 1.5 }}>
           Collecting data for your first Brand Pulse score. Check back in a few days.
         </div>
         <div style={{ marginTop: 8 }}>
@@ -32,7 +32,7 @@ export default function BrandPulseCard() {
               width: 8,
               height: 8,
               borderRadius: '50%',
-              background: 'rgba(255,255,255,0.08)',
+              background: '#e9ecef',
               marginRight: 4,
             }} />
           ))}
@@ -51,7 +51,7 @@ export default function BrandPulseCard() {
           style={{
             background: 'none',
             border: 'none',
-            color: 'rgba(255,255,255,0.25)',
+            color: '#adb5bd',
             fontSize: 10,
             cursor: 'pointer',
           }}
@@ -68,7 +68,7 @@ export default function BrandPulseCard() {
           </span>
           <span style={{ fontSize: 16, fontWeight: 700, color }}>{label}</span>
         </div>
-        <span style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.5)' }}>{score}/10</span>
+        <span style={{ fontSize: 14, fontWeight: 600, color: '#6c757d' }}>{score}/10</span>
       </div>
 
       {/* Dot bar */}
@@ -79,7 +79,7 @@ export default function BrandPulseCard() {
             width: 8,
             height: 8,
             borderRadius: '50%',
-            background: i < score ? color : 'rgba(255,255,255,0.08)',
+            background: i < score ? color : '#e9ecef',
             marginRight: 4,
             transition: 'background 0.3s',
           }} />
@@ -97,7 +97,7 @@ export default function BrandPulseCard() {
 
       {/* Last synced */}
       {lastSynced && (
-        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.15)', marginTop: 8, textAlign: 'right' }}>
+        <div style={{ fontSize: 9, color: '#adb5bd', marginTop: 8, textAlign: 'right' }}>
           Last updated: {formatTimeAgo(new Date(lastSynced))}
         </div>
       )}
@@ -109,8 +109,8 @@ function SignalRow({ icon, label, value, trend, direction }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11 }}>
       <span style={{ width: 18 }}>{icon}</span>
-      <span style={{ color: 'rgba(255,255,255,0.4)', width: 50 }}>{label}</span>
-      <span style={{ color: 'rgba(255,255,255,0.6)', flex: 1 }}>{value}</span>
+      <span style={{ color: '#adb5bd', width: 50 }}>{label}</span>
+      <span style={{ color: '#6c757d', flex: 1 }}>{value}</span>
       <span style={{ color: ARROW_COLORS[direction], fontWeight: 600 }}>
         {trend} {ARROWS[direction]}
       </span>

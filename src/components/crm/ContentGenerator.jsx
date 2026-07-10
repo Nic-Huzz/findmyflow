@@ -12,12 +12,39 @@ import { fetchVoiceProfile, buildVoiceInstructions, getVoiceProfileSummary, getV
 import './ContentGenerator.css'
 
 const CONTENT_TYPES = [
+  { id: 'story_arc', name: 'Story Arc (Reel Script)', icon: '🎬', desc: '8-stage story framework' },
   { id: 'transformation_story', name: 'Transformation Story', icon: '🦋', desc: 'Before/after narrative' },
   { id: 'educational', name: 'Educational Post', icon: '📚', desc: 'Teach something valuable' },
   { id: 'pain_agitation', name: 'Pain Agitation', icon: '🎯', desc: 'Surface the problem' },
   { id: 'social_proof', name: 'Social Proof', icon: '⭐', desc: 'Showcase wins' },
   { id: 'offer_teaser', name: 'Offer Teaser', icon: '🎁', desc: 'Create curiosity' }
 ]
+
+const STORY_ARC_TEMPLATE = `Write a reel script using this story arc structure. Fill in each stage that applies (skip stages that don't fit your story):
+
+## Normal (the before)
+[What was the old, stuck, or "before" version of you/the viewer?]
+
+## Desire + Challenge
+[What did you want deep down? What was blocking it?]
+
+## Enter the Unfamiliar
+[What scary decision did you make? Name the fear and the risk.]
+
+## Adapt Through Adversity
+[The messy, hard middle. What went wrong? How were you exposed?]
+
+## Attaining Desire + The Price
+[You got what you wanted, but it cost something real. What did you give up?]
+
+## Return Changed
+[Back in the same place/situation, but now different. How?]
+
+## New Normal
+[Who are you now? State it simply.]
+
+## Turn to Viewer (optional)
+[A reminder, question, or invitation to the audience.]`
 
 const PLATFORMS = [
   { id: 'instagram', name: 'Instagram', icon: '📸', limit: 2200, optimal: 150 },
@@ -116,6 +143,9 @@ export default function ContentGenerator({ userId, projectId, onContentGenerated
   const [voiceFeedbackComment, setVoiceFeedbackComment] = useState('')
   const [submittingFeedback, setSubmittingFeedback] = useState(false)
 
+  // Content Intel patterns (for story_arc type)
+  const [contentIntelTip, setContentIntelTip] = useState(null)
+
   // Quick presets & CTA state
   const [selectedPreset, setSelectedPreset] = useState(null)
   const [showCtaLibrary, setShowCtaLibrary] = useState(false)
@@ -128,6 +158,68 @@ export default function ContentGenerator({ userId, projectId, onContentGenerated
   const charCount = abMode ? 0 : editedContent.length
   const isOverLimit = currentPlatform?.limit && charCount > currentPlatform.limit
   const isNearOptimal = currentPlatform?.optimal && charCount <= currentPlatform.optimal
+
+  // Clear Content Intel tip when userId changes
+  useEffect(() => { setContentIntelTip(null) }, [userId])
+
+  // Pre-fill story arc template + fetch Content Intel patterns when story_arc selected
+  useEffect(() => {
+    if (selectedType === 'story_arc') {
+      if (!additionalInstructions || additionalInstructions === '') {
+        setAdditionalInstructions(STORY_ARC_TEMPLATE)
+      }
+      // Fetch Content Intel patterns
+      if (userId && !contentIntelTip) {
+        supabase
+          .from('instagram_posts')
+          .select('views, saves, ai_analysis')
+          .eq('user_id', userId)
+          .not('ai_analysis', 'is', null)
+          .order('posted_at', { ascending: false })
+          .limit(30)
+          .then(({ data }) => {
+            if (!data || data.length < 3) return
+            const hookGroups = {}
+            const openingGroups = {}
+            for (const r of data) {
+              const a = r.ai_analysis
+              if (!a) continue
+              const ht = a.hook_type
+              if (ht) {
+                if (!hookGroups[ht]) hookGroups[ht] = { views: 0, count: 0 }
+                hookGroups[ht].views += r.views || 0
+                hookGroups[ht].count++
+              }
+              const ol = a.opening_line_type
+              if (ol && ol !== 'none') {
+                if (!openingGroups[ol]) openingGroups[ol] = { saves: 0, count: 0 }
+                openingGroups[ol].saves += r.saves || 0
+                openingGroups[ol].count++
+              }
+            }
+            let bestHook = null, bestHookAvg = 0
+            for (const [type, d] of Object.entries(hookGroups)) {
+              if (d.count < 2) continue
+              const avg = d.views / d.count
+              if (avg > bestHookAvg) { bestHook = type; bestHookAvg = avg }
+            }
+            let bestOpening = null, bestOpeningSaves = 0
+            for (const [type, d] of Object.entries(openingGroups)) {
+              if (d.count < 2) continue
+              const avg = d.saves / d.count
+              if (avg > bestOpeningSaves) { bestOpening = type; bestOpeningSaves = avg }
+            }
+            if (bestHook || bestOpening) {
+              const tips = []
+              if (bestHook) tips.push(`${bestHook.replace(/_/g, ' ')} hooks get the most views`)
+              if (bestOpening) tips.push(`${bestOpening.replace(/_/g, ' ')} openings get the most saves`)
+              setContentIntelTip(tips.join('. ') + '.')
+            }
+          })
+          .catch(() => {}) // Content Intel is optional, don't block on failure
+      }
+    }
+  }, [selectedType, userId])
 
   // Load context when modal opens
   useEffect(() => {
@@ -212,7 +304,10 @@ export default function ContentGenerator({ userId, projectId, onContentGenerated
         }
         instructions = `${voiceInstructions}\n${toneInstruction}\n${refinementMap[refinement]}\n\nOriginal content to refine:\n${editedContent}`
       } else {
-        instructions = `${voiceInstructions}\n${toneInstruction}${presetInstruction}\n${additionalInstructions}`.trim()
+        const intelContext = (selectedType === 'story_arc' && contentIntelTip)
+          ? `\nCONTENT INTEL (from your best-performing reels): ${contentIntelTip} Use these patterns.`
+          : ''
+        instructions = `${voiceInstructions}\n${toneInstruction}${presetInstruction}${intelContext}\n${additionalInstructions}`.trim()
       }
 
       const response = await supabase.functions.invoke('content-generator', {
@@ -628,7 +723,13 @@ Only provide the hooks, nothing else.`,
                       <button
                         key={type.id}
                         className={`cg-type-btn ${selectedType === type.id ? 'selected' : ''}`}
-                        onClick={() => setSelectedType(type.id)}
+                        onClick={() => {
+                          const wasStoryArc = selectedType === 'story_arc'
+                          setSelectedType(type.id)
+                          if (wasStoryArc && type.id !== 'story_arc') {
+                            setAdditionalInstructions('')
+                          }
+                        }}
                       >
                         <span className="type-icon">{type.icon}</span>
                         <span className="type-name">{type.name}</span>
@@ -712,14 +813,27 @@ Only provide the hooks, nothing else.`,
                 </div>
 
                 <div className="cg-section">
-                  <h3>Any specific angle? <span className="optional">(optional)</span></h3>
+                  <h3>{selectedType === 'story_arc' ? 'Your story' : 'Any specific angle?'} <span className="optional">{selectedType === 'story_arc' ? '(fill in each stage)' : '(optional)'}</span></h3>
                   <textarea
                     className="cg-instructions"
-                    placeholder="e.g., Focus on the time-saving aspect, mention my coaching program, target new moms..."
+                    placeholder={selectedType === 'story_arc'
+                      ? 'Fill in the story stages above with your specific story beats...'
+                      : 'e.g., Focus on the time-saving aspect, mention my coaching program, target new moms...'}
                     value={additionalInstructions}
                     onChange={e => setAdditionalInstructions(e.target.value)}
-                    rows={2}
+                    rows={selectedType === 'story_arc' ? 12 : 2}
                   />
+                  {/* Content Intel tip for story arc */}
+                  {selectedType === 'story_arc' && contentIntelTip && (
+                    <div style={{
+                      marginTop: 8, padding: '8px 12px',
+                      background: 'rgba(94,23,235,0.08)', border: '1px solid rgba(94,23,235,0.12)',
+                      borderRadius: 8, fontSize: 11, lineHeight: 1.5,
+                    }}>
+                      <span style={{ color: '#E9A23B', fontWeight: 600 }}>From your best reels: </span>
+                      <span style={{ color: 'rgba(255,255,255,0.5)' }}>{contentIntelTip}</span>
+                    </div>
+                  )}
                   <div className="cg-hook-generator">
                     <button
                       className="cg-generate-hooks-btn"

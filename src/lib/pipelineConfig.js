@@ -15,7 +15,6 @@ export const NODE_MODULES = {
     { key: 'validation', name: 'Validation', icon: '🔍', desc: 'Deep audience research', route: '/validation-flows', multi: 'Capture, Convert', certification: true },
   ],
   capture: [
-    { key: 'lead_magnet', name: 'Marketing Campaign', icon: '📣', desc: 'Build your marketing campaign', route: '/create/marketing-campaign' },
     { key: 'funnel_builder', name: 'Funnel Builder', icon: '🗺️', desc: 'Deep funnel mapping', route: '/funnel-builder', certification: true },
   ],
   convert: [
@@ -39,6 +38,7 @@ export const NODE_MODULES = {
 // Tool definitions per node
 export const NODE_TOOLS = {
   attract: [
+    { name: 'Event Page Copy', icon: '📝', desc: 'Listing copy in 3 lengths for your booking page', soon: true },
     { name: 'Content Generator', icon: '✨', desc: 'AI posts for this event', soon: true },
     { name: 'Content Planning', icon: '📋', desc: 'Weekly calendar', soon: true },
     { name: 'Warm Outreach', icon: '☀️', desc: 'DM contacts about this event', soon: true },

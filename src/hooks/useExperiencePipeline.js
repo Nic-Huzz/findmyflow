@@ -26,7 +26,6 @@ const MODULE_CHECKS = {
   validation: (data) => data.flowSessions?.some(f => f.flow_type === 'persona_selection'),
   // Capture modules
   attraction_offer: (data) => data.flowSessions?.some(f => f.flow_type === 'attraction_offer'),
-  lead_magnet: (data) => data.products?.some(p => p.money_model_tier === 'attraction'),
   funnel_builder: (data) => data.flowSessions?.some(f => f.flow_type === 'funnel_builder'),
   // Convert modules
   grand_slam: (data) => data.flowSessions?.some(f => f.flow_type === 'grand_slam_offer' || f.flow_type === 'offer_builder_v2'),
@@ -143,9 +142,13 @@ export default function useExperiencePipeline(experienceId) {
     setExperience(exp)
     if (!exp || expRes.error) { setLoading(false); return }
 
-    // Module check data
+    // Module check data — per-experience for 'nodes', account-level for legacy
+    const allFlowSessions = flowsRes.data || []
+    const filteredFlowSessions = exp.checklist_version === 'nodes'
+      ? allFlowSessions.filter(f => f.experience_id === experienceId)
+      : allFlowSessions
     const mData = {
-      flowSessions: flowsRes.data || [],
+      flowSessions: filteredFlowSessions,
       products: productsRes.data || [],
       remarkableAngle: remarkableRes.data?.length > 0,
       blueprints: blueprintRes.data || [],
@@ -218,7 +221,7 @@ export default function useExperiencePipeline(experienceId) {
 
     // Module readiness per node
     const attractModules = ['leads_strategy', 'blow_up_brand', 'validation']
-    const captureModules = ['attraction_offer', 'lead_magnet', 'funnel_builder']
+    const captureModules = ['attraction_offer', 'funnel_builder']
     const convertModules = ['grand_slam', 'offer_builder', 'product_selection', 'launch_readiness']
     const deliverModules = ['journey_designer', 'testing']
     const growModules = ['upsell', 'downsell', 'continuity', 'scale_income']
@@ -312,6 +315,38 @@ export default function useExperiencePipeline(experienceId) {
     isModuleComplete,
     refresh: fetchPipeline,
   }
+}
+
+// Utility: batch tickets-sold lookup for a list of experiences.
+// Applies the SAME rule as the pipeline's convert node (line ~209):
+// if any convert-node metrics exist → sum of 'tickets' metrics, else attendee count.
+export async function fetchTicketsSold(userId, experienceIds) {
+  if (!userId || !experienceIds?.length) return {}
+  const [{ data: metrics }, { data: attendees }] = await Promise.all([
+    supabase.from('pipeline_metrics')
+      .select('experience_id, metric_key, metric_value')
+      .eq('user_id', userId)
+      .eq('node', 'convert')
+      .in('experience_id', experienceIds),
+    supabase.from('contact_experiences')
+      .select('experience_id')
+      .eq('user_id', userId)
+      .eq('role', 'attendee')
+      .in('experience_id', experienceIds),
+  ])
+
+  const result = {}
+  for (const id of experienceIds) {
+    const expMetrics = (metrics || []).filter(m => m.experience_id === id)
+    if (expMetrics.length > 0) {
+      result[id] = expMetrics
+        .filter(m => m.metric_key === 'tickets')
+        .reduce((sum, m) => sum + Number(m.metric_value || 0), 0)
+    } else {
+      result[id] = (attendees || []).filter(a => a.experience_id === id).length
+    }
+  }
+  return result
 }
 
 // Utility: save a manual metric

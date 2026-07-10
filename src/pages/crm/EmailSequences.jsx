@@ -12,11 +12,43 @@ import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './EmailSequences.css'
 
 const SEQUENCE_TYPES = [
+  { id: 'cold_outreach', label: 'Cold Outreach', icon: '🎯', description: 'Reach prospects directly' },
   { id: 'welcome', label: 'Welcome Series', icon: '👋', description: 'Onboard new subscribers' },
   { id: 'nurture', label: 'Nurture', icon: '💜', description: 'Build trust over time' },
   { id: 'launch', label: 'Launch', icon: '🚀', description: 'Product/offer launch' },
   { id: 'reengagement', label: 'Re-engagement', icon: '🔄', description: 'Win back cold leads' },
   { id: 'post_purchase', label: 'Post-Purchase', icon: '⭐', description: 'Delight customers' },
+]
+
+const COLD_OUTREACH_TEMPLATES = [
+  {
+    step_number: 1,
+    delay_days: 0,
+    subject: '[Their business] + [your offer]',
+    body: `I saw [reason — something specific about their business that shows you did your homework].
+
+[One sentence: what you offer and why it fits them].
+
+Can I send you the pricing sheet to open for when the time is right?
+
+Best,
+[Your name]
+Founder`,
+  },
+  {
+    step_number: 2,
+    delay_days: 3,
+    subject: 'Re: [Their business] + [your offer]',
+    body: `As promised, here's the pricing sheet.
+
+[Attach pricing sheet or link to it]
+
+Are you considering buying sometime in the next 6 months? Happy to answer any questions.
+
+Best,
+[Your name]
+Founder`,
+  },
 ]
 
 const STATUS_OPTIONS = [
@@ -31,6 +63,7 @@ const STATUS_OPTIONS = [
  */
 function getPromptTemplate(sequenceType) {
   if (sequenceType === 'launch') return 'launchSequence'
+  if (sequenceType === 'cold_outreach') return 'coldOutreach'
   return 'nurtureSequence'
 }
 
@@ -477,6 +510,16 @@ function SequenceDetailModal({ sequence, userId, onClose, onEdit, onDelete, onTo
             </div>
           </div>
 
+          {sequence.sequence_type === 'cold_outreach' && (
+            <div style={{
+              padding: '8px 12px', marginBottom: 10,
+              background: 'rgba(233,162,59,0.06)', border: '1px solid rgba(233,162,59,0.12)',
+              borderRadius: 8, fontSize: 11, color: 'rgba(233,162,59,0.7)', lineHeight: 1.5,
+            }}>
+              Structure: Reason, Value prop, Ask. Under 100 words. No links or tracking. Founder in signature.
+            </div>
+          )}
+
           {sequence.description && (
             <div className="es-detail-description">
               <h3>Description</h3>
@@ -583,6 +626,7 @@ function SequenceDetailModal({ sequence, userId, onClose, onEdit, onDelete, onTo
             sequenceId={sequence.id}
             userId={userId}
             nextStepNumber={steps.length + 1}
+            sequenceType={sequence.sequence_type}
             onClose={() => { setShowStepForm(false); setEditingStep(null) }}
             onSave={handleStepSaved}
           />
@@ -595,7 +639,7 @@ function SequenceDetailModal({ sequence, userId, onClose, onEdit, onDelete, onTo
 /**
  * Email Step Add/Edit Form (overlay within detail modal)
  */
-function EmailStepForm({ step, sequenceId, userId, nextStepNumber, onClose, onSave }) {
+function EmailStepForm({ step, sequenceId, userId, nextStepNumber, sequenceType, onClose, onSave }) {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({
     subject: step?.subject || '',
@@ -603,6 +647,9 @@ function EmailStepForm({ step, sequenceId, userId, nextStepNumber, onClose, onSa
     delay_days: step?.delay_days || (nextStepNumber === 1 ? 0 : nextStepNumber),
     step_number: step?.step_number || nextStepNumber,
   })
+
+  const isColdOutreach = sequenceType === 'cold_outreach'
+  const wordCount = form.body.trim().split(/\s+/).filter(Boolean).length
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -705,12 +752,32 @@ function EmailStepForm({ step, sequenceId, userId, nextStepNumber, onClose, onSa
 
           <div className="form-group">
             <label>Email Body</label>
+            {isColdOutreach && (
+              <div style={{
+                fontSize: 10, padding: '6px 10px', marginBottom: 6,
+                background: 'rgba(233,162,59,0.08)', border: '1px solid rgba(233,162,59,0.15)',
+                borderRadius: 6, color: 'rgba(233,162,59,0.7)', lineHeight: 1.5,
+              }}>
+                Cold outreach rules: under 100 words, no links, no tracking, founder in signature
+              </div>
+            )}
             <textarea
               value={form.body}
               onChange={e => setForm({ ...form, body: e.target.value })}
-              placeholder="Write your email content here..."
+              placeholder={isColdOutreach
+                ? "I saw [reason]...\n\n[Value prop — 1 sentence].\n\nCan I send you the pricing sheet?\n\nBest,\n[Name]\nFounder"
+                : "Write your email content here..."}
               rows={6}
             />
+            {isColdOutreach && (
+              <div style={{
+                fontSize: 10, textAlign: 'right', marginTop: 4,
+                color: wordCount > 100 ? '#ef4444' : wordCount > 80 ? '#f59e0b' : 'rgba(255,255,255,0.3)',
+                fontWeight: wordCount > 80 ? 600 : 400,
+              }}>
+                {wordCount}/100 words
+              </div>
+            )}
           </div>
 
           <div className="modal-actions">
@@ -772,11 +839,23 @@ function SequenceModal({ sequence, userId, onClose, onSave }) {
             sequence_type: form.sequence_type,
             description: form.description.trim() || null,
             status: form.status,
+            steps_count: form.sequence_type === 'cold_outreach' ? 2 : 0,
           })
           .select()
           .single()
 
         if (error) throw error
+
+        // Auto-create template steps for cold outreach
+        if (form.sequence_type === 'cold_outreach') {
+          const steps = COLD_OUTREACH_TEMPLATES.map(t => ({
+            ...t,
+            sequence_id: data.id,
+            user_id: userId,
+          }))
+          await supabase.from('crm_email_steps').insert(steps)
+        }
+
         onSave(data)
       }
       hapticMedium()

@@ -1,0 +1,91 @@
+<!--
+  Google Play Store Feature Graphic — 1024x500
+
+  How to use:
+  1. Open this file in a browser
+  2. Screenshot or use DevTools to capture at exactly 1024x500
+     - Chrome: DevTools → Toggle Device Toolbar → set to 1024x500 → capture screenshot
+     - Or use: window.devicePixelRatio aware screenshot tools for 2x crisp output
+  3. Save as PNG and upload to Google Play Console → Store listing → Feature graphic
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+<title>Vibe Rise — Play Store Feature Graphic (1024x500)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    width: 1024px;
+    height: 500px;
+    overflow: hidden;
+    background: #0a0a0f;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .feature-graphic {
+    width: 1024px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0f;
+  }
+
+  /* Subtle ambient glow behind text */
+  .feature-graphic::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 350px;
+    background: radial-gradient(ellipse, rgba(94, 23, 235, 0.15) 0%, rgba(233, 162, 59, 0.08) 50%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .app-name {
+    font-weight: 900;
+    font-size: 120px;
+    letter-spacing: -2px;
+    line-height: 1;
+    background: linear-gradient(135deg, #5e17eb 0%, #8B3FE8 30%, #E9A23B 70%, #F0C060 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tagline {
+    font-weight: 400;
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+  <div class="feature-graphic">
+    <div class="app-name">VIBE RISE</div>
+    <div class="tagline">Find your flow. Build your future.</div>
+  </div>
+</body>
+</html>

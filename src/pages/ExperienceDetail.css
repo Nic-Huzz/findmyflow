@@ -35,7 +35,7 @@
 }
 
 .exp-detail .exp-back:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* ─── Header ─── */
@@ -640,8 +640,8 @@
 
 /* ─── Post-event placeholder ─── */
 .exp-phase-placeholder {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  background: #ffffff;
+  border: 1px dashed #dee2e6;
   border-radius: 22px;
   padding: 60px 32px;
   text-align: center;
@@ -657,13 +657,13 @@
   font-size: 22px;
   font-weight: 700;
   margin: 0 0 12px;
-  color: #fff;
+  color: #1a1a2e;
 }
 
 .exp-phase-placeholder p {
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.65);
+  color: #6c757d;
   max-width: 440px;
   margin: 0 auto;
 }
@@ -672,11 +672,11 @@
 .exp-detail .exp-state {
   text-align: center;
   padding: 80px 20px;
-  color: rgba(255, 255, 255, 0.65);
+  color: #6c757d;
 }
 
 .exp-detail .exp-state.exp-error {
-  color: #ffb4b4;
+  color: #ef4444;
 }
 
 .exp-detail .exp-spinner {

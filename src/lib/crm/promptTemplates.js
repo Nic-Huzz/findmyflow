@@ -390,30 +390,31 @@ ${additionalContext}`)
   }
 
   sections.push(`
+RULES (non-negotiable):
+- Every email MUST be under 100 words
+- NO links, NO open tracking, NO images
+- End with founder name + "Founder" title (nothing else)
+- Write like a human, not a marketer
+
+STRUCTURE (every email follows this):
+1. REASON — I saw [something specific about their business]. Shows you did homework.
+2. VALUE PROP — One sentence on what you offer and why it fits them.
+3. ASK — A soft, low-commitment ask. Never "book a call."
+
 OUTPUT FORMAT:
-Please create 3 different outreach approaches:
+Create 3 versions of a 2-email cold outreach sequence:
 
-**APPROACH 1: Value-First**
-- Opening line (personalized hook)
-- Value statement
-- Soft CTA
+**Email 1 (Cold)**
+- Subject line (short, no clickbait)
+- Body: Reason → Value prop → Ask
+- Sign off: [Name] / Founder
 
-**APPROACH 2: Curiosity-Based**
-- Question opener
-- Insight or observation
-- Conversation starter
+**Email 2 (Follow-up, Day 3)**
+- Subject line (reply to Email 1)
+- Body: Deliver on the ask from Email 1 (e.g., attach pricing sheet) + one qualification question (e.g., "Are you considering buying in the next 6 months?")
+- Sign off: [Name] / Founder
 
-**APPROACH 3: Direct/Results-Focused**
-- Bold claim or result
-- Brief proof
-- Clear CTA
-
-For each approach, provide:
-- Initial message (50-100 words max)
-- Follow-up if no response (after 3-5 days)
-- Response to positive reply
-
-Keep messages conversational, not salesy. Focus on starting a dialogue.`)
+Keep it conversational, specific, and under 100 words per email. The ask in Email 1 should be something easy to say yes to (e.g., "Can I send you the pricing sheet to open when the time is right?").`)
 
   return sections.join('\n')
 }

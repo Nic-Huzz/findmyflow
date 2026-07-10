@@ -93,6 +93,7 @@ export default function ExperienceDetail() {
       one_line_promise: experience.one_line_promise || '',
       booking_url: experience.booking_url || '',
       venue: experience.venue || '',
+      capacity: experience.capacity != null ? String(experience.capacity) : '',
       description: experience.description || '',
       ticket_price: experience.ticket_price != null ? String(experience.ticket_price) : '',
       early_bird_price: experience.early_bird_price != null ? String(experience.early_bird_price) : '',
@@ -155,6 +156,7 @@ export default function ExperienceDetail() {
         one_line_promise: detailsDraft.one_line_promise || null,
         booking_url: detailsDraft.booking_url || null,
         venue: detailsDraft.venue || null,
+        capacity: parseInt(detailsDraft.capacity, 10) > 0 ? parseInt(detailsDraft.capacity, 10) : null,
         description: detailsDraft.description || null,
         ticket_price: detailsDraft.ticket_price ? parseFloat(detailsDraft.ticket_price) : null,
         early_bird_price: detailsDraft.early_bird_price ? parseFloat(detailsDraft.early_bird_price) : null,
@@ -397,6 +399,19 @@ export default function ExperienceDetail() {
                 value={detailsDraft.venue}
                 onChange={e => setDetailsDraft(d => ({ ...d, venue: e.target.value }))}
                 placeholder="e.g. The Istana, Bali"
+              />
+            </div>
+
+            {/* Capacity */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">How many spots?</label>
+              <input
+                type="number"
+                className="exp-det-input"
+                value={detailsDraft.capacity}
+                onChange={e => setDetailsDraft(d => ({ ...d, capacity: e.target.value }))}
+                placeholder="e.g. 30"
+                min="1"
               />
             </div>
 
@@ -1019,7 +1034,7 @@ function ProgressRing({ pct, completed, total }) {
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="rgba(255,255,255,0.12)"
+          stroke="#e9ecef"
           strokeWidth={stroke}
           fill="none"
         />

@@ -75,7 +75,7 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
                 </div>
               </div>
             )) : (
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', padding: '6px 0' }}>
+              <div style={{ fontSize: 12, color: '#6c757d', padding: '6px 0' }}>
                 No Wahoos yet. Design one to get noticed.
               </div>
             )}
@@ -102,7 +102,7 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
                 </div>
                 {post.permalink && (
                   <a href={post.permalink} target="_blank" rel="noopener noreferrer"
-                    style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>↗</a>
+                    style={{ fontSize: 11, color: '#adb5bd', textDecoration: 'none' }}>↗</a>
                 )}
               </div>
             ))}
@@ -183,9 +183,9 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
                     <div className="pl-ds">{tool.desc}</div>
                   </div>
                   {tool.soon ? (
-                    <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.25)', fontWeight: 600 }}>Coming soon</span>
+                    <span style={{ fontSize: 9, color: '#adb5bd', fontWeight: 600 }}>Coming soon</span>
                   ) : disabled ? (
-                    <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>After event</span>
+                    <span style={{ fontSize: 9, color: '#adb5bd' }}>After event</span>
                   ) : (
                     <div className="pl-bg use">Open</div>
                   )}

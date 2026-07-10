@@ -3,7 +3,7 @@
 .mis-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(26, 26, 46, 0.45);
   z-index: 1100;
   display: flex;
   align-items: flex-end;
@@ -13,7 +13,7 @@
 @keyframes misFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .mis-sheet {
-  background: linear-gradient(180deg, #1a0a3e 0%, #0d0620 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 20px 20px 0 0;
   padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   max-width: 480px;
@@ -35,14 +35,14 @@
 .mis-title {
   font-size: 17px;
   font-weight: 800;
-  color: white;
+  color: #1a1a2e;
   margin: 0;
 }
 
 .mis-close {
-  background: rgba(255,255,255,0.1);
+  background: #f8f9fa;
   border: none;
-  color: rgba(255,255,255,0.6);
+  color: #6c757d;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -55,7 +55,7 @@
 
 .mis-prompt {
   font-size: 14px;
-  color: rgba(255,255,255,0.5);
+  color: #6c757d;
   margin: 0 0 12px;
 }
 
@@ -70,18 +70,19 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #ffffff;
+  border: 1px solid #e9ecef;
   border-radius: 12px;
-  color: white;
+  color: #1a1a2e;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   transition: border-color 0.2s, background 0.2s;
   touch-action: manipulation;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
-.mis-method-btn:hover { border-color: rgba(233,162,59,0.4); background: rgba(255,255,255,0.06); }
+.mis-method-btn:hover { border-color: rgba(233,162,59,0.4); background: #f8f9fa; }
 
 .mis-method-icon { font-size: 20px; }
 .mis-method-label { flex: 1; text-align: left; }
@@ -89,7 +90,7 @@
 .mis-back {
   background: none;
   border: none;
-  color: rgba(255,255,255,0.4);
+  color: #6c757d;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -113,7 +114,7 @@
 .mis-field-label {
   font-size: 12px;
   font-weight: 700;
-  color: rgba(255,255,255,0.5);
+  color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -121,8 +122,8 @@
 .mis-field-input-wrap {
   display: flex;
   align-items: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: #ffffff;
+  border: 1px solid #e9ecef;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -130,7 +131,7 @@
 
 .mis-field-prefix {
   padding: 0 0 0 12px;
-  color: rgba(255,255,255,0.4);
+  color: #6c757d;
   font-size: 16px;
   font-weight: 600;
 }
@@ -140,12 +141,12 @@
   padding: 12px;
   background: transparent;
   border: none;
-  color: white;
+  color: #1a1a2e;
   font-size: 16px;
   font-family: inherit;
 }
 .mis-field-input:focus { outline: none; }
-.mis-field-input::placeholder { color: rgba(255,255,255,0.2); }
+.mis-field-input::placeholder { color: #adb5bd; }
 
 /* Screenshot upload */
 .mis-screenshot {
@@ -159,7 +160,7 @@
   background: rgba(94,23,235,0.08);
   border: 1px dashed rgba(94,23,235,0.25);
   border-radius: 10px;
-  color: #a78bfa;
+  color: #5e17eb;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -171,7 +172,7 @@
 .mis-screenshot-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .mis-screenshot-hint {
   font-size: 12px;
-  color: rgba(255,255,255,0.3);
+  color: #adb5bd;
   text-align: center;
 }
 .mis-screenshot-error {
@@ -191,11 +192,11 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(255,255,255,0.08);
+  background: #e9ecef;
 }
 .mis-divider span {
   font-size: 11px;
-  color: rgba(255,255,255,0.25);
+  color: #adb5bd;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;

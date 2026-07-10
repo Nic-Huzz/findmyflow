@@ -124,10 +124,10 @@ export default function InstagramConnect({ onRefresh }) {
       <div className="ch2-card" style={{ border: '1px solid rgba(94, 23, 235, 0.3)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#fff' }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a2e' }}>
               📸 @{integration.platform_username || 'Instagram'}
             </div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 2 }}>
+            <div style={{ fontSize: 10, color: '#adb5bd', marginTop: 2 }}>
               Last synced: {lastSync}
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function InstagramConnect({ onRefresh }) {
               {syncing ? '↻ Syncing...' : '↻ Refresh'}
             </button>
             <button
-              style={{ fontSize: 10, padding: '4px 8px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.2)', cursor: 'pointer' }}
+              style={{ fontSize: 10, padding: '4px 8px', background: 'none', border: 'none', color: '#adb5bd', cursor: 'pointer' }}
               onClick={handleDisconnect}
             >
               Disconnect
@@ -171,7 +171,7 @@ export default function InstagramConnect({ onRefresh }) {
     <div
       className="ch2-card"
       style={{
-        background: 'linear-gradient(135deg, rgba(94, 23, 235, 0.15), rgba(233, 162, 59, 0.1))',
+        background: 'linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(233, 162, 59, 0.05))',
         border: '1px solid rgba(94, 23, 235, 0.2)',
         cursor: 'pointer',
       }}
@@ -179,10 +179,10 @@ export default function InstagramConnect({ onRefresh }) {
     >
       <div style={{ textAlign: 'center', padding: '8px 0' }}>
         <div style={{ fontSize: 24, marginBottom: 6 }}>📸</div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a2e', marginBottom: 4 }}>
           Connect Instagram
         </div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', lineHeight: 1.4 }}>
+        <div style={{ fontSize: 11, color: '#6c757d', lineHeight: 1.4 }}>
           Track your brand growth and link posts to experiences automatically
         </div>
       </div>
