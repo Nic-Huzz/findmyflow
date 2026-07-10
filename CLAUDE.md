@@ -51,9 +51,12 @@ Users arrive at Vibe Rise at **The Crack** or after sitting in **Head Full of Dr
 
 **Core Offer (Hormozi Grand Slam)**: "I'll teach you to design experiences that create lasting shifts, fill the room every time, and make a living doing what you love. You get the method (Shift Architecture), the tools (Vibe Rise), the community (weekly group), and the equipment (headsets). No one else offers all four."
 
-**App segmentation**: `/7-day-challenge` is for everyone. `/create` is specifically for experience creators. Vibe Seekers still use the app; if their flow turns out to be experience creation, they naturally enter the creator track.
+**Three products, three categories:**
+- **Vibe Rise Sessions** (the CrossFit) — weekly in-person events: Connect → Heal → Wahoo → Close. Brand = category. See `docs/vibe-rise-sessions.md`.
+- **Vibe Rise App** (the Nike Run Club / Strava) — consumer progress ledger between sessions. `/7-day-challenge` is for everyone. Digital bridge to physical community, not replacement.
+- **Creator Portal / Scale** (the CRM for experience creators) — `/create` tools for hosts to design, validate, and scale experiences. Remarkable Results → Reach → Growth → Scale Score pipeline.
 
-See `docs/frameworks/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell).
+See `docs/frameworks/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell). See `docs/frameworks/find-my-flow-x-category-pirates.md` for Category Pirates integration and category definitions.
 
 ## Tech Stack
 
@@ -389,6 +392,9 @@ import { hapticLight, hapticMedium, hapticSuccess, hapticError } from './lib/hap
 // Celebrations
 const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 ```
+
+### Design Consistency (IMPORTANT)
+The app uses a **light theme** throughout. Never create new components or pages with dark backgrounds (#0a0a14, #1a1a2e, etc.). Match the existing app's light background (`#f5f5f0` or white) and use the brand colours (purple #5e17eb, gold #E9A23B) for accents. Use existing component styles and patterns from `src/styles/flow-base.css` before inventing new ones. The only dark UI is the old standalone HTML mockups in `/public/` which are not part of the app.
 
 ### CSS Scoping
 Always scope to parent: `.see-your-flow .entry-card { }` not `.entry-card { }`

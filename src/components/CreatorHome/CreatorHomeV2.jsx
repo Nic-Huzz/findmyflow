@@ -16,6 +16,7 @@ import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { hapticLight } from '../../lib/haptics'
 import PositioningSummary from '../PositioningSummary'
+import BlowUpBrandCard from './BlowUpBrandCard'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
@@ -99,8 +100,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [loading, setLoading] = useState(true)
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
   const [showAllPast, setShowAllPast] = useState(false)
-  const [showBlowUpMore, setShowBlowUpMore] = useState(false)
-  const [showReadiness, setShowReadiness] = useState(false)
+  const [igRefreshKey, setIgRefreshKey] = useState(0)
   const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron
 
   // Creator detail modal
@@ -161,12 +161,6 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [nervousSystemData, setNervousSystemData] = useState(null)
   const [woundMapData, setWoundMapData] = useState(null)
   const [limitingBeliefData, setLimitingBeliefData] = useState(null)
-
-  // Set dark theme on body for BottomToolbar styling, clean up on unmount
-  useEffect(() => {
-    document.body.setAttribute('data-theme', 'dark')
-    return () => document.body.removeAttribute('data-theme')
-  }, [])
 
   const { experiences, loading: expLoading } = useExperienceList()
 
@@ -355,21 +349,54 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       {/* Hero — sits above the content area, flush to edges */}
       {activeTab === 'identity' && (
         <div className="ch2-id-hero">
-          {essenceAvatar ? (
-            <div className="ch2-id-avatar">
-              <img src={essenceAvatar} alt="" onError={e => { e.target.style.display = 'none' }} />
-            </div>
-          ) : (
-            <div className="ch2-id-avatar-empty" onClick={() => { hapticLight(); navigate('/essence-mirror?returnTo=/create') }} style={{ cursor: 'pointer' }}>
-              Discover<br />Your<br />Essence →
-            </div>
-          )}
-          <div>
-            <div className="ch2-id-type">{archetypeLabel}</div>
-            <div className="ch2-id-name">{essenceName || 'Your Identity'}</div>
-            {scopeFocus && (
-              <div className="ch2-id-focus">🎯 {scopeFocus}</div>
+          <div className="ch2-id-hero-main">
+            {essenceAvatar ? (
+              <div className="ch2-id-avatar">
+                <img src={essenceAvatar} alt="" onError={e => { e.target.style.display = 'none' }} />
+              </div>
+            ) : (
+              <div className="ch2-id-avatar-empty" onClick={() => { hapticLight(); navigate('/essence-mirror?returnTo=/create') }} style={{ cursor: 'pointer' }}>
+                Discover<br />Your<br />Essence →
+              </div>
             )}
+            <div>
+              <div className="ch2-id-type">{archetypeLabel}</div>
+              <div className="ch2-id-name">{essenceName || 'Your Identity'}</div>
+              {scopeFocus ? (
+                <div className="ch2-id-focus">🎯 {scopeFocus}</div>
+              ) : !essenceName && (
+                <div className="ch2-id-focus">✨ Let&apos;s find out who you are</div>
+              )}
+            </div>
+          </div>
+          <div className="ch2-hero-progress">
+            <div className="ch2-hero-pills">
+              {[
+                { icon: '💎', label: 'Results', done: !!remarkableAngle },
+                { icon: '📡', label: 'Reach', done: hasReach },
+                { icon: '🚀', label: 'Growth', done: hasGrowth },
+                { icon: '📊', label: 'Score', done: hasScaleScore },
+              ].map(p => (
+                <button
+                  key={p.label}
+                  className={`ch2-hero-pill${p.done ? '' : ' dim'}`}
+                  onClick={() => { hapticLight(); document.getElementById('ch2-playbook-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}
+                >
+                  {p.icon} {p.label} {p.done && <span className="tick">✓</span>}
+                </button>
+              ))}
+            </div>
+            <div className="ch2-hero-bar-row">
+              <div className="ch2-hero-bar">
+                <div
+                  className="ch2-hero-bar-fill"
+                  style={{ width: `${Math.max(3, [!!remarkableAngle, hasReach, hasGrowth, hasScaleScore].filter(Boolean).length * 25)}%` }}
+                />
+              </div>
+              <div className="ch2-hero-bar-label">
+                Playbook {[!!remarkableAngle, hasReach, hasGrowth, hasScaleScore].filter(Boolean).length} of 4
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -380,62 +407,88 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           <div className="ch2-id-card">
             <div className="ch2-id-inner">
 
-              {/* North Stars */}
-              {selectedCreators.length > 0 && (
-                <div className="ch2-id-section">
-                  <div className="ch2-label">North Stars</div>
-                  <div className="ch2-stars">
-                    {selectedCreators.slice(0, 5).map(name => {
-                      const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
-                      return (
-                        <div key={name} className="ch2-star" onClick={() => handleCreatorTap(name)} style={{ cursor: 'pointer' }}>
-                          <div className="ch2-star-img">
-                            <img src={`/images/creators/${slug}.png`} alt="" onError={e => { e.target.style.display = 'none' }} />
-                          </div>
-                          <div className="ch2-star-name">{name}</div>
-                        </div>
-                      )
-                    })}
+              {/* Who You Are */}
+              <div className="ch2-id-section">
+                <div className="ch2-card-header">
+                  <div className="ch2-card-header-left">
+                    <span className="ch2-card-icon">🧬</span>
+                    <span className="ch2-label" style={{ margin: 0 }}>Who You Are</span>
                   </div>
                 </div>
-              )}
 
-              {/* Skills */}
-              <div className="ch2-id-section">
-                <div className="ch2-label">Your Skills</div>
-                {userSkills.length > 0 ? (
-                  <div className="ch2-skills">
-                    <span className="ch2-skill">{userSkills[0]}</span>
-                    {userSkills.length > 1 && !showSkillsExpanded && (
-                      <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(true)}>+{userSkills.length - 1} more</span>
+                {(userSkills.length > 0 || userProblems.length > 0) ? (
+                  <>
+                    <p className="ch2-card-sub">Pulled from your Life Map and Essence Mirror.</p>
+
+                    {userSkills.length > 0 && (
+                      <>
+                        <div className="ch2-section-label">Your Skills</div>
+                        <div className="ch2-skills">
+                          <span className="ch2-skill">{userSkills[0]}</span>
+                          {userSkills.length > 1 && !showSkillsExpanded && (
+                            <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(true)}>+{userSkills.length - 1} more</span>
+                          )}
+                          {showSkillsExpanded && userSkills.slice(1).map(s => <span key={s} className="ch2-skill">{s}</span>)}
+                          {showSkillsExpanded && (
+                            <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(false)}>show less</span>
+                          )}
+                        </div>
+                      </>
                     )}
-                    {showSkillsExpanded && userSkills.slice(1).map(s => <span key={s} className="ch2-skill">{s}</span>)}
-                    {showSkillsExpanded && (
-                      <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(false)}>show less</span>
+
+                    {userProblems.length > 0 && (
+                      <>
+                        <div className="ch2-section-label" style={{ marginTop: 14 }}>Problems You Solve</div>
+                        <div className="ch2-skills">
+                          <span className="ch2-skill ch2-skill-gold">{userProblems[0]}</span>
+                          {userProblems.length > 1 && !showSkillsExpanded && (
+                            <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(true)}>+{userProblems.length - 1} more</span>
+                          )}
+                          {showSkillsExpanded && userProblems.slice(1).map(p => <span key={p} className="ch2-skill ch2-skill-gold">{p}</span>)}
+                        </div>
+                      </>
                     )}
-                  </div>
+                  </>
                 ) : (
-                  <button className="ch2-btn-outline" onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
-                    Complete your Life Map to discover these
-                  </button>
+                  <>
+                    <p className="ch2-card-sub">Two quick flows fill this in. Most people finish both in one sitting.</p>
+                    <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }}>
+                      <div className="ch2-biz-icon">🗺️</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">Your Skills + Problems</div>
+                        <div className="ch2-biz-val">Complete your Life Map to discover these</div>
+                      </div>
+                      <div className="ch2-row-chevron">›</div>
+                    </div>
+                  </>
                 )}
-              </div>
 
-              {/* Problems */}
-              <div className="ch2-id-section">
-                <div className="ch2-label">Problems You Solve</div>
-                {userProblems.length > 0 ? (
-                  <div className="ch2-skills">
-                    <span className="ch2-skill">{userProblems[0]}</span>
-                    {userProblems.length > 1 && !showSkillsExpanded && (
-                      <span className="ch2-see-more" onClick={() => setShowSkillsExpanded(true)}>+{userProblems.length - 1} more</span>
-                    )}
-                    {showSkillsExpanded && userProblems.slice(1).map(p => <span key={p} className="ch2-skill">{p}</span>)}
-                  </div>
+                {selectedCreators.length > 0 ? (
+                  <>
+                    <div className="ch2-section-label" style={{ marginTop: 14 }}>North Stars</div>
+                    <div className="ch2-stars">
+                      {selectedCreators.slice(0, 5).map(name => {
+                        const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+                        return (
+                          <div key={name} className="ch2-star" onClick={() => handleCreatorTap(name)} style={{ cursor: 'pointer' }}>
+                            <div className="ch2-star-img">
+                              <img src={`/images/creators/${slug}.png`} alt="" onError={e => { e.target.style.display = 'none' }} />
+                            </div>
+                            <div className="ch2-star-name">{name}</div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </>
                 ) : (
-                  <button className="ch2-btn-outline" onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }} style={{ marginTop: 4, fontSize: 12, padding: '8px 14px' }}>
-                    Complete your Life Map to discover these
-                  </button>
+                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/experience-creators') }}>
+                    <div className="ch2-biz-icon">⭐</div>
+                    <div className="ch2-biz-info">
+                      <div className="ch2-biz-label">North Stars</div>
+                      <div className="ch2-biz-val">Meet the creators who work like you</div>
+                    </div>
+                    <div className="ch2-row-chevron">›</div>
+                  </div>
                 )}
               </div>
 
@@ -448,249 +501,60 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               {/* ═══ PLAYBOOK SUB-TAB ═══ */}
               {identitySubTab === 'playbook' && <>
 
-              {/* Remarkable Results */}
-              {remarkableAngle ? (
-                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-label">Remarkable Results</div>
-
-                  {/* AI Rule Break Statement */}
-                  {remarkableAngle.ai_rule_statement && (
-                    <div className="ch2-tagline">{remarkableAngle.ai_rule_statement}</div>
-                  )}
-
-                  {/* One-liner (always visible) */}
-                  {remarkableAngle.extreme_action_plan && (
-                    <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                      <div className="ch2-biz-icon">💎</div>
-                      <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">One-liner</div>
-                        <div className="ch2-biz-val" style={{ fontWeight: 600 }}>{remarkableAngle.extreme_action_plan}</div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Expandable details */}
-                  {!showBlowUpMore && (
-                    <span className="ch2-see-more" onClick={() => setShowBlowUpMore(true)}>see more</span>
-                  )}
-                  {showBlowUpMore && (
-                    <>
-                      {remarkableAngle.experience && (
-                        <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                          <div className="ch2-biz-icon">🎪</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">The Experience</div>
-                            <div className="ch2-biz-val">{remarkableAngle.experience}</div>
-                          </div>
-                        </div>
-                      )}
-                      {remarkableAngle.different && (
-                        <div className="ch2-biz-row" onClick={() => navigate('/create/remarkable')}>
-                          <div className="ch2-biz-icon">✨</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">How You're Different</div>
-                            <div className="ch2-biz-val">{remarkableAngle.different}</div>
-                          </div>
-                        </div>
-                      )}
-                      {remarkableAngle.assumption && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">🔥</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">The Assumption You Break</div>
-                            <div className="ch2-biz-val">{remarkableAngle.assumption}</div>
-                          </div>
-                        </div>
-                      )}
-                      {remarkableAngle.combination_insight && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">🔀</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">Two Worlds</div>
-                            <div className="ch2-biz-val">{remarkableAngle.combination_insight}</div>
-                          </div>
-                        </div>
-                      )}
-                      {remarkableAngle.wound_problem && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">🎯</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">The Problem</div>
-                            <div className="ch2-biz-val">{remarkableAngle.wound_problem}</div>
-                          </div>
-                        </div>
-                      )}
-                      {remarkableAngle.score_unique != null && remarkableAngle.score_share != null && remarkableAngle.score_simple != null && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">📊</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">Remarkability Score</div>
-                            <div className="ch2-biz-val">{remarkableAngle.score_unique}x{remarkableAngle.score_share}x{remarkableAngle.score_simple}={remarkableAngle.score_unique * remarkableAngle.score_share * remarkableAngle.score_simple}</div>
-                          </div>
-                        </div>
-                      )}
-                      {remarkableAngle.ai_remarkable_bio && (
-                        <div className="ch2-biz-row">
-                          <div className="ch2-biz-icon">📝</div>
-                          <div className="ch2-biz-info">
-                            <div className="ch2-biz-label">Remarkable Bio</div>
-                            <div className="ch2-biz-val">{remarkableAngle.ai_remarkable_bio}</div>
-                          </div>
-                        </div>
-                      )}
-                      <span className="ch2-see-more" onClick={() => setShowBlowUpMore(false)}>show less</span>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-locked" onClick={() => navigate('/create/remarkable')}>
-                    <div className="ch2-locked-title">Remarkable Results</div>
-                    <div className="ch2-locked-sub">What do you do differently that gets unexpected results? Find your rule break.</div>
-                    <div className="ch2-locked-cta">Find your rule break →</div>
-                  </div>
-                </div>
-              )}
-
-              {/* Readiness — inline inside Results section */}
-              {blowUpReadiness && remarkableAngle && (
-                <div className="ch2-id-section" style={{ paddingTop: 0, paddingBottom: 8 }}>
-                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => setShowReadiness(!showReadiness)}>
-                    <div className="ch2-biz-icon">🔋</div>
-                    <div className="ch2-biz-info">
-                      <div className="ch2-biz-label">Readiness</div>
-                      <div className="ch2-biz-val">{blowUpReadiness.all_ready ? 'Ready for a format change' : 'Still building'}</div>
-                    </div>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{showReadiness ? '↑' : '↓'}</div>
-                  </div>
-                  {showReadiness && (
-                    <div style={{ paddingTop: 6 }}>
-                      <div className="ch2-readiness-layers">
-                        <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer1_status}`}>
-                          <span className="ch2-readiness-dot" />
-                          <div className="ch2-readiness-info">
-                            <span className="ch2-readiness-name">Distilled</span>
-                            <span className="ch2-readiness-hint">
-                              {blowUpReadiness.layer1_status === 'green'
-                                ? remarkableAngle?.extreme_action_plan || 'Your method is compressed'
-                                : 'Keep running experiences. Capture 3% after each.'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer2_status}`}>
-                          <span className="ch2-readiness-dot" />
-                          <div className="ch2-readiness-info">
-                            <span className="ch2-readiness-name">Proven</span>
-                            <span className="ch2-readiness-hint">
-                              {blowUpReadiness.layer2_status === 'green'
-                                ? `${blowUpReadiness.proof_count === '50_plus' ? '50+' : '10-50'} people experienced it`
-                                : blowUpReadiness.layer2_status === 'amber'
-                                  ? '1-10 people so far. Keep going.'
-                                  : 'Run 5 experiences. Capture one 3% improvement after each.'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={`ch2-readiness-row ch2-readiness-${blowUpReadiness.layer3_status}`}>
-                          <span className="ch2-readiness-dot" />
-                          <div className="ch2-readiness-info">
-                            <span className="ch2-readiness-name">Ceiling</span>
-                            <span className="ch2-readiness-hint">
-                              {blowUpReadiness.ceiling_type === 'reach'
-                                ? 'Reach ceiling. Your method is ready for a bigger container.'
-                                : blowUpReadiness.ceiling_type === 'credibility'
-                                  ? 'Credibility ceiling. You need proof that scales.'
-                                  : 'Keep filling the room you\'re in.'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <button className="ch2-readiness-retake" onClick={() => navigate('/create/remarkable')}>
-                        Retake assessment →
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Remarkable Reach */}
-              <div className="ch2-id-section" style={{ paddingTop: 10 }}>
-                {hasReach ? (
-                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/create/narrative-builder')}>
-                    <div className="ch2-biz-icon">📡</div>
-                    <div className="ch2-biz-info">
-                      <div className="ch2-biz-label">Remarkable Reach</div>
-                      <div className="ch2-biz-val">Vehicle, language, and cosign mapped</div>
-                    </div>
-                    <div className="ch2-biz-status ch2-st-done">✓</div>
-                  </div>
-                ) : remarkableAngle ? (
-                  <div className="ch2-locked" onClick={() => navigate('/create/narrative-builder')}
-                    style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)', cursor: 'pointer' }}>
-                    <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Remarkable Reach</div>
-                    <div className="ch2-locked-sub">How do people hear about you? Find your strongest vehicle, your language, and who gives your audience permission.</div>
-                    <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Build your reach →</div>
-                  </div>
-                ) : (
-                  <div className="ch2-locked" style={{ opacity: 0.45 }}>
-                    <div className="ch2-locked-title" style={{ color: 'rgba(255,255,255,0.4)' }}>Remarkable Reach 🔒</div>
-                    <div className="ch2-locked-sub">Complete Remarkable Results first.</div>
-                  </div>
-                )}
-              </div>
-
-              {/* Remarkable Growth */}
-              <div className="ch2-id-section" style={{ paddingTop: 10 }}>
-                {hasGrowth ? (
-                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/create/access-architecture')}>
-                    <div className="ch2-biz-icon">🚀</div>
-                    <div className="ch2-biz-info">
-                      <div className="ch2-biz-label">Remarkable Growth</div>
-                      <div className="ch2-biz-val">5 barriers audited, on-ramp designed</div>
-                    </div>
-                    <div className="ch2-biz-status ch2-st-done">✓</div>
-                  </div>
-                ) : hasReach ? (
-                  <div className="ch2-locked" onClick={() => navigate('/create/access-architecture')}
-                    style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)', cursor: 'pointer' }}>
-                    <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Remarkable Growth</div>
-                    <div className="ch2-locked-sub">Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.</div>
-                    <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Audit my barriers →</div>
-                  </div>
-                ) : (
-                  <div className="ch2-locked" style={{ opacity: 0.45 }}>
-                    <div className="ch2-locked-title" style={{ color: 'rgba(255,255,255,0.4)' }}>Remarkable Growth 🔒</div>
-                    <div className="ch2-locked-sub">Complete Remarkable Reach first.</div>
-                  </div>
-                )}
-              </div>
-
-              {/* Scale Score */}
-              <div className="ch2-id-section" style={{ paddingTop: 10 }}>
-                {hasScaleScore ? (
-                  <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => navigate('/create/scale-diagnostic')}>
-                    <div className="ch2-biz-icon">📊</div>
-                    <div className="ch2-biz-info">
-                      <div className="ch2-biz-label">Scale Score</div>
-                      <div className="ch2-biz-val">3-pillar diagnostic complete</div>
-                    </div>
-                    <div className="ch2-biz-status ch2-st-done">✓</div>
-                  </div>
-                ) : hasGrowth ? (
-                  <div className="ch2-locked" onClick={() => navigate('/create/scale-diagnostic')}
-                    style={{ borderColor: 'rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.05)', cursor: 'pointer' }}>
-                    <div className="ch2-locked-title" style={{ color: '#E9A23B' }}>Scale Score</div>
-                    <div className="ch2-locked-sub">Will your experience scale? 3-pillar diagnostic that pulls from your previous work.</div>
-                    <div className="ch2-locked-cta" style={{ color: '#E9A23B' }}>Score my experience →</div>
-                  </div>
-                ) : (
-                  <div className="ch2-locked" style={{ opacity: 0.45 }}>
-                    <div className="ch2-locked-title" style={{ color: 'rgba(255,255,255,0.4)' }}>Scale Score 🔒</div>
-                    <div className="ch2-locked-sub">Complete Remarkable Growth first.</div>
-                  </div>
-                )}
-              </div>
+              <BlowUpBrandCard
+                remarkableAngle={remarkableAngle}
+                hasReach={hasReach}
+                hasGrowth={hasGrowth}
+                hasScaleScore={hasScaleScore}
+                blowUpReadiness={blowUpReadiness}
+                navigate={navigate}
+              />
 
               <div className="ch2-id-divider" />
+
+              {/* ═══ ACTIONS ═══ */}
+              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                <div className="ch2-label">Actions</div>
+                <div className="ch2-actions-grid">
+                  {remarkableAngle && (
+                    <div className="ch2-action-card" onClick={() => navigate('/create/plays')}>
+                      <div className="ch2-action-icon">⚡</div>
+                      <div className="ch2-action-info">
+                        <div className="ch2-action-title">Create</div>
+                        <div className="ch2-action-sub">Design a Lightning Strike that makes your movement impossible to ignore</div>
+                      </div>
+                      {activePlays.filter(p => p.challenge_source === 'strike').length > 0 && (
+                        <div className="ch2-action-count">{activePlays.filter(p => p.challenge_source === 'strike').length} active</div>
+                      )}
+                      <div className="ch2-action-arrow">›</div>
+                    </div>
+                  )}
+                  <div className="ch2-action-card" onClick={() => navigate('/create/bridge')}>
+                    <div className="ch2-action-icon">🌉</div>
+                    <div className="ch2-action-info">
+                      <div className="ch2-action-title">Bridge</div>
+                      <div className="ch2-action-sub">
+                        {remarkableAngle
+                          ? 'Find 5 people slightly ahead of you and build mutual value'
+                          : 'Find 5 people slightly ahead of you and build mutual value. You can start this today.'}
+                      </div>
+                    </div>
+                    {bridgeCount.total > 0 && (
+                      <div className="ch2-action-count">{bridgeCount.contacted} of {bridgeCount.total}</div>
+                    )}
+                    <div className="ch2-action-arrow">›</div>
+                  </div>
+                  {!remarkableAngle && (
+                    <div className="ch2-action-card ch2-action-locked">
+                      <div className="ch2-action-icon">⚡</div>
+                      <div className="ch2-action-info">
+                        <div className="ch2-action-title">Create 🔒</div>
+                        <div className="ch2-action-sub">Unlocks with your rule break</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {/* Your Model */}
               {(payRentModel || assessment) ? (
@@ -743,35 +607,6 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 remarkableAngle={remarkableAngle}
               />
 
-              {/* ═══ ACTIONS ═══ */}
-              <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                <div className="ch2-label">Actions</div>
-                <div className="ch2-actions-grid">
-                  <div className="ch2-action-card" onClick={() => navigate('/create/plays')}>
-                    <div className="ch2-action-icon">⚡</div>
-                    <div className="ch2-action-info">
-                      <div className="ch2-action-title">Create</div>
-                      <div className="ch2-action-sub">Design a Lightning Strike that makes your movement impossible to ignore</div>
-                    </div>
-                    {activePlays.filter(p => p.challenge_source === 'strike').length > 0 && (
-                      <div className="ch2-action-count">{activePlays.filter(p => p.challenge_source === 'strike').length} active</div>
-                    )}
-                    <div className="ch2-action-arrow">›</div>
-                  </div>
-                  <div className="ch2-action-card" onClick={() => navigate('/create/bridge')}>
-                    <div className="ch2-action-icon">🌉</div>
-                    <div className="ch2-action-info">
-                      <div className="ch2-action-title">Bridge</div>
-                      <div className="ch2-action-sub">Find 5 people slightly ahead of you and build mutual value</div>
-                    </div>
-                    {bridgeCount.total > 0 && (
-                      <div className="ch2-action-count">{bridgeCount.contacted} of {bridgeCount.total}</div>
-                    )}
-                    <div className="ch2-action-arrow">›</div>
-                  </div>
-                </div>
-              </div>
-
               </>}
 
               {/* ═══ INNER GAME SUB-TAB ═══ */}
@@ -789,7 +624,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                       <div className="ch2-biz-label">You work like</div>
                       <div className="ch2-biz-val">{dnaResult.matched_founder || dnaResult.archetype}</div>
                     </div>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontWeight: 600 }}>See more ›</div>
+                    <div style={{ fontSize: 10, color: '#adb5bd', fontWeight: 600 }}>See more ›</div>
                   </div>
                 </div>
               ) : (
@@ -944,11 +779,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                     </div>
                     {/* Mini pipeline dots */}
                     <div style={{ display: 'flex', gap: 3, marginTop: 8 }}>
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: mPct >= 60 ? '#22c55e' : mPct >= 20 ? '#eab308' : 'rgba(255,255,255,0.08)' }} title="Attract" />
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} title="Capture" />
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} title="Convert" />
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: oPct >= 60 ? '#22c55e' : oPct >= 20 ? '#eab308' : 'rgba(255,255,255,0.08)' }} title="Deliver" />
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} title="Grow" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: mPct >= 60 ? '#22c55e' : mPct >= 20 ? '#eab308' : '#e9ecef' }} title="Attract" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#e9ecef' }} title="Capture" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#e9ecef' }} title="Convert" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: oPct >= 60 ? '#22c55e' : oPct >= 20 ? '#eab308' : '#e9ecef' }} title="Deliver" />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#e9ecef' }} title="Grow" />
                     </div>
                   </div>
                 )
@@ -1021,9 +856,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           <RootReachCard />
 
           {/* Instagram Integration */}
-          <InstagramConnect />
+          <InstagramConnect onRefresh={() => setIgRefreshKey(k => k + 1)} />
           <BrandPulseCard />
-          <ContentIntel />
+          <ContentIntel refreshKey={igRefreshKey} />
 
           {/* KPIs */}
           <div className="ch2-kpi-grid">
@@ -1049,7 +884,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           {threePercentChain.length > 0 && (
             <div className="ch2-card">
               <div className="ch2-label">3% Improvement Chain</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', marginBottom: 10 }}>Each experience builds on the last.</div>
+              <div style={{ fontSize: 11, color: '#adb5bd', marginBottom: 10 }}>Each experience builds on the last.</div>
               {threePercentChain.map((item, i) => (
                 <div key={i} className="ch2-chain-item">
                   <div className="ch2-chain-dot">{item.num}</div>
@@ -1066,7 +901,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           {topFans.length > 0 && (
             <div className="ch2-card">
               <div className="ch2-label">Your Top Fans</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.15)', marginBottom: 8 }}>People who keep coming back.</div>
+              <div style={{ fontSize: 10, color: '#adb5bd', marginBottom: 8 }}>People who keep coming back.</div>
               {topFans.map(fan => (
                 <div key={fan.id} className="ch2-fan-row">
                   <div className="ch2-fan-avatar">{getInitials(fan.name)}</div>
@@ -1116,7 +951,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 <div className="ch2-biz-val">{item.label}</div>
                 <div className="ch2-biz-label">{item.sub}</div>
               </div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontWeight: 600 }}>→</div>
+              <div style={{ fontSize: 11, color: '#adb5bd', fontWeight: 600 }}>→</div>
             </div>
           ))}
           <div className="ch2-label" style={{ marginBottom: 4, marginTop: 14, color: 'var(--purple)' }}>Inner Game</div>
@@ -1131,7 +966,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 <div className="ch2-biz-val">{item.label}</div>
                 <div className="ch2-biz-label">{item.sub}</div>
               </div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', fontWeight: 600 }}>→</div>
+              <div style={{ fontSize: 11, color: '#adb5bd', fontWeight: 600 }}>→</div>
             </div>
           ))}
           <button className="ch2-btn-outline" onClick={() => setActiveTab('identity')} style={{ marginTop: 8 }}>
@@ -1142,7 +977,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         {/* ═══ AI PORTAL TAB (desktop-only) ═══ */}
         {isElectron && (
           <div className={`ch2-tab-panel${activeTab === 'ai-portal' ? ' active' : ''}`}>
-            <Suspense fallback={<div style={{ padding: 20, color: 'rgba(255,255,255,0.4)' }}>Loading AI Portal...</div>}>
+            <Suspense fallback={<div style={{ padding: 20, color: '#6c757d' }}>Loading AI Portal...</div>}>
               <AIPortal />
             </Suspense>
           </div>

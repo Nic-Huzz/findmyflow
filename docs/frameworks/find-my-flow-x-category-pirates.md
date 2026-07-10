@@ -3,6 +3,118 @@
 
 ---
 
+## v2 Update (July 2026)
+
+The April 2026 analysis below remains accurate for the framework-to-framework mappings. The following has evolved since then:
+
+### The Category
+
+v1 framed the category as "Playful Healing" for experience creators. v2 defines **Vibe Rise as its own category** (brand = category, like CrossFit):
+
+**One-sentence strategy:** "You already know the life you want. Your body won't let you go get it. Vibe Rise expands what feels safe until it does."
+
+**The premise we reject:** Self-help says "find your passion, discover your purpose." But you already know. The problem isn't knowledge. It's that your nervous system says "not safe" every time you move toward the life you want. Your cone of safety is too small.
+
+**The different future:** A world where "I do Vibe Rise" is as normal as "I go to the gym." Where expanding what feels safe is a weekly practice, not a crisis response.
+
+**Session format:** Weekly, 90-120 min, 15-30 people. Structure: Connection circle (wins/learnings/surprises) → Healing experience (host or special guest) → Wahoo experience (community member facilitates) → Identity close ("I'm someone who ___"). See `docs/vibe-rise-sessions.md` for full format, pricing, variants, and scaling plan.
+
+**The app is the progress ledger, not the product.** Like Strava for runners: the app tracks practice between sessions, makes progress visible to the community, but the experience is physical and communal. Strava data: athletes in a club are 2x more likely to train weekly. Digital as bridge, not replacement.
+
+### Three Products, Three Categories
+
+The ecosystem has three distinct layers, each its own category:
+
+```
+VIBE RISE SESSIONS (the CrossFit)
+  └── The in-person weekly experience. Brand = category.
+      Category: "Vibe Rise" (not wellness, not therapy, not fitness)
+      DAMs demand from: therapy, wellness retreats, meditation apps
+      Superconsumers: repeat attendees who become hosts (3% chain)
+      Revenue: $30-50 drop-in, $200-250/month, $2K/year
+
+VIBE RISE APP (the Nike Run Club / Strava)
+  └── Consumer progress ledger between sessions.
+      Category: progress ledger for in-person wellness communities
+      DAMs demand from: Headspace, Calm, BetterHelp, wellness apps
+      Superconsumers: weekly session attendees tracking daily practices
+      Revenue: free (bridge to sessions), premium features for power users
+      Key insight: digital works as BRIDGE to physical community,
+      not replacement. Strava users in clubs are 2x more likely to train.
+
+CREATOR PORTAL / SCALE (the CRM for experience creators)
+  └── Tools for hosts to design, validate, and scale their experiences.
+      Category: CRM / OS for experience creators
+      DAMs demand from: HubSpot, coaching platforms, generic CRMs
+      Superconsumers: experience creators who want to blow up
+      Revenue: SaaS subscription + certification ($2,500 host training)
+      Product: Remarkable Results → Reach → Growth → Scale Score pipeline
+```
+
+Each layer has its own Category Pirates analysis:
+- **Sessions** = the EXPERIENCE (creates the value)
+- **App** = the RETENTION layer (tracks and sustains the value)
+- **Creator Portal** = the SCALE layer (enables others to create the value)
+
+The Scale Score in the Creator Portal becomes the tool that certifies new Vibe Rise hosts: "Your experience scores 12+/15 (Phase 3). You're ready to run sessions."
+
+### Blow Up Brand Pipeline (renamed)
+
+v1 called this "Blow Up Brand." v2 is a sequential 4-flow pipeline:
+1. **Remarkable Results** (`/create/remarkable`) — find your rule break (was "Blow Up Brand")
+2. **Remarkable Reach** (`/create/narrative-builder`) — how your story spreads (was "Narrative Builder," now includes Vehicle Discovery with 3 types)
+3. **Remarkable Growth** (`/create/access-architecture`) — remove barriers (was "Access Architecture")
+4. **Scale Score** (`/scale-diagnostic`) — 3-pillar diagnostic: RETURN, BREAK, TRIBAL (was "Scale Diagnostic" with 4 AQAL questions, now /15 not /100)
+
+Each flow locks until the previous is completed.
+
+### Scale Score (replaces Scale Diagnostic)
+
+v1: 4 questions (Body, Culture, Identity, Access), scored /100.
+v2: 3 pillars (RETURN, BREAK, TRIBAL), 6 questions + branch selection, scored /15. Phase classification: 12+ Phase 3, 9-11 Strong Phase 3, 6-8 Phase 2.5, <6 Phase 2. Public lead magnet at `/try/facilitator-score`.
+
+### Phase 3 Theory (new IP layer)
+
+Not in v1. The entire Rule Break Tree thesis, Phase 2→3 transformation theory, and supporting frameworks were developed Jun-Jul 2026. Key additions:
+
+- **Rule Break Ingredients Framework** — Vehicle break (Type A: new medium, Type B: new action on existing medium) vs Results break. A results break gives you the vehicle break for free because novel results = novel content. Remarkability has a half-life.
+- **5 Meta-Patterns** — Merge pattern (blow-ups at branch intersections), Pendulum overshoot (Phase 3 swings past baseline = remarkability), Phase 2 decline signal (timing), Phase 2.5 trap (digital caps transformation), Bimodal blow-up (category creators fast, evolvers slow).
+- **Phase 3 Modality Map** — 132 modality cells across 10 branches with Phase 2 companies, Phase 3 companies, gaps, and merge opportunities.
+- **Capacity Spectrum** — For each modality: ancestral baseline → deviation → L1-L5 training progression → overshoot. Identity consistently forms at L3 (communal + committed + visible).
+- **The L3 Rule** — Design your flagship experience at L3 or above. Below L3, people do it but don't identify with it.
+
+All saved to Obsidian vault at `Frameworks/` and `Insights/`. Key notes: Phase 3 Viability Diagnostic, Rule Break Ingredients Framework, Phase 3 Modality Map, Capacity Spectrum Per Branch, Five Meta-Patterns From The Tree, Format Change Is The Rule Break, Phase 2 Market Size Is Not a Factor.
+
+### What still holds from v1
+
+- Movement = Category POV (92%) — identical mechanism
+- 3 Movement Questions (Q1/Q2/Q3) — still the core discovery tool, but Q2 now has a deeper answer rooted in Life Paths / cone of safety
+- DAM the Demand — still valid, the DAM statement structure works
+- Lightning Strikes = Wahoo system at Authority layer — still accurate
+- Superconsumers = Repeat attendees — still the right frame
+- The full Strike Design Flow (10 steps) — architecturally sound, not yet built in app
+- "CP is the strategic playbook, FMF is the emotional operating system" — still true
+
+### The 3 Movement Questions (v2 answers)
+
+**Q1: "How does the world currently solve this problem?"**
+> Therapy. Meditation apps. Self-help books. Wellness retreats. All assume the problem is that you're broken and need fixing, or that you don't know what you want.
+
+**Q2: "What's wrong with that?"**
+> You're not broken and you DO know what you want. You've known for years. The problem is your body says "not safe" every time you try to pursue the life you actually want. The cone of safety keeps you in careers, relationships, and patterns that feel survivable but unfulfilling. No amount of thinking, journaling, or app-based meditation expands that cone. The body needs to be trained, not talked to.
+
+**Q3: "How do you solve it?"**
+> Weekly Vibe Rise sessions. Breathe, plunge, face something that scares you, and be witnessed by your crew. The cone expands. Life paths that felt like Pressure become Fun. The ones that felt impossible become Vibe Rise. The app tracks it between sessions. The community holds you to it.
+
+**DAM Statement (v2):**
+> "You think you need therapy or a meditation app. But you already know what you want. Your body just won't let you go get it. What you actually need is a weekly practice that expands what feels safe. That's Vibe Rise."
+
+---
+
+*v1 analysis preserved below for reference.*
+
+---
+
 ## The Core Thesis
 
 Category Pirates says: **"Whoever frames the problem owns the solution."** You don't compete in an existing category. You create a new one where you're the only answer.
