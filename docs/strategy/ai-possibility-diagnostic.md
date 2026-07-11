@@ -456,6 +456,57 @@ Estimated monthly cost: $[sum of cost column]
 - Status dashboard: which tools are GREEN/YELLOW/RED for THIS user
 - Progressive: re-run quarterly as business grows
 
+### Traffic Light System (v2, Creator Portal only)
+
+Personalised traffic lights per capability card, based on what the logged-in user has actually connected:
+
+| Light | Meaning | Visual | Action |
+|-------|---------|--------|--------|
+| GREEN | Tool connected and working for you right now | Solid green dot | "View dashboard" link |
+| YELLOW | Tool available, one click to activate | Pulsing amber dot | "Connect now" button (fires Composio OAuth) |
+| RED | Not set up, needs configuration or account creation | Grey/red dot | "Set up guide" link |
+
+**Why this matters for the portal:** The diagnostic stops being a one-time quiz and becomes a live dashboard. "You have 12 capabilities GREEN, 5 YELLOW (one click each), 3 RED." Every time the user connects a tool, a light flips. Gamifies the setup process.
+
+**Data source:** Query Composio for connected apps + check Supabase for configured edge functions/API keys. The personal-status-overlay doc already maps this for Huzz's setup; the portal version does it per-user dynamically.
+
+**Why NOT for the /try/ lead magnet:** We don't know what the public user has connected. Traffic lights would all be YELLOW/RED, which is demoralising rather than motivating. The lead magnet version uses automation level badges (Runs itself / One-click / etc.) instead, which communicate possibility not status.
+
+**Content / lead magnet angle:** The traffic light visual IS compelling for marketing. A shareable "AI Readiness Scorecard" image showing 15 green dots, 5 yellow, 2 red communicates progress at a glance. Could be generated as a canvas card (like Play Profile or Weekly Review) and shared on social. The card shows the score, the user shares it, new users want their own score. UGC loop potential.
+
+### Shareable Scorecard (v1.5, lead magnet enhancement)
+
+Generate a canvas card after results that users can screenshot/share:
+
+```
+┌─────────────────────────────────────────┐
+│  MY AI POSSIBILITY SCORE                │
+│                                         │
+│  🟢🟢🟢🟢🟢🟢🟢🟢  8 automated       │
+│  🟡🟡🟡                3 AI-assisted    │
+│  🔴                     1 human only     │
+│                                         │
+│  12 capabilities scanned                │
+│  viberise.nichuzz.com/try/ai-diagnostic │
+└─────────────────────────────────────────┘
+```
+
+The dot grid is the visual hook. People see someone else's grid with mostly green and want to know what they're missing. Same psychology as the Vibe Rise Weekly Review card and Play Profile DNA card.
+
+Implementation: Reuse the existing canvas card pattern from `WeeklyReviewCard.jsx`. Render dots as colored circles on canvas, add score text, generate as downloadable image.
+
+### v2 improvement backlog (below 90% confidence, needs more work)
+
+These were identified during review but not implemented because confidence was below 90%:
+
+1. **Business-model personalisation** (75%) — Card copy adapts to the user's business model. "Auto-post about your upcoming events" instead of generic "Auto-post content daily." Needs 6 x 53 = 318 copy variants or a smart template system. Risk of forced/inaccurate copy.
+
+2. **n8n swap for non-technical users** (80%) — Replace n8n with Zapier or Make for users who select "Just help me think" or don't indicate technical skills. Needs pricing verification (Zapier free tier very limited now).
+
+3. **Composite recommendations** (70%) — "Fill your next event automatically" as a single card combining content + email + booking. Doesn't map to a single tool, feels artificial in current card format. Needs a different card type (workflow card vs tool card).
+
+4. **"Time saved" estimate** (60%) — Would need user input on current workload ("how many hours/week do you spend on content?") to calculate. Adds a step to the flow. Valuable output but increases friction.
+
 ### Data model
 - `ai_diagnostic_results` table: user_id, business_model, pain_points[], selected_capabilities[], report_json, created_at
 - Results feed into the Creator Brain for personalised agent actions
