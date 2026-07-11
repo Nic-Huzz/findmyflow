@@ -75,6 +75,7 @@ export default function QuestPathMap({
   const [activeSlide, setActiveSlide] = useState(0)
   const [healingIntentions, setHealingIntentions] = useState({})
   const [crossPollination, setCrossPollination] = useState([])
+  const [heroAvatarUrl, setHeroAvatarUrl] = useState(null)
   const lightMode = true
 
   const activeQuests = useMemo(() =>
@@ -111,6 +112,18 @@ export default function QuestPathMap({
       .select('source_quest_id, target_quest_id, created_at')
       .eq('user_id', userId)
       .then(({ data }) => { if (data) setCrossPollination(data) })
+  }, [userId])
+
+  // Load hero avatar
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('user_stage_progress')
+      .select('hero_avatar_url')
+      .eq('user_id', userId)
+      .not('hero_avatar_url', 'is', null)
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => { if (data?.hero_avatar_url) setHeroAvatarUrl(data.hero_avatar_url) })
   }, [userId])
 
   // Scroll sync for dot indicators
@@ -177,6 +190,7 @@ export default function QuestPathMap({
             trunkState={trunkS}
             light={lightMode}
             crossPollination={crossPollination}
+            heroAvatarUrl={heroAvatarUrl}
           />
         </div>
 
@@ -225,7 +239,7 @@ export default function QuestPathMap({
 
 // ─── Overview SVG (vertical: Y=time, X=state) ────────────────────────────────
 
-function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollination }) {
+function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollination, heroAvatarUrl }) {
   // Compute global date range across all tasks
   const dateRange = useMemo(() => {
     const allDates = quests.flatMap(q =>
@@ -254,25 +268,42 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
     return offsets
   }, [quests])
 
-  // Compute merged pairs from cross-pollination signals
-  // Each unique pair that has ANY signal becomes a merge
-  const mergedPairs = useMemo(() => {
+  // Compute merge info from cross-pollination signals
+  // source line stops at mergeY, curves into target line which thickens
+  const mergeInfo = useMemo(() => {
     const seen = {}
-    const pairs = []
+    const merges = [] // { sourceId, targetId, mergeY }
+    const stopAtY = {} // questId → Y where it stops (merged into another)
+    const thickenAtY = {} // questId → Y where it gets thicker (received a merge)
+
     crossPollination.forEach(cp => {
       const key = [cp.source_quest_id, cp.target_quest_id].sort().join(':')
-      if (seen[key]) return // only first signal per pair
+      if (seen[key]) return
       seen[key] = true
-      // Compute merge Y from signal date
+
       const signalDate = new Date(cp.created_at).getTime()
       const { minDate, maxDate } = dateRange
       const timeSpan = maxDate - minDate || 1
       const t = (signalDate - minDate) / timeSpan
       const mergeY = OV_BOTTOM - t * (OV_BOTTOM - OV_TOP)
-      const [idA, idB] = key.split(':')
-      pairs.push({ idA, idB, mergeY, key })
+
+      // Source merges INTO target
+      const sourceId = cp.source_quest_id
+      const targetId = cp.target_quest_id
+
+      merges.push({ sourceId, targetId, mergeY, key })
+
+      // Source line stops at mergeY (it merged away)
+      if (!stopAtY[sourceId] || mergeY < stopAtY[sourceId]) {
+        stopAtY[sourceId] = mergeY
+      }
+      // Target line thickens from mergeY upward
+      if (!thickenAtY[targetId] || mergeY > thickenAtY[targetId]) {
+        thickenAtY[targetId] = mergeY
+      }
     })
-    return pairs
+
+    return { merges, stopAtY, thickenAtY }
   }, [crossPollination, dateRange])
 
   return (
@@ -321,44 +352,27 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
             tasks={questTasks[quest.id] || []}
             laneX={laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')}
             dateRange={dateRange}
+            stopAtY={mergeInfo.stopAtY[quest.id]}
+            thickenAtY={mergeInfo.thickenAtY[quest.id]}
+            heroAvatarUrl={heroAvatarUrl}
           />
         ))}
 
-        {/* Merge lines: when a cross-pollination signal exists, merge two lines */}
-        {mergedPairs.map(({ idA, idB, mergeY, key }) => {
-          const xA = laneOffsets[idA]
-          const xB = laneOffsets[idB]
-          if (xA == null || xB == null) return null
-          const mergeX = (xA + xB) / 2
-          const questA = quests.find(q => q.id === idA)
-          const questB = quests.find(q => q.id === idB)
-          const mergeColour = '#5e17eb'
+        {/* Merge curves: source line curves INTO target line */}
+        {mergeInfo.merges.map(({ sourceId, targetId, mergeY, key }) => {
+          const xSource = laneOffsets[sourceId]
+          const xTarget = laneOffsets[targetId]
+          if (xSource == null || xTarget == null) return null
+          const sourceQuest = quests.find(q => q.id === sourceId)
+          const sourceColour = SAFE_COLOURS[sourceQuest?.predicted_state] || '#5e17eb'
           return (
             <g key={key}>
-              {/* Lines converging to merge point */}
-              <path d={`M ${xA} ${mergeY + 30} Q ${xA} ${mergeY + 10}, ${mergeX} ${mergeY}`}
-                fill="none" stroke={SAFE_COLOURS[questA?.predicted_state] || mergeColour}
-                strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-              <path d={`M ${xB} ${mergeY + 30} Q ${xB} ${mergeY + 10}, ${mergeX} ${mergeY}`}
-                fill="none" stroke={SAFE_COLOURS[questB?.predicted_state] || mergeColour}
-                strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-              {/* Merged thick line continuing upward */}
-              <line x1={mergeX} y1={mergeY} x2={mergeX} y2={OV_TOP}
-                stroke={mergeColour} strokeWidth="4.5" strokeLinecap="round" opacity="0.6" />
-              <line x1={mergeX} y1={mergeY} x2={mergeX} y2={OV_TOP}
-                stroke={mergeColour} strokeWidth="12" strokeLinecap="round" opacity="0.04"
-                filter={`url(#${uid}glow)`} />
-              {/* Merge node */}
-              <circle cx={mergeX} cy={mergeY} r="5" fill={mergeColour} opacity="0.3" />
-              <circle cx={mergeX} cy={mergeY} r="3" fill={mergeColour} opacity="0.5" />
-              {/* Merge avatar */}
-              <circle cx={mergeX} cy={OV_TOP + 15} r="8" fill={mergeColour} opacity="0.7" />
-              <text x={mergeX} y={OV_TOP + 18} fill="#fff" fontSize="8" fontWeight="700" textAnchor="middle">🔥</text>
-              <circle cx={mergeX} cy={OV_TOP + 15} r="11" fill="none" stroke={mergeColour}
-                strokeWidth="1" opacity="0.12">
-                <animate attributeName="r" values="11;17;11" dur="2.5s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite" />
-              </circle>
+              {/* Curve from source lane to target lane at mergeY */}
+              <path d={`M ${xSource} ${mergeY + 40} C ${xSource} ${mergeY + 15}, ${xTarget} ${mergeY + 15}, ${xTarget} ${mergeY}`}
+                fill="none" stroke={sourceColour} strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+              {/* Merge node on target line */}
+              <circle cx={xTarget} cy={mergeY} r="5" fill="#5e17eb" opacity="0.35" />
+              <circle cx={xTarget} cy={mergeY} r="3" fill="#5e17eb" opacity="0.55" />
             </g>
           )
         })}
@@ -374,16 +388,17 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
 
 // ─── Vertical quest line (single path in overview) ────────────────────────────
 
-function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange }) {
+function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange, stopAtY, thickenAtY, heroAvatarUrl }) {
   const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
   const n = tasks.length
 
   // No tasks — just show label
   if (n === 0) {
     return (
-      <text x={laneX} y={OV_BOTTOM + 12} fill={destColour} opacity="0.4"
-        fontSize="7" fontWeight="700" textAnchor="middle">
-        {quest.label?.slice(0, 14)}
+      <text x={laneX} y={OV_BOTTOM + 16} fill={destColour} opacity="0.4"
+        fontSize="11" fontWeight="800" textAnchor="end"
+        transform={`rotate(-45, ${laneX}, ${OV_BOTTOM + 16})`}>
+        {quest.label?.slice(0, 22)}
       </text>
     )
   }
@@ -407,22 +422,41 @@ function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange }) {
   // Find the most recent completed task for the character marker
   const lastDone = [...taskPoints].reverse().find(p => p.task.done)
 
-  // Build path through all task points (straight vertical with the lane X)
+  // Line boundaries
   const firstY = taskPoints.length > 0 ? taskPoints[0].y : OV_BOTTOM
   const lastY = taskPoints.length > 0 ? taskPoints[taskPoints.length - 1].y : OV_TOP
+  // If this quest merges into another, stop the line at stopAtY
+  const topY = stopAtY != null ? Math.max(stopAtY, lastY) : lastY
 
   return (
     <g>
-      {/* Line from first to last task */}
-      <line x1={laneX} y1={firstY} x2={laneX} y2={lastY}
-        stroke={destColour} strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
-      {/* Glow */}
-      <line x1={laneX} y1={firstY} x2={laneX} y2={lastY}
-        stroke={destColour} strokeWidth="7" strokeLinecap="round" opacity="0.05"
-        filter={`url(#${uid}glow)`} />
+      {/* Main line (below thicken point or full if no thicken) */}
+      {thickenAtY != null ? (
+        <>
+          {/* Thin portion: firstY → thickenAtY */}
+          <line x1={laneX} y1={firstY} x2={laneX} y2={thickenAtY}
+            stroke={destColour} strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+          {/* Thick portion: thickenAtY → topY (received a merge) */}
+          <line x1={laneX} y1={thickenAtY} x2={laneX} y2={topY}
+            stroke={destColour} strokeWidth="5" strokeLinecap="round" opacity="0.65" />
+          <line x1={laneX} y1={thickenAtY} x2={laneX} y2={topY}
+            stroke={destColour} strokeWidth="12" strokeLinecap="round" opacity="0.05"
+            filter={`url(#${uid}glow)`} />
+        </>
+      ) : (
+        <>
+          <line x1={laneX} y1={firstY} x2={laneX} y2={topY}
+            stroke={destColour} strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+          <line x1={laneX} y1={firstY} x2={laneX} y2={topY}
+            stroke={destColour} strokeWidth="7" strokeLinecap="round" opacity="0.05"
+            filter={`url(#${uid}glow)`} />
+        </>
+      )}
 
-      {/* Task dots */}
-      {taskPoints.map(({ x, y, task }) => (
+      {/* Task dots (only show below stopAtY if quest merged away) */}
+      {taskPoints
+        .filter(({ y }) => stopAtY == null || y >= stopAtY)
+        .map(({ x, y, task }) => (
         <circle key={task.id} cx={x} cy={y} r={task.done ? 3 : 2}
           fill={task.done ? destColour : 'none'}
           stroke={task.done ? 'none' : `${destColour}40`}
@@ -430,18 +464,39 @@ function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange }) {
           opacity={task.done ? 0.7 : 1} />
       ))}
 
-      {/* Character marker at most recent completed task */}
-      {lastDone && (
+      {/* Character marker — don't show if quest merged away */}
+      {lastDone && stopAtY == null && (
         <g>
-          <circle cx={lastDone.x} cy={lastDone.y} r="7" fill={destColour} opacity="0.8" />
-          <text x={lastDone.x} y={lastDone.y + 3} fill="#fff" fontSize="7"
-            fontWeight="700" textAnchor="middle">
-            {STATE_META[quest.predicted_state]?.emoji?.slice(0, 2) || '•'}
-          </text>
+          {/* Ring */}
+          <circle cx={lastDone.x} cy={lastDone.y} r="12" fill={destColour} opacity="0.15" />
+          <circle cx={lastDone.x} cy={lastDone.y} r="10" fill="#f5f5f0" />
+          {/* Avatar image clipped to circle */}
+          {heroAvatarUrl ? (
+            <>
+              <defs>
+                <clipPath id={`${uid}clip-${quest.id}`}>
+                  <circle cx={lastDone.x} cy={lastDone.y} r="9" />
+                </clipPath>
+              </defs>
+              <image
+                href={heroAvatarUrl}
+                x={lastDone.x - 9} y={lastDone.y - 9}
+                width="18" height="18"
+                clipPath={`url(#${uid}clip-${quest.id})`}
+                preserveAspectRatio="xMidYMid slice"
+              />
+            </>
+          ) : (
+            <circle cx={lastDone.x} cy={lastDone.y} r="9" fill={destColour} opacity="0.8" />
+          )}
+          {/* Border ring */}
           <circle cx={lastDone.x} cy={lastDone.y} r="10" fill="none"
-            stroke={destColour} strokeWidth="1" opacity="0.12">
-            <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite" />
+            stroke={destColour} strokeWidth="1.5" opacity="0.6" />
+          {/* Pulse */}
+          <circle cx={lastDone.x} cy={lastDone.y} r="12" fill="none"
+            stroke={destColour} strokeWidth="1" opacity="0.1">
+            <animate attributeName="r" values="12;20;12" dur="2.5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite" />
           </circle>
         </g>
       )}

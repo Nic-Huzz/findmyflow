@@ -172,6 +172,8 @@ const PlayListUpdateFlow = lazyRetry(() => import('./flows/PlayListUpdateFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
+const CuriosityMapFlow = lazyRetry(() => import('./flows/CuriosityMapFlow'))
+const CareerAlignmentFlow = lazyRetry(() => import('./flows/CareerAlignmentFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 // const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap')) // archived
 
@@ -782,6 +784,16 @@ function AppRouter() {
             <Route path="/limiting-belief-rewire" element={
               <AuthGate>
                 <LimitingBeliefRewire />
+              </AuthGate>
+            } />
+            <Route path="/curiosity-map" element={
+              <AuthGate>
+                <CuriosityMapFlow />
+              </AuthGate>
+            } />
+            <Route path="/career-alignment" element={
+              <AuthGate>
+                <CareerAlignmentFlow />
               </AuthGate>
             } />
             <Route path="/life-map" element={

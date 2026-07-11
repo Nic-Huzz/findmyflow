@@ -319,6 +319,44 @@
 }
 
 /* ===== Question Cards ===== */
+/* Curiosity context card */
+.lm-curiosity-context {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+.lm-curiosity-context-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 6px;
+}
+
+.lm-curiosity-context-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.lm-curiosity-context-gold {
+  border-color: rgba(251, 191, 36, 0.3);
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.lm-curiosity-cluster-item {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 4px;
+  padding-left: 8px;
+  border-left: 2px solid rgba(251, 191, 36, 0.25);
+}
+
 .lm-questions {
   display: flex;
   flex-direction: column;

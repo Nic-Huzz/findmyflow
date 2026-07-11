@@ -20,6 +20,7 @@ import './FacilitateLifePaths.css'
 const STEPS = {
   INTRO: 'intro',
   CURRENT: 'current',
+  SUGGESTIONS: 'suggestions',
   ENTER: 'enter',
   TAG: 'tag',
   SPRING: 'spring',
@@ -66,6 +67,11 @@ export default function LifePathFlow() {
   const wahooInputRef = useRef(null)
   const stuckInputRef = useRef(null)
   const reasonTimerRef = useRef(null)
+
+  // AI suggestions
+  const [suggestedPaths, setSuggestedPaths] = useState([])
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false)
+  const [selectedSuggestions, setSelectedSuggestions] = useState(new Set())
 
   // Derived
   const taggedCareers = careers.filter(c => c.predictedState)
@@ -152,6 +158,46 @@ export default function LifePathFlow() {
       return () => clearTimeout(t)
     }
   }, [step])
+
+  // Fetch AI suggestions when entering SUGGESTIONS step
+  useEffect(() => {
+    if (step !== STEPS.SUGGESTIONS || suggestedPaths.length > 0) return
+    ;(async () => {
+      setSuggestionsLoading(true)
+      try {
+        // Fetch curiosity clusters + life map skills/problems
+        const [{ data: clusters }, { data: skillsData }, { data: problemsData }] = await Promise.all([
+          supabase.from('curiosity_clusters').select('cluster_name, branch, why').eq('user_id', user.id),
+          supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', user.id).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
+          supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', user.id).eq('cluster_type', 'problems').eq('cluster_stage', 'final'),
+        ])
+
+        const hasData = clusters?.length || skillsData?.length || problemsData?.length
+        if (!hasData) {
+          // No data to suggest from — skip to manual entry
+          setStep(STEPS.ENTER)
+          setSuggestionsLoading(false)
+          return
+        }
+
+        const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
+          body: {
+            curiosityClusters: clusters || [],
+            skills: (skillsData || []).map(s => s.cluster_label),
+            problems: (problemsData || []).map(p => p.cluster_label),
+          },
+        })
+
+        if (error) throw error
+        if (data?.paths?.length) setSuggestedPaths(data.paths)
+      } catch (err) {
+        console.error('Path suggestions failed:', err)
+        // AI failed — skip to manual entry rather than showing misleading "no data" message
+        setStep(STEPS.ENTER)
+      }
+      setSuggestionsLoading(false)
+    })()
+  }, [step, suggestedPaths.length, user?.id])
 
   useEffect(() => {
     if (step === STEPS.READING) {
@@ -532,7 +578,64 @@ export default function LifePathFlow() {
                     <p style={{ margin: '0 0 8px' }}>The one you spend the most time in decides which life paths feel possible.</p>
                     <p style={{ margin: 0 }}>Right now, you're walking the <span style={{ color: STATE_META[currentCareer.state]?.color, opacity: 1 }}>{STATE_META[currentCareer.state]?.label}</span> path.</p>
                   </div>
-                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>What else is out there? →</button>
+                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.SUGGESTIONS)}>What else is out there? →</button>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* SUGGESTIONS */}
+          {step === STEPS.SUGGESTIONS && (
+            <div className="flp-panel-step">
+              {suggestionsLoading ? (
+                <>
+                  <div className="flp-panel-step-prompt">Finding paths that match your curiosities...</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: 20 }}>
+                    <div style={{ width: 32, height: 32, border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#fbbf24', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  </div>
+                </>
+              ) : suggestedPaths.length > 0 ? (
+                <>
+                  <div className="flp-panel-step-prompt">Based on your curiosities and skills, these paths might light you up.</div>
+                  <div style={{ fontSize: 13, opacity: 0.4, fontStyle: 'italic', marginBottom: 12 }}>Tap any that resonate. You can also add your own on the next screen.</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                    {suggestedPaths.map((path, i) => {
+                      const selected = selectedSuggestions.has(i)
+                      return (
+                        <button key={i} onClick={() => {
+                          hapticLight()
+                          setSelectedSuggestions(prev => {
+                            const next = new Set(prev)
+                            if (next.has(i)) { next.delete(i); const match = careers.find(c => c.label === path.name); if (match) removeCareer(match.id) }
+                            else { next.add(i); addCareer(path.name) }
+                            return next
+                          })
+                        }} style={{
+                          textAlign: 'left', padding: '12px 14px', borderRadius: 12, cursor: 'pointer', fontFamily: 'inherit',
+                          border: selected ? '2px solid #fbbf24' : '2px solid rgba(255,255,255,0.1)',
+                          background: selected ? 'rgba(251,191,36,0.1)' : 'rgba(255,255,255,0.04)',
+                          transition: 'all 0.2s',
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontSize: 16, flexShrink: 0 }}>{selected ? '\u2713' : '\u{25CB}'}</span>
+                            <div>
+                              <div style={{ fontSize: 14, fontWeight: 700, color: selected ? '#fbbf24' : 'inherit' }}>{path.name}</div>
+                              <div style={{ fontSize: 12, opacity: 0.5, lineHeight: 1.4, marginTop: 2 }}>{path.description}</div>
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>
+                    {selectedSuggestions.size > 0 ? `Continue with ${selectedSuggestions.size} selected →` : 'Skip, I\'ll add my own →'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="flp-panel-step-prompt">What are all the career options available to you?</div>
+                  <div style={{ fontSize: 13, opacity: 0.4, fontStyle: 'italic', marginBottom: 8 }}>Complete your Curiosity Map and Life Map for personalised suggestions.</div>
+                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>Add paths manually →</button>
                 </>
               )}
             </div>
