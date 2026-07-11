@@ -67,6 +67,9 @@
 .qpm-canvas svg {
   width: 100%; display: block;
 }
+.qpm-canvas-vertical svg {
+  min-height: 70vh;
+}
 .qpm-canvas svg text {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   user-select: none;
@@ -159,6 +162,19 @@
 .qpm-healing-later { background: rgba(0,0,0,0.04); color: rgba(0,0,0,0.5); }
 .qpm-healing-hint {
   font-size: 11px; color: rgba(0,0,0,0.3); margin-top: 6px;
+}
+
+/* ── Commentary ── */
+.qpm-commentary {
+  padding: 16px 4px 8px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.qpm-commentary-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: rgba(0,0,0,0.4); line-height: 1.4;
+}
+.qpm-commentary-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
 }
 
 .qpm-swipe-hint {

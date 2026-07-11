@@ -24,23 +24,33 @@ import {
 } from '../LifePathMap/lifePaths'
 import './QuestPathMap.css'
 
-// Scaled coordinates for portrait card (400×480 viewBox)
+// ── Horizontal layout constants (used by FocusSVG per-quest detail) ──
 const VB_W = 400
 const VB_H = 480
-const TX = 40    // trunk X
-const CX = 370   // career endpoint X
-const SCALE_Y = VB_H / 600 // map lifePaths Y coords to our viewBox
+const TX = 40    // trunk X (horizontal)
+const CX = 370   // career endpoint X (horizontal)
+const SCALE_Y = VB_H / 600
 
 function scaledY(state) {
   return stateY(state) * SCALE_Y
 }
 
-function cardBranchPath(destState, trunkState) {
-  const ty = scaledY(trunkState)
-  const dy = scaledY(destState)
-  const dx = CX - TX
-  return `M ${TX} ${ty} C ${TX + dx * 0.35} ${ty}, ${TX + dx * 0.65} ${dy}, ${CX} ${dy}`
+// ── Vertical overview constants (Y=time, X=state) ──
+const OV_W = 420   // overview viewBox width
+const OV_H = 800   // overview viewBox height (taller for more dot visibility)
+const OV_BOTTOM = OV_H - 100 // Y for earliest (bottom, room for rotated labels)
+const OV_TOP_PAD = 50        // room at top for NOW
+const OV_TOP = OV_TOP_PAD     // Y for most recent (top)
+
+// State zone X ranges (left=uninterested, right=vibe rise)
+const STATE_ZONES = {
+  shutdown: { center: 65,  left: 25,  right: 105 },
+  anxious:  { center: 160, left: 115, right: 205 },
+  peace:    { center: 255, left: 215, right: 305 },
+  vibe:     { center: 355, left: 315, right: 405 },
 }
+
+function stateX(s) { return STATE_ZONES[s]?.center ?? 255 }
 
 // State gradient colours (for the safe portion of the line)
 const SAFE_COLOURS = {
@@ -64,6 +74,7 @@ export default function QuestPathMap({
   const slidesRef = useRef(null)
   const [activeSlide, setActiveSlide] = useState(0)
   const [healingIntentions, setHealingIntentions] = useState({})
+  const [crossPollination, setCrossPollination] = useState([])
   const lightMode = true
 
   const activeQuests = useMemo(() =>
@@ -93,6 +104,15 @@ export default function QuestPathMap({
       })
   }, [allTaskIdKey])
 
+  // Load cross-pollination signals
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('quest_cross_pollination')
+      .select('source_quest_id, target_quest_id, created_at')
+      .eq('user_id', userId)
+      .then(({ data }) => { if (data) setCrossPollination(data) })
+  }, [userId])
+
   // Scroll sync for dot indicators
   const handleScroll = useCallback(() => {
     if (!slidesRef.current) return
@@ -108,24 +128,6 @@ export default function QuestPathMap({
 
   const trunkS = trunkState || 'anxious'
   const trunkYPos = scaledY(trunkS)
-
-  // Compute Y offsets for quests sharing the same predicted_state
-  const questOffsets = useMemo(() => {
-    const groups = {}
-    activeQuests.forEach(q => {
-      const s = q.predicted_state || 'anxious'
-      if (!groups[s]) groups[s] = []
-      groups[s].push(q.id)
-    })
-    const offsets = {}
-    Object.values(groups).forEach(ids => {
-      if (ids.length <= 1) { ids.forEach(id => { offsets[id] = 0 }); return }
-      const spacing = 24 * SCALE_Y
-      const total = (ids.length - 1) * spacing
-      ids.forEach((id, i) => { offsets[id] = i * spacing - total / 2 })
-    })
-    return offsets
-  }, [activeQuests])
 
   // Compute global cone
   const cone = useMemo(() => {
@@ -173,10 +175,8 @@ export default function QuestPathMap({
             quests={activeQuests}
             questTasks={questTasks}
             trunkState={trunkS}
-            trunkY={trunkYPos}
-            cone={cone}
             light={lightMode}
-            questOffsets={questOffsets}
+            crossPollination={crossPollination}
           />
         </div>
 
@@ -223,87 +223,236 @@ export default function QuestPathMap({
 }
 
 
-// ─── Overview SVG (all paths) ─────────────────────────────────────────────────
+// ─── Overview SVG (vertical: Y=time, X=state) ────────────────────────────────
 
-function OverviewSVG({ uid, quests, questTasks, trunkState, trunkY, cone, light, questOffsets }) {
+function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollination }) {
+  // Compute global date range across all tasks
+  const dateRange = useMemo(() => {
+    const allDates = quests.flatMap(q =>
+      (questTasks[q.id] || []).filter(t => t.created_at).map(t => new Date(t.created_at).getTime())
+    )
+    if (!allDates.length) return { minDate: Date.now() - 86400000, maxDate: Date.now() }
+    return { minDate: Math.min(...allDates), maxDate: Math.max(...allDates) }
+  }, [quests, questTasks])
+
+  // Compute lane offsets: quests sharing a predicted_state get spread horizontally
+  const laneOffsets = useMemo(() => {
+    const groups = {}
+    quests.forEach(q => {
+      const s = q.predicted_state || 'peace'
+      if (!groups[s]) groups[s] = []
+      groups[s].push(q.id)
+    })
+    const offsets = {}
+    Object.entries(groups).forEach(([s, ids]) => {
+      const zone = STATE_ZONES[s]
+      if (!zone) return
+      const spacing = Math.min(25, (zone.right - zone.left) / Math.max(ids.length, 1))
+      const total = (ids.length - 1) * spacing
+      ids.forEach((id, i) => { offsets[id] = zone.center + (i * spacing - total / 2) })
+    })
+    return offsets
+  }, [quests])
+
+  // Compute merged pairs from cross-pollination signals
+  // Each unique pair that has ANY signal becomes a merge
+  const mergedPairs = useMemo(() => {
+    const seen = {}
+    const pairs = []
+    crossPollination.forEach(cp => {
+      const key = [cp.source_quest_id, cp.target_quest_id].sort().join(':')
+      if (seen[key]) return // only first signal per pair
+      seen[key] = true
+      // Compute merge Y from signal date
+      const signalDate = new Date(cp.created_at).getTime()
+      const { minDate, maxDate } = dateRange
+      const timeSpan = maxDate - minDate || 1
+      const t = (signalDate - minDate) / timeSpan
+      const mergeY = OV_BOTTOM - t * (OV_BOTTOM - OV_TOP)
+      const [idA, idB] = key.split(':')
+      pairs.push({ idA, idB, mergeY, key })
+    })
+    return pairs
+  }, [crossPollination, dateRange])
+
   return (
-    <div className="qpm-canvas">
-      <svg viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="xMidYMid meet">
-        <rect width={VB_W} height={VB_H} fill={light ? '#f5f5f0' : '#0a0a14'} rx="16" />
+    <div className="qpm-canvas qpm-canvas-vertical">
+      <svg viewBox={`0 0 ${OV_W} ${OV_H}`} preserveAspectRatio="xMidYMid meet">
+        <rect width={OV_W} height={OV_H} fill="#f5f5f0" rx="16" />
+
         <defs>
           <filter id={`${uid}glow`} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
-          <radialGradient id={`${uid}tg`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState]} stopOpacity="0.2" />
-            <stop offset="100%" stopColor={SAFE_COLOURS[trunkState]} stopOpacity="0" />
+          <radialGradient id={`${uid}avGlow`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#E9A23B" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#E9A23B" stopOpacity="0" />
           </radialGradient>
-          <linearGradient id={`${uid}cg`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#f59e0b" stopOpacity={light ? 0.25 : 0.06} />
-            <stop offset="60%" stopColor="#f59e0b" stopOpacity={light ? 0.12 : 0.02} />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
-        {/* State bands + labels */}
+        {/* State zone columns */}
         {STATES.map(s => {
-          const sy = scaledY(s)
-          const bandH = 72 * SCALE_Y
+          const zone = STATE_ZONES[s]
+          if (!zone) return null
           return (
             <g key={s}>
-              <rect x={TX} y={sy - bandH / 2} width={CX - TX + 30} height={bandH} rx="4"
-                fill={SAFE_COLOURS[s]} opacity={0.08} />
-              <line x1={TX} y1={sy} x2={CX + 30} y2={sy}
-                stroke={SAFE_COLOURS[s]} strokeWidth="1" opacity="0.2"
-                strokeDasharray="4,8" />
-              <text x={12} y={sy - 8} fill={SAFE_COLOURS[s]} opacity="0.75"
-                fontSize="9" fontWeight="800" textAnchor="start" letterSpacing="1">
+              <rect x={zone.left} y={OV_TOP - 10} width={zone.right - zone.left} height={OV_BOTTOM - OV_TOP + 20}
+                rx="6" fill={SAFE_COLOURS[s]} opacity="0.04" />
+              <text x={zone.center} y={OV_TOP - 18} fill={SAFE_COLOURS[s]} opacity="0.6"
+                fontSize="9" fontWeight="800" textAnchor="middle" letterSpacing="1">
                 {STATE_META[s].label.toUpperCase()}
-              </text>
-              <text x={12} y={sy + 6} fill={SAFE_COLOURS[s]} opacity="0.45"
-                fontSize="7" textAnchor="start">
-                {STATE_META[s].felt}
               </text>
             </g>
           )
         })}
 
-        {/* Cone of safety */}
-        {!cone.empty && (
-          <path d={`M ${TX} ${trunkY} L ${CX + 10} ${cone.topY} L ${CX + 10} ${cone.botY} Z`}
-            fill={`url(#${uid}cg)`} />
-        )}
+        {/* Zone dividers */}
+        <line x1="110" y1={OV_TOP - 10} x2="110" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
+        <line x1="210" y1={OV_TOP - 10} x2="210" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
+        <line x1="310" y1={OV_TOP - 10} x2="310" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
 
-        {/* Quest paths */}
+        {/* Quest paths (vertical lines) */}
         {quests.map(quest => (
-          <QuestPath
+          <VerticalQuestLine
             key={quest.id}
             uid={uid}
             quest={quest}
             tasks={questTasks[quest.id] || []}
-            trunkState={trunkState}
-            trunkY={trunkY}
-            cone={cone}
-            mini
-            light={light}
-            destOffset={questOffsets?.[quest.id] || 0}
+            laneX={laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')}
+            dateRange={dateRange}
           />
         ))}
 
-        {/* Trunk */}
-        <circle cx={TX} cy={trunkY} r="22" fill={`url(#${uid}tg)`} />
-        <circle cx={TX} cy={trunkY} r="6" fill={SAFE_COLOURS[trunkState]} opacity="0.85" />
-        <circle cx={TX} cy={trunkY} r="3" fill={light ? '#333' : '#fff'} opacity="0.5" />
-        <circle cx={TX} cy={trunkY} r="6" fill="none" stroke={SAFE_COLOURS[trunkState]}
-          strokeWidth="1.5" opacity="0.15">
-          <animate attributeName="r" values="6;16;6" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.15;0;0.15" dur="3s" repeatCount="indefinite" />
-        </circle>
-        <text x={TX} y={trunkY + 20} fill={light ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.3)'} fontSize="8"
-          textAnchor="middle" fontWeight="600">YOU</text>
+        {/* Merge lines: when a cross-pollination signal exists, merge two lines */}
+        {mergedPairs.map(({ idA, idB, mergeY, key }) => {
+          const xA = laneOffsets[idA]
+          const xB = laneOffsets[idB]
+          if (xA == null || xB == null) return null
+          const mergeX = (xA + xB) / 2
+          const questA = quests.find(q => q.id === idA)
+          const questB = quests.find(q => q.id === idB)
+          const mergeColour = '#5e17eb'
+          return (
+            <g key={key}>
+              {/* Lines converging to merge point */}
+              <path d={`M ${xA} ${mergeY + 30} Q ${xA} ${mergeY + 10}, ${mergeX} ${mergeY}`}
+                fill="none" stroke={SAFE_COLOURS[questA?.predicted_state] || mergeColour}
+                strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+              <path d={`M ${xB} ${mergeY + 30} Q ${xB} ${mergeY + 10}, ${mergeX} ${mergeY}`}
+                fill="none" stroke={SAFE_COLOURS[questB?.predicted_state] || mergeColour}
+                strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+              {/* Merged thick line continuing upward */}
+              <line x1={mergeX} y1={mergeY} x2={mergeX} y2={OV_TOP}
+                stroke={mergeColour} strokeWidth="4.5" strokeLinecap="round" opacity="0.6" />
+              <line x1={mergeX} y1={mergeY} x2={mergeX} y2={OV_TOP}
+                stroke={mergeColour} strokeWidth="12" strokeLinecap="round" opacity="0.04"
+                filter={`url(#${uid}glow)`} />
+              {/* Merge node */}
+              <circle cx={mergeX} cy={mergeY} r="5" fill={mergeColour} opacity="0.3" />
+              <circle cx={mergeX} cy={mergeY} r="3" fill={mergeColour} opacity="0.5" />
+              {/* Merge avatar */}
+              <circle cx={mergeX} cy={OV_TOP + 15} r="8" fill={mergeColour} opacity="0.7" />
+              <text x={mergeX} y={OV_TOP + 18} fill="#fff" fontSize="8" fontWeight="700" textAnchor="middle">🔥</text>
+              <circle cx={mergeX} cy={OV_TOP + 15} r="11" fill="none" stroke={mergeColour}
+                strokeWidth="1" opacity="0.12">
+                <animate attributeName="r" values="11;17;11" dur="2.5s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite" />
+              </circle>
+            </g>
+          )
+        })}
+
+        {/* NOW marker at top */}
+        <text x={OV_W - 20} y={OV_TOP - 5} fill="rgba(0,0,0,0.2)"
+          fontSize="8" fontWeight="600" textAnchor="end">NOW ↑</text>
       </svg>
     </div>
+  )
+}
+
+
+// ─── Vertical quest line (single path in overview) ────────────────────────────
+
+function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange }) {
+  const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
+  const n = tasks.length
+
+  // No tasks — just show label
+  if (n === 0) {
+    return (
+      <text x={laneX} y={OV_BOTTOM + 12} fill={destColour} opacity="0.4"
+        fontSize="7" fontWeight="700" textAnchor="middle">
+        {quest.label?.slice(0, 14)}
+      </text>
+    )
+  }
+
+  // Map tasks to Y positions based on created_at dates
+  const { minDate, maxDate } = dateRange
+  const timeSpan = maxDate - minDate || 1
+
+  const taskPoints = useMemo(() =>
+    tasks
+      .filter(t => t.created_at)
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      .map(task => {
+        const t = (new Date(task.created_at) - minDate) / timeSpan
+        const y = OV_BOTTOM - t * (OV_BOTTOM - OV_TOP)
+        return { x: laneX, y, task }
+      }),
+    [tasks, laneX, minDate, maxDate, timeSpan]
+  )
+
+  // Find the most recent completed task for the character marker
+  const lastDone = [...taskPoints].reverse().find(p => p.task.done)
+
+  // Build path through all task points (straight vertical with the lane X)
+  const firstY = taskPoints.length > 0 ? taskPoints[0].y : OV_BOTTOM
+  const lastY = taskPoints.length > 0 ? taskPoints[taskPoints.length - 1].y : OV_TOP
+
+  return (
+    <g>
+      {/* Line from first to last task */}
+      <line x1={laneX} y1={firstY} x2={laneX} y2={lastY}
+        stroke={destColour} strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+      {/* Glow */}
+      <line x1={laneX} y1={firstY} x2={laneX} y2={lastY}
+        stroke={destColour} strokeWidth="7" strokeLinecap="round" opacity="0.05"
+        filter={`url(#${uid}glow)`} />
+
+      {/* Task dots */}
+      {taskPoints.map(({ x, y, task }) => (
+        <circle key={task.id} cx={x} cy={y} r={task.done ? 3 : 2}
+          fill={task.done ? destColour : 'none'}
+          stroke={task.done ? 'none' : `${destColour}40`}
+          strokeWidth={task.done ? 0 : 1}
+          opacity={task.done ? 0.7 : 1} />
+      ))}
+
+      {/* Character marker at most recent completed task */}
+      {lastDone && (
+        <g>
+          <circle cx={lastDone.x} cy={lastDone.y} r="7" fill={destColour} opacity="0.8" />
+          <text x={lastDone.x} y={lastDone.y + 3} fill="#fff" fontSize="7"
+            fontWeight="700" textAnchor="middle">
+            {STATE_META[quest.predicted_state]?.emoji?.slice(0, 2) || '•'}
+          </text>
+          <circle cx={lastDone.x} cy={lastDone.y} r="10" fill="none"
+            stroke={destColour} strokeWidth="1" opacity="0.12">
+            <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite" />
+          </circle>
+        </g>
+      )}
+
+      {/* Quest label at bottom (rotated) */}
+      <text x={laneX} y={OV_BOTTOM + 16} fill={destColour} opacity="0.9"
+        fontSize="11" fontWeight="800" textAnchor="end"
+        transform={`rotate(-45, ${laneX}, ${OV_BOTTOM + 16})`}>
+        {quest.label?.slice(0, 22)}
+      </text>
+    </g>
   )
 }
 
