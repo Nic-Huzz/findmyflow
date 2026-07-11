@@ -49,6 +49,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasLifePaths, setHasLifePaths] = useState(false)
+  const [hasCuriosityMap, setHasCuriosityMap] = useState(false)
+  const [hasCareerAlignment, setHasCareerAlignment] = useState(false)
   const [lifePathCareers, setLifePathCareers] = useState([]) // careers from life_path_sessions
   const [lifePathCurrentState, setLifePathCurrentState] = useState(null)
   const [lifePathSafety, setLifePathSafety] = useState(0)
@@ -207,6 +209,24 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) setHasCareerClarity(true)
+      })
+    // Check if curiosity map completed
+    supabase
+      .from('curiosity_clusters')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasCuriosityMap(true)
+      })
+    // Check if career alignment completed
+    supabase
+      .from('career_alignments')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasCareerAlignment(true)
       })
     // Check if people matching completed (saved favourites in localStorage)
     try {
@@ -421,17 +441,43 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       {/* ══════ QUEST BOARD ══════ */}
 
       {/* Your Journey — only show if any item is incomplete */}
-      {(!hasLifeMap || !hasLifePaths || !hasEssenceAvatar || !(hasWahoos || hasPlaySkills) || !hasHealingCompletion) && (
+      {(!hasCuriosityMap || !hasLifeMap || !hasLifePaths || !hasEssenceAvatar || !(hasWahoos || hasPlaySkills) || !hasHealingCompletion) && (
         <div className="quest-section">
           <div className="quest-section-header">
             <span className="quest-section-icon">📖</span>
             <span className="quest-section-title">Your Journey</span>
           </div>
+          {/* Curiosity Map → Life Map → Life Paths (sequential, all visible, locked until previous complete) */}
+          {!hasCuriosityMap && (
+            <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Map Your Curiosities', route: '/curiosity-map', narrative: 'What can\'t you stop reading, watching, and learning about?', icon: '✨' }} isCompleted={false} />
+          )}
           {!hasLifeMap && (
-            <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
+            hasCuriosityMap ? (
+              <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
+            ) : (
+              <div className="level-deep-dive" style={{ opacity: 0.5 }}>
+                <div className="level-dd-icon">🔒</div>
+                <div className="level-dd-info">
+                  <div className="level-dd-name">Life Map</div>
+                  <div className="level-dd-narrative">Complete Curiosity Map first.</div>
+                </div>
+                <span className="level-dd-status locked">Locked</span>
+              </div>
+            )
           )}
           {!hasLifePaths && (
-            <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={false} />
+            hasLifeMap ? (
+              <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={false} />
+            ) : (
+              <div className="level-deep-dive" style={{ opacity: 0.5 }}>
+                <div className="level-dd-icon">🔒</div>
+                <div className="level-dd-info">
+                  <div className="level-dd-name">Map Your Life Paths</div>
+                  <div className="level-dd-narrative">Complete Life Map first.</div>
+                </div>
+                <span className="level-dd-status locked">Locked</span>
+              </div>
+            )
           )}
           {!hasEssenceAvatar && (
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
@@ -584,7 +630,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         <div className="struggle-pills">
           <button className={`struggle-pill ${activeStruggle === 'direction' ? 'active' : ''}`}
             onClick={() => setActiveStruggle(activeStruggle === 'direction' ? null : 'direction')}>
-            🧭 Should I start my own thing?
+            🧭 What career path is best?
           </button>
           <button className={`struggle-pill ${activeStruggle === 'fear' ? 'active' : ''}`}
             onClick={() => setActiveStruggle(activeStruggle === 'fear' ? null : 'fear')}>
@@ -598,7 +644,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
         {activeStruggle === 'direction' && (
           <div className="struggle-flows">
-            <DeepDiveCard deepDive={{ id: 'career_clarity', name: 'Career Clarity Quiz', route: '/career-clarity', narrative: 'Should you stay, pivot, or build?', icon: '🧭' }} isCompleted={hasCareerClarity} />
+            <DeepDiveCard deepDive={{ id: 'career_alignment', name: 'What career path is best?', route: '/career-alignment', narrative: 'See how aligned your current career is with your curiosities.', icon: '🎯' }} isCompleted={hasCareerAlignment} />
+            <DeepDiveCard deepDive={{ id: 'career_clarity', name: 'Career Clarity Quiz', route: '/career-clarity', narrative: 'Different job or start own thing?', icon: '🧭' }} isCompleted={hasCareerClarity} />
           </div>
         )}
 
@@ -685,12 +732,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       })()}
 
       {/* Completed — Life Map, Life Paths (viewable), closed quests */}
-      {(quests.some(q => q.status !== 'active') || hasLifeMap || hasLifePaths) && (
+      {(quests.some(q => q.status !== 'active') || hasCuriosityMap || hasLifeMap || hasLifePaths) && (
         <div className="quest-section quest-completed-section">
           <div className="quest-section-header">
             <span className="quest-section-icon">✅</span>
             <span className="quest-section-title">Completed</span>
           </div>
+          {hasCuriosityMap && (
+            <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Your Curiosities', route: '/curiosity-map', narrative: 'See and update your curiosity landscape.', icon: '✨' }} isCompleted={true} />
+          )}
           {hasLifeMap && (
             <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story.', icon: '📖' }} isCompleted={true} />
           )}
