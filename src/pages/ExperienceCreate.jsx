@@ -27,6 +27,7 @@ export default function ExperienceCreate() {
   const [name, setName] = useState('')
   const [dateStr, setDateStr] = useState('')
   const [ticketPrice, setTicketPrice] = useState('')
+  const [capacity, setCapacity] = useState('')
   const [previousExperience, setPreviousExperience] = useState(null)
   const [runAgainSource, setRunAgainSource] = useState(null)
   const [prevStats, setPrevStats] = useState(null)
@@ -34,8 +35,6 @@ export default function ExperienceCreate() {
   const [validationError, setValidationError] = useState('')
   const [templateSource, setTemplateSource] = useState(null)
   const [saveToLibrary, setSaveToLibrary] = useState(!templateId)
-  const [pitchOfferType, setPitchOfferType] = useState(null)
-  const [pitchOtherText, setPitchOtherText] = useState('')
 
   useEffect(() => {
     document.title = runAgainFromId ? 'Run Again' : templateId ? 'Run from Template' : 'New Experience'
@@ -151,6 +150,7 @@ export default function ExperienceCreate() {
         }
       }
 
+      const parsedCapacity = parseInt(capacity, 10)
       const exp = await createExperience({
         name,
         experience_date: dateStr || null,
@@ -159,15 +159,8 @@ export default function ExperienceCreate() {
         experience_type: experienceType,
         template_id: resolvedTemplateId,
         runAgainFromId: runAgainFromId || null,
+        capacity: parsedCapacity > 0 ? parsedCapacity : null,
       })
-
-      // Save pitch offer type if selected
-      if (pitchOfferType) {
-        await supabase
-          .from('experiences')
-          .update({ pitch_offer_type: pitchOfferType, pitch_next_offer: true })
-          .eq('id', exp.id)
-      }
 
       hapticSuccess()
       navigate(`/create/experience/${exp.id}`)
@@ -311,76 +304,18 @@ export default function ExperienceCreate() {
           </label>
 
           <label className="exp-field">
-            <span className="exp-field-label">Ticket price (optional)</span>
-            <div className="exp-price-row">
-              <span className="exp-price-currency">$</span>
-              <input
-                type="number"
-                value={ticketPrice}
-                onChange={(e) => setTicketPrice(e.target.value)}
-                placeholder="0"
-                min="0"
-                step="0.01"
-              />
-              <button
-                type="button"
-                className="exp-price-free"
-                onClick={() => setTicketPrice('0')}
-              >
-                Free
-              </button>
-            </div>
+            <span className="exp-field-label">How many spots? (optional)</span>
+            <input
+              type="number"
+              value={capacity}
+              onChange={(e) => setCapacity(e.target.value)}
+              placeholder="e.g. 30"
+              min="1"
+            />
+            <span className="exp-field-hint">We use this to show how full your event is.</span>
           </label>
 
-          <p className="exp-pricing-hint">Set your full pricing in the Details tab after creating.</p>
-
-          <div className="exp-field">
-            <span className="exp-field-label">Will you pitch another offer at this event?</span>
-            <div className="exp-pitch-options">
-              {['core', 'continuity'].map(type => (
-                <button
-                  key={type}
-                  type="button"
-                  className={`exp-pitch-btn ${pitchOfferType === type ? 'active' : ''}`}
-                  onClick={() => {
-                    hapticLight()
-                    setPitchOfferType(pitchOfferType === type ? null : type)
-                  }}
-                >
-                  {type === 'core' ? 'Core' : 'Continuity'}
-                </button>
-              ))}
-              <button
-                type="button"
-                className={`exp-pitch-btn ${pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' ? 'active' : ''}`}
-                onClick={() => {
-                  hapticLight()
-                  if (pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity') {
-                    setPitchOfferType(null)
-                    setPitchOtherText('')
-                  } else {
-                    setPitchOfferType('other')
-                  }
-                }}
-              >
-                Other
-              </button>
-            </div>
-            {pitchOfferType && pitchOfferType !== 'core' && pitchOfferType !== 'continuity' && (
-              <input
-                type="text"
-                className="exp-pitch-other-input"
-                value={pitchOtherText}
-                onChange={(e) => {
-                  setPitchOtherText(e.target.value)
-                  setPitchOfferType(e.target.value.trim() || 'other')
-                }}
-                placeholder="What will you pitch?"
-                maxLength={80}
-                autoFocus
-              />
-            )}
-          </div>
+          <p className="exp-pricing-hint">Set your pricing and offers in the Details tab after creating.</p>
 
           {!templateId && (
             <label className="exp-checkbox-row">

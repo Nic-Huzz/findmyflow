@@ -1,14 +1,13 @@
 /**
- * RootReachCard.jsx — Creator Momentum (Roots × Reach)
+ * RootReachCard.jsx — Reach (weekly action score)
  *
- * Two scores side by side + one prescribed next action.
- * Roots (0-5): infrastructure built (permanent). Reach (0-10): weekly action (rolling).
- * Dark theme, premium feel, anti-hustle framing.
+ * One score (0-10) from rolling 7-day binary checks: "are you running the machine?"
+ * Roots was removed: the identity tab's Blow Up Your Brand card now covers foundation.
+ * Light theme, matches the ch2 portal styling.
  */
 
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
-import useRootScore from '../../hooks/useRootScore'
 import useReachScore from '../../hooks/useReachScore'
 import { hapticLight } from '../../lib/haptics'
 import './RootReachCard.css'
@@ -16,130 +15,77 @@ import './RootReachCard.css'
 export default function RootReachCard() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const { root, breakdown: rootBreakdown, lowestGap, loading: rootLoading } = useRootScore(user?.id)
   const { reach, breakdown: reachBreakdown, loading: reachLoading } = useReachScore(user?.id)
 
-  if (rootLoading || reachLoading) return null
-  if (root === null && reach === null) return null
+  if (reachLoading) return null
+  if (reach === null) return null
 
-  const allBuilt = root === 5
-  const sweetSpot = root === 5 && reach >= 8
+  const strong = reach >= 8
+  const quiet = reach < 4
 
   return (
     <div className="rr-card">
       {/* Header */}
       <div className="rr-header">
-        <span className="rr-title">Your Momentum</span>
+        <span className="rr-title">Reach · This Week</span>
       </div>
 
-      {/* Two scores */}
-      <div className="rr-scores">
-        <div className="rr-score-col">
-          <div className="rr-score-label roots">Roots</div>
-          <div className="rr-score-num roots">
-            {root ?? '—'}<span className="rr-score-max">/5</span>
-          </div>
-          <div className="rr-score-sub">foundation</div>
-          <div className="rr-bar">
-            <div className="rr-bar-fill roots" style={{ width: `${(root / 5) * 100}%` }} />
-          </div>
+      {/* Score */}
+      <div className="rr-reach-hero">
+        <div className="rr-score-num reach">
+          {reach}<span className="rr-score-max">/10</span>
         </div>
-
-        <div className="rr-divider" />
-
-        <div className="rr-score-col">
-          <div className="rr-score-label reach">Reach</div>
-          <div className="rr-score-num reach">
-            {reach ?? '—'}<span className="rr-score-max">/10</span>
-          </div>
-          <div className="rr-score-sub">this week</div>
-          <div className="rr-bar">
-            <div className="rr-bar-fill reach" style={{ width: `${(reach / 10) * 100}%` }} />
-          </div>
+        <div className="rr-score-sub">actions in the last 7 days</div>
+        <div className="rr-bar">
+          <div className="rr-bar-fill reach" style={{ width: `${(reach / 10) * 100}%` }} />
         </div>
       </div>
 
-      {/* Breakdown */}
-      <div className="rr-breakdown">
-        <div className="rr-breakdown-col">
-          {rootBreakdown?.map(item => (
-            <div
-              key={item.key}
-              className={`rr-breakdown-item ${item.built ? 'done' : 'pending'}`}
-              onClick={() => {
-                if (!item.built && item.action?.route) {
-                  hapticLight()
-                  navigate(`${item.action.route}?returnTo=/create/growth`)
-                }
-              }}
-              style={{ cursor: item.built ? 'default' : 'pointer' }}
-            >
-              <span className={`rr-dot roots ${item.built ? 'done' : 'pending'}`} />
-              <span>{item.label}</span>
-              {item.built
-                ? <span className="rr-check">✓</span>
-                : <span className="rr-arrow">→</span>
+      {/* Breakdown: all 10 checks as pills. Done first so wins lead. */}
+      <div className="rr-pills">
+        {[...(reachBreakdown || [])].sort((a, b) => (b.active ? 1 : 0) - (a.active ? 1 : 0)).map(item => (
+          <button
+            key={item.key}
+            type="button"
+            className={`rr-pill ${item.active ? 'done' : 'pending'}`}
+            onClick={() => {
+              if (!item.active && item.route) {
+                hapticLight()
+                navigate(item.route)
               }
-            </div>
-          ))}
-        </div>
-        <div className="rr-breakdown-col">
-          {reachBreakdown?.slice(0, 5).map(item => (
-            <div
-              key={item.key}
-              className={`rr-breakdown-item ${item.active ? 'done' : 'pending'}`}
-              onClick={() => {
-                if (!item.active && item.route) {
-                  hapticLight()
-                  navigate(item.route)
-                }
-              }}
-              style={{ cursor: item.active ? 'default' : item.route ? 'pointer' : 'default' }}
-            >
-              <span className={`rr-dot reach ${item.active ? 'done' : 'pending'}`} />
-              <span>{item.label}</span>
-              {item.active
-                ? null
-                : item.route ? <span className="rr-arrow">→</span> : null
-              }
-            </div>
-          ))}
-        </div>
+            }}
+            style={{ cursor: item.active ? 'default' : item.route ? 'pointer' : 'default' }}
+          >
+            {item.active && <span className="rr-pill-check">✓</span>}
+            {item.label}
+            {!item.active && item.route && <span className="rr-pill-arrow">→</span>}
+          </button>
+        ))}
       </div>
 
       {/* Prescription */}
-      {sweetSpot ? (
+      {strong ? (
         <div className="rr-prescription sweet-spot">
-          <div className="rr-rx-eyebrow sweet-spot">Sweet spot</div>
+          <div className="rr-rx-eyebrow sweet-spot">On fire</div>
           <div className="rr-rx-text">
-            Strong foundation, consistent action. Keep this rhythm going.
+            You are running the machine. Keep this rhythm going.
           </div>
         </div>
-      ) : allBuilt ? (
-        <div className="rr-prescription solid">
-          <div className="rr-rx-eyebrow" style={{ color: 'rgba(94,23,235,0.5)' }}>Foundation solid</div>
-          <div className="rr-rx-text">
-            Keep showing up this week. Pick one reach action and do it today.
-          </div>
-        </div>
-      ) : lowestGap ? (
+      ) : quiet ? (
         <div className="rr-prescription action">
           <div className="rr-rx-eyebrow action">Your next move</div>
           <div className="rr-rx-text">
-            {lowestGap.prescription}
+            Quiet week so far. Pick one action from the list above and do it today. Small moves count.
           </div>
-          <button
-            className="rr-rx-btn"
-            onClick={() => {
-              hapticLight()
-              const route = lowestGap.action.route
-              navigate(`${route}${route.includes('?') ? '&' : '?'}returnTo=/create`)
-            }}
-          >
-            {lowestGap.action.label} <span style={{ opacity: 0.5 }}>→</span>
-          </button>
         </div>
-      ) : null}
+      ) : (
+        <div className="rr-prescription solid">
+          <div className="rr-rx-eyebrow" style={{ color: 'rgba(94,23,235,0.5)' }}>Good pace</div>
+          <div className="rr-rx-text">
+            Solid week. Pick one more action from the list to keep momentum building.
+          </div>
+        </div>
+      )}
     </div>
   )
 }

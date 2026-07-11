@@ -33,7 +33,6 @@ const MODULE_CHECKS = {
   product_selection: (data) => data.flowSessions?.some(f => f.flow_type === 'product_selection'),
   launch_readiness: (data) => data.flowSessions?.some(f => f.flow_type === 'launch_readiness'),
   // Deliver modules
-  journey_designer: (data) => data.blueprints?.length > 0,
   testing: (data) => data.flowSessions?.some(f => f.flow_type === 'mvp_readiness'),
   // Grow modules
   upsell: (data) => data.flowSessions?.some(f => f.flow_type === 'upsell_offer'),
@@ -71,7 +70,7 @@ export default function useExperiencePipeline(experienceId) {
     try {
     const [
       expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes,
-      checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes,
+      checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes,
       igPostsRes,
     ] = await Promise.all([
       // Experience details
@@ -122,11 +121,6 @@ export default function useExperiencePipeline(experienceId) {
         .select('id')
         .eq('user_id', userId)
         .limit(1),
-      // Module completion: journey blueprints
-      supabase.from('experience_blueprints')
-        .select('id')
-        .eq('experience_id', experienceId)
-        .limit(1),
       // Instagram posts tagged to this experience
       supabase.from('instagram_posts')
         .select('id, reach, views, like_count, comments_count, shares, saves, ig_media_id, permalink, media_type, caption, posted_at, thumbnail_url')
@@ -135,7 +129,7 @@ export default function useExperiencePipeline(experienceId) {
     ])
 
     // Log any query errors
-    ;[expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, blueprintRes, igPostsRes]
+    ;[expRes, metricsRes, contentRes, contactsRes, attendeesRes, dealsRes, checklistRes, wahoosRes, flowsRes, productsRes, remarkableRes, igPostsRes]
       .forEach((res, i) => { if (res.error) console.warn(`Pipeline query ${i} failed:`, res.error.message) })
 
     const exp = expRes.data
@@ -151,7 +145,6 @@ export default function useExperiencePipeline(experienceId) {
       flowSessions: filteredFlowSessions,
       products: productsRes.data || [],
       remarkableAngle: remarkableRes.data?.length > 0,
-      blueprints: blueprintRes.data || [],
     }
     setModuleData(mData)
 
@@ -223,7 +216,6 @@ export default function useExperiencePipeline(experienceId) {
     const attractModules = ['leads_strategy', 'blow_up_brand', 'validation']
     const captureModules = ['attraction_offer', 'funnel_builder']
     const convertModules = ['grand_slam', 'offer_builder', 'product_selection', 'launch_readiness']
-    const deliverModules = ['journey_designer', 'testing']
     const growModules = ['upsell', 'downsell', 'continuity', 'scale_income']
 
     function moduleReadiness(keys) {

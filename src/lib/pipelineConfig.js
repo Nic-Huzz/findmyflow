@@ -24,7 +24,6 @@ export const NODE_MODULES = {
     { key: 'product_selection', name: 'Product Selection', icon: '📦', desc: 'Build a full product suite', route: '/product-selection', certification: true },
   ],
   deliver: [
-    { key: 'journey_designer', name: 'Journey Designer', icon: '🎨', desc: 'Runsheet builder for this event', route: '/create' },
     { key: 'testing', name: 'Testing', icon: '🔬', desc: 'Test with real users', route: '/testing-explainer', multi: 'Convert', certification: true },
   ],
   grow: [
