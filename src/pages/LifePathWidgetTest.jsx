@@ -30,6 +30,7 @@ const STEPS = {
   STUCK: 'stuck',
   STUCK_SPRING: 'stuck_spring',
   WAHOOS: 'wahoos',
+  COURAGE_TAG: 'courage_tag',
   COMPLETE: 'complete',
 }
 
@@ -328,7 +329,7 @@ export default function LifePathFlow() {
     setStuckPoints(prev => prev.map(s => s.id === spId ? { ...s, addedToWahoos: true } : s))
     setWahooSteps(prev => ({
       ...prev,
-      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: sp.text, done: false, fromStuckPoint: spId }],
+      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: sp.text, done: false, isCourage: false, fromStuckPoint: spId }],
     }))
   }, [stuckPoints, selectedWahooId])
 
@@ -337,7 +338,7 @@ export default function LifePathFlow() {
     if (!wahooInput.trim() || !selectedWahooId) return
     setWahooSteps(prev => ({
       ...prev,
-      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: wahooInput.trim(), done: false }],
+      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: wahooInput.trim(), done: false, isCourage: false }],
     }))
     setWahooInput('')
     setTimeout(() => wahooInputRef.current?.focus(), 50)
@@ -379,7 +380,7 @@ export default function LifePathFlow() {
     const savedEntries = [] // { idx, groanId }
     for (let i = 0; i < steps.length; i++) {
       const ws = steps[i]
-      if (ws.savedToGroan) continue
+      if (ws.savedToGroan || !ws.isCourage) continue
       try {
         const sp = ws.fromStuckPoint ? stuckPoints.find(s => s.id === ws.fromStuckPoint) : null
         const { data: dbRecord } = await createGroanChallenge({
@@ -862,7 +863,7 @@ export default function LifePathFlow() {
           {step === STEPS.WAHOOS && selectedWahooId && (
             <>
               <div className="flp-panel-step-prompt" style={{ fontSize: 14, marginBottom: 4 }}>
-                If we broke down living the "{careers.find(c => c.id === selectedWahooId)?.label}" life path into tiny steps, what are they?
+                What needs to happen for "{careers.find(c => c.id === selectedWahooId)?.label}" to become real?
               </div>
 
               {/* Stuck point bubbles */}
@@ -904,12 +905,59 @@ export default function LifePathFlow() {
               </div>
 
               <button className="flp-advance-btn" style={{ width: '100%', marginTop: 16 }}
+                onClick={() => {
+                  const steps = wahooSteps[selectedWahooId] || []
+                  if (steps.length === 0) {
+                    saveRef.current({ step: 'complete' })
+                    setStep(STEPS.COMPLETE)
+                  } else {
+                    setStep(STEPS.COURAGE_TAG)
+                  }
+                }}>
+                {(wahooSteps[selectedWahooId] || []).length > 0 ? 'Next →' : 'Skip, finish →'}
+              </button>
+            </>
+          )}
+
+          {/* ── COURAGE TAG: which of these scare you? ── */}
+          {step === STEPS.COURAGE_TAG && selectedWahooId && (
+            <>
+              <div className="flp-panel-step-prompt" style={{ fontSize: 14, marginBottom: 4 }}>
+                Which of these scare you?
+              </div>
+              <div style={{ fontSize: 12, opacity: 0.4, marginBottom: 16 }}>
+                Tap any that feel like a stretch. These become courage challenges in your Courage tab.
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {(wahooSteps[selectedWahooId] || []).map((ws, i) => (
+                  <button key={i} onClick={() => {
+                    hapticLight()
+                    setWahooSteps(prev => {
+                      const updated = { ...prev }
+                      const arr = [...(updated[selectedWahooId] || [])]
+                      arr[i] = { ...arr[i], isCourage: !arr[i].isCourage }
+                      updated[selectedWahooId] = arr
+                      return updated
+                    })
+                  }} style={{
+                    display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px',
+                    borderRadius: 12, cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
+                    border: ws.isCourage ? '2px solid #E9A23B' : '2px solid rgba(255,255,255,0.1)',
+                    background: ws.isCourage ? 'rgba(233,162,59,0.1)' : 'rgba(255,255,255,0.04)',
+                    transition: 'all 0.2s', color: 'inherit',
+                  }}>
+                    <span style={{ fontSize: 16, flexShrink: 0 }}>{ws.isCourage ? '\u26A1' : '\u25CB'}</span>
+                    <span style={{ fontSize: 14, flex: 1 }}>{ws.text}</span>
+                  </button>
+                ))}
+              </div>
+
+              <button className="flp-advance-btn" style={{ width: '100%', marginTop: 16 }}
                 onClick={async () => {
                   const saved = await saveWahoosToGroan()
-                  // Build groan ID lookup from returned entries (avoids stale closure)
                   const groanIdByIdx = {}
                   saved.forEach(({ idx, groanId }) => { groanIdByIdx[idx] = groanId })
-                  // Create quest if one doesn't exist for this career
                   if (user?.id && selectedWahooId) {
                     const career = careers.find(c => c.id === selectedWahooId)
                     if (career) {
@@ -924,7 +972,6 @@ export default function LifePathFlow() {
                         questId = newQuest?.id
                       }
                       if (questId) {
-                        // Get existing task texts to prevent duplicates
                         const { data: existingTasks } = await supabase.from('quest_tasks')
                           .select('text').eq('quest_id', questId)
                         const existingTexts = new Set((existingTasks || []).map(t => t.text.toLowerCase()))
@@ -932,13 +979,12 @@ export default function LifePathFlow() {
                         const newTasks = steps.filter(ws => !existingTexts.has(ws.text.toLowerCase()))
                         if (newTasks.length > 0) {
                           await supabase.from('quest_tasks').insert(newTasks.map((ws, i) => {
-                            // Use groan ID from returned entries (fresh), fall back to state (for previously saved)
                             const origIdx = steps.indexOf(ws)
                             const groanId = groanIdByIdx[origIdx] || ((typeof ws.savedToGroan === 'string') ? ws.savedToGroan : null)
                             return {
                               quest_id: questId, user_id: user.id, text: ws.text,
-                              is_courage_challenge: !!groanId || !!ws.savedToGroan,
-                              groan_challenge_id: groanId,
+                              is_courage_challenge: !!ws.isCourage,
+                              groan_challenge_id: ws.isCourage ? groanId : null,
                               stuck_point_id: ws.fromStuckPoint || null,
                               sort_order: (existingTasks?.length || 0) + i,
                             }
