@@ -1,4 +1,4 @@
-# Reddit Comment Drafts — 2026-07-11
+# Reddit Comment Drafts — 2026-07-12 (scan 2)
 
 *Review, edit in your voice, then approve for posting. Max 2 per day.*
 
@@ -6,9 +6,9 @@
 
 ## This scan: No drafts
 
-**Reason:** Reddit is blocked by this environment's network policy.
+**Reason:** Reddit is still blocked by this environment's network policy.
 
-Both `www.reddit.com` and the WebSearch tool (which also cannot access reddit.com per Anthropic's crawler policy) are unavailable. The proxy returns `403 Forbidden` on direct curl. This has been the case since at least 2026-07-09.
+`www.reddit.com` is blocked at the proxy level (HTTP 407/403 on CONNECT tunnel). This has been the case since at least 2026-07-09 across multiple scans. WebSearch also cannot reach reddit.com.
 
 **To fix this:** The remote execution environment needs reddit.com added to its network allowlist. Configure this in the Claude Code on the web environment settings at https://code.claude.com/docs/en/claude-code-on-the-web.
 
