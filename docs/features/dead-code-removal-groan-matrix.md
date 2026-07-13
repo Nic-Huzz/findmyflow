@@ -68,12 +68,24 @@ All selectors starting with `.groan-modal`, `.groan-btn`, `.groan-popup`, `.groa
 
 Search `src/Challenge.css` for these prefixes and remove the matching rules.
 
+### Removal Order (IMPORTANT — follow this sequence or intermediate builds will fail)
+
+1. Remove the JSX block first (lines ~2090-2419, the `selectedGroanChallenge || groanCellContext` conditional render)
+2. Remove the functions (`handleMatrixCellClick`, `getEnrichedCellContext`, `handleGenerateFromPopup`, custom challenge handler, `handleStartCompletion`, `handleCompleteGroanChallenge`, `handleRegenerateChallenge`, `closeGroanModal`)
+3. Remove the state variables (`selectedGroanChallenge`, `groanReflectionStep`, `groanReflection`, `groanMatrixKey`, `customChallengeText`, `threePercentText`, `groanCellContext`, `groanChallengeLoading`)
+4. Update the `useEffect` modal-active guard (remove `selectedGroanChallenge` and `groanCellContext` from condition)
+5. Remove the `import GroanMatrix from './components/GroanMatrix'` line
+6. Remove dead CSS from `Challenge.css` (`.groan-modal-*`, `.groan-btn-*`, `.groan-popup-*`, `.groan-reflection-*` selectors)
+7. Build check after each major step
+
 ### What NOT to Remove
 
-- `src/components/GroanMatrix.jsx` — the component file itself. It may be referenced elsewhere or re-used later. Just remove the import from Challenge.jsx.
+- `src/components/GroanMatrix.jsx` — **still used!** Has its own route at `/groan-matrix` in `AppRouter.jsx` (line 848-852). Also lazy-imported and CSS preloaded in AppRouter. Only the import in Challenge.jsx is dead.
+- `src/components/GroanMatrix.css` — loaded by AppRouter.jsx (line 353). Not dead.
 - `src/components/GroanCompletionModal.jsx` — this is the LIVE completion path. Do not touch.
 - `src/components/GroanReflectionInput.jsx` — used by `QuestCard.jsx`. Not dead.
-- Any `groan_challenges` database tables or service functions — these are used by the live GroanCompletionModal path.
+- Any `groan_challenges` database tables or service functions — used by the live GroanCompletionModal path.
+- The `/groan-matrix` route in AppRouter.jsx — still a valid page.
 
 ---
 

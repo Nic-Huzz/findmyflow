@@ -137,11 +137,42 @@ select cron.schedule(
 );
 ```
 
-The Edge Function should iterate over all active users (users with a `nervous_system_checkins` row in the last 14 days) and upsert one brief per user.
+### Invocation Strategy
 
-### Pattern Detection Logic
+Supabase Edge Functions have a 150s timeout. Querying ALL users in one invocation will timeout at scale. Use the existing pattern from `score-league-matchups`: the cron calls the function once, the function fetches a batch of user IDs and processes them.
 
-The key algorithms in the Edge Function:
+```typescript
+// 1. Fetch active users (had a checkin in last 14 days)
+const { data: activeUsers } = await supabase
+  .from('nervous_system_checkins')
+  .select('user_id')
+  .gte('created_at', new Date(Date.now() - 14 * 86400000).toISOString())
+  .order('user_id')
+
+const uniqueUserIds = [...new Set(activeUsers.map(r => r.user_id))]
+
+// 2. Process each user (10 queries per user, each fast with index)
+for (const userId of uniqueUserIds) {
+  try {
+    const brief = await generateBriefForUser(userId)
+    await supabase.from('zarlo_briefs').upsert(
+      { user_id: userId, brief, generated_at: new Date().toISOString() },
+      { onConflict: 'user_id' }
+    )
+  } catch (e) {
+    console.error(`Brief failed for ${userId}:`, e)
+    // Skip and continue — one user's failure shouldn't block others
+  }
+}
+```
+
+At <100 active users (current scale), this completes in <30s. At 1,000+ users, split into batched invocations.
+
+### New Users / Insufficient Data
+
+If a user has <3 days of data, the Brief should still generate but with empty/null pattern fields. The Brief structure uses `null` for undetectable patterns, not errors. Zarlo's prompt handles null gracefully ("no patterns detected yet").
+
+### Pattern Detection Logic (Exact Algorithms)
 
 **Day-of-week pattern:**
 ```sql
@@ -153,16 +184,45 @@ FROM nervous_system_checkins
 WHERE user_id = $1 AND checkin_type = 'daily'
 GROUP BY day, before_state
 ```
-Flag any day where a single state is >60% of check-ins for that day.
+Flag any day where a single state is >60% of check-ins for that day AND has at least 3 data points for that day.
 
-**Contradiction detection:**
-- "Reports Safe but Pressure wahoos increasing": compare last 7 days daily check-in states vs last 7 days wahoo classifications
-- "Healing tab declining while voice count rising": compare healing_intentions created_at frequency (last 30d vs first 30d) vs protective voice count trend
+**Contradiction detection (exact logic):**
+```javascript
+// Contradiction 1: "Reports Safe but Pressure wahoos increasing"
+const last14dCheckins = checkins.filter(c => c.checkin_type === 'daily' && withinDays(c, 14))
+const safePct = last14dCheckins.filter(c => c.before_state === 'ventral').length / last14dCheckins.length
+const last14dWahoos = wahoos.filter(w => withinDays(w, 14))
+const pressurePct = last14dWahoos.filter(w => w.wahoo_classification === 'anxious').length / last14dWahoos.length
+if (safePct > 0.5 && pressurePct > 0.3) {
+  contradictions.push('Reports Safe but Pressure wahoos increasing')
+}
 
-**Threshold detection:**
-- Voice graduation: dominant voice count >= 4 (one away from 5)
-- Streak milestone: current streak within 3 days of 7/14/21/30/60/100
-- Stage stuck: days since last stage-relevant action (varies per stage, see spec doc Section 9 Gap 2)
+// Contradiction 2: "Healing tab declining while voice count rising"
+const healingLast30 = healingIntentions.filter(h => withinDays(h, 30)).length
+const healingFirst30 = healingIntentions.filter(h => withinDays(h, 30, 60)).length
+if (healingFirst30 > 0 && healingLast30 < healingFirst30 * 0.5 && dominantVoiceCount >= 3) {
+  contradictions.push('Healing tab declining while protective voice count rising')
+}
+```
+
+**Threshold detection (exact logic):**
+```javascript
+// Voice graduation
+const voiceCountToGraduate = Math.max(0, 5 - dominantVoiceCount)
+const voiceGraduationReady = voiceCountToGraduate === 0
+
+// Streak milestone  
+const MILESTONES = [7, 14, 21, 30, 60, 100, 200, 365]
+const nextMilestone = MILESTONES.find(m => m > currentStreak)
+const streakMilestoneApproaching = nextMilestone && (nextMilestone - currentStreak) <= 3
+  ? `${nextMilestone}_day` : null
+
+// Stage stuck (days since last stage-relevant action)
+const STUCK_THRESHOLDS = { 4: 7, 5: 7, 6: 7, 7: 7, 8: 14, 9: 14 }
+const threshold = STUCK_THRESHOLDS[heroStage] || 14
+const daysSinceLastProgress = /* days since last quest_completion, healing_intention, or stage change */
+const stageStuckDays = daysSinceLastProgress > threshold ? daysSinceLastProgress : 0
+```
 
 ---
 
@@ -238,29 +298,114 @@ import JourneyTab from './components/JourneyTab'
 ### New Component
 
 **Create:** `src/components/JourneyTab.jsx`
-
-V1 shell — displays hero stage progress and interim milestones:
+**Create:** `src/components/JourneyTab.css`
 
 ```jsx
-// JourneyTab — hero's journey progress + interim milestones
-// 
-// Sections:
-// 1. Current stage name + feeling target
-// 2. Progress toward next graduation (if applicable)
-// 3. Protective voice count (Stage 6→7 only)
-// 4. Chapter count (session attendance, future)
-//
-// Data sources:
-// - user_stage_progress (hero stage)
-// - healing_intentions (voice counts)
-// - zarlo_briefs (thresholds, patterns)
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import './JourneyTab.css'
+
+// Hero stage names + feeling targets (from measurement framework)
+const HERO_STAGES = [
+  { stage: 0, name: 'Not Started', feeling: '' },
+  { stage: 1, name: 'The Matrix', feeling: 'Something just shifted. I can\'t go back.' },
+  { stage: 2, name: 'The Earthquake', feeling: 'Something just shifted. I can\'t go back.' },
+  { stage: 3, name: 'Head Full of Dreams', feeling: 'I can see it but I can\'t reach it.' },
+  { stage: 4, name: 'Mirror / Mentor', feeling: 'I feel so seen. I have words for this now.' },
+  { stage: 5, name: 'First Vibe Rise', feeling: 'I didn\'t know I could feel this alive.' },
+  { stage: 6, name: 'The Daily Loop', feeling: 'I\'m actually doing it. Every day.' },
+  { stage: 7, name: 'Pattern Revealed', feeling: 'That\'s what\'s been stopping me.' },
+  { stage: 8, name: 'The Ordeal', feeling: 'That hurt. But something released.' },
+  { stage: 9, name: 'Flow Statement', feeling: 'Of course. This was always my path.' },
+  { stage: 10, name: 'Aligned Action', feeling: 'I\'m doing the thing. For real.' },
+]
+
+export default function JourneyTab({ userId }) {
+  const [heroStage, setHeroStage] = useState(0)
+  const [voiceCounts, setVoiceCounts] = useState({})
+  const [brief, setBrief] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!userId) return
+    Promise.all([
+      supabase.from('user_stage_progress')
+        .select('current_journey_level')
+        .eq('user_id', userId).maybeSingle(),
+      supabase.from('healing_intentions')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+      supabase.from('zarlo_briefs')
+        .select('brief')
+        .eq('user_id', userId).maybeSingle(),
+    ]).then(([stageRes, voiceRes, briefRes]) => {
+      setHeroStage(stageRes.data?.current_journey_level || 0)
+      
+      const counts = {}
+      voiceRes.data?.forEach(row => {
+        if (row.protective_voice)
+          counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
+      })
+      setVoiceCounts(counts)
+      setBrief(briefRes.data?.brief || null)
+      setLoading(false)
+    })
+  }, [userId])
+
+  if (loading) return <div className="jt-loading">Loading journey...</div>
+
+  const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
+  const sorted = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
+  const dominant = sorted[0] // [name, count] or undefined
+
+  return (
+    <div className="jt-container">
+      {/* Current Stage */}
+      <div className="jt-stage-card">
+        <div className="jt-stage-number">Stage {heroStage}</div>
+        <h2 className="jt-stage-name">{stageInfo.name}</h2>
+        {stageInfo.feeling && (
+          <p className="jt-stage-feeling">"{stageInfo.feeling}"</p>
+        )}
+      </div>
+
+      {/* Voice Progress (Stage 6→7 only) */}
+      {heroStage >= 5 && heroStage < 7 && dominant && (
+        <div className="jt-section">
+          <h3 className="jt-section-title">Pattern Recognition</h3>
+          <div className="jt-voice-dots">
+            {[1, 2, 3, 4, 5].map(i => (
+              <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
+            ))}
+          </div>
+          <p className="jt-voice-hint">
+            {dominant[1] < 3 && `${dominant[1]} of 5 patterns identified`}
+            {dominant[1] === 3 && `The ${formatVoice(dominant[0])} keeps showing up.`}
+            {dominant[1] === 4 && `Four times. There's something underneath it.`}
+            {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready.`}
+          </p>
+        </div>
+      )}
+
+      {/* Approaching Thresholds (from Zarlo Brief) */}
+      {brief?.thresholds?.streak_milestone_approaching && (
+        <div className="jt-section">
+          <p className="jt-threshold-hint">
+            Streak milestone approaching: {brief.thresholds.streak_milestone_approaching.replace('_', '-')}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function formatVoice(name) {
+  return name?.charAt(0).toUpperCase() + name?.slice(1).replace(/_/g, ' ')
+}
 ```
 
-Keep it minimal for V1. The Journey tab is a CONTAINER that will grow as more features are built (graduation celebrations, stuck mechanics, insight drops). Start with:
-
-- Hero stage number + name + feeling target
-- If Stage 6→7: protective voice count dots (●●●○○)
-- If brief exists: any approaching thresholds shown as gentle text
+**CSS (`JourneyTab.css`):** Light background, purple/gold accents, `.jt-` prefix. Stage card centered, feeling target in italic purple. Voice dots as 12px circles (filled = purple, empty = light grey border). Follow existing tab content patterns from TuneTab/PlayListTab.
 
 ### CSS
 
