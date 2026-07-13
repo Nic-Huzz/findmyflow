@@ -71,8 +71,8 @@ export default function JourneyCompleted({ userId }) {
       .order('updated_at', { ascending: false })
       .then(({ data }) => {
         if (data) setClosedQuests(data)
-        setLoaded(true)
       })
+      .finally(() => setLoaded(true))
   }, [userId, user?.email])
 
   if (!loaded) return null

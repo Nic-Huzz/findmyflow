@@ -109,8 +109,8 @@ export default function JourneyOnboarding({ userId }) {
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) setHasHealingCompletion(true)
-        setLoaded(true)
       })
+      .finally(() => setLoaded(true))
   }, [userId, user?.email])
 
   if (!loaded) return null
@@ -120,15 +120,12 @@ export default function JourneyOnboarding({ userId }) {
   if (allDone) return null
 
   return (
-    <div className="jo-section">
+    <div className="jo-section level-tab">
       <div className="quest-section">
         <div className="quest-section-header">
           <span className="quest-section-icon">📖</span>
           <span className="quest-section-title">Getting Started</span>
         </div>
-
-        {/* Wrap DeepDiveCards in level-tab for CSS scoping */}
-        <div className="level-tab">
           {/* Curiosity Map → Life Map → Life Paths (sequential, locked until previous complete) */}
           {!hasCuriosityMap && (
             <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Map Your Curiosities', route: '/curiosity-map', narrative: 'What can\'t you stop reading, watching, and learning about?', icon: '✨' }} isCompleted={false} />
@@ -204,7 +201,6 @@ export default function JourneyOnboarding({ userId }) {
               <span className="level-dd-status locked">Locked</span>
             </div>
           )}
-        </div>
       </div>
     </div>
   )

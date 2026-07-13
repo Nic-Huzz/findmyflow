@@ -22,6 +22,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
 
   useEffect(() => {
     if (!userId || heroStage < 3) return
+    let active = true
 
     // All evidence fetches fire in parallel (not serial)
     // Stage 2: first NS check-in
@@ -32,7 +33,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) {
+        if (active && data) {
           setEvidence(prev => ({ ...prev, [2]: { date: data.created_at, label: 'First check-in' } }))
         }
       })
@@ -40,7 +41,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
     // Stage 3: life paths session
     supabase.auth.getUser().then(({ data: userData }) => {
       const email = userData?.user?.email
-      if (!email) return
+      if (!active || !email) return
       supabase.from('life_path_sessions')
         .select('created_at')
         .eq('client_email', email)
@@ -48,7 +49,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
         .limit(1)
         .maybeSingle()
         .then(({ data }) => {
-          if (data) setEvidence(prev => ({ ...prev, [3]: { date: data.created_at, label: 'Life Paths mapped' } }))
+          if (active && data) setEvidence(prev => ({ ...prev, [3]: { date: data.created_at, label: 'Life Paths mapped' } }))
         })
     })
 
@@ -58,7 +59,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
       .eq('user_id', userId)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.essence_mirror_completed && data?.hero_avatar_url) {
+        if (active && data?.essence_mirror_completed && data?.hero_avatar_url) {
           setEvidence(prev => ({ ...prev, [4]: { date: data.updated_at, label: 'Hero avatar created' } }))
         }
       })
@@ -73,7 +74,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setEvidence(prev => ({ ...prev, [5]: { date: data.completed_at, label: 'First Vibe Rise moment' } }))
+        if (active && data) setEvidence(prev => ({ ...prev, [5]: { date: data.completed_at, label: 'First Vibe Rise moment' } }))
       })
 
     // Stage 6: life path at vibe + charging/teaching
@@ -87,8 +88,10 @@ export default function JourneyTimeline({ userId, heroStage }) {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setEvidence(prev => ({ ...prev, [6]: { date: data.updated_at, label: `${data.label} reached Vibe Rise` } }))
+        if (active && data) setEvidence(prev => ({ ...prev, [6]: { date: data.updated_at, label: `${data.label} reached Vibe Rise` } }))
       })
+
+    return () => { active = false }
   }, [userId, heroStage])
 
   if (heroStage < 3) return null
