@@ -1,7 +1,12 @@
 /* PositioningSummary — Light theme matching Identity tab (.ch2-id-section) */
 
 .ps-card {
-  padding: 0 20px 16px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 0 4px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
   position: relative;
   z-index: 2;
 }
