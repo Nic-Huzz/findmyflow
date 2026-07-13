@@ -19,9 +19,34 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 | **CD7** Curiosity | 5 | AI-generated Groan challenges, essence zone discovery (scary+wahoo scoring), Zarlo context-aware variable responses, protective voice archetypes with kryptonite, Mind Space graph |
 | **CD8** Loss | 5 | Streak loss mechanics, protective voice as therapeutic loss framing, longest vs current streak gap, CRM nudge engine, Smart Alerts, deal pipeline won/lost tracking, weekly planning forced |
 
-**Current Score: 49 + 36 + 25 + 25 + 16 + 16 + 25 + 25 = 217** (Moderate)
+**Pre-Sprint Score: 49 + 36 + 25 + 25 + 16 + 16 + 25 + 25 = 217** (Moderate)
 
-*Scores updated February 2025 after full codebase audit*
+*Scores from February 2025 codebase audit*
+
+---
+
+## Post-Octalysis Sprint Score (July 2026)
+
+After Sprints 1-4 (DCC/Hades/Celeste-inspired gamification):
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD1** Epic Meaning | 7 | **8** | +1 | 12-stage hero journey with named stages + feeling targets. Graduation celebrations frame transitions as meaningful. Stuck messaging reframes stuckness as part of the story. |
+| **CD2** Accomplishment | 6 | **8** | +2 | RP differentiation per wahoo state (Pressure = Vibe Rise = 10). Daily check-in +2 RP. 6 stage graduations with celebrations/confetti. Journey tab with stage display. Voice dots (●●●○○). Insight Drops V1 (Common + Uncommon). |
+| **CD3** Creativity | 5 | **6** | +1 | Per-state wahoo feedback (4 responses, not generic). Pressure captures voice objection (creative self-reflection). UnstickFlow 3-step modal (name fear → worst case → create wahoo). |
+| **CD4** Ownership | 5 | **7** | +2 | Hero stage visible on Journey tab (permanent). Voice dots accumulate. Insight Drops are personal discoveries. UnstickFlow creates your own wahoo from your own fear. |
+| **CD5** Social | 4 | **5** | +1 | Zarlo now proactive companion (Brief-based observations, not just reactive). Creates "being witnessed" feeling. No real social features shipped yet (V2). |
+| **CD6** Scarcity | 4 | **5** | +1 | "Almost there" moments (voice count 4/5, streak approaching milestone). Graduation thresholds create anticipation. |
+| **CD7** Curiosity | 5 | **7** | +2 | Insight Drops slide up unexpectedly (2 rarity tiers). Proactive Zarlo bubbles unpredictable. Graduation celebrations surprising on first occurrence. Voice dots create "what happens at 5?" |
+| **CD8** Loss | 5 | **5** | 0 | **Intentionally held (Celeste model).** Pressure earns MORE not less. "Streak resets. Learning doesn't." No new loss mechanics. |
+
+**Post-Sprint Score: 64 + 64 + 36 + 49 + 25 + 25 + 49 + 25 = 337** (Moderate-Strong)
+
+**Change: 217 → 337 (+120 points, +55%)**
+
+**Target: 479 (Strong)** — remaining 142 points require V2 backlog items (Social V1, L0-L4 depth, Self-Knowledge Skills, mystery mechanics, Figurine visual).
+
+*Scores updated July 2026 after Octalysis Sprints 1-4*
 
 ---
 
