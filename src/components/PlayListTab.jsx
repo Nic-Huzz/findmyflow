@@ -62,9 +62,24 @@ export default function PlayListTab({
 
   // Community Courage — recent feed items
   const [communityItems, setCommunityItems] = useState([])
+  const [communityNames, setCommunityNames] = useState({})
 
   useEffect(() => {
-    fetchFeed(0, 3).then(({ data }) => setCommunityItems(data || []))
+    fetchFeed(0, 3).then(async ({ data }) => {
+      const items = data || []
+      setCommunityItems(items)
+      if (!items.length) return
+      const userIds = [...new Set(items.map(i => i.user_id))]
+      const { data: profiles } = await supabase
+        .from('lead_flow_profiles')
+        .select('user_id, custom_essence_name, essence_archetype')
+        .in('user_id', userIds)
+      const names = {}
+      profiles?.forEach(p => {
+        names[p.user_id] = p.custom_essence_name || p.essence_archetype || null
+      })
+      setCommunityNames(names)
+    }).catch(() => {})
   }, [])
 
   // Fetch bucket list wahoos (generated, not yet accepted)
@@ -411,7 +426,7 @@ export default function PlayListTab({
           <h3 className="plt-community-title">Community Courage</h3>
           {communityItems.map(item => (
             <div key={item.id} className="plt-community-card">
-              <span className="plt-community-name">{item.user_display_name || item.title?.split(' ')[0] || 'Someone'}</span>
+              <span className="plt-community-name">{communityNames[item.user_id] || 'Someone'}</span>
               <span className="plt-community-text">{item.title}</span>
             </div>
           ))}

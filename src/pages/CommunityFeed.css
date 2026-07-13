@@ -211,6 +211,15 @@
   flex-shrink: 0;
 }
 
+.cf-page .cf-avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--brand-gold);
+  flex-shrink: 0;
+}
+
 .cf-page .cf-item-name {
   font-size: 14px;
   font-weight: 700;

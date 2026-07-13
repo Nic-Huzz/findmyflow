@@ -8,6 +8,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
+
+// Hide bottom toolbar on this page
 import { supabase } from '../lib/supabaseClient'
 import { fetchFeed, toggleFeedReaction } from '../lib/communityFeed'
 import './CommunityFeed.css'
@@ -107,16 +109,34 @@ export default function CommunityFeed() {
     const unknownIds = userIds.filter(id => !displayNames[id])
     if (!unknownIds.length) return
 
-    const { data } = await supabase
+    // Fetch profile data + avatar URL
+    const { data: profileData } = await supabase
       .from('lead_flow_profiles')
-      .select('user_id, custom_essence_name, essence_archetype')
+      .select('user_id, custom_essence_name, essence_archetype, custom_essence_image')
       .in('user_id', unknownIds)
+
+    const { data: avatarData } = await supabase
+      .from('user_stage_progress')
+      .select('user_id, hero_avatar_url')
+      .in('user_id', unknownIds)
+
+    const avatarMap = {}
+    avatarData?.forEach(a => { if (a.hero_avatar_url) avatarMap[a.user_id] = a.hero_avatar_url })
 
     const names = { ...displayNames }
     const foundIds = new Set()
-    if (data) {
-      data.forEach(p => {
-        names[p.user_id] = p.custom_essence_name || p.essence_archetype || null
+    if (profileData) {
+      profileData.forEach(p => {
+        const essenceName = p.custom_essence_name
+        const archetype = p.essence_archetype
+        // Format: "Name: Archetype" if both exist, otherwise just whichever is available
+        const display = essenceName && archetype
+          ? `${essenceName}: ${archetype}`
+          : essenceName || archetype || null
+        names[p.user_id] = {
+          display: display,
+          avatarUrl: p.custom_essence_image || avatarMap[p.user_id] || null,
+        }
         foundIds.add(p.user_id)
       })
     }
@@ -128,9 +148,9 @@ export default function CommunityFeed() {
       // The user's own email is available from auth context
       noProfileIds.forEach(id => {
         if (id === userId && user?.email) {
-          names[id] = user.email.split('@')[0]
+          names[id] = { display: user.email.split('@')[0], avatarUrl: avatarMap[id] || null }
         } else if (!names[id]) {
-          names[id] = null // Will show as "Someone"
+          names[id] = { display: null, avatarUrl: avatarMap[id] || null }
         }
       })
     }
@@ -207,7 +227,18 @@ export default function CommunityFeed() {
   }, [userId])
 
   const getDisplayName = (itemUserId) => {
-    return displayNames[itemUserId] || 'Someone'
+    const info = displayNames[itemUserId]
+    return info?.display || 'Someone'
+  }
+
+  const getAvatarUrl = (itemUserId) => {
+    const info = displayNames[itemUserId]
+    return info?.avatarUrl || null
+  }
+
+  const formatSubtitle = (text) => {
+    if (!text) return null
+    return text.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
   }
 
   const getReactionCount = (reactions, type) => {
@@ -270,14 +301,17 @@ export default function CommunityFeed() {
             const variant = EVENT_VARIANT[item.event_type] || ''
             const icon = EVENT_ICONS[item.event_type] || '💪'
             const name = getDisplayName(item.user_id)
+            const avatarUrl = getAvatarUrl(item.user_id)
 
             return (
               <div key={item.id} className={`cf-item${variant ? ` cf-item--${variant}` : ''}`}>
                 {/* Header */}
                 <div className="cf-item-header">
-                  <div className="cf-avatar">
-                    {getInitials(name)}
-                  </div>
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="" className="cf-avatar-img" />
+                  ) : (
+                    <div className="cf-avatar">{getInitials(name)}</div>
+                  )}
                   <span className="cf-item-name">{name}</span>
                   <span className="cf-item-time">{timeAgo(item.created_at)}</span>
                 </div>
@@ -286,7 +320,7 @@ export default function CommunityFeed() {
                 <div className="cf-item-body">
                   <p className="cf-item-title">{icon} {item.title}</p>
                   {item.subtitle && (
-                    <p className="cf-item-subtitle">{item.subtitle}</p>
+                    <p className="cf-item-subtitle">{formatSubtitle(item.subtitle)}</p>
                   )}
                 </div>
 

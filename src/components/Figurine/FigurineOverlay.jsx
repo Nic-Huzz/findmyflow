@@ -36,9 +36,10 @@ export default function FigurineOverlay({ avatarUrl, message, emoji, onDismiss, 
         {avatarUrl && (
           <div className="fo-avatar-container">
             <img src={avatarUrl} alt="" className="fo-avatar" />
+            {emoji && <span className="fo-emoji-badge">{emoji}</span>}
           </div>
         )}
-        {emoji && <span className="fo-emoji">{emoji}</span>}
+        {!avatarUrl && emoji && <span className="fo-emoji-standalone">{emoji}</span>}
         <p className="fo-message">{message}</p>
         <button className="fo-dismiss" onClick={handleDismiss}>Continue</button>
       </div>
