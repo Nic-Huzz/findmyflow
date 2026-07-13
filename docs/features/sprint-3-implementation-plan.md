@@ -176,12 +176,14 @@ export async function checkHeroGraduation(userId) {
     if (maxCount >= 5) newStage = 7
   }
 
-  // 3. If graduated, update the stage
+  // 3. If graduated, update the stage (UPSERT — row may not exist for new users)
   if (newStage !== null && newStage > currentStage) {
     await supabase
       .from('user_stage_progress')
-      .update({ current_journey_level: newStage })
-      .eq('user_id', userId)
+      .upsert({
+        user_id: userId,
+        current_journey_level: newStage,
+      }, { onConflict: 'user_id' })
 
     return { from: currentStage, to: newStage, stageData }
   }
@@ -194,13 +196,15 @@ export async function checkHeroGraduation(userId) {
 
 The checker should run after actions that could trigger a transition:
 
-| Action | File | Possible Graduation |
+| Action | File(s) | Possible Graduation |
 |---|---|---|
 | Daily check-in completed | `DailyCheckin.jsx` (after NS insert) | →2 |
-| Quest created | `QuestBoardCard.jsx` or `WahooCreator.jsx` | 2→3 |
-| Essence Mirror saved | `EssenceMirrorFlow.jsx` (final save) | 3→4 |
+| Quest created | `QuestSelector.jsx:34`, `LevelTab.jsx:125`, `WahooDiscoveryFlow.jsx:113`, `LifePathWidgetTest.jsx:968` (4 creation points) | 2→3 |
+| Essence Mirror saved | `EssenceMirrorFlow.jsx` (final save step) | 3→4 |
 | Wahoo completed | `GroanCompletionModal.jsx` (after save) | 4→5, 5→6 |
 | Healing flow completed | `HealingFlowModal.jsx` (after save) | 6→7 |
+
+**IMPORTANT:** Quest creation happens in 4 different files. All must call `checkHeroGraduation`. The cleanest approach: create a shared `createQuest()` utility that wraps the Supabase insert + graduation check, then call it from all 4 locations. But for Sprint 3, calling the checker inline after each insert is acceptable.
 
 **Integration pattern (same in each file):**
 
@@ -219,9 +223,11 @@ if (graduation) {
 
 ### Edge Cases
 
+- **`user_stage_progress` row doesn't exist:** Uses UPSERT with `onConflict: 'user_id'`. If no row, creates one with just `current_journey_level` set. Other columns get DB defaults. This handles new users who bypass PersonaAssessment.
 - **User at Stage 0 with lots of existing data:** First check-in could cascade through →2, 2→3, 3→4 etc. The checker only advances ONE stage per call. Subsequent calls on later actions will catch up. No need to cascade in a single call.
-- **Existing users who already qualify for Stage 5+ but are at Stage 0:** They'll graduate naturally as they complete their next action. No retroactive mass-graduation needed.
-- **Race condition on rapid taps:** The checker reads-then-writes. Two simultaneous calls could both read Stage 4 and both try to write Stage 5. The second write is a no-op (same value). No harm.
+- **Existing users who already qualify for Stage 5+ but are at Stage 0:** Run the backfill script (below) after deploying. They'll also graduate naturally on their next action.
+- **Race condition on rapid taps:** The checker reads-then-writes. Two simultaneous calls could both read Stage 4 and both try to write Stage 5. The UPSERT is idempotent. No harm.
+- **Stage 4→5 JSON parsing:** Uses try/catch per row. Malformed `reflection_text` is silently skipped, not crash-inducing.
 
 ---
 
