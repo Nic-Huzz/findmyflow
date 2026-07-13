@@ -719,7 +719,7 @@ That's it. No action required. Just awareness.`)
           setTimeout(() => {
             addMessage('zarlo', SOUTH_MODE.restResponse)
             setCurrentOptions([
-              { id: 'gentle_release', label: 'Show me a gentle release', route: '/7-day-challenge?tab=healing' },
+              { id: 'gentle_release', label: 'Show me a gentle release', route: '/7-day-challenge?tab=courage' },
               { id: 'just_log', label: 'Just log how I feel', route: '/7-day-challenge?tab=tracker' },
               { id: 'close', label: 'Thanks, I\'ll rest' }
             ])

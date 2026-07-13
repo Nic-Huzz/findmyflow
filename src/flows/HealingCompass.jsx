@@ -1245,9 +1245,9 @@ export default function HealingCompass() {
       <div className="ns-hc-sticky-nav">
         <button
           className="ns-hc-primary-button"
-          onClick={() => navigate('/7-day-challenge?tab=healing')}
+          onClick={() => navigate('/7-day-challenge?tab=courage')}
         >
-          Start Healing Quests
+          Back to Courage
         </button>
       </div>
     </div>

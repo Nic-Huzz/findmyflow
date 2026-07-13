@@ -699,7 +699,7 @@ export const ROUTING_OPTIONS = [
   { id: 'stuck', label: 'Understand why I\'m stuck', icon: '🔍', route: '/nervous-system' },
   { id: 'build', label: 'Figure out what to build', icon: '🎯', route: '/nikigai/skills' },
   { id: 'push', label: 'Push my comfort zone', icon: '💪', route: '/7-day-challenge' },
-  { id: 'heal', label: 'Heal and process emotions', icon: '🧘', route: '/7-day-challenge?tab=healing' },
+  { id: 'heal', label: 'Heal and process emotions', icon: '🧘', route: '/7-day-challenge?tab=courage' },
   { id: 'offer', label: 'Work on my offer/business', icon: '💰', route: '/attraction-offer' },
   { id: 'progress', label: 'See my progress', icon: '📊', route: '/library' }
 ]

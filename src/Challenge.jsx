@@ -43,7 +43,6 @@ import ChallengeIntro from './components/ChallengeIntro'
 import DailyCheckin from './components/DailyCheckin'
 import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
-import HealingIntentionsList from './components/HealingIntentionsList'
 import JourneyTab from './components/JourneyTab'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
@@ -129,8 +128,6 @@ function Challenge() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
-    healingSubTab,
-    setHealingSubTab,
     playlistSubTab,
     setPlaylistSubTab,
     userArchetypes,
@@ -345,12 +342,6 @@ function Challenge() {
             setUnlockedTabs(prev => new Set([...prev, 'Courage']))
           }
         })
-        // Unlock Healing if any healing quest completed
-        supabase.from('quest_completions')
-          .select('id').eq('user_id', user.id).eq('quest_category', 'Healing').limit(1)
-          .then(({ data: d }) => {
-            if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Healing']))
-          })
       }
     }
 
@@ -1255,18 +1246,8 @@ function Challenge() {
     return 0
   })
 
-  // Apply R-type and frequency filters for Healing tab
-  let displayQuests = filteredQuests
-  if (activeCategory === 'Healing') {
-    if (activeRTypeFilter !== 'All') {
-      displayQuests = displayQuests.filter(q => q.type === activeRTypeFilter)
-    }
-    if (activeFrequencyFilter !== 'all') {
-      displayQuests = displayQuests.filter(q => q.frequency === activeFrequencyFilter)
-    }
-  }
-
   // Apply search filter
+  let displayQuests = filteredQuests
   if (searchQuery.trim()) {
     const query = searchQuery.toLowerCase()
     displayQuests = displayQuests.filter(q =>
@@ -1494,7 +1475,7 @@ function Challenge() {
         {/* Healing Summary */}
         {activeCategory === 'HealingSummary' && (
           <HealingSummary
-            onBack={() => setActiveCategory('Healing')}
+            onBack={() => setActiveCategory('Courage')}
             progress={progress}
           />
         )}
@@ -1502,26 +1483,10 @@ function Challenge() {
         {/* Quest Content - only show if not on Summary tabs */}
         {activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
-        {/* Artifact Progress — hidden on Play-list tab */}
-        {artifactProgress && activeCategory !== 'Courage' && activeCategory !== 'Healing' && (() => {
-          const stageConfig = null
-
-          // Healing: per-frequency title and description
-          const healingFreqMeta = {
-            daily: { name: '☀️ Daily Healing', desc: 'Clear what blocks your Vibe Rise. Small daily reps that add up.' },
-            weekly: { name: '📅 Weekly Healing', desc: 'Go deeper. Process the patterns your protective voice built.' },
-            deepdive: { name: '🌊 Deep Dive', desc: 'One-time flows to map your nervous system and find the wound.' },
-            explainer: { name: '📖 Explainers', desc: 'Understand the foundations of healing, emotional splinters, and the Four R\'s.' },
-            all: { name: '🧘 Healing Mastery', desc: 'Your combined healing progress across all practices.' }
-          }
-          const healingMeta = activeCategory === 'Healing' ? healingFreqMeta[activeFrequencyFilter] : null
-
-          const artifactName = healingMeta ? healingMeta.name
-            : stageConfig ? `${stageConfig.icon} ${stageConfig.name}`
-            : artifactProgress.name
-          const artifactDesc = healingMeta ? healingMeta.desc
-            : stageConfig ? stageConfig.description
-            : artifactProgress.description
+        {/* Artifact Progress — hidden on Courage tab */}
+        {artifactProgress && activeCategory !== 'Courage' && (() => {
+          const artifactName = artifactProgress.name
+          const artifactDesc = artifactProgress.description
           return (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
@@ -1531,66 +1496,18 @@ function Challenge() {
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                {activeCategory === 'Healing' && artifactProgress.frequencyCategories ? (
-                  (() => {
-                    // Show per-tab progress bar based on selected frequency
-                    const freqMap = { daily: 'Daily', weekly: 'Weekly', deepdive: 'Deep Dive', explainer: 'Explainer' }
-                    const iconMap = { Daily: '☀️', Weekly: '📅', 'Deep Dive': '🌊', Explainer: '📖' }
-
-                    if (activeFrequencyFilter === 'all') {
-                      // Combined total across all frequencies
-                      const totalCurrent = Object.values(artifactProgress.frequencyCategories)
-                        .reduce((sum, f) => sum + (f.currentPoints || 0), 0)
-                      const totalRequired = Object.values(artifactProgress.frequencyCategories)
-                        .reduce((sum, f) => sum + (f.pointsRequired || 0), 0)
-                      return (
-                        <div className="progress-bar-container">
-                          <div className="progress-bar-label">
-                            <span>📋 All Progress</span>
-                            <span>{totalCurrent}/{totalRequired}</span>
-                          </div>
-                          <div className="progress-bar">
-                            <div
-                              className="progress-bar-fill"
-                              style={{ width: `${Math.min((totalCurrent / totalRequired) * 100, 100)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      )
-                    }
-
-                    const freqKey = freqMap[activeFrequencyFilter]
-                    const freqData = freqKey && artifactProgress.frequencyCategories[freqKey]
-                    if (!freqData) return null
-                    return (
-                      <div className="progress-bar-container">
-                        <div className="progress-bar-label">
-                          <span>{iconMap[freqKey] || '📋'} {freqKey}</span>
-                          <span>{freqData.currentPoints}/{freqData.pointsRequired}</span>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className={`progress-bar-fill ${activeFrequencyFilter}`}
-                            style={{ width: `${Math.min((freqData.currentPoints / freqData.pointsRequired) * 100, 100)}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  })()
-                ) : (
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-label">
-                      <span>Progress</span>
-                      <span>{artifactProgress.currentPoints || 0}/{artifactProgress.pointsRequired}</span>
-                    </div>
-                    <div className="progress-bar">
-                      <div
-                        className="progress-bar-fill"
-                        style={{ width: `${Math.min(((artifactProgress.currentPoints || 0) / artifactProgress.pointsRequired) * 100, 100)}%` }}
-                      ></div>
-                    </div>
+                <div className="progress-bar-container">
+                  <div className="progress-bar-label">
+                    <span>Progress</span>
+                    <span>{artifactProgress.currentPoints || 0}/{artifactProgress.pointsRequired}</span>
                   </div>
-                )}
+                  <div className="progress-bar">
+                    <div
+                      className="progress-bar-fill"
+                      style={{ width: `${Math.min(((artifactProgress.currentPoints || 0) / artifactProgress.pointsRequired) * 100, 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
                 {(() => {
                   const tabStatus = getTabCompletionStatus(activeCategory)
                   if (tabStatus.totalQuests === 0) return null
@@ -1635,11 +1552,6 @@ function Challenge() {
             onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }}
             wahooCount={wahooCountThisWeek}
           />
-        )}
-
-        {/* Healing tab — per-task healing intentions */}
-        {activeCategory === 'Healing' && (
-          <HealingIntentionsList userId={user?.id} />
         )}
 
         {/* Journey Tab — hero stage, voice progress, thresholds */}
