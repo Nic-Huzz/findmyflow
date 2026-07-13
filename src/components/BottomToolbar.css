@@ -301,4 +301,43 @@ body.project-selector-active .bottom-toolbar {
   }
 }
 
+/* ═══ DOWNLOAD POPUP ═══ */
+.dl-popup-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.dl-popup {
+  background: #fff; border-radius: 20px; padding: 2rem;
+  max-width: 380px; width: 100%; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.dl-popup-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; font-size: 22px;
+  color: #999; cursor: pointer; line-height: 1;
+}
+.dl-popup-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.dl-popup-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 0.25rem; color: #1a1a1a; }
+.dl-popup-sub { font-size: 0.88rem; color: #888; margin: 0 0 1.5rem; }
+.dl-popup-section { margin-bottom: 1.25rem; }
+.dl-popup-label {
+  font-family: 'Inconsolata', monospace; font-size: 0.72rem;
+  font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #999; margin-bottom: 0.5rem;
+}
+.dl-popup-buttons { display: flex; gap: 0.5rem; }
+.dl-popup-btn {
+  display: block; width: 100%; padding: 0.75rem 1rem;
+  border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+  text-decoration: none; text-align: center; cursor: pointer;
+  border: none; font-family: inherit; transition: transform 0.2s;
+}
+.dl-popup-btn:hover { transform: translateY(-1px); }
+.dl-popup-btn--dark { background: #1a1a1a; color: #fff; }
+.dl-popup-btn--purple { background: #5e17eb; color: #fff; }
+.dl-popup-note { font-size: 0.78rem; color: #aaa; margin: 0.75rem 0 0; }
+
 /* NO dark mode override - keep toolbar white always */
