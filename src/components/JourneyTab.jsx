@@ -42,6 +42,10 @@ export default function JourneyTab({ userId }) {
         .select('protective_voice')
         .eq('user_id', userId)
         .not('protective_voice', 'is', null),
+      supabase.from('nervous_system_checkins')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
       supabase.from('zarlo_briefs')
         .select('brief')
         .eq('user_id', userId).maybeSingle(),
@@ -51,11 +55,12 @@ export default function JourneyTab({ userId }) {
         .eq('status', 'active')
         .neq('label', 'Healing Work')
         .order('created_at'),
-    ]).then(async ([stageRes, voiceRes, briefRes, questsRes]) => {
+    ]).then(async ([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes]) => {
       setHeroStage(stageRes.data?.current_journey_level || 0)
 
       const counts = {}
-      voiceRes.data?.forEach(row => {
+      const allVoices = [...(hiVoiceRes.data || []), ...(nsVoiceRes.data || [])]
+      allVoices.forEach(row => {
         if (row.protective_voice)
           counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
       })

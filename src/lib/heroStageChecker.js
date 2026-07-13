@@ -11,7 +11,7 @@ import { postFeedEvent } from './communityFeed'
 export async function checkHeroGraduation(userId) {
   const { data: stageData } = await supabase
     .from('user_stage_progress')
-    .select('current_journey_level, essence_mirror_completed, essence_archetype, essence_name')
+    .select('current_journey_level, essence_mirror_completed, hero_avatar_url, persona')
     .eq('user_id', userId)
     .maybeSingle()
 
@@ -69,17 +69,24 @@ export async function checkHeroGraduation(userId) {
     if (count >= 2) newStage = 6
   }
 
-  // 6→7: Protective voice identified 5+ times
+  // 6→7: Protective voice identified 5+ times (combined from both sources)
   if (currentStage === 6) {
-    const { data: vd } = await supabase
-      .from('nervous_system_checkins')
-      .select('protective_voice')
-      .eq('user_id', userId)
-      .not('protective_voice', 'is', null)
+    const [{ data: nsVoices }, { data: hiVoices }] = await Promise.all([
+      supabase
+        .from('nervous_system_checkins')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+      supabase
+        .from('healing_intentions')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+    ])
 
-    voiceData = vd // Assign to function-scoped variable for return
+    voiceData = [...(nsVoices || []), ...(hiVoices || [])]
     const counts = {}
-    voiceData?.forEach(row => {
+    voiceData.forEach(row => {
       if (row.protective_voice)
         counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
     })
@@ -114,7 +121,7 @@ export async function checkHeroGraduation(userId) {
       7: 'Pattern Revealed',
     }
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
-    const feelingTarget = stageData?.essence_name || null
+    const feelingTarget = stageData?.persona || null
     postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`, feelingTarget)
 
     return {

@@ -98,16 +98,24 @@ async function checkAndAdvance(
     if (count >= 2) newStage = 6
   }
 
-  // 6→7: Protective voice identified 5+ times (any single voice)
+  // 6→7: Protective voice identified 5+ times (combined from both sources)
   if (currentStage === 6) {
-    const { data: voiceRows } = await supabase
-      .from('nervous_system_checkins')
-      .select('protective_voice')
-      .eq('user_id', userId)
-      .not('protective_voice', 'is', null)
+    const [{ data: nsVoices }, { data: hiVoices }] = await Promise.all([
+      supabase
+        .from('nervous_system_checkins')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+      supabase
+        .from('healing_intentions')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+    ])
 
+    const allVoices = [...(nsVoices || []), ...(hiVoices || [])]
     const counts: Record<string, number> = {}
-    voiceRows?.forEach((row: any) => {
+    allVoices.forEach((row: any) => {
       if (row.protective_voice)
         counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
     })
