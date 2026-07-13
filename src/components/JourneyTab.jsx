@@ -3,6 +3,10 @@ import { supabase } from '../lib/supabaseClient'
 import UnstickFlow from './UnstickFlow'
 import QuestPathMap from './level/QuestPathMap'
 import JourneyTimeline from './journey/JourneyTimeline'
+import JourneyOnboarding from './journey/JourneyOnboarding'
+import JourneyZones from './journey/JourneyZones'
+import JourneyCompleted from './journey/JourneyCompleted'
+import { useFigurine } from '../hooks/useFigurine'
 import './JourneyTab.css'
 
 // Hero stage names + feeling targets (from measurement framework)
@@ -196,6 +200,9 @@ export default function JourneyTab({ userId }) {
         )}
       </div>
 
+      {/* Onboarding — only if items incomplete */}
+      <JourneyOnboarding userId={userId} />
+
       {/* Voice Progress (Stage 5-6 only, leading to Stage 7) */}
       {heroStage >= 5 && heroStage < 7 && dominant && (
         <div className="jt-section">
@@ -272,6 +279,12 @@ export default function JourneyTab({ userId }) {
           onClose={() => setShowFlowMap(false)}
         />
       )}
+
+      {/* Zone Assessments */}
+      <JourneyZones userId={userId} />
+
+      {/* Completed exercises + closed quests */}
+      <JourneyCompleted userId={userId} />
 
       {/* Stuck Detection (from Zarlo Brief) */}
       {brief?.thresholds?.stage_stuck_days > 0 && (

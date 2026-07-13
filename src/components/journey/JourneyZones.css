@@ -1,0 +1,89 @@
+/* ── Zone Assessment Strip ── */
+.jz-section { margin-top: 20px; }
+
+.jz-title {
+  font-size: 1rem; font-weight: 700;
+  color: #1a1a1a; margin: 0 0 12px;
+  text-align: center;
+}
+
+.jz-strip {
+  display: flex; gap: 8px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding: 4px 0;
+}
+
+.jz-card {
+  flex-shrink: 0; padding: 10px 14px;
+  border-radius: 12px; border: 1px solid rgba(0,0,0,0.08);
+  background: white; cursor: pointer;
+  font-family: inherit; text-align: center; min-width: 90px;
+}
+
+.jz-card.completed {
+  border-color: rgba(94,23,235,0.15);
+  background: rgba(94,23,235,0.03);
+}
+
+.jz-label { font-size: 0.75rem; font-weight: 600; color: #1a1a1a; }
+.jz-check { font-size: 0.7rem; margin-top: 2px; }
+
+/* ── Zone Modal ── */
+.jz-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+
+.jz-modal {
+  background: white; border-radius: 20px; padding: 24px;
+  max-width: 400px; width: 100%; max-height: 80vh;
+  overflow-y: auto; position: relative;
+}
+
+.jz-modal-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; font-size: 1.2rem;
+  cursor: pointer; color: rgba(0,0,0,0.3);
+}
+
+.jz-modal-title {
+  font-size: 1.2rem; font-weight: 700;
+  color: #1a1a1a; margin: 0 0 8px;
+}
+
+.jz-modal-question {
+  font-size: 0.9rem; color: rgba(0,0,0,0.5);
+  line-height: 1.4; margin: 0 0 14px; font-style: italic;
+}
+
+.jz-modal-result {
+  background: rgba(94,23,235,0.04); border-radius: 12px;
+  padding: 12px; margin-bottom: 14px;
+}
+
+.jz-modal-result-label {
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: rgba(94,23,235,0.5); margin-bottom: 4px;
+}
+
+.jz-modal-result-name {
+  font-size: 0.95rem; font-weight: 600; color: #1a1a1a;
+}
+
+.jz-modal-cta {
+  display: block; text-align: center;
+  padding: 12px; border-radius: 12px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  color: white; font-size: 0.9rem; font-weight: 600;
+  text-decoration: none; margin-bottom: 10px;
+}
+
+.jz-modal-boss {
+  font-size: 0.8rem; color: rgba(0,0,0,0.4);
+  text-align: center; margin-top: 8px;
+}
+
+.jz-modal-boss-name { font-weight: 600; color: #5e17eb; }
