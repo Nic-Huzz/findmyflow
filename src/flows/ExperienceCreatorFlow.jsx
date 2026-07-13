@@ -639,8 +639,8 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
             ) : (
               <>
                 <p className="ecf-gate-text">Go to the Creator Portal to unlock the full breakdown of how your picks built their careers.</p>
-                <button className="ecf-save-btn" onClick={() => navigate('/create')}>
-                  Go to Creator Portal →
+                <button className="ecf-save-btn" onClick={saveModel} disabled={loading}>
+                  {loading ? 'Saving...' : 'Go to Creator Portal →'}
                 </button>
               </>
             )}
