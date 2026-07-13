@@ -406,7 +406,7 @@ export async function getUserContext(userId) {
       { data: compassData },
       { data: stageData },
       { data: ecData },
-      { data: healingVoiceData },
+      { data: nsVoiceData },
       wheelData,
       { data: briefData }
     ] = await Promise.all([
@@ -422,9 +422,17 @@ export async function getUserContext(userId) {
       supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle()
     ])
 
+    // Also fetch healing_intentions voices (combined with NS checkins for accurate count)
+    const { data: hiVoiceData } = await supabase
+      .from('healing_intentions')
+      .select('protective_voice')
+      .eq('user_id', userId)
+      .not('protective_voice', 'is', null)
+
     // Protective voice pattern detection (feeds Stage 6→7 graduation)
+    const allVoiceData = [...(nsVoiceData || []), ...(hiVoiceData || [])]
     const voiceCounts = {}
-    healingVoiceData?.forEach(row => {
+    allVoiceData.forEach(row => {
       if (row.protective_voice) {
         voiceCounts[row.protective_voice] = (voiceCounts[row.protective_voice] || 0) + 1
       }

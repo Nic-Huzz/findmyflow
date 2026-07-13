@@ -68,16 +68,23 @@ function ZarloWidget({ activeChat, setActiveChat }) {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      const { data: voiceData } = await supabase
-        .from('nervous_system_checkins')
-        .select('protective_voice')
-        .eq('user_id', user.id)
-        .not('protective_voice', 'is', null)
+      // Query both sources for protective voice data (matches heroStageChecker)
+      const [{ data: nsVoices }, { data: hiVoices }] = await Promise.all([
+        supabase.from('nervous_system_checkins')
+          .select('protective_voice')
+          .eq('user_id', user.id)
+          .not('protective_voice', 'is', null),
+        supabase.from('healing_intentions')
+          .select('protective_voice')
+          .eq('user_id', user.id)
+          .not('protective_voice', 'is', null),
+      ])
 
-      if (!voiceData?.length) return
+      const allVoices = [...(nsVoices || []), ...(hiVoices || [])]
+      if (!allVoices.length) return
 
       const counts = {}
-      voiceData.forEach(row => {
+      allVoices.forEach(row => {
         if (row.protective_voice) {
           counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
         }
