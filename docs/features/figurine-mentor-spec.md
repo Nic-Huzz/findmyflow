@@ -167,12 +167,15 @@ User's journey data:
 
 ## Additional Design Considerations
 
-### Priority: Figurine vs Zarlo
+### Priority + Positioning: Figurine vs Zarlo
 
-When both want to speak at the same time (e.g., Zarlo proactive bubble + Figurine graduation):
+**Positioning:** Figurine FAB = bottom RIGHT. Zarlo FAB = bottom LEFT. Both always visible as bubbles (after their respective unlock stages). Two companions, two corners.
+
+**When both want to speak** (e.g., Zarlo proactive bubble + Figurine graduation):
 - **Figurine always wins.** It speaks rarely, so when it does, it takes priority.
 - Zarlo's proactive message gets deferred to next session.
-- They should never appear simultaneously on screen.
+
+**Chat conflict:** Opening one closes the other. Shared `activeChat` state in Challenge.jsx: `null | 'zarlo' | 'figurine'`. Setting one clears the other. Both can't be in active conversation simultaneously. They're different characters with different conversations.
 
 ### AI Backend
 
