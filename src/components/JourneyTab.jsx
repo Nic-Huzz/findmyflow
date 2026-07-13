@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import UnstickFlow from './UnstickFlow'
+import QuestPathMap from './level/QuestPathMap'
 import './JourneyTab.css'
 
 // Hero stage names + feeling targets (from measurement framework)
@@ -24,6 +25,12 @@ export default function JourneyTab({ userId }) {
   const [brief, setBrief] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showUnstickFlow, setShowUnstickFlow] = useState(false)
+  const [lifePaths, setLifePaths] = useState([])
+  const [questTasks, setQuestTasks] = useState({})
+  const [trunkState, setTrunkState] = useState(null)
+  const [safety, setSafety] = useState(0)
+  const [careers, setCareers] = useState([])
+  const [showFlowMap, setShowFlowMap] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -38,7 +45,13 @@ export default function JourneyTab({ userId }) {
       supabase.from('zarlo_briefs')
         .select('brief')
         .eq('user_id', userId).maybeSingle(),
-    ]).then(([stageRes, voiceRes, briefRes]) => {
+      supabase.from('quests')
+        .select('id, label, status, predicted_state, depth_level')
+        .eq('user_id', userId)
+        .eq('status', 'active')
+        .neq('label', 'Healing Work')
+        .order('created_at'),
+    ]).then(async ([stageRes, voiceRes, briefRes, questsRes]) => {
       setHeroStage(stageRes.data?.current_journey_level || 0)
 
       const counts = {}
@@ -48,6 +61,43 @@ export default function JourneyTab({ userId }) {
       })
       setVoiceCounts(counts)
       setBrief(briefRes.data?.brief || null)
+
+      const activeQuests = questsRes.data || []
+      setLifePaths(activeQuests)
+
+      // Fetch quest tasks for Flow Map
+      if (activeQuests.length > 0) {
+        const { data: allTasks } = await supabase
+          .from('quest_tasks')
+          .select('*')
+          .in('quest_id', activeQuests.map(q => q.id))
+          .order('sort_order')
+        const taskMap = {}
+        ;(allTasks || []).forEach(t => {
+          if (!taskMap[t.quest_id]) taskMap[t.quest_id] = []
+          taskMap[t.quest_id].push(t)
+        })
+        setQuestTasks(taskMap)
+      }
+
+      // Fetch trunk state from life_path_sessions (filtered by client_email)
+      const { data: userData } = await supabase.auth.getUser()
+      const email = userData?.user?.email
+      if (email) {
+        const { data: sessionData } = await supabase
+          .from('life_path_sessions')
+          .select('current_state, safety, careers')
+          .eq('client_email', email)
+          .order('updated_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+        if (sessionData) {
+          setTrunkState(sessionData.current_state)
+          setSafety(sessionData.safety || 0)
+          setCareers(sessionData.careers || [])
+        }
+      }
+
       setLoading(false)
     })
   }, [userId])
@@ -85,6 +135,60 @@ export default function JourneyTab({ userId }) {
             {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready.`}
           </p>
         </div>
+      )}
+
+      {/* Life Paths Summary */}
+      {lifePaths.length > 0 && (
+        <div className="jt-section">
+          <h3 className="jt-section-title">Your Life Paths</h3>
+          <div className="jt-paths-list">
+            {lifePaths.map(path => (
+              <div key={path.id} className="jt-path-row">
+                <span className="jt-path-dot" style={{
+                  background: path.predicted_state === 'vibe' ? '#c084fc'
+                    : path.predicted_state === 'peace' ? '#10b981'
+                    : path.predicted_state === 'anxious' ? '#f59e0b'
+                    : path.predicted_state === 'shutdown' ? '#ef4444'
+                    : '#d1d5db'
+                }} />
+                <span className="jt-path-name">{path.label}</span>
+                {path.depth_level && (
+                  <span className="jt-path-depth">
+                    {path.depth_level === 'education' ? 'L0'
+                      : path.depth_level === 'testing' ? 'L1'
+                      : path.depth_level === 'practising' ? 'L2'
+                      : path.depth_level === 'charging' ? 'L3'
+                      : path.depth_level === 'teaching' ? 'L4'
+                      : ''}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+          <button className="jt-flowmap-btn" onClick={() => setShowFlowMap(true)}>
+            View Flow Map
+          </button>
+        </div>
+      )}
+
+      {/* Flow Map overlay */}
+      {showFlowMap && (
+        <QuestPathMap
+          quests={lifePaths}
+          questTasks={questTasks}
+          trunkState={trunkState}
+          safety={safety}
+          careers={careers}
+          userId={userId}
+          onUpdate={() => {
+            supabase.from('quests')
+              .select('id, label, status, predicted_state, depth_level')
+              .eq('user_id', userId).eq('status', 'active').neq('label', 'Healing Work')
+              .order('created_at')
+              .then(({ data }) => { if (data) setLifePaths(data) })
+          }}
+          onClose={() => setShowFlowMap(false)}
+        />
       )}
 
       {/* Stuck Detection (from Zarlo Brief) */}
