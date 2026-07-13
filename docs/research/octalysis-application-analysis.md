@@ -56,29 +56,46 @@ All other drives unchanged from Sprint 1-4 scores.
 
 **Post-Social Score: 64 + 64 + 36 + 49 + 49 + 25 + 49 + 25 = 361** (Strong)
 
-**Full journey: 217 → 337 → 361 (+144 points, +66%)**
+---
+
+## Post-Tab Restructure + L0-L4 Depth + Social Gaps Score (July 2026)
+
+After tab restructure (Journey/Quests/Tune/Courage), L0-L4 depth scale on wahoo creation, healing merged into Courage, and Social V1 gaps (level-up auto-posts + anonymous solidarity):
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD3** Creativity | 6 | **7** | +1 | L0-L4 depth capture on wahoo creation = meaningful choices about WHERE you are. Visibility multi-select adapts to depth = creative boundary decisions. WahooCreator is now a 4-step creative exercise. |
+| **CD4** Ownership | 7 | **8** | +1 | Depth level visible per quest ("L2 Practising"). Life paths summary on Journey tab with state + depth. Your relationship to each path is now VISIBLE and YOURS. |
+| **CD7** Curiosity | 7 | **8** | +1 | Visibility examples adapt to depth ("what options appear at L3?"). Flow Map accessible from Journey tab. Tab restructure reveals Journey as first tab (new content to explore). |
+
+All other drives unchanged.
+
+**Current Score: 64 + 64 + 49 + 64 + 49 + 25 + 64 + 25 = 404** (Strong)
+
+**Full journey: 217 → 337 → 361 → 404 (+187 points, +86%)**
 
 ```
-                    Start (217)      Now (361)        Target (479)
+                    Start (217)      Now (404)        Target (479)
 CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD2 Accomplishment  ██████░░░░ (6)   ████████░░ (8)   █████████░ (9)
-CD3 Creativity      █████░░░░░ (5)   ██████░░░░ (6)   ████████░░ (8)
-CD4 Ownership       █████░░░░░ (5)   ███████░░░ (7)   ████████░░ (8)
+CD3 Creativity      █████░░░░░ (5)   ███████░░░ (7)   ████████░░ (8)
+CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD5 Social          ████░░░░░░ (4)   ███████░░░ (7)   ████████░░ (8)
 CD6 Scarcity        ████░░░░░░ (4)   █████░░░░░ (5)   ██████░░░░ (6)
-CD7 Curiosity       █████░░░░░ (5)   ███████░░░ (7)   █████████░ (9)
+CD7 Curiosity       █████░░░░░ (5)   ████████░░ (8)   █████████░ (9)
 CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
 ```
 
-**Remaining gap to target: 118 points.** Requires V2 backlog:
-- CD2 8→9: Self-Knowledge Skills (+17 pts)
-- CD3 6→8: L0-L4 depth + wahoo creation creativity (+28 pts)
-- CD4 7→8: Figurine visual + permanent profile marks (+15 pts)
-- CD5 7→8: Session Bridge + solidarity (+15 pts)
-- CD6 5→6: Monthly Community Day + session dynamics (+11 pts)
-- CD7 7→9: Mystery mechanics + Skills + expanded triggers (+32 pts)
+**3 drives at target** (CD1, CD4, CD8). 5 remaining.
 
-*Scores updated July 2026 after Social V1 build*
+**Remaining gap to target: 75 points.** Requires V2 backlog:
+- CD2 8→9: Self-Knowledge Skills (+17 pts)
+- CD3 7→8: Named user creations in codex + more creative wahoo options (+15 pts)
+- CD5 7→8: Session Bridge + deeper community features (+15 pts)
+- CD6 5→6: Monthly Community Day + session appointment dynamics (+11 pts)
+- CD7 8→9: Mystery mechanics + Self-Knowledge Skills + Figurine cryptic hooks (+17 pts)
+
+*Scores updated July 2026 after Tab Restructure + L0-L4 Depth + Social V1 Gaps*
 
 ---
 
