@@ -40,7 +40,7 @@ async function checkAndAdvance(
   // Fetch current stage data
   const { data: stageData } = await supabase
     .from('user_stage_progress')
-    .select('current_journey_level, essence_mirror_completed, essence_archetype')
+    .select('current_journey_level, essence_mirror_completed, hero_avatar_url')
     .eq('user_id', userId)
     .maybeSingle()
 
@@ -56,19 +56,23 @@ async function checkAndAdvance(
     if (count > 0) newStage = 2
   }
 
-  // 2→3: At least one active quest
+  // 2→3: Life Paths exercise completed
   if (currentStage === 2) {
-    const { count } = await supabase
-      .from('quests')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('status', 'active')
-    if (count > 0) newStage = 3
+    // Backfill uses service role — look up email from auth.users
+    const { data: authUser } = await supabase.auth.admin.getUserById(userId)
+    const email = authUser?.user?.email
+    if (email) {
+      const { count } = await supabase
+        .from('life_path_sessions')
+        .select('id', { count: 'exact', head: true })
+        .eq('client_email', email)
+      if (count > 0) newStage = 3
+    }
   }
 
-  // 3→4: Essence Mirror completed
+  // 3→4: Essence Mirror completed + hero avatar generated
   if (currentStage === 3) {
-    if (stageData?.essence_mirror_completed && stageData?.essence_archetype) {
+    if (stageData?.essence_mirror_completed && stageData?.hero_avatar_url) {
       newStage = 4
     }
   }

@@ -28,19 +28,22 @@ export async function checkHeroGraduation(userId) {
     if (count > 0) newStage = 2
   }
 
-  // 2→3: At least one active quest
+  // 2→3: Life Paths exercise completed (life_path_sessions exists)
   if (currentStage === 2) {
-    const { count } = await supabase
-      .from('quests')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('status', 'active')
-    if (count > 0) newStage = 3
+    const { data: userData } = await supabase.auth.getUser()
+    const email = userData?.user?.email
+    if (email) {
+      const { count } = await supabase
+        .from('life_path_sessions')
+        .select('id', { count: 'exact', head: true })
+        .eq('client_email', email)
+      if (count > 0) newStage = 3
+    }
   }
 
-  // 3→4: Essence Mirror completed
+  // 3→4: Essence Mirror completed + hero avatar generated
   if (currentStage === 3) {
-    if (stageData?.essence_mirror_completed && stageData?.essence_archetype) {
+    if (stageData?.essence_mirror_completed && stageData?.hero_avatar_url) {
       newStage = 4
     }
   }
