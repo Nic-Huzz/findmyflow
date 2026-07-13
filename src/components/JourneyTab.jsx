@@ -291,7 +291,7 @@ export default function JourneyTab({ userId }) {
       {/* Orphaned Wahoos — completed courage challenges not linked to a life path */}
       {orphanedWahoos.length > 0 && (
         <div className="jt-section jt-orphan-section">
-          <h3 className="jt-section-title">Unlinked Courage Challenges</h3>
+          <h3 className="jt-section-title">Connect your wins to a life path</h3>
           <p className="jt-orphan-intro">
             You've done {orphanedWahoos.length} courage challenge{orphanedWahoos.length > 1 ? 's' : ''} not connected to a life path yet.
           </p>
@@ -321,7 +321,7 @@ export default function JourneyTab({ userId }) {
           <h3 className="jt-section-title">Your Life Paths</h3>
           <div className="jt-paths-list">
             {lifePaths.map(path => (
-              <div key={path.id} className="jt-path-row">
+              <div key={path.id} className={`jt-path-row jt-path-state-${path.predicted_state || 'none'}`}>
                 <span className="jt-path-dot" style={{
                   background: path.predicted_state === 'vibe' ? '#c084fc'
                     : path.predicted_state === 'peace' ? '#10b981'

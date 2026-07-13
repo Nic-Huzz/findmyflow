@@ -108,7 +108,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
         const ev = evidence[s.stage]
         return (
           <div key={s.stage} className="jtl-item">
-            <div className="jtl-dot" />
+            <div className="jtl-dot">✓</div>
             <div className="jtl-content">
               <div className="jtl-name">{s.icon} {s.name}</div>
               {ev && (

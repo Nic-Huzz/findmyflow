@@ -1,7 +1,7 @@
 /* JourneyTab — light theme, .jt- prefix scoping */
 
 .jt-container {
-  padding: 16px;
+  padding: 20px;
 }
 
 .jt-loading {
@@ -17,16 +17,24 @@
   border-radius: 16px;
   padding: 24px;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.08);
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, #5e17eb, #E9A23B) 1;
+  border-image-slice: 1;
+  overflow: hidden;
 }
 
 .jt-stage-number {
-  font-size: 0.75rem;
+  display: inline-block;
+  font-size: 0.7rem;
   text-transform: uppercase;
   color: #5e17eb;
-  letter-spacing: 0.1em;
-  font-weight: 600;
-  margin-bottom: 4px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 6px;
+  background: rgba(94, 23, 235, 0.06);
+  padding: 3px 12px;
+  border-radius: 20px;
 }
 
 .jt-stage-name {
@@ -45,9 +53,10 @@
 }
 
 .jt-stage-refs {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 14px;
+  padding: 12px;
+  background: rgba(94, 23, 235, 0.03);
+  border-radius: 10px;
 }
 
 .jt-stage-ref-label {
@@ -87,11 +96,15 @@
 
 /* Generic section card */
 .jt-section {
-  margin-top: 20px;
+  margin-top: 16px;
   background: #fff;
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.jt-section + .jt-section {
+  margin-top: 12px;
 }
 
 .jt-section-title {
@@ -195,7 +208,13 @@
   padding: 10px 12px;
   background: rgba(0, 0, 0, 0.02);
   border-radius: 10px;
+  border-left: 3px solid transparent;
 }
+
+.jt-path-state-vibe { border-left-color: #c084fc; background: rgba(192, 132, 252, 0.04); }
+.jt-path-state-peace { border-left-color: #10b981; background: rgba(16, 185, 129, 0.04); }
+.jt-path-state-anxious { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.04); }
+.jt-path-state-shutdown { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.04); }
 
 .jt-path-dot {
   width: 10px;
@@ -257,9 +276,11 @@
 
 /* ── Next step inside stage card ── */
 .jt-stage-next {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(233, 162, 59, 0.04);
+  border-radius: 10px;
+  border-left: 2px solid #E9A23B;
 }
 
 .jt-next-inline {
