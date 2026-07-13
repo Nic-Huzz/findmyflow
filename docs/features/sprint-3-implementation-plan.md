@@ -34,6 +34,13 @@ Store lastKnownStage in localStorage
 - Queries are cheap (~50ms total, indexed lookups)
 - No risk of missing a trigger point
 
+**Known trade-off: graduation celebrations are delayed, not instant.**
+When a user completes a qualifying action (e.g. first Vibe Rise wahoo) while already on `/7-day-challenge`, the graduation celebration doesn't fire until the next page mount (navigate away and back, or next app open). The useEffect with `[user?.id]` doesn't re-fire on re-renders.
+
+This is intentional, not a bug. The wahoo-specific celebration (Sprint 1A) fires immediately. The graduation is a "welcome back, your journey has advanced" moment — like Hades showing new dialogue when you return home, not during the run. Do NOT "fix" this by wiring graduation checks into individual components. The simplicity of one integration point is worth the delay.
+
+**LevelUpModal text length:** Graduation messages are full sentences (e.g. "You've been called this your whole life without knowing it. Radiant Rebel."). The existing modal is designed for short titles. The implementing agent should verify text fits visually and may need to reduce font-size or increase padding in the `isGraduation` variant.
+
 ---
 
 ## What Sprint 3 Builds
