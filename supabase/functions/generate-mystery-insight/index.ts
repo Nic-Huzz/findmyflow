@@ -189,7 +189,7 @@ serve(async (req) => {
 
     // Score trends
     const scoreTrends = (capacityData.data || []).map(s =>
-      `${s.week_start_date}: tune=${s.business_score}, courage=${s.courage_score}, healing=${s.healing_score}`
+      `${s.week_start_date}: practices=${s.business_score}, courage=${s.courage_score}, healing=${s.healing_score}`
     ).join('\n')
 
     const PROMPTS: Record<string, string> = {
@@ -207,8 +207,9 @@ Total wahoos: ${(wahoos.data || []).length}
 RULES:
 - Reveal ONE specific pattern with data to back it up (days, counts, percentages).
 - Make it feel like "how did you know that?" not "here's a generic insight."
-- 2-3 sentences max. No fluff. No em dashes.
+- 2-3 sentences max. No fluff. No em dashes. No colons in headers.
 - Write so a 12-year-old would understand.
+- Output PLAIN TEXT only. Never use markdown (no **, ##, *, etc). No bullet points.
 - Start with the observation, end with what it means for them.`,
 
       shadow_reveal: `You are an AI Mirror. You connect this person's protective behaviour patterns to what they avoid.
@@ -225,8 +226,9 @@ State distribution: ${JSON.stringify(stateCounts)}
 RULES:
 - Connect their protective voice to a specific avoidance pattern in their data.
 - Name the voice, name what they avoid, name what it costs them.
-- 2-3 sentences max. No fluff. No em dashes.
+- 2-3 sentences max. No fluff. No em dashes. No colons in headers.
 - Write so a 12-year-old would understand.
+- Output PLAIN TEXT only. Never use markdown (no **, ##, *, etc). No bullet points.
 - Be compassionate but honest. This should land like a loving truth.`,
 
       capacity_equation: `You are an AI Mirror. You break down what's driving or blocking this person's capacity score.
@@ -243,8 +245,9 @@ Check-in days: ${checkinDays}
 RULES:
 - Name the specific bottleneck or strength in their capacity equation.
 - Use their actual numbers. "Your healing score dropped 40% this week" not "you might want to focus on healing."
-- 2-3 sentences max. No fluff. No em dashes.
+- 2-3 sentences max. No fluff. No em dashes. No colons in headers.
 - Write so a 12-year-old would understand.
+- Output PLAIN TEXT only. Never use markdown (no **, ##, *, etc). No bullet points.
 - End with one actionable thing they could try.`,
     }
 
