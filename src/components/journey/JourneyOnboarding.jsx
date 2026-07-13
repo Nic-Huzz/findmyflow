@@ -162,7 +162,7 @@ export default function JourneyOnboarding({ userId }) {
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
           )}
           {!(hasWahoos || hasPlaySkills) && hasLifePaths && (
-            <div className="level-deep-dive" style={{ cursor: 'pointer' }}>
+            <div className="level-deep-dive" style={{ cursor: 'default' }}>
               <div className="level-dd-icon">🔥</div>
               <div className="level-dd-info">
                 <div className="level-dd-name">Unlock Your Courage Tab</div>
@@ -182,7 +182,7 @@ export default function JourneyOnboarding({ userId }) {
             </div>
           )}
           {!hasHealingCompletion && hasLifePaths && (
-            <div className="level-deep-dive" style={{ cursor: 'pointer' }}>
+            <div className="level-deep-dive" style={{ cursor: 'default' }}>
               <div className="level-dd-icon">💚</div>
               <div className="level-dd-info">
                 <div className="level-dd-name">Unlock Your Healing Tab</div>
