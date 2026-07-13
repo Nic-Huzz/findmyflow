@@ -45,7 +45,7 @@ const SLIDES = [
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams is where the promise leaves you' }
     ],
     beats: {
-      scene: 'Year 12 graduation. Everyone clapping. The golden road laid out: university, graduate job, salary, house. I believed every word.',
+      scene: 'I never questioned it. Not once. Because everyone in my life, my parents, my parents\' friends, my friends, were all living that way. The golden road wasn\'t sold to me. It was the water I swam in. School, uni, job, salary, house. Nobody questioned it because nobody could see it. You don\'t question water when you\'re a fish.ouse. I believed every word.',
       tension: 'The promise is universal, unquestioned, and wrong. Nobody asks whether the destination actually contains what it claims.',
       turn: 'The pitch isn\'t a lie. It\'s a map to someone else\'s destination. You can follow it perfectly and arrive somewhere you never wanted to be.',
       land: 'I followed it perfectly. That was the problem.',
@@ -163,7 +163,7 @@ const SLIDES = [
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams is the aftermath' }
     ],
     beats: {
-      scene: 'Not a dramatic moment. A Tuesday. Sitting in traffic. And suddenly the gap between who I was performing as and who I actually was became physically unbearable.',
+      scene: 'One month into my first full-time week at my dream job. A hollow fear crept in. The Monday-to-Friday office grind stretching out ahead of me forever. "Is this it?" Two weeks later, Covid lockdowns hit. The earthquake wasn\'t the virus. The virus just removed every distraction that was holding the cracks together.en who I was performing as and who I actually was became physically unbearable.',
       tension: 'Your nervous system can hold the contradiction for years. Decades. Until it can\'t. The crack isn\'t a choice. It\'s a threshold.',
       turn: 'The crack doesn\'t mean you\'re broken. It means the mask finally failed. And the mask failing is the beginning.',
       land: 'The crack happens when the gap between who you\'re pretending to be and who you actually are gets too wide for your nervous system to hold.',
@@ -842,7 +842,7 @@ const SLIDES = [
       { ch: 'Ch 79', num: '79', text: 'The sentence revisited at the end' }
     ],
     beats: {
-      scene: 'Writing the sentence for the first time. "I am a Playful Creator. The world told me play wasn\'t serious. That installed the Performer. Now the Performer runs my life instead of the Creator." Twenty-six years in one line.',
+      scene: 'Poland. Staying at Tamara\'s. Sitting with a pen and a blank page. Writing the sentence for the first time. "I am a Playful Creator. The world told me play wasn\'t serious. That installed the Performer. Now the Performer runs my life instead of the Creator." Twenty-six years in one line.',
       tension: 'One sentence shouldn\'t be able to contain an entire life. But this one does. And writing it is terrifying because it means you can no longer pretend you don\'t know.',
       turn: 'The sentence isn\'t the end of Part 1. It\'s the beginning of awareness. You now have words for what was previously just a feeling.',
       land: '"I am a Playful Creator. The world told me play wasn\'t serious. That installed the Performer. Now the Performer runs my life instead of the Creator."',
@@ -2047,7 +2047,7 @@ const SLIDES = [
       { ch: 'Ch 29', num: '29', text: 'The diagonal: where to go from here' }
     ],
     beats: {
-      scene: 'Peak of the flood. I could describe my essence. Name my wound. Map my skills, problems, people. And I was paralysed. Maximum capability. Minimum belief. The most qualified person who was convinced he had no right to be there.',
+      scene: '2021. Eighteen months into lockdown. Stuck at home in Sydney. I could describe my essence. Name my wound. Map my skills, problems, people. Frameworks for my frameworks. $30K deep in courses. And I was in the exact same room, in the exact same life, with the exact same paralysis. Maximum capability. Minimum belief. Bottom right of the graph.oblems, people. And I was paralysed. Maximum capability. Minimum belief. The most qualified person who was convinced he had no right to be there.',
       tension: 'Bottom-right is the most painful place on the graph because you can SEE everything you\'re capable of. And you can\'t reach it.',
       turn: 'This is where Part 2 ends. Extreme bottom-right. The most capable, least believing version of yourself. The only direction from here is up and to the left: toward the diagonal.',
       land: 'Maximum capability. Minimum belief. The most qualified person in the room who was convinced he had no right to be there.',
@@ -2097,7 +2097,7 @@ const SLIDES = [
       { ch: 'Ch 52', num: '52', text: 'What actually closes it' }
     ],
     beats: {
-      scene: 'Staring at the two cliffs. Everything I wanted on the other side. The gap was narrow enough to jump. And I couldn\'t move my feet.',
+      scene: 'Working for myself. Living in Bali. The life I wanted was right there. I could see it clearly. But the gap between knowing and doing was still open. Everything on the other side: freedom, creation, experiences, purpose. Everything on this side: safety, familiarity, the patterns I knew. And I couldn\'t move my feet.',
       tension: 'The gap isn\'t knowledge, motivation, or discipline. It\'s safety. Your nervous system hasn\'t experienced the other side as survivable yet.',
       turn: 'The gap closes when you jump, not when you understand why you should jump.',
       land: 'The gap between knowing and doing isn\'t motivation. It isn\'t discipline. It isn\'t another course.',
@@ -2496,7 +2496,7 @@ const SLIDES = [
       { ch: 'Ch 79', num: '79', text: 'The one sentence revisited' }
     ],
     beats: {
-      scene: 'Week six. Something shifted. A scary thing came up and instead of the usual dread, I felt something new: the dread of NOT doing it. The identity had flipped.',
+      scene: 'I told myself I\'d do 5 magic tricks at the open mic. I did 4. Walked off feeling like I\'d failed. But the next week, I sang on Instagram. Without fear. Without planning. Without the voice. The flip had happened and I didn\'t even notice until it was already done. The pain of NOT doing the scary thing was now worse than doing it.d, I felt something new: the dread of NOT doing it. The identity had flipped.',
       tension: 'Identity is the most powerful force in human behaviour. You will always act in alignment with who you believe you are.',
       turn: 'After the flip, not doing the scary thing felt worse than doing it. The pain of betraying my new identity was greater than the pain of the fear.',
       land: 'The pain of betraying my new identity was greater than the pain of the fear.',
@@ -2853,7 +2853,7 @@ const SLIDES = [
       { ch: 'Ch 28', num: '28', text: 'Limiting Belief: "Who am I to do this?"' }
     ],
     beats: {
-      scene: 'Someone introduces me as "an expert in this space." My first instinct: correct them. "I\'m not an expert, I just..." The imposter syndrome in real time.',
+      scene: 'Running a workshop. Afterwards, someone described me as "teaching the teacher." My first instinct: deflect. "I\'m not a teacher. I\'m just figuring this out." But I was teaching. And the people in the room saw it before I did. Claiming authority isn\'t arrogance. It\'s letting other people\'s evidence override your protective voice.hem. "I\'m not an expert, I just..." The imposter syndrome in real time.',
       tension: 'Every imposter syndrome lives at the authority layer. The fear isn\'t about being exposed. It\'s about being seen as yourself, and that not being enough.',
       turn: 'Claiming authority isn\'t about being the best. It\'s about being honest about what you know and being willing to be seen knowing it.',
       land: 'The fear is that you\'ll be seen as who you actually are, and it won\'t be enough.',

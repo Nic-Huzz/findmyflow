@@ -1,0 +1,150 @@
+/* ── QuestTaskSheet — bottom sheet, scoped .qts- ── */
+
+.qts-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1200;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+
+.qts-sheet {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 480px;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 0 20px 28px;
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.1);
+  animation: qtsSlideUp 0.25s ease-out;
+}
+
+@keyframes qtsSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.qts-handle {
+  width: 36px; height: 4px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+.qts-accent {
+  height: 3px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 2px;
+  margin: 12px 0 16px;
+}
+
+/* ── Header ── */
+.qts-header {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 16px;
+}
+.qts-icon { font-size: 24px; }
+.qts-header-text { flex: 1; }
+.qts-title {
+  font-size: 16px; font-weight: 700; color: #1a1a2e;
+  margin: 0 0 2px; line-height: 1.3;
+}
+.qts-quest-label {
+  font-size: 12px; color: rgba(0,0,0,0.4);
+  font-weight: 500; display: block;
+}
+.qts-date {
+  font-size: 11px; color: rgba(0,0,0,0.3);
+  display: block; margin-top: 2px;
+}
+
+/* ── Content rows ── */
+.qts-section {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.qts-row {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.qts-row-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+  color: rgba(0,0,0,0.35); font-weight: 600;
+}
+.qts-row-value {
+  font-size: 14px; color: rgba(0,0,0,0.7); line-height: 1.4;
+}
+
+/* ── Pills ── */
+.qts-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 12px; border-radius: 10px;
+  font-size: 13px; font-weight: 600;
+  border: 1px solid; width: fit-content;
+}
+.qts-pill-neutral {
+  background: rgba(0,0,0,0.03);
+  color: rgba(0,0,0,0.5);
+  border-color: rgba(0,0,0,0.06);
+}
+.qts-pill-healed {
+  background: rgba(16,185,129,0.06);
+  color: #10b981;
+  border-color: rgba(16,185,129,0.15);
+}
+
+/* ── Identity statement ── */
+.qts-identity {
+  font-size: 14px; font-style: italic;
+  color: rgba(0,0,0,0.55); line-height: 1.5;
+  padding: 10px 14px;
+  background: rgba(94,23,235,0.03);
+  border-radius: 10px;
+  border-left: 3px solid rgba(94,23,235,0.15);
+}
+
+/* ── Cross-pollination tags ── */
+.qts-cross-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.qts-cross-tag {
+  padding: 4px 10px; border-radius: 8px;
+  font-size: 11px; font-weight: 600;
+  background: rgba(94,23,235,0.06);
+  color: #5e17eb;
+}
+
+/* ── Healing stage dots ── */
+.qts-stage-dots {
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.qts-stage-dot {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.qts-stage-dot-inner {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: rgba(0,0,0,0.08);
+  transition: all 0.2s;
+}
+.qts-stage-dot.active .qts-stage-dot-inner {
+  background: #5e17eb;
+}
+.qts-stage-label {
+  font-size: 9px; color: rgba(0,0,0,0.3); font-weight: 500;
+}
+.qts-stage-dot.active .qts-stage-label {
+  color: #5e17eb; font-weight: 600;
+}
+
+/* ── CTA ── */
+.qts-cta {
+  width: 100%; padding: 12px;
+  border: none; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(94,23,235,0.9), rgba(233,162,59,0.9));
+  color: #fff; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  margin-top: 4px;
+}
+
+/* ── Empty state ── */
+.qts-empty {
+  font-size: 13px; color: rgba(0,0,0,0.3);
+  text-align: center; padding: 12px 0;
+}

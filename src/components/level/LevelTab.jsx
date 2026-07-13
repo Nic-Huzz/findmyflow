@@ -508,7 +508,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <div className="level-deep-dive" onClick={() => setUnlockExplainer('healing')} style={{ cursor: 'pointer' }}>
               <div className="level-dd-icon">💚</div>
               <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Healing Tab</div>
+                <div className="level-dd-name">Unlock Your Courage Tab</div>
                 <div className="level-dd-narrative">Remove what's blocking your path.</div>
               </div>
               <span className="level-dd-status start">Start</span>
@@ -518,7 +518,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <div className="level-deep-dive" style={{ opacity: 0.5 }}>
               <div className="level-dd-icon">🔒</div>
               <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Healing Tab</div>
+                <div className="level-dd-name">Unlock Your Courage Tab</div>
                 <div className="level-dd-narrative">Complete Life Paths first.</div>
               </div>
               <span className="level-dd-status locked">Locked</span>
@@ -782,7 +782,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         <div className="quest-modal-overlay" onClick={() => setUnlockExplainer(null)}>
           <div className="quest-modal" onClick={e => e.stopPropagation()}>
             <button className="quest-modal-close" onClick={() => setUnlockExplainer(null)}>✕</button>
-            <h2 className="quest-modal-title">💚 Your Healing Tab</h2>
+            <h2 className="quest-modal-title">💚 Your Courage Tab</h2>
             <p className="quest-modal-question" style={{ fontStyle: 'italic', color: '#5e17eb' }}>Removing what blocks your path.</p>
             <p className="quest-modal-question">Every fear you feel has a source. A moment in your past where expressing yourself like this felt unsafe.</p>
             <p className="quest-modal-question">Your nervous system remembers. It created a protective voice to stop you from ever feeling that way again. That voice is why you hesitate, avoid, and play small.</p>

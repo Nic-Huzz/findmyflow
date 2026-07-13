@@ -69,8 +69,6 @@ export function useChallengeData() {
   // UI State
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(getInitialCategory)
-  const [activeRTypeFilter, setActiveRTypeFilter] = useState('All')
-  const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('daily')
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [onboardingScreen, setOnboardingScreen] = useState('install-app') // 'install-app' | 'enable-notifications'
   const [showGroupSelection, setShowGroupSelection] = useState(false)
@@ -116,7 +114,7 @@ export function useChallengeData() {
   const [activeStageTab, setActiveStageTab] = useState(1)
   const [projectStage, setProjectStage] = useState(1)
 
-  // Sub-Tab State (for Bonus tabs)
+  // Sub-Tab State
   // healingSubTab archived — Healing tab merged into Courage
   // bonusSubTab archived — Bonus tab replaced by Tune
   const [playlistSubTab, setPlaylistSubTab] = useState('playlist') // 'flow-finder' | 'playlist' | 'play-profile'
@@ -1792,10 +1790,6 @@ export function useChallengeData() {
     loading,
     activeCategory,
     setActiveCategory,
-    activeRTypeFilter,
-    setActiveRTypeFilter,
-    activeFrequencyFilter,
-    setActiveFrequencyFilter,
     showOnboarding,
     setShowOnboarding,
     onboardingScreen,

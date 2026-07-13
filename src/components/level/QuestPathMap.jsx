@@ -161,24 +161,6 @@ export default function QuestPathMap({
   }, [])
 
   const trunkS = trunkState || 'anxious'
-  const trunkYPos = scaledY(trunkS)
-
-  // Compute global cone
-  const cone = useMemo(() => {
-    if (!careers?.length) return { centerY: trunkYPos, topY: 0, botY: VB_H, empty: true }
-    const mapped = careers.filter(c => c.predictedState).map(c => ({
-      predictedState: c.predictedState,
-      realistic: true,
-    }))
-    const raw = computeCone(mapped, safety || 0)
-    // Scale cone Y values to our viewBox
-    return {
-      ...raw,
-      centerY: raw.centerY * SCALE_Y,
-      topY: raw.topY * SCALE_Y,
-      botY: raw.botY * SCALE_Y,
-    }
-  }, [careers, safety, trunkYPos])
 
   return (
     <div className="qpm-overlay">
@@ -237,10 +219,6 @@ export default function QuestPathMap({
               quest={quest}
               tasks={questTasks[quest.id] || []}
               healingIntentions={healingIntentions}
-              trunkState={trunkS}
-              trunkY={trunkYPos}
-              cone={cone}
-              light={lightMode}
             />
             <FocusFooter
               quest={quest}
@@ -584,246 +562,109 @@ function VerticalQuestLine({ uid, quest, tasks, healingIntentions = {}, laneX, d
 }
 
 
-// ─── Focus SVG (single quest) ─────────────────────────────────────────────────
+// ─── Focus SVG (single quest, vertical) ───────────────────────────────────────
 
-function FocusSVG({ uid, quest, tasks, healingIntentions, trunkState, trunkY, cone, light }) {
+function FocusSVG({ uid, quest, tasks, healingIntentions }) {
+  const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
+  const n = tasks.length
+  const FH = 500
+  const FW = 320
+  const FTop = 30
+  const FBottom = FH - 30
+  const centerX = FW / 2
+
+  const getDate = (t) => t.backdated_date || t.created_at
+
+  const sortedTasks = useMemo(() =>
+    [...tasks].filter(t => getDate(t)).sort((a, b) => new Date(getDate(a)) - new Date(getDate(b))),
+    [tasks]
+  )
+
+  const taskPoints = useMemo(() =>
+    sortedTasks.map((task, i) => {
+      const frac = sortedTasks.length > 1 ? i / (sortedTasks.length - 1) : 0.5
+      const y = FBottom - frac * (FBottom - FTop)
+      return { x: centerX, y, task }
+    }),
+    [sortedTasks, centerX]
+  )
+
+  const firstY = taskPoints.length > 0 ? taskPoints[0].y : FBottom
+  const lastY = taskPoints.length > 0 ? taskPoints[taskPoints.length - 1].y : FTop
+
+  if (n === 0) return null
+
   return (
     <div className="qpm-canvas qpm-canvas-focus">
-      <svg viewBox={`0 0 ${VB_W} 380`} preserveAspectRatio="xMidYMid meet">
-        <rect width={VB_W} height="380" fill={light ? '#f5f5f0' : '#0a0a14'} rx="16" />
+      <svg viewBox={`0 0 ${FW} ${FH}`} preserveAspectRatio="xMidYMid meet">
+        <rect width={FW} height={FH} fill="#f5f5f0" rx="16" />
+
         <defs>
-          <filter id={`${uid}glow`} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="5" result="blur" />
+          <filter id={`${uid}fglow`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
-          <linearGradient id={`${uid}sg`} x1="0" y1="1" x2="0.8" y2="0">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState] || '#10b981'} />
-            <stop offset="100%" stopColor={SAFE_COLOURS[quest.predicted_state] || '#c084fc'} />
-          </linearGradient>
-          <linearGradient id={`${uid}sgg`} x1="0" y1="1" x2="0.8" y2="0">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState] || '#10b981'} stopOpacity={light ? 0.3 : 0.06} />
-            <stop offset="100%" stopColor={SAFE_COLOURS[quest.predicted_state] || '#c084fc'} stopOpacity={light ? 0.3 : 0.06} />
-          </linearGradient>
-          <radialGradient id={`${uid}ftg`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState]} stopOpacity="0.25" />
-            <stop offset="100%" stopColor={SAFE_COLOURS[trunkState]} stopOpacity="0" />
-          </radialGradient>
-          <linearGradient id={`${uid}fcg`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#f59e0b" stopOpacity={light ? 0.22 : 0.05} />
-            <stop offset="60%" stopColor="#f59e0b" stopOpacity={light ? 0.1 : 0.015} />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
-        {/* Cone (subtle) */}
-        {!cone.empty && (
-          <path d={`M ${TX} ${trunkY * (380 / VB_H)} L ${CX + 10} ${cone.topY * (380 / VB_H)} L ${CX + 10} ${cone.botY * (380 / VB_H)} Z`}
-            fill={`url(#${uid}fcg)`} />
-        )}
+        {/* Vertical line */}
+        <line x1={centerX} y1={firstY} x2={centerX} y2={lastY}
+          stroke={destColour} strokeWidth="3" strokeLinecap="round" opacity="0.5" />
+        <line x1={centerX} y1={firstY} x2={centerX} y2={lastY}
+          stroke={destColour} strokeWidth="8" strokeLinecap="round" opacity="0.04"
+          filter={`url(#${uid}fglow)`} />
 
-        <QuestPath
-          uid={uid}
-          quest={quest}
-          tasks={tasks}
-          healingIntentions={healingIntentions}
-          trunkState={trunkState}
-          trunkY={trunkY * (380 / VB_H)}
-          cone={{ ...cone, topY: cone.topY * (380 / VB_H), botY: cone.botY * (380 / VB_H), centerY: cone.centerY * (380 / VB_H) }}
-          viewH={380}
-          showLabels
-          light={light}
-        />
+        {/* Task dots with labels */}
+        {taskPoints.map(({ x, y, task }, i) => {
+          const hi = healingIntentions?.[task.id]
+          const hasHealing = hi && !hi.outcome && hi.healing_stage
+          const isHealed = hi && hi.outcome
+          const isCourage = task.is_courage_challenge
+          const labelSide = i % 2 === 0 ? 'left' : 'right'
+          const labelX = labelSide === 'left' ? x - 16 : x + 16
+          const anchor = labelSide === 'left' ? 'end' : 'start'
 
-        {/* Trunk */}
-        <circle cx={TX} cy={trunkY * (380 / VB_H)} r="20" fill={`url(#${uid}ftg)`} />
-        <circle cx={TX} cy={trunkY * (380 / VB_H)} r="5" fill={SAFE_COLOURS[trunkState]} opacity="0.85" />
-        <circle cx={TX} cy={trunkY * (380 / VB_H)} r="2.5" fill={light ? '#333' : '#fff'} opacity="0.5" />
-        <text x={TX} y={trunkY * (380 / VB_H) + 18} fill={light ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.3)'}
-          fontSize="8" textAnchor="middle" fontWeight="600">YOU</text>
+          return (
+            <g key={task.id}>
+              {/* Healing block */}
+              {hasHealing && (
+                <>
+                  <rect x={x - 12} y={y - 8} width="24" height="16" rx="8"
+                    fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.25)" strokeWidth="1" />
+                  <text x={x} y={y + 4} fill="rgba(239,68,68,0.6)" fontSize="9" textAnchor="middle">💚</text>
+                </>
+              )}
+              {/* Healed block */}
+              {isHealed && (
+                <circle cx={x} cy={y} r="6" fill="rgba(16,185,129,0.06)"
+                  stroke="#10b981" strokeWidth="1" strokeDasharray="3,2" opacity="0.5" />
+              )}
+              {/* Dot */}
+              {!hasHealing && (
+                <circle cx={x} cy={y} r={task.done ? 4 : 2.5}
+                  fill={task.done ? destColour : 'none'}
+                  stroke={task.done ? 'none' : `${destColour}40`}
+                  strokeWidth={task.done ? 0 : 1}
+                  opacity={task.done ? 0.7 : 1} />
+              )}
+              {/* Courage badge */}
+              {isCourage && task.done && !hasHealing && (
+                <text x={x + 7} y={y + 3} fill={destColour} fontSize="7" opacity="0.6">⚡</text>
+              )}
+              {/* Label */}
+              <text x={labelX} y={y + 4} fill="rgba(0,0,0,0.5)" fontSize="8"
+                fontWeight={task.done ? '600' : '400'} textAnchor={anchor}
+                opacity={task.done ? 0.7 : 0.4}>
+                {task.text?.slice(0, 25)}
+              </text>
+            </g>
+          )
+        })}
+
+        {/* NOW label at top */}
+        <text x={centerX} y={FTop - 10} fill="rgba(0,0,0,0.2)"
+          fontSize="8" fontWeight="600" textAnchor="middle">NOW ↑</text>
       </svg>
     </div>
-  )
-}
-
-
-// ─── Shared: single quest path rendering ──────────────────────────────────────
-
-function QuestPath({ uid, quest, tasks, healingIntentions = {}, trunkState, trunkY, cone, viewH, mini, showLabels, light, destOffset = 0 }) {
-  const pathRef = useRef(null)
-  const [points, setPoints] = useState(null)
-  const h = viewH || VB_H
-  const destY = scaledY(quest.predicted_state || 'anxious') * (h / VB_H) + destOffset
-  const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
-
-  const dx = CX - TX
-  const pathD = `M ${TX} ${trunkY} C ${TX + dx * 0.35} ${trunkY}, ${TX + dx * 0.65} ${destY}, ${CX} ${destY}`
-
-  const doneTasks = useMemo(() => tasks.filter(t => t.done), [tasks])
-  const safeTasks = useMemo(() => tasks.filter(t => t.safety_status === 'safe'), [tasks])
-  const n = tasks.length
-  const doneFrac = n > 0 ? doneTasks.length / n : 0
-  const safeFrac = n > 0 ? safeTasks.length / n : 0
-
-  useEffect(() => {
-    if (!pathRef.current || !n) return
-    const path = pathRef.current
-    const totalLen = path.getTotalLength()
-    const pts = tasks.map((task, i) => {
-      const frac = n > 1 ? i / (n - 1) : 0.5
-      const pt = path.getPointAtLength(frac * totalLen)
-      return { x: pt.x, y: pt.y, task }
-    })
-    const doneLen = doneFrac * totalLen
-    const safeLen = safeFrac * totalLen
-    const charPt = n > 0 ? path.getPointAtLength(doneLen) : null
-    setPoints({ pts, charPt, totalLen, doneLen, safeLen })
-  }, [pathD, n, doneFrac, safeFrac])
-
-  return (
-    <g>
-      {/* Hidden reference path (stroke="transparent" + positive width required for Safari/iOS getPointAtLength) */}
-      <path ref={pathRef} d={pathD} fill="none" stroke="transparent" strokeWidth="1" />
-
-      {/* Ghost (full path) */}
-      <path d={pathD} fill="none" stroke={light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.04)'}
-        strokeWidth={mini ? 1.5 : 2.5} strokeDasharray="5,12" strokeLinecap="round" />
-
-      {/* Done but not safe (grey solid) */}
-      {points && points.doneLen > 0 && (
-        <path d={pathD} fill="none" stroke={light ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.13)'}
-          strokeWidth={mini ? 2 : 3} strokeLinecap="round"
-          strokeDasharray={`${points.doneLen} ${points.totalLen}`} />
-      )}
-
-      {/* Safe (coloured gradient) */}
-      {points && points.safeLen > 0 && (
-        <>
-          <path d={pathD} fill="none" stroke={mini ? destColour : `url(#${uid}sg)`}
-            strokeWidth={mini ? 2.5 : 3.5} strokeLinecap="round"
-            strokeDasharray={`${points.safeLen} ${points.totalLen}`}>
-            <animate attributeName="strokeOpacity" values="0.85;1;0.85" dur="4s" repeatCount="indefinite" />
-          </path>
-          {/* Glow */}
-          <path d={pathD} fill="none" stroke={mini ? destColour : `url(#${uid}sgg)`}
-            strokeWidth={mini ? 6 : 12} strokeLinecap="round"
-            strokeDasharray={`${points.safeLen} ${points.totalLen}`}
-            opacity="0.5" filter={`url(#${uid}glow)`} />
-        </>
-      )}
-
-      {/* Healing blocks (active fears — 💚 pill) */}
-      {points?.pts.map(({ x, y, task }) => {
-        const hi = healingIntentions?.[task.id]
-        if (!hi) return null
-        // Healed block (outcome recorded — green dashed circle + strikethrough)
-        if (hi.outcome) {
-          return (
-            <g key={`heal-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 5 : 8} fill={light ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.05)'}
-                stroke="#10b981" strokeWidth="1" strokeDasharray="3,2" opacity="0.5" />
-              {showLabels && (
-                <text x={x} y={y - 12} fill={light ? 'rgba(16,185,129,0.4)' : 'rgba(16,185,129,0.3)'}
-                  fontSize="7" textAnchor="middle" textDecoration="line-through">
-                  {hi.pattern?.slice(0, 18) || 'healed'}
-                </text>
-              )}
-            </g>
-          )
-        }
-        // Active healing block (fear blocking path)
-        return (
-          <g key={`heal-${task.id}`}>
-            <rect x={x - 14} y={y - 9} width="28" height="18" rx="9"
-              fill={light ? 'rgba(239,68,68,0.08)' : 'rgba(239,68,68,0.06)'}
-              stroke={light ? 'rgba(239,68,68,0.25)' : 'rgba(239,68,68,0.18)'} strokeWidth="1" />
-            <text x={x} y={y + 4} fill={light ? 'rgba(239,68,68,0.7)' : 'rgba(239,68,68,0.5)'}
-              fontSize="10" textAnchor="middle">💚</text>
-            {showLabels && (
-              <text x={x} y={y - 14} fill={light ? 'rgba(239,68,68,0.5)' : 'rgba(239,68,68,0.35)'}
-                fontSize="7" textAnchor="middle">{hi.pattern?.slice(0, 18) || 'fear'}</text>
-            )}
-          </g>
-        )
-      })}
-
-      {/* Milestone dots */}
-      {points?.pts.map(({ x, y, task }, i) => {
-        const hi = healingIntentions?.[task.id]
-        if (hi) return null // rendered as healing block instead
-
-        // Courage challenge — done + safe (⚡ with coloured dot)
-        if (task.done && task.is_courage_challenge && task.safety_status === 'safe') {
-          return (
-            <g key={`m-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 3.5 : 5} fill={destColour} opacity="0.8" />
-              {!mini && <text x={x + 8} y={y + 3} fill={destColour} fontSize="8" opacity="0.7">⚡</text>}
-              {showLabels && (
-                <text x={x} y={y - 10} fill={light ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.35)'} fontSize="8"
-                  textAnchor="middle">{task.text?.slice(0, 20)}</text>
-              )}
-            </g>
-          )
-        }
-        // Courage challenge — done + not safe (⚡ with grey dot)
-        if (task.done && task.is_courage_challenge && task.safety_status === 'not_safe') {
-          return (
-            <g key={`m-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 3 : 4.5} fill={light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.15)'} />
-              {!mini && <text x={x + 7} y={y + 3} fill={light ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)'} fontSize="8">⚡</text>}
-              {showLabels && (
-                <text x={x} y={y - 10} fill={light ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.2)'} fontSize="8"
-                  textAnchor="middle">{task.text?.slice(0, 20)}</text>
-              )}
-            </g>
-          )
-        }
-        // Regular completed task (not courage)
-        if (task.done) {
-          return (
-            <g key={`m-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 2 : 3.5} fill={destColour} opacity="0.4" />
-              {showLabels && (
-                <text x={x} y={y - 10} fill={light ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.25)'} fontSize="8"
-                  textAnchor="middle">{task.text?.slice(0, 20)}</text>
-              )}
-            </g>
-          )
-        }
-        // Future task (empty circle)
-        return (
-          <g key={`m-${task.id}`}>
-            <circle cx={x} cy={y} r={mini ? 2 : 3} fill="none"
-              stroke={light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.08)'} strokeWidth="1.5" />
-            {showLabels && (
-              <text x={x} y={y + (y < trunkY ? 16 : -8)} fill={light ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.1)'}
-                fontSize="7" textAnchor="middle">{task.text?.slice(0, 18)}</text>
-            )}
-          </g>
-        )
-      })}
-
-      {/* Character marker */}
-      {points?.charPt && doneFrac > 0 && (
-        <g>
-          <circle cx={points.charPt.x} cy={points.charPt.y} r={mini ? 3.5 : 5} fill={light ? '#1a1a2e' : '#fff'} opacity="0.9" />
-          <circle cx={points.charPt.x} cy={points.charPt.y} r={mini ? 7 : 10}
-            fill="none" stroke={light ? '#1a1a2e' : '#fff'} strokeWidth="1.5" opacity={light ? 0.15 : 0.1}>
-            <animate attributeName="r" values={mini ? '7;12;7' : '10;18;10'} dur="2.5s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite" />
-          </circle>
-        </g>
-      )}
-
-      {/* Destination label */}
-      <text x={CX} y={destY - (mini ? 10 : 14)} fill={`${destColour}${light ? (doneFrac > 0.5 ? 'cc' : '90') : (doneFrac > 0.5 ? '60' : '30')}`}
-        fontSize={mini ? 9 : 10} fontWeight="700" textAnchor="middle">
-        {mini ? quest.label?.slice(0, 16) : STATE_META[quest.predicted_state]?.emoji}
-      </text>
-      {!mini && (
-        <circle cx={CX} cy={destY} r="5" fill={`${destColour}${light ? '40' : '15'}`}
-          stroke={`${destColour}30`} strokeWidth="1" />
-      )}
-    </g>
   )
 }
 
