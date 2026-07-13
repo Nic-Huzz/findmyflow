@@ -208,29 +208,7 @@ export default function JourneyTab({ userId }) {
           </div>
         )}
 
-        {/* Progress indicator (stage 5-6: voice dots) */}
-        {heroStage >= 5 && heroStage < 7 && dominant && (
-          <div className="jt-stage-progress">
-            <div className="jt-voice-dots">
-              {[1, 2, 3, 4, 5].map(i => (
-                <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
-              ))}
-            </div>
-            <p className="jt-voice-hint">
-              {dominant[1] < 3 && `${dominant[1]} of 5 patterns identified`}
-              {dominant[1] === 3 && `The ${formatVoice(dominant[0])} keeps showing up.`}
-              {dominant[1] === 4 && `Four times. There's something underneath it.`}
-              {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready.`}
-            </p>
-            {solidarityCount > 0 && (
-              <p className="jt-solidarity">
-                {solidarityCount} other {solidarityCount === 1 ? 'person' : 'people'} identified the same voice this month.
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Next step */}
+        {/* Next step (with progress indicator merged for stages 5-6) */}
         <div className="jt-stage-next">
           {heroStage === 2 && (
             <a href="/life-paths" className="jt-next-inline">
@@ -258,11 +236,25 @@ export default function JourneyTab({ userId }) {
               <span className="jt-next-text">Get a life path to Vibe Rise at Charging or Teaching depth</span>
             </div>
           )}
-          {heroStage === 6 && (
+          {heroStage === 6 && dominant && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Keep exploring what blocks you. A pattern is emerging.</span>
-              {dominant && <span className="jt-next-sub">{formatVoice(dominant[0])}: {dominant[1]} of 5</span>}
+              <span className="jt-next-text">
+                {dominant[1] < 3 && `Keep exploring what blocks you. A pattern is emerging.`}
+                {dominant[1] === 3 && `The ${formatVoice(dominant[0])} keeps showing up. Keep going.`}
+                {dominant[1] === 4 && `Four times the ${formatVoice(dominant[0])}. One more and something becomes clear.`}
+                {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready to face the root.`}
+              </span>
+              <div className="jt-voice-dots" style={{ marginTop: 8 }}>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
+                ))}
+              </div>
+              {solidarityCount > 0 && (
+                <span className="jt-solidarity">
+                  {solidarityCount} other{solidarityCount > 1 ? 's' : ''} identified the same voice this month.
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -315,7 +307,7 @@ export default function JourneyTab({ userId }) {
           {lifePaths.length === 0 ? (
             <a href="/life-paths" className="jt-orphan-cta">Map Your Life Paths first →</a>
           ) : (
-            <p className="jt-orphan-hint">Add quests on the Quests tab to link these.</p>
+            <a href="/7-day-challenge?tab=quests" className="jt-orphan-cta">Go to Quests tab to link these →</a>
           )}
         </div>
       )}
