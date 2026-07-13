@@ -321,7 +321,7 @@ export default function CommunityFeed() {
                 {/* Body */}
                 <div className="cf-item-body">
                   <p className="cf-item-title">{icon} {item.title}</p>
-                  {item.subtitle && (
+                  {item.subtitle && item.event_type !== 'stage_graduation' && (
                     <p className="cf-item-subtitle">{formatSubtitle(item.subtitle)}</p>
                   )}
                 </div>
