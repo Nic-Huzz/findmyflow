@@ -37,6 +37,8 @@ export default function JourneyTab({ userId }) {
   const [careers, setCareers] = useState([])
   const [showFlowMap, setShowFlowMap] = useState(false)
   const [solidarityCount, setSolidarityCount] = useState(0)
+  const [orphanedWahoos, setOrphanedWahoos] = useState([])
+  const figurine = useFigurine()
 
   useEffect(() => {
     if (!userId) return
@@ -122,6 +124,25 @@ export default function JourneyTab({ userId }) {
         }
       }
 
+      // Orphaned wahoos: completed but not linked to any quest
+      const completedRes = await supabase
+        .from('groan_challenges')
+        .select('id, title, challenge_text')
+        .eq('user_id', userId)
+        .eq('status', 'completed')
+        .limit(50)
+
+      const linkedRes = await supabase
+        .from('quest_tasks')
+        .select('groan_challenge_id')
+        .eq('user_id', userId)
+        .not('groan_challenge_id', 'is', null)
+
+      const linkedIds = new Set((linkedRes.data || []).map(t => t.groan_challenge_id))
+      setOrphanedWahoos(
+        (completedRes.data || []).filter(w => !linkedIds.has(w.id)).slice(0, 10)
+      )
+
       setLoading(false)
     }).catch(err => {
       console.error('JourneyTab data load error:', err)
@@ -147,6 +168,25 @@ export default function JourneyTab({ userId }) {
           <p className="jt-stage-feeling">"{stageInfo.feeling}"</p>
         )}
       </div>
+
+      {/* Figurine Presence */}
+      {figurine.isUnlocked && (
+        <div className="jt-section jt-figurine-presence">
+          {figurine.avatarUrl && <img src={figurine.avatarUrl} alt="" className="jt-figurine-avatar" />}
+          <div className="jt-figurine-info">
+            <span className="jt-figurine-name">{figurine.profile?.custom_essence_name || figurine.profile?.essence_archetype || 'Your Mentor'}</span>
+            <span className="jt-figurine-phase">{figurine.phaseName}</span>
+          </div>
+          {!figurine.isMirrorMode && figurine.canChat && (
+            <button className="jt-figurine-chat-btn" onClick={() => {/* TODO: open figurine chat */}}>
+              Talk to your mentor
+            </button>
+          )}
+          {figurine.isMirrorMode && (
+            <p className="jt-figurine-mirror-msg">Your mentor is still learning about you.</p>
+          )}
+        </div>
+      )}
 
       {/* What's Next */}
       <div className="jt-next">
@@ -199,6 +239,30 @@ export default function JourneyTab({ userId }) {
           </div>
         )}
       </div>
+
+      {/* Orphaned Wahoos — completed courage challenges not linked to a life path */}
+      {orphanedWahoos.length > 0 && (
+        <div className="jt-section jt-orphan-section">
+          <h3 className="jt-section-title">Unlinked Courage Challenges</h3>
+          <p className="jt-orphan-intro">
+            You've done {orphanedWahoos.length} courage challenge{orphanedWahoos.length > 1 ? 's' : ''} not connected to a life path yet.
+          </p>
+          {orphanedWahoos.slice(0, 5).map(w => (
+            <div key={w.id} className="jt-orphan-item">
+              <span className="jt-orphan-icon">⚡</span>
+              <span className="jt-orphan-text">{w.title || w.challenge_text}</span>
+            </div>
+          ))}
+          {orphanedWahoos.length > 5 && (
+            <div className="jt-orphan-more">+ {orphanedWahoos.length - 5} more</div>
+          )}
+          {lifePaths.length === 0 ? (
+            <a href="/life-paths" className="jt-orphan-cta">Map Your Life Paths first →</a>
+          ) : (
+            <p className="jt-orphan-hint">Add quests on the Quests tab to link these.</p>
+          )}
+        </div>
+      )}
 
       {/* Onboarding — only if items incomplete */}
       <JourneyOnboarding userId={userId} />

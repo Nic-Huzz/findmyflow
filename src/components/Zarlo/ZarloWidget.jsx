@@ -20,10 +20,28 @@ function cap(str) {
   return str?.charAt(0).toUpperCase() + str?.slice(1).replace(/_/g, ' ')
 }
 
-function ZarloWidget() {
+function ZarloWidget({ activeChat, setActiveChat }) {
   const [isOpen, setIsOpen] = useState(false)
   const [hasNotification, setHasNotification] = useState(false)
   const location = useLocation()
+
+  // Chat conflict management: close Zarlo if another chat (e.g. Figurine) opens
+  useEffect(() => {
+    if (activeChat && activeChat !== 'zarlo' && isOpen) {
+      setIsOpen(false)
+    }
+  }, [activeChat])
+
+  // Window event listener for chat conflict (when no props available, e.g. rendered from AppRouter)
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail && e.detail !== 'zarlo' && isOpen) {
+        setIsOpen(false)
+      }
+    }
+    window.addEventListener('activeChatChanged', handler)
+    return () => window.removeEventListener('activeChatChanged', handler)
+  }, [isOpen])
 
   // Get current challenge tab from URL if on challenge page
   const getChallengeTab = () => {
@@ -154,7 +172,15 @@ function ZarloWidget() {
   if (shouldHide) return null
 
   const handleToggle = () => {
-    setIsOpen(prev => !prev)
+    const opening = !isOpen
+    setIsOpen(opening)
+    if (opening) {
+      setActiveChat?.('zarlo')
+      window.dispatchEvent(new CustomEvent('activeChatChanged', { detail: 'zarlo' }))
+    } else {
+      setActiveChat?.(null)
+      window.dispatchEvent(new CustomEvent('activeChatChanged', { detail: null }))
+    }
     if (hasNotification) {
       setHasNotification(false)
     }
@@ -162,6 +188,8 @@ function ZarloWidget() {
 
   const handleClose = () => {
     setIsOpen(false)
+    setActiveChat?.(null)
+    window.dispatchEvent(new CustomEvent('activeChatChanged', { detail: null }))
   }
 
   // Check if on validation page (needs higher positioning)

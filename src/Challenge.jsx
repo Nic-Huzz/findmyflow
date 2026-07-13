@@ -52,6 +52,8 @@ import { postFeedEvent } from './lib/communityFeed'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useInsightDrops } from './hooks/useInsightDrops'
 import InsightDrop from './components/InsightDrop'
+import FigurineFAB from './components/Figurine/FigurineFAB'
+import FigurineOverlay from './components/Figurine/FigurineOverlay'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -170,6 +172,16 @@ function Challenge() {
     lifetimeScores
   } = useChallengeData()
 
+  // Chat conflict management (Figurine vs Zarlo)
+  const [activeChat, setActiveChat] = useState(null)
+
+  // Figurine: Mirror→Mentor transition moment (Step 9)
+  const [showMentorTransition, setShowMentorTransition] = useState(false)
+  const [mentorTransitionAvatar, setMentorTransitionAvatar] = useState(null)
+
+  // Figurine: Monthly cryptic hook (Step 10)
+  const [crypticHook, setCrypticHook] = useState(null)
+
   // First-visit story intro (persisted in DB)
   const [showIntro, setShowIntro] = useState(false)
   const [introChecked, setIntroChecked] = useState(false)
@@ -245,6 +257,54 @@ function Challenge() {
       })
   }, [user?.id])
 
+  // Step 9: Mirror→Mentor transition moment (fires once when user crosses threshold)
+  useEffect(() => {
+    if (localStorage.getItem('figurine_mentor_transition_shown')) return
+    if (!user?.id) return
+    Promise.all([
+      supabase.from('quest_completions').select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).eq('quest_category', 'Groans'),
+      supabase.from('nervous_system_checkins').select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).eq('checkin_type', 'daily'),
+      supabase.from('user_stage_progress').select('essence_mirror_completed, hero_avatar_url')
+        .eq('user_id', user.id).maybeSingle(),
+    ]).then(([wahoos, checkins, stage]) => {
+      if (wahoos.count >= 3 && checkins.count >= 7 && stage.data?.essence_mirror_completed) {
+        if (!localStorage.getItem('figurine_mentor_transition_shown')) {
+          setShowMentorTransition(true)
+          setMentorTransitionAvatar(stage.data?.hero_avatar_url)
+          localStorage.setItem('figurine_mentor_transition_shown', 'true')
+        }
+      }
+    })
+  }, [user?.id])
+
+  // Step 10: Monthly cryptic hook from Figurine
+  useEffect(() => {
+    const month = new Date().toISOString().slice(0, 7) // "2026-07"
+    if (localStorage.getItem(`figurine_cryptic_${month}`)) return
+    if (!user?.id) return
+
+    supabase.from('user_stage_progress')
+      .select('current_journey_level, hero_avatar_url')
+      .eq('user_id', user.id).maybeSingle()
+      .then(({ data }) => {
+        if (!data || data.current_journey_level < 4) return // Only for Stage 4+
+
+        const hooks = [
+          "There's something connecting your paths. You're not ready to see it yet.",
+          "The voice you keep fighting? It's trying to protect something real.",
+          "What if the thing you're avoiding is the thing you're meant to do?",
+          "You're closer than you think. But not to what you expect.",
+          "The pattern will break. Not because you forced it. Because you outgrew it.",
+        ]
+        const hookIndex = parseInt(month.replace('-', '')) % hooks.length
+
+        setCrypticHook({ message: hooks[hookIndex], avatarUrl: data.hero_avatar_url })
+        localStorage.setItem(`figurine_cryptic_${month}`, 'true')
+      })
+  }, [user?.id])
+
   // Celebrations (level-up modal)
   const { showLevelUp, levelUpKey, celebrateLevelUp, celebrateStageGraduation, closeLevelUp } = useCelebrations()
 
@@ -315,6 +375,8 @@ function Challenge() {
           celebrateStageGraduation(graduation.from, graduation.to, {
             essenceName: graduation.stageData?.essence_name,
             voiceName: graduation.dominantVoice,
+            avatarUrl: graduation.stageData?.hero_avatar_url,
+            useFigurineOverlay: graduation.to >= 4,
           })
         }
       } else {
@@ -1616,8 +1678,16 @@ function Challenge() {
         onClose={() => setGraduationModal({ isOpen: false, celebration: null })}
       />
 
-      {/* Level-up celebration modal */}
-      {showLevelUp && (
+      {/* Level-up / graduation celebration modal */}
+      {showLevelUp && showLevelUp.useFigurineOverlay && (
+        <FigurineOverlay
+          avatarUrl={showLevelUp.avatarUrl}
+          message={showLevelUp.name}
+          emoji={showLevelUp.emoji}
+          onDismiss={closeLevelUp}
+        />
+      )}
+      {showLevelUp && !showLevelUp.useFigurineOverlay && (
         <LevelUpModal key={levelUpKey} level={showLevelUp} onClose={closeLevelUp} />
       )}
 
@@ -1674,6 +1744,31 @@ function Challenge() {
 
       {/* Insight Drop (self-knowledge card, max 1 per session) */}
       {insight && <InsightDrop insight={insight} onDismiss={dismissInsight} />}
+
+      {/* Figurine FAB (bottom-left, chat conflict managed) */}
+      <FigurineFAB activeChat={activeChat} setActiveChat={setActiveChat} />
+
+      {/* Figurine: Mirror→Mentor transition overlay (Step 9) */}
+      {showMentorTransition && (
+        <FigurineOverlay
+          avatarUrl={mentorTransitionAvatar}
+          message="I've been watching. I know your patterns now. From here, I'm not just showing you who you are. I'm showing you who you become. You can talk to me whenever you need."
+          emoji="🪞"
+          onDismiss={() => setShowMentorTransition(false)}
+          autoDismiss={15000}
+        />
+      )}
+
+      {/* Figurine: Monthly cryptic hook (Step 10) */}
+      {crypticHook && (
+        <FigurineOverlay
+          avatarUrl={crypticHook.avatarUrl}
+          message={crypticHook.message}
+          emoji="🔮"
+          onDismiss={() => setCrypticHook(null)}
+          autoDismiss={12000}
+        />
+      )}
       </div>
     </div>
   )

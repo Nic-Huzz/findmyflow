@@ -244,3 +244,92 @@
 .jt-next-arrow {
   font-size: 1.2rem; color: #E9A23B; font-weight: 700; flex-shrink: 0;
 }
+
+/* ── Figurine Presence ── */
+.jt-figurine-presence {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.jt-figurine-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E9A23B;
+}
+
+.jt-figurine-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.jt-figurine-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.jt-figurine-phase {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.jt-figurine-chat-btn {
+  padding: 8px 16px;
+  border: 1px solid #E9A23B;
+  border-radius: 10px;
+  background: none;
+  color: #E9A23B;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.jt-figurine-mirror-msg {
+  width: 100%;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin: 4px 0 0;
+}
+
+/* ── Orphaned Wahoos ── */
+.jt-orphan-section { border-left: 3px solid #E9A23B; }
+
+.jt-orphan-intro {
+  font-size: 0.85rem; color: rgba(0,0,0,0.5);
+  line-height: 1.4; margin: 0 0 12px;
+}
+
+.jt-orphan-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.jt-orphan-icon { font-size: 0.9rem; }
+.jt-orphan-text { font-size: 0.85rem; color: #1a1a1a; }
+
+.jt-orphan-more {
+  font-size: 0.75rem; color: rgba(0,0,0,0.3);
+  padding: 6px 0; font-style: italic;
+}
+
+.jt-orphan-hint {
+  font-size: 0.8rem; color: rgba(0,0,0,0.4);
+  margin: 12px 0 0; line-height: 1.4;
+}
+
+.jt-orphan-cta {
+  display: block; text-align: center;
+  padding: 10px; border-radius: 10px;
+  background: rgba(233,162,59,0.08); color: #E9A23B;
+  font-size: 0.85rem; font-weight: 600;
+  text-decoration: none; margin-top: 12px;
+}

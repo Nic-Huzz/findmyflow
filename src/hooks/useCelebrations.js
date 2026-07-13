@@ -182,7 +182,14 @@ export function useCelebrations() {
     }
     // 6→7: no confetti (reverent)
 
-    setShowLevelUp({ name: c.message, emoji: c.emoji, description: '', isGraduation: true })
+    setShowLevelUp({
+      name: c.message,
+      emoji: c.emoji,
+      description: '',
+      isGraduation: true,
+      avatarUrl: context.avatarUrl || null,
+      useFigurineOverlay: context.useFigurineOverlay || false,
+    })
     setLevelUpKey(k => k + 1)
     if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200])
   }, [])
