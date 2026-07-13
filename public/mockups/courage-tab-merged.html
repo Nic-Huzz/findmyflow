@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courage Tab — Merged with Healing (App-Accurate Mockup)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f5f0; color: #1a1a1a;
+  }
+
+  .phone-frame {
+    max-width: 390px; margin: 20px auto; background: #f5f5f0;
+    border-radius: 40px; border: 3px solid #ddd; padding: 50px 0 0;
+    min-height: 844px; position: relative; overflow: hidden;
+  }
+
+  /* ── Challenge Header (simplified from ChallengeHeader.jsx) ── */
+  .challenge-header {
+    padding: 8px 20px 12px; text-align: center;
+  }
+  .header-streak {
+    display: flex; justify-content: center; align-items: center; gap: 16px;
+    margin-bottom: 8px;
+  }
+  .streak-item {
+    font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.5);
+  }
+  .streak-item span { font-weight: 800; }
+
+  /* Score pills (from ChallengeHeader — tune/wahoo/healing) */
+  .score-pills {
+    display: flex; justify-content: center; gap: 8px;
+  }
+  .score-pill {
+    display: flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .score-pill.tune { color: #10b981; }
+  .score-pill.wahoo { color: #E9A23B; }
+  .score-pill.healing { color: #5e17eb; }
+
+  /* Rise bar */
+  .rise-bar {
+    margin: 10px 20px 0; height: 4px; background: rgba(0,0,0,0.06);
+    border-radius: 2px; overflow: hidden;
+  }
+  .rise-bar-fill {
+    height: 100%; width: 65%; border-radius: 2px;
+    background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  }
+  .rise-label {
+    text-align: right; font-size: 10px; color: rgba(0,0,0,0.3);
+    font-weight: 600; margin: 2px 20px 0; letter-spacing: 0.5px;
+  }
+
+  /* ── Tabs (matching .challenge-tab from Challenge.css) ── */
+  .challenge-tabs {
+    display: flex; justify-content: center; gap: 0.5rem;
+    padding: 1rem 1rem 0;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .challenge-tab {
+    padding: 0.5rem 1rem; border: none;
+    background: white; border-radius: 12px;
+    font-weight: 700; font-size: 0.875rem;
+    color: #666; cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    white-space: nowrap;
+  }
+  .challenge-tab:hover {
+    background: #f8f9fa; transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .challenge-tab.active {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(94,23,235,0.3);
+  }
+
+  /* ── Content area ── */
+  .content { padding: 16px 16px 100px; }
+
+  /* ── Tab intro (matches PlayListTab explainer style) ── */
+  .tab-intro {
+    text-align: center; padding: 4px 8px 16px;
+  }
+  .tab-intro p {
+    font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.5;
+  }
+
+  /* ── Section headers ── */
+  .section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: rgba(0,0,0,0.25); margin: 20px 0 10px;
+    padding: 0 4px;
+  }
+
+  /* ── Active wahoo card (matching QuestBoardCard style) ── */
+  .wahoo-card {
+    background: white; border-radius: 16px; padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .wahoo-top { display: flex; align-items: flex-start; gap: 10px; }
+  .wahoo-checkbox {
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 2px solid rgba(94,23,235,0.3); background: white;
+    flex-shrink: 0; margin-top: 1px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .wahoo-checkbox:hover { border-color: #5e17eb; background: rgba(94,23,235,0.05); }
+
+  .wahoo-body { flex: 1; }
+  .wahoo-quest {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #5e17eb; opacity: 0.5; margin-bottom: 3px;
+  }
+  .wahoo-text {
+    font-size: 14px; font-weight: 600; line-height: 1.35; color: #1a1a1a;
+  }
+
+  /* Depth + visibility badges */
+  .wahoo-badges { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+  .badge {
+    font-size: 9px; font-weight: 700; padding: 2px 7px;
+    border-radius: 20px; letter-spacing: 0.3px;
+  }
+  .badge.depth {
+    background: rgba(233,162,59,0.1); color: rgba(233,162,59,0.8);
+  }
+  .badge.vis {
+    background: rgba(94,23,235,0.06); color: rgba(94,23,235,0.5);
+  }
+
+  /* Courage icon */
+  .wahoo-courage {
+    font-size: 12px; color: #E9A23B; margin-left: auto; flex-shrink: 0;
+  }
+
+  /* ── Healing intention inline (green zone) ── */
+  .wahoo-healing {
+    margin-top: 10px; padding: 10px 12px; border-radius: 12px;
+    background: rgba(16,185,129,0.04);
+    border: 1px solid rgba(16,185,129,0.1);
+  }
+  .healing-row {
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .healing-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .healing-content { flex: 1; }
+  .healing-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; color: rgba(16,185,129,0.5); margin-bottom: 3px;
+  }
+  .healing-pattern {
+    font-size: 12px; color: rgba(0,0,0,0.45); line-height: 1.4;
+  }
+  .healing-origin {
+    font-size: 11px; color: rgba(0,0,0,0.3); line-height: 1.4;
+    margin-top: 4px; font-style: italic;
+  }
+  .healing-cta {
+    display: inline-block; margin-top: 6px; font-size: 11px;
+    font-weight: 700; color: #10b981; cursor: pointer;
+    padding: 4px 10px; background: rgba(16,185,129,0.08);
+    border-radius: 8px;
+  }
+
+  /* ── "What's blocking you?" (matching HealingIntentionsList standalone input) ── */
+  .blocking-section {
+    background: white; border-radius: 16px; padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px dashed rgba(16,185,129,0.2);
+  }
+  .blocking-row { display: flex; align-items: center; gap: 10px; }
+  .blocking-icon { font-size: 18px; flex-shrink: 0; opacity: 0.6; }
+  .blocking-input {
+    flex: 1; border: none; outline: none; font-size: 13px;
+    color: #1a1a1a; background: transparent;
+    font-family: inherit;
+  }
+  .blocking-input::placeholder { color: rgba(0,0,0,0.25); }
+  .blocking-go {
+    padding: 6px 12px; border-radius: 10px; border: none;
+    background: rgba(16,185,129,0.1); color: #10b981;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+
+  /* ── Add wahoo button (matching WahooCreator CTA) ── */
+  .add-wahoo-section {
+    margin: 12px 0;
+  }
+  .add-wahoo-btn {
+    width: 100%; padding: 13px; border-radius: 14px; border: none;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    color: white; font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(94,23,235,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .add-wahoo-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(94,23,235,0.25);
+  }
+
+  /* ── Completed section ── */
+  .completed-card {
+    background: white; border-radius: 12px; padding: 10px 14px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(0,0,0,0.04);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .completed-check {
+    width: 20px; height: 20px; border-radius: 5px;
+    background: rgba(16,185,129,0.1); color: #10b981;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+  }
+  .completed-body { flex: 1; min-width: 0; }
+  .completed-text {
+    font-size: 12px; color: rgba(0,0,0,0.4); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .completed-quest {
+    font-size: 9px; color: rgba(94,23,235,0.3); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .completed-tags { display: flex; gap: 4px; flex-shrink: 0; }
+  .state-tag {
+    font-size: 9px; font-weight: 700; padding: 2px 6px;
+    border-radius: 8px;
+  }
+  .state-vibe { background: rgba(192,132,252,0.1); color: #c084fc; }
+  .state-fun { background: rgba(16,185,129,0.1); color: #10b981; }
+  .state-pressure { background: rgba(245,158,11,0.1); color: #f59e0b; }
+  .healed-tag { background: rgba(16,185,129,0.08); color: #10b981; }
+
+  /* ── Inspiration link (matching WahooInspiration trigger) ── */
+  .inspiration-link {
+    text-align: center; padding: 20px 0 8px;
+    font-size: 13px; font-weight: 600;
+    color: rgba(94,23,235,0.4); cursor: pointer;
+  }
+  .inspiration-link:hover { color: rgba(94,23,235,0.6); }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: rgba(0,0,0,0.05); margin: 16px 0; }
+
+  /* ── Bottom safe area ── */
+  .bottom-spacer { height: 20px; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+
+  <!-- Challenge Header (simplified) -->
+  <div class="challenge-header">
+    <div class="header-streak">
+      <div class="streak-item">🔥 <span>12</span> day streak</div>
+      <div class="streak-item">⚡ <span>23</span> wahoos</div>
+    </div>
+    <div class="score-pills">
+      <div class="score-pill tune">☀️ 45</div>
+      <div class="score-pill wahoo">🔥 78</div>
+      <div class="score-pill healing">💜 32</div>
+    </div>
+    <div class="rise-bar"><div class="rise-bar-fill"></div></div>
+    <div class="rise-label">Habit Builder · 155 RP</div>
+  </div>
+
+  <!-- Tabs (matching Challenge.jsx .challenge-tabs) -->
+  <div class="challenge-tabs">
+    <button class="challenge-tab">Journey</button>
+    <button class="challenge-tab">Quests</button>
+    <button class="challenge-tab">Tune</button>
+    <button class="challenge-tab active">Courage</button>
+  </div>
+
+  <div class="content">
+
+    <!-- Tab intro -->
+    <div class="tab-intro">
+      <p>Actions that expand what feels possible for your path.</p>
+    </div>
+
+    <!-- ── ACTIVE WAHOOS ── -->
+    <div class="section-title">Active</div>
+
+    <!-- Wahoo with healing intention (pattern + origin found) -->
+    <div class="wahoo-card">
+      <div class="wahoo-top">
+        <div class="wahoo-checkbox"></div>
+        <div class="wahoo-body">
+          <div class="wahoo-quest">Breathwork Journey</div>
+          <div class="wahoo-text">Run a paid group breathwork session</div>
+          <div class="wahoo-badges">
+            <span class="badge depth">L3 Charging</span>
+            <span class="badge vis">Live</span>
+            <span class="badge vis">Money</span>
+          </div>
+        </div>
+        <div class="wahoo-courage">⚡</div>
+      </div>
+      <div class="wahoo-healing">
+        <div class="healing-row">
+          <div class="healing-icon">💚</div>
+          <div class="healing-content">
+            <div class="healing-label">Pattern identified</div>
+            <div class="healing-pattern">"Who am I to charge for this? I'm not qualified enough."</div>
+            <div class="healing-origin">People Pleaser — formed when asking for help got dismissed, age 12</div>
+            <div class="healing-cta">Continue to Rewire →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wahoo without healing (clean card) -->
+    <div class="wahoo-card">
+      <div class="wahoo-top">
+        <div class="wahoo-checkbox"></div>
+        <div class="wahoo-body">
+          <div class="wahoo-quest">Dance & Movement</div>
+          <div class="wahoo-text">Post a video of me dancing</div>
+          <div class="wahoo-badges">
+            <span class="badge depth">L1 Testing</span>
+            <span class="badge vis">Screen</span>
+            <span class="badge vis">Vulnerable</span>
+          </div>
+        </div>
+        <div class="wahoo-courage">⚡</div>
+      </div>
+    </div>
+
+    <!-- Wahoo with early healing (pattern only, no origin yet) -->
+    <div class="wahoo-card">
+      <div class="wahoo-top">
+        <div class="wahoo-checkbox"></div>
+        <div class="wahoo-body">
+          <div class="wahoo-quest">Psychology Practice</div>
+          <div class="wahoo-text">Tell my boss I want to restructure my role</div>
+          <div class="wahoo-badges">
+            <span class="badge depth">L2 Practising</span>
+            <span class="badge vis">Live</span>
+            <span class="badge vis">Authority</span>
+          </div>
+        </div>
+        <div class="wahoo-courage">⚡</div>
+      </div>
+      <div class="wahoo-healing">
+        <div class="healing-row">
+          <div class="healing-icon">💚</div>
+          <div class="healing-content">
+            <div class="healing-label">Fear blocking this</div>
+            <div class="healing-pattern">"They'll think I'm being ungrateful"</div>
+            <div class="healing-cta">Explore deeper →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── WHAT'S BLOCKING YOU? ── -->
+    <div class="blocking-section">
+      <div class="blocking-row">
+        <div class="blocking-icon">💚</div>
+        <input class="blocking-input" type="text" placeholder="What's blocking you right now?" />
+        <button class="blocking-go">Explore</button>
+      </div>
+    </div>
+
+    <!-- ── ADD WAHOO ── -->
+    <div class="add-wahoo-section">
+      <button class="add-wahoo-btn">⚡ Add a Wahoo</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── COMPLETED ── -->
+    <div class="section-title">Completed</div>
+
+    <div class="completed-card">
+      <div class="completed-check">✓</div>
+      <div class="completed-body">
+        <div class="completed-quest">Breathwork Journey</div>
+        <div class="completed-text">Share my breathwork story on Instagram</div>
+      </div>
+      <div class="completed-tags">
+        <span class="state-tag state-vibe">Vibe Rise</span>
+      </div>
+    </div>
+
+    <div class="completed-card">
+      <div class="completed-check">✓</div>
+      <div class="completed-body">
+        <div class="completed-quest">Connection</div>
+        <div class="completed-text">Attend a strangers' gathering</div>
+      </div>
+      <div class="completed-tags">
+        <span class="state-tag state-fun">Fun</span>
+      </div>
+    </div>
+
+    <div class="completed-card">
+      <div class="completed-check">✓</div>
+      <div class="completed-body">
+        <div class="completed-quest">Breathwork Journey</div>
+        <div class="completed-text">Ask for a testimonial</div>
+      </div>
+      <div class="completed-tags">
+        <span class="state-tag healed-tag">💚</span>
+        <span class="state-tag state-vibe">Vibe Rise</span>
+      </div>
+    </div>
+
+    <div class="completed-card">
+      <div class="completed-check">✓</div>
+      <div class="completed-body">
+        <div class="completed-quest">Psychology Practice</div>
+        <div class="completed-text">Cold call 3 potential clients</div>
+      </div>
+      <div class="completed-tags">
+        <span class="state-tag state-pressure">Pressure</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Inspiration -->
+    <div class="inspiration-link">Need inspiration? →</div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</div>
+
+</body>
+</html>
