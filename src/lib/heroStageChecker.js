@@ -59,14 +59,16 @@ export async function checkHeroGraduation(userId) {
     if (count > 0) newStage = 5
   }
 
-  // 5→6: 2+ wahoos completed
+  // 5→6: At least one life path at Vibe Rise state + L3 Charging or L4 Teaching depth
   if (currentStage === 5) {
     const { count } = await supabase
-      .from('quest_completions')
+      .from('quests')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
-      .eq('quest_category', 'Groans')
-    if (count >= 2) newStage = 6
+      .eq('status', 'active')
+      .eq('predicted_state', 'vibe')
+      .in('depth_level', ['charging', 'teaching'])
+    if (count > 0) newStage = 6
   }
 
   // 6→7: Protective voice identified 5+ times (combined from both sources)

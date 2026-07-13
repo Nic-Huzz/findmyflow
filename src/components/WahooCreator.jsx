@@ -126,6 +126,22 @@ export default function WahooCreator({
             groan_challenge_id: dbRecord.id,
             sort_order: 0,
           })
+
+          // Auto-bump quest depth (high watermark — only goes up, never down)
+          if (depthLevel) {
+            const DEPTH_ORDER = { education: 0, testing: 1, practising: 2, charging: 3, teaching: 4 }
+            const { data: quest } = await supabase
+              .from('quests')
+              .select('depth_level')
+              .eq('id', linkedQuestId)
+              .single()
+            if ((DEPTH_ORDER[depthLevel] ?? -1) > (DEPTH_ORDER[quest?.depth_level] ?? -1)) {
+              await supabase
+                .from('quests')
+                .update({ depth_level: depthLevel })
+                .eq('id', linkedQuestId)
+            }
+          }
         } catch (e) { /* non-blocking */ }
       }
 
