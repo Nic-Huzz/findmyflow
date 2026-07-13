@@ -431,6 +431,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                     <span className="ch2-card-icon">🧬</span>
                     <span className="ch2-label" style={{ margin: 0 }}>Who You Are</span>
                   </div>
+                  {userSkills.length === 0 && userProblems.length === 0 && (
+                    <span className="ch2-start-badge">Start here</span>
+                  )}
                 </div>
 
                 {(userSkills.length > 0 || userProblems.length > 0) ? (
@@ -615,14 +618,24 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* Positioning Summary */}
-              <PositioningSummary
-                userId={userId}
-                essenceName={essenceName}
-                skills={userSkills}
-                problems={userProblems}
-                remarkableAngle={remarkableAngle}
-              />
+              {/* Positioning Summary — unlocks after Remarkable Results */}
+              {remarkableAngle ? (
+                <PositioningSummary
+                  userId={userId}
+                  essenceName={essenceName}
+                  skills={userSkills}
+                  problems={userProblems}
+                  remarkableAngle={remarkableAngle}
+                />
+              ) : (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-locked" onClick={() => navigate('/create/remarkable')}>
+                    <div className="ch2-locked-title">Your Positioning 🔒</div>
+                    <div className="ch2-locked-sub">Unlocks after Remarkable Results. We use your rule break to write this.</div>
+                    <div className="ch2-locked-cta">Find Your Rule Break →</div>
+                  </div>
+                </div>
+              )}
 
               </>}
 

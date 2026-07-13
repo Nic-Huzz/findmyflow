@@ -1024,3 +1024,17 @@ button.ch2-see-more:hover {
 }
 .ch2-share-btn.primary:disabled { opacity: 0.6; cursor: default; }
 .ch2-share-btn.ghost { background: rgba(255,255,255,0.15); color: white; }
+
+/* ═══ START HERE BADGE ═══ */
+.ch2 .ch2-start-badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c88520;
+  background: rgba(233, 162, 59, 0.14);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  padding: 3px 9px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
