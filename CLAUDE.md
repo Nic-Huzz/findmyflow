@@ -188,9 +188,9 @@ docs/                         # Documentation files
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet), `/create/pay-rent`, `/create/attraction-stack`, `/create/marketing-campaign`, `/create/scale-income`, `/create/plays`, `/create/bridge`, `/create/build-app` (+ `/interest`, `/prework`, `/challenge/:number`), `/create/experiences`, `/create/growth`, `/create/terminal`, `/create/profile`
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -198,19 +198,19 @@ docs/                         # Documentation files
 
 **Life Map**: `/life-map` (replaces old `/nikigai/*` routes, which redirect here)
 
-**Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
+**Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/offer-builder-v2`, `/offer-stack-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`, `/funnel-baseline`, `/launch-readiness`, `/mvp-readiness`, `/feedback-analysis`, `/grand-slam-matrix`, `/product-suite-map`
 
 **Play Profile**: `/play-profile` (quiz + dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`
 
 **Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`, `/try/essence-mirror`, `/try/ai-diagnostic` (AI Possibility Diagnostic), `/try/life-paths`, `/try/life-paths-test`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/wound-map`, `/shift-scorecard`, `/life-paths` (AuthGate), `/facilitate/life-paths`, `/voice-training`, `/v/:shareToken` (public share)
 
-**CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
+**CRM** (`/crm/*`): Dashboard | ceo (CEO Dashboard) | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses, tools/calculators | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
 **Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/scale-diagnostic` → `/create/scale-diagnostic`
 
@@ -236,7 +236,7 @@ The old 9-level sequential system is flattened into a quest board. Quests = life
 
 **Zone Diagnosis** (`/zone-diagnosis/:levelNumber`): Graph → Zone Explainer → Zone Pick → Protective Voices (conditional) → Boss Reveal. Protective voices: topLeft = Performer/Controller/People Pleaser, bottomRight = Perfectionist/Ghost.
 
-Key files: `src/components/level/LevelConfig.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`, `src/flows/ZoneDiagnosisFlow.jsx`. DB: `quests`, `quest_tasks`, `user_level_progress`.
+Key files: `src/components/level/LevelConfig.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`, `src/flows/ZoneDiagnosisFlow.jsx`. DB: `quests`, `quest_tasks` (safety_status: null/safe/not_safe for courage challenges), `user_level_progress`.
 
 ### 3. Essence Mirror (First-Time Onboarding)
 
@@ -443,7 +443,16 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `experience_checkins` | `weekly_reviews` | `healing_intentions` (quest_task_id FK, pattern, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
 
 ### Blow Up Brand Pipeline
-`remarkable_angles` | `narrative_builders` (vehicle_type, vehicle_desc) | `access_architectures` | `scale_diagnostics` (score_body, score_culture, score_identity, score_ancestral, score_format, score_irreplaceable, score_rulebreak, branch, total_score, phase_classification) | `lead_captures` (email, source, scores)
+`remarkable_angles` | `narrative_builders` (vehicle_type, vehicle_desc) | `access_architectures` | `scale_diagnostics` (score_body, score_culture, score_identity, score_ancestral, score_format, score_irreplaceable, score_rulebreak, branch, total_score, phase_classification) | `lead_captures` (email, source, scores, metadata)
+
+### Quest Tracking
+`quest_cross_pollination` (source_quest_id, target_quest_id, groan_challenge_id — tracks when a courage challenge on one quest also feeds another quest)
+
+### Content Intel
+`instagram_posts` (is_trial_reel, skip_rate, avg_watch_time, total_watch_time, reposts, plays, ai_analysis)
+
+### Creator Experiences
+`experiences` (capacity — null means no limit set)
 
 ### Other
 `user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
