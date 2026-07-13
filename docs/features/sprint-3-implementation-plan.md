@@ -85,6 +85,7 @@ export async function checkHeroGraduation(userId) {
 
   const currentStage = stageData?.current_journey_level || 0
   let newStage = null
+  let voiceData = null // Declared at function scope (used by 6→7 check AND return)
 
   // →2: Account exists + first NS check-in
   if (currentStage < 2) {
@@ -119,7 +120,7 @@ export async function checkHeroGraduation(userId) {
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
       .eq('quest_category', 'Groans')
-      .like('reflection_text', '%"wahoo_classification":"vibe"%')
+      .like('reflection_text', '%"wahoo_classification":"vibe",%')
     if (count > 0) newStage = 5
   }
 
@@ -135,12 +136,13 @@ export async function checkHeroGraduation(userId) {
 
   // 6→7: Protective voice identified 5+ times
   if (currentStage === 6) {
-    const { data: voiceData } = await supabase
+    const { data: vd } = await supabase
       .from('healing_intentions')
       .select('protective_voice')
       .eq('user_id', userId)
       .not('protective_voice', 'is', null)
 
+    voiceData = vd // Assign to function-scoped variable for return
     const counts = {}
     voiceData?.forEach(row => {
       if (row.protective_voice)
@@ -150,14 +152,22 @@ export async function checkHeroGraduation(userId) {
     if (maxCount >= 5) newStage = 7
   }
 
-  // If graduated, upsert the stage (handles missing rows for new users)
+  // If graduated, update the stage
+  // Use UPDATE (not UPSERT) — row should always exist from PersonaAssessment.
+  // If UPDATE affects 0 rows (edge case: missing row), fall back to INSERT.
   if (newStage !== null && newStage > currentStage) {
-    await supabase
+    const { count } = await supabase
       .from('user_stage_progress')
-      .upsert(
-        { user_id: userId, current_journey_level: newStage },
-        { onConflict: 'user_id' }
-      )
+      .update({ current_journey_level: newStage })
+      .eq('user_id', userId)
+
+    // Fallback: if no row existed, create minimal one
+    if (count === 0) {
+      await supabase
+        .from('user_stage_progress')
+        .insert({ user_id: userId, current_journey_level: newStage, conversations_logged: 0 })
+        .catch(() => {}) // Silent — if INSERT also fails (constraint), stage just doesn't advance
+    }
 
     return {
       from: currentStage,
@@ -185,17 +195,36 @@ function getDominantVoice(voiceData) {
 
 ### Integration: `src/Challenge.jsx`
 
-Wire into the EXISTING `current_journey_level` load (line ~286):
+Wire into the EXISTING `current_journey_level` load (line ~286).
+
+**CRITICAL: Do NOT replace the existing useEffect. EXTEND it.** The existing useEffect at ~line 286 loads `current_journey_level` AND handles tab unlocking (Courage tab unlock at lines ~296-309). All of that logic MUST be preserved.
 
 ```javascript
 import { checkHeroGraduation } from './lib/heroStageChecker'
 
-// Replace the existing useEffect that loads current_journey_level (~line 286):
+// EXTEND the existing useEffect at ~line 286. Add graduation check
+// AFTER the existing stage load, BEFORE the existing tab unlock logic.
+// 
+// The existing code structure is:
+//   useEffect(() => {
+//     supabase.from('user_stage_progress').select('current_journey_level')...
+//       .then(({ data }) => {
+//         const level = data?.current_journey_level || 0
+//         setCurrentJourneyLevel(level)
+//         // ... tab unlock logic ...
+//       })
+//   }, [user?.id])
+//
+// Refactor to async and insert graduation check:
+
 useEffect(() => {
   if (!user?.id) return
 
-  const checkStage = async () => {
-    // 1. Load current stage (existing logic)
+  const loadStageAndCheckGraduation = async () => {
+    // 1. Check for graduation FIRST (may update the stage in DB)
+    const graduation = await checkHeroGraduation(user.id)
+
+    // 2. Load current stage (may have just been updated by graduation check)
     const { data } = await supabase
       .from('user_stage_progress')
       .select('current_journey_level')
@@ -203,14 +232,11 @@ useEffect(() => {
       .maybeSingle()
 
     const level = data?.current_journey_level || 0
-    const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
+    setCurrentJourneyLevel(level)
 
-    // 2. Check for graduation (new logic)
-    const graduation = await checkHeroGraduation(user.id)
-
+    // 3. Celebrate graduation if detected
     if (graduation) {
-      // Stage changed! Update local state + celebrate
-      setCurrentJourneyLevel(graduation.to)
+      const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
       localStorage.setItem('last_hero_stage', String(graduation.to))
 
       // Only celebrate if user has visited before (not first load ever)
@@ -219,21 +245,24 @@ useEffect(() => {
           essenceName: graduation.stageData?.essence_name,
           voiceName: graduation.dominantVoice,
         })
-      } else {
-        localStorage.setItem('last_hero_stage', String(graduation.to))
       }
     } else {
-      setCurrentJourneyLevel(level)
+      const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
       if (lastKnown === 0 && level > 0) {
         localStorage.setItem('last_hero_stage', String(level))
       }
     }
 
-    // 3. Existing tab unlock logic continues below...
+    // 4. PRESERVE ALL EXISTING TAB UNLOCK LOGIC BELOW THIS LINE
+    // (Courage tab unlock, etc. — do not delete!)
+    if (level === 0) {
+      // ... existing tab unlock code stays here unchanged ...
+    }
   }
 
-  checkStage()
+  loadStageAndCheckGraduation()
 }, [user?.id])
+```
 ```
 
 **That's the ENTIRE integration. One file. One useEffect. No changes to any other component.**
