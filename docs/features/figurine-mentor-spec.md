@@ -34,7 +34,7 @@ The Figurine branch generated Pixar-style hero avatars via Gemini (already exist
 | **B: Abstract orb/glow** | Archetype-coloured presence that breathes per NS state | Simple, works for all users, CSS animations ready | Less personal, no face |
 | **C: Archetype icon** | Each of 12 archetypes has its own symbol/sigil | Distinctive, brandable | Less personal than a face |
 
-**Decision needed:** Which option? Or a combination (e.g., hero avatar when available, abstract glow as fallback)?
+**DECIDED: Option A (Hero Avatar).** The user's Pixar-style avatar generated during Essence Mirror. Emotional connection of seeing YOUR character as your mentor is the product. Fallback for users without avatar: archetype-coloured glow with archetype initial.
 
 ### 2. Interaction Model
 
@@ -77,16 +77,18 @@ The Figurine branch generated Pixar-style hero avatars via Gemini (already exist
 
 ### 4. Mirror → Mentor Transition
 
-| Phase | Stage | What the Figurine Does | Chat Available? |
-|---|---|---|---|
-| **Mirror** (4a) | After Essence Mirror completion | Reflects who you are. "Here's what I see in you." One-way only. | No — Figurine only delivers messages |
-| **Mentor** (4b) | After enough data collected (TBD trigger) | Guides who you become. "Here's what I see ahead." Full mentoring. | Yes — user can ask questions, get coached |
+Stage 4 in the Hero's Journey IS "Meeting the Mentor" (Campbell). The Figurine activation happens WITHIN Stage 4, in two phases:
 
-**Trigger for 4a → 4b:** TBD. Options:
-- After first Vibe Rise wahoo (Stage 5)
-- After completing a Fantasy League season (Stage 6)
-- After protective voice identified 3+ times
-- After a set number of Zarlo Brief cycles (the Figurine has "learned enough")
+| Phase | When | What the Figurine Does | Chat Available? |
+|---|---|---|---|
+| **Mirror** (4a) | Essence Mirror completed + avatar generated | Reflects who you are. "Here's what I see in you." One-way coaching overlays only. | No — Figurine delivers messages, user acknowledges |
+| **Mentor** (4b) | 3+ wahoos completed AND 7+ days of check-in data | Guides who you become. "Here's what I see ahead." Full mentoring conversation. | Yes — user can initiate chat, ask questions, get coached |
+
+**Trigger for 4a → 4b (CONFIRMED):** 3+ wahoos completed AND 7+ daily check-ins. This means ~1 week of active use. The Figurine has enough data to say something meaningful. The mentor can then guide the user TOWARD their first Vibe Rise wahoo (Stage 5), not just celebrate it after.
+
+**Visual form (CONFIRMED):** Hero avatar (Option A). The user's Pixar-style avatar generated during Essence Mirror. Fallback for users without avatar: archetype-coloured glow with archetype initial. Push everyone through Essence Mirror first.
+
+**Chat access (CONFIRMED):** Unlocked at Stage 4b (mentor mode). Before that, Figurine is one-way only (coaching overlays at stage transitions + stuck moments).
 
 ---
 
