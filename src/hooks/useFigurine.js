@@ -295,8 +295,9 @@ export function useFigurine() {
             if (data === '[DONE]') break
             try {
               const parsed = JSON.parse(data)
-              if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-                fullText += parsed.delta.text
+              const text = parsed.delta?.text || (typeof parsed.delta === 'string' ? parsed.delta : null)
+              if (text) {
+                fullText += text
                 setMessages(prev => {
                   const updated = [...prev]
                   updated[updated.length - 1] = { role: 'assistant', content: fullText }
