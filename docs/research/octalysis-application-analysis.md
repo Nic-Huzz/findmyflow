@@ -40,13 +40,45 @@ After Sprints 1-4 (DCC/Hades/Celeste-inspired gamification):
 | **CD7** Curiosity | 5 | **7** | +2 | Insight Drops slide up unexpectedly (2 rarity tiers). Proactive Zarlo bubbles unpredictable. Graduation celebrations surprising on first occurrence. Voice dots create "what happens at 5?" |
 | **CD8** Loss | 5 | **5** | 0 | **Intentionally held (Celeste model).** Pressure earns MORE not less. "Streak resets. Learning doesn't." No new loss mechanics. |
 
-**Post-Sprint Score: 64 + 64 + 36 + 49 + 25 + 25 + 49 + 25 = 337** (Moderate-Strong)
+**Post-Sprint 1-4 Score: 64 + 64 + 36 + 49 + 25 + 25 + 49 + 25 = 337** (Moderate-Strong)
 
-**Change: 217 → 337 (+120 points, +55%)**
+---
 
-**Target: 479 (Strong)** — remaining 142 points require V2 backlog items (Social V1, L0-L4 depth, Self-Knowledge Skills, mystery mechanics, Figurine visual).
+## Post-Social V1 Score (July 2026)
 
-*Scores updated July 2026 after Octalysis Sprints 1-4*
+After Social V1 (community feed, auto-posts, reactions, two entry points):
+
+| Core Drive | Before Social | After Social | Change | What Changed |
+|---|---|---|---|---|
+| **CD5** Social | 5 | **7** | +2 | Community feed with auto-posted achievements (stage graduations, insight unlocks). 4 reaction types (Kudos). Two entry points (header button + Courage tab section). ShareWinStep posts visible. Cumulative monthly counter. |
+
+All other drives unchanged from Sprint 1-4 scores.
+
+**Post-Social Score: 64 + 64 + 36 + 49 + 49 + 25 + 49 + 25 = 361** (Strong)
+
+**Full journey: 217 → 337 → 361 (+144 points, +66%)**
+
+```
+                    Start (217)      Now (361)        Target (479)
+CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD2 Accomplishment  ██████░░░░ (6)   ████████░░ (8)   █████████░ (9)
+CD3 Creativity      █████░░░░░ (5)   ██████░░░░ (6)   ████████░░ (8)
+CD4 Ownership       █████░░░░░ (5)   ███████░░░ (7)   ████████░░ (8)
+CD5 Social          ████░░░░░░ (4)   ███████░░░ (7)   ████████░░ (8)
+CD6 Scarcity        ████░░░░░░ (4)   █████░░░░░ (5)   ██████░░░░ (6)
+CD7 Curiosity       █████░░░░░ (5)   ███████░░░ (7)   █████████░ (9)
+CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
+```
+
+**Remaining gap to target: 118 points.** Requires V2 backlog:
+- CD2 8→9: Self-Knowledge Skills (+17 pts)
+- CD3 6→8: L0-L4 depth + wahoo creation creativity (+28 pts)
+- CD4 7→8: Figurine visual + permanent profile marks (+15 pts)
+- CD5 7→8: Session Bridge + solidarity (+15 pts)
+- CD6 5→6: Monthly Community Day + session dynamics (+11 pts)
+- CD7 7→9: Mystery mechanics + Skills + expanded triggers (+32 pts)
+
+*Scores updated July 2026 after Social V1 build*
 
 ---
 
