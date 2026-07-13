@@ -8,8 +8,11 @@
  */
 
 import { useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './BottomToolbar.css'
+
+const DMG_ARM64 = 'https://github.com/Nic-Huzz/findmyflow/releases/download/v1.0.0/Vibe-Rise-mac-arm64.dmg'
+const DMG_X64 = 'https://github.com/Nic-Huzz/findmyflow/releases/download/v1.0.0/Vibe-Rise-mac-x64.dmg'
 
 // Main app navigation items
 const MAIN_NAV_ITEMS = [
@@ -72,6 +75,12 @@ const CREATE_NAV_ITEMS = [
     label: 'Profile',
     icon: '👤',
     path: '/create/profile'
+  },
+  {
+    id: 'get-app',
+    label: 'Get App',
+    icon: '📲',
+    isModal: true,
   }
 ]
 
@@ -157,9 +166,58 @@ const HIDDEN_ROUTES = [
   '/settings/' // Settings pages (notifications, etc.)
 ]
 
+function DownloadPopup({ onClose }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const handleClick = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose() }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [onClose])
+
+  return (
+    <div className="dl-popup-overlay">
+      <div className="dl-popup" ref={ref}>
+        <button className="dl-popup-close" onClick={onClose}>&times;</button>
+        <div className="dl-popup-icon">📲</div>
+        <h3 className="dl-popup-title">Get the Scale app</h3>
+        <p className="dl-popup-sub">Quick access from your desktop or home screen.</p>
+
+        <div className="dl-popup-section">
+          <div className="dl-popup-label">Mac Desktop App</div>
+          <div className="dl-popup-buttons">
+            <a href={DMG_ARM64} className="dl-popup-btn dl-popup-btn--dark">Apple Silicon (M1-M4)</a>
+            <a href={DMG_X64} className="dl-popup-btn dl-popup-btn--dark">Intel Mac</a>
+          </div>
+        </div>
+
+        <div className="dl-popup-section">
+          <div className="dl-popup-label">Mobile / Any Device</div>
+          <button
+            className="dl-popup-btn dl-popup-btn--purple"
+            onClick={() => {
+              if ('BeforeInstallPromptEvent' in window || window.matchMedia('(display-mode: standalone)').matches) {
+                alert('Tap the share button in your browser, then "Add to Home Screen"')
+              } else {
+                alert('Open create.nichuzz.com in Safari (iOS) or Chrome (Android), tap Share, then "Add to Home Screen"')
+              }
+              onClose()
+            }}
+          >
+            Install as App (PWA)
+          </button>
+        </div>
+
+        <p className="dl-popup-note">All versions sync to the same account.</p>
+      </div>
+    </div>
+  )
+}
+
 function BottomToolbar() {
   const location = useLocation()
   const [isOnboarding, setIsOnboarding] = useState(false)
+  const [showDownload, setShowDownload] = useState(false)
 
   // Watch for onboarding-active, project-selector-active, or modal-active class on body
   useEffect(() => {
@@ -268,24 +326,36 @@ function BottomToolbar() {
   }
 
   return (
-    <nav className={`bottom-toolbar ${isCreateSection ? 'create-toolbar' : isCRMSection ? 'crm-toolbar' : 'main-toolbar'}`}>
-      {navItems.map(item => (
-        // Use plain <a> instead of navigate() — React Router v7 wraps navigate()
-        // in startTransition which suppresses Suspense fallbacks for lazy routes.
-        // Plain links force a full browser navigation that always works.
-        <a
-          key={item.id}
-          href={item.locked ? undefined : item.path}
-          className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''} ${item.locked ? 'locked-item' : ''}`}
-          aria-label={item.label}
-          aria-current={isActive(item) ? 'page' : undefined}
-          onClick={item.locked ? (e) => e.preventDefault() : undefined}
-        >
-          <span className="toolbar-icon">{item.icon}</span>
-          <span className="toolbar-label">{item.label}</span>
-        </a>
-      ))}
-    </nav>
+    <>
+      <nav className={`bottom-toolbar ${isCreateSection ? 'create-toolbar' : isCRMSection ? 'crm-toolbar' : 'main-toolbar'}`}>
+        {navItems.map(item => (
+          item.isModal ? (
+            <button
+              key={item.id}
+              className="toolbar-item"
+              aria-label={item.label}
+              onClick={() => setShowDownload(true)}
+            >
+              <span className="toolbar-icon">{item.icon}</span>
+              <span className="toolbar-label">{item.label}</span>
+            </button>
+          ) : (
+            <a
+              key={item.id}
+              href={item.locked ? undefined : item.path}
+              className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''} ${item.locked ? 'locked-item' : ''}`}
+              aria-label={item.label}
+              aria-current={isActive(item) ? 'page' : undefined}
+              onClick={item.locked ? (e) => e.preventDefault() : undefined}
+            >
+              <span className="toolbar-icon">{item.icon}</span>
+              <span className="toolbar-label">{item.label}</span>
+            </a>
+          )
+        ))}
+      </nav>
+      {showDownload && <DownloadPopup onClose={() => setShowDownload(false)} />}
+    </>
   )
 }
 
