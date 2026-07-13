@@ -1,0 +1,51 @@
+.jtl-timeline { padding: 0 8px 8px; }
+
+.jtl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  position: relative;
+}
+
+.jtl-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 24px;
+  bottom: -8px;
+  width: 2px;
+  background: rgba(94, 23, 235, 0.12);
+}
+
+.jtl-item.jtl-current::after { display: none; }
+
+.jtl-dot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: #5e17eb;
+  opacity: 0.25;
+}
+
+.jtl-dot-current {
+  opacity: 1;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.15);
+}
+
+.jtl-content { flex: 1; }
+
+.jtl-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.jtl-item:not(.jtl-current) .jtl-name { opacity: 0.5; }
+
+.jtl-detail {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.35);
+  margin-top: 1px;
+}

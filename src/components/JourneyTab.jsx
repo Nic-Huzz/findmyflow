@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import UnstickFlow from './UnstickFlow'
 import QuestPathMap from './level/QuestPathMap'
+import JourneyTimeline from './journey/JourneyTimeline'
 import './JourneyTab.css'
 
 // Hero stage names + feeling targets (from measurement framework)
@@ -132,12 +133,66 @@ export default function JourneyTab({ userId }) {
 
   return (
     <div className="jt-container">
+      <JourneyTimeline userId={userId} heroStage={heroStage} />
+
       {/* Current Stage */}
       <div className="jt-stage-card">
         <div className="jt-stage-number">Stage {heroStage}</div>
         <h2 className="jt-stage-name">{stageInfo.name}</h2>
         {stageInfo.feeling && (
           <p className="jt-stage-feeling">"{stageInfo.feeling}"</p>
+        )}
+      </div>
+
+      {/* What's Next */}
+      <div className="jt-next">
+        {heroStage === 2 && (
+          <a href="/life-paths" className="jt-next-card">
+            <span className="jt-next-icon">🗺️</span>
+            <div className="jt-next-body">
+              <div className="jt-next-label">Next step</div>
+              <div className="jt-next-text">Map your life paths to see what futures are possible</div>
+            </div>
+            <span className="jt-next-arrow">→</span>
+          </a>
+        )}
+        {heroStage === 3 && (
+          <a href="/essence-mirror" className="jt-next-card">
+            <span className="jt-next-icon">🦸</span>
+            <div className="jt-next-body">
+              <div className="jt-next-label">Next step</div>
+              <div className="jt-next-text">Discover your essence archetype and create your hero avatar</div>
+            </div>
+            <span className="jt-next-arrow">→</span>
+          </a>
+        )}
+        {heroStage === 4 && (
+          <div className="jt-next-card">
+            <span className="jt-next-icon">🔥</span>
+            <div className="jt-next-body">
+              <div className="jt-next-label">Next step</div>
+              <div className="jt-next-text">Do a courage challenge that makes you feel alive</div>
+            </div>
+          </div>
+        )}
+        {heroStage === 5 && (
+          <div className="jt-next-card">
+            <span className="jt-next-icon">💰</span>
+            <div className="jt-next-body">
+              <div className="jt-next-label">Next step</div>
+              <div className="jt-next-text">Get a life path to Vibe Rise at Charging or Teaching depth</div>
+            </div>
+          </div>
+        )}
+        {heroStage === 6 && (
+          <div className="jt-next-card">
+            <span className="jt-next-icon">💚</span>
+            <div className="jt-next-body">
+              <div className="jt-next-label">Next step</div>
+              <div className="jt-next-text">Keep exploring what blocks you. A pattern is emerging.</div>
+              {dominant && <div className="jt-next-sub">{formatVoice(dominant[0])}: {dominant[1]} of 5</div>}
+            </div>
+          </div>
         )}
       </div>
 
