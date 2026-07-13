@@ -262,17 +262,19 @@ export default function CommunityFeed() {
         <div style={{ width: 60 }} /> {/* Spacer for centering */}
       </div>
 
-      {/* Cumulative counter */}
-      <div className="cf-counter">
-        <div className="cf-counter-total">
-          {totalWahoos}
-          <span>wahoos completed this month</span>
-        </div>
-        {myWahoos > 0 && (
-          <div className="cf-counter-you">
-            You contributed <strong>{myWahoos}</strong> of them
+      {/* Cumulative counter card */}
+      <div className="cf-counter-card">
+        <div className="cf-counter-icon">⚡</div>
+        <div className="cf-counter-content">
+          <div className="cf-counter-total">
+            <span className="cf-counter-number">{totalWahoos}</span> community wahoos this month
           </div>
-        )}
+          {myWahoos > 0 && (
+            <div className="cf-counter-you">
+              You contributed <strong>{myWahoos}</strong> of them
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Loading state */}

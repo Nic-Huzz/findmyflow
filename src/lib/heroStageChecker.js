@@ -123,8 +123,7 @@ export async function checkHeroGraduation(userId) {
       7: 'Approach to the Inmost Cave',
     }
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
-    const feelingTarget = stageData?.persona || null
-    postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`, feelingTarget)
+    postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`)
 
     return {
       from: currentStage,

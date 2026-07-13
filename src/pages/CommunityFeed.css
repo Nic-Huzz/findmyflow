@@ -63,31 +63,47 @@
   letter-spacing: -0.3px;
 }
 
-/* === COUNTER === */
-.cf-page .cf-counter {
-  text-align: center;
-  padding: 24px 20px 16px;
+/* === COUNTER CARD === */
+.cf-page .cf-counter-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 16px 12px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid rgba(94, 23, 235, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(94, 23, 235, 0.06);
+}
+
+.cf-page .cf-counter-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.cf-page .cf-counter-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .cf-page .cf-counter-total {
-  font-size: 28px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.cf-page .cf-counter-number {
+  font-size: 22px;
   font-weight: 900;
   color: var(--brand-purple);
   letter-spacing: -0.5px;
 }
 
-.cf-page .cf-counter-total span {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  display: block;
-  margin-top: 2px;
-}
-
 .cf-page .cf-counter-you {
   font-size: 13px;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .cf-page .cf-counter-you strong {
