@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import UnstickFlow from './UnstickFlow'
 import './JourneyTab.css'
 
 // Hero stage names + feeling targets (from measurement framework)
@@ -22,6 +23,7 @@ export default function JourneyTab({ userId }) {
   const [voiceCounts, setVoiceCounts] = useState({})
   const [brief, setBrief] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [showUnstickFlow, setShowUnstickFlow] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -85,6 +87,21 @@ export default function JourneyTab({ userId }) {
         </div>
       )}
 
+      {/* Stuck Detection (from Zarlo Brief) */}
+      {brief?.thresholds?.stage_stuck_days > 0 && (
+        <div className="jt-section jt-stuck-section">
+          <span className="jt-stuck-icon">🧭</span>
+          <p className="jt-stuck-message">
+            {getStuckMessage(heroStage, brief.thresholds.stage_stuck_days)}
+          </p>
+          {brief.thresholds.stage_stuck_days > 7 && (
+            <button className="jt-stuck-cta" onClick={() => setShowUnstickFlow(true)}>
+              Let's work through it
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Approaching Thresholds (from Zarlo Brief) */}
       {brief?.thresholds?.streak_milestone_approaching && (
         <div className="jt-section">
@@ -93,8 +110,31 @@ export default function JourneyTab({ userId }) {
           </p>
         </div>
       )}
+
+      {showUnstickFlow && (
+        <UnstickFlow
+          userId={userId}
+          heroStage={heroStage}
+          onClose={() => setShowUnstickFlow(false)}
+          onWahooCreated={() => {
+            setShowUnstickFlow(false)
+            // Refresh data so voice dots / stage update
+            window.location.reload() // Simple V1. Replace with state refresh in V2.
+          }}
+        />
+      )}
     </div>
   )
+}
+
+function getStuckMessage(stage, days) {
+  if (days <= 7) return "You've been here a while. That's not wrong. The journey has its own pace."
+  if (stage <= 3) return "There's a step you haven't taken yet. It's simpler than you think."
+  if (stage === 4) return "You've done wahoos but none have hit Vibe Rise yet. Let's figure out what lights you up."
+  if (stage === 5) return "You hit Vibe Rise once. What stopped you from going back?"
+  if (stage === 6) return "Your courage is growing but the pattern underneath hasn't surfaced. Let's dig."
+  if (stage === 7) return "You've seen the root. The next step isn't in the app. What's holding you back from booking?"
+  return "There's something you haven't tried yet."
 }
 
 function formatVoice(name) {

@@ -93,6 +93,42 @@
   line-height: 1.4;
 }
 
+/* Stuck section */
+.jt-stuck-section {
+  border-left: 3px solid #E9A23B;
+}
+
+.jt-stuck-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.jt-stuck-message {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+.jt-stuck-cta {
+  margin-top: 12px;
+  background: none;
+  border: 1px solid #E9A23B;
+  color: #E9A23B;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.jt-stuck-cta:active {
+  background: rgba(233, 162, 59, 0.06);
+}
+
 /* Threshold hint text */
 .jt-threshold-hint {
   font-size: 0.9rem;
