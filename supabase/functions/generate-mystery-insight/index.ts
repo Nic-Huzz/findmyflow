@@ -95,15 +95,15 @@ serve(async (req) => {
         .maybeSingle(),
 
       // Weekly scores (last 8 weeks)
-      supabase.from('weekly_user_scores')
-        .select('week_start, tune_score, playlist_score, healing_score, total_score')
+      supabase.from('challenge_weekly_scores')
+        .select('week_start_date, business_score, healing_score, courage_score')
         .eq('user_id', user.id)
-        .order('week_start', { ascending: false })
+        .order('week_start_date', { ascending: false })
         .limit(8),
 
       // Zone diagnoses
       supabase.from('user_level_progress')
-        .select('level, zone_result, protective_voices')
+        .select('current_level, zone_diagnosis_zone, zone_diagnosis_boss')
         .eq('user_id', user.id),
 
       // Tune tab data (practices + drains)
@@ -119,7 +119,7 @@ serve(async (req) => {
     const checkinDays = new Set(
       (checkins.data || []).map(c => c.created_at?.slice(0, 10))
     ).size
-    const hasZoneDiagnosis = (zoneDiagnoses.data || []).length > 0
+    const hasZoneDiagnosis = (zoneDiagnoses.data || []).filter(z => z.zone_diagnosis_zone).length > 0
     const tuneDays = new Set(
       (tuneData.data || []).map(c => c.created_at?.slice(0, 10))
     ).size
@@ -182,13 +182,14 @@ serve(async (req) => {
     })
 
     // Zone diagnosis summaries
-    const zoneResults = (zoneDiagnoses.data || []).map(z =>
-      `Level ${z.level}: zone=${z.zone_result}, voices=${JSON.stringify(z.protective_voices)}`
-    ).join('\n')
+    const zoneResults = (zoneDiagnoses.data || [])
+      .filter(z => z.zone_diagnosis_zone)
+      .map(z => `Level ${z.current_level}: zone=${z.zone_diagnosis_zone}, boss=${z.zone_diagnosis_boss}`)
+      .join('\n')
 
     // Score trends
     const scoreTrends = (capacityData.data || []).map(s =>
-      `${s.week_start}: tune=${s.tune_score}, courage=${s.playlist_score}, healing=${s.healing_score}, total=${s.total_score}`
+      `${s.week_start_date}: tune=${s.business_score}, courage=${s.courage_score}, healing=${s.healing_score}`
     ).join('\n')
 
     const PROMPTS: Record<string, string> = {
