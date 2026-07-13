@@ -32,6 +32,17 @@ A user hits an UpgradePrompt, pays via Stripe Checkout, and `user_subscriptions`
 - **`allow_promotion_codes: true`** is already on — Nic can create discount codes in Stripe with zero code changes; mention this to him.
 - **RLS:** the webhook writes with the service role key; the client reads its own row. If the unlock doesn't appear, check the webhook function uses the service key, not anon.
 
+## Scale creator portal fulfillment (decided 2026-07-13)
+
+The /movement-makers landing page sells Scale: $499 one-time setup + $99/month portal. Fulfillment flow, agreed with Nic:
+
+1. **Checkout:** Stripe Checkout `mode: 'subscription'` with TWO line items: recurring $99/mo Price + one-time $499 Price (first invoice $598). This is separate from the consumer one-time product above; needs its own Product/Prices.
+2. **Webhook:** `checkout.session.completed` upserts `user_subscriptions` with `plan: 'creator'`, keyed to the checkout email. Subscription updated/deleted handlers become active for this plan (cancel = access off).
+3. **Success page:** "You're in. Log in at create.nichuzz.com with the email you paid with." Magic link login; CreateGate already checks `user_subscriptions` plan 'creator'/'pro'.
+4. **Email mismatch gap:** if login email differs from checkout email, CreateGate shows "Paid with a different email? Contact us." Manual resolution is fine at founding-member volume (Nic books a setup call with every buyer anyway).
+5. **Desktop app is an OPTION, not the funnel:** web portal is the product. Offer the existing notarized Electron DMG in two places: (a) success/welcome page under the main "Open the portal" button, (b) a persistent "Get the desktop app" link inside the portal. Mac only for now; show PWA install instructions (Chrome/Edge "Install app") alongside for everyone else. DMG needs re-notarizing per release, but it wraps the web app so releases should be rare.
+6. **Until this ships:** landing page CTA stays lead capture (`lead_captures` + creator_nurture + notify email); Nic sends a Stripe payment link manually and books the setup call. Swap the CTA to real checkout when this goes live.
+
 ## Acceptance criteria
 
 - [ ] Pricing confirmed by Nic (amount, currency, one-time vs recurring)

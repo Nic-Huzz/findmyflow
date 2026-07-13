@@ -4,11 +4,13 @@
  */
 
 import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
 export default function CreatorLogin() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const isWelcome = searchParams.get('welcome') === 'scale'
   const [email, setEmail] = useState('')
   const [step, setStep] = useState('email') // 'email' | 'code'
   const [code, setCode] = useState(['', '', '', '', '', ''])
@@ -119,6 +121,24 @@ export default function CreatorLogin() {
             Creator Portal
           </div>
         </div>
+
+        {isWelcome && step === 'email' && (
+          <div style={{
+            background: 'rgba(233, 162, 59, 0.12)',
+            border: '1px solid rgba(233, 162, 59, 0.3)',
+            borderRadius: 12,
+            padding: '14px 18px',
+            marginBottom: 24,
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#E9A23B', marginBottom: 4 }}>
+              Welcome to Scale!
+            </div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
+              Your payment is confirmed. Sign in with the email you used at checkout to activate your portal.
+            </div>
+          </div>
+        )}
 
         {step === 'email' ? (
           <form onSubmit={handleEmailSubmit}>

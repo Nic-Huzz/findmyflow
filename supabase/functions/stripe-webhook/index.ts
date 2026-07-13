@@ -2,6 +2,9 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 import Stripe from 'https://esm.sh/stripe@14.14.0?target=deno'
 
+// Scale creator portal product ID — payments for this product grant plan_type 'creator'
+const SCALE_PRODUCT_ID = 'prod_UsdZD0VH5q0wwe'
+
 serve(async (req) => {
   const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, { apiVersion: '2023-10-16' })
   const supabase = createClient(
@@ -27,15 +30,57 @@ serve(async (req) => {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session
-      const userId = session.metadata?.supabase_user_id
-      if (!userId) break
+
+      // Determine plan type from product metadata or line items
+      let planType = session.metadata?.plan || 'pro'
+
+      // For payment link purchases: detect Scale product from line items
+      if (session.subscription) {
+        try {
+          const sub = await stripe.subscriptions.retrieve(session.subscription as string, {
+            expand: ['items.data.price.product'],
+          })
+          const hasScaleProduct = sub.items.data.some((item: any) => {
+            const product = item.price.product
+            const productId = typeof product === 'string' ? product : product.id
+            return productId === SCALE_PRODUCT_ID
+          })
+          if (hasScaleProduct) planType = 'creator'
+        } catch (e) {
+          console.error('Failed to check subscription items:', e)
+        }
+      }
+
+      // Resolve user: prefer metadata user ID, fall back to targeted email lookup
+      let userId = session.metadata?.supabase_user_id
+      if (!userId && session.customer_details?.email) {
+        const { data: matchedUsers } = await supabase
+          .rpc('get_user_id_by_email', { lookup_email: session.customer_details.email.toLowerCase() })
+        if (matchedUsers?.[0]?.id) userId = matchedUsers[0].id
+      }
+
+      if (!userId) {
+        // No matching Supabase user yet. Store by email so we can link later.
+        console.log(`No Supabase user for ${session.customer_details?.email}. Storing pending subscription.`)
+        await supabase.from('pending_subscriptions').upsert({
+          email: session.customer_details?.email?.toLowerCase(),
+          stripe_customer_id: session.customer as string,
+          stripe_subscription_id: (session.subscription as string) || null,
+          plan_type: planType,
+          status: 'active',
+          created_at: new Date().toISOString(),
+        }, { onConflict: 'email' }).then(({ error }) => {
+          if (error) console.error('pending_subscriptions upsert failed:', error.message)
+        })
+        break
+      }
 
       await supabase.from('user_subscriptions').upsert({
         user_id: userId,
         stripe_customer_id: session.customer as string,
         stripe_subscription_id: (session.subscription as string) || null,
         status: 'active',
-        plan_type: 'pro',
+        plan_type: planType,
         current_period_start: new Date().toISOString(),
         current_period_end: null,
         updated_at: new Date().toISOString()
