@@ -91,7 +91,7 @@ export default function CreateGate({ children }) {
         </h1>
 
         <p className="cg-sub">
-          We studied how 59 experience creators went from unknown to world-renowned. Here's what we found.
+          We studied how 100 experience creators went from unknown to famous. Here's what we found.
         </p>
 
         {/* Section 1: How Did They Pay Rent? */}
@@ -142,8 +142,41 @@ export default function CreateGate({ children }) {
           ))}
         </div>
 
+        {/* Section 4: What's inside the portal */}
+        <div className="cg-teaser-section">
+          <div className="cg-teaser-header">
+            <span className="cg-teaser-num">04</span>
+            <h2 className="cg-teaser-title">Then Run the Same Playbook</h2>
+          </div>
+          <p className="cg-teaser-sub">The portal turns what they did into steps you can follow.</p>
+          <div className="cg-feature-row">
+            <span className="cg-feature-icon">💎</span>
+            <div className="cg-feature-info">
+              <div className="cg-feature-name">Find your rule break</div>
+              <div className="cg-feature-desc">A guided flow that finds the thing you do differently. That's what makes word spread.</div>
+            </div>
+          </div>
+          <div className="cg-feature-row">
+            <span className="cg-feature-icon">🎟️</span>
+            <div className="cg-feature-info">
+              <div className="cg-feature-name">Fill your events</div>
+              <div className="cg-feature-desc">Plan every event with a simple pipeline. Attract, capture, convert, deliver, grow.</div>
+            </div>
+          </div>
+          <div className="cg-feature-row">
+            <span className="cg-feature-icon">🎯</span>
+            <div className="cg-feature-info">
+              <div className="cg-feature-name">Nail your positioning</div>
+              <div className="cg-feature-desc">We turn your answers into a clear statement of who you help and why they come to you.</div>
+            </div>
+          </div>
+        </div>
+
+        <p className="cg-whofor">For people who run workshops, retreats, circles, or live events. Or want to start.</p>
+
         {/* CTA — no pricing, no external purchase link (App Store 3.1.3(f) compliant) */}
         <div className="cg-gate-section">
+          <p className="cg-proof">Built from a study of 100 creators, including Brené Brown, Wim Hof and Tony Robbins.</p>
           {expressed ? (
             <p className="cg-expressed">You're on the list. We'll be in touch soon.</p>
           ) : (
@@ -180,18 +213,6 @@ export default function CreateGate({ children }) {
           <button
             className="cg-cta-signin"
             onClick={() => { window.location.href = '/log-in?returnTo=/create' }}
-            style={{
-              marginTop: 12,
-              padding: '14px 24px',
-              borderRadius: 12,
-              border: '1px solid rgba(255,255,255,0.15)',
-              background: 'transparent',
-              color: 'rgba(255,255,255,0.6)',
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: 'pointer',
-              width: '100%',
-            }}
           >
             Already a member? Sign in
           </button>
