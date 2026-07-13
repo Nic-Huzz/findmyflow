@@ -50,11 +50,20 @@
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+.jt-stage-ref-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5e17eb;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .jt-stage-ref {
   font-size: 0.8rem;
   color: rgba(0, 0, 0, 0.4);
   font-style: italic;
-  margin: 0 0 4px;
+  margin: 0 0 3px;
   line-height: 1.4;
 }
 

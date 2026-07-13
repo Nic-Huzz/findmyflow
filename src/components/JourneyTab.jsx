@@ -14,49 +14,49 @@ const HERO_STAGES = [
   { stage: 0, name: 'Not Started', references: [] },
   { stage: 1, name: 'Ordinary World', references: [] },
   { stage: 2, name: 'Call to Adventure', references: [
-    'Think: Ariel seeing the surface world for the first time.',
-    'Think: Peter Parker getting bitten by the spider.',
-    'Think: Neo seeing the Matrix for the first time.',
+    'Ariel seeing the surface world for the first time.',
+    'Peter Parker getting bitten by the spider.',
+    'Neo seeing the Matrix for the first time.',
   ]},
   { stage: 3, name: 'Refusal of the Call', references: [
-    'Think: Simba running away to the jungle.',
-    'Think: Miles Morales saying "I can\'t do this."',
-    'Think: Frodo saying "I wish the ring had never come to me."',
+    'Simba running away to the jungle.',
+    'Miles Morales saying "I can\'t do this."',
+    'Frodo saying "I wish the ring had never come to me."',
   ]},
   { stage: 4, name: 'Meeting the Mentor', references: [
-    'Think: Aladdin meeting the Genie.',
-    'Think: Tony Stark building the first suit in the cave.',
-    'Think: Luke meeting Yoda on Dagobah.',
+    'Aladdin meeting the Genie.',
+    'Tony Stark building the first suit in the cave.',
+    'Luke meeting Yoda on Dagobah.',
   ]},
   { stage: 5, name: 'Crossing the Threshold', references: [
-    'Think: Jasmine and Aladdin on the magic carpet for the first time.',
-    'Think: Spider-Man\'s first swing through New York.',
-    'Think: Neo dodging bullets for the first time.',
+    'Jasmine and Aladdin on the magic carpet for the first time.',
+    'Spider-Man\'s first swing through New York.',
+    'Neo dodging bullets for the first time.',
   ]},
   { stage: 6, name: 'Tests, Allies, Enemies', references: [
-    'Think: Mulan training with the army.',
-    'Think: The Avengers learning to fight together.',
-    'Think: Rocky running up the stairs.',
+    'Mulan training with the army.',
+    'The Avengers learning to fight together.',
+    'Rocky running up the stairs.',
   ]},
   { stage: 7, name: 'Approach to the Inmost Cave', references: [
-    'Think: Simba returning to the Pride Lands to face Scar.',
-    'Think: Doctor Strange facing Dormammu.',
-    'Think: Luke entering the cave on Dagobah.',
+    'Simba returning to the Pride Lands to face Scar.',
+    'Doctor Strange facing Dormammu.',
+    'Luke entering the cave on Dagobah.',
   ]},
   { stage: 8, name: 'The Ordeal', references: [
-    'Think: Mufasa\'s death breaking Simba open.',
-    'Think: Tony Stark snapping the Infinity Gauntlet.',
-    'Think: Neo dying and coming back as The One.',
+    'Mufasa\'s death breaking Simba open.',
+    'Tony Stark snapping the Infinity Gauntlet.',
+    'Neo dying and coming back as The One.',
   ]},
   { stage: 9, name: 'Reward', references: [
-    'Think: Simba taking his place on Pride Rock.',
-    'Think: Thor finally becoming worthy.',
-    'Think: Frodo holding the ring at Mount Doom.',
+    'Simba taking his place on Pride Rock.',
+    'Thor finally becoming worthy.',
+    'Frodo holding the ring at Mount Doom.',
   ]},
   { stage: 10, name: 'The Road Back', references: [
-    'Think: Woody choosing to leave Andy.',
-    'Think: Spider-Man returning to Queens.',
-    'Think: Bilbo writing his book.',
+    'Woody choosing to leave Andy.',
+    'Spider-Man returning to Queens.',
+    'Bilbo writing his book.',
   ]},
 ]
 
@@ -201,6 +201,7 @@ export default function JourneyTab({ userId }) {
         <h2 className="jt-stage-name">{stageInfo.name}</h2>
         {stageInfo.references?.length > 0 && (
           <div className="jt-stage-refs">
+            <p className="jt-stage-ref-label">Think:</p>
             {stageInfo.references.map((ref, i) => (
               <p key={i} className="jt-stage-ref">{ref}</p>
             ))}
