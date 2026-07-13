@@ -7,6 +7,7 @@ import JourneyOnboarding from './journey/JourneyOnboarding'
 import JourneyZones from './journey/JourneyZones'
 import JourneyCompleted from './journey/JourneyCompleted'
 import OrphanWahooLinker from './journey/OrphanWahooLinker'
+import SkillsDisplay from './journey/SkillsDisplay'
 import { useFigurine } from '../hooks/useFigurine'
 import './JourneyTab.css'
 
@@ -289,6 +290,9 @@ export default function JourneyTab({ userId }) {
           )}
         </div>
       )}
+
+      {/* Self-Knowledge Skills */}
+      <SkillsDisplay userId={userId} />
 
       {/* Orphaned Wahoos — prompt to link */}
       {orphanedWahoos.length > 0 && !showOrphanLinker && (

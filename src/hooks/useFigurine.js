@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { computeLevel, SKILL_THRESHOLDS, formatSkillsForPrompt } from './useSkills'
 
 // ─── Reuse from Figurine branch ─────────────────────────────────────────
 
@@ -67,7 +68,7 @@ function getReturnMessage(daysSinceLastInteraction) {
 
 // ─── Adapted system prompt (adds hero stage + Brief) ────────────────────
 
-function buildFigurinePrompt(profile, heroStage, brief, memories, intelligencePhase, currentNsState) {
+function buildFigurinePrompt(profile, heroStage, brief, memories, intelligencePhase, currentNsState, skills) {
   const groupStyle = getGroupStyle(profile.essence_archetype)
   const fields = profile.custom_essence_fields || {}
 
@@ -109,6 +110,9 @@ CURRENT TONE (based on their nervous system state): ${toneInstruction}
 
 Hero Journey Stage: ${heroStage} of 12
 ${phaseGuidance}
+${skills ? `\nSELF-KNOWLEDGE SKILLS:\n${formatSkillsForPrompt(skills)}` : ''}
+
+SKILL-BASED TONE:${skills?.depth?.level >= 3 ? '\n- Depth L3+: Name protective voices directly. Don\'t hedge.' : ''}${skills?.courage?.level >= 3 ? '\n- Courage L3+: Reference specific wahoos. Challenge them to go bigger.' : ''}${skills?.presence?.level >= 4 ? '\n- Presence L4+: Predict their state based on day patterns.' : ''}${skills?.recovery?.level >= 3 ? '\n- Recovery L3+: Acknowledge resilience with specific data.' : ''}${Object.values(skills || {}).every(s => s.level >= 3) ? '\n- All skills L3+: Full mentor mode. Say the uncomfortable thing with love.' : ''}
 ${memorySection}
 
 ${brief ? `\nZARLO BRIEF (daily summary of their journey):\n${JSON.stringify(brief, null, 2)}` : ''}
@@ -145,6 +149,7 @@ export function useFigurine() {
   const [intelligencePhase, setIntelligencePhase] = useState(0)
 
   // Chat state
+  const [skills, setSkills] = useState(null)
   const [messages, setMessages] = useState([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [conversationsToday, setConversationsToday] = useState(0)
@@ -173,6 +178,9 @@ export function useFigurine() {
       { data: memoryData },
       { data: checkinData },
       { data: wahooData },
+      depthResult,
+      recoveryResult,
+      curiosityResult,
     ] = await Promise.all([
       supabase.from('lead_flow_profiles')
         .select('essence_archetype, custom_essence_name, custom_essence_image, custom_essence_fields, protective_archetype')
@@ -191,6 +199,13 @@ export function useFigurine() {
         .eq('checkin_type', 'daily'),
       supabase.from('quest_completions')
         .select('id').eq('user_id', user.id).eq('quest_category', 'Groans'),
+      // Skills: depth, recovery, curiosity (presence + courage reuse above)
+      supabase.from('healing_intentions')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .in('healing_stage', ['recognised', 'released']),
+      supabase.rpc('compute_recovery_count', { p_user_id: user.id }),
+      supabase.rpc('compute_curiosity_count', { p_user_id: user.id }),
     ])
 
     const stage = stageData?.current_journey_level || 0
@@ -212,6 +227,20 @@ export function useFigurine() {
     if (checkinData?.length > 0) {
       setCurrentNsState(checkinData[checkinData.length - 1]?.before_state || 'ventral')
     }
+
+    // Compute self-knowledge skills
+    const skillCounts = {
+      presence: checkinCount,
+      courage: wahooCount,
+      depth: depthResult.count || 0,
+      recovery: recoveryResult.data ?? 0,
+      curiosity: curiosityResult.data ?? 0,
+    }
+    const computedSkills = {}
+    for (const [key, count] of Object.entries(skillCounts)) {
+      computedSkills[key] = { count, level: computeLevel(count, SKILL_THRESHOLDS[key]) }
+    }
+    setSkills(computedSkills)
 
     // Intelligence
     const intData = {
@@ -258,7 +287,7 @@ export function useFigurine() {
       return
     }
 
-    const systemPrompt = buildFigurinePrompt(profile, heroStage, brief, memories, intelligencePhase, currentNsState)
+    const systemPrompt = buildFigurinePrompt(profile, heroStage, brief, memories, intelligencePhase, currentNsState, skills)
 
     try {
       const token = (await supabase.auth.getSession()).data.session?.access_token

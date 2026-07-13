@@ -70,7 +70,8 @@ serve(async (req) => {
 
     // Gather user data in parallel
     const [
-      checkins, wahoos, profile, capacityData, zoneDiagnoses, tuneData
+      checkins, wahoos, profile, capacityData, zoneDiagnoses, tuneData,
+      allCheckins, depthResult, recoveryResult, curiosityResult
     ] = await Promise.all([
       // NS check-ins (last 30 days)
       supabase.from('nervous_system_checkins')
@@ -113,7 +114,42 @@ serve(async (req) => {
         .in('checkin_type', ['daily', 'practice', 'drain'])
         .gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())
         .limit(200),
+      // Skills: all-time daily check-in count (for Presence)
+      supabase.from('nervous_system_checkins')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).eq('checkin_type', 'daily'),
+      // Skills: depth
+      supabase.from('healing_intentions')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).in('healing_stage', ['recognised', 'released']),
+      // Skills: recovery
+      supabase.rpc('compute_recovery_count', { p_user_id: user.id }),
+      // Skills: curiosity
+      supabase.rpc('compute_curiosity_count', { p_user_id: user.id }),
     ])
+
+    // Compute self-knowledge skills
+    const SKILL_THRESHOLDS: Record<string, number[]> = {
+      presence: [7, 20, 40, 70, 100],
+      courage: [3, 10, 25, 45, 65],
+      depth: [2, 5, 10, 15, 20],
+      recovery: [2, 5, 10, 18, 30],
+      curiosity: [1, 2, 3, 4, 5],
+    }
+    function getLevel(count: number, t: number[]) {
+      for (let i = t.length - 1; i >= 0; i--) { if (count >= t[i]) return i + 1 }
+      return 0
+    }
+    const skillCounts = {
+      presence: allCheckins.count || 0,
+      courage: (wahoos.data || []).length,
+      depth: depthResult.count || 0,
+      recovery: recoveryResult.data ?? 0,
+      curiosity: curiosityResult.data ?? 0,
+    }
+    const skillSummary = Object.entries(skillCounts).map(([k, c]) =>
+      `${k.charAt(0).toUpperCase() + k.slice(1)}: L${getLevel(c, SKILL_THRESHOLDS[k])} (${c})`
+    ).join(', ')
 
     // Determine content type based on available data
     const checkinDays = new Set(
@@ -197,6 +233,7 @@ serve(async (req) => {
 
 USER DATA:
 Essence archetype: ${essenceName}
+Self-knowledge skills: ${skillSummary}
 Check-in days: ${checkinDays} days over last 30 days
 State distribution: ${JSON.stringify(stateCounts)}
 Day-of-week patterns: ${JSON.stringify(dayOfWeekStates)}
@@ -216,6 +253,7 @@ RULES:
 
 USER DATA:
 Essence archetype: ${essenceName}
+Self-knowledge skills: ${skillSummary}
 Protective archetype: ${protectiveArchetype || 'Not identified'}
 Protective voice counts: ${JSON.stringify(voiceCounts)}
 Zone diagnosis results: ${zoneResults || 'None'}
@@ -235,6 +273,7 @@ RULES:
 
 USER DATA:
 Essence archetype: ${essenceName}
+Self-knowledge skills: ${skillSummary}
 Weekly score trends (most recent first):
 ${scoreTrends || 'No weekly data yet'}
 State distribution: ${JSON.stringify(stateCounts)}
