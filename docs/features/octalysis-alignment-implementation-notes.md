@@ -315,9 +315,9 @@ These are TWO SEPARATE systems with different triggers, different context needs,
 |---|---|---|
 | **Trigger** | Daily events (check-in, wahoo, session, inactivity) | Stage transitions, stuck thresholds, major data milestones |
 | **UI** | Floating widget, chat interface (existing) | Avatar panel, special modal/overlay (on Figurine branch) |
-| **Context** | Recent events + patterns (last 7 days) | Full journey history + hero stage + depth + convergence |
-| **AI prompt** | Shorter context, faster response, personality-forward | Deeper context, slower/rarer response, wisdom-forward |
-| **Data source** | `nervous_system_checkins`, `healing_intentions`, `groan_challenges` (recent) | `user_stage_progress`, hero stage calculations, cross-pollination, full voice counts |
+| **Context** | ALL data via pre-computed Zarlo Brief (see Section 6) | Full journey history + hero stage + depth + convergence |
+| **AI prompt** | Zarlo Brief (~500 tokens) + page context, personality-forward | Deeper context, slower/rarer response, wisdom-forward |
+| **Data source** | ALL tables via Zarlo Brief (daily pre-computed summary of full history) | `user_stage_progress`, hero stage calculations, cross-pollination, full voice counts |
 
 **Build order:** Zarlo enrichment first (it exists, just needs better context). Figurine later (dedicated session, as noted in measurement framework).
 

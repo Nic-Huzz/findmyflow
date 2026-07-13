@@ -155,6 +155,8 @@ Each should feel like a moment the user screenshots and shares.
 
 Stuckness is NOT failure. It's a different type of content delivery. The longer you're stuck, the richer Zarlo becomes.
 
+**NOTE:** These generic timings (2/4/8/12 weeks) were SUPERSEDED by per-stage calibrated timings in `docs/features/octalysis-alignment-implementation-notes.md` Section 9 (Gap 2). The spec doc is the source of truth for stuck thresholds.
+
 ### Gap 3: Social Validation Layer is Absent
 
 **Problem:** The 5×5 matrix, depth scale, and hero stages are all INDIVIDUAL measurements. CD5 Social is Vibe Rise's biggest gap (4/10). No mention of how others witness, validate, or participate in your journey.
