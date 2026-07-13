@@ -754,6 +754,207 @@ Current format: Entrepreneur circle + Coldnips beach meetups. Connection (wins/l
 
 ---
 
+## Sprint 1: Build Guide (exact changes)
+
+### Why These Three First (Prioritisation Rationale)
+
+The single biggest insight from the Octalysis research: **how failure feels determines whether people come back.** Hades proved that "death" can be the most rewarding moment. Celeste proved you don't need punishment to drive engagement. Duolingo proved that fear works for habits but creates anxiety.
+
+Sprint 1 targets the three features that change how FAILURE FEELS in the app. Every user experiences "bad" states (Pressure, Shutdown, streak breaks, missed days) regularly. These three changes transform those moments from "I picked the wrong answer" to "that counts too." This affects every user every day, which is why it comes first.
+
+### Success Metrics
+
+The north star is NOT "more engagement" or "more check-ins." It's: **are users trending toward Vibe Rise state over time?**
+
+| Feature | Leading Indicator | Lagging Indicator |
+|---|---|---|
+| **Post-wahoo responses** | Pressure/Uninterested reporting rate increases (people stop lying about their state because it's no longer punished) | Ratio of Vibe Rise wahoos to total wahoos increases over 30 days (honest reporting → better self-knowledge → better wahoo selection → more Vibe Rise) |
+| **Daily check-in RP** | Check-in completion rate increases (currently no incentive) | Activated/Shutdown check-ins decrease as a % over 60 days (showing up daily → awareness → regulation → safer states) |
+| **Voice counting + Zarlo tiers** | Users who reach 3+ voice identifications continue to Stage 7 faster | Stage 7 graduation rate increases (pattern recognition → root identification → reconsolidation booking) |
+
+**The ultimate metric across all features:** % of life paths in Vibe Rise or Fun predicted state, trending up over user lifetime.
+
+### Sprint 1A: Post-Wahoo Responses (1 day)
+
+**File:** `src/components/GroanCompletionModal.jsx`
+
+**Change 1: RP differentiation (line 19 + lines 123-129)**
+
+Current:
+```javascript
+const PLAY_LIST_POINTS = 7  // line 19
+```
+
+Change to:
+```javascript
+// RP per wahoo classification (Hades model: harder states earn MORE)
+const WAHOO_RP = {
+  vibe: 10,      // 7 base + 3 identity bonus
+  peace: 7,      // base
+  anxious: 10,   // 7 base + 3 edge-push bonus (Pressure is as brave as Vibe Rise)
+  shutdown: 9,   // 7 base + 2 honesty bonus
+  // Legacy compat
+  wahoo: 10,
+  vibe_rise: 7,
+  routine: 7,
+}
+```
+
+Then at line 129, replace `PLAY_LIST_POINTS` with `WAHOO_RP[wahooClassification] || 7` in both the `quest_completions` insert and the `increment_scores` RPC call.
+
+**Change 2: Per-state copy + celebration (lines 255-262 + 337-354)**
+
+At lines 255-261, replace the celebration block:
+```javascript
+// Current: same confetti for all
+// Replace with:
+if (wahooClassification === 'vibe' || wahooClassification === 'wahoo') {
+  confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, 
+    colors: ['#E9A23B', '#f5c55a', '#fbbf24'] })
+} else if (wahooClassification === 'peace') {
+  // Gentle purple pulse, no confetti
+} else if (wahooClassification === 'anxious') {
+  // No confetti. Brief dim acknowledgment.
+} else {
+  // Uninterested: no celebration, clean neutral
+}
+```
+
+At lines 337-354, replace the identity prompt section per state:
+
+For **Pressure** (`anxious`): replace identity statement with voice capture:
+```jsx
+{wahooClassification === 'anxious' && (
+  <div className="gcm-identity-prompt">
+    <div className="gcm-reframe-line">
+      That wasn't easy. The {essenceName ? `voice in the ${essenceName}'s head` : 'voice in your head'} 
+      probably told you to stop. You didn't.
+    </div>
+    <label className="gcm-identity-label">What did the voice say before you did it?</label>
+    <input className="gcm-identity-input" type="text" value={identityStatement}
+      onChange={e => setIdentityStatement(e.target.value)}
+      placeholder="e.g. you're not ready, people will judge, it won't work" />
+  </div>
+)}
+```
+
+For **Uninterested** (`shutdown`): show validation + retry CTA:
+```jsx
+{wahooClassification === 'shutdown' && (
+  <div className="gcm-identity-prompt">
+    <div className="gcm-reframe-line">
+      This one didn't land. That's useful information. 
+      Not everything that scares you matters to you.
+    </div>
+  </div>
+)}
+```
+
+For **Fun** (`peace`): add warmth line:
+```jsx
+{wahooClassification === 'peace' && (
+  <div className="gcm-identity-prompt">
+    <div className="gcm-reframe-line">That landed. Good.</div>
+    <label className="gcm-identity-label">Now that I {challenge.title?.toLowerCase()}, I've proven I'm someone who...</label>
+    <input className="gcm-identity-input" type="text" value={identityStatement}
+      onChange={e => setIdentityStatement(e.target.value)}
+      placeholder="e.g. takes risks, shows up, backs themselves" />
+  </div>
+)}
+```
+
+**Change 3: Store Pressure voice text in reflection_text JSON (line 132)**
+
+The `reflection_text` field already stores JSON with `wahoo_classification` and `identity_statement`. Add `voice_objection` for Pressure responses:
+```javascript
+reflection_text: JSON.stringify({
+  // ... existing fields ...
+  wahoo_classification: wahooClassification,
+  identity_statement: identityStatement || null,
+  voice_objection: wahooClassification === 'anxious' ? identityStatement : null,
+  // Note: for Pressure, identityStatement field is repurposed as voice_objection
+})
+```
+
+### Sprint 1B: Daily Check-In RP (half day)
+
+**File:** `src/components/DailyCheckin.jsx`
+
+**Change:** After the `nervous_system_checkins` insert at line 92, add RP award:
+
+```javascript
+// Line 92-96: existing insert
+await supabase.from('nervous_system_checkins').insert({
+  user_id: userId,
+  before_state: selectedState,
+  checkin_type: 'daily',
+})
+
+// ADD AFTER: Award 2 RP for showing up (all states equal)
+try {
+  await supabase.from('quest_completions').insert({
+    user_id: userId,
+    quest_id: `daily_checkin_${new Date().toISOString().slice(0, 10)}`,
+    quest_category: 'Tune',
+    quest_type: 'DailyCheckin',
+    points_earned: 2,
+    challenge_day: 0,
+    project_id: null,
+  })
+  await supabase.rpc('increment_scores', {
+    p_user_id: userId,
+    p_project_id: null,
+    p_category: 'tune',
+    p_points: 2,
+    p_week_start: getWeekStartLocal(),
+  })
+} catch (e) {
+  console.warn('Daily checkin RP error:', e)
+}
+```
+
+**Import needed:** Add `import { getWeekStartLocal } from '../lib/dateUtils'` at top of file.
+
+**Note:** Using date-stamped `quest_id` prevents double-awarding if user somehow triggers check-in twice in a day. The existing `quest_completions` delete-then-insert pattern in `GroanCompletionModal` handles this for wahoos; daily check-ins use the date as natural deduplication.
+
+### Sprint 1C: Protective Voice Counting (1-2 days)
+
+**No file changes needed for counting.** The data already exists in `healing_intentions`. The implementation is:
+
+1. **Query (run in Zarlo context generation or a new utility):**
+```javascript
+const { data: voiceCounts } = await supabase
+  .from('healing_intentions')
+  .select('protective_voice')
+  .eq('user_id', userId)
+  .not('protective_voice', 'is', null)
+
+// Count occurrences
+const counts = {}
+voiceCounts?.forEach(row => {
+  counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
+})
+const dominant = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]
+// dominant = ['perfectionist', 4]
+```
+
+2. **Add to Zarlo context in `zarloEngine.js`:** Include `dominant_protective_voice` and `dominant_voice_count` in the context object passed to the system prompt.
+
+3. **Zarlo proactive trigger:** In `ZarloWidget.jsx`, add a `useEffect` that checks voice count on mount:
+```javascript
+useEffect(() => {
+  if (!userId) return
+  // Query voice counts
+  // If dominant count >= 3 and no previous notification for this threshold:
+  //   setHasNotification(true)  // <-- already plumbed, currently unused
+  //   setNotificationMessage("The [voice] keeps showing up...")
+}, [userId])
+```
+
+This uses the `hasNotification` state that the UI audit confirmed is already wired but never set to `true`.
+
+---
+
 ## 10. Research Audit Findings (2026-07-12)
 
 ### Figurine Branch Audit
