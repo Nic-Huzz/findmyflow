@@ -616,8 +616,8 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
               trySaved ? (
                 <div className="ecf-try-saved">
                   <p className="ecf-try-saved-text">You're on the list! We'll send you access soon.</p>
-                  <button className="ecf-save-btn" onClick={() => navigate('/create')}>
-                    Go to Creator Portal →
+                  <button className="ecf-save-btn" onClick={() => (user?.id ? saveModel() : navigate('/create'))} disabled={loading}>
+                    {loading ? 'Saving...' : 'Go to Creator Portal →'}
                   </button>
                 </div>
               ) : (
