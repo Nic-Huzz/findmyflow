@@ -1752,7 +1752,7 @@ function Challenge() {
       {showMentorTransition && (
         <FigurineOverlay
           avatarUrl={mentorTransitionAvatar}
-          message="I've been watching. I know your patterns now. From here, I'm not just showing you who you are. I'm showing you who you become. You can talk to me whenever you need."
+          message="I'm the essence you've always felt but couldn't name. I'm here now, and I'm not going anywhere. Talk to me whenever you need."
           emoji="🪞"
           onDismiss={() => setShowMentorTransition(false)}
           autoDismiss={15000}

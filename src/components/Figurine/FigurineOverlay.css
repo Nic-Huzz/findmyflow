@@ -54,6 +54,9 @@
   object-fit: cover;
   border: 3px solid #E9A23B;
   box-shadow: 0 0 24px rgba(233, 162, 59, 0.25), 0 0 48px rgba(94, 23, 235, 0.1);
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .fo-emoji-badge {

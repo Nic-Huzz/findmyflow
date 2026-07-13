@@ -35,7 +35,7 @@ export default function FigurineOverlay({ avatarUrl, message, emoji, onDismiss, 
       <div className="fo-card" onClick={e => e.stopPropagation()}>
         {avatarUrl && (
           <div className="fo-avatar-container">
-            <img src={avatarUrl} alt="" className="fo-avatar" />
+            <img src={avatarUrl} alt="" className="fo-avatar" draggable="false" />
             {emoji && <span className="fo-emoji-badge">{emoji}</span>}
           </div>
         )}
