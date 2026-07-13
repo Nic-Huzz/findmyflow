@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient'
+import { postFeedEvent } from './communityFeed'
 
 /**
  * Checks if a user qualifies for a hero stage graduation.
@@ -99,6 +100,19 @@ export async function checkHeroGraduation(userId) {
         .insert({ user_id: userId, current_journey_level: newStage, conversations_logged: 0 })
         .catch(() => {}) // Silent — if INSERT also fails (constraint), stage just doesn't advance
     }
+
+    // Auto-post stage graduation to community feed
+    const STAGE_NAMES = {
+      2: 'The Earthquake',
+      3: 'Head Full of Dreams',
+      4: 'Mirror / Mentor',
+      5: 'First Vibe Rise',
+      6: 'The Daily Loop',
+      7: 'Pattern Revealed',
+    }
+    const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
+    const feelingTarget = stageData?.essence_name || null
+    postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`, feelingTarget)
 
     return {
       from: currentStage,

@@ -190,6 +190,12 @@ function ChallengeHeader({
           >
             🏆 Leaderboard
           </button>
+          <button
+            className="challenge-journey-btn"
+            onClick={() => navigate('/community')}
+          >
+            📣 Community
+          </button>
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button
               className="challenge-day settings-badge"

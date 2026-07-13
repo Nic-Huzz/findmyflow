@@ -305,6 +305,9 @@ const LifePathWidgetTest = lazyRetry(() => import('./pages/LifePathWidgetTest'))
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
 const PlaylistFeedAdmin = lazyRetry(() => import('./pages/PlaylistFeedAdmin'))
 
+// Community Feed
+const CommunityFeed = lazyRetry(() => import('./pages/CommunityFeed'))
+
 import './App.css'
 import './PersonaAssessment.css'
 import './flows/AttractionOfferFlow.css'
@@ -376,6 +379,7 @@ import './pages/league/LeagueAdmin.css'
 import './pages/league/NewsfeedPage.css'
 import './pages/PlaylistFeed.css'
 import './pages/PlaylistFeedAdmin.css'
+import './pages/CommunityFeed.css'
 import './flows/PayRentFlow.css'
 import './flows/ScaleIncomeFlow.css'
 
@@ -1487,6 +1491,13 @@ function AppRouter() {
             <Route path="/newsfeed" element={
               <AuthGate>
                 <NewsfeedPage />
+              </AuthGate>
+            } />
+
+            {/* Community Feed */}
+            <Route path="/community" element={
+              <AuthGate>
+                <CommunityFeed />
               </AuthGate>
             } />
 

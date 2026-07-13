@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { postFeedEvent } from '../lib/communityFeed'
 
 export function useInsightDrops(userId) {
   const [insight, setInsight] = useState(null)
@@ -71,11 +72,13 @@ async function checkInsights(userId) {
   if (brief?.patterns?.visibility_layers) {
     for (const [layer, count] of Object.entries(brief.patterns.visibility_layers)) {
       if (count === 1 && !seen(`first_${layer}`)) {
-        return {
+        const insight = {
           key: `first_${layer}`, rarity: 'uncommon', icon: '✨',
           title: `New territory: ${cap(layer)}`,
           body: `You just went ${cap(layer)} for the first time. The voice didn't want you here.`,
         }
+        postFeedEvent(userId, 'insight_unlocked', insight.title)
+        return insight
       }
     }
   }
@@ -83,11 +86,13 @@ async function checkInsights(userId) {
   // 4. Uncommon: Protective voice emerging (count = 3)
   const voice = brief?.patterns?.dominant_voice
   if (voice?.count === 3 && !seen(`voice_emerging_${voice.name}`)) {
-    return {
+    const insight = {
       key: `voice_emerging_${voice.name}`, rarity: 'uncommon', icon: '🔮',
       title: `Voice identified: The ${cap(voice.name)}`,
       body: `The ${cap(voice.name)} is your most frequent block. It shows up when you're about to do something that matters.`,
     }
+    postFeedEvent(userId, 'insight_unlocked', insight.title)
+    return insight
   }
 
   return null

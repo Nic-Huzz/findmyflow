@@ -23,6 +23,7 @@ import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
 import HealingFlowModal from './HealingFlowModal'
 import QuestSelector from './QuestSelector'
+import { fetchFeed } from '../lib/communityFeed'
 
 export default function PlayListTab({
   userId,
@@ -58,6 +59,13 @@ export default function PlayListTab({
     }
   }, [showWahooModal])
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
+
+  // Community Courage — recent feed items
+  const [communityItems, setCommunityItems] = useState([])
+
+  useEffect(() => {
+    fetchFeed(0, 3).then(({ data }) => setCommunityItems(data || []))
+  }, [])
 
   // Fetch bucket list wahoos (generated, not yet accepted)
   const fetchBucketListWahoos = useCallback(async () => {
@@ -396,6 +404,22 @@ export default function PlayListTab({
         onWahooSaved={fetchBucketListWahoos}
         onPlaySkillsUpdated={fetchPlayskills}
       />
+
+      {/* Community Courage — recent shared wahoos */}
+      {communityItems.length > 0 && (
+        <div className="plt-community">
+          <h3 className="plt-community-title">Community Courage</h3>
+          {communityItems.map(item => (
+            <div key={item.id} className="plt-community-card">
+              <span className="plt-community-name">{item.user_display_name || item.title?.split(' ')[0] || 'Someone'}</span>
+              <span className="plt-community-text">{item.title}</span>
+            </div>
+          ))}
+          <button className="plt-community-more" onClick={() => navigate('/community')}>
+            See all →
+          </button>
+        </div>
+      )}
 
       {/* Completion modal */}
       {completingChallenge && (
