@@ -223,42 +223,48 @@
   font-style: italic;
 }
 
-/* ── What's Next ── */
-.jt-next { margin-top: 16px; }
+/* ── Progress indicator inside stage card ── */
+.jt-stage-progress {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
 
-.jt-next-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #fff;
-  border-radius: 14px;
-  padding: 14px 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  border-left: 3px solid #E9A23B;
+/* ── Next step inside stage card ── */
+.jt-stage-next {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.jt-next-inline {
+  display: block;
   text-decoration: none;
   color: inherit;
 }
 
-.jt-next-icon { font-size: 1.3rem; flex-shrink: 0; }
-.jt-next-body { flex: 1; }
-
 .jt-next-label {
-  font-size: 0.7rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.8px;
-  color: #E9A23B; margin-bottom: 2px;
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: #E9A23B; margin-bottom: 4px;
+  display: block;
 }
 
 .jt-next-text {
-  font-size: 0.85rem; color: #1a1a1a; line-height: 1.3;
+  font-size: 0.85rem; color: rgba(0, 0, 0, 0.6); line-height: 1.4;
+  display: block;
 }
 
 .jt-next-sub {
   font-size: 0.75rem; color: rgba(94, 23, 235, 0.5);
   margin-top: 4px; font-weight: 600;
+  display: block;
 }
 
 .jt-next-arrow {
-  font-size: 1.2rem; color: #E9A23B; font-weight: 700; flex-shrink: 0;
+  float: right;
+  font-size: 1.1rem; color: #E9A23B; font-weight: 700;
+  margin-top: -20px;
 }
 
 /* ── Figurine Presence ── */

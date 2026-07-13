@@ -159,16 +159,76 @@ export default function JourneyTab({ userId }) {
 
   return (
     <div className="jt-container">
-      {/* Current Stage */}
+      {/* Current Stage — unified card with next step + progress */}
       <div className="jt-stage-card">
         <div className="jt-stage-number">Stage {heroStage}</div>
         <h2 className="jt-stage-name">{stageInfo.name}</h2>
         {stageInfo.feeling && (
           <p className="jt-stage-feeling">"{stageInfo.feeling}"</p>
         )}
+
+        {/* Progress indicator (stage 5-6: voice dots) */}
+        {heroStage >= 5 && heroStage < 7 && dominant && (
+          <div className="jt-stage-progress">
+            <div className="jt-voice-dots">
+              {[1, 2, 3, 4, 5].map(i => (
+                <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
+              ))}
+            </div>
+            <p className="jt-voice-hint">
+              {dominant[1] < 3 && `${dominant[1]} of 5 patterns identified`}
+              {dominant[1] === 3 && `The ${formatVoice(dominant[0])} keeps showing up.`}
+              {dominant[1] === 4 && `Four times. There's something underneath it.`}
+              {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready.`}
+            </p>
+            {solidarityCount > 0 && (
+              <p className="jt-solidarity">
+                {solidarityCount} other {solidarityCount === 1 ? 'person' : 'people'} identified the same voice this month.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Next step */}
+        <div className="jt-stage-next">
+          {heroStage === 2 && (
+            <a href="/life-paths" className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Map your life paths to see what futures are possible</span>
+              <span className="jt-next-arrow">→</span>
+            </a>
+          )}
+          {heroStage === 3 && (
+            <a href="/essence-mirror" className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Discover your essence archetype and create your hero avatar</span>
+              <span className="jt-next-arrow">→</span>
+            </a>
+          )}
+          {heroStage === 4 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Do a courage challenge that makes you feel alive</span>
+            </div>
+          )}
+          {heroStage === 5 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Get a life path to Vibe Rise at Charging or Teaching depth</span>
+            </div>
+          )}
+          {heroStage === 6 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Keep exploring what blocks you. A pattern is emerging.</span>
+              {dominant && <span className="jt-next-sub">{formatVoice(dominant[0])}: {dominant[1]} of 5</span>}
+            </div>
+          )}
+        </div>
+
         {heroStage > 1 && (
           <button className="jt-stage-history-btn" onClick={() => setShowTimeline(!showTimeline)}>
-            {showTimeline ? 'Hide journey' : 'Your Hero\'s Journey'}
+            Your Hero's Journey {showTimeline ? '▴' : '▾'}
           </button>
         )}
       </div>
@@ -194,58 +254,6 @@ export default function JourneyTab({ userId }) {
           )}
         </div>
       )}
-
-      {/* What's Next */}
-      <div className="jt-next">
-        {heroStage === 2 && (
-          <a href="/life-paths" className="jt-next-card">
-            <span className="jt-next-icon">🗺️</span>
-            <div className="jt-next-body">
-              <div className="jt-next-label">Next step</div>
-              <div className="jt-next-text">Map your life paths to see what futures are possible</div>
-            </div>
-            <span className="jt-next-arrow">→</span>
-          </a>
-        )}
-        {heroStage === 3 && (
-          <a href="/essence-mirror" className="jt-next-card">
-            <span className="jt-next-icon">🦸</span>
-            <div className="jt-next-body">
-              <div className="jt-next-label">Next step</div>
-              <div className="jt-next-text">Discover your essence archetype and create your hero avatar</div>
-            </div>
-            <span className="jt-next-arrow">→</span>
-          </a>
-        )}
-        {heroStage === 4 && (
-          <div className="jt-next-card">
-            <span className="jt-next-icon">🔥</span>
-            <div className="jt-next-body">
-              <div className="jt-next-label">Next step</div>
-              <div className="jt-next-text">Do a courage challenge that makes you feel alive</div>
-            </div>
-          </div>
-        )}
-        {heroStage === 5 && (
-          <div className="jt-next-card">
-            <span className="jt-next-icon">💰</span>
-            <div className="jt-next-body">
-              <div className="jt-next-label">Next step</div>
-              <div className="jt-next-text">Get a life path to Vibe Rise at Charging or Teaching depth</div>
-            </div>
-          </div>
-        )}
-        {heroStage === 6 && (
-          <div className="jt-next-card">
-            <span className="jt-next-icon">💚</span>
-            <div className="jt-next-body">
-              <div className="jt-next-label">Next step</div>
-              <div className="jt-next-text">Keep exploring what blocks you. A pattern is emerging.</div>
-              {dominant && <div className="jt-next-sub">{formatVoice(dominant[0])}: {dominant[1]} of 5</div>}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Orphaned Wahoos — completed courage challenges not linked to a life path */}
       {orphanedWahoos.length > 0 && (
@@ -273,29 +281,6 @@ export default function JourneyTab({ userId }) {
 
       {/* Onboarding — only if items incomplete */}
       <JourneyOnboarding userId={userId} />
-
-      {/* Voice Progress (Stage 5-6 only, leading to Stage 7) */}
-      {heroStage >= 5 && heroStage < 7 && dominant && (
-        <div className="jt-section">
-          <h3 className="jt-section-title">Pattern Recognition</h3>
-          <div className="jt-voice-dots">
-            {[1, 2, 3, 4, 5].map(i => (
-              <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
-            ))}
-          </div>
-          <p className="jt-voice-hint">
-            {dominant[1] < 3 && `${dominant[1]} of 5 patterns identified`}
-            {dominant[1] === 3 && `The ${formatVoice(dominant[0])} keeps showing up.`}
-            {dominant[1] === 4 && `Four times. There's something underneath it.`}
-            {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready.`}
-          </p>
-          {solidarityCount > 0 && (
-            <p className="jt-solidarity">
-              {solidarityCount} other {solidarityCount === 1 ? 'person' : 'people'} identified the same voice this month.
-            </p>
-          )}
-        </div>
-      )}
 
       {/* Life Paths Summary */}
       {lifePaths.length > 0 && (

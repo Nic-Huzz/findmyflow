@@ -81,28 +81,30 @@ export default function JourneyCompleted({ userId }) {
   const hasAnything = hasCuriosityMap || hasLifeMap || hasLifePaths || closedQuests.length > 0
   if (!hasAnything) return null
 
+  const items = [
+    ...(hasCuriosityMap ? [{ icon: '✨', label: 'Your Curiosities', route: '/curiosity-map' }] : []),
+    ...(hasLifeMap ? [{ icon: '📖', label: 'Life Map', route: '/life-map' }] : []),
+    ...(hasLifePaths ? [{ icon: '🗺️', label: 'Life Paths', route: '/life-paths' }] : []),
+    ...closedQuests.map(q => ({
+      icon: q.close_reason === 'achieved' ? '🎉' : q.close_reason === 'lost_interest' ? '🤔' : '⏳',
+      label: q.label,
+      status: q.close_reason === 'achieved' ? 'Achieved' : q.close_reason === 'lost_interest' ? 'Lost interest' : 'Paused',
+    })),
+  ]
+
   return (
     <div className="jc-section">
       <h3 className="jc-title">Completed</h3>
-
-      {/* Wrap DeepDiveCards in level-tab for CSS scoping */}
-      <div className="level-tab">
-        {hasCuriosityMap && (
-          <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Your Curiosities', route: '/curiosity-map', narrative: 'See and update your curiosity landscape.', icon: '✨' }} isCompleted={true} />
-        )}
-        {hasLifeMap && (
-          <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story.', icon: '📖' }} isCompleted={true} />
-        )}
-        {hasLifePaths && (
-          <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={true} />
-        )}
-      </div>
-
-      {closedQuests.map(q => (
-        <div key={q.id} className="jc-quest">
-          <span className="jc-icon">{q.close_reason === 'achieved' ? '🎉' : q.close_reason === 'lost_interest' ? '🤔' : '⏳'}</span>
-          <span className="jc-label">{q.label}</span>
-          <span className="jc-status">{q.close_reason === 'achieved' ? 'Achieved' : q.close_reason === 'lost_interest' ? 'Lost interest' : 'Paused'}</span>
+      {items.map((item, i) => (
+        <div key={i} className="jc-row">
+          <span className="jc-check">✓</span>
+          <span className="jc-label">{item.label}</span>
+          {item.route && (
+            <a href={item.route} className="jc-update">Update</a>
+          )}
+          {item.status && (
+            <span className="jc-status">{item.status}</span>
+          )}
         </div>
       ))}
     </div>
