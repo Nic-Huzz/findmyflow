@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
@@ -48,7 +48,10 @@ import JourneyTab from './components/JourneyTab'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
+import { checkHeroGraduation } from './lib/heroStageChecker'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
+import { useInsightDrops } from './hooks/useInsightDrops'
+import InsightDrop from './components/InsightDrop'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -249,7 +252,10 @@ function Challenge() {
   }, [user?.id])
 
   // Celebrations (level-up modal)
-  const { showLevelUp, levelUpKey, celebrateLevelUp, closeLevelUp } = useCelebrations()
+  const { showLevelUp, levelUpKey, celebrateLevelUp, celebrateStageGraduation, closeLevelUp } = useCelebrations()
+
+  // Insight Drops (self-knowledge cards, max 1 per session)
+  const { insight, dismissInsight } = useInsightDrops(user?.id)
 
   // League data for nudge banner + content challenges
   const {
@@ -279,43 +285,77 @@ function Challenge() {
   // Wahoo count: all completed challenges this week
   const [wahooCountThisWeek, setWahooCountThisWeek] = useState(0)
 
-  // Dynamic level detection
+  // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
   const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Quests', 'Tune']))
+
+  // Post-action trigger: bumped by completion handlers to re-check graduation immediately
+  const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
+  const recheckStage = useCallback(() => setStageCheckTrigger(n => n + 1), [])
+
   useEffect(() => {
     if (!user?.id) return
-    supabase
-      .from('user_stage_progress')
-      .select('current_journey_level')
-      .eq('user_id', user.id)
-      .maybeSingle()
-      .then(({ data }) => {
-        const level = data?.current_journey_level || 0
-        setCurrentJourneyLevel(level)
-        // Pre-unlock tabs based on DB state for Level 0
-        if (level === 0) {
-          // Unlock Courage tab if wahoos identified (discovery flow / quick-add)
-          // or legacy play-skills picked (PlaySkillPicker, pre-2026-06)
-          Promise.all([
-            supabase.from('groan_challenges')
-              .select('id').eq('user_id', user.id).not('wahoo_category', 'is', null).limit(1),
-            supabase.from('nikigai_clusters')
-              .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
-          ]).then(([wahoos, skills]) => {
-            if (wahoos.data?.length > 0 || skills.data?.length > 0) {
-              setUnlockedTabs(prev => new Set([...prev, 'Courage']))
-            }
+
+    const loadStageAndCheckGraduation = async () => {
+      // 1. Check for graduation FIRST (may update the stage in DB)
+      const graduation = await checkHeroGraduation(user.id)
+
+      // 2. Load current stage (may have just been updated by graduation check)
+      const { data } = await supabase
+        .from('user_stage_progress')
+        .select('current_journey_level')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      const level = data?.current_journey_level || 0
+      setCurrentJourneyLevel(level)
+
+      // 3. Celebrate graduation if detected
+      if (graduation) {
+        const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
+        localStorage.setItem('last_hero_stage', String(graduation.to))
+
+        // Only celebrate if user has visited before (not first load ever)
+        if (lastKnown > 0) {
+          celebrateStageGraduation(graduation.from, graduation.to, {
+            essenceName: graduation.stageData?.essence_name,
+            voiceName: graduation.dominantVoice,
           })
-          // Unlock Healing if any healing quest completed
-          supabase.from('quest_completions')
-            .select('id').eq('user_id', user.id).eq('quest_category', 'Healing').limit(1)
-            .then(({ data: d }) => {
-              if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Healing']))
-            })
         }
-      })
-  }, [user?.id])
+      } else {
+        const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
+        if (lastKnown === 0 && level > 0) {
+          localStorage.setItem('last_hero_stage', String(level))
+        }
+      }
+
+      // 4. PRESERVE ALL EXISTING TAB UNLOCK LOGIC
+      // Pre-unlock tabs based on DB state for Level 0
+      if (level === 0) {
+        // Unlock Courage tab if wahoos identified (discovery flow / quick-add)
+        // or legacy play-skills picked (PlaySkillPicker, pre-2026-06)
+        Promise.all([
+          supabase.from('groan_challenges')
+            .select('id').eq('user_id', user.id).not('wahoo_category', 'is', null).limit(1),
+          supabase.from('nikigai_clusters')
+            .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
+        ]).then(([wahoos, skills]) => {
+          if (wahoos.data?.length > 0 || skills.data?.length > 0) {
+            setUnlockedTabs(prev => new Set([...prev, 'Courage']))
+          }
+        })
+        // Unlock Healing if any healing quest completed
+        supabase.from('quest_completions')
+          .select('id').eq('user_id', user.id).eq('quest_category', 'Healing').limit(1)
+          .then(({ data: d }) => {
+            if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Healing']))
+          })
+      }
+    }
+
+    loadStageAndCheckGraduation()
+  }, [user?.id, stageCheckTrigger])
 
   // Wahoo count: all completed challenges this week
   useEffect(() => {
@@ -1087,6 +1127,9 @@ function Challenge() {
         }
       }
 
+      // Re-check hero stage graduation after any quest completion
+      recheckStage()
+
       // Check for project graduation
       if (selectedProject?.id && progress?.challenge_instance_id) {
         try {
@@ -1337,7 +1380,7 @@ function Challenge() {
   return (
     <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
-      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => { setShowDailyCheckin(false); setCapacityRefresh(n => n + 1) }} />}
+      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => { setShowDailyCheckin(false); setCapacityRefresh(n => n + 1); recheckStage() }} />}
       <NotificationPrompt />
       <ChallengeHeader
         navigate={navigate}
@@ -1687,6 +1730,7 @@ function Challenge() {
           onComplete={async (quest, textInput) => {
             const inputValue = quest.inputType === 'checkbox' ? 'completed' : textInput
             await handleQuestComplete(quest, inputValue)
+            recheckStage()
           }}
           onClose={() => setHealingModalQuest(null)}
         />
@@ -1716,6 +1760,9 @@ function Challenge() {
           onClose={() => setShowIntentionCheckin(false)}
         />
       )}
+
+      {/* Insight Drop (self-knowledge card, max 1 per session) */}
+      {insight && <InsightDrop insight={insight} onDismiss={dismissInsight} />}
       </div>
     </div>
   )

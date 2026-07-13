@@ -16,6 +16,10 @@ const HIDDEN_ROUTES = [
   // All routes now have Zarlo enabled
 ]
 
+function cap(str) {
+  return str?.charAt(0).toUpperCase() + str?.slice(1).replace(/_/g, ' ')
+}
+
 function ZarloWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [hasNotification, setHasNotification] = useState(false)
@@ -93,9 +97,59 @@ function ZarloWidget() {
     }
   }, [])
 
-  useEffect(() => {
-    checkVoicePatterns()
+  // Brief-based proactive insights (Sprint 3D — replaces Sprint 1C as primary, keeps it as fallback)
+  const checkProactiveInsights = useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const today = new Date().toISOString().slice(0, 10)
+      if (localStorage.getItem(`zarlo_proactive_${today}`)) return
+
+      const { data: briefRow } = await supabase
+        .from('zarlo_briefs')
+        .select('brief')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (!briefRow?.brief) {
+        checkVoicePatterns() // Sprint 1C fallback
+        return
+      }
+
+      const brief = briefRow.brief
+      let message = null
+
+      // 1. Voice readiness (1 away from Stage 7)
+      if (brief.thresholds?.voice_count_to_graduate === 1) {
+        const voice = brief.patterns?.dominant_voice
+        if (voice && !localStorage.getItem(`zarlo_readiness_${voice.name}`)) {
+          message = `One more pattern and something becomes clear. The ${cap(voice.name)} is almost fully visible.`
+          localStorage.setItem(`zarlo_readiness_${voice.name}`, 'true')
+        }
+      }
+
+      // 2. Streak milestone approaching
+      if (!message && brief.thresholds?.streak_milestone_approaching) {
+        const milestone = brief.thresholds.streak_milestone_approaching.replace('_', '-')
+        const key = `zarlo_streak_${milestone}`
+        if (!localStorage.getItem(key)) {
+          message = `You're close to a ${milestone} streak. That's not luck. That's you showing up.`
+          localStorage.setItem(key, 'true')
+        }
+      }
+
+      if (message) {
+        setProactiveMessage(message)
+        setHasNotification(true)
+        localStorage.setItem(`zarlo_proactive_${today}`, 'true')
+      }
+    } catch (e) { /* silent */ }
   }, [checkVoicePatterns])
+
+  useEffect(() => {
+    checkProactiveInsights()
+  }, [checkProactiveInsights])
 
   if (shouldHide) return null
 

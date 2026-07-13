@@ -205,6 +205,17 @@
   transform: scale(1.05);
 }
 
+/* Graduation variant — longer message text, reverent feel */
+.level-up-modal.graduation .level-up-name.graduation-message {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 0;
+  max-width: 280px;
+  margin: 4px auto 20px;
+}
+
 /* Haptic feedback indicator (for accessibility) */
 @media (prefers-reduced-motion: reduce) {
   .floating-points,

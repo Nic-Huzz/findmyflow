@@ -2,10 +2,12 @@
 // Hook for managing celebration animations
 
 import { useState, useCallback } from 'react'
+import confetti from 'canvas-confetti'
 import {
   triggerConfetti,
   triggerCelebration,
-  triggerFireConfetti
+  triggerFireConfetti,
+  triggerSideCannons
 } from '../components/Celebrations'
 import { sendAchievementNotification } from '../lib/notifications'
 
@@ -141,6 +143,47 @@ export function useCelebrations() {
     setFloatingPoints(prev => prev.filter(p => p.id !== id))
   }, [])
 
+  /**
+   * Celebrate a hero stage graduation (e.g. Stage 3→4)
+   */
+  const celebrateStageGraduation = useCallback((fromStage, toStage, context = {}) => {
+    const CELEBRATIONS = {
+      '0-2': { confetti: 'purple', emoji: '\u{1F331}',
+        message: 'Something just shifted. Welcome.' },
+      '2-3': { confetti: 'purple', emoji: '\u{1F5FA}\uFE0F',
+        message: 'You can see the paths now. That\'s the first step.' },
+      '3-4': { confetti: 'side_cannons', emoji: '\u{1FA9E}',
+        message: context.essenceName
+          ? `You've been called this your whole life without knowing it. ${context.essenceName}.`
+          : 'Your archetype has been revealed.' },
+      '4-5': { confetti: 'gold', emoji: '\u{1F525}',
+        message: 'There it is. You felt it. Remember this next time the voice gets loud.' },
+      '5-6': { confetti: 'purple', emoji: '\u2694\uFE0F',
+        message: 'You\'re ready for the arena. Time to train with others.' },
+      '6-7': { confetti: null, emoji: '\u{1F441}\uFE0F',
+        message: context.voiceName
+          ? `The ${context.voiceName.charAt(0).toUpperCase() + context.voiceName.slice(1).replace(/_/g, ' ')}. Five times. You're ready to face the root.`
+          : 'The pattern is clear now. You\'re ready to face the root.' },
+    }
+
+    const key = `${fromStage}-${toStage}`
+    const c = CELEBRATIONS[key]
+    if (!c) return
+
+    if (c.confetti === 'side_cannons') triggerSideCannons()
+    else if (c.confetti === 'gold') {
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#E9A23B', '#f5c55a', '#fbbf24'] })
+      setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 }, colors: ['#E9A23B', '#f5c55a'] }), 300)
+    } else if (c.confetti === 'purple') {
+      confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#5e17eb', '#8b5cf6', '#c4b5fd'] })
+    }
+    // 6→7: no confetti (reverent)
+
+    setShowLevelUp({ name: c.message, emoji: c.emoji, description: '', isGraduation: true })
+    setLevelUpKey(k => k + 1)
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200])
+  }, [])
+
   return {
     // State
     showLevelUp,
@@ -155,6 +198,7 @@ export function useCelebrations() {
     celebrateStreakMilestone,
     celebrateImprovementSuccess,
     celebrateFirstTask,
+    celebrateStageGraduation,
 
     // Cleanup
     clearToast,
