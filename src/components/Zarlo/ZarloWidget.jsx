@@ -5,8 +5,9 @@
  * Shows notification dot when Zarlo has something important
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
+import { supabase } from '../../lib/supabaseClient'
 import ZarloChat from './ZarloChat'
 import './Zarlo.css'
 
@@ -32,10 +33,71 @@ function ZarloWidget() {
     location.pathname.startsWith(route)
   )
 
+  const [proactiveMessage, setProactiveMessage] = useState(null)
+
   // Close Zarlo when navigating
   useEffect(() => {
     setIsOpen(false)
   }, [location.pathname])
+
+  // Proactive voice pattern detection (Sprint 1C — check on mount)
+  const checkVoicePatterns = useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data: voiceData } = await supabase
+        .from('healing_intentions')
+        .select('protective_voice')
+        .eq('user_id', user.id)
+        .not('protective_voice', 'is', null)
+
+      if (!voiceData?.length) return
+
+      const counts = {}
+      voiceData.forEach(row => {
+        if (row.protective_voice) {
+          counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
+        }
+      })
+
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+      if (!sorted.length) return
+
+      const [voiceName, count] = sorted[0]
+
+      // Check if we've already notified for this threshold (stored in localStorage)
+      const notifiedKey = `zarlo_voice_notified_${voiceName}_${count >= 5 ? '5' : count >= 3 ? '3' : '0'}`
+      if (localStorage.getItem(notifiedKey)) return
+
+      // Tier 2: Pattern emerging (count 3-4)
+      if (count >= 3 && count < 5) {
+        const voiceLabel = voiceName.charAt(0).toUpperCase() + voiceName.slice(1).replace(/_/g, ' ')
+        setProactiveMessage(
+          count === 3
+            ? `The ${voiceLabel} keeps showing up. That's three times now.`
+            : `Four times the ${voiceLabel} has blocked you. There's something underneath it.`
+        )
+        setHasNotification(true)
+        localStorage.setItem(notifiedKey, 'true')
+      }
+      // Tier 3: Graduation threshold (count 5+)
+      else if (count >= 5) {
+        const voiceLabel = voiceName.charAt(0).toUpperCase() + voiceName.slice(1).replace(/_/g, ' ')
+        setProactiveMessage(
+          `The ${voiceLabel}. Five times. It's been in every healing flow. You're ready to see the root.`
+        )
+        setHasNotification(true)
+        localStorage.setItem(notifiedKey, 'true')
+      }
+    } catch (e) {
+      // Silent fail — proactive features should never break the app
+    }
+  }, [])
+
+  useEffect(() => {
+    checkVoicePatterns()
+  }, [])
 
   if (shouldHide) return null
 
@@ -62,6 +124,22 @@ function ZarloWidget() {
             onClose={handleClose}
             challengeTab={getChallengeTab()}
           />
+        </div>
+      )}
+
+      {/* Proactive message bubble */}
+      {proactiveMessage && !isOpen && (
+        <div className="zarlo-proactive-bubble" onClick={() => {
+          setProactiveMessage(null)
+          setHasNotification(false)
+          handleToggle()
+        }}>
+          <p className="zarlo-proactive-text">{proactiveMessage}</p>
+          <button className="zarlo-proactive-dismiss" onClick={(e) => {
+            e.stopPropagation()
+            setProactiveMessage(null)
+            setHasNotification(false)
+          }}>&times;</button>
         </div>
       )}
 

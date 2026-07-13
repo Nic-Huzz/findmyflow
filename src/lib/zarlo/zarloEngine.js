@@ -406,6 +406,7 @@ export async function getUserContext(userId) {
       { data: compassData },
       { data: stageData },
       { data: ecData },
+      { data: healingVoiceData },
       wheelData
     ] = await Promise.all([
       supabase.from('nervous_system_responses').select('id').eq('user_id', userId).limit(1),
@@ -414,8 +415,19 @@ export async function getUserContext(userId) {
       supabase.from('flow_entries').select('direction, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
       supabase.from('user_stage_progress').select('*').eq('user_id', userId).single(),
       supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+      supabase.from('healing_intentions').select('protective_voice').eq('user_id', userId).not('protective_voice', 'is', null),
       loadWheelData(userId)
     ])
+
+    // Protective voice pattern detection (feeds Stage 6→7 graduation)
+    const voiceCounts = {}
+    healingVoiceData?.forEach(row => {
+      if (row.protective_voice) {
+        voiceCounts[row.protective_voice] = (voiceCounts[row.protective_voice] || 0) + 1
+      }
+    })
+    const voiceEntries = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
+    const dominantVoice = voiceEntries[0] || null // [name, count] or null
 
     // Check for South pattern (3+ South in last 5 entries)
     const recentDirections = compassData?.map(c => c.direction) || []
@@ -444,6 +456,10 @@ export async function getUserContext(userId) {
       experienceCreatorArchetype: ecData?.dominant_archetype || null,
       experienceCreatorSuite: ecData?.product_suite || null,
       experienceCreatorPicks: ecData?.selected_creators || null,
+      // Protective voice pattern detection
+      protectiveVoiceCounts: voiceCounts,
+      dominantVoice: dominantVoice ? { name: dominantVoice[0], count: dominantVoice[1] } : null,
+      essenceName: stageData?.essence_name || null,
     }
   } catch (err) {
     console.error('Error getting user context:', err)
