@@ -506,5 +506,51 @@ Day 5: Milestones (2D)
 
 ---
 
+---
+
+## Testing Checklist (Post-Deploy)
+
+### Journey Tab (visual QA)
+- [ ] Navigate to `/7-day-challenge?tab=journey` — does the tab render?
+- [ ] Stage card shows correct hero stage number + name
+- [ ] Feeling target text displays in italic purple
+- [ ] If user is Stage 5-6: voice dots appear with correct fill count
+- [ ] Voice hint text matches count (1-2: "X of 5 patterns", 3: "keeps showing up", 4: "underneath it", 5: "ready to see the root")
+- [ ] If user has no healing_intentions data: voice section hidden (no error)
+- [ ] Tab switching (Journey → Tune → Journey) works without re-fetching or errors
+- [ ] Mobile responsive: card doesn't overflow on small screens
+
+### Zarlo Brief (functional QA — after migration + deploy + cron)
+- [ ] Invoke Edge Function manually: `curl -X POST https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/generate-zarlo-brief -H "Authorization: Bearer [SERVICE_ROLE_KEY]"` — returns 200
+- [ ] Check `zarlo_briefs` table has a row for your user with populated JSON
+- [ ] Brief JSON structure matches spec: `current_state`, `patterns`, `convergence`, `thresholds`, `contradictions`
+- [ ] Open Zarlo chat — does it reference any Brief data? (e.g. voice counts, patterns)
+- [ ] New user with <3 days data: Brief generates with null patterns (not error)
+
+### Zarlo Proactive Bubble (Sprint 1C — verify still working)
+- [ ] User with protective_voice count >= 3: notification dot appears on Zarlo FAB
+- [ ] Tapping bubble opens Zarlo chat
+- [ ] Dismissing bubble clears notification dot
+- [ ] Bubble doesn't reappear for same threshold (localStorage check)
+
+### Post-Wahoo Responses (Sprint 1A — verify still working)
+- [ ] Complete a wahoo, select Vibe Rise: gold confetti + essence callout + identity prompt
+- [ ] Complete a wahoo, select Fun: purple confetti + "That landed. Good." + identity prompt
+- [ ] Complete a wahoo, select Pressure: no confetti + "The voice told you to stop" + voice capture input
+- [ ] Complete a wahoo, select Uninterested: no confetti + "This one didn't land" + no input
+- [ ] Check `quest_completions` table: Vibe Rise/Pressure = 10 RP, Fun = 7 RP, Uninterested = 9 RP
+
+### Daily Check-in RP (Sprint 1B — verify still working)
+- [ ] Complete daily check-in (any state): check `quest_completions` for `daily_checkin_YYYY-MM-DD` row with 2 points
+- [ ] Complete check-in again same day: no duplicate row (catch block handles gracefully)
+
+### Dead Code Removal (regression)
+- [ ] `/7-day-challenge` page loads normally (all tabs work)
+- [ ] Wahoo completion via QuestBoardCard still works (GroanCompletionModal path)
+- [ ] Wahoo completion via PlayListTab still works
+- [ ] `/groan-matrix` route still loads (GroanMatrix component not removed, only Challenge.jsx import)
+
+---
+
 *Depends on: Sprint 1 (committed). No other blockers.*
 *Next: Sprint 3 (graduation celebrations, insight drop cards, stuck mechanics) — write plan after Sprint 2 learnings.*
