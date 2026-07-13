@@ -163,6 +163,62 @@ User's journey data:
 
 ---
 
+## Additional Design Considerations
+
+### Priority: Figurine vs Zarlo
+
+When both want to speak at the same time (e.g., Zarlo proactive bubble + Figurine graduation):
+- **Figurine always wins.** It speaks rarely, so when it does, it takes priority.
+- Zarlo's proactive message gets deferred to next session.
+- They should never appear simultaneously on screen.
+
+### AI Backend
+
+The Figurine chat uses Claude API calls (same as Zarlo). Two options:
+- **Option A:** Reuse existing `agent-chat` Edge Function with a `character: 'figurine'` parameter that switches the system prompt. Simplest.
+- **Option B:** Separate `figurine-chat` Edge Function. More isolation but more code.
+
+**Recommendation:** Option A — one function, character parameter. The only difference is the system prompt (archetype-voiced vs Zarlo's companion voice).
+
+### Conversation Memory
+
+For the Figurine to reference past conversations ("Last time we talked, you were struggling with..."):
+- Store conversation summaries in `essence_avatar_memory` with `memory_type: 'conversation'`
+- NOT full chat transcripts (too large for prompt context). Instead: after each conversation, the AI generates a 1-2 sentence summary that gets stored.
+- On next conversation, recent summaries are injected into the system prompt.
+- The `essence_avatar_memory` table from the Figurine branch already supports this (has `content`, `source`, `confidence` fields).
+
+### Rate Limiting
+
+Uncapped Figurine chat = uncapped API costs. Limits:
+- **V1:** 3 conversations per day, max 10 messages per conversation
+- **V2:** Adjust based on usage data
+- Display remaining conversations: "2 conversations left today"
+- Coaching overlays (one-way) don't count toward the limit
+
+### NS-State-Aware Tone
+
+The Figurine's voice should adapt to the user's current nervous system state:
+
+| NS State | Figurine Tone | Example |
+|---|---|---|
+| Vibe Rise | Energising, celebratory | "This is the version of you I've been waiting for." |
+| Safe/Ventral | Warm, encouraging | "You're in a good place. Let's build from here." |
+| Sympathetic/Activated | Grounding, steady, shorter messages | "I can feel the activation. Breathe. We don't need to solve anything right now." |
+| Dorsal/Shutdown | Gentle, no demands | "I'm here. That's enough for today." |
+
+The system prompt should include the user's current NS state (from latest daily check-in or Zarlo Brief) and instruct the AI to match tone accordingly.
+
+### Relationship to Healing Flow
+
+The Figurine can extend the healing experience but does NOT replace the HealingFlowModal:
+- After a healing flow completion: Figurine offers "Want to go deeper?" CTA on Journey tab
+- The deeper conversation references the healing flow data (pattern, fear, origin, rewire) from `healing_intentions`
+- This is a CHAT conversation, not a form — the user explores with the Figurine's guidance
+- Saves insights to `essence_avatar_memory` for future reference
+
+---
+
 ## Data Requirements
 
 ### Already exists (no changes):
