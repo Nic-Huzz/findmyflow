@@ -136,14 +136,19 @@ export default function PlayListTab({
     }
   }
 
+  // Stable key from challenge IDs — re-fetches when actual challenges change, not just count
+  const challengeKey = useMemo(() =>
+    activeChallenges.map(c => c.reference_id).filter(Boolean).join(','),
+    [activeChallenges]
+  )
+
   // Fetch healing intentions linked to active challenges
   useEffect(() => {
-    if (!userId || activeChallenges.length === 0) {
+    if (!userId || !challengeKey) {
       setHealingByChallenge({})
       return
     }
-    const challengeIds = activeChallenges.map(c => c.reference_id).filter(Boolean)
-    if (!challengeIds.length) return
+    const challengeIds = challengeKey.split(',')
 
     supabase
       .from('quest_tasks')
@@ -162,7 +167,7 @@ export default function PlayListTab({
         })
         setHealingByChallenge(map)
       })
-  }, [userId, activeChallenges.length])
+  }, [userId, challengeKey])
 
   // Extract category ids from playskills
   const categoryIds = useMemo(() => {
@@ -336,6 +341,8 @@ export default function PlayListTab({
                   setBlockingTaskId(task.id)
                   setShowBlockingHealingModal(true)
                   setShowBlockingQuestPicker(false)
+                } else {
+                  setBlockingQuestId(null)
                 }
               }}
             />

@@ -99,6 +99,9 @@ export default function JourneyTab({ userId }) {
       }
 
       setLoading(false)
+    }).catch(err => {
+      console.error('JourneyTab data load error:', err)
+      setLoading(false)
     })
   }, [userId])
 
