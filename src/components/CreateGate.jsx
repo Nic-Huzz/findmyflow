@@ -87,7 +87,7 @@ export default function CreateGate({ children }) {
         <div className="cg-badge">Become a Movement Maker</div>
 
         <h1 className="cg-headline">
-          Pick the creators who built the life you want. <span className="cg-gradient">See exactly how they did it.</span>
+          Pick the experience creators who built the life you want. <span className="cg-gradient">See exactly how they did it.</span>
         </h1>
 
         <p className="cg-sub">
