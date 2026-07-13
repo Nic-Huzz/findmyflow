@@ -18,6 +18,8 @@ import { supabase } from '../../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../../lib/dateUtils'
 import HealingFlowModal from '../HealingFlowModal'
+import BackdatePanel from './BackdatePanel'
+import QuestTaskSheet from './QuestTaskSheet'
 import {
   TRUNK_X, CAREER_X, stateY, STATE_META, STATES,
   branchPath, computeCone, isInCone,
@@ -76,6 +78,8 @@ export default function QuestPathMap({
   const [healingIntentions, setHealingIntentions] = useState({})
   const [crossPollination, setCrossPollination] = useState([])
   const [heroAvatarUrl, setHeroAvatarUrl] = useState(null)
+  const [sheetTask, setSheetTask] = useState(null)
+  const [sheetData, setSheetData] = useState(null)
   const lightMode = true
 
   const activeQuests = useMemo(() =>
@@ -139,6 +143,23 @@ export default function QuestPathMap({
     return () => document.body.classList.remove('modal-active')
   }, [])
 
+  // Tap handler for ⚡/💚 icons
+  const handleDotTap = useCallback(async (task) => {
+    setSheetTask(task)
+    setSheetData(null)
+    if (task.groan_challenge_id) {
+      try {
+        const { data } = await supabase.from('quest_completions')
+          .select('reflection_text')
+          .eq('quest_id', `play_list_challenge_${task.groan_challenge_id}`)
+          .maybeSingle()
+        if (data?.reflection_text) {
+          setSheetData(JSON.parse(data.reflection_text))
+        }
+      } catch (e) { /* non-blocking */ }
+    }
+  }, [])
+
   const trunkS = trunkState || 'anxious'
   const trunkYPos = scaledY(trunkS)
 
@@ -187,10 +208,12 @@ export default function QuestPathMap({
             uid={uid}
             quests={activeQuests}
             questTasks={questTasks}
+            healingIntentions={healingIntentions}
             trunkState={trunkS}
             light={lightMode}
             crossPollination={crossPollination}
             heroAvatarUrl={heroAvatarUrl}
+            onDotTap={handleDotTap}
           />
         </div>
 
@@ -232,6 +255,24 @@ export default function QuestPathMap({
       </div>
 
       <div className="qpm-swipe-hint">← swipe →</div>
+
+      {/* Bottom sheet for task details */}
+      {sheetTask && (
+        <QuestTaskSheet
+          task={sheetTask}
+          quest={activeQuests.find(q => (questTasks[q.id] || []).some(t => t.id === sheetTask.id))}
+          completionData={sheetData}
+          healingIntention={healingIntentions[sheetTask.id]}
+          crossPollination={crossPollination
+            .filter(cp => sheetTask.groan_challenge_id && cp.groan_challenge_id === sheetTask.groan_challenge_id)
+            .map(cp => {
+              const targetQuest = activeQuests.find(q => q.id === cp.target_quest_id)
+              const sourceQuest = activeQuests.find(q => q.id === cp.source_quest_id)
+              return { questLabel: targetQuest?.label || sourceQuest?.label || 'Another path' }
+            })}
+          onClose={() => { setSheetTask(null); setSheetData(null) }}
+        />
+      )}
     </div>
   )
 }
@@ -239,11 +280,11 @@ export default function QuestPathMap({
 
 // ─── Overview SVG (vertical: Y=time, X=state) ────────────────────────────────
 
-function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollination, heroAvatarUrl }) {
+function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, light, crossPollination, heroAvatarUrl, onDotTap }) {
   // Compute global date range across all tasks
   const dateRange = useMemo(() => {
     const allDates = quests.flatMap(q =>
-      (questTasks[q.id] || []).filter(t => t.created_at).map(t => new Date(t.created_at).getTime())
+      (questTasks[q.id] || []).filter(t => t.backdated_date || t.created_at).map(t => new Date(t.backdated_date || t.created_at).getTime())
     )
     if (!allDates.length) return { minDate: Date.now() - 86400000, maxDate: Date.now() }
     return { minDate: Math.min(...allDates), maxDate: Math.max(...allDates) }
@@ -350,11 +391,13 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
             uid={uid}
             quest={quest}
             tasks={questTasks[quest.id] || []}
+            healingIntentions={healingIntentions}
             laneX={laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')}
             dateRange={dateRange}
             stopAtY={mergeInfo.stopAtY[quest.id]}
             thickenAtY={mergeInfo.thickenAtY[quest.id]}
             heroAvatarUrl={heroAvatarUrl}
+            onDotTap={onDotTap}
           />
         ))}
 
@@ -388,7 +431,7 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
 
 // ─── Vertical quest line (single path in overview) ────────────────────────────
 
-function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange, stopAtY, thickenAtY, heroAvatarUrl }) {
+function VerticalQuestLine({ uid, quest, tasks, healingIntentions = {}, laneX, dateRange, stopAtY, thickenAtY, heroAvatarUrl, onDotTap }) {
   const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
   const n = tasks.length
 
@@ -403,21 +446,21 @@ function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange, stopAtY, thick
     )
   }
 
-  // Map tasks to Y positions based on created_at dates
+  // Map tasks to Y positions based on backdated_date or created_at
   const { minDate, maxDate } = dateRange
   const timeSpan = maxDate - minDate || 1
 
-  const taskPoints = useMemo(() =>
-    tasks
-      .filter(t => t.created_at)
-      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+  const taskPoints = useMemo(() => {
+    const getDate = (task) => task.backdated_date || task.created_at
+    return tasks
+      .filter(t => getDate(t))
+      .sort((a, b) => new Date(getDate(a)) - new Date(getDate(b)))
       .map(task => {
-        const t = (new Date(task.created_at) - minDate) / timeSpan
+        const t = (new Date(getDate(task)) - minDate) / timeSpan
         const y = OV_BOTTOM - t * (OV_BOTTOM - OV_TOP)
         return { x: laneX, y, task }
-      }),
-    [tasks, laneX, minDate, maxDate, timeSpan]
-  )
+      })
+  }, [tasks, laneX, minDate, maxDate, timeSpan])
 
   // Find the most recent completed task for the character marker
   const lastDone = [...taskPoints].reverse().find(p => p.task.done)
@@ -453,16 +496,45 @@ function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange, stopAtY, thick
         </>
       )}
 
-      {/* Task dots (only show below stopAtY if quest merged away) */}
+      {/* Task dots: ⚡ completed courage, 💚 healing, ● regular — tappable */}
       {taskPoints
         .filter(({ y }) => stopAtY == null || y >= stopAtY)
-        .map(({ x, y, task }) => (
-        <circle key={task.id} cx={x} cy={y} r={task.done ? 3 : 2}
-          fill={task.done ? destColour : 'none'}
-          stroke={task.done ? 'none' : `${destColour}40`}
-          strokeWidth={task.done ? 0 : 1}
-          opacity={task.done ? 0.7 : 1} />
-      ))}
+        .map(({ x, y, task }) => {
+          const hi = healingIntentions[task.id]
+          const hasActiveHealing = hi && !hi.outcome && hi.healing_stage
+          const isTappable = (task.done && task.is_courage_challenge) || hasActiveHealing
+
+          // 💚 Healing identified
+          if (hasActiveHealing && !task.done) {
+            return (
+              <g key={task.id} onClick={() => onDotTap?.(task)} cursor="pointer">
+                <circle cx={x} cy={y} r="18" fill="transparent" />
+                <text x={x} y={y + 4} fill="#10b981" fontSize="10"
+                  textAnchor="middle" opacity="0.8">💚</text>
+              </g>
+            )
+          }
+
+          // ⚡ Completed courage challenge
+          if (task.done && task.is_courage_challenge) {
+            return (
+              <g key={task.id} onClick={() => onDotTap?.(task)} cursor="pointer">
+                <circle cx={x} cy={y} r="18" fill="transparent" />
+                <text x={x} y={y + 4} fill={destColour} fontSize="10"
+                  textAnchor="middle" opacity="0.7">⚡</text>
+              </g>
+            )
+          }
+
+          // Regular dot
+          return (
+            <circle key={task.id} cx={x} cy={y} r={task.done ? 3 : 2}
+              fill={task.done ? destColour : 'none'}
+              stroke={task.done ? 'none' : `${destColour}40`}
+              strokeWidth={task.done ? 0 : 1}
+              opacity={task.done ? 0.6 : 0.8} />
+          )
+        })}
 
       {/* Character marker — don't show if quest merged away */}
       {lastDone && stopAtY == null && (
@@ -923,6 +995,14 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
         </div>
       )}
     </div>
+
+    {/* Backdate panel — last item */}
+    <BackdatePanel
+      quest={quest}
+      existingTasks={tasks}
+      userId={userId}
+      onSaved={onUpdate}
+    />
 
     {healingTaskId && (
       <HealingFlowModal

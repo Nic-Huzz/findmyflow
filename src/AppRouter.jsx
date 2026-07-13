@@ -174,6 +174,7 @@ const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
 const CuriosityMapFlow = lazyRetry(() => import('./flows/CuriosityMapFlow'))
 const CareerAlignmentFlow = lazyRetry(() => import('./flows/CareerAlignmentFlow'))
+const QuestMapPage = lazyRetry(() => import('./pages/QuestMapPage'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 // const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap')) // archived
 
@@ -727,6 +728,7 @@ function AppRouter() {
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
+            <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 

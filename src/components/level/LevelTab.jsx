@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../auth/AuthProvider'
 import confetti from 'canvas-confetti'
@@ -25,12 +26,13 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
-import QuestPathMap from './QuestPathMap'
+// QuestPathMap now at /quest-map route (QuestMapPage.jsx)
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   const { user } = useAuth()
+  const navigate = useNavigate()
   // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
   const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
@@ -54,7 +56,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [lifePathCareers, setLifePathCareers] = useState([]) // careers from life_path_sessions
   const [lifePathCurrentState, setLifePathCurrentState] = useState(null)
   const [lifePathSafety, setLifePathSafety] = useState(0)
-  const [showPathMap, setShowPathMap] = useState(false)
+  // showPathMap removed — now navigates to /quest-map
 
   // Quest board state
   const [quests, setQuests] = useState([])
@@ -527,7 +529,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       {/* Life Path Progress button */}
       {hasLifePaths && quests.filter(q => q.status === 'active').length > 0 && (
-        <button className="quest-path-btn" onClick={() => setShowPathMap(true)}>
+        <button className="quest-path-btn" onClick={() => navigate('/quest-map')}>
           <span className="quest-path-btn-icon">✦</span>
           <span>Your Life Paths</span>
           <span className="quest-path-btn-arrow">→</span>
@@ -1032,19 +1034,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       )}
       </div>{/* end hidden wrapper */}
 
-      {/* Life Path Progress Map */}
-      {showPathMap && (
-        <QuestPathMap
-          quests={quests}
-          questTasks={questTasks}
-          trunkState={lifePathCurrentState}
-          safety={lifePathSafety}
-          careers={lifePathCareers}
-          userId={userId}
-          onUpdate={loadQuests}
-          onClose={() => setShowPathMap(false)}
-        />
-      )}
     </div>
   )
 }
