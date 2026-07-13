@@ -395,9 +395,10 @@
 }
 
 .jt-orphan-cta {
-  display: block; text-align: center;
+  display: block; width: 100%; text-align: center;
   padding: 10px; border-radius: 10px;
   background: rgba(233,162,59,0.08); color: #E9A23B;
   font-size: 0.85rem; font-weight: 600;
   text-decoration: none; margin-top: 12px;
+  border: none; cursor: pointer; font-family: inherit;
 }

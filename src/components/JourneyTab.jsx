@@ -6,6 +6,7 @@ import JourneyTimeline from './journey/JourneyTimeline'
 import JourneyOnboarding from './journey/JourneyOnboarding'
 import JourneyZones from './journey/JourneyZones'
 import JourneyCompleted from './journey/JourneyCompleted'
+import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import { useFigurine } from '../hooks/useFigurine'
 import './JourneyTab.css'
 
@@ -75,6 +76,7 @@ export default function JourneyTab({ userId }) {
   const [solidarityCount, setSolidarityCount] = useState(0)
   const [orphanedWahoos, setOrphanedWahoos] = useState([])
   const [showTimeline, setShowTimeline] = useState(false)
+  const [showOrphanLinker, setShowOrphanLinker] = useState(false)
   const figurine = useFigurine()
 
   useEffect(() => {
@@ -288,28 +290,39 @@ export default function JourneyTab({ userId }) {
         </div>
       )}
 
-      {/* Orphaned Wahoos — completed courage challenges not linked to a life path */}
-      {orphanedWahoos.length > 0 && (
+      {/* Orphaned Wahoos — prompt to link */}
+      {orphanedWahoos.length > 0 && !showOrphanLinker && (
         <div className="jt-section jt-orphan-section">
           <h3 className="jt-section-title">Connect your wins to a life path</h3>
           <p className="jt-orphan-intro">
             You've done {orphanedWahoos.length} courage challenge{orphanedWahoos.length > 1 ? 's' : ''} not connected to a life path yet.
           </p>
-          {orphanedWahoos.slice(0, 5).map(w => (
-            <div key={w.id} className="jt-orphan-item">
-              <span className="jt-orphan-icon">⚡</span>
-              <span className="jt-orphan-text">{w.title || w.challenge_text}</span>
-            </div>
-          ))}
-          {orphanedWahoos.length > 5 && (
-            <div className="jt-orphan-more">+ {orphanedWahoos.length - 5} more</div>
-          )}
           {lifePaths.length === 0 ? (
             <a href="/life-paths" className="jt-orphan-cta">Map Your Life Paths first →</a>
           ) : (
-            <a href="/7-day-challenge?tab=quests" className="jt-orphan-cta">Go to Quests tab to link these →</a>
+            <button className="jt-orphan-cta" onClick={() => setShowOrphanLinker(true)}>
+              Link them now →
+            </button>
           )}
         </div>
+      )}
+
+      {/* Orphan Linker Popup */}
+      {showOrphanLinker && (
+        <OrphanWahooLinker
+          wahoos={orphanedWahoos}
+          userId={userId}
+          onLinked={() => {
+            setShowOrphanLinker(false)
+            setOrphanedWahoos([])
+            supabase.from('quests')
+              .select('id, label, status, predicted_state, depth_level')
+              .eq('user_id', userId).eq('status', 'active').neq('label', 'Healing Work')
+              .order('created_at')
+              .then(({ data }) => { if (data) setLifePaths(data) })
+          }}
+          onClose={() => setShowOrphanLinker(false)}
+        />
       )}
 
       {/* Onboarding — only if items incomplete */}
