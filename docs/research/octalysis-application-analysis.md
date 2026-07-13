@@ -70,32 +70,45 @@ After tab restructure (Journey/Quests/Tune/Courage), L0-L4 depth scale on wahoo 
 
 All other drives unchanged.
 
-**Current Score: 64 + 64 + 49 + 64 + 49 + 25 + 64 + 25 = 404** (Strong)
+**Post-Tab/Depth Score: 64 + 64 + 49 + 64 + 49 + 25 + 64 + 25 = 404** (Strong)
 
-**Full journey: 217 → 337 → 361 → 404 (+187 points, +86%)**
+---
+
+## Post-Figurine Mentor Score (July 2026)
+
+After Figurine Mentor (4-phase build: hook, overlay, chat, FAB, integration, transitions, cryptic hooks):
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD5** Social | 7 | **8** | +1 | Figurine is a rich NPC mentor relationship (Hades model). Archetype-voiced, remembers conversations, adapts to NS state, deepens over intelligence phases. Combined with community feed = target hit. |
+| **CD7** Curiosity | 8 | **9** | +1 | Monthly cryptic hooks create open loops. Mirror→Mentor transition is a surprise unlock. Intelligence phases create "what happens when the Figurine gets smarter?" curiosity. Target hit. |
+
+All other drives unchanged.
+
+**Current Score: 64 + 64 + 49 + 64 + 64 + 25 + 81 + 25 = 436** (Strong)
+
+**Full journey: 217 → 337 → 361 → 404 → 436 (+219 points, +101%)**
 
 ```
-                    Start (217)      Now (404)        Target (479)
+                    Start (217)      Now (436)        Target (479)
 CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD2 Accomplishment  ██████░░░░ (6)   ████████░░ (8)   █████████░ (9)
 CD3 Creativity      █████░░░░░ (5)   ███████░░░ (7)   ████████░░ (8)
 CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
-CD5 Social          ████░░░░░░ (4)   ███████░░░ (7)   ████████░░ (8)
+CD5 Social          ████░░░░░░ (4)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD6 Scarcity        ████░░░░░░ (4)   █████░░░░░ (5)   ██████░░░░ (6)
-CD7 Curiosity       █████░░░░░ (5)   ████████░░ (8)   █████████░ (9)
+CD7 Curiosity       █████░░░░░ (5)   █████████░ (9)   █████████░ (9) ✅ Hit
 CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
 ```
 
-**3 drives at target** (CD1, CD4, CD8). 5 remaining.
+**5 drives at target** (CD1, CD4, CD5, CD7, CD8). 3 remaining.
 
-**Remaining gap to target: 75 points.** Requires V2 backlog:
+**Remaining gap to target: 43 points.** Requires V2 backlog:
 - CD2 8→9: Self-Knowledge Skills (+17 pts)
 - CD3 7→8: Named user creations in codex + more creative wahoo options (+15 pts)
-- CD5 7→8: Session Bridge + deeper community features (+15 pts)
 - CD6 5→6: Monthly Community Day + session appointment dynamics (+11 pts)
-- CD7 8→9: Mystery mechanics + Self-Knowledge Skills + Figurine cryptic hooks (+17 pts)
 
-*Scores updated July 2026 after Tab Restructure + L0-L4 Depth + Social V1 Gaps*
+*Scores updated July 2026 after Figurine Mentor build*
 
 ---
 
