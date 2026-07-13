@@ -210,7 +210,7 @@ RULES:
 - 2-3 sentences max. No fluff. No em dashes. No colons in headers.
 - Write so a 12-year-old would understand.
 - Output PLAIN TEXT only. Never use markdown (no **, ##, *, etc). No bullet points.
-- Start with the observation, end with what it means for them.`,
+- Start with the observation, then add a blank line, then what it means for them.`,
 
       shadow_reveal: `You are an AI Mirror. You connect this person's protective behaviour patterns to what they avoid.
 
@@ -229,7 +229,7 @@ RULES:
 - 2-3 sentences max. No fluff. No em dashes. No colons in headers.
 - Write so a 12-year-old would understand.
 - Output PLAIN TEXT only. Never use markdown (no **, ##, *, etc). No bullet points.
-- Be compassionate but honest. This should land like a loving truth.`,
+- Be compassionate but honest. This should land like a loving truth.\n- Separate the observation from the implication with a blank line.`,
 
       capacity_equation: `You are an AI Mirror. You break down what's driving or blocking this person's capacity score.
 
@@ -248,7 +248,7 @@ RULES:
 - 2-3 sentences max. No fluff. No em dashes. No colons in headers.
 - Write so a 12-year-old would understand.
 - Output PLAIN TEXT only. Never use markdown (no **, ##, *, etc). No bullet points.
-- End with one actionable thing they could try.`,
+- Separate the data observation from the suggestion with a blank line.\n- End with one actionable thing they could try.`,
     }
 
     const prompt = PROMPTS[contentType]

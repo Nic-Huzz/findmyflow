@@ -183,6 +183,7 @@
   color: #1a1a2e;
   margin: 0;
   font-weight: 500;
+  white-space: pre-line;
 }
 
 .mb-close-btn {
@@ -262,4 +263,5 @@
   line-height: 1.6;
   color: #1a1a2e;
   margin: 0;
+  white-space: pre-line;
 }
