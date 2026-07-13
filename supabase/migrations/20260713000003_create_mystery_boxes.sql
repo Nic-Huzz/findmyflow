@@ -18,10 +18,9 @@ CREATE TABLE IF NOT EXISTS mystery_boxes (
 CREATE INDEX idx_mystery_boxes_user ON mystery_boxes(user_id);
 CREATE INDEX idx_mystery_boxes_unopened ON mystery_boxes(user_id) WHERE opened_at IS NULL;
 
--- Prevent duplicate triggers for one-time events
+-- Prevent duplicate triggers (covers all trigger types)
 CREATE UNIQUE INDEX idx_mystery_boxes_unique_trigger
-  ON mystery_boxes(user_id, trigger_type)
-  WHERE trigger_type IN ('first_wahoo', 'all_categories', '30_day_streak');
+  ON mystery_boxes(user_id, trigger_type);
 
 -- RLS
 ALTER TABLE mystery_boxes ENABLE ROW LEVEL SECURITY;

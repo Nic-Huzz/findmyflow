@@ -14,7 +14,9 @@ export async function earnMysteryBox(userId, triggerType, boxTier, metadata = {}
       metadata,
     })
     .then(() => {})
-    .catch(() => {}) // Silent — dedup constraint or any error
+    .catch((err) => {
+      if (err?.code !== '23505') console.warn('Mystery box insert failed:', err)
+    })
 }
 
 /**
@@ -87,25 +89,25 @@ export async function checkStreakBox(userId, streakDays) {
 export async function checkNewCategoryBox(userId, visibilityLayer) {
   if (!visibilityLayer) return
 
-  // Count distinct categories the user has completed
+  // Count distinct categories BEFORE the current completion (exclude most recent)
   const { data } = await supabase
     .from('quest_completions')
     .select('reflection_text')
     .eq('user_id', userId)
     .eq('quest_category', 'Groans')
+    .order('created_at', { ascending: false })
+    .range(1, 100) // Skip the row just inserted (index 0)
 
-  const categories = new Set()
+  const priorCategories = new Set()
   data?.forEach(row => {
     try {
       const ref = JSON.parse(row.reflection_text || '{}')
-      if (ref.visibility_layer) categories.add(ref.visibility_layer)
+      if (ref.visibility_layer) priorCategories.add(ref.visibility_layer)
     } catch {}
   })
 
-  // If this layer is new (the set includes it for the first time via the just-inserted row)
-  // and they have more than 1 category, award the box
-  if (categories.size >= 2 && categories.has(visibilityLayer)) {
-    // Use the layer name as part of trigger to allow one box per new category
+  // Award box only if this layer genuinely didn't exist before
+  if (!priorCategories.has(visibilityLayer) && priorCategories.size >= 1) {
     await earnMysteryBox(userId, `new_category_${visibilityLayer}`, 'silver', { category: visibilityLayer })
   }
 }

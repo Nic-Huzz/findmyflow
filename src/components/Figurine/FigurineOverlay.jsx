@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './FigurineOverlay.css'
 
 /**
@@ -15,19 +15,25 @@ import './FigurineOverlay.css'
  */
 export default function FigurineOverlay({ avatarUrl, message, emoji, onDismiss, autoDismiss = 10000 }) {
   const [visible, setVisible] = useState(false)
+  const delayedRef = useRef(null)
 
   useEffect(() => {
-    setTimeout(() => setVisible(true), 100)
+    const show = setTimeout(() => setVisible(true), 100)
     const timer = setTimeout(() => {
       setVisible(false)
-      setTimeout(onDismiss, 300)
+      delayedRef.current = setTimeout(onDismiss, 300)
     }, autoDismiss)
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(show)
+      clearTimeout(timer)
+      clearTimeout(delayedRef.current)
+    }
   }, [autoDismiss, onDismiss])
 
   const handleDismiss = () => {
     setVisible(false)
-    setTimeout(onDismiss, 300)
+    clearTimeout(delayedRef.current)
+    delayedRef.current = setTimeout(onDismiss, 300)
   }
 
   return (

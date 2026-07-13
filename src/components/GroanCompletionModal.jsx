@@ -9,7 +9,7 @@ import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
 import { postFeedEvent } from '../lib/communityFeed'
-import { checkFirstWahooBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
+import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -192,7 +192,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           .eq('quest_category', 'Groans')
         if (count === 1) {
           postFeedEvent(userId, 'first_wahoo', 'Completed their first wahoo')
-          checkFirstWahooBox(userId)
+          earnMysteryBox(userId, 'first_wahoo', 'bronze')
         }
       } catch (e) { /* best effort */ }
 
