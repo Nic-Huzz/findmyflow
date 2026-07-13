@@ -38,6 +38,7 @@ export default function JourneyTab({ userId }) {
   const [showFlowMap, setShowFlowMap] = useState(false)
   const [solidarityCount, setSolidarityCount] = useState(0)
   const [orphanedWahoos, setOrphanedWahoos] = useState([])
+  const [showTimeline, setShowTimeline] = useState(false)
   const figurine = useFigurine()
 
   useEffect(() => {
@@ -155,8 +156,6 @@ export default function JourneyTab({ userId }) {
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
   const sorted = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
   const dominant = sorted[0] // [name, count] or undefined
-
-  const [showTimeline, setShowTimeline] = useState(false)
 
   return (
     <div className="jt-container">
