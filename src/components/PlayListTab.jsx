@@ -4,11 +4,11 @@
  * Play-List tab for the 7-Day Challenge page.
  *
  * States:
- *   1. No category wahoos and no playskills → WahooDiscoveryFlow (first-visit)
- *   2. Otherwise → category bubbles + Active Wahoos + WahooCreator (free text
- *      + bucket list) + WahooInspiration ("Need inspiration?")
+ *   1. No playskills and no active challenges → WahooDiscoveryFlow (first-visit)
+ *   2. Otherwise → Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration
  *
  * Active Wahoos come from priority_weekly_picks.
+ * Bucket list wahoos come from groan_challenges with status='generated' and no accepted_at.
  */
 
 import { useMemo, useState, useEffect, useCallback } from 'react'
@@ -16,18 +16,11 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { findSkillSegment } from '../lib/wheelTaxonomy'
-import { createGroanChallenge } from '../lib/crm/groanChallengeService'
 import { hapticLight } from '../lib/haptics'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
-
-const WAHOO_CATEGORIES = [
-  { id: 'appearance', name: 'Appearance', icon: '👤' },
-  { id: 'creation', name: 'Creation', icon: '🎨' },
-  { id: 'connection', name: 'Connection', icon: '🤝' },
-]
 
 export default function PlayListTab({
   userId,
@@ -44,6 +37,7 @@ export default function PlayListTab({
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
   const [showWahooModal, setShowWahooModal] = useState(false)
+  const [bucketListWahoos, setBucketListWahoos] = useState([])
 
   useEffect(() => {
     if (showWahooModal) {
@@ -52,29 +46,19 @@ export default function PlayListTab({
     }
   }, [showWahooModal])
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
-  const [categoryWahoos, setCategoryWahoos] = useState({ appearance: [], creation: [], connection: [] })
-  const [expandedBubble, setExpandedBubble] = useState(null)
-  const [quickAddText, setQuickAddText] = useState('')
-  const [quickAddSaving, setQuickAddSaving] = useState(false)
 
-  // Fetch all wahoos with categories (completed + queued bucket list)
-  const fetchCategoryWahoos = useCallback(async () => {
+  // Fetch bucket list wahoos (generated, not yet accepted)
+  const fetchBucketListWahoos = useCallback(async () => {
     if (!userId) return
     const { data } = await supabase
       .from('groan_challenges')
-      .select('id, title, challenge_text, description, status, wahoo_category, completed_at, accepted_at')
+      .select('id, title, challenge_text, status, accepted_at')
       .eq('user_id', userId)
-      .not('wahoo_category', 'is', null)
+      .eq('status', 'generated')
+      .is('accepted_at', null)
       .order('created_at', { ascending: false })
-    if (data) {
-      const grouped = { appearance: [], creation: [], connection: [] }
-      data.forEach(w => {
-        if (grouped[w.wahoo_category]) {
-          grouped[w.wahoo_category].push(w)
-        }
-      })
-      setCategoryWahoos(grouped)
-    }
+      .limit(20)
+    if (data) setBucketListWahoos(data)
   }, [userId])
 
   // Fetch playskills (extracted so WahooInspiration's PlaySkillPicker can refresh)
@@ -88,7 +72,7 @@ export default function PlayListTab({
     if (data) setPlayskills(data)
   }, [userId])
 
-  // Fetch playskills + active challenges + category wahoos
+  // Fetch playskills + active challenges + bucket list
   useEffect(() => {
     if (!userId) return
 
@@ -100,7 +84,7 @@ export default function PlayListTab({
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .eq('status', 'completed'),
-      fetchCategoryWahoos(),
+      fetchBucketListWahoos(),
     ]).then(([, , { count }]) => {
       setAllTimeWahoos(count || 0)
       setLoading(false)
@@ -109,31 +93,6 @@ export default function PlayListTab({
       setLoading(false)
     })
   }, [userId])
-
-  // Quick-add a future wahoo (saved as generated, not accepted)
-  async function handleQuickAdd(catId) {
-    if (!quickAddText.trim() || quickAddSaving) return
-    setQuickAddSaving(true)
-    try {
-      await createGroanChallenge({
-        userId,
-        title: quickAddText.trim(),
-        description: quickAddText.trim(),
-        visibilityLayer: 'screen',
-        sourceType: 'skill',
-        sourceLabel: 'Bucket list',
-        scaryScore: 7,
-        wahooScore: 7,
-        wahooCategory: catId,
-      })
-      setQuickAddText('')
-      fetchCategoryWahoos()
-    } catch (err) {
-      console.error('Quick-add error:', err)
-    } finally {
-      setQuickAddSaving(false)
-    }
-  }
 
   const fetchActiveChallenges = async () => {
     // Fetch all picks (not just current week) — wahoos persist until completed
@@ -225,20 +184,15 @@ export default function PlayListTab({
     return <div className="playlist-tab"><div className="loading-state"><div className="spinner" /></div></div>
   }
 
-  // ─── State 1: First visit (no category wahoos, no playskills) ──────────────
+  // ─── State 1: First visit (no playskills, no active challenges) ─────────────
 
-  const hasCategoryWahoos = Object.values(categoryWahoos).flat().length > 0
-
-  if (playskills.length === 0 && !hasCategoryWahoos) {
+  if (playskills.length === 0 && activeChallenges.length === 0) {
     return (
       <div className="playlist-tab">
-        {activeChallenges.length > 0 && renderActiveWahoos()}
-
         <WahooDiscoveryFlow
           userId={userId}
           currentVisibilityLayer={currentVisibilityLayer}
           onComplete={() => {
-            fetchCategoryWahoos()
             fetchActiveChallenges()
             onRefreshPoints?.()
           }}
@@ -264,78 +218,6 @@ export default function PlayListTab({
 
   return (
     <div className="playlist-tab">
-      {/* Expression Header + Category Bubbles */}
-      <div className="plt-expression-header">
-        <div className="plt-expression-tagline">Actions that expand what feels possible for your path</div>
-        <div className="plt-category-bubbles">
-          {WAHOO_CATEGORIES.map(cat => {
-            const items = categoryWahoos[cat.id] || []
-            const completedCount = items.length
-            const isExpanded = expandedBubble === cat.id
-            return (
-              <div key={cat.id} className="plt-bubble-wrapper">
-                <button
-                  className={`plt-category-bubble ${isExpanded ? 'expanded' : ''}`}
-                  onClick={() => { hapticLight(); setExpandedBubble(isExpanded ? null : cat.id); setQuickAddText('') }}
-                >
-                  <span className="plt-bubble-icon">{cat.icon}</span>
-                  <span className="plt-bubble-name">{cat.name}</span>
-                  <span className="plt-bubble-count">{completedCount}</span>
-                </button>
-                {isExpanded && (
-                  <div className="plt-bubble-modal-overlay" onClick={() => { setExpandedBubble(null); setQuickAddText('') }}>
-                    <div className="plt-bubble-modal" onClick={e => e.stopPropagation()}>
-                      <div className="plt-modal-header">
-                        <span className="plt-modal-title">{cat.icon} {cat.name} Wahoos</span>
-                        <button className="plt-modal-close" onClick={() => { setExpandedBubble(null); setQuickAddText('') }}>✕</button>
-                      </div>
-                      <div className="plt-quickadd">
-                        <input
-                          className="plt-quickadd-input"
-                          placeholder="Add a future wahoo..."
-                          value={quickAddText}
-                          onChange={e => setQuickAddText(e.target.value)}
-                          autoFocus
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' && quickAddText.trim()) {
-                              handleQuickAdd(cat.id)
-                            }
-                          }}
-                        />
-                        <button
-                          className="plt-quickadd-btn"
-                          disabled={!quickAddText.trim() || quickAddSaving}
-                          onClick={() => handleQuickAdd(cat.id)}
-                        >
-                          {quickAddSaving ? '...' : '+'}
-                        </button>
-                      </div>
-                      {items.length === 0 && (
-                        <div className="plt-dropdown-empty">No wahoos yet</div>
-                      )}
-                      {[...items].sort((a, b) => {
-                        if (a.status === 'completed' && b.status !== 'completed') return 1
-                        if (a.status !== 'completed' && b.status === 'completed') return -1
-                        return 0
-                      }).map(w => {
-                        const name = w.title || w.challenge_text
-                        const isDone = w.status === 'completed'
-                        return (
-                          <div key={w.id} className={`plt-dropdown-item ${isDone ? 'done' : ''}`}>
-                            <span className="plt-dropdown-check">{isDone ? '✓' : '○'}</span>
-                            <span className={`plt-dropdown-name ${isDone ? 'crossed' : ''}`}>{name}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
@@ -355,16 +237,15 @@ export default function PlayListTab({
             <WahooCreator
               key={wahooCreatorKey}
               userId={userId}
-              currentVisibilityLayer={currentVisibilityLayer}
-              bucketList={Object.values(categoryWahoos).flat().filter(w => w.status !== 'completed' && !w.accepted_at)}
+              bucketList={bucketListWahoos}
               onWahooAccepted={() => {
                 fetchActiveChallenges()
-                fetchCategoryWahoos()
+                fetchBucketListWahoos()
                 onRefreshPoints?.()
               }}
               onClose={() => {
                 fetchActiveChallenges()
-                fetchCategoryWahoos()
+                fetchBucketListWahoos()
                 setWahooCreatorKey(k => k + 1)
                 setShowWahooModal(false)
               }}
@@ -380,10 +261,10 @@ export default function PlayListTab({
         currentVisibilityLayer={currentVisibilityLayer}
         onWahooAccepted={() => {
           fetchActiveChallenges()
-          fetchCategoryWahoos()
+          fetchBucketListWahoos()
           onRefreshPoints?.()
         }}
-        onWahooSaved={fetchCategoryWahoos}
+        onWahooSaved={fetchBucketListWahoos}
         onPlaySkillsUpdated={fetchPlayskills}
       />
 

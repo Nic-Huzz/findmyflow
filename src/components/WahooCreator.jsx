@@ -1,15 +1,11 @@
 /**
  * WahooCreator.jsx
  *
- * Wahoo creation for the Play-list tab.
- * Primary path: free text ("I know what I want to do") → category → save + activate.
+ * Wahoo creation for the Courage tab.
+ * Flow: free text → quest link (compulsory) → depth level → visibility → submit.
  * Secondary path: "Choose from your list" → activate a queued bucket-list wahoo.
  *
- * Browse/AI-suggestion paths moved to WahooInspiration ("Need inspiration?").
- * Saves via createGroanChallenge + acceptGroanChallenge + priority_weekly_picks.
- *
  * CSS prefix: wc-
- * Created: 2026-05-09. Slimmed: 2026-06-12.
  */
 
 import { useState, useEffect, useRef } from 'react'
@@ -20,71 +16,112 @@ import { hapticLight, hapticSuccess } from '../lib/haptics'
 import QuestSelector from './QuestSelector'
 import './WahooCreator.css'
 
-const WAHOO_CATEGORIES = [
-  { id: 'appearance', name: 'Appearance', icon: '👤' },
-  { id: 'creation', name: 'Creation', icon: '🎨' },
-  { id: 'connection', name: 'Connection', icon: '🤝' },
+const DEPTH_LEVELS = [
+  { id: 'education', label: 'Learning about it', icon: '📚' },
+  { id: 'testing', label: 'Tried it / testing it', icon: '🧪' },
+  { id: 'practising', label: 'Do it regularly', icon: '🔄' },
+  { id: 'charging', label: 'Getting paid for this', icon: '💰' },
+  { id: 'teaching', label: 'Teaching / passing it on', icon: '🎓' },
 ]
+
+const VISIBILITY_EXAMPLES = {
+  education: [
+    { id: 'screen', label: 'Share what I\'m learning', icon: '📱' },
+    { id: 'live', label: 'Attend a talk or class', icon: '👥' },
+    { id: 'money', label: 'Invest in a course or book', icon: '💳' },
+    { id: 'vulnerable', label: 'Admit I don\'t know yet', icon: '💜' },
+    { id: 'authority', label: 'Let people know I\'m curious', icon: '🌟' },
+  ],
+  testing: [
+    { id: 'screen', label: 'Share my first experience', icon: '📱' },
+    { id: 'live', label: 'Go to a class or session', icon: '👥' },
+    { id: 'money', label: 'Buy what I need to get started', icon: '💳' },
+    { id: 'vulnerable', label: 'Tell someone I\'m a beginner', icon: '💜' },
+    { id: 'authority', label: 'Be known as exploring this', icon: '🌟' },
+  ],
+  practising: [
+    { id: 'screen', label: 'Share my journey so far', icon: '📱' },
+    { id: 'live', label: 'Join regular practice groups', icon: '👥' },
+    { id: 'money', label: 'Invest in going deeper', icon: '💳' },
+    { id: 'vulnerable', label: 'Share my struggles', icon: '💜' },
+    { id: 'authority', label: 'Be known as someone who does this', icon: '🌟' },
+  ],
+  charging: [
+    { id: 'screen', label: 'Create a professional presence', icon: '📱' },
+    { id: 'live', label: 'Run a paid session in person', icon: '👥' },
+    { id: 'money', label: 'Set my price and stand by it', icon: '💳' },
+    { id: 'vulnerable', label: 'Show my process, not just results', icon: '💜' },
+    { id: 'authority', label: 'Be known as a professional', icon: '🌟' },
+  ],
+  teaching: [
+    { id: 'screen', label: 'Create teaching content', icon: '📱' },
+    { id: 'live', label: 'Train others in person', icon: '👥' },
+    { id: 'money', label: 'Build revenue from teaching', icon: '💳' },
+    { id: 'vulnerable', label: 'Teach honestly, including what I don\'t know', icon: '💜' },
+    { id: 'authority', label: 'Be the go-to person', icon: '🌟' },
+  ],
+}
 
 export default function WahooCreator({
   userId,
-  currentVisibilityLayer = 'screen', // from current level config
-  bucketList = [], // queued wahoos from parent
+  bucketList = [],
   onWahooAccepted,
   onClose,
 }) {
-  const [step, setStep] = useState('freetext') // freetext | fromlist | success
+  const [step, setStep] = useState('freetext')
   const [freeText, setFreeText] = useState('')
-  const [wahooCategory, setWahooCategory] = useState(null)
+  const [linkedQuestId, setLinkedQuestId] = useState(null)
+  const [depthLevel, setDepthLevel] = useState(null)
+  const [visibilityLayers, setVisibilityLayers] = useState([])
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState(null)
-  const [linkedQuestId, setLinkedQuestId] = useState(null)
   const successTimerRef = useRef(null)
 
   useEffect(() => {
     return () => { if (successTimerRef.current) clearTimeout(successTimerRef.current) }
   }, [])
 
-  // ─── Accept Challenge ───────────────────────────────────────────────────────
+  function toggleVisibility(id) {
+    setVisibilityLayers(prev =>
+      prev.includes(id) ? prev.filter(v => v !== id) : [...prev, id]
+    )
+  }
 
-  async function acceptChallenge(challenge) {
+  async function handleSubmit() {
+    if (!freeText.trim() || !linkedQuestId || !depthLevel || generating) return
     setGenerating(true)
     setError(null)
 
     try {
       const { data: dbRecord, error: saveError } = await createGroanChallenge({
         userId,
-        title: challenge.title,
-        description: challenge.description,
-        visibilityLayer: challenge.visibilityLayer,
+        title: freeText.trim(),
+        description: freeText.trim(),
+        visibilityLayer: visibilityLayers[0] || 'screen',
         sourceType: 'skill',
-        sourceLabel: challenge.sourceLabel,
-        scaryScore: challenge.scaryScore,
-        wahooScore: challenge.wahooScore,
-        wahooCategory: challenge.wahooCategory || wahooCategory,
+        sourceLabel: 'Free text',
+        depthLevel,
+        visibilityLayers,
       })
       if (saveError || !dbRecord) throw saveError || new Error('Challenge was not saved')
 
       const { error: acceptError } = await acceptGroanChallenge(dbRecord.id)
       if (acceptError) throw acceptError
 
-      // Add to weekly picks (ignoreDuplicates prevents double-tap issues)
-      const { error: pickError } = await supabase.from('priority_weekly_picks').upsert({
+      await supabase.from('priority_weekly_picks').upsert({
         user_id: userId,
         week_start_date: getWeekStartLocal(),
         pick_type: 'groan',
         reference_id: dbRecord.id,
-        display_name: challenge.title,
+        display_name: freeText.trim(),
       }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
-      if (pickError) throw pickError
 
-      // Link to quest if selected
-      if (linkedQuestId && dbRecord) {
+      if (linkedQuestId) {
         try {
           await supabase.from('quest_tasks').insert({
             quest_id: linkedQuestId,
             user_id: userId,
-            text: challenge.title,
+            text: freeText.trim(),
             is_courage_challenge: true,
             groan_challenge_id: dbRecord.id,
             sort_order: 0,
@@ -104,8 +141,6 @@ export default function WahooCreator({
     }
   }
 
-  // ─── Success ────────────────────────────────────────────────────────────────
-
   if (step === 'success') {
     return (
       <div className="wc-container">
@@ -118,17 +153,13 @@ export default function WahooCreator({
     )
   }
 
-  // ─── Choose from bucket list ────────────────────────────────────────────────
-
   if (step === 'fromlist') {
     return (
       <div className="wc-container">
         <button className="wc-back" onClick={() => setStep('freetext')}>← Back</button>
-
         <div className="wc-card">
           <h3 className="wc-card-title">Your Wahoo List</h3>
           <p className="wc-card-sub">Pick one to activate this week.</p>
-
           <div className="wc-suggestions-list">
             {bucketList.map(w => (
               <button
@@ -138,8 +169,7 @@ export default function WahooCreator({
                   hapticLight()
                   setGenerating(true)
                   try {
-                    const { error: acceptError } = await acceptGroanChallenge(w.id)
-                    if (acceptError) throw acceptError
+                    await acceptGroanChallenge(w.id)
                     await supabase.from('priority_weekly_picks').upsert({
                       user_id: userId,
                       week_start_date: getWeekStartLocal(),
@@ -161,74 +191,74 @@ export default function WahooCreator({
                 disabled={generating}
               >
                 <div className="wc-suggestion-title">{w.title || w.challenge_text}</div>
-                {w.wahoo_category && (
-                  <div className="wc-suggestion-desc">
-                    {WAHOO_CATEGORIES.find(c => c.id === w.wahoo_category)?.icon} {WAHOO_CATEGORIES.find(c => c.id === w.wahoo_category)?.name}
-                  </div>
-                )}
               </button>
             ))}
           </div>
-
           {error && <p className="wc-error">{error}</p>}
         </div>
       </div>
     )
   }
 
-  // ─── Free Text (default) ────────────────────────────────────────────────────
+  const visOptions = depthLevel ? VISIBILITY_EXAMPLES[depthLevel] : []
+  const canSubmit = freeText.trim() && linkedQuestId && depthLevel && !generating
 
   return (
     <div className="wc-container">
       <div className="wc-header">
         <h3 className="wc-title">Add a Wahoo</h3>
-        <p className="wc-explainer">Wahoos are bucket-list experiences you&apos;d love to have. Each one is like a rep in the gym training your system that expressing in this way is safe.</p>
+        <p className="wc-explainer">Something you&apos;d love to do that scares you a little.</p>
       </div>
 
       <div className="wc-card">
-        <h3 className="wc-card-title">What&apos;s something you&apos;d love to do that scares you a little?</h3>
-        <p className="wc-card-sub">Anything goes. Host a silent disco, do magic tricks, post a vulnerable video, cold-call 5 strangers.</p>
-
+        <h3 className="wc-card-title">What&apos;s the wahoo?</h3>
         <textarea
           className="wc-textarea"
           placeholder="I want to..."
           value={freeText}
           onChange={e => setFreeText(e.target.value)}
-          rows={3}
+          rows={2}
         />
 
-        <div className="wc-inline-category">
-          <span className="wc-inline-category-label">Category:</span>
-          <div className="wc-inline-category-btns">
-            {WAHOO_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                className={`wc-inline-cat-btn ${wahooCategory === cat.id ? 'selected' : ''}`}
-                onClick={() => { hapticLight(); setWahooCategory(cat.id) }}
-              >
-                {cat.icon} {cat.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
+        <div className="wc-field-label">Which life path is this for?</div>
         <QuestSelector userId={userId} value={linkedQuestId}
           onChange={(id) => setLinkedQuestId(id)} />
 
+        <div className="wc-field-label">Where are you with this?</div>
+        <div className="wc-depth-options">
+          {DEPTH_LEVELS.map(d => (
+            <button
+              key={d.id}
+              className={`wc-depth-btn ${depthLevel === d.id ? 'selected' : ''}`}
+              onClick={() => { hapticLight(); setDepthLevel(d.id); setVisibilityLayers([]) }}
+            >
+              <span className="wc-depth-icon">{d.icon}</span>
+              <span className="wc-depth-label">{d.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {depthLevel && (
+          <>
+            <div className="wc-field-label">What part pushes your boundary?</div>
+            <div className="wc-vis-options">
+              {visOptions.map(v => (
+                <button
+                  key={v.id}
+                  className={`wc-vis-btn ${visibilityLayers.includes(v.id) ? 'selected' : ''}`}
+                  onClick={() => { hapticLight(); toggleVisibility(v.id) }}
+                >
+                  <span className="wc-vis-icon">{v.icon}</span>
+                  <span className="wc-vis-label">{v.label}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
         {error && <p className="wc-error">{error}</p>}
 
-        <button
-          className="wc-cta"
-          disabled={!freeText.trim() || !wahooCategory || generating}
-          onClick={() => acceptChallenge({
-            title: freeText.trim(),
-            description: freeText.trim(),
-            visibilityLayer: currentVisibilityLayer || 'screen',
-            sourceLabel: 'Free text',
-            scaryScore: 7,
-            wahooScore: 7,
-          })}
-        >
+        <button className="wc-cta" disabled={!canSubmit} onClick={handleSubmit}>
           {generating ? 'Saving...' : 'Submit'}
         </button>
 

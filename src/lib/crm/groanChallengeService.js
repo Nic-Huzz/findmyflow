@@ -109,7 +109,9 @@ export async function createGroanChallenge(challengeData) {
     wahooScore = 5,
     linkedContractId = null,
     generationPrompt = null,
-    wahooCategory = null
+    wahooCategory = null,
+    depthLevel = null,
+    visibilityLayers = [],
   } = challengeData
 
   // Calculate essence zone (only if scores provided)
@@ -133,6 +135,8 @@ export async function createGroanChallenge(challengeData) {
       linked_contract_id: linkedContractId,
       generation_prompt: generationPrompt,
       wahoo_category: wahooCategory,
+      depth_level: depthLevel,
+      visibility_layers: visibilityLayers,
       status: GROAN_CHALLENGE_STATUS.GENERATED
     })
     .select()
