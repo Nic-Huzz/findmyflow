@@ -147,56 +147,139 @@ The original exploration drew direct connections between Flow Map layers, hero s
 
 ---
 
-## 4. L0-L5 Depth Spectrum — Merged with Visibility Layers
+## 4. Depth Scale (L0-L4) + Visibility Layers
 
-### The Merge Insight
-
-L0-L2 = private relationship with curiosity (no visibility question needed).
-L3+ = engaging with OTHERS around it, which IS the visibility question.
-
-### Confirmed Scale
+### The Depth Scale (Y-axis on Life Map)
 
 ```
-L0 = Education      "I'm learning about it"     (private — no visibility needed)
-L1 = Trialling       "I tried it"                (private — no visibility needed)
-L2 = Changing        "It's changing how I live"   (private — no visibility needed)
-
-L3+ = Sharing with others → captured through visibility layers:
-  Screen    = "I posted/shared about it online"
-  Live      = "I did it in person with others"
-  Money     = "Someone paid me for this"
-  Vulnerable = "I showed the messy/imperfect version"
-  Authority  = "I'm known for this"
+L0 = Education    "I'm learning about it"          → Stages 2-4
+L1 = Testing      "I tried it"                     → Stages 5-6
+L2 = Practising   "I do it regularly"              → Stages 7-9
+L3 = Charging     "I'm getting paid for this"      → Stages 10-11
+L4 = Teaching     "I pass this knowledge on"       → Stage 12
 ```
 
-### Pre-Wahoo Capture (Single Step)
+Every hero stage has a home. L0-L4 = Y-axis on the life map. Lines grow vertically by depth of relationship.
+
+### Visibility Layers Manifest Per Level
+
+The 5 visibility layers (Screen, Live, Money, Vulnerable, Authority) mean something DIFFERENT at each depth level. This creates a 5×5 matrix where every cell is a specific type of courage challenge.
+
+**This matrix is the courage challenge recommendation engine.** When a user is stuck or unsure what wahoo to do, the app can ask "Where are you with this?" (depth) and then suggest visibility challenges appropriate to that level.
+
+#### The 5×5 Matrix
+
+```
+              Screen     Live       Money        Vulnerable    Authority
+            ┌──────────┬──────────┬────────────┬─────────────┬───────────┐
+L0 Educate  │ Share    │ Attend   │ Invest in  │ Admit you   │ Known as  │
+            │ reading  │ a talk   │ learning   │ don't know  │ curious   │
+            ├──────────┼──────────┼────────────┼─────────────┼───────────┤
+L1 Test     │ Share    │ Go to a  │ Buy        │ Share       │ Known as  │
+            │ 1st try  │ class    │ supplies   │ beginner    │ exploring │
+            ├──────────┼──────────┼────────────┼─────────────┼───────────┤
+L2 Practise │ Share    │ Regular  │ Ongoing    │ Share       │ Known as  │
+            │ journey  │ groups   │ invest     │ struggles   │ "does it" │
+            ├──────────┼──────────┼────────────┼─────────────┼───────────┤
+L3 Charge   │ Pro      │ Run      │ Get PAID   │ Claim       │ Known as  │
+            │ presence │ sessions │ for it     │ your worth  │ pro       │
+            ├──────────┼──────────┼────────────┼─────────────┼───────────┤
+L4 Teach    │ Teach    │ Train    │ Revenue    │ Honest      │ Known as  │
+            │ content  │ others   │ stream     │ teacher     │ THE one   │
+            └──────────┴──────────┴────────────┴─────────────┴───────────┘
+```
+
+#### Pain Points Per Cell — What Each Wahoo Unblocks
+
+**L0 Education — "I read about it but never start"**
+Core pain: Endless consumption without action. Head Full of Dreams. (Stages 2-4)
+
+| Visibility | Pain it solves | Benefit |
+|---|---|---|
+| **Screen** | Interest stays private forever. Nobody knows you care about this. | Public commitment creates accountability. Others start sending related things. |
+| **Live** | Learning alone feels safe but keeps you invisible. | Being in a room with others who share the interest breaks the echo chamber. |
+| **Money** | Free content has no commitment cost. Easy to drop. | Financial investment shifts from browsing to invested. "I paid for this." |
+| **Vulnerable** | Expert mask. They've read everything but pretend they already know. | Permission to not know. "I'm curious and I don't know anything yet" is the first honest moment. |
+| **Authority** | The curiosity has no witnesses. Nobody holds them to it. | Social identity starts forming. Creates gentle external expectation. |
+
+**L1 Testing — "I tried it once but it didn't stick"**
+Core pain: Dabbled but never committed. One class, one session. "It was interesting but..." (Stages 5-6)
+
+| Visibility | Pain it solves | Benefit |
+|---|---|---|
+| **Screen** | The experience stays a private memory that fades. Easy to pretend it didn't happen. | Creates a record. "I said I did this." Others ask "how was it?" prompting reflection. |
+| **Live** | Trying alone at home is too low-stakes. No co-regulation, no witnesses. | The group holds you to the full experience. Can't leave a class halfway through like closing a video. |
+| **Money** | "I don't have what I need" is the excuse. No mat, no journal, no course. | Removes the excuse. The infrastructure is now in your house, asking you to use it. |
+| **Vulnerable** | Perfectionism blocks the second attempt. "I wasn't good at it so I shouldn't continue." | Normalises being bad at something. "I'm terrible AND I want to keep going" breaks the Perfectionist. |
+| **Authority** | The exploration has no social weight. A thing you tried, not a direction you're heading. | People start asking "how's that going?" — gentle accountability. Exploration becomes a thread, not a one-off. |
+
+**L2 Practising — "I do it regularly but I've plateaued"**
+Core pain: Built a routine but hit a ceiling. Maintenance, not transformation. (Stages 7-9)
+
+| Visibility | Pain it solves | Benefit |
+|---|---|---|
+| **Screen** | Practice becomes invisible routine. No reflection, no milestones marked. Autopilot. | Forces reflection: "What have I actually learned?" Documenting reveals patterns you missed. |
+| **Live** | Solo practice avoids mirrors. Nobody challenges your plateau. | Community mirrors progress back. Others at different levels show what's possible. |
+| **Money** | Surface-level practice is cheap. Going deep costs money (retreats, advanced training). | Commitment to going DEEPER. The investment signals "I'm serious, not just dabbling." |
+| **Vulnerable** | Practice looks good from outside but feels stuck inside. Nobody knows you're plateauing. | "I do this every day and I'm STILL stuck" is the honest breakthrough that opens the door to healing work. |
+| **Authority** | Practice is private. Hasn't shaped how others see you or how you make decisions. | Identity claim. When public, it starts shaping career conversations, relationships, life decisions. |
+
+**L3 Charging — "I'm good at this but I can't ask for money"**
+Core pain: Skill without confidence to claim economic value. Gives it away, undercharges, avoids the transaction. (Stages 10-11)
+
+| Visibility | Pain it solves | Benefit |
+|---|---|---|
+| **Screen** | The skill exists but has no public offering. Nobody can find or hire them. | "I'm open for this" posted publicly is a bridge-burning moment. Can't unsay it. |
+| **Live** | They've done it for free a hundred times. Charging face-to-face is the hardest version. | Revenue validates the skill. Someone handed them money and said "that was worth it." |
+| **Money** | The number itself is the vulnerability. Too high = rejection. Too low = self-betrayal. | Pricing IS the identity claim. "This is what my time and skill are worth." Every sale after the first is easier. |
+| **Vulnerable** | Only shows polished outcomes. The messy middle stays hidden. | Authenticity becomes a differentiator. Imperfection is more relatable than perfection. |
+| **Authority** | Does the work but hasn't claimed the title. "I'm a facilitator" still feels like a costume. | When OTHER people introduce you as "the breathwork person," the identity becomes socially confirmed. |
+
+**L4 Teaching — "I do it well but I haven't multiplied"**
+Core pain: Skilled and charging but they're the bottleneck. One person, one session. Haven't passed the knowledge on. (Stage 12)
+
+| Visibility | Pain it solves | Benefit |
+|---|---|---|
+| **Screen** | Knowledge lives only in their head and sessions. If they stop, it stops. | Scales beyond physical presence. Knowledge becomes an asset, not just a service. |
+| **Live** | They're the only one who can deliver. No leverage, no multiplication. | First "graduate" — someone else can now do what they do. The 3% chain fires. |
+| **Money** | Trading time for money. Income capped by hours in the day. | Courses, workshops, certifications create recurring revenue without physical presence. |
+| **Vulnerable** | Teacher pedestal. Expected to have all answers. Imposter syndrome at the teaching level. | "Here's what I know, here's what I'm still figuring out" is more powerful than manufactured expertise. |
+| **Authority** | They teach but haven't claimed the top position. Still deferring to other authorities. | "If you want to learn this, talk to them." Full identity ownership. The hero's journey complete. |
+
+**Application note:** This matrix is the **courage challenge recommendation engine**. When a user is stuck or unsure what wahoo to do next, the AI (figurine/mentor) can identify their current depth level and which visibility layers they haven't crossed, then suggest the specific wahoo that would unblock them. E.g. "You're at L2 Practising in breathwork but you've never shared your struggles publicly. What if you posted about your plateau this week?"
+
+### Pre-Wahoo Capture (Single Step, Both Captured)
 
 ```
 "Where are you with this?"
 
-  ○ Learning about it (Education)
-  ○ Trying it for the first time (Trialling)
-  ○ It's becoming part of my life (Changing)
-  ○ Sharing it with others → [which kind?]
-    □ Online (Screen)
-    □ In person (Live)
-    □ Getting paid (Money)
-    □ Showing the real me (Vulnerable)
-    □ Being the go-to person (Authority)
+  ○ Learning about it (L0 Education)
+  ○ Tried it / testing it (L1 Testing)
+  ○ Do it regularly (L2 Practising)
+  ○ Getting paid for this (L3 Charging)
+  ○ Teaching / passing it on (L4 Teaching)
+
+"What part of this wahoo pushes your boundary?" (multi-select, examples adapt to depth level)
+
+  □ [Screen example for selected level]
+  □ [Live example for selected level]
+  □ [Money example for selected level]
+  □ [Vulnerable example for selected level]
+  □ [Authority example for selected level]
 ```
 
-Both depth AND visibility captured in one natural interaction.
+Depth and visibility captured in one step. Visibility examples are context-specific based on the depth level selected.
 
 ### Dual Mapping: Depth × Visibility (AI-Only Data Layer)
 
-The full depth × visibility matrix lives behind the scenes. The AI (figurine/Zarlo) sees mismatches and gives contextual nudges. The user never sees the grid.
+The full 5×5 matrix lives behind the scenes. The AI (figurine/Zarlo) sees mismatches and gives contextual nudges. The user never sees the grid.
 
 #### What Mismatches Reveal
 
 | Position | What it means | Protective Voice |
 |---|---|---|
-| **High Depth, Low Visibility** (e.g. L2 Changing + no sharing) | "It's part of my life but nobody knows" | **Ghost** |
-| **Low Depth, High Visibility** (e.g. L1 Trialling + Authority) | "I claim this but barely do it" | **Performer** |
+| **High Depth, Low Visibility** (e.g. L2 Practising + no sharing) | "It's part of my life but nobody knows" | **Ghost** |
+| **Low Depth, High Visibility** (e.g. L1 Testing + Authority) | "I claim this but barely do it" | **Performer** |
 | **Sharing but can't reach Money** | "People know me for this but I can't charge" | **People Pleaser** |
 | **Can't move from L1 to L2** | "I tried once but can't commit" | **Controller** |
 | **Sharing but can't reach Vulnerable** | "I do it publicly but not imperfectly" | **Perfectionist** |
@@ -232,8 +315,8 @@ The full depth × visibility matrix lives behind the scenes. The AI (figurine/Za
 | Layer | Question | Vibe Rise Metric | Hero Stage |
 |---|---|---|---|
 | **Curiosities (Breadth)** | What am I exploring? | Number of active life paths, content inputs, clusters | 2-4 |
-| **Experience (Depth)** | How deep am I? | L0-L2 per curiosity + visibility layers at L3+ | 5-9 |
-| **Comfort Zone (Blocks)** | What's stopping me? | Protective voices, healing progress, cone expansion | 5-8 |
+| **Experience (Depth)** | How deep am I? | L0-L4 per curiosity (Education→Testing→Practising→Charging→Teaching) | 2-12 |
+| **Comfort Zone (Blocks)** | What's stopping me? | Visibility layer gaps per depth level (5×5 matrix mismatches reveal protective voices) | 5-8 |
 
 ---
 
@@ -291,13 +374,13 @@ The full depth × visibility matrix lives behind the scenes. The AI (figurine/Za
 |---|---|---|---|
 | 1 | **Flow Statement design** | To explore | Closest existing: PositioningSummary.jsx. May evolve or create new. TBC. |
 | 2 | **Graduation data quantities** | Confirmed | 6→7: one voice 5 times. 7→8: root trauma reconsolidation. See graduation table. |
-| 3 | **L0-L5 merged with visibility** | Confirmed | L0=Education, L1=Trialling, L2=Changing. L3+ = visibility layers. Both captured on same step. |
+| 3 | **L0-L4 depth scale + 5×5 matrix** | Confirmed | L0=Education, L1=Testing, L2=Practising, L3=Charging, L4=Teaching. Maps cleanly to all 12 hero stages. Visibility layers manifest differently per level (5×5 matrix). Matrix = courage challenge recommendation engine for stuck users. |
 | 4 | **Visibility layers back in wahoo creation** | Confirmed | Merged into depth scale at L3+. One step captures both. |
-| 5 | **Wahoo creation cleanup** | Defined | Quest link compulsory, depth+visibility merged, scary scores removed. |
+| 5 | **Wahoo creation cleanup** | Ready to build | New flow: (1) Free text, (2) Quest link (compulsory), (3) Depth L0-L4, (4) Visibility multi-select (context-specific to depth), (5) Submit. Categories ARCHIVED (depth+visibility replaces them). Scary scores REMOVED. Legacy bucket list wahoos: ask depth+visibility when activating. |
 | 6 | **Figurine/Mentor design** | Deferred | Dedicated session. Section 7 above. |
 | 7 | **Credibility Score for Scale Portal** | Explainer written | See `docs/features/credibility-score-explainer.md`. |
 | 8 | **Workshop beats** | Done | See `docs/features/hero-journey-workshop-beats.md`. |
-| 9 | **Hero stage × Zone Calibration mapping** | Confirmed | 10 High, 1 Medium (Stage 11). See section 2. |
+| 9 | **Hero stage × Zone Calibration mapping** | Paused | 10 High, 1 Medium. Utility unclear — possible graduation requirement (user answers zone cal questions to confirm stage). May overcomplicate. Return when building graduation UX. |
 | 10 | **Update Flow Map Metrics Obsidian note** | Pending | After all items resolved. |
 
 ---
