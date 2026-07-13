@@ -48,11 +48,13 @@ Sprint 4 focuses on three things that are NOW unblocked by Sprint 3:
 | Item | What It Does | Effort | Why Now |
 |---|---|---|---|
 | **4A** Backfill hero stages | Edge Function to advance existing users to correct stages | 1 day | Sprint 3A checker exists but existing users are all at Stage 0 |
-| **4B** Expanded proactive triggers | Add 3 more Brief-based triggers (contradictions, day-of-week, visibility gaps) | 1-2 days | Brief has been running 2+ weeks, data exists |
-| **4C** Social V1: Kudos + counters | One-tap Kudos on shared wahoos + cumulative monthly counter | 2-3 days | Reaction system exists, extend it |
-| **4D** Stuck detection + Figurine prompt | Journey tab shows stuck state, Figurine offers 3-step Unstick Flow | 2-3 days | Journey tab exists, graduation checker tracks stage duration |
+| **4B** Stuck detection + Unstick Flow | Journey tab shows stuck state + 3-step modal creates wahoo | 2-3 days | Journey tab exists, Brief computes stuck days |
 
-**Total: 6-9 days**
+**Total: 3-4 days**
+
+**Removed from Sprint 4:**
+- Expanded proactive triggers (contradictions, day-of-week, visibility gaps) — most Briefs still have null pattern data. Move to Sprint 5 when >50% have non-null data.
+- Social V1 (Kudos, counters) — needs dedicated design session. Move to Sprint 5+.
 
 ---
 
@@ -279,84 +281,416 @@ AND created_at >= date_trunc('month', now())
 
 ---
 
-## 4D: Stuck Detection + Figurine Unstick Prompt
+## 4C: Stuck Detection + Unstick Flow
 
 ### What Exists
 
 - Journey tab shows hero stage (Sprint 2C)
 - Zarlo Brief computes `thresholds.stage_stuck_days` (Sprint 2A)
 - Stuck thresholds per stage defined in spec (Section 9, Gap 2)
-- Figurine branch has reusable architecture (Section 10 audit)
+- HealingFlowModal pattern (multi-step, auto-save, modal overlay) as reference
 
-### What to Build
+### Modify: `src/components/JourneyTab.jsx`
 
-**Phase 1 (Sprint 4): Stuck detection + simple prompt on Journey tab.**
-
-Not the full Figurine visual — that needs a dedicated design session. Instead: the Journey tab shows a warm message when Brief detects stuckness, with a guided 3-step flow using existing modal patterns.
-
-**File: `src/components/JourneyTab.jsx`**
-
-After the stage card:
+Add state + stuck section after the voice dots:
 
 ```jsx
+import { useState } from 'react'  // add to existing import
+import UnstickFlow from './UnstickFlow'
+
+// Inside component, add state:
+const [showUnstickFlow, setShowUnstickFlow] = useState(false)
+
+// In JSX, after voice dots section:
 {brief?.thresholds?.stage_stuck_days > 0 && (
   <div className="jt-section jt-stuck-section">
     <span className="jt-stuck-icon">🧭</span>
     <p className="jt-stuck-message">
       {getStuckMessage(heroStage, brief.thresholds.stage_stuck_days)}
     </p>
-    <button className="jt-stuck-cta" onClick={() => setShowUnstickFlow(true)}>
-      Let's work through it
-    </button>
+    {brief.thresholds.stage_stuck_days > 7 && (
+      <button className="jt-stuck-cta" onClick={() => setShowUnstickFlow(true)}>
+        Let's work through it
+      </button>
+    )}
   </div>
+)}
+
+{showUnstickFlow && (
+  <UnstickFlow
+    userId={userId}
+    heroStage={heroStage}
+    onClose={() => setShowUnstickFlow(false)}
+    onWahooCreated={() => {
+      setShowUnstickFlow(false)
+      // Refresh data so voice dots / stage update
+      window.location.reload() // Simple V1. Replace with state refresh in V2.
+    }}
+  />
 )}
 ```
 
-**Stuck messages (per stage, per duration):**
+**Stuck messages (outside component, pure function):**
 
 ```javascript
 function getStuckMessage(stage, days) {
   if (days <= 7) return "You've been here a while. That's not wrong. The journey has its own pace."
-  if (stage <= 4) return "There's a step you haven't taken yet. It's simpler than you think."
+  if (stage <= 3) return "There's a step you haven't taken yet. It's simpler than you think."
+  if (stage === 4) return "You've done wahoos but none have hit Vibe Rise yet. Let's figure out what lights you up."
   if (stage === 5) return "You hit Vibe Rise once. What stopped you from going back?"
   if (stage === 6) return "Your courage is growing but the pattern underneath hasn't surfaced. Let's dig."
-  if (stage === 7) return "You've seen the root. The next step isn't in the app. What's holding you back?"
+  if (stage === 7) return "You've seen the root. The next step isn't in the app. What's holding you back from booking?"
   return "There's something you haven't tried yet."
 }
 ```
 
-### Unstick Flow Modal
+### Add to `src/components/JourneyTab.css`:
 
-**Create: `src/components/UnstickFlow.jsx`**
+```css
+.jt-stuck-section {
+  border-left: 3px solid #E9A23B;
+}
 
-Follow `HealingFlowModal` pattern (multi-step, auto-save, modal overlay):
+.jt-stuck-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
 
-```jsx
-// 3 steps:
-// 1. "What's the thing you've been avoiding?" → free text
-// 2. "If you did that, what's the worst that could happen?" → free text
-//    → "That's the voice talking. Not you."
-// 3. "What's the SMALLEST version you could do this week?" → free text
-//    → Auto-creates a wahoo linked to active quest
+.jt-stuck-message {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
 
-// On step 3 submit:
-// - Create groan_challenge from the text
-// - Link to user's most recent active quest
-// - Close modal
-// - recheckStage() (the new wahoo might trigger graduation)
+.jt-stuck-cta {
+  margin-top: 12px;
+  background: none;
+  border: 1px solid #E9A23B;
+  color: #E9A23B;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.jt-stuck-cta:active {
+  background: rgba(233, 162, 59, 0.06);
+}
 ```
 
-**CSS: `src/components/UnstickFlow.css`**
+### Create: `src/components/UnstickFlow.jsx`
 
-Follow existing modal patterns (`.uf-` prefix, white card, 22px border-radius, center overlay).
+```jsx
+import { useState } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import './UnstickFlow.css'
+
+/**
+ * UnstickFlow — 3-step guided flow to break through stuckness.
+ * Follows HealingFlowModal pattern (multi-step, modal overlay).
+ * Step 3 auto-creates a wahoo linked to the user's most recent active quest.
+ * 
+ * Props:
+ *  - userId: string
+ *  - heroStage: number (for context-aware copy)
+ *  - onClose: () => void
+ *  - onWahooCreated: () => void (called after step 3 creates the wahoo)
+ */
+export default function UnstickFlow({ userId, heroStage, onClose, onWahooCreated }) {
+  const [step, setStep] = useState(1)
+  const [avoiding, setAvoiding] = useState('')
+  const [worstCase, setWorstCase] = useState('')
+  const [smallestStep, setSmallestStep] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  const handleSubmit = async () => {
+    if (!smallestStep.trim() || saving) return
+    setSaving(true)
+
+    try {
+      // Find user's most recent active quest to link the wahoo to
+      const { data: quests } = await supabase
+        .from('quests')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      const questId = quests?.[0]?.id || null
+
+      // Create a groan challenge (wahoo) from the smallest step
+      const { data: challenge } = await supabase
+        .from('groan_challenges')
+        .insert({
+          user_id: userId,
+          title: smallestStep.trim(),
+          description: `Unstick flow: Avoiding "${avoiding.trim()}". Fear: "${worstCase.trim()}". Smallest step: "${smallestStep.trim()}"`,
+          status: 'active',
+          challenge_source: 'unstick_flow',
+          wahoo_category: 'connection', // Default category
+        })
+        .select('id')
+        .single()
+
+      // Link to quest if one exists
+      if (questId && challenge?.id) {
+        await supabase.from('quest_tasks').insert({
+          user_id: userId,
+          quest_id: questId,
+          label: smallestStep.trim(),
+          is_courage_challenge: true,
+          groan_challenge_id: challenge.id,
+        })
+      }
+
+      onWahooCreated?.()
+    } catch (e) {
+      console.error('UnstickFlow error:', e)
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="uf-overlay" onClick={onClose}>
+      <div className="uf-modal" onClick={e => e.stopPropagation()}>
+        <button className="uf-close" onClick={onClose}>&times;</button>
+
+        {/* Step dots */}
+        <div className="uf-dots">
+          {[1, 2, 3].map(n => (
+            <span key={n} className={`uf-dot ${step >= n ? 'uf-dot-filled' : ''}`} />
+          ))}
+        </div>
+
+        {step === 1 && (
+          <>
+            <span className="uf-step-icon">🧭</span>
+            <h2 className="uf-title">What's the thing you've been avoiding?</h2>
+            <p className="uf-subtitle">Not the thing you should do. The thing you keep not doing.</p>
+            <textarea
+              className="uf-input"
+              value={avoiding}
+              onChange={e => setAvoiding(e.target.value)}
+              placeholder="e.g. sharing my work publicly, having that conversation, going to a class"
+              rows={3}
+            />
+            <button
+              className="uf-btn"
+              disabled={!avoiding.trim()}
+              onClick={() => setStep(2)}
+            >
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 2 && (
+          <>
+            <span className="uf-step-icon">😰</span>
+            <h2 className="uf-title">If you did that, what's the worst that could happen?</h2>
+            <textarea
+              className="uf-input"
+              value={worstCase}
+              onChange={e => setWorstCase(e.target.value)}
+              placeholder="e.g. people would judge me, I'd fail, it wouldn't be good enough"
+              rows={3}
+            />
+            {worstCase.trim() && (
+              <p className="uf-reframe">That's the voice talking. Not you.</p>
+            )}
+            <button
+              className="uf-btn"
+              disabled={!worstCase.trim()}
+              onClick={() => setStep(3)}
+            >
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <span className="uf-step-icon">🌱</span>
+            <h2 className="uf-title">What's the smallest version you could do this week?</h2>
+            <p className="uf-subtitle">Not the brave version. The version that barely scares you.</p>
+            <textarea
+              className="uf-input"
+              value={smallestStep}
+              onChange={e => setSmallestStep(e.target.value)}
+              placeholder="e.g. send one message, attend one class, write one paragraph"
+              rows={3}
+            />
+            <button
+              className="uf-btn uf-btn-gold"
+              disabled={!smallestStep.trim() || saving}
+              onClick={handleSubmit}
+            >
+              {saving ? 'Creating...' : 'Add to Courage Tab'}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+```
+
+### Create: `src/components/UnstickFlow.css`
+
+```css
+/* UnstickFlow — 3-step guided modal, .uf- prefix */
+
+.uf-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 16px;
+}
+
+.uf-modal {
+  background: white;
+  border-radius: 22px;
+  padding: 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  animation: uf-pop 0.2s ease;
+}
+
+@keyframes uf-pop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.uf-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.uf-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.uf-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e5e7eb;
+}
+
+.uf-dot-filled {
+  background: #5e17eb;
+}
+
+.uf-step-icon {
+  display: block;
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.uf-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.uf-subtitle {
+  font-size: 0.85rem;
+  color: #6b7280;
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.uf-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  resize: none;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.uf-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.uf-reframe {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #9333ea;
+  margin: 12px 0 0;
+  font-style: italic;
+  animation: uf-fade 0.5s ease;
+}
+
+@keyframes uf-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.uf-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #5e17eb;
+  color: white;
+}
+
+.uf-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.uf-btn-gold {
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  color: #1f2937;
+}
+```
 
 ### Testing
-- [ ] Journey tab shows stuck message when `stage_stuck_days > 0`
-- [ ] Different message per stage
-- [ ] "Let's work through it" opens UnstickFlow modal
-- [ ] 3-step flow: text input on each step, continue buttons
-- [ ] Step 3 creates a wahoo on the courage tab
-- [ ] Modal closes after step 3 submit
+- [ ] Journey tab shows stuck message when `stage_stuck_days > 0` in Brief
+- [ ] CTA only appears when stuck > 7 days (gentle message shows before that)
+- [ ] Different message per stage (3, 4, 5, 6, 7)
+- [ ] Tapping CTA opens UnstickFlow modal
+- [ ] Step 1: text input + continue button (disabled when empty)
+- [ ] Step 2: text input + "That's the voice talking" appears after typing
+- [ ] Step 3: text input + "Add to Courage Tab" creates a `groan_challenges` row
+- [ ] Created wahoo links to most recent active quest via `quest_tasks`
+- [ ] Modal closes after submit
+- [ ] Progress dots fill as steps advance
+- [ ] `challenge_source: 'unstick_flow'` distinguishes from regular wahoos
 
 ---
 
@@ -368,20 +702,11 @@ Day 1: Backfill (4A)
   - Deploy + invoke once
   - Verify hero stage distribution
 
-Day 2-3: Expanded proactive (4B)
-  - Check Brief data availability first
-  - Add 3 triggers to ZarloWidget
-  - Test each trigger type
-
-Day 4-5: Social V1 (4C)
-  - Community section on Journey tab
-  - Kudos on shared wahoos (reuse existing reaction system)
-  - Monthly counter query
-
-Day 6-8: Stuck detection + Unstick Flow (4D)
+Day 2-4: Stuck detection + Unstick Flow (4B)
   - Stuck message on Journey tab (uses Brief data)
   - UnstickFlow modal (3-step, creates wahoo)
   - Wire to Journey tab CTA
+  - Test each step + wahoo creation
 ```
 
 ---
