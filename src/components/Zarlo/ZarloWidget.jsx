@@ -66,29 +66,27 @@ function ZarloWidget() {
 
       const [voiceName, count] = sorted[0]
 
-      // Check if we've already notified for this threshold (stored in localStorage)
-      const notifiedKey = `zarlo_voice_notified_${voiceName}_${count >= 5 ? '5' : count >= 3 ? '3' : '0'}`
-      if (localStorage.getItem(notifiedKey)) return
+      const voiceLabel = voiceName.charAt(0).toUpperCase() + voiceName.slice(1).replace(/_/g, ' ')
 
-      // Tier 2: Pattern emerging (count 3-4)
-      if (count >= 3 && count < 5) {
-        const voiceLabel = voiceName.charAt(0).toUpperCase() + voiceName.slice(1).replace(/_/g, ' ')
-        setProactiveMessage(
-          count === 3
-            ? `The ${voiceLabel} keeps showing up. That's three times now.`
-            : `Four times the ${voiceLabel} has blocked you. There's something underneath it.`
-        )
-        setHasNotification(true)
-        localStorage.setItem(notifiedKey, 'true')
-      }
-      // Tier 3: Graduation threshold (count 5+)
-      else if (count >= 5) {
-        const voiceLabel = voiceName.charAt(0).toUpperCase() + voiceName.slice(1).replace(/_/g, ' ')
+      // Check each threshold independently (3, 4, 5) so user sees each message once
+      if (count >= 5 && !localStorage.getItem(`zarlo_voice_${voiceName}_5`)) {
         setProactiveMessage(
           `The ${voiceLabel}. Five times. It's been in every healing flow. You're ready to see the root.`
         )
         setHasNotification(true)
-        localStorage.setItem(notifiedKey, 'true')
+        localStorage.setItem(`zarlo_voice_${voiceName}_5`, 'true')
+      } else if (count === 4 && !localStorage.getItem(`zarlo_voice_${voiceName}_4`)) {
+        setProactiveMessage(
+          `Four times the ${voiceLabel} has blocked you. There's something underneath it.`
+        )
+        setHasNotification(true)
+        localStorage.setItem(`zarlo_voice_${voiceName}_4`, 'true')
+      } else if (count === 3 && !localStorage.getItem(`zarlo_voice_${voiceName}_3`)) {
+        setProactiveMessage(
+          `The ${voiceLabel} keeps showing up. That's three times now.`
+        )
+        setHasNotification(true)
+        localStorage.setItem(`zarlo_voice_${voiceName}_3`, 'true')
       }
     } catch (e) {
       // Silent fail — proactive features should never break the app
@@ -97,7 +95,7 @@ function ZarloWidget() {
 
   useEffect(() => {
     checkVoicePatterns()
-  }, [])
+  }, [checkVoicePatterns])
 
   if (shouldHide) return null
 
