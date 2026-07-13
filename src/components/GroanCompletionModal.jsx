@@ -9,6 +9,7 @@ import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
 import { postFeedEvent } from '../lib/communityFeed'
+import { checkFirstWahooBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -182,7 +183,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Score increment error:', e)
       }
 
-      // 4a2. Auto-post first_wahoo to community feed (once ever)
+      // 4a2. Auto-post first_wahoo + mystery box checks
       try {
         const { count } = await supabase
           .from('quest_completions')
@@ -191,8 +192,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           .eq('quest_category', 'Groans')
         if (count === 1) {
           postFeedEvent(userId, 'first_wahoo', 'Completed their first wahoo')
+          checkFirstWahooBox(userId)
         }
       } catch (e) { /* best effort */ }
+
+      // 4a3. Mystery box: new wahoo category check
+      checkNewCategoryBox(userId, challenge.visibility_layer).catch(() => {})
 
       // 4b. Track wahoo analytics
       trackWahooCompleted({ challengeId: challenge.id, wahooScore: scores.wahoo, scaryScore: scores.scary })

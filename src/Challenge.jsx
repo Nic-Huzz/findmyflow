@@ -49,6 +49,7 @@ import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
 import { checkHeroGraduation } from './lib/heroStageChecker'
 import { postFeedEvent } from './lib/communityFeed'
+import { checkStreakBox } from './lib/mysteryBoxes'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useInsightDrops } from './hooks/useInsightDrops'
 import InsightDrop from './components/InsightDrop'
@@ -1055,13 +1056,14 @@ function Challenge() {
       if (!isUserLevelCategory) {
         const streakResult = await handleStreakUpdate(user.id, progress.challenge_instance_id)
 
-        // Auto-post streak milestones to community feed
+        // Auto-post streak milestones to community feed + mystery box
         if (streakResult?.streak_incremented && streakResult.streak_days) {
           const STREAK_MILESTONES = [7, 14, 30, 60, 100]
           const days = streakResult.streak_days
           if (STREAK_MILESTONES.includes(days)) {
             postFeedEvent(user.id, 'streak_milestone', `${days} day streak`, `${days} days in a row`)
           }
+          checkStreakBox(user.id, days)
         }
 
         const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
