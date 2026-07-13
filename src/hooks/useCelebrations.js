@@ -57,7 +57,7 @@ export function useCelebrations() {
 
   /**
    * Celebrate leveling up
-   * TODO: Wire postFeedEvent(userId, 'level_up', `Reached ${levelName}`) once userId is available in this hook
+   * Note: community feed auto-post handled in Challenge.jsx (has userId)
    */
   const celebrateLevelUp = useCallback((newLevel) => {
     setShowLevelUp(newLevel)
@@ -79,7 +79,8 @@ export function useCelebrations() {
 
   /**
    * Celebrate hitting a streak milestone
-   * TODO: Wire postFeedEvent(userId, 'streak_milestone', `Hit a ${days}-day streak`) once userId is available in this hook
+   * Note: celebrateStreakMilestone is currently unused (not called anywhere).
+   * When wired, community feed auto-post should be added at the call site (where userId is available).
    */
   const celebrateStreakMilestone = useCallback((days) => {
     triggerFireConfetti()

@@ -48,6 +48,7 @@ import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
 import { checkHeroGraduation } from './lib/heroStageChecker'
+import { postFeedEvent } from './lib/communityFeed'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
 import { useInsightDrops } from './hooks/useInsightDrops'
 import InsightDrop from './components/InsightDrop'
@@ -967,7 +968,9 @@ function Challenge() {
         const freshXP = freshScores?.lifetime_total_score || 0
         const priorXP = freshXP - quest.points
         if (getLevelNumber(freshXP) > getLevelNumber(priorXP)) {
-          setTimeout(() => celebrateLevelUp(getLevel(freshXP)), 800)
+          const newLevel = getLevel(freshXP)
+          setTimeout(() => celebrateLevelUp(newLevel), 800)
+          postFeedEvent(user.id, 'level_up', `Reached ${newLevel?.name || 'a new level'}`)
         }
 
         // Refresh user's scores from new tables

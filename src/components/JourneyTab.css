@@ -198,3 +198,11 @@
 .jt-flowmap-btn:active {
   background: rgba(94, 23, 235, 0.08);
 }
+
+.jt-solidarity {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin: 4px 0 0;
+  font-style: italic;
+}

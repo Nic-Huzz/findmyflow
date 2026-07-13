@@ -31,6 +31,7 @@ export default function JourneyTab({ userId }) {
   const [safety, setSafety] = useState(0)
   const [careers, setCareers] = useState([])
   const [showFlowMap, setShowFlowMap] = useState(false)
+  const [solidarityCount, setSolidarityCount] = useState(0)
 
   useEffect(() => {
     if (!userId) return
@@ -66,6 +67,19 @@ export default function JourneyTab({ userId }) {
       })
       setVoiceCounts(counts)
       setBrief(briefRes.data?.brief || null)
+
+      // Anonymous solidarity: how many others identified the same dominant voice this month?
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+      if (sorted.length > 0) {
+        const dominantVoiceName = sorted[0][0]
+        const { count: othersCount } = await supabase
+          .from('nervous_system_checkins')
+          .select('user_id', { count: 'exact', head: true })
+          .eq('protective_voice', dominantVoiceName)
+          .neq('user_id', userId)
+          .gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())
+        setSolidarityCount(othersCount || 0)
+      }
 
       const activeQuests = questsRes.data || []
       setLifePaths(activeQuests)
@@ -142,6 +156,11 @@ export default function JourneyTab({ userId }) {
             {dominant[1] === 4 && `Four times. There's something underneath it.`}
             {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready.`}
           </p>
+          {solidarityCount > 0 && (
+            <p className="jt-solidarity">
+              {solidarityCount} other {solidarityCount === 1 ? 'person' : 'people'} identified the same voice this month.
+            </p>
+          )}
         </div>
       )}
 
