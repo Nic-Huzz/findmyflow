@@ -51,7 +51,7 @@ function ZarloWidget() {
       if (!user) return
 
       const { data: voiceData } = await supabase
-        .from('healing_intentions')
+        .from('nervous_system_checkins')
         .select('protective_voice')
         .eq('user_id', user.id)
         .not('protective_voice', 'is', null)

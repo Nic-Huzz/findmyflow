@@ -68,7 +68,7 @@ export async function checkHeroGraduation(userId) {
   // 6→7: Protective voice identified 5+ times
   if (currentStage === 6) {
     const { data: vd } = await supabase
-      .from('healing_intentions')
+      .from('nervous_system_checkins')
       .select('protective_voice')
       .eq('user_id', userId)
       .not('protective_voice', 'is', null)

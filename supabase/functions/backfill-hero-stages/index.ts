@@ -10,7 +10,7 @@
  *  3→4: essence_mirror_completed = true AND essence_archetype exists
  *  4→5: quest_completions with reflection_text LIKE '%"wahoo_classification":"vibe",%'
  *  5→6: quest_completions with quest_category = 'Groans' count >= 2
- *  6→7: healing_intentions protective_voice count >= 5 for any single voice
+ *  6→7: nervous_system_checkins protective_voice count >= 5 for any single voice
  *
  * Uses service role key — bypasses RLS.
  * Per-user try/catch so one failure never blocks others.
@@ -97,7 +97,7 @@ async function checkAndAdvance(
   // 6→7: Protective voice identified 5+ times (any single voice)
   if (currentStage === 6) {
     const { data: voiceRows } = await supabase
-      .from('healing_intentions')
+      .from('nervous_system_checkins')
       .select('protective_voice')
       .eq('user_id', userId)
       .not('protective_voice', 'is', null)

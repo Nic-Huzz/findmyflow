@@ -416,7 +416,7 @@ export async function getUserContext(userId) {
       supabase.from('flow_entries').select('direction, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
       supabase.from('user_stage_progress').select('*').eq('user_id', userId).single(),
       supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
-      supabase.from('healing_intentions').select('protective_voice').eq('user_id', userId).not('protective_voice', 'is', null),
+      supabase.from('nervous_system_checkins').select('protective_voice').eq('user_id', userId).not('protective_voice', 'is', null),
       loadWheelData(userId),
       // Load pre-computed Zarlo Brief
       supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle()
