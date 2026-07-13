@@ -21,6 +21,8 @@ import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
+import HealingFlowModal from './HealingFlowModal'
+import QuestSelector from './QuestSelector'
 
 export default function PlayListTab({
   userId,
@@ -38,6 +40,16 @@ export default function PlayListTab({
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
   const [showWahooModal, setShowWahooModal] = useState(false)
   const [bucketListWahoos, setBucketListWahoos] = useState([])
+
+  // Healing data for inline display
+  const [healingByChallenge, setHealingByChallenge] = useState({})
+
+  // Standalone healing flow state
+  const [blockingText, setBlockingText] = useState('')
+  const [showBlockingQuestPicker, setShowBlockingQuestPicker] = useState(false)
+  const [blockingQuestId, setBlockingQuestId] = useState(null)
+  const [blockingTaskId, setBlockingTaskId] = useState(null)
+  const [showBlockingHealingModal, setShowBlockingHealingModal] = useState(false)
 
   useEffect(() => {
     if (showWahooModal) {
@@ -124,6 +136,34 @@ export default function PlayListTab({
     }
   }
 
+  // Fetch healing intentions linked to active challenges
+  useEffect(() => {
+    if (!userId || activeChallenges.length === 0) {
+      setHealingByChallenge({})
+      return
+    }
+    const challengeIds = activeChallenges.map(c => c.reference_id).filter(Boolean)
+    if (!challengeIds.length) return
+
+    supabase
+      .from('quest_tasks')
+      .select('groan_challenge_id, id, healing_intentions!quest_task_id(id, pattern, fear_text, origin_text, healing_stage, outcome, protective_voice, quest_task_id)')
+      .in('groan_challenge_id', challengeIds)
+      .not('groan_challenge_id', 'is', null)
+      .then(({ data }) => {
+        if (!data) return
+        const map = {}
+        data.forEach(qt => {
+          const intentions = qt.healing_intentions || []
+          const active = intentions.find(h => !h.outcome)
+          if (active && qt.groan_challenge_id) {
+            map[qt.groan_challenge_id] = { ...active, questTaskId: qt.id }
+          }
+        })
+        setHealingByChallenge(map)
+      })
+  }, [userId, activeChallenges.length])
+
   // Extract category ids from playskills
   const categoryIds = useMemo(() => {
     const ids = new Set()
@@ -149,12 +189,45 @@ export default function PlayListTab({
         <div className="plt-section-items">
           {activeChallenges.map(pick => {
             const isLoading = loadingChallengeId === pick.reference_id
+            const healing = healingByChallenge[pick.reference_id]
+            const hasActiveHealing = healing && !healing.outcome && healing.healing_stage
+
             return (
               <div key={pick.id || pick.reference_id} className="plt-item-row">
                 <span className="plt-item-check"></span>
                 <div className="plt-item-body">
                   <div className="plt-item-name">{pick.display_name}</div>
                   <div className="plt-item-meta">{pick._source_label || 'Courage'}</div>
+
+                  {hasActiveHealing && (
+                    <div
+                      className="plt-healing-inline"
+                      onClick={() => {
+                        setBlockingTaskId(healing.questTaskId)
+                        setBlockingText(pick.display_name)
+                        setShowBlockingHealingModal(true)
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <span className="plt-healing-icon">💚</span>
+                      <div className="plt-healing-body">
+                        {healing.pattern && (
+                          <div className="plt-healing-pattern">"{healing.pattern}"</div>
+                        )}
+                        {healing.protective_voice && (
+                          <div className="plt-healing-voice">
+                            {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
+                          </div>
+                        )}
+                        {healing.origin_text && (
+                          <div className="plt-healing-origin">{healing.origin_text}</div>
+                        )}
+                        <div className="plt-healing-cta">
+                          {healing.healing_stage === 'in_progress' ? 'Continue healing flow →' : 'View →'}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <button
                   className="plt-item-action"
@@ -221,6 +294,55 @@ export default function PlayListTab({
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
+      {/* What's blocking you? — standalone healing entry */}
+      <div className="plt-blocking-input">
+        <div className="plt-blocking-row">
+          <span className="plt-blocking-icon">💚</span>
+          <input
+            className="plt-blocking-field"
+            type="text"
+            value={blockingText}
+            onChange={e => {
+              setBlockingText(e.target.value)
+              if (showBlockingQuestPicker) setShowBlockingQuestPicker(false)
+            }}
+            placeholder="What's blocking you right now?"
+            onKeyDown={e => {
+              if (e.key === 'Enter' && blockingText.trim()) setShowBlockingQuestPicker(true)
+            }}
+          />
+          {blockingText.trim() && !showBlockingQuestPicker && (
+            <button className="plt-blocking-go" onClick={() => setShowBlockingQuestPicker(true)}>
+              Explore
+            </button>
+          )}
+        </div>
+        {showBlockingQuestPicker && (
+          <div style={{ marginTop: 8 }}>
+            <QuestSelector
+              userId={userId}
+              value={blockingQuestId}
+              onChange={async (questId) => {
+                if (!questId || !blockingText.trim()) return
+                setBlockingQuestId(questId)
+                const { data: task } = await supabase.from('quest_tasks').insert({
+                  quest_id: questId,
+                  user_id: userId,
+                  text: blockingText.trim(),
+                  is_courage_challenge: true,
+                  sort_order: 0,
+                }).select('id').single()
+                if (task) {
+                  setBlockingTaskId(task.id)
+                  setShowBlockingHealingModal(true)
+                  setShowBlockingQuestPicker(false)
+                }
+              }}
+            />
+          </div>
+        )}
+      </div>
+
       {/* Add a Wahoo button */}
       <button
         className="wc-add-btn"
@@ -279,6 +401,28 @@ export default function PlayListTab({
             onRefreshPoints?.()
           }}
           onClose={() => setCompletingChallenge(null)}
+        />
+      )}
+
+      {/* Healing flow modal (standalone or resume) */}
+      {showBlockingHealingModal && blockingTaskId && (
+        <HealingFlowModal
+          taskText={blockingText}
+          userId={userId}
+          questTaskId={blockingTaskId}
+          onComplete={() => {
+            setShowBlockingHealingModal(false)
+            setBlockingText('')
+            setBlockingTaskId(null)
+            setBlockingQuestId(null)
+            fetchActiveChallenges()
+            onRefreshPoints?.()
+          }}
+          onClose={() => {
+            setShowBlockingHealingModal(false)
+            setBlockingText('')
+            setBlockingTaskId(null)
+          }}
         />
       )}
     </div>
