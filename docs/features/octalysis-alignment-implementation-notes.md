@@ -84,43 +84,110 @@ Existing plan covers this. No additional notes needed.
 
 ---
 
-## 3. Flow Statement / Double-Dash — Commentary for Implementing Agent
+## 3. Flow Statement / Double-Dash — Full Spec
 
-The existing plan covers the Flow Statement and convergence detection. These notes add the Octalysis "felt experience" layer that should inform implementation.
+Stage 8 = Celeste Chapter 6 (acceptance of root trauma). Stage 9 = the double-dash (Flow Statement = new capacity).
 
-### The Celeste Parallel (Critical Context)
+### 3.1 FORMAT
 
-In Celeste, Chapter 6 is where Madeline ACCEPTS Badeline (her anxiety/protective voice). The mechanical reward is a double-dash: her capacity literally doubles. The player FEELS this in their hands. One dash becomes two. The game doesn't explain why. Your body already knows.
+One raw sentence. Not a template, not a paragraph. The shortest possible expression of the merge point. Something you could say to a stranger in 10 seconds and they'd feel it.
 
-**The Vibe Rise equivalent:**
-- Stage 8 = Celeste Chapter 6 (acceptance of root trauma via reconsolidation)
-- Stage 9 = The double-dash (Flow Statement = new capacity)
+**Not:** "I help burned-out professionals discover their purpose through breathwork, gathering design, and nervous system regulation to create transformational experiences."
 
-### What "Double-Dash" Means Mechanically in the App
+**Yes:** "I create spaces where people feel safe enough to fall apart."
 
-The Flow Statement isn't just TEXT. Something should CHANGE in the app after Stage 9. Options for the implementing agent to consider:
+The raw version is UNPOLISHED. It might be grammatically imperfect. It might be a fragment. That's the point. It came from the gut, not from a copywriting exercise. The polishing happens later in Stage 10 (PositioningSummary refines it into positioning).
 
-1. **Zarlo's personality shifts permanently.** Pre-Stage-9 Zarlo is cautious, exploratory, asking questions. Post-Stage-9 Zarlo becomes more direct, more challenging, more like a co-founder than a therapist. The relationship "levels up."
+### 3.2 INPUTS
 
-2. **New app section unlocks.** The Build phase (Scale Portal bridge, Aligned Action tools) becomes accessible. The user literally has access to things they didn't before. Like gaining a new ability.
+The AI needs these data points to surface the convergence signal:
 
-3. **Visual marker on avatar/profile.** A glow, a colour shift, a new element on the hero profile. Everyone who sees your profile knows you've crossed the threshold. Permanent, visible, earned.
+| Data | Table | What it reveals |
+|---|---|---|
+| Active life paths + predicted states | `quests` | Which curiosities are alive and in which NS state |
+| Cross-pollination events | `quest_cross_pollination` | Which paths are feeding each other |
+| Wahoo patterns across quests | `groan_challenges` + `quest_tasks` | What types of courage keep appearing across different paths |
+| Healing flow patterns | `healing_intentions` | What fears connect across quests (same root pattern in multiple paths) |
+| Essence archetype | `user_stage_progress` | The identity lens through which the merge should be framed |
+| Post-Stage 8 self-report | Post-session self-report | What shifted, what feels different |
+| Curiosity clusters | `curiosity_clusters` | Original content consumption that started each branch |
+| Career alignment | Career alignment data | What was unfed before, what's fed now |
 
-4. **Capacity Score recalibration.** The Capacity Score baseline shifts upward. Pre-Stage-9, the "ceiling" was lower. Post-Stage-9, higher scores become achievable. The system recognises increased capacity.
+**The key signal:** Two or more life paths that share the same healing pattern, the same wahoo types, or the same cross-pollination events. The THREAD that runs through seemingly separate curiosities.
 
-5. **Quest recommendations change.** Pre-Stage-9: the app suggests Repair-phase wahoos (self-knowledge, healing, vulnerability). Post-Stage-9: the app suggests Build-phase wahoos (creation, monetisation, authority). The menu changes.
+### 3.3 AI-FIRST (but user writes the sentence)
 
-**Recommendation:** Do at least TWO of these. One visual (the user sees the change), one mechanical (the app behaves differently). The user should be able to point to the moment and say "that's when things shifted."
+AI proposes the thread. User names the statement. The AI doesn't write the Flow Statement. It POINTS at the convergence and asks: "Do you see it?"
 
-### Convergence Animation Spec Notes
+**Step 1: AI surfaces the signal**
+"Your breathwork path and your gathering path keep crossing. The wahoos you chose for both are about the same thing: creating containers where people let go. Your healing work traced both back to the same fear: not being safe enough to be seen. These aren't two paths. They're one."
 
-When the Flow Statement is confirmed (Stage 9), the convergence should be VISUAL:
-- Life path lines on the Quest Path Map that were separate should visually merge
-- The merge point should glow or pulse
-- The Flow Statement text should appear at the merge point
-- This should feel like a reveal, not a creation. "It was always there. Now you can see it."
+**Step 2: AI offers a prompt, not a statement**
+"If you had to say what connects everything you care about, in one sentence, what would it be?"
 
-Reference: DCC's "Added to the Dungeon Codex" moment. Your discovery becomes part of the world.
+**Step 3: User writes**
+[free text input]
+
+**Step 4: AI reflects back (not edits)**
+"You said: 'I create spaces where people feel safe enough to fall apart.' That's your Flow Statement. Does it feel true?"
+
+**Step 5: User confirms or rewrites**
+[Confirm] or [Try again]
+
+The AI never writes the sentence FOR them. It creates the conditions where the sentence EMERGES from them. The user should feel authorship, not editing.
+
+### 3.4 EXAMPLES
+
+| Person | Curiosities | Merge thread | Flow Statement |
+|---|---|---|---|
+| **A** Breathwork Facilitator | Breathwork, gathering design, psychology | Creating safe containers for emotional release | "I create spaces where people feel safe enough to fall apart." |
+| **B** Corporate Escapee → Dance Teacher | Dance, somatic healing, entrepreneurship | Using the body to bypass the mind's defences | "I help people feel things they've been thinking about for too long." |
+| **C** Tech Worker Who Coaches | Coding, psychology, teaching | Making complex things simple so people stop feeling stupid | "I translate complicated worlds so nobody has to feel lost." |
+| **D** Burnt-Out Nurse → Nature Therapy | Nature, ancestral living, NS regulation | Returning to what our bodies already know | "I remind people their body already knows how to heal." |
+| **E** Former Athlete → Retreats | Fitness, cold exposure, community, meditation | Physical challenge as doorway to emotional transformation | "I use the body to break open what the mind can't reach." |
+
+None mention a target audience, a price, a method name, or a business model. Those come in Stage 10. The Flow Statement is IDENTITY, not POSITIONING.
+
+### 3.5 HOW IT'S DIFFERENT
+
+| | Flow Statement | Mission Statement | Ikigai | Positioning Statement |
+|---|---|---|---|---|
+| **Answers** | "What's the thread through everything I am?" | "What do I exist to do?" | "Where do passion/skill/need/pay overlap?" | "Who do I serve and how?" |
+| **Tone** | Raw, personal, felt | Formal, organisational | Analytical, diagrammatic | Marketing, audience-facing |
+| **Created by** | Discovery (emerged from journey data) | Decision (decided in a meeting) | Analysis (filled in a Venn diagram) | Craft (copywritten for an audience) |
+| **Changes?** | Rarely. It's WHO YOU ARE. | Updates with strategy | Recalculated as inputs change | Refines as market understanding grows |
+| **Feeling** | "Of course. This was always true." | "This is what we do." | "This is where things overlap." | "This is how I explain myself." |
+| **Stage** | 9 (the reward) | 10+ (business building) | 3-4 (analysis) | 10 (aligned action) |
+
+**The key difference:** The Flow Statement is PRE-BUSINESS. It's not about who you serve or how you charge. It's about what you ARE when your curiosities merge. The business comes FROM it, not the other way around.
+
+Ikigai asks "where do these circles overlap?" and produces an intersection.
+The Flow Statement asks "what were these circles always pointing at?" and produces a revelation.
+
+### 3.6 WHAT MAKES IT FEEL LIKE A REVELATION
+
+**A. The data was always there.** The AI doesn't generate the connection. It REVEALS what was already visible in the data.
+
+**B. The reconsolidation cleared the view.** Stage 8 removed the protective voice keeping the paths separate. Without the block, the merge becomes obvious.
+
+**C. The user speaks it before understanding it.** The prompt often produces a sentence the user surprises THEMSELVES with. The AI reflects back: "You just said it. Did you hear yourself?"
+
+**D. The app changes after (the double-dash).** Once confirmed:
+- Quest recommendations shift from Repair to Build
+- Zarlo's tone becomes more direct (co-founder, not therapist)
+- New sections unlock (Scale Portal bridge)
+- The figurine evolves visually
+- The Flow Map shows the merge point glowing
+
+**E. It can't be rushed.** You can't write a Flow Statement at Stage 3. You don't have the data. You haven't done the healing. The merge hasn't appeared. It only works AFTER Stage 8 because the block had to dissolve first.
+
+### 3.7 Convergence Animation
+
+When the Flow Statement is confirmed (Stage 9):
+- Life path lines on the Quest Path Map visually merge
+- The merge point glows or pulses
+- The Flow Statement text appears at the merge point
+- Feels like a reveal, not a creation. "It was always there. Now you can see it."
 
 ---
 
@@ -633,7 +700,42 @@ Matrix stays behind the scenes. Zarlo uses it via the Zarlo Brief. Users don't s
 | `groan_streaks` | "14 days, longest was 21" | "4 rebuilds, each faster than last" |
 
 **V1:** Style existing celebration/notification moments as Insight Drop cards. Same data, better presentation.
-**V2:** Full rarity system, "Your Insights" collection on Journey tab, Legendary drops tied to Figurine.
+**V2:** Full rarity system, "Your Insights" collection on Journey tab, Legendary drops tied to Figurine. Plus Self-Knowledge Skills (see below).
+
+### V2: Self-Knowledge Skills (DCC Skill Upgrades)
+
+In DCC, skills level up based on USE (punch more → Pugilism levels up → punches hit harder). The upgrade changes the EXPERIENCE, not just a number.
+
+**Vibe Rise equivalent:** Skills that level based on submissions/completions. Each level makes the AI smarter FOR YOU.
+
+| Skill | Levels Based On | L1 | L3 | L5 |
+|---|---|---|---|---|
+| **Self-Awareness** | Daily check-ins (10/25/50/100/200) | Zarlo asks "how are you?" | Zarlo detects day-of-week patterns | Zarlo predicts your state before you check in: "It's Wednesday. You're probably Activated. Am I right?" |
+| **Courage** | Wahoos completed (5/15/30/60/100) | App suggests Screen wahoos only | App surfaces Live + Money challenges | App recommends Vulnerable/Authority because you've proven capacity |
+| **Pattern Recognition** | Healing flows completed (3/8/15/30/50) | Zarlo names the voice after you identify it | Zarlo spots the voice before you name it | Zarlo predicts which voice will fight a wahoo BEFORE you attempt it: "The Perfectionist is going to resist this one. Ready?" |
+| **Resilience** | Streak rebuilds, not length (2/4/7/10/15) | "Streak broken" | "3rd rebuild. Getting faster." | "Recovery speed IS the skill. You bounce back in [N] days now vs [N] days before." |
+| **Integration** | Cross-pollination events (2/5/10/20/35) | Paths feel separate | Zarlo notices connections | Zarlo actively suggests: "Your coaching insight applies to breathwork. Try this wahoo." |
+
+**Key design principles:**
+- Levels unlock based on NUMBER OF SUBMISSIONS, not quality. Showing up IS the levelling.
+- Each level changes what the AI DOES, not just what a badge says. Higher skill = smarter Zarlo = more personalised experience.
+- Skill levels are visible on the Journey tab (simple: "Courage L3" with a progress bar to L4).
+- Level-ups are delivered as Insight Drops: "Courage Level 3 unlocked. You've completed 30 wahoos. The app can now recommend deeper challenges."
+- The Zarlo Brief already tracks the underlying data. Skills are the user-facing LABEL for what the Brief computes.
+
+**V2 Zarlo additional capabilities (unlocked by skill levels):**
+
+| Capability | Unlocked By | What It Does |
+|---|---|---|
+| **Life path commentary** | Self-Awareness L3+ | Zarlo customises daily messages based on active life paths: "Your coaching path is at L2 but hasn't moved in 2 weeks. Your music path just jumped to L1. Energy is flowing there." |
+| **Ranking updates** | Courage L2+ | Zarlo surfaces where you sit relative to others (anonymous): "Your wahoo count this week puts you in the top 20% of active users." / "You've completed more Vulnerable wahoos than 85% of people at your stage." |
+| **Journey narration** | Pattern Recognition L3+ | Zarlo narrates your journey like a story: "Month 1: you wouldn't go Live. Month 3: you ran a workshop. That's not a small change." |
+| **Predictive nudges** | Self-Awareness L5 | Zarlo anticipates based on patterns: "Tomorrow's Thursday. You usually skip the app on Thursdays. Want to set an intention tonight?" |
+| **Path recommendations** | Integration L3+ | Zarlo suggests NEW life paths based on convergence patterns: "People with your breathwork + coaching combo often explore facilitation. Curious?" |
+
+**Build dependency:** Requires Zarlo Brief (Section 6) to be working first. Skills are the presentation layer on top of the Brief's pattern detection.
+
+**Why this isn't flimsy:** The levels change the PRODUCT, not just the interface. A L1 user gets generic Zarlo. A L5 user gets an AI that knows them deeply and can predict, challenge, and connect dots they can't see. The skill IS the relationship depth with the system. You're not grinding for a badge. You're training your AI to understand you.
 
 ### Gap 7: Session Bridge — Saved for Later
 
@@ -647,6 +749,74 @@ Current format: Entrepreneur circle + Coldnips beach meetups. Connection (wins/l
 - Session chapter numbering per attendee
 - Loyalty tiers (Spark → Flame → Fire → Blaze → Inferno)
 - Guest speaker / community member scheduling
+
+---
+
+---
+
+## 10. Research Audit Findings (2026-07-12)
+
+### Figurine Branch Audit
+
+**Branch:** `Figurine` (exists remote, reverted from main). 1,600+ lines of docs, working code.
+
+**What's REUSABLE:**
+- `computeIntelligence()` — milestone-based intelligence scoring (4 phases over months)
+- `getGroupStyle()` — archetype voice calibration (4 group styles)
+- `buildSystemPrompt()` — archetype-voiced prompt builder with phase-specific guidance
+- `getReturnMessage()` — absence-calibrated return messages (3-7, 8-14, 15-29, 30+ days)
+- CSS breathing/glow animations per NS state (4 keyframes: confident 3s, relaxed 4s, agitated 1.5s, slow 6s)
+- `essence_avatar_memory` table (pattern/correction/insight/milestone/fear/breakthrough types, confidence scoring, supersede chain)
+- Data loading pattern (6 parallel Supabase queries)
+- `custom_essence_figurine` column on `lead_flow_profiles`
+
+**What needs REBUILDING (chatbot → coach):**
+- `EssenceAvatarPanel.jsx` is a chatbot UI (text input + message thread). The coach should be a ONE-WAY coaching moment overlay, not a conversation.
+- `EssenceAvatarWidget.jsx` is an always-on floating widget. The coach should APPEAR only at transitions/stuck moments, not persist.
+- Dark theme CSS violates light-theme convention. Needs redesign.
+- `hasSomethingToSay` is hardcoded to `false` (Phase 2 pattern detection was never built).
+- No stage transition detection. No stuck detection. No Unstick Flow.
+
+**Architecture recommendation:**
+- **Reuse:** Intelligence scoring, archetype voice, system prompt builder, memory table, CSS animations, data loading
+- **Build new:** Stage transition listener, stuck detector with per-stage thresholds, 3-step Unstick Flow modal, one-way coaching overlay
+- **Discard:** Chatbot panel, free-text input, streaming conversation, dark-theme panel, "replaces Zarlo" approach
+
+### UI Pattern Audit
+
+**Celebrations (reuse for Insight Drops + Graduations):**
+- `MicroToast` — 7 preset types, add new types for insight drops. Fixed pill at top, slide-in/out, 2.5s.
+- `LevelUpModal` — Full-screen dark overlay, pop animation, auto-triggers confetti. Use for stage graduations.
+- `useCelebrations` hook — Central orchestrator. Add `celebrateStageGraduation()` and `celebrateInsightDrop()`.
+- `FloatingPoints` — Floating "+N RP" that rises and fades. Already works.
+
+**Zarlo Widget (proactive bubbles ready):**
+- `hasNotification` state EXISTS but is **never set to true**. The red pulse dot is plumbed and unused. This is the exact hook for proactive Zarlo messages.
+- A preview speech bubble above the FAB would need a new element (doesn't exist yet).
+- Chat panel is dark theme (`--zarlo-bg: #1a1a2e`) — needs updating for light theme convention.
+
+**Tab Architecture (Journey tab addition):**
+- Tabs defined in `useChallengeData.js` line 138: `['Tune', 'Wahoo', 'Healing', 'Level']`
+- Adding Journey tab = add to array + conditional render in `Challenge.jsx`
+- Tab syncs to URL via `?tab=` query parameter (deep linking works)
+- Sub-tabs within tabs use `stage-tabs` pattern (Healing has daily/weekly/explainer)
+
+**Modal Patterns (for Unstick Flow + Graduations):**
+- `HealingFlowModal` is the closest reference: 7-step, auto-save on unmount, resume-aware, multi-step via `step` state
+- Center overlay: `position: fixed; inset: 0; background: rgba(0,0,0,0.5)`, white card, 22px border-radius, max-width 420px
+- Bottom sheet: `QuestTaskSheet` pattern, slides up, drag handle, max-height 75vh
+
+**Social Features (for Kudos extension):**
+- 4 reaction types exist: 🎉 Cheer, 🔥 Fire, 👏 Clap, 💜 Heart
+- Optimistic UI with revert on failure
+- `league_content_reactions` table with unique constraint on (submission_id, user_id, reaction_type)
+- Reaction system is GENERIC — can be reused for any content type by passing different `submission_id`
+- `ContentCard` pattern (avatar + name + action + media + reactions) is reusable for any social feed
+
+**Scheduled Jobs (for Zarlo Brief):**
+- `pg_cron` + edge function pattern already in use (league scoring every 15 min, push notifications 3x daily)
+- Pattern: pg_cron calls edge function via `net.http_post()` with service role key
+- The Zarlo Brief can use this exact pattern: daily cron generates brief per active user
 
 ---
 
