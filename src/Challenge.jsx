@@ -1053,7 +1053,16 @@ function Challenge() {
       // User-level quests (Healing, Voices) skip challenge_progress and project updates.
       // Their scoring is handled entirely by increment_scores RPC above.
       if (!isUserLevelCategory) {
-        await handleStreakUpdate(user.id, progress.challenge_instance_id)
+        const streakResult = await handleStreakUpdate(user.id, progress.challenge_instance_id)
+
+        // Auto-post streak milestones to community feed
+        if (streakResult?.streak_incremented && streakResult.streak_days) {
+          const STREAK_MILESTONES = [7, 14, 30, 60, 100]
+          const days = streakResult.streak_days
+          if (STREAK_MILESTONES.includes(days)) {
+            postFeedEvent(user.id, 'streak_milestone', `${days} day streak`, `${days} days in a row`)
+          }
+        }
 
         const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
         const hasPointsColumn = rTypesWithColumns.includes(rType)

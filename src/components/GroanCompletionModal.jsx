@@ -8,6 +8,7 @@ import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
+import { postFeedEvent } from '../lib/communityFeed'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -180,6 +181,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       } catch (e) {
         console.warn('Score increment error:', e)
       }
+
+      // 4a2. Auto-post first_wahoo to community feed (once ever)
+      try {
+        const { count } = await supabase
+          .from('quest_completions')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .eq('quest_category', 'Groans')
+        if (count === 1) {
+          postFeedEvent(userId, 'first_wahoo', 'Completed their first wahoo')
+        }
+      } catch (e) { /* best effort */ }
 
       // 4b. Track wahoo analytics
       trackWahooCompleted({ challengeId: challenge.id, wahooScore: scores.wahoo, scaryScore: scores.scary })
