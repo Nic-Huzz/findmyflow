@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useFigurine } from '../../hooks/useFigurine'
 import FigurineChat from './FigurineChat'
 import './FigurineFAB.css'
@@ -40,7 +41,7 @@ export default function FigurineFAB({ activeChat, setActiveChat }) {
 
   return (
     <div className="figurine-fab-container">
-      {isOpen && !isMirrorMode && (
+      {isOpen && !isMirrorMode && createPortal(
         <FigurineChat
           avatarUrl={avatarUrl}
           archetypeName={profile?.custom_essence_name || profile?.essence_archetype}
@@ -52,7 +53,8 @@ export default function FigurineFAB({ activeChat, setActiveChat }) {
           conversationsRemaining={conversationsRemaining}
           intelligencePhase={intelligencePhase}
           phaseName={phaseName}
-        />
+        />,
+        document.body
       )}
 
       <button
