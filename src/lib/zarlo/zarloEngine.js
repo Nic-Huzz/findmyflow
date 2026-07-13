@@ -407,7 +407,8 @@ export async function getUserContext(userId) {
       { data: stageData },
       { data: ecData },
       { data: healingVoiceData },
-      wheelData
+      wheelData,
+      { data: briefData }
     ] = await Promise.all([
       supabase.from('nervous_system_responses').select('id').eq('user_id', userId).limit(1),
       supabase.from('nikigai_clusters').select('id').eq('user_id', userId).limit(1),
@@ -416,7 +417,9 @@ export async function getUserContext(userId) {
       supabase.from('user_stage_progress').select('*').eq('user_id', userId).single(),
       supabase.from('experience_creator_selections').select('dominant_archetype, product_suite, selected_creators').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
       supabase.from('healing_intentions').select('protective_voice').eq('user_id', userId).not('protective_voice', 'is', null),
-      loadWheelData(userId)
+      loadWheelData(userId),
+      // Load pre-computed Zarlo Brief
+      supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle()
     ])
 
     // Protective voice pattern detection (feeds Stage 6→7 graduation)
@@ -460,6 +463,8 @@ export async function getUserContext(userId) {
       protectiveVoiceCounts: voiceCounts,
       dominantVoice: dominantVoice ? { name: dominantVoice[0], count: dominantVoice[1] } : null,
       essenceName: stageData?.essence_name || null,
+      // Pre-computed Zarlo Brief (may be null for new users or if cron hasn't run)
+      zarloBrief: briefData?.brief || null,
     }
   } catch (err) {
     console.error('Error getting user context:', err)

@@ -1,0 +1,104 @@
+/* JourneyTab — light theme, .jt- prefix scoping */
+
+.jt-container {
+  padding: 16px;
+}
+
+.jt-loading {
+  padding: 40px 16px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* Current Stage Card */
+.jt-stage-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.jt-stage-number {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #5e17eb;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.jt-stage-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.jt-stage-feeling {
+  font-style: italic;
+  color: #5e17eb;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Generic section card */
+.jt-section {
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.jt-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+/* Voice dots row */
+.jt-voice-dots {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.jt-dot {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.jt-dot-filled {
+  background: #5e17eb;
+  border-color: #5e17eb;
+}
+
+/* Voice hint text */
+.jt-voice-hint {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-align: center;
+  margin: 8px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Threshold hint text */
+.jt-threshold-hint {
+  font-size: 0.9rem;
+  color: #9333ea;
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}

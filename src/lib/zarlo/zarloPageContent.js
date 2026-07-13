@@ -964,3 +964,15 @@ export function getOnboardingContent(screen) {
 
   return PAGE_CONTENT[screenMap[screen]] || PAGE_CONTENT['onboarding_welcome']
 }
+
+/**
+ * Build Zarlo Brief injection text for the system prompt.
+ * Returns empty string if no Brief is available.
+ * @param {object} userContext - Context object from getUserContext (contains zarloBrief)
+ * @returns {string} System prompt injection text
+ */
+export function getZarloBriefPromptInjection(userContext) {
+  if (!userContext?.zarloBrief) return ''
+
+  return `\n\nZARLO BRIEF (pre-computed daily summary of this user's full journey):\n${JSON.stringify(userContext.zarloBrief, null, 2)}\n\nUse this data to notice patterns, name contradictions, and signal approaching thresholds. Be warm but direct. Never shame. Name what you see.`
+}

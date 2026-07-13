@@ -48,6 +48,7 @@ const TAB_TO_CATEGORY = {
   'tracker': 'Courage',      // backward compat
   'tune': 'Tune',
   'bonus': 'Tune',           // backward compat
+  'journey': 'Journey',
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
   'healing-summary': 'HealingSummary'
@@ -136,7 +137,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Quests', 'Tune', 'Courage', 'Healing']
+  const categories = ['Quests', 'Tune', 'Courage', 'Healing', 'Journey']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 
