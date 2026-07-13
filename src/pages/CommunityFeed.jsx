@@ -112,7 +112,7 @@ export default function CommunityFeed() {
     // Fetch profile data + avatar URL
     const { data: profileData } = await supabase
       .from('lead_flow_profiles')
-      .select('user_id, custom_essence_name, essence_archetype, custom_essence_image')
+      .select('user_id, user_name, custom_essence_name, essence_archetype, custom_essence_image')
       .in('user_id', unknownIds)
 
     const { data: avatarData } = await supabase
@@ -127,12 +127,12 @@ export default function CommunityFeed() {
     const foundIds = new Set()
     if (profileData) {
       profileData.forEach(p => {
-        const essenceName = p.custom_essence_name
-        const archetype = p.essence_archetype
-        // Format: "Name: Archetype" if both exist, otherwise just whichever is available
-        const display = essenceName && archetype
-          ? `${essenceName}: ${archetype}`
-          : essenceName || archetype || null
+        const userName = p.user_name || null
+        const essenceName = p.custom_essence_name || p.essence_archetype || null
+        // Format: "UserName: EssenceName" if both, otherwise just whichever is available
+        const display = userName && essenceName
+          ? `${userName}: ${essenceName}`
+          : userName || essenceName || null
         names[p.user_id] = {
           display: display,
           avatarUrl: p.custom_essence_image || avatarMap[p.user_id] || null,
