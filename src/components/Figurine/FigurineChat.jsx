@@ -18,6 +18,33 @@ import './FigurineChat.css'
  *  - intelligencePhase: number (0-3)
  *  - phaseName: string
  */
+const PROMPT_BUBBLES = [
+  // Phase 0: Archetype only
+  [
+    'What does my archetype say about me?',
+    'What are my biggest strengths?',
+    'What should I watch out for?',
+  ],
+  // Phase 1: + NS state + wahoos
+  [
+    'How am I doing this week?',
+    'What patterns do you see in my check-ins?',
+    'What should I try next?',
+  ],
+  // Phase 2: + voices + healing
+  [
+    'What keeps getting in my way?',
+    'What would you tell me on a hard day?',
+    'Am I making progress?',
+  ],
+  // Phase 3: Full data
+  [
+    'What do you think I should focus on?',
+    'What have you noticed about me?',
+    'What would my next breakthrough look like?',
+  ],
+]
+
 export default function FigurineChat({
   avatarUrl, archetypeName, messages, isStreaming, onSend, onClose,
   canChat, conversationsRemaining, intelligencePhase, phaseName
@@ -51,9 +78,14 @@ export default function FigurineChat({
 
         {/* Messages */}
         <div className="fc-messages">
-          {messages.length === 0 && (
-            <div className="fc-empty">
-              <p>Ask me anything about your journey.</p>
+          {messages.length === 0 && canChat && (
+            <div className="fc-prompts">
+              <p className="fc-prompts-label">Ask me anything, or try one of these:</p>
+              {(PROMPT_BUBBLES[intelligencePhase] || PROMPT_BUBBLES[0]).map((q, i) => (
+                <button key={i} className="fc-prompt-btn" onClick={() => onSend(q)}>
+                  {q}
+                </button>
+              ))}
             </div>
           )}
           {messages.map((msg, i) => (

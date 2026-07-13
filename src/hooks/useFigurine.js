@@ -27,7 +27,7 @@ function getIntelligencePhase(percent) {
   return 0
 }
 
-const PHASE_NAMES = ['Archetype Voice', 'State Mirror', 'Pattern Emergence', 'Personalised']
+const PHASE_NAMES = ['Your Mentor', 'Your Mentor', 'Your Mentor', 'Your Mentor']
 
 function getNextMilestoneHint(data) {
   if (!data.essenceArchetype) return 'Complete the Essence Mirror to begin'
