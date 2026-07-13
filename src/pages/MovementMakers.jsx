@@ -1,6 +1,6 @@
 /**
  * MovementMakers.jsx — /movement-makers
- * Landing page for Movement Makers cohort product.
+ * Landing page for Movement Makers ($499 setup + $99/month creator portal).
  * "Get Paid To Have Fun."
  *
  * Embeds ExperienceCreatorFlow inline as the first interactive step.
@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabaseClient'
 import './MovementMakers.css'
 
 // Fonts loaded via CSS import in MovementMakers.css
@@ -17,10 +18,10 @@ const ExperienceCreatorFlow = lazy(() => import('../flows/ExperienceCreatorFlow'
 
 const FAQS = [
   { q: "What if I'm just starting out?", a: "Movement Makers is for facilitators who already run experiences. If you're still figuring out what you want to create, start with the free Vibe Rise app. It'll help you discover your play-skills and build courage. When you're ready to build a business from them, Movement Makers is here." },
-  { q: "How is this different from a course?", a: "Courses dump information. Movement Makers gives you a system and a group that holds you accountable to USE it. The app tracks your checklists, your challenges, your 3% improvements. The weekly check-ins make sure you actually do the work. You're not learning. You're building." },
-  { q: "What happens on the check-ins?", a: "Weekly: accountability check (the app shows green/red on your commitments), debrief from anyone who ran an experience, and intention setting for the next week. No fluff." },
-  { q: "Can I cancel anytime?", a: "Yes. Monthly. No lock-in. First month is fully refundable if it's not for you." },
-  { q: "What's the time commitment?", a: "One weekly check-in. The rest is working your checklist and running your experiences, which you're already doing. The app removes time from your workflow, it doesn't add to it." },
+  { q: "What do I get in the $499 setup?", a: "The identity work that everything else builds on. We find your rule break (the thing you do differently that makes word spread), map your business model based on creators like you, and turn it all into a clear positioning statement. You do it once and it's yours forever." },
+  { q: "How is this different from a course?", a: "Courses dump information. Movement Makers gives you a system you actually use. The app tracks your checklists, your challenges, your 3% improvements. You're not learning. You're building." },
+  { q: "Can I cancel anytime?", a: "Yes. The $99 subscription is monthly with no lock-in, and your first month is fully refundable if it's not for you. The $499 setup is not refundable, because it gives you full access to the identity content straight away." },
+  { q: "What's the time commitment?", a: "The system works around events you're already running. You work your checklist, run your experience, log what happened. The app removes time from your workflow, it doesn't add to it." },
   { q: "What kind of experiences qualify?", a: "Workshops, breathwork, dance, retreats, circles, coaching cohorts, performances, online sessions. If you create an experience where people show up and something shifts, you're a Movement Maker." },
 ]
 
@@ -28,10 +29,13 @@ export default function MovementMakers() {
   const navigate = useNavigate()
   const [headerSolid, setHeaderSolid] = useState(false)
   const [expandedFaq, setExpandedFaq] = useState(null)
-  const [joinSubmitted, setJoinSubmitted] = useState(false)
+  const [joinEmail, setJoinEmail] = useState('')
+  const [joinState, setJoinState] = useState('idle') // idle | saving | done
+  const [joinError, setJoinError] = useState('')
   const matchingRef = useRef(null)
 
   useEffect(() => {
+    document.title = 'Movement Makers | Scale Your Income + Impact as an Experience Creator'
     const onScroll = () => setHeaderSolid(window.scrollY > 80)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -45,8 +49,32 @@ export default function MovementMakers() {
     document.getElementById('mm-pricing')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const handleJoinCohort = () => {
-    setJoinSubmitted(true)
+  const handleJoinSubmit = async () => {
+    const email = joinEmail.trim().toLowerCase()
+    if (!email || !email.includes('@')) {
+      setJoinError('Please enter a valid email address.')
+      return
+    }
+    setJoinState('saving')
+    setJoinError('')
+    try {
+      await supabase.from('lead_captures').insert({ email, source: 'movement-makers' })
+    } catch (err) {
+      console.warn('Lead capture error:', err.message)
+    }
+    // Enroll in the creator nurture sequence (same funnel as the matching embed)
+    supabase.functions.invoke('enroll-email-sequence', {
+      body: {
+        email,
+        sequence_type: 'creator_nurture',
+        personalization_tokens: { name: email.split('@')[0] },
+      },
+    }).catch(() => {})
+    // Ping Huzz: pricing-card leads are high intent
+    supabase.functions.invoke('notify-app-build-interest', {
+      body: { userEmail: email, userName: null, userId: null, source: 'movement-makers-pricing' },
+    }).catch(() => {})
+    setJoinState('done')
   }
 
   return (
@@ -73,12 +101,12 @@ export default function MovementMakers() {
             <span className="mm-h1-accent">Have Fun.</span>
           </h1>
           <p className="mm-hero-sub">
-            A monthly cohort of experience creators building businesses from the work that lights them up.
+            Scale your income and impact as an experience creator.
           </p>
           <div className="mm-hero-badges">
-            <span className="mm-badge">10 Per Cohort</span>
-            <span className="mm-badge">Weekly Check-ins</span>
             <span className="mm-badge">Full Creator Portal</span>
+            <span className="mm-badge">Built From 200+ Events</span>
+            <span className="mm-badge">Cancel Anytime</span>
           </div>
         </div>
       </section>
@@ -136,7 +164,7 @@ export default function MovementMakers() {
             <p className="mm-story-quote">
               "Running events for $30 tickets is brutal. You need 30 people just to make $1,000. I learned every lesson the hard way: empty rooms, undercharging, no follow-up, starting from scratch every single time.
               <br /><br />
-              After 200+ experiences I figured out the system. Now my events do 100+ people and over $2K profit each. Movement Makers is everything I learned, built into an app so you don't have to learn it the hard way."
+              After 200+ experiences I figured out the system. Now my events do 100+ people. Movement Makers is everything I learned, built into an app so you don't have to learn it the hard way."
             </p>
             <div className="mm-story-author">
               <div className="mm-story-avatar">
@@ -144,7 +172,7 @@ export default function MovementMakers() {
               </div>
               <div>
                 <div className="mm-story-name">Huzz</div>
-                <div className="mm-story-role">Founder, Healing But Fun</div>
+                <div className="mm-story-role">Founder, Vibe Rise</div>
                 <div className="mm-story-role">200+ experiences facilitated in Bali</div>
               </div>
             </div>
@@ -176,89 +204,93 @@ export default function MovementMakers() {
             </div>
             <div>
               <div className="mm-proof-stat">4</div>
-              <div className="mm-proof-label">Experiences delivered</div>
+              <div className="mm-proof-label">Signature formats</div>
               <div className="mm-proof-detail">Healing Compass, Shaking Breathwork, Vibe Rise, Retreats</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* WHAT'S INCLUDED (4 phases) */}
+      {/* WHAT'S INCLUDED (Setup + Portal) */}
       <section className="mm-section mm-section--warm">
         <div className="mm-container" style={{ textAlign: 'center' }}>
           <p className="mm-label">WHAT'S INCLUDED</p>
-          <h2 className="mm-h2">$1,276 of value. $100/month.</h2>
-          <p className="mm-sub">The system handles every phase of running an experience. You just show up and create.</p>
+          <h2 className="mm-h2">The biggest creators took 12 years to figure this out.</h2>
+          <p className="mm-sub">We studied how the biggest experience creators blew up. On average it took 12 years. Most quit long before that. This gives you what they figured out the slow way.</p>
 
-          <div className="mm-phase-grid">
-            {/* Setup */}
+          {/* Block A: The Setup ($499) */}
+          <div className="mm-block-label">
+            <span className="mm-block-name">THE SETUP</span>
+            <span className="mm-block-price">$499 one time</span>
+          </div>
+          <p className="mm-block-sub">The identity work everything else builds on. Done once, yours forever.</p>
+          <div className="mm-phase-grid mm-phase-grid--single">
             <div className="mm-phase-card">
               <div className="mm-phase-header">
-                <span className="mm-phase-icon">🧭</span>
-                <span className="mm-phase-name">Setup</span>
+                <span className="mm-phase-icon">💎</span>
+                <span className="mm-phase-name">Position</span>
               </div>
-              <div className="mm-phase-desc">Map your business before you plan a single event.</div>
+              <div className="mm-phase-desc">Find the thing you do differently. That's what makes word spread.</div>
               <div className="mm-phase-features">
                 <div className="mm-phase-feature"><strong>The Business Model Finder</strong><span>See exactly what to build based on creators like you</span></div>
-                <div className="mm-phase-feature"><strong>The Journey Compass</strong><span>Know exactly where you are and what to focus on next</span></div>
-                <div className="mm-phase-feature"><strong>How To Scale Your Income</strong><span>Find the gaps in how you attract, sell, scale, and retain</span></div>
-                <div className="mm-phase-feature"><strong>Your Play Profile</strong><span>Create your system for success</span></div>
+                <div className="mm-phase-feature"><strong>The Blow Up Brand Pipeline</strong><span>Rule Break, Reach, Growth, and your Scale Score</span></div>
+                <div className="mm-phase-feature"><strong>Your Positioning Statement</strong><span>AI turns your answers into who you help and why they come to you</span></div>
               </div>
-              <div className="mm-phase-screenshot">[Screenshot: My Business tab]</div>
-            </div>
-
-            {/* Pre-Event */}
-            <div className="mm-phase-card">
-              <div className="mm-phase-header">
-                <span className="mm-phase-icon">⚡</span>
-                <span className="mm-phase-name">Pre-Event</span>
-              </div>
-              <div className="mm-phase-desc">Fill the room. The parts you resist, handled.</div>
-              <div className="mm-phase-features">
-                <div className="mm-phase-feature"><strong>The Room-Filling System</strong><span>Every marketing task laid out with nothing forgotten</span></div>
-                <div className="mm-phase-feature"><strong>The Execution Engine</strong><span>Tasks become challenges with deadlines your group sees</span></div>
-                <div className="mm-phase-feature"><strong>The Price-It-Right Calculator</strong><span>Know exactly what to charge based on your value stack</span></div>
-              </div>
-              <div className="mm-phase-screenshot">[Screenshot: Checklist with lightning bolts]</div>
-            </div>
-
-            {/* Deliver */}
-            <div className="mm-phase-card">
-              <div className="mm-phase-header">
-                <span className="mm-phase-icon">🎪</span>
-                <span className="mm-phase-name">Deliver</span>
-              </div>
-              <div className="mm-phase-desc">Walk in ready. Focus on the magic.</div>
-              <div className="mm-phase-features">
-                <div className="mm-phase-feature"><strong>Run-sheet ready</strong><span>Your minute-by-minute agenda, built from the checklist</span></div>
-                <div className="mm-phase-feature"><strong>Energy arc planned</strong><span>Peaks, rests, and transitions mapped before you arrive</span></div>
-                <div className="mm-phase-feature"><strong>Materials prepped</strong><span>Nothing forgotten, everything ticked off</span></div>
-                <div className="mm-phase-feature"><strong>You just facilitate</strong><span>The business is handled. You do what you do best.</span></div>
-              </div>
-            </div>
-
-            {/* Post-Event */}
-            <div className="mm-phase-card">
-              <div className="mm-phase-header">
-                <span className="mm-phase-icon">🔄</span>
-                <span className="mm-phase-name">Post-Event</span>
-              </div>
-              <div className="mm-phase-desc">Close the loop. Compound forward.</div>
-              <div className="mm-phase-features">
-                <div className="mm-phase-feature"><strong>The Customer Bible</strong><span>Take a photo of your sign-up sheet, AI does the rest</span></div>
-                <div className="mm-phase-feature"><strong>The Compound Tracker</strong><span>See your repeat attendees, growth, and momentum over time</span></div>
-                <div className="mm-phase-feature"><strong>The Success System</strong><span>One small improvement per event that compounds into mastery</span></div>
-                <div className="mm-phase-feature"><strong>The Profit Calculator</strong><span>Know exactly what you made after every experience</span></div>
-              </div>
-              <div className="mm-phase-screenshot">[Screenshot: Post-event tab]</div>
+              <div className="mm-phase-screenshot">[Screenshot: Playbook tab stepper]</div>
             </div>
           </div>
 
-          <div className="mm-group-bar">
-            <div className="mm-group-bar-icon">👥</div>
-            <div>
-              <div className="mm-group-bar-title">Plus: Weekly check-ins with your cohort</div>
-              <div className="mm-group-bar-desc">Accountability, intention setting, debrief. The group makes sure you actually do the work.</div>
+          {/* Block B: The Portal ($99/month) */}
+          <div className="mm-block-label">
+            <span className="mm-block-name">THE PORTAL</span>
+            <span className="mm-block-price">$99/month</span>
+          </div>
+          <p className="mm-block-sub">The engine you run every event through.</p>
+          <div className="mm-phase-grid">
+            {/* Fill */}
+            <div className="mm-phase-card">
+              <div className="mm-phase-header">
+                <span className="mm-phase-icon">⚡</span>
+                <span className="mm-phase-name">Fill</span>
+              </div>
+              <div className="mm-phase-desc">Fill the room. The parts you resist, handled.</div>
+              <div className="mm-phase-features">
+                <div className="mm-phase-feature"><strong>The Experience Pipeline</strong><span>Attract, capture, convert, deliver, grow. Every event, same system.</span></div>
+                <div className="mm-phase-feature"><strong>The Execution Engine</strong><span>Tasks become challenges with deadlines</span></div>
+                <div className="mm-phase-feature"><strong>Fill Checklists</strong><span>Every marketing task laid out with nothing forgotten</span></div>
+                <div className="mm-phase-feature"><strong>The Price-It-Right Calculator</strong><span>Know exactly what to charge based on your value stack</span></div>
+              </div>
+              <div className="mm-phase-screenshot">[Screenshot: Experience pipeline view]</div>
+            </div>
+
+            {/* Run */}
+            <div className="mm-phase-card">
+              <div className="mm-phase-header">
+                <span className="mm-phase-icon">🎪</span>
+                <span className="mm-phase-name">Run</span>
+              </div>
+              <div className="mm-phase-desc">Walk in ready. Focus on the magic.</div>
+              <div className="mm-phase-features">
+                <div className="mm-phase-feature"><strong>Run Sheets</strong><span>Your minute-by-minute agenda, built from the checklist</span></div>
+                <div className="mm-phase-feature"><strong>Reusable Templates</strong><span>Save what works, use it every time</span></div>
+                <div className="mm-phase-feature"><strong>Run It Again</strong><span>One tap turns a past event into the next one</span></div>
+              </div>
+            </div>
+
+            {/* Grow */}
+            <div className="mm-phase-card">
+              <div className="mm-phase-header">
+                <span className="mm-phase-icon">🔄</span>
+                <span className="mm-phase-name">Grow</span>
+              </div>
+              <div className="mm-phase-desc">Close the loop. Compound forward.</div>
+              <div className="mm-phase-features">
+                <div className="mm-phase-feature"><strong>Repeat-Attendee Tracking</strong><span>See who keeps coming back, and who to invite next</span></div>
+                <div className="mm-phase-feature"><strong>Profit Per Event</strong><span>Know exactly what you made after every experience</span></div>
+                <div className="mm-phase-feature"><strong>The 3% Note</strong><span>One small improvement per event that compounds into mastery</span></div>
+                <div className="mm-phase-feature"><strong>A Contact List That Builds Itself</strong><span>Every attendee saved without spreadsheets</span></div>
+              </div>
+              <div className="mm-phase-screenshot">[Screenshot: Grow metrics view]</div>
             </div>
           </div>
         </div>
@@ -268,22 +300,33 @@ export default function MovementMakers() {
       <section className="mm-section" id="mm-pricing">
         <div className="mm-container" style={{ textAlign: 'center' }}>
           <p className="mm-label">PRICING</p>
-          <h2 className="mm-h2">Simple. One price. Everything included.</h2>
+          <h2 className="mm-h2">One setup. One subscription. Everything included.</h2>
           <div className="mm-price-card">
-            <div className="mm-price-eyebrow">FOUNDING MEMBERSHIP</div>
+            <div className="mm-price-eyebrow">FOUNDING PRICE</div>
             <div className="mm-price-name">Movement Makers</div>
-            <div className="mm-price-tagline">10 experience creators per monthly cohort</div>
-            <div className="mm-price-amount">$100<span>/month</span></div>
-            <div className="mm-price-was">Total value: <s>$1,276/month</s></div>
+            <div className="mm-price-tagline">The setup builds your positioning. The portal fills your events.</div>
+            <div className="mm-price-amount">$499<span> setup</span></div>
+            <div className="mm-price-then">then $99<span>/month</span></div>
             <div className="mm-price-roi">Fill 3 extra seats at your next experience and it's paid for itself.</div>
-            {joinSubmitted ? (
-              <div className="mm-price-submitted">You're on the list. We'll be in touch.</div>
+            {joinState === 'done' ? (
+              <div className="mm-price-submitted">You're in. We'll be in touch to book your setup.</div>
             ) : (
-              <button className="mm-price-cta" onClick={handleJoinCohort}>
-                Join The Next Cohort →
-              </button>
+              <div className="mm-price-join">
+                <input
+                  type="email"
+                  className="mm-price-email"
+                  placeholder="you@email.com"
+                  value={joinEmail}
+                  onChange={(e) => setJoinEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleJoinSubmit()}
+                />
+                <button className="mm-price-cta" onClick={handleJoinSubmit} disabled={joinState === 'saving'}>
+                  {joinState === 'saving' ? 'Saving...' : 'Get Started →'}
+                </button>
+                {joinError && <div className="mm-price-error">{joinError}</div>}
+              </div>
             )}
-            <div className="mm-price-spots"><strong>10 spots</strong> per cohort. Founding membership pricing.</div>
+            <div className="mm-price-spots"><strong>8 spots left</strong> at founding price.</div>
           </div>
         </div>
       </section>
@@ -300,11 +343,11 @@ export default function MovementMakers() {
             </div>
             <div className="mm-guarantee-card mm-guarantee-unconditional">
               <div className="mm-guarantee-type">THE SAFETY NET</div>
-              <div className="mm-guarantee-text">Try the first month. If it's not for you, full refund. No questions asked.</div>
+              <div className="mm-guarantee-text">Try the portal for a month. If it's not for you, your first $99 comes back. No questions asked.</div>
             </div>
             <div className="mm-guarantee-card mm-guarantee-conditional">
               <div className="mm-guarantee-type">THE COMMITMENT</div>
-              <div className="mm-guarantee-text">Complete 3 checklists, run 1 experience through the system. If your attendance doesn't grow, next month is free.</div>
+              <div className="mm-guarantee-text">Complete 3 checklists, run 1 experience through the pipeline. If your attendance doesn't grow, next month is free.</div>
             </div>
           </div>
         </div>
@@ -352,7 +395,7 @@ export default function MovementMakers() {
         <div className="mm-container">
           <h2 className="mm-h2">Ready to get paid<br />to have fun?</h2>
           <p style={{ color: '#6b6b6b', fontSize: '1.05rem', maxWidth: '500px', margin: '1rem auto 2rem' }}>
-            10 spots. Monthly cohort. Full system. Triple guarantee.
+            Full system. Setup included. Cancel anytime.
           </p>
           <button className="mm-cta" onClick={scrollToPricing}>
             Join Movement Makers &rarr;
@@ -366,7 +409,7 @@ export default function MovementMakers() {
           <div className="mm-logo" style={{ justifyContent: 'center', marginBottom: '0.5rem' }}>
             <span className="mm-logo-dot" /> Movement Makers
           </div>
-          <p style={{ fontSize: '0.78rem', color: '#999' }}>by Healing But Fun. Built in Bali.</p>
+          <p style={{ fontSize: '0.78rem', color: '#999' }}>by Vibe Rise. Built in Bali.</p>
         </div>
       </footer>
     </div>
