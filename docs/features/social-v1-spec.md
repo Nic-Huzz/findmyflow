@@ -151,10 +151,14 @@ CREATE TABLE community_feed (
   metadata JSONB,              -- Event-specific data (stage number, streak days, wahoo classification, etc.)
   created_at TIMESTAMPTZ DEFAULT NOW(),
 
-  -- Deduplication: prevent double-posting the same event
-  -- e.g. (user_id, 'stage_graduation', '{"stage": 5}') can only exist once
-  CONSTRAINT unique_event UNIQUE (user_id, event_type, title)
 );
+
+-- Deduplication: prevent double-posting AUTO events only.
+-- Opt-in shares (shared_wahoo, shared_healing, shared_weekly_review) are NOT deduped
+-- because users should be able to share multiple wahoos with the same title on different days.
+CREATE UNIQUE INDEX unique_auto_event 
+  ON community_feed(user_id, event_type, title) 
+  WHERE event_type NOT IN ('shared_wahoo', 'shared_healing', 'shared_weekly_review');
 
 ALTER TABLE community_feed ENABLE ROW LEVEL SECURITY;
 
@@ -168,7 +172,7 @@ CREATE INDEX idx_community_feed_time ON community_feed(created_at DESC);
 CREATE INDEX idx_community_feed_user ON community_feed(user_id);
 ```
 
-**Deduplication:** The `UNIQUE (user_id, event_type, title)` constraint prevents double-posting. If `heroStageChecker` fires twice for the same graduation, the second INSERT fails silently (use `.insert(...).catch(() => {})` or `ON CONFLICT DO NOTHING`).
+**Deduplication:** A partial unique index on `(user_id, event_type, title)` covers AUTO events only. If `heroStageChecker` fires twice for the same graduation, the second INSERT fails silently. Opt-in shares (shared_wahoo, shared_healing, shared_weekly_review) are excluded from the constraint — users can share multiple wahoos with the same title on different days.
 
 ### ONE Reaction Table: `community_feed_reactions`
 
