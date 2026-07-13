@@ -115,12 +115,12 @@ export async function checkHeroGraduation(userId) {
 
     // Auto-post stage graduation to community feed
     const STAGE_NAMES = {
-      2: 'The Earthquake',
-      3: 'Head Full of Dreams',
-      4: 'Mirror / Mentor',
-      5: 'First Vibe Rise',
-      6: 'The Daily Loop',
-      7: 'Pattern Revealed',
+      2: 'Call to Adventure',
+      3: 'Refusal of the Call',
+      4: 'Meeting the Mentor',
+      5: 'Crossing the Threshold',
+      6: 'Tests, Allies, Enemies',
+      7: 'Approach to the Inmost Cave',
     }
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
     const feelingTarget = stageData?.persona || null

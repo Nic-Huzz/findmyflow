@@ -44,6 +44,22 @@
   line-height: 1.4;
 }
 
+.jt-stage-history-btn {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: rgba(94, 23, 235, 0.4);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+}
+
+.jt-stage-history-btn:active {
+  color: #5e17eb;
+}
+
 /* Generic section card */
 .jt-section {
   margin-top: 20px;

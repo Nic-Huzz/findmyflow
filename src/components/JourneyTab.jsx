@@ -9,19 +9,19 @@ import JourneyCompleted from './journey/JourneyCompleted'
 import { useFigurine } from '../hooks/useFigurine'
 import './JourneyTab.css'
 
-// Hero stage names + feeling targets (from measurement framework)
+// Hero stage names (Campbell) + feeling targets
 const HERO_STAGES = [
   { stage: 0, name: 'Not Started', feeling: '' },
-  { stage: 1, name: 'The Matrix', feeling: 'Something just shifted. I can\'t go back.' },
-  { stage: 2, name: 'The Earthquake', feeling: 'Something just shifted. I can\'t go back.' },
-  { stage: 3, name: 'Head Full of Dreams', feeling: 'I can see it but I can\'t reach it.' },
-  { stage: 4, name: 'Mirror / Mentor', feeling: 'I feel so seen. I have words for this now.' },
-  { stage: 5, name: 'First Vibe Rise', feeling: 'I didn\'t know I could feel this alive.' },
-  { stage: 6, name: 'The Daily Loop', feeling: 'I\'m actually doing it. Every day.' },
-  { stage: 7, name: 'Pattern Revealed', feeling: 'That\'s what\'s been stopping me.' },
+  { stage: 1, name: 'Ordinary World', feeling: '' },
+  { stage: 2, name: 'Call to Adventure', feeling: 'Something just shifted. I can\'t go back.' },
+  { stage: 3, name: 'Refusal of the Call', feeling: 'I can see it but I can\'t reach it.' },
+  { stage: 4, name: 'Meeting the Mentor', feeling: 'I feel so seen. I have words for this now.' },
+  { stage: 5, name: 'Crossing the Threshold', feeling: 'I didn\'t know I could feel this alive.' },
+  { stage: 6, name: 'Tests, Allies, Enemies', feeling: 'I\'m actually doing it. Every day.' },
+  { stage: 7, name: 'Approach to the Inmost Cave', feeling: 'That\'s what\'s been stopping me.' },
   { stage: 8, name: 'The Ordeal', feeling: 'That hurt. But something released.' },
-  { stage: 9, name: 'Flow Statement', feeling: 'Of course. This was always my path.' },
-  { stage: 10, name: 'Aligned Action', feeling: 'I\'m doing the thing. For real.' },
+  { stage: 9, name: 'Reward', feeling: 'Of course. This was always my path.' },
+  { stage: 10, name: 'The Road Back', feeling: 'I\'m doing the thing. For real.' },
 ]
 
 export default function JourneyTab({ userId }) {
@@ -156,10 +156,10 @@ export default function JourneyTab({ userId }) {
   const sorted = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
   const dominant = sorted[0] // [name, count] or undefined
 
+  const [showTimeline, setShowTimeline] = useState(false)
+
   return (
     <div className="jt-container">
-      <JourneyTimeline userId={userId} heroStage={heroStage} />
-
       {/* Current Stage */}
       <div className="jt-stage-card">
         <div className="jt-stage-number">Stage {heroStage}</div>
@@ -167,7 +167,15 @@ export default function JourneyTab({ userId }) {
         {stageInfo.feeling && (
           <p className="jt-stage-feeling">"{stageInfo.feeling}"</p>
         )}
+        {heroStage > 1 && (
+          <button className="jt-stage-history-btn" onClick={() => setShowTimeline(!showTimeline)}>
+            {showTimeline ? 'Hide journey' : 'Your Hero\'s Journey'}
+          </button>
+        )}
       </div>
+
+      {/* Timeline dropdown */}
+      {showTimeline && <JourneyTimeline userId={userId} heroStage={heroStage} />}
 
       {/* Figurine Presence */}
       {figurine.isUnlocked && (

@@ -9,20 +9,24 @@ import { supabase } from '../../lib/supabaseClient'
 import './JourneyTimeline.css'
 
 const HERO_STAGES = [
-  { stage: 2, name: 'The Earthquake', icon: '⚡' },
-  { stage: 3, name: 'Head Full of Dreams', icon: '💭' },
-  { stage: 4, name: 'Mirror / Mentor', icon: '🪞' },
-  { stage: 5, name: 'First Vibe Rise', icon: '🔥' },
-  { stage: 6, name: 'The Daily Loop', icon: '🔄' },
-  { stage: 7, name: 'Pattern Revealed', icon: '🔮' },
+  { stage: 1, name: 'Ordinary World', icon: '🏢' },
+  { stage: 2, name: 'Call to Adventure', icon: '⚡' },
+  { stage: 3, name: 'Refusal of the Call', icon: '💭' },
+  { stage: 4, name: 'Meeting the Mentor', icon: '🪞' },
+  { stage: 5, name: 'Crossing the Threshold', icon: '🔥' },
+  { stage: 6, name: 'Tests, Allies, Enemies', icon: '🔄' },
+  { stage: 7, name: 'Approach to the Inmost Cave', icon: '🔮' },
 ]
 
 export default function JourneyTimeline({ userId, heroStage }) {
   const [evidence, setEvidence] = useState({})
 
   useEffect(() => {
-    if (!userId || heroStage < 3) return
+    if (!userId || heroStage < 2) return
     let active = true
+
+    // Stage 1: always show (pre-app, no date)
+    setEvidence(prev => ({ ...prev, [1]: { date: null, label: 'Life before the crack' } }))
 
     // All evidence fetches fire in parallel (not serial)
     // Stage 2: first NS check-in
@@ -94,7 +98,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
     return () => { active = false }
   }, [userId, heroStage])
 
-  if (heroStage < 3) return null
+  if (heroStage < 2) return null
 
   const completedStages = HERO_STAGES.filter(s => s.stage < heroStage)
 
