@@ -9,19 +9,55 @@ import JourneyCompleted from './journey/JourneyCompleted'
 import { useFigurine } from '../hooks/useFigurine'
 import './JourneyTab.css'
 
-// Hero stage names (Campbell) + feeling targets
+// Hero stage names (Campbell) + movie references
 const HERO_STAGES = [
-  { stage: 0, name: 'Not Started', feeling: '' },
-  { stage: 1, name: 'Ordinary World', feeling: '' },
-  { stage: 2, name: 'Call to Adventure', feeling: 'Something just shifted. I can\'t go back.' },
-  { stage: 3, name: 'Refusal of the Call', feeling: 'I can see it but I can\'t reach it.' },
-  { stage: 4, name: 'Meeting the Mentor', feeling: 'I feel so seen. I have words for this now.' },
-  { stage: 5, name: 'Crossing the Threshold', feeling: 'I didn\'t know I could feel this alive.' },
-  { stage: 6, name: 'Tests, Allies, Enemies', feeling: 'I\'m actually doing it. Every day.' },
-  { stage: 7, name: 'Approach to the Inmost Cave', feeling: 'That\'s what\'s been stopping me.' },
-  { stage: 8, name: 'The Ordeal', feeling: 'That hurt. But something released.' },
-  { stage: 9, name: 'Reward', feeling: 'Of course. This was always my path.' },
-  { stage: 10, name: 'The Road Back', feeling: 'I\'m doing the thing. For real.' },
+  { stage: 0, name: 'Not Started', references: [] },
+  { stage: 1, name: 'Ordinary World', references: [] },
+  { stage: 2, name: 'Call to Adventure', references: [
+    'Think: Ariel seeing the surface world for the first time.',
+    'Think: Peter Parker getting bitten by the spider.',
+    'Think: Neo seeing the Matrix for the first time.',
+  ]},
+  { stage: 3, name: 'Refusal of the Call', references: [
+    'Think: Simba running away to the jungle.',
+    'Think: Miles Morales saying "I can\'t do this."',
+    'Think: Frodo saying "I wish the ring had never come to me."',
+  ]},
+  { stage: 4, name: 'Meeting the Mentor', references: [
+    'Think: Aladdin meeting the Genie.',
+    'Think: Tony Stark building the first suit in the cave.',
+    'Think: Luke meeting Yoda on Dagobah.',
+  ]},
+  { stage: 5, name: 'Crossing the Threshold', references: [
+    'Think: Jasmine and Aladdin on the magic carpet for the first time.',
+    'Think: Spider-Man\'s first swing through New York.',
+    'Think: Neo dodging bullets for the first time.',
+  ]},
+  { stage: 6, name: 'Tests, Allies, Enemies', references: [
+    'Think: Mulan training with the army.',
+    'Think: The Avengers learning to fight together.',
+    'Think: Rocky running up the stairs.',
+  ]},
+  { stage: 7, name: 'Approach to the Inmost Cave', references: [
+    'Think: Simba returning to the Pride Lands to face Scar.',
+    'Think: Doctor Strange facing Dormammu.',
+    'Think: Luke entering the cave on Dagobah.',
+  ]},
+  { stage: 8, name: 'The Ordeal', references: [
+    'Think: Mufasa\'s death breaking Simba open.',
+    'Think: Tony Stark snapping the Infinity Gauntlet.',
+    'Think: Neo dying and coming back as The One.',
+  ]},
+  { stage: 9, name: 'Reward', references: [
+    'Think: Simba taking his place on Pride Rock.',
+    'Think: Thor finally becoming worthy.',
+    'Think: Frodo holding the ring at Mount Doom.',
+  ]},
+  { stage: 10, name: 'The Road Back', references: [
+    'Think: Woody choosing to leave Andy.',
+    'Think: Spider-Man returning to Queens.',
+    'Think: Bilbo writing his book.',
+  ]},
 ]
 
 export default function JourneyTab({ userId }) {
@@ -163,8 +199,12 @@ export default function JourneyTab({ userId }) {
       <div className="jt-stage-card">
         <div className="jt-stage-number">Stage {heroStage}</div>
         <h2 className="jt-stage-name">{stageInfo.name}</h2>
-        {stageInfo.feeling && (
-          <p className="jt-stage-feeling">"{stageInfo.feeling}"</p>
+        {stageInfo.references?.length > 0 && (
+          <div className="jt-stage-refs">
+            {stageInfo.references.map((ref, i) => (
+              <p key={i} className="jt-stage-ref">{ref}</p>
+            ))}
+          </div>
         )}
 
         {/* Progress indicator (stage 5-6: voice dots) */}

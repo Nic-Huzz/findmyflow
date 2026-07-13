@@ -44,6 +44,22 @@
   line-height: 1.4;
 }
 
+.jt-stage-refs {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.jt-stage-ref {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  margin: 0 0 4px;
+  line-height: 1.4;
+}
+
+.jt-stage-ref:last-child { margin-bottom: 0; }
+
 .jt-stage-history-btn {
   margin-top: 12px;
   background: none;
