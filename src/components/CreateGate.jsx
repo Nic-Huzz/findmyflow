@@ -84,7 +84,7 @@ export default function CreateGate({ children }) {
   return (
     <div className="cg-page">
       <div className="cg-container">
-        <div className="cg-badge">Movement Maker</div>
+        <div className="cg-badge">Become a Movement Maker</div>
 
         <h1 className="cg-headline">
           Pick the creators who built the life you want. <span className="cg-gradient">See exactly how they did it.</span>
@@ -114,14 +114,11 @@ export default function CreateGate({ children }) {
             <span className="cg-teaser-num">02</span>
             <h2 className="cg-teaser-title">How Did They Blow Up Their Brand?</h2>
           </div>
-          <p className="cg-teaser-sub">The four triggers that made the world pay attention.</p>
+          <p className="cg-teaser-sub">The rule they broke that made the world pay attention.</p>
           {CREATORS.slice(0, 4).map(c => (
             <CreatorRow key={c.name} creator={c}>
               <div className="cg-trigger-tags">
-                <span className="cg-trigger-tag">Rule Break <BlurredText width={80} /></span>
-                <span className="cg-trigger-tag">Unexpected Combo <BlurredText width={80} /></span>
-                <span className="cg-trigger-tag">Extreme Action <BlurredText width={80} /></span>
-                <span className="cg-trigger-tag">Extreme Simplicity <BlurredText width={80} /></span>
+                <span className="cg-trigger-tag">Rule Break <BlurredText width={140} /></span>
               </div>
             </CreatorRow>
           ))}
