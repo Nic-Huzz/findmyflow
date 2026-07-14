@@ -103,12 +103,46 @@ CD8 Loss            █████░░░░░ (5)   █████░░�
 
 **5 drives at target** (CD1, CD4, CD5, CD7, CD8). 3 remaining.
 
-**Remaining gap to target: 43 points.** Requires V2 backlog:
-- CD2 8→9: Self-Knowledge Skills (+17 pts)
-- CD3 7→8: Named user creations in codex + more creative wahoo options (+15 pts)
-- CD6 5→6: Monthly Community Day + session appointment dynamics (+11 pts)
-
 *Scores updated July 2026 after Figurine Mentor build*
+
+---
+
+## Post-Mystery Boxes + Skills + Triggers Score (July 2026)
+
+After Mystery Boxes v1 (10 triggers, 3 AI content types, opening animation, AI Mirrors collection), Self-Knowledge Skills (5 skills L1-L5, Journey tab display, Figurine/mystery box prompt injection), additional community feed auto-events, Zarlo light theme redesign:
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD2** Accomplishment | 8 | **9** | +1 | Self-Knowledge Skills L1-L5 with visible progress dots. Skill levels surface in Figurine prompt ("Your Courage is L4"). 10 mystery box triggers reward milestones. Achievement feels tracked across multiple dimensions, not just RP. |
+| **CD3** Creativity | 7 | **8** | +1 | Mystery box content is unique per user (AI-generated from YOUR data). Pattern Mirror, Shadow Reveal, Capacity Insight all reflect creative self-discovery. The AI creates something new for each box, never repeatable. |
+| **CD7** Curiosity | 9 | **10** | +1 | Mystery boxes are the purest CD7 mechanic: variable reward, unknown content, "what will the AI say about me?". 10 triggers mean boxes arrive unpredictably. AI Mirrors collection on /me creates desire to collect more. Skill-based Figurine tone changes create "what happens when I reach L3?" |
+
+All other drives unchanged.
+
+**Current Score: 64 + 81 + 64 + 64 + 64 + 25 + 100 + 25 = 487** (Exceptional)
+
+**Full journey: 217 → 337 → 361 → 404 → 436 → 487 (+270 points, +124%)**
+
+```
+                    Start (217)      Now (487)        Target (479)
+CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD2 Accomplishment  ██████░░░░ (6)   █████████░ (9)   █████████░ (9) ✅ Hit
+CD3 Creativity      █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD5 Social          ████░░░░░░ (4)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD6 Scarcity        ████░░░░░░ (4)   █████░░░░░ (5)   ██████░░░░ (6)
+CD7 Curiosity       █████░░░░░ (5)   ██████████ (10)  █████████░ (9) ✅ Exceeded
+CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
+```
+
+**7 of 8 drives at or above target.** Only CD6 (Scarcity) remains below.
+
+**Remaining gap: CD6 5→6 (+11 pts).** Requires:
+- Micro-timer windows (Morning Surge 1.5x RP, Momentum Window after wahoo)
+- Monthly Community Day (appointment dynamics)
+- Zarlo V2 open loop hooks (creates "do it before the window closes" moments)
+
+*Scores updated July 2026 after Mystery Boxes + Skills build*
 
 ---
 
