@@ -365,7 +365,7 @@ export function useFigurine() {
     } finally {
       setIsStreaming(false)
     }
-  }, [profile, heroStage, brief, memories, intelligencePhase, currentNsState, messages, isMirrorMode, isStreaming, conversationsToday])
+  }, [profile, heroStage, brief, memories, intelligencePhase, currentNsState, messages, isMirrorMode, isStreaming, conversationsToday, skills])
 
   const clearMessages = useCallback(() => setMessages([]), [])
 
