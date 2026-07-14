@@ -13,7 +13,6 @@ import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
 import FestLeaderboard from './FestLeaderboard'
-import MysteryBoxNotification from './MysteryBox/MysteryBoxNotification'
 
 // Week type display info
 const WEEK_TYPES = {
@@ -185,7 +184,6 @@ function ChallengeHeader({
             <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
             <span className="streak-badge-num">{streakDays}</span>
           </div>
-          <MysteryBoxNotification userId={user?.id} />
           <button
             className="challenge-journey-btn"
             onClick={() => setShowLeaderboard(true)}

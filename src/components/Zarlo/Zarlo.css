@@ -680,3 +680,123 @@
 .zarlo-messages::-webkit-scrollbar-thumb:hover {
   background: #d1d5db;
 }
+
+/* ============================================
+   FREE-TEXT INPUT (V2)
+   ============================================ */
+
+.zarlo-free-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--zarlo-border);
+  background: var(--zarlo-bg);
+}
+
+.zarlo-free-text-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: var(--zarlo-text);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.zarlo-free-text-input:focus {
+  border-color: var(--zarlo-primary);
+}
+
+.zarlo-free-text-input::placeholder {
+  color: var(--zarlo-text-muted);
+}
+
+.zarlo-free-text-input:disabled {
+  opacity: 0.5;
+}
+
+.zarlo-free-text-send {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--zarlo-primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.zarlo-free-text-send:hover {
+  background: var(--zarlo-primary-dark);
+}
+
+.zarlo-free-text-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   PROACTIVE BUBBLE (Phase 3)
+   ============================================ */
+
+.zarlo-proactive {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  max-width: 300px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  cursor: pointer;
+  z-index: 1001;
+  animation: zarlo-bubble-in 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.zarlo-proactive:hover {
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.18);
+  transform: translateY(-2px);
+}
+
+.zarlo-proactive-exit {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.zarlo-proactive-avatar {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.zarlo-proactive-text {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #1a1a2e;
+}
+
+@keyframes zarlo-bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

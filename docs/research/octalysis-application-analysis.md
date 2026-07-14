@@ -119,30 +119,27 @@ After Mystery Boxes v1 (10 triggers, 3 AI content types, opening animation, AI M
 
 All other drives unchanged.
 
-**Current Score: 64 + 81 + 64 + 64 + 64 + 25 + 100 + 25 = 487** (Exceptional)
+**Current Score: 64 + 81 + 64 + 64 + 64 + 36 + 100 + 25 = 498** (Exceptional)
 
-**Full journey: 217 → 337 → 361 → 404 → 436 → 487 (+270 points, +124%)**
+**Full journey: 217 → 337 → 361 → 404 → 436 → 487 → 498 (+281 points, +129%)**
 
 ```
-                    Start (217)      Now (487)        Target (479)
+                    Start (217)      Now (498)        Target (479)
 CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD2 Accomplishment  ██████░░░░ (6)   █████████░ (9)   █████████░ (9) ✅ Hit
 CD3 Creativity      █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
 CD5 Social          ████░░░░░░ (4)   ████████░░ (8)   ████████░░ (8) ✅ Hit
-CD6 Scarcity        ████░░░░░░ (4)   █████░░░░░ (5)   ██████░░░░ (6)
+CD6 Scarcity        ████░░░░░░ (4)   ██████░░░░ (6)   ██████░░░░ (6) ✅ Hit
 CD7 Curiosity       █████░░░░░ (5)   ██████████ (10)  █████████░ (9) ✅ Exceeded
 CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
 ```
 
-**7 of 8 drives at or above target.** Only CD6 (Scarcity) remains below.
+**8 of 8 drives at or above target.** All targets hit.
 
-**Remaining gap: CD6 5→6 (+11 pts).** Requires:
-- Micro-timer windows (Morning Surge 1.5x RP, Momentum Window after wahoo)
-- Monthly Community Day (appointment dynamics)
-- Zarlo V2 open loop hooks (creates "do it before the window closes" moments)
+**CD6 closed by:** Zarlo V2 open loop hooks (skill-threshold teasers create "do X more and I'll tell you something" anticipation), weekly countdown ("2 days left in the week"), data-gated reveals (skills approaching next level). These create natural scarcity without artificial time pressure.
 
-*Scores updated July 2026 after Mystery Boxes + Skills build*
+*Scores updated July 2026 after Zarlo V2 Phase 1 + Phase 2 + Phase 4 build*
 
 ---
 

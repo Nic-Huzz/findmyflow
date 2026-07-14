@@ -55,6 +55,8 @@ import { useInsightDrops } from './hooks/useInsightDrops'
 import InsightDrop from './components/InsightDrop'
 import FigurineFAB from './components/Figurine/FigurineFAB'
 import FigurineOverlay from './components/Figurine/FigurineOverlay'
+import ZarloProactiveBubble from './components/Zarlo/ZarloProactiveBubble'
+import { generateZarloReaction } from './lib/zarlo/zarloEngine'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -206,6 +208,9 @@ function Challenge() {
   const [showDailyCheckin, setShowDailyCheckin] = useState(false)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
 
+  // Zarlo proactive bubble state
+  const [zarloReaction, setZarloReaction] = useState(null)
+
   // Weekly Review state
   const [weeklyReviewNeeded, setWeeklyReviewNeeded] = useState(false)
   const [weeklyReviewDismissed, setWeeklyReviewDismissed] = useState(false)
@@ -304,6 +309,17 @@ function Challenge() {
         setCrypticHook({ message: hooks[hookIndex], avatarUrl: data.hero_avatar_url })
         localStorage.setItem(`figurine_cryptic_${month}`, 'true')
       })
+  }, [user?.id])
+
+  // Zarlo proactive reaction listener (wahoo, healing events from child components)
+  useEffect(() => {
+    const handler = (e) => {
+      const { actionType, actionData } = e.detail || {}
+      if (!user?.id || !actionType) return
+      generateZarloReaction(user.id, actionType, actionData).then(r => { if (r) setZarloReaction(r) })
+    }
+    window.addEventListener('zarlo:reaction', handler)
+    return () => window.removeEventListener('zarlo:reaction', handler)
   }, [user?.id])
 
   // Celebrations (level-up modal)
@@ -1440,7 +1456,12 @@ function Challenge() {
   return (
     <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
-      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => { setShowDailyCheckin(false); setCapacityRefresh(n => n + 1); recheckStage() }} />}
+      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={(state) => {
+        setShowDailyCheckin(false)
+        setCapacityRefresh(n => n + 1)
+        recheckStage()
+        if (state) generateZarloReaction(user?.id, 'daily_checkin', { state }).then(r => { if (r) setZarloReaction(r) })
+      }} />}
       <NotificationPrompt />
       <ChallengeHeader
         navigate={navigate}
@@ -1773,6 +1794,15 @@ function Challenge() {
 
       {/* Insight Drop (self-knowledge card, max 1 per session) */}
       {insight && <InsightDrop insight={insight} onDismiss={dismissInsight} />}
+
+      {/* Zarlo proactive bubble (Phase 3) — hidden when Zarlo chat is open */}
+      {zarloReaction && activeChat !== 'zarlo' && (
+        <ZarloProactiveBubble
+          message={zarloReaction}
+          onTap={() => setActiveChat('zarlo')}
+          onDismiss={() => setZarloReaction(null)}
+        />
+      )}
 
       {/* Figurine FAB (bottom-left, chat conflict managed) */}
       <FigurineFAB activeChat={activeChat} setActiveChat={setActiveChat} />

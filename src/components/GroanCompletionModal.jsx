@@ -283,6 +283,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     if (shared) {
       confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } })
     }
+    // Notify Zarlo of wahoo completion (proactive bubble)
+    window.dispatchEvent(new CustomEvent('zarlo:reaction', {
+      detail: { actionType: 'wahoo_completed', actionData: { category: challenge?.wahoo_category || 'unknown', classification: wahooClassification || 'unknown' } }
+    }))
     onComplete?.()
     onClose()
   }

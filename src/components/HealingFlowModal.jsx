@@ -134,6 +134,10 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
         }).catch(() => {})
 
       hapticSuccess()
+      // Notify Zarlo of healing completion (proactive bubble)
+      window.dispatchEvent(new CustomEvent('zarlo:reaction', {
+        detail: { actionType: 'healing_completed', actionData: { stage: 'recognised', pattern: pattern || 'unnamed' } }
+      }))
       onComplete?.()
     } catch (e) {
       console.error('Healing flow save error:', e)
