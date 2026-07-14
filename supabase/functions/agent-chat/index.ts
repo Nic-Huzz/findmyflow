@@ -40,7 +40,7 @@ serve(async (req) => {
       })
     }
 
-    const { systemPrompt, messages } = await req.json()
+    const { systemPrompt, messages, model, maxTokens } = await req.json()
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: 'Messages required' }), {
@@ -52,8 +52,8 @@ serve(async (req) => {
     const client = new Anthropic()
 
     const stream = await client.messages.stream({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
+      model: model || 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens || 1024,
       system: systemPrompt || 'You are a helpful assistant.',
       messages: messages.map((m: { role: string; content: string }) => ({
         role: m.role,
