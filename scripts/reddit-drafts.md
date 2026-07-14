@@ -1,4 +1,4 @@
-# Reddit Comment Drafts — 2026-07-13 (scan 4)
+# Reddit Comment Drafts — 2026-07-14 (scan 5)
 
 *Review, edit in your voice, then approve for posting. Max 2 per day.*
 
@@ -8,12 +8,12 @@
 
 **Reason:** Reddit is still blocked by this environment's network policy.
 
-All three access methods confirmed blocked:
+All access methods remain blocked:
 - `curl` to `www.reddit.com` — no output (CONNECT tunnel blocked at proxy)
 - `WebSearch` with `allowed_domains: ["reddit.com"]` — explicit API error: "reddit.com not accessible to our user agent"
 - `WebFetch` to `https://www.reddit.com/r/findapath/new.json` — error: "Claude Code is unable to fetch from www.reddit.com"
 
-This has been the case since at least 2026-07-09 across all scans (1, 2, 3, and now 4).
+This has been the case since at least 2026-07-09 across all scans (1, 2, 3, 4, and now 5).
 
 **To fix this:** Add `reddit.com` to the allowed domains in the Claude Code on the web environment settings: https://code.claude.com/docs/en/claude-code-on-the-web
 
