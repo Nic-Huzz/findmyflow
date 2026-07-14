@@ -165,8 +165,10 @@ function ZarloChat({ onClose, challengeTab = null }) {
   const [skills, setSkills] = useState(null)
   const [recentActions, setRecentActions] = useState([])
   const [conversationHistory, setConversationHistory] = useState([]) // [{role, content}] for AI context
+  const [userMessageCount, setUserMessageCount] = useState(0) // 5 per session cap
   const streamingMsgIdRef = useRef(null)
   const abortRef = useRef(null)
+  const MAX_MESSAGES_PER_SESSION = 5
 
   // Current route for page awareness
   const currentRoute = location.pathname
@@ -382,6 +384,14 @@ function ZarloChat({ onClose, challengeTab = null }) {
    */
   const sendAIMessage = async (text) => {
     if (isStreaming || !user?.id) return
+
+    if (userMessageCount >= MAX_MESSAGES_PER_SESSION) {
+      addMessage('user', text)
+      addMessage('zarlo', "That's enough from me for now. Close and reopen if you need me again, or tap your Mentor for a deeper conversation.")
+      return
+    }
+
+    setUserMessageCount(n => n + 1)
 
     // Add user message
     addMessage('user', text)
@@ -989,6 +999,7 @@ That's it. No action required. Just awareness.`)
     // Only show in context mode for authenticated users
     if (currentMode !== 'context' || !user?.id) return null
     if (showCommitmentInput) return null
+    if (userMessageCount >= MAX_MESSAGES_PER_SESSION) return null
 
     return (
       <form className="zarlo-free-text" onSubmit={handleFreeTextSubmit}>
