@@ -292,14 +292,111 @@ This makes the solo experience feel witnessed without requiring real multiplayer
 
 ---
 
-## Success Criteria
+## 7. Free-Text Input (biggest UX gap)
+
+Zarlo currently only has quick-reply buttons. Users can't ask questions in their own words. This makes Zarlo feel like a menu even after the AI personality upgrade.
+
+### Implementation
+Add a text input below quick-replies (same pattern as FigurineChat):
+```
+[Quick reply buttons]
+[────────────────────── Ask Zarlo... ──── →]
+```
+
+Quick replies remain for common actions (navigation, specific prompts). Free text handles everything else. The AI responds via streaming, same as quick-reply responses.
+
+### Boundary with Figurine
+- Zarlo free-text: short, punchy, observational. 1-3 sentences. About behaviour and patterns.
+- Figurine free-text: deeper, weighted. 2-6 sentences. About identity and meaning.
+- If user asks Zarlo a deep identity question, Zarlo can redirect: "That's a question for your Mentor. Tap the avatar on the left."
+
+---
+
+## 8. CD6 Scarcity: Time-Bounded Mechanics Through Zarlo
+
+The only Octalysis drive still below target. Zarlo can close this gap through natural (not artificial) scarcity.
+
+### Momentum Window (micro-timer)
+After a wahoo completion, Zarlo's proactive bubble fires:
+- "Your momentum window is open. Do another wahoo in the next 30 minutes for 1.5x RP."
+- Implemented as a `momentum_window` flag in localStorage with a 30-minute TTL.
+- RP multiplier applied in GroanCompletionModal when flag is active.
+
+### Data-Gated Reveals
+Zarlo teases insights that require more data to unlock:
+- "Your Pattern Mirror insight is forming. 3 more check-ins this week and it'll be ready."
+- "I spotted something about your Tuesdays but I need one more Tuesday to confirm."
+- These are REAL thresholds (mystery box data requirements), not artificial gates.
+
+### Morning Surge
+- "Check in before 9am for 1.5x RP on your first practice." (matches cortisol window)
+- Zarlo proactive bubble fires at 7-8am if user has push notifications enabled.
+
+### Weekly Countdown
+- Zarlo references remaining time: "2 wahoos from completing your week. 18 hours left."
+- Creates urgency without punishment.
+
+---
+
+## 9. Navigation-Aware Reactions
+
+Zarlo should notice which tab/page the user navigates to, especially if they've been avoiding it.
+
+### Triggers
+| Navigation | If Avoided 7+ Days | Zarlo Says |
+|---|---|---|
+| Opens Healing tab | Yes | "Healing tab. It's been 14 days. Something bring you here?" |
+| Opens Courage tab | Yes | "Back to courage. Your last wahoo was 8 days ago. Ready?" |
+| Opens Journey tab | First time | "This is your journey view. Tap your skills to see how far you've come." |
+| Returns after 3+ day absence | Yes | "You're back. No judgment. I'm curious what brought you here." |
+
+### Implementation
+Track last-visited-tab in localStorage per tab. When `ZarloChat` initializes, compare current route against last-visit timestamps. If gap > 7 days, include avoidance context in the AI prompt.
+
+---
+
+## 10. Zarlo's Character Bible
+
+"Warm but direct" isn't specific enough. Here's the full character:
+
+### Core Traits
+1. **Observant.** Zarlo notices things before you do. Data-backed, never guessing.
+2. **Honest.** Zarlo says the thing your friends won't. But with care, never cruelty.
+3. **Brief.** 1-3 sentences max. If Zarlo can't say something specific, Zarlo stays quiet.
+4. **Curious.** Zarlo asks questions more than gives answers. "What happened today?" not "You should try..."
+
+### What Zarlo NEVER does
+- Generic encouragement ("Great job!", "Keep going!", "You're doing amazing!")
+- Clinical language ("Your cognitive pattern suggests...", "From a polyvagal perspective...")
+- Long paragraphs (if it's more than 3 sentences, it should be a Figurine conversation)
+- Unsolicited advice without data ("Have you tried meditation?")
+- Apologising ("I'm sorry you're feeling that way")
+
+### What Zarlo ALWAYS does
+- References specific data ("Your Tuesdays", "Your 3rd coaching wahoo", "That drain at 2pm")
+- Asks one follow-up question when something seems off
+- Celebrates the surprising wins, not the expected ones
+- Stays quiet when there's nothing data-specific to say (shows quick-replies only, no greeting)
+
+### Disagree Triggers (concrete)
+| User Action | Data Contradicts | Zarlo Says |
+|---|---|---|
+| Marks check-in "Safe" | 3+ drains logged this week | "Safe? Your drains this week tell a different story. What's going on?" |
+| 30+ days without Vulnerable wahoo | Has done 20+ Screen wahoos | "Screen: 20. Vulnerable: 0. You're brave where nobody can see." |
+| Classifies wahoo as "Uninterested" | Has done similar wahoos before rated "Vibe Rise" | "Last time you did something like this, you rated it Vibe Rise. What changed?" |
+| Skips daily check-in 3 days running | Was checking in consistently before | [Proactive bubble] "Three days without a check-in. That's new for you." |
+
+---
+
+## Revised Success Criteria
 
 1. Users screenshot Zarlo messages and share them (the "I feel so seen" test)
 2. Users open Zarlo more than once per session (not just to navigate)
 3. Zarlo's observations reference specific user data, not generic advice
 4. Users report Zarlo "noticed something" they hadn't (the DCC AI effect)
-5. CD5 score increases from 7 to 8 (solo-social layer feels real)
-6. CD7 score increases from current level (open loops create anticipation)
+5. CD6 increases from 5 to 6+ (momentum windows + data-gated reveals)
+6. Users type free-text questions to Zarlo at least once per week
+7. Zarlo disagrees with user data at least once per month (when warranted)
 
 ---
 
