@@ -13,18 +13,18 @@
    ============================================ */
 
 .zarlo-widget-container {
-  --zarlo-primary: #7c3aed;
-  --zarlo-primary-dark: #6d28d9;
-  --zarlo-bg: #1a1a2e;
-  --zarlo-bg-light: #25253a;
-  --zarlo-text: #ffffff;
-  --zarlo-text-muted: #a0a0b0;
-  --zarlo-border: rgba(255, 255, 255, 0.1);
-  --zarlo-user-bg: #7c3aed;
-  --zarlo-zarlo-bg: #25253a;
-  --zarlo-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --zarlo-radius: 16px;
-  --zarlo-radius-sm: 8px;
+  --zarlo-primary: #5e17eb;
+  --zarlo-primary-dark: #4c12c4;
+  --zarlo-bg: #ffffff;
+  --zarlo-bg-light: #f9fafb;
+  --zarlo-text: #1a1a2e;
+  --zarlo-text-muted: #6c757d;
+  --zarlo-border: rgba(0, 0, 0, 0.08);
+  --zarlo-user-bg: #5e17eb;
+  --zarlo-zarlo-bg: #f9fafb;
+  --zarlo-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --zarlo-radius: 22px;
+  --zarlo-radius-sm: 12px;
 }
 
 /* ============================================
@@ -77,7 +77,7 @@
 
 .zarlo-fab:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 24px rgba(124, 58, 237, 0.4), 0 0 20px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.3);
 }
 
 .zarlo-fab:active {
@@ -85,8 +85,9 @@
 }
 
 .zarlo-fab.open {
-  background: var(--zarlo-bg);
-  border: 1px solid var(--zarlo-border);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--zarlo-primary);
 }
 
 .zarlo-fab-icon {
@@ -266,7 +267,7 @@
 }
 
 .zarlo-close-btn:hover {
-  background: var(--zarlo-border);
+  background: #f3f4f6;
   color: var(--zarlo-text);
 }
 
@@ -407,18 +408,18 @@
   padding: 12px 16px;
   border-radius: var(--zarlo-radius-sm);
   line-height: 1.5;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .zarlo-message.zarlo .zarlo-message-content {
   background: var(--zarlo-zarlo-bg);
   border: 1px solid var(--zarlo-border);
-  border-radius: 4px 16px 16px 16px;
+  border-radius: 4px var(--zarlo-radius-sm) var(--zarlo-radius-sm) var(--zarlo-radius-sm);
 }
 
 .zarlo-message.user .zarlo-message-content {
   background: var(--zarlo-user-bg);
-  border-radius: 16px 4px 16px 16px;
+  border-radius: var(--zarlo-radius-sm) 4px var(--zarlo-radius-sm) var(--zarlo-radius-sm);
 }
 
 .zarlo-message-text {
@@ -426,6 +427,10 @@
   font-size: 14px;
   color: var(--zarlo-text);
   white-space: pre-wrap;
+}
+
+.zarlo-message.user .zarlo-message-text {
+  color: #ffffff;
 }
 
 /* Markdown-style formatting in messages */
@@ -493,8 +498,8 @@
   width: 100%;
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid var(--zarlo-border);
-  background: var(--zarlo-bg-light);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
   color: var(--zarlo-text);
   font-size: 14px;
   font-family: inherit;
@@ -574,9 +579,9 @@
 }
 
 .zarlo-quick-reply:hover {
-  background: var(--zarlo-primary);
-  border-color: var(--zarlo-primary);
-  transform: translateY(-2px);
+  background: rgba(94, 23, 235, 0.08);
+  border-color: rgba(94, 23, 235, 0.2);
+  transform: translateY(-1px);
 }
 
 .zarlo-quick-reply:active {
@@ -668,10 +673,10 @@
 }
 
 .zarlo-messages::-webkit-scrollbar-thumb {
-  background: var(--zarlo-border);
+  background: #e5e7eb;
   border-radius: 3px;
 }
 
 .zarlo-messages::-webkit-scrollbar-thumb:hover {
-  background: var(--zarlo-text-muted);
+  background: #d1d5db;
 }
