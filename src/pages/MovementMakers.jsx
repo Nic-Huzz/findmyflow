@@ -102,7 +102,7 @@ export default function MovementMakers() {
       <section className="mm-hero">
         <div className="mm-hero-glow" />
         <div className="mm-container mm-hero-inner">
-          <p className="mm-eyebrow">FOR EXPERIENCE CREATORS WHO ARE READY TO BUILD</p>
+          <p className="mm-eyebrow">FOR EXPERIENCE CREATORS WHO ARE READY TO SCALE</p>
           <h1 className="mm-h1">
             Get Paid To<br />
             <span className="mm-h1-accent">Have Fun.</span>

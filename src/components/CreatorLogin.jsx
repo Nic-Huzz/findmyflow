@@ -108,7 +108,7 @@ export default function CreatorLogin() {
           <img
             src="/icon-creator-192.png"
             alt="Scale"
-            style={{ width: 56, height: 56, borderRadius: 14, marginBottom: 16 }}
+            style={{ width: 56, height: 56, borderRadius: 14, marginBottom: 16, display: 'block', margin: '0 auto 16px' }}
           />
           <div style={{ fontSize: 32, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
             Scale
@@ -185,11 +185,11 @@ export default function CreatorLogin() {
               style={{
                 width: '100%', padding: '14px', borderRadius: 12,
                 border: 'none',
-                background: 'linear-gradient(135deg, #5e17eb, #7c3aed)',
-                color: '#fff', fontSize: 15, fontWeight: 600,
+                background: 'linear-gradient(135deg, #E9A23B, #f5c842)',
+                color: '#1a0440', fontSize: 15, fontWeight: 700,
                 cursor: loading ? 'wait' : 'pointer',
                 opacity: loading ? 0.6 : 1,
-                boxShadow: '0 4px 16px rgba(94, 23, 235, 0.3)',
+                boxShadow: '0 4px 16px rgba(233, 162, 59, 0.4)',
               }}
             >
               {loading ? 'Sending...' : 'Send Code'}
