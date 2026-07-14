@@ -85,7 +85,7 @@ serve(async (req) => {
     current_period_start: new Date().toISOString(),
     current_period_end: null,
     updated_at: new Date().toISOString(),
-  }, { onConflict: 'user_id' })
+  }, { onConflict: 'user_id,plan_type' })
 
   if (upsertErr) {
     console.error('Claim upsert failed:', upsertErr.message)
