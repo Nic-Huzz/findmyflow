@@ -63,6 +63,39 @@
   letter-spacing: -0.3px;
 }
 
+/* === TABS === */
+.cf-page .cf-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 20px;
+  margin-top: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cf-page .cf-tab {
+  flex: 1;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cf-page .cf-tab-active {
+  color: var(--brand-purple);
+  border-bottom-color: var(--brand-purple);
+}
+
+/* === TASKS TAB === */
+.cf-page .cf-tasks-tab {
+  padding: 16px 20px;
+}
+
 /* === COUNTER CARD === */
 .cf-page .cf-counter-card {
   display: flex;

@@ -23,8 +23,6 @@ import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
 import HealingFlowModal from './HealingFlowModal'
 import QuestSelector from './QuestSelector'
-import ContentChallenges from './ContentChallenges'
-import { fetchFeed } from '../lib/communityFeed'
 
 export default function PlayListTab({
   userId,
@@ -61,28 +59,6 @@ export default function PlayListTab({
     }
   }, [showWahooModal])
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
-
-  // Community Courage — recent feed items
-  const [communityItems, setCommunityItems] = useState([])
-  const [communityNames, setCommunityNames] = useState({})
-
-  useEffect(() => {
-    fetchFeed(0, 3).then(async ({ data }) => {
-      const items = data || []
-      setCommunityItems(items)
-      if (!items.length) return
-      const userIds = [...new Set(items.map(i => i.user_id))]
-      const { data: profiles } = await supabase
-        .from('lead_flow_profiles')
-        .select('user_id, custom_essence_name, essence_archetype')
-        .in('user_id', userIds)
-      const names = {}
-      profiles?.forEach(p => {
-        names[p.user_id] = p.custom_essence_name || p.essence_archetype || null
-      })
-      setCommunityNames(names)
-    }).catch(() => {})
-  }, [])
 
   // Fetch bucket list wahoos (generated, not yet accepted)
   const fetchBucketListWahoos = useCallback(async () => {
@@ -229,7 +205,7 @@ export default function PlayListTab({
                   <div className="plt-item-name">{pick.display_name}</div>
                   <div className="plt-item-meta">{pick._source_label || 'Courage'}</div>
 
-                  {hasActiveHealing && (
+                  {hasActiveHealing && healing.protective_voice && (
                     <div
                       className="plt-healing-inline"
                       onClick={() => {
@@ -241,20 +217,10 @@ export default function PlayListTab({
                     >
                       <span className="plt-healing-icon">💚</span>
                       <div className="plt-healing-body">
-                        {healing.pattern && (
-                          <div className="plt-healing-pattern">"{healing.pattern}"</div>
-                        )}
-                        {healing.protective_voice && (
-                          <div className="plt-healing-voice">
-                            {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
-                          </div>
-                        )}
-                        {healing.origin_text && (
-                          <div className="plt-healing-origin">{healing.origin_text}</div>
-                        )}
-                        <div className="plt-healing-cta">
-                          {healing.healing_stage === 'in_progress' ? 'Continue healing flow →' : 'View →'}
+                        <div className="plt-healing-voice">
+                          {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
                         </div>
+                        <div className="plt-healing-cta">Continue healing flow →</div>
                       </div>
                     </div>
                   )}
@@ -373,46 +339,18 @@ export default function PlayListTab({
         onPlaySkillsUpdated={fetchPlayskills}
       />
 
-      {/* Reach section — only if in active league */}
-      {leagueData?.league?.status === 'active' && leagueData?.isOnTeam && (
-        <div className="plt-reach-section">
-          <div className="plt-reach-header">
-            <span className="plt-reach-icon">📣</span>
-            <span className="plt-reach-title">Community</span>
-            <span className="plt-reach-subtitle">Share your journey to earn league points</span>
-          </div>
-          <ContentChallenges
-            leagueId={leagueData.league.id}
-            userId={userId}
-            teamId={leagueData.userTeam?.id}
-            weekNumber={leagueData.getCurrentWeek?.()}
-            leagueStatus={leagueData.league.status}
-            isOnTeam={leagueData.isOnTeam}
-            teams={leagueData.teams}
-            contentSubmissions={leagueData.contentSubmissions}
-            onSubmitted={leagueData.onContentSubmitted}
-            standings={leagueData.standings}
-            userTeam={leagueData.userTeam}
-            userData={leagueData.userData}
-          />
-        </div>
-      )}
-
-      {/* Community Courage — recent shared wahoos */}
-      {communityItems.length > 0 && (
-        <div className="plt-community">
-          <h3 className="plt-community-title">Community Courage</h3>
-          {communityItems.map(item => (
-            <div key={item.id} className="plt-community-card">
-              <span className="plt-community-name">{communityNames[item.user_id] || 'Someone'}</span>
-              <span className="plt-community-text">{item.title}</span>
-            </div>
-          ))}
-          <button className="plt-community-more" onClick={() => navigate('/community')}>
-            See all →
-          </button>
-        </div>
-      )}
+      {/* Community Tasks CTA */}
+      <button className="plt-community-cta" onClick={() => navigate('/community?tab=tasks')}>
+        <span className="plt-community-cta-glow" />
+        <span className="plt-community-cta-inner">
+          <span className="plt-community-cta-icon">📣</span>
+          <span className="plt-community-cta-text">
+            <span className="plt-community-cta-title">Earn Rise Points</span>
+            <span className="plt-community-cta-sub">Share your journey with the community</span>
+          </span>
+          <span className="plt-community-cta-badge">⚡ RP</span>
+        </span>
+      </button>
 
       {/* Completion modal */}
       {completingChallenge && (

@@ -6,12 +6,13 @@
  * and opt-in shared wahoos all appear in a single timeline.
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 
-// Hide bottom toolbar on this page
 import { supabase } from '../lib/supabaseClient'
 import { fetchFeed, toggleFeedReaction } from '../lib/communityFeed'
+import { useLeagueData } from '../hooks/useLeagueData'
+import ContentChallenges from '../components/ContentChallenges'
 import './CommunityFeed.css'
 
 const REACTION_TYPES = [
@@ -64,9 +65,11 @@ function getInitials(name) {
 
 export default function CommunityFeed() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const userId = user?.id
 
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'feed')
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -75,6 +78,9 @@ export default function CommunityFeed() {
   const [myWahoos, setMyWahoos] = useState(0)
   const [displayNames, setDisplayNames] = useState({})
   const pendingReactions = useRef(new Set())
+
+  // League data for Tasks tab
+  const leagueData = useLeagueData()
 
   const PAGE_SIZE = 20
 
@@ -253,6 +259,8 @@ export default function CommunityFeed() {
     return reactions.some(r => r.reaction_type === type && r.user_id === userId)
   }
 
+  const showTasksTab = leagueData?.league?.status === 'active' && leagueData?.isOnTeam
+
   return (
     <div className="cf-page">
       {/* Toolbar */}
@@ -261,117 +269,144 @@ export default function CommunityFeed() {
           ← Back
         </button>
         <h1 className="cf-toolbar-title">Community</h1>
-        <div style={{ width: 60 }} /> {/* Spacer for centering */}
+        <div style={{ width: 60 }} />
       </div>
 
-      {/* Cumulative counter card */}
-      <div className="cf-counter-card">
-        <div className="cf-counter-icon">⚡</div>
-        <div className="cf-counter-content">
-          <div className="cf-counter-total">
-            <span className="cf-counter-number">{totalWahoos}</span> community wahoos this month
+      {/* Tabs */}
+      {showTasksTab && (
+        <div className="cf-tabs">
+          <button
+            className={`cf-tab ${activeTab === 'feed' ? 'cf-tab-active' : ''}`}
+            onClick={() => setActiveTab('feed')}
+          >
+            Feed
+          </button>
+          <button
+            className={`cf-tab ${activeTab === 'tasks' ? 'cf-tab-active' : ''}`}
+            onClick={() => setActiveTab('tasks')}
+          >
+            Tasks
+          </button>
+        </div>
+      )}
+
+      {/* ─── Feed Tab ─── */}
+      {activeTab === 'feed' && (
+        <>
+          {/* Cumulative counter card */}
+          <div className="cf-counter-card">
+            <div className="cf-counter-icon">⚡</div>
+            <div className="cf-counter-content">
+              <div className="cf-counter-total">
+                <span className="cf-counter-number">{totalWahoos}</span> community wahoos this month
+              </div>
+              {myWahoos > 0 && (
+                <div className="cf-counter-you">
+                  You contributed <strong>{myWahoos}</strong> of them
+                </div>
+              )}
+            </div>
           </div>
-          {myWahoos > 0 && (
-            <div className="cf-counter-you">
-              You contributed <strong>{myWahoos}</strong> of them
+
+          {/* Loading state */}
+          {loading && (
+            <div className="cf-loading">
+              <div className="cf-spinner" />
+              <span>Loading feed...</span>
             </div>
           )}
-        </div>
-      </div>
 
-      {/* Loading state */}
-      {loading && (
-        <div className="cf-loading">
-          <div className="cf-spinner" />
-          <span>Loading feed...</span>
-        </div>
+          {/* Empty state */}
+          {!loading && items.length === 0 && (
+            <div className="cf-empty">
+              <span className="cf-empty-icon">📣</span>
+              <h2 className="cf-empty-title">No activity yet</h2>
+              <p className="cf-empty-text">
+                Complete a wahoo to be the first on the feed.
+              </p>
+            </div>
+          )}
+
+          {/* Feed items */}
+          {!loading && items.length > 0 && (
+            <div className="cf-feed">
+              {items.map(item => {
+                const variant = EVENT_VARIANT[item.event_type] || ''
+                const icon = EVENT_ICONS[item.event_type] || '💪'
+                const name = getDisplayName(item.user_id)
+                const avatarUrl = getAvatarUrl(item.user_id)
+
+                return (
+                  <div key={item.id} className={`cf-item${variant ? ` cf-item--${variant}` : ''}`}>
+                    <div className="cf-item-header">
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt="" className="cf-avatar-img" />
+                      ) : (
+                        <div className="cf-avatar">{getInitials(name)}</div>
+                      )}
+                      <span className="cf-item-name">{name}</span>
+                      <span className="cf-item-time">{timeAgo(item.created_at)}</span>
+                    </div>
+                    <div className="cf-item-body">
+                      <p className="cf-item-title">{icon} {item.title}</p>
+                      {item.subtitle && item.event_type !== 'stage_graduation' && (
+                        <p className="cf-item-subtitle">{formatSubtitle(item.subtitle)}</p>
+                      )}
+                    </div>
+                    {item.image_url && (
+                      <img src={item.image_url} alt="" className="cf-item-image" loading="lazy" />
+                    )}
+                    <div className="cf-reactions">
+                      {REACTION_TYPES.map(rt => {
+                        const count = getReactionCount(item.reactions, rt.type)
+                        const active = isReactionActive(item.reactions, rt.type)
+                        return (
+                          <button
+                            key={rt.type}
+                            className={`cf-reaction-btn${active ? ' cf-reaction-active' : ''}`}
+                            onClick={() => handleReaction(item.id, rt.type)}
+                            title={rt.label}
+                          >
+                            <span>{rt.emoji}</span>
+                            {count > 0 && <span className="cf-reaction-count">{count}</span>}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Load more */}
+          {!loading && hasMore && items.length > 0 && (
+            <div className="cf-load-more">
+              <button className="cf-load-more-btn" onClick={handleLoadMore} disabled={loadingMore}>
+                {loadingMore ? 'Loading...' : 'Load more'}
+              </button>
+            </div>
+          )}
+        </>
       )}
 
-      {/* Empty state */}
-      {!loading && items.length === 0 && (
-        <div className="cf-empty">
-          <span className="cf-empty-icon">📣</span>
-          <h2 className="cf-empty-title">No activity yet</h2>
-          <p className="cf-empty-text">
-            Complete a wahoo to be the first on the feed.
-          </p>
-        </div>
-      )}
-
-      {/* Feed items */}
-      {!loading && items.length > 0 && (
-        <div className="cf-feed">
-          {items.map(item => {
-            const variant = EVENT_VARIANT[item.event_type] || ''
-            const icon = EVENT_ICONS[item.event_type] || '💪'
-            const name = getDisplayName(item.user_id)
-            const avatarUrl = getAvatarUrl(item.user_id)
-
-            return (
-              <div key={item.id} className={`cf-item${variant ? ` cf-item--${variant}` : ''}`}>
-                {/* Header */}
-                <div className="cf-item-header">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="" className="cf-avatar-img" />
-                  ) : (
-                    <div className="cf-avatar">{getInitials(name)}</div>
-                  )}
-                  <span className="cf-item-name">{name}</span>
-                  <span className="cf-item-time">{timeAgo(item.created_at)}</span>
-                </div>
-
-                {/* Body */}
-                <div className="cf-item-body">
-                  <p className="cf-item-title">{icon} {item.title}</p>
-                  {item.subtitle && item.event_type !== 'stage_graduation' && (
-                    <p className="cf-item-subtitle">{formatSubtitle(item.subtitle)}</p>
-                  )}
-                </div>
-
-                {/* Image */}
-                {item.image_url && (
-                  <img
-                    src={item.image_url}
-                    alt=""
-                    className="cf-item-image"
-                    loading="lazy"
-                  />
-                )}
-
-                {/* Reactions */}
-                <div className="cf-reactions">
-                  {REACTION_TYPES.map(rt => {
-                    const count = getReactionCount(item.reactions, rt.type)
-                    const active = isReactionActive(item.reactions, rt.type)
-                    return (
-                      <button
-                        key={rt.type}
-                        className={`cf-reaction-btn${active ? ' cf-reaction-active' : ''}`}
-                        onClick={() => handleReaction(item.id, rt.type)}
-                        title={rt.label}
-                      >
-                        <span>{rt.emoji}</span>
-                        {count > 0 && <span className="cf-reaction-count">{count}</span>}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
-
-      {/* Load more */}
-      {!loading && hasMore && items.length > 0 && (
-        <div className="cf-load-more">
-          <button
-            className="cf-load-more-btn"
-            onClick={handleLoadMore}
-            disabled={loadingMore}
-          >
-            {loadingMore ? 'Loading...' : 'Load more'}
-          </button>
+      {/* ─── Tasks Tab ─── */}
+      {activeTab === 'tasks' && showTasksTab && (
+        <div className="cf-tasks-tab">
+          <ContentChallenges
+            leagueId={leagueData.league.id}
+            userId={userId}
+            teamId={leagueData.userTeam?.id}
+            weekNumber={leagueData.getCurrentWeek?.()}
+            leagueStatus={leagueData.league.status}
+            isOnTeam={leagueData.isOnTeam}
+            teams={leagueData.teams}
+            contentSubmissions={leagueData.contentSubmissions}
+            onSubmitted={leagueData.reloadContent}
+            standings={leagueData.standings}
+            userTeam={leagueData.userTeam}
+            userData={null}
+          />
         </div>
       )}
     </div>

@@ -3915,3 +3915,83 @@
   color: #888;
   width: 100%;
 }
+
+/* ── Community Tasks CTA (bottom of Courage tab) ── */
+.playlist-tab .plt-community-cta {
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin: 20px 0 8px;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #E9A23B 100%);
+  cursor: pointer;
+  overflow: hidden;
+  font-family: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.playlist-tab .plt-community-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.25);
+}
+
+.playlist-tab .plt-community-cta:active {
+  transform: translateY(0);
+}
+
+.playlist-tab .plt-community-cta-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(233, 162, 59, 0.3) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.playlist-tab .plt-community-cta-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  z-index: 1;
+}
+
+.playlist-tab .plt-community-cta-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.playlist-tab .plt-community-cta-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+}
+
+.playlist-tab .plt-community-cta-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.2px;
+}
+
+.playlist-tab .plt-community-cta-sub {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 1px;
+}
+
+.playlist-tab .plt-community-cta-badge {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
