@@ -301,25 +301,27 @@ export default function JourneyTab({ userId }) {
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">
-                Name the voice that stops you. When you complete a courage challenge, tap "Want to explore what makes this scary?" to start a healing flow.
+                After a courage challenge, tap "Explore what makes this scary?" to start a healing flow.
               </span>
               {dominant && (
-                <>
-                  <div className="jt-voice-dots" style={{ marginTop: 8 }}>
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
-                    ))}
+                <div className="jt-voice-progress">
+                  <div className="jt-voice-progress-header">
+                    <span className="jt-voice-progress-name">{formatVoice(dominant[0])}</span>
+                    <span className="jt-voice-progress-count">{dominant[1]}/5</span>
                   </div>
-                  <span className="jt-next-text" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                  <div className="jt-voice-bar">
+                    <div className="jt-voice-bar-fill" style={{ width: `${(dominant[1] / 5) * 100}%` }} />
+                  </div>
+                  <span className="jt-voice-progress-hint">
                     {dominant[1] < 5
-                      ? `${dominant[1]}/5 protective voice entries. The ${formatVoice(dominant[0])} is your most common.`
-                      : `5/5 done. The ${formatVoice(dominant[0])} is your pattern. You're ready.`}
+                      ? 'Your most common protective voice. Keep exploring it.'
+                      : 'Pattern clear. You\'re ready for the next stage.'}
                   </span>
-                </>
+                </div>
               )}
               {solidarityCount > 0 && (
                 <span className="jt-solidarity">
-                  {solidarityCount} other{solidarityCount > 1 ? 's' : ''} identified the same voice this month.
+                  {solidarityCount} other{solidarityCount > 1 ? 's' : ''} named this voice too.
                 </span>
               )}
             </div>

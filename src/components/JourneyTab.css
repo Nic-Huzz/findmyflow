@@ -115,27 +115,53 @@
   text-align: center;
 }
 
-/* Voice dots row */
-.jt-voice-dots {
+/* Voice progress card */
+.jt-voice-progress {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 12px;
+}
+
+.jt-voice-progress-header {
   display: flex;
-  flex-direction: row;
-  gap: 8px;
-  justify-content: center;
-  margin: 12px 0;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-.jt-dot {
-  width: 14px;
-  height: 14px;
-  border: 2px solid #d1d5db;
-  border-radius: 50%;
-  display: inline-block;
-  transition: all 0.3s ease;
+.jt-voice-progress-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5e17eb;
+  text-transform: capitalize;
 }
 
-.jt-dot-filled {
-  background: #5e17eb;
-  border-color: #5e17eb;
+.jt-voice-progress-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
+.jt-voice-bar {
+  height: 6px;
+  background: rgba(94, 23, 235, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.jt-voice-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #8b5cf6);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.jt-voice-progress-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 6px;
 }
 
 /* Voice hint text */
