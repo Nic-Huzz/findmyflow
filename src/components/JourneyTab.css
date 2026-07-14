@@ -327,6 +327,24 @@
   display: block;
 }
 
+.jt-next-cta-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jt-next-cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(94, 23, 235, 0.25);
+}
+
 .jt-next-sub {
   font-size: 0.75rem; color: rgba(94, 23, 235, 0.5);
   margin-top: 4px; font-weight: 600;

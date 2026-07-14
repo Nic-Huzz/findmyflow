@@ -308,12 +308,13 @@ export function useFigurine() {
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-      // SSE streaming (same pattern as Figurine branch useEssenceAvatar)
+      // SSE streaming
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
       let fullText = ''
+      let streamDone = false
 
-      while (true) {
+      while (!streamDone) {
         const { done, value } = await reader.read()
         if (done) break
         const chunk = decoder.decode(value, { stream: true })
@@ -321,9 +322,14 @@ export function useFigurine() {
         for (const line of lines) {
           if (line.startsWith('data: ')) {
             const data = line.slice(6)
-            if (data === '[DONE]') break
+            if (data === '[DONE]') { streamDone = true; break }
             try {
               const parsed = JSON.parse(data)
+              // Check for error from edge function
+              if (parsed.error) {
+                console.error('Figurine stream error:', parsed.error)
+                throw new Error(parsed.error)
+              }
               const text = parsed.delta?.text || (typeof parsed.delta === 'string' ? parsed.delta : null)
               if (text) {
                 fullText += text
@@ -333,9 +339,16 @@ export function useFigurine() {
                   return updated
                 })
               }
-            } catch {}
+            } catch (e) {
+              if (e.message && !e.message.includes('JSON')) throw e
+            }
           }
         }
+      }
+
+      // Handle empty response
+      if (!fullText?.trim()) {
+        throw new Error('Empty response from mentor')
       }
 
       // Save conversation summary to memory (after response complete)

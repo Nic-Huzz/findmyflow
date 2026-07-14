@@ -288,13 +288,13 @@ export default function JourneyTab({ userId }) {
           {heroStage === 4 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Go to the Courage tab and do a courage challenge that makes you feel Vibe Rise.</span>
+              <span className="jt-next-text">Complete a courage challenge. Any feeling counts.</span>
             </div>
           )}
           {heroStage === 5 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Keep doing courage challenges on one life path until it reaches Charging or Teaching depth. Go to the Courage tab.</span>
+              <span className="jt-next-text">Focus your courage challenges on one life path. Go deeper.</span>
             </div>
           )}
           {heroStage === 6 && (
@@ -324,6 +324,33 @@ export default function JourneyTab({ userId }) {
                   {solidarityCount} other{solidarityCount > 1 ? 's' : ''} named this voice too.
                 </span>
               )}
+            </div>
+          )}
+          {heroStage === 7 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">The root is close. This part needs a human, not an app.</span>
+              <a href="https://calendly.com/nichuzz/vibe-rise" target="_blank" rel="noopener noreferrer" className="jt-next-cta-btn">
+                Book a session with Huzz
+              </a>
+            </div>
+          )}
+          {heroStage === 8 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">You've been through the fire. Check in when you're ready.</span>
+            </div>
+          )}
+          {heroStage === 9 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Your life paths are connecting. Watch for where they overlap.</span>
+            </div>
+          )}
+          {heroStage >= 10 && (
+            <div className="jt-next-inline">
+              <span className="jt-next-label">Next step</span>
+              <span className="jt-next-text">Your flow statement is forming. Keep going.</span>
             </div>
           )}
         </div>
