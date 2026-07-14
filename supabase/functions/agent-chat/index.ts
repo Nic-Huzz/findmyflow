@@ -5,7 +5,7 @@
  */
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import Anthropic from 'npm:@anthropic-ai/sdk@0.24.3'
+import Anthropic from 'npm:@anthropic-ai/sdk@0.39.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -52,8 +52,8 @@ serve(async (req) => {
     const client = new Anthropic()
 
     const stream = await client.messages.stream({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 2048,
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
       system: systemPrompt || 'You are a helpful assistant.',
       messages: messages.map((m: { role: string; content: string }) => ({
         role: m.role,
