@@ -292,12 +292,12 @@ export default function PlayListTab({
 
       {/* "What's blocking you?" archived — healing tied to wahoo cards only */}
 
-      {/* Add a Wahoo button */}
+      {/* Add a courage challenge button */}
       <button
         className="wc-add-btn"
         onClick={() => setShowWahooModal(true)}
       >
-        + Add a Wahoo
+        + Add a Courage Challenge
       </button>
 
       {/* WahooCreator Modal */}
@@ -309,10 +309,15 @@ export default function PlayListTab({
               key={wahooCreatorKey}
               userId={userId}
               bucketList={bucketListWahoos}
-              onWahooAccepted={() => {
+              onWahooAccepted={(healingTask) => {
                 fetchActiveChallenges()
                 fetchBucketListWahoos()
                 onRefreshPoints?.()
+                if (healingTask?.id) {
+                  setBlockingTaskId(healingTask.id)
+                  setBlockingText(healingTask.text || '')
+                  setShowBlockingHealingModal(true)
+                }
               }}
               onClose={() => {
                 fetchActiveChallenges()
@@ -325,19 +330,7 @@ export default function PlayListTab({
         </div>
       )}
 
-      {/* Need inspiration? — play-skills + Ikigai Mix (+ future pillar gaps) */}
-      <WahooInspiration
-        userId={userId}
-        categories={categoryIds}
-        currentVisibilityLayer={currentVisibilityLayer}
-        onWahooAccepted={() => {
-          fetchActiveChallenges()
-          fetchBucketListWahoos()
-          onRefreshPoints?.()
-        }}
-        onWahooSaved={fetchBucketListWahoos}
-        onPlaySkillsUpdated={fetchPlayskills}
-      />
+      {/* WahooInspiration archived — play-skills + Ikigai Mix deferred */}
 
       {/* Community Tasks CTA */}
       <button className="plt-community-cta" onClick={() => navigate('/community?tab=tasks')}>
@@ -345,7 +338,7 @@ export default function PlayListTab({
         <span className="plt-community-cta-inner">
           <span className="plt-community-cta-icon">📣</span>
           <span className="plt-community-cta-text">
-            <span className="plt-community-cta-title">Earn Rise Points</span>
+            <span className="plt-community-cta-title">Earn Community Points</span>
             <span className="plt-community-cta-sub">Share your journey with the community</span>
           </span>
           <span className="plt-community-cta-badge">⚡ RP</span>

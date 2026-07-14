@@ -697,24 +697,7 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
   return (
     <>
     <div className="qpm-footer">
-      {/* Dual progress bar */}
-      {n > 0 && (
-        <>
-          <div className="qpm-progress-row">
-            <div className="qpm-progress-bg">
-              <div className="qpm-progress-done" style={{ width: `${donePct}%` }} />
-              <div className="qpm-progress-safe" style={{
-                width: `${safePct}%`,
-                background: `linear-gradient(90deg, ${SAFE_COLOURS[trunkState] || '#10b981'}, ${SAFE_COLOURS[quest.predicted_state] || '#c084fc'})`,
-              }} />
-            </div>
-          </div>
-          <div className="qpm-progress-labels">
-            <span style={{ color: 'rgba(16,185,129,0.5)' }}>{safePct}% safe</span>
-            <span>{donePct}% done</span>
-          </div>
-        </>
-      )}
+      {/* Progress bar archived — tasks are infinite, % done is misleading */}
 
       {/* All incomplete tasks grouped by type */}
       {tasks.filter(t => !t.done).map(t => {

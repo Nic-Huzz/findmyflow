@@ -16,6 +16,14 @@ import { hapticLight, hapticSuccess } from '../lib/haptics'
 import QuestSelector from './QuestSelector'
 import './WahooCreator.css'
 
+const PROTECTIVE_VOICES = [
+  { id: 'controller', name: 'Controller', icon: '🧱', desc: 'Takes over, pushes too hard' },
+  { id: 'ghost', name: 'Ghost', icon: '👻', desc: 'Disappears, avoids, goes quiet' },
+  { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞', desc: 'Says yes when you mean no' },
+  { id: 'auto-pilot', name: 'Auto-Pilot', icon: '🤖', desc: 'Goes through the motions, checks out' },
+  { id: 'perfectionist', name: 'Perfectionist', icon: '🎯', desc: 'Won\'t start until it\'s perfect' },
+]
+
 const DEPTH_LEVELS = [
   { id: 'education', label: 'Learning about it', icon: '📚' },
   { id: 'testing', label: 'Tried it / testing it', icon: '🧪' },
@@ -66,16 +74,21 @@ export default function WahooCreator({
   userId,
   bucketList = [],
   initialText = '',
+  initialQuestId = null,
+  initialSourceLabel = null,
   onWahooAccepted,
   onClose,
 }) {
   const [step, setStep] = useState('freetext')
   const [freeText, setFreeText] = useState(initialText)
-  const [linkedQuestId, setLinkedQuestId] = useState(null)
+  const [linkedQuestId, setLinkedQuestId] = useState(initialQuestId)
   const [depthLevel, setDepthLevel] = useState(null)
   const [visibilityLayers, setVisibilityLayers] = useState([])
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState(null)
+  const [protectiveVoice, setProtectiveVoice] = useState(null)
+  const [wantsHealing, setWantsHealing] = useState(null) // null | 'yes' | 'no'
+  const [healingTiming, setHealingTiming] = useState(null) // null | 'now' | 'later'
   const successTimerRef = useRef(null)
 
   useEffect(() => {
@@ -94,13 +107,20 @@ export default function WahooCreator({
     setError(null)
 
     try {
+      // Resolve quest label for source_label
+      let sourceLabel = initialSourceLabel
+      if (!sourceLabel && linkedQuestId) {
+        const { data: q } = await supabase.from('quests').select('label').eq('id', linkedQuestId).maybeSingle()
+        sourceLabel = q?.label || 'Courage'
+      }
+
       const { data: dbRecord, error: saveError } = await createGroanChallenge({
         userId,
         title: freeText.trim(),
         description: freeText.trim(),
         visibilityLayer: visibilityLayers[0] || 'screen',
         sourceType: 'skill',
-        sourceLabel: 'Free text',
+        sourceLabel: sourceLabel || 'Courage',
         depthLevel,
         visibilityLayers,
       })
@@ -146,8 +166,38 @@ export default function WahooCreator({
         } catch (e) { /* non-blocking */ }
       }
 
+      // Save healing intention if protective voice was identified
+      if (protectiveVoice && linkedQuestId && wantsHealing !== null) {
+        const { data: taskRow } = await supabase
+          .from('quest_tasks')
+          .select('id')
+          .eq('groan_challenge_id', dbRecord.id)
+          .maybeSingle()
+        if (taskRow) {
+          await supabase.from('healing_intentions').upsert({
+            quest_task_id: taskRow.id,
+            user_id: userId,
+            protective_voice: protectiveVoice,
+            pattern: protectiveVoice,
+            healing_stage: wantsHealing === 'yes' ? 'in_progress' : 'in_progress',
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'quest_task_id' }).then(() => {}).catch(() => {})
+        }
+      }
+
       hapticSuccess()
-      onWahooAccepted?.()
+
+      // If user chose "dig in now", pass the task ID + voice so parent can open HealingFlowModal
+      if (wantsHealing === 'yes' && healingTiming === 'now') {
+        const { data: taskRow } = await supabase
+          .from('quest_tasks')
+          .select('id, text')
+          .eq('groan_challenge_id', dbRecord.id)
+          .maybeSingle()
+        onWahooAccepted?.(taskRow || null, protectiveVoice)
+      } else {
+        onWahooAccepted?.(null, null)
+      }
       setStep('success')
       successTimerRef.current = setTimeout(() => onClose?.(), 1500)
     } catch (err) {
@@ -218,17 +268,18 @@ export default function WahooCreator({
   }
 
   const visOptions = depthLevel ? VISIBILITY_EXAMPLES[depthLevel] : []
-  const canSubmit = freeText.trim() && linkedQuestId && depthLevel && !generating
+  const healingComplete = !protectiveVoice || (wantsHealing === 'no') || (wantsHealing === 'yes' && healingTiming !== null)
+  const canSubmit = freeText.trim() && linkedQuestId && depthLevel && healingComplete && !generating
 
   return (
     <div className="wc-container">
       <div className="wc-header">
-        <h3 className="wc-title">Add a Wahoo</h3>
+        <h3 className="wc-title">Add a Courage Challenge</h3>
         <p className="wc-explainer">Something you&apos;d love to do that scares you a little.</p>
       </div>
 
       <div className="wc-card">
-        <h3 className="wc-card-title">What&apos;s the wahoo?</h3>
+        <h3 className="wc-card-title">What&apos;s the challenge?</h3>
         <textarea
           className="wc-textarea"
           placeholder="I want to..."
@@ -270,6 +321,54 @@ export default function WahooCreator({
               ))}
             </div>
           </>
+        )}
+
+        {/* Protective voice (optional) */}
+        {depthLevel && (
+          <>
+            <div className="wc-field-label">What voice tries to stop you?</div>
+            <div className="wc-vis-options">
+              {PROTECTIVE_VOICES.map(v => (
+                <button
+                  key={v.id}
+                  className={`wc-vis-btn ${protectiveVoice === v.id ? 'selected' : ''}`}
+                  onClick={() => { hapticLight(); setProtectiveVoice(protectiveVoice === v.id ? null : v.id); setWantsHealing(null); setHealingTiming(null) }}
+                >
+                  <span className="wc-vis-icon">{v.icon}</span>
+                  <span className="wc-vis-label">{v.name}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Healing prompt (only if voice selected) */}
+        {protectiveVoice && wantsHealing === null && (
+          <div className="wc-healing-prompt">
+            <div className="wc-field-label">Keen to explore why?</div>
+            <div className="wc-healing-buttons">
+              <button className="wc-healing-btn yes" onClick={() => { hapticLight(); setWantsHealing('yes') }}>
+                Yes, dig in 💚
+              </button>
+              <button className="wc-healing-btn no" onClick={() => { hapticLight(); setWantsHealing('no') }}>
+                No, all good
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Timing (only if wants healing) */}
+        {wantsHealing === 'yes' && healingTiming === null && (
+          <div className="wc-healing-prompt">
+            <div className="wc-healing-buttons">
+              <button className="wc-healing-btn yes" onClick={() => { hapticLight(); setHealingTiming('now') }}>
+                Dive in now 💚
+              </button>
+              <button className="wc-healing-btn later" onClick={() => { hapticLight(); setHealingTiming('later') }}>
+                Later
+              </button>
+            </div>
+          </div>
         )}
 
         {error && <p className="wc-error">{error}</p>}
