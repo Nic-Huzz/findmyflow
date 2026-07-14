@@ -251,9 +251,12 @@ This makes the solo experience feel witnessed without requiring real multiplayer
 | `src/hooks/useCelebrations.js` | Add `celebrationCopy` config with voiced variations. |
 | `supabase/functions/generate-zarlo-brief/index.ts` | Add skills + recent actions to the Brief. |
 
-### New Infrastructure
-- `user_action_log` table (lightweight): `user_id, action_type, action_data, created_at`. Last 10 actions per user. Capped with a trigger or cron. Used for "Last 3 Actions" context.
-- OR: compute recent actions on-the-fly from existing tables (slower but no new table).
+### Recent Actions (no new table)
+Compute on-the-fly from existing tables. Three parallel queries, LIMIT 1 each:
+- Latest `quest_completions WHERE quest_category = 'Groans'` (most recent wahoo)
+- Latest `nervous_system_checkins WHERE checkin_type = 'daily'` (most recent check-in)
+- Latest `healing_intentions WHERE healing_stage IN ('recognised', 'released')` (most recent healing)
+Combine + sort by timestamp. ~50ms total. No migration needed.
 
 ### Cost Estimate
 - Haiku per Zarlo open: ~200 input tokens (prompt) + ~50 output tokens = ~$0.0002 per interaction
@@ -270,11 +273,13 @@ This makes the solo experience feel witnessed without requiring real multiplayer
 
 ## Build Phases
 
-### Phase 1: Personality Layer (highest impact, 1 session)
+### Phase 1: Personality Layer + Free-Text (highest impact, 1 session)
 1. Build `buildZarloPrompt()` with full context injection
-2. Replace `showPageContext()` greeting with streaming AI call
-3. Replace `handleContextPrompt()` responses with streaming AI
-4. Keep all other modes scripted (intake, accountability, commitment, routing)
+2. Add free-text input below quick-replies (same streaming pattern as Figurine)
+3. Replace `showPageContext()` greeting with streaming AI call
+4. Replace `handleContextPrompt()` responses with streaming AI
+5. Keep all other modes scripted (intake, accountability, commitment, routing)
+6. Add `getRecentActions()` — on-the-fly query from `quest_completions` + `nervous_system_checkins` (LIMIT 3, no new table)
 
 ### Phase 2: Achievement Voice (low effort, same session)
 1. Add `celebrationCopy` config to celebrations
