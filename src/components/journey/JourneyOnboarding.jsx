@@ -77,12 +77,12 @@ export default function JourneyOnboarding({ userId }) {
         if (data?.[0]?.custom_essence_image) setHasEssenceAvatar(true)
       })
 
-    // Check wahoos
+    // Check wahoos (any groan challenge, not just ones with old categories)
     supabase
       .from('groan_challenges')
       .select('id')
       .eq('user_id', userId)
-      .not('wahoo_category', 'is', null)
+      .in('status', ['active', 'completed'])
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) setHasWahoos(true)
@@ -116,7 +116,7 @@ export default function JourneyOnboarding({ userId }) {
   if (!loaded) return null
 
   // Hide entire section if everything is done
-  const allDone = hasCuriosityMap && hasLifeMap && hasLifePaths && hasEssenceAvatar && (hasWahoos || hasPlaySkills) && hasHealingCompletion
+  const allDone = hasCuriosityMap && hasLifeMap && hasLifePaths && hasEssenceAvatar && (hasWahoos || hasPlaySkills || hasHealingCompletion)
   if (allDone) return null
 
   return (
@@ -161,41 +161,21 @@ export default function JourneyOnboarding({ userId }) {
           {!hasEssenceAvatar && (
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
           )}
-          {!(hasWahoos || hasPlaySkills) && hasLifePaths && (
+          {!(hasWahoos || hasPlaySkills || hasHealingCompletion) && hasLifePaths && (
             <div className="level-deep-dive" style={{ cursor: 'default' }}>
               <div className="level-dd-icon">🔥</div>
               <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Courage Tab</div>
-                <div className="level-dd-narrative">Name what would light you up.</div>
+                <div className="level-dd-name">Start Your First Courage Challenge</div>
+                <div className="level-dd-narrative">Face something that scares you a little. Explore what blocks you.</div>
               </div>
               <span className="level-dd-status start">Start</span>
             </div>
           )}
-          {!(hasWahoos || hasPlaySkills) && !hasLifePaths && (
+          {!(hasWahoos || hasPlaySkills || hasHealingCompletion) && !hasLifePaths && (
             <div className="level-deep-dive" style={{ opacity: 0.5 }}>
               <div className="level-dd-icon">🔒</div>
               <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Courage Tab</div>
-                <div className="level-dd-narrative">Complete Life Paths first.</div>
-              </div>
-              <span className="level-dd-status locked">Locked</span>
-            </div>
-          )}
-          {!hasHealingCompletion && hasLifePaths && (
-            <div className="level-deep-dive" style={{ cursor: 'default' }}>
-              <div className="level-dd-icon">💚</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Healing Tab</div>
-                <div className="level-dd-narrative">Remove what's blocking your path.</div>
-              </div>
-              <span className="level-dd-status start">Start</span>
-            </div>
-          )}
-          {!hasHealingCompletion && !hasLifePaths && (
-            <div className="level-deep-dive" style={{ opacity: 0.5 }}>
-              <div className="level-dd-icon">🔒</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Healing Tab</div>
+                <div className="level-dd-name">Start Your First Courage Challenge</div>
                 <div className="level-dd-narrative">Complete Life Paths first.</div>
               </div>
               <span className="level-dd-status locked">Locked</span>
