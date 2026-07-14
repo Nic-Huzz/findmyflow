@@ -217,6 +217,15 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           challenge_day: 0,
           project_id: null,
         }).catch(() => {})
+
+        // Mystery box: first quest achieved
+        supabase.from('quests')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .eq('close_reason', 'achieved')
+          .then(({ count }) => {
+            if (count === 1) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'first_quest_achieved', 'silver'))
+          }).catch(() => {})
       }
       setShowClose(false); onUpdate?.()
     }

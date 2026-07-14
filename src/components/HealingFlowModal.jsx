@@ -124,6 +124,15 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
         })
       } catch (e2) { /* non-blocking */ }
 
+      // Mystery box: first healing flow
+      supabase.from('healing_intentions')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .in('healing_stage', ['recognised', 'released'])
+        .then(({ count }) => {
+          if (count === 1) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'first_healing', 'bronze'))
+        }).catch(() => {})
+
       hapticSuccess()
       onComplete?.()
     } catch (e) {

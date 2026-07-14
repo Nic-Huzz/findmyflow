@@ -125,6 +125,13 @@ export async function checkHeroGraduation(userId) {
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
     postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`)
 
+    // Mystery box: hero stage milestones
+    if (newStage === 4 || newStage === 7) {
+      import('./mysteryBoxes').then(m => {
+        m.earnMysteryBox(userId, `hero_stage_${newStage}`, newStage === 7 ? 'legendary' : 'gold')
+      }).catch(() => {})
+    }
+
     return {
       from: currentStage,
       to: newStage,
