@@ -292,6 +292,17 @@ export function useFigurine() {
       return
     }
 
+    // Confidence floor: if no Brief data, don't let the AI improvise
+    if (!brief && intelligencePhase < 2) {
+      setMessages(prev => {
+        const updated = [...prev]
+        updated[updated.length - 1] = { role: 'assistant', content: "I don't know you well enough yet. Keep checking in and doing courage challenges. I'll have something real to say soon." }
+        return updated
+      })
+      setIsStreaming(false)
+      return
+    }
+
     const systemPrompt = buildFigurinePrompt(profile, heroStage, brief, memories, intelligencePhase, currentNsState, skills)
 
     try {

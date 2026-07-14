@@ -336,6 +336,14 @@ function ZarloChat({ onClose, challengeTab = null }) {
     const prompts = getPromptsForPage(currentRoute, challengeTab)
     setCurrentOptions([...prompts, { id: 'report_bug', label: 'Report a bug' }])
 
+    // Confidence floor: no Brief and no actions = use scripted greeting
+    if (!ctx?.zarloBrief && (!actions || actions.length === 0)) {
+      const pageContent = getPageContent(currentRoute)
+      const timeGreeting = getTimeGreeting()
+      addMessage('zarlo', `${timeGreeting}! You're in **${pageContent.pageName}**`)
+      return
+    }
+
     // Add a placeholder streaming message
     const msgId = Date.now() + Math.random()
     streamingMsgIdRef.current = msgId
@@ -388,6 +396,13 @@ function ZarloChat({ onClose, challengeTab = null }) {
     if (userMessageCount >= MAX_MESSAGES_PER_SESSION) {
       addMessage('user', text)
       addMessage('zarlo', "That's enough from me for now. Close and reopen if you need me again, or tap your Mentor for a deeper conversation.")
+      return
+    }
+
+    // Confidence floor: if no Brief and no recent actions, don't let AI improvise
+    if (!userContext?.zarloBrief && (!recentActions || recentActions.length === 0)) {
+      addMessage('user', text)
+      addMessage('zarlo', "I don't have enough data on you yet. Keep checking in and doing courage challenges. I'll have something specific to say soon.")
       return
     }
 
