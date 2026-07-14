@@ -115,8 +115,10 @@ export default function JourneyOnboarding({ userId }) {
 
   if (!loaded) return null
 
+  const hasCourage = hasWahoos || hasPlaySkills || hasHealingCompletion
+
   // Hide entire section if everything is done
-  const allDone = hasCuriosityMap && hasLifeMap && hasLifePaths && hasEssenceAvatar && (hasWahoos || hasPlaySkills || hasHealingCompletion)
+  const allDone = hasCuriosityMap && hasLifeMap && hasLifePaths && hasEssenceAvatar && hasCourage
   if (allDone) return null
 
   return (
@@ -126,10 +128,13 @@ export default function JourneyOnboarding({ userId }) {
           <span className="quest-section-icon">📖</span>
           <span className="quest-section-title">Getting Started</span>
         </div>
-          {/* Curiosity Map → Life Map → Life Paths (sequential, locked until previous complete) */}
+
+          {/* 1. Curiosity Map */}
           {!hasCuriosityMap && (
             <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Map Your Curiosities', route: '/curiosity-map', narrative: 'What can\'t you stop reading, watching, and learning about?', icon: '✨' }} isCompleted={false} />
           )}
+
+          {/* 2. Life Map (locked until Curiosity Map) */}
           {!hasLifeMap && (
             hasCuriosityMap ? (
               <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
@@ -144,6 +149,8 @@ export default function JourneyOnboarding({ userId }) {
               </div>
             )
           )}
+
+          {/* 3. Life Paths (locked until Life Map) */}
           {!hasLifePaths && (
             hasLifeMap ? (
               <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={false} />
@@ -158,20 +165,36 @@ export default function JourneyOnboarding({ userId }) {
               </div>
             )
           )}
+
+          {/* 4. Explore Your Quests — unlocks Quests tab (locked until Life Paths) */}
+          {hasLifePaths && (
+            <div className="level-deep-dive" style={{ cursor: 'default' }}>
+              <div className="level-dd-icon">🧭</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">Explore Your Quests</div>
+                <div className="level-dd-narrative">Your Quests tab is now unlocked. See your life paths as active quests.</div>
+              </div>
+              <span className="level-dd-status" style={{ color: '#10b981', fontWeight: 700 }}>Unlocked</span>
+            </div>
+          )}
+
+          {/* 5. Hero Avatar (always available) */}
           {!hasEssenceAvatar && (
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
           )}
-          {!(hasWahoos || hasPlaySkills || hasHealingCompletion) && hasLifePaths && (
+
+          {/* 6. First Courage Challenge — unlocks Courage tab (locked until Life Paths) */}
+          {!hasCourage && hasLifePaths && (
             <div className="level-deep-dive" style={{ cursor: 'default' }}>
               <div className="level-dd-icon">🔥</div>
               <div className="level-dd-info">
                 <div className="level-dd-name">Start Your First Courage Challenge</div>
-                <div className="level-dd-narrative">Face something that scares you a little. Explore what blocks you.</div>
+                <div className="level-dd-narrative">Face something that scares you a little. Head to the Courage tab.</div>
               </div>
               <span className="level-dd-status start">Start</span>
             </div>
           )}
-          {!(hasWahoos || hasPlaySkills || hasHealingCompletion) && !hasLifePaths && (
+          {!hasCourage && !hasLifePaths && (
             <div className="level-deep-dive" style={{ opacity: 0.5 }}>
               <div className="level-dd-icon">🔒</div>
               <div className="level-dd-info">

@@ -18,7 +18,7 @@ const HERO_STAGES = [
   { stage: 7, name: 'Approach to the Inmost Cave', icon: '🔮' },
 ]
 
-export default function JourneyTimeline({ userId, heroStage }) {
+export default function JourneyTimeline({ userId, heroStage, userEmail }) {
   const [evidence, setEvidence] = useState({})
 
   useEffect(() => {
@@ -42,20 +42,18 @@ export default function JourneyTimeline({ userId, heroStage }) {
         }
       })
 
-    // Stage 3: life paths session
-    supabase.auth.getUser().then(({ data: userData }) => {
-      const email = userData?.user?.email
-      if (!active || !email) return
+    // Stage 3: life paths session (email passed from parent to avoid duplicate auth call)
+    if (userEmail) {
       supabase.from('life_path_sessions')
         .select('created_at')
-        .eq('client_email', email)
+        .eq('client_email', userEmail)
         .order('created_at', { ascending: true })
         .limit(1)
         .maybeSingle()
         .then(({ data }) => {
           if (active && data) setEvidence(prev => ({ ...prev, [3]: { date: data.created_at, label: 'Life Paths mapped' } }))
         })
-    })
+    }
 
     // Stage 4: essence mirror
     supabase.from('user_stage_progress')
@@ -96,7 +94,7 @@ export default function JourneyTimeline({ userId, heroStage }) {
       })
 
     return () => { active = false }
-  }, [userId, heroStage])
+  }, [userId, heroStage, userEmail])
 
   if (heroStage < 2) return null
 

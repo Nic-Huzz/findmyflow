@@ -13,20 +13,19 @@ import './ChallengeIntro.css'
 
 const SLIDES = [
   {
-    heading: 'You know that feeling.',
-    body: 'When fear turns into aliveness. When you do the scary thing and everything lights up instead of falling apart.',
+    heading: 'Something cracked.',
+    body: 'Maybe it was burnout. Maybe it was a quiet realisation that the life you built isn\'t the one you want. Either way, you\'re here because the old version stopped working.',
     duration: 7000,
   },
   {
-    heading: 'That feeling is trainable.',
-    body: 'Every challenge here is designed to build your capacity for it. Remove what blocks it. Practice what creates it. Track what sustains it.',
+    heading: 'That\'s not a breakdown. That\'s your origin story.',
+    body: 'Every hero starts in the Ordinary World. Then something breaks them open. Right now you\'re answering the Call to Adventure. This app is your map through the journey.',
     duration: 8000,
   },
   {
-    heading: 'A gym for your nervous system.',
-    body: null,
+    heading: 'Your journey starts with self-knowledge.',
+    body: 'Map your curiosities. Trace your life story. See which paths are open to you. Then start doing the things that scare you a little.',
     duration: null,
-    hasQuadrant: true,
     hasButton: true,
   },
 ]
@@ -78,26 +77,9 @@ export default function ChallengeIntro({ userId, onComplete }) {
         {slide.body && (
           <p className="challenge-intro-body">{slide.body}</p>
         )}
-        {slide.hasQuadrant && (
-          <div className="ci-tier-stack">
-            <div className="ci-tier ci-tier-vr">
-              <span className="ci-tier-name">Vibe Rise <span className="ci-tier-bracket ci-tier-bracket--vr">(Essence Archetype)</span></span>
-            </div>
-            <div className="ci-tier ci-tier-ventral">
-              <span className="ci-tier-name">Fun <span className="ci-tier-bracket">(Ventral Vagal)</span></span>
-            </div>
-            <div className="ci-tier ci-tier-sympathetic">
-              <span className="ci-tier-name">Pressure <span className="ci-tier-bracket">(Sympathetic)</span></span>
-            </div>
-            <div className="ci-tier ci-tier-dorsal">
-              <span className="ci-tier-name">Auto-Pilot <span className="ci-tier-bracket">(Dorsal Vagal)</span></span>
-            </div>
-            <p className="ci-tier-tagline">Three states are mapped. <span className="ci-tier-gold">We train the fourth.</span></p>
-          </div>
-        )}
         {slide.hasButton && (
           <button className="challenge-intro-cta" onClick={handleComplete}>
-            Let&apos;s Go
+            Begin Your Journey
           </button>
         )}
       </div>

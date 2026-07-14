@@ -4,7 +4,6 @@ import UnstickFlow from './UnstickFlow'
 import QuestPathMap from './level/QuestPathMap'
 import JourneyTimeline from './journey/JourneyTimeline'
 import JourneyOnboarding from './journey/JourneyOnboarding'
-import JourneyZones from './journey/JourneyZones'
 import JourneyCompleted from './journey/JourneyCompleted'
 import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import SkillsDisplay from './journey/SkillsDisplay'
@@ -78,10 +77,14 @@ export default function JourneyTab({ userId }) {
   const [orphanedWahoos, setOrphanedWahoos] = useState([])
   const [showTimeline, setShowTimeline] = useState(false)
   const [showOrphanLinker, setShowOrphanLinker] = useState(false)
+  const [userEmail, setUserEmail] = useState(null)
   const figurine = useFigurine()
 
   useEffect(() => {
     if (!userId) return
+    let active = true
+
+    // ─── Batch 1: all independent queries in parallel ───
     Promise.all([
       supabase.from('user_stage_progress')
         .select('current_journey_level')
@@ -103,9 +106,26 @@ export default function JourneyTab({ userId }) {
         .eq('status', 'active')
         .neq('label', 'Healing Work')
         .order('created_at'),
-    ]).then(async ([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes]) => {
-      setHeroStage(stageRes.data?.current_journey_level || 0)
+      supabase.auth.getUser(),
+      supabase.from('groan_challenges')
+        .select('id, title, challenge_text')
+        .eq('user_id', userId)
+        .eq('status', 'completed')
+        .limit(50),
+      supabase.from('quest_tasks')
+        .select('groan_challenge_id')
+        .eq('user_id', userId)
+        .not('groan_challenge_id', 'is', null),
+    ]).then(([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes, authRes, completedRes, linkedRes]) => {
+      if (!active) return
 
+      setHeroStage(stageRes.data?.current_journey_level || 0)
+      setBrief(briefRes.data?.brief || null)
+
+      const email = authRes.data?.user?.email
+      setUserEmail(email || null)
+
+      // Voice counts
       const counts = {}
       const allVoices = [...(hiVoiceRes.data || []), ...(nsVoiceRes.data || [])]
       allVoices.forEach(row => {
@@ -113,81 +133,81 @@ export default function JourneyTab({ userId }) {
           counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
       })
       setVoiceCounts(counts)
-      setBrief(briefRes.data?.brief || null)
-
-      // Anonymous solidarity: how many others identified the same dominant voice this month?
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-      if (sorted.length > 0) {
-        const dominantVoiceName = sorted[0][0]
-        const { count: othersCount } = await supabase
-          .from('nervous_system_checkins')
-          .select('user_id', { count: 'exact', head: true })
-          .eq('protective_voice', dominantVoiceName)
-          .neq('user_id', userId)
-          .gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())
-        setSolidarityCount(othersCount || 0)
-      }
 
       const activeQuests = questsRes.data || []
       setLifePaths(activeQuests)
 
-      // Fetch quest tasks for Flow Map
-      if (activeQuests.length > 0) {
-        const { data: allTasks } = await supabase
-          .from('quest_tasks')
-          .select('*')
-          .in('quest_id', activeQuests.map(q => q.id))
-          .order('sort_order')
-        const taskMap = {}
-        ;(allTasks || []).forEach(t => {
-          if (!taskMap[t.quest_id]) taskMap[t.quest_id] = []
-          taskMap[t.quest_id].push(t)
-        })
-        setQuestTasks(taskMap)
-      }
-
-      // Fetch trunk state from life_path_sessions (filtered by client_email)
-      const { data: userData } = await supabase.auth.getUser()
-      const email = userData?.user?.email
-      if (email) {
-        const { data: sessionData } = await supabase
-          .from('life_path_sessions')
-          .select('current_state, safety, careers')
-          .eq('client_email', email)
-          .order('updated_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
-        if (sessionData) {
-          setTrunkState(sessionData.current_state)
-          setSafety(sessionData.safety || 0)
-          setCareers(sessionData.careers || [])
-        }
-      }
-
-      // Orphaned wahoos: completed but not linked to any quest
-      const completedRes = await supabase
-        .from('groan_challenges')
-        .select('id, title, challenge_text')
-        .eq('user_id', userId)
-        .eq('status', 'completed')
-        .limit(50)
-
-      const linkedRes = await supabase
-        .from('quest_tasks')
-        .select('groan_challenge_id')
-        .eq('user_id', userId)
-        .not('groan_challenge_id', 'is', null)
-
+      // Orphaned wahoos (no further queries needed)
       const linkedIds = new Set((linkedRes.data || []).map(t => t.groan_challenge_id))
       setOrphanedWahoos(
         (completedRes.data || []).filter(w => !linkedIds.has(w.id)).slice(0, 10)
       )
 
-      setLoading(false)
+      // ─── Batch 2: queries that depend on batch 1 results, all parallel ───
+      const batch2 = []
+
+      // Solidarity count (needs dominant voice)
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+      if (sorted.length > 0) {
+        batch2.push(
+          supabase
+            .from('nervous_system_checkins')
+            .select('user_id', { count: 'exact', head: true })
+            .eq('protective_voice', sorted[0][0])
+            .neq('user_id', userId)
+            .gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())
+            .then(({ count }) => { if (active) setSolidarityCount(count || 0) })
+        )
+      }
+
+      // Quest tasks for Flow Map (needs quest IDs)
+      if (activeQuests.length > 0) {
+        batch2.push(
+          supabase
+            .from('quest_tasks')
+            .select('*')
+            .in('quest_id', activeQuests.map(q => q.id))
+            .order('sort_order')
+            .then(({ data: allTasks }) => {
+              if (!active) return
+              const taskMap = {}
+              ;(allTasks || []).forEach(t => {
+                if (!taskMap[t.quest_id]) taskMap[t.quest_id] = []
+                taskMap[t.quest_id].push(t)
+              })
+              setQuestTasks(taskMap)
+            })
+        )
+      }
+
+      // Life path sessions (needs email)
+      if (email) {
+        batch2.push(
+          supabase
+            .from('life_path_sessions')
+            .select('current_state, safety, careers')
+            .eq('client_email', email)
+            .order('updated_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+            .then(({ data: sessionData }) => {
+              if (!active || !sessionData) return
+              setTrunkState(sessionData.current_state)
+              setSafety(sessionData.safety || 0)
+              setCareers(sessionData.careers || [])
+            })
+        )
+      }
+
+      return Promise.all(batch2)
+    }).then(() => {
+      if (active) setLoading(false)
     }).catch(err => {
       console.error('JourneyTab data load error:', err)
-      setLoading(false)
+      if (active) setLoading(false)
     })
+
+    return () => { active = false }
   }, [userId])
 
   if (loading) return <div className="jt-loading">Loading journey...</div>
@@ -270,7 +290,7 @@ export default function JourneyTab({ userId }) {
       </div>
 
       {/* Timeline dropdown */}
-      {showTimeline && <JourneyTimeline userId={userId} heroStage={heroStage} />}
+      {showTimeline && <JourneyTimeline userId={userId} heroStage={heroStage} userEmail={userEmail} />}
 
       {/* Figurine Presence */}
       {figurine.isUnlocked && (
@@ -386,8 +406,7 @@ export default function JourneyTab({ userId }) {
         />
       )}
 
-      {/* Zone Assessments */}
-      <JourneyZones userId={userId} />
+      {/* Zone Assessments — archived, re-enable when redesigned */}
 
       {/* Completed exercises + closed quests */}
       <JourneyCompleted userId={userId} />
