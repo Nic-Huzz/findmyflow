@@ -11,19 +11,30 @@ import { hapticSuccess } from '../../lib/haptics'
 import QuestSelector from '../QuestSelector'
 import './OrphanWahooLinker.css'
 
+const DEPTH_OPTIONS = [
+  { id: 'education', label: 'Learning about it', icon: '📚' },
+  { id: 'testing', label: 'Tried it / testing it', icon: '🧪' },
+  { id: 'practising', label: 'Do it regularly', icon: '🔄' },
+  { id: 'charging', label: 'Getting paid for this', icon: '💰' },
+  { id: 'teaching', label: 'Teaching / passing it on', icon: '🎓' },
+]
+
 export default function OrphanWahooLinker({ wahoos, userId, onLinked, onClose }) {
-  const [linkingId, setLinkingId] = useState(null) // which wahoo has quest selector open
+  const [linkingId, setLinkingId] = useState(null)
   const [linkedIds, setLinkedIds] = useState(new Set())
   const [saving, setSaving] = useState(false)
+  const [pendingQuest, setPendingQuest] = useState({}) // wahooId → questId
+  const [pendingDepth, setPendingDepth] = useState({}) // wahooId → depthLevel
 
   const remaining = wahoos.filter(w => !linkedIds.has(w.id))
 
-  async function handleLink(wahoo, questId) {
-    if (!questId || saving) return
+  async function handleLink(wahoo) {
+    const questId = pendingQuest[wahoo.id]
+    const depth = pendingDepth[wahoo.id]
+    if (!questId || !depth || saving) return
     setSaving(true)
 
     try {
-      // Create quest_task linking wahoo to quest
       await supabase.from('quest_tasks').insert({
         quest_id: questId,
         user_id: userId,
@@ -31,14 +42,20 @@ export default function OrphanWahooLinker({ wahoos, userId, onLinked, onClose })
         is_courage_challenge: true,
         groan_challenge_id: wahoo.id,
         sort_order: 0,
-        done: true, // already completed
+        done: true,
       })
+
+      // Auto-bump quest depth (high watermark)
+      const DEPTH_ORDER = { education: 0, testing: 1, practising: 2, charging: 3, teaching: 4 }
+      const { data: quest } = await supabase.from('quests').select('depth_level').eq('id', questId).single()
+      if ((DEPTH_ORDER[depth] ?? -1) > (DEPTH_ORDER[quest?.depth_level] ?? -1)) {
+        await supabase.from('quests').update({ depth_level: depth }).eq('id', questId)
+      }
 
       hapticSuccess()
       setLinkedIds(prev => new Set([...prev, wahoo.id]))
       setLinkingId(null)
 
-      // If all linked, notify parent
       if (remaining.length <= 1) {
         onLinked?.()
       }
@@ -72,10 +89,30 @@ export default function OrphanWahooLinker({ wahoos, userId, onLinked, onClose })
                 <div className="owl-quest-picker">
                   <QuestSelector
                     userId={userId}
-                    value={null}
-                    onChange={(questId) => handleLink(w, questId)}
+                    value={pendingQuest[w.id] || null}
+                    onChange={(questId) => setPendingQuest(prev => ({ ...prev, [w.id]: questId }))}
                   />
-                  {saving && <span className="owl-saving">Linking...</span>}
+                  {pendingQuest[w.id] && (
+                    <>
+                      <div className="owl-depth-label">How deep were you into this?</div>
+                      <div className="owl-depth-options">
+                        {DEPTH_OPTIONS.map(d => (
+                          <button
+                            key={d.id}
+                            className={`owl-depth-btn ${pendingDepth[w.id] === d.id ? 'selected' : ''}`}
+                            onClick={() => setPendingDepth(prev => ({ ...prev, [w.id]: d.id }))}
+                          >
+                            <span>{d.icon}</span> {d.label}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {pendingQuest[w.id] && pendingDepth[w.id] && (
+                    <button className="owl-link-btn" onClick={() => handleLink(w)} disabled={saving}>
+                      {saving ? 'Linking...' : 'Link'}
+                    </button>
+                  )}
                 </div>
               )}
             </div>

@@ -120,8 +120,7 @@ export default function JourneyTab({ userId }) {
       supabase.from('groan_challenges')
         .select('id, title, challenge_text')
         .eq('user_id', userId)
-        .eq('status', 'completed')
-        .limit(50),
+        .eq('status', 'completed'),
       supabase.from('quest_tasks')
         .select('groan_challenge_id')
         .eq('user_id', userId)
@@ -178,7 +177,7 @@ export default function JourneyTab({ userId }) {
       // Orphaned wahoos (no further queries needed)
       const linkedIds = new Set((linkedRes.data || []).map(t => t.groan_challenge_id))
       setOrphanedWahoos(
-        (completedRes.data || []).filter(w => !linkedIds.has(w.id)).slice(0, 10)
+        (completedRes.data || []).filter(w => !linkedIds.has(w.id))
       )
 
       // ─── Batch 2: queries that depend on batch 1 results, all parallel ───
@@ -206,12 +205,25 @@ export default function JourneyTab({ userId }) {
             .select('*')
             .in('quest_id', allQuestsData.map(q => q.id))
             .order('sort_order')
-            .then(({ data: allTasks }) => {
-              if (!active) return
+            .then(async ({ data: allTasks }) => {
+              if (!active || !allTasks) return
+
+              // Fetch depth_level from groan_challenges for tasks with a groan link
+              const groanIds = allTasks.filter(t => t.groan_challenge_id).map(t => t.groan_challenge_id)
+              let depthMap = {}
+              if (groanIds.length > 0) {
+                const { data: depths } = await supabase
+                  .from('groan_challenges')
+                  .select('id, depth_level')
+                  .in('id', groanIds)
+                depths?.forEach(d => { depthMap[d.id] = d.depth_level })
+              }
+
               const taskMap = {}
-              ;(allTasks || []).forEach(t => {
-                if (!taskMap[t.quest_id]) taskMap[t.quest_id] = []
-                taskMap[t.quest_id].push(t)
+              allTasks.forEach(t => {
+                const task = { ...t, depth_level: depthMap[t.groan_challenge_id] || null }
+                if (!taskMap[task.quest_id]) taskMap[task.quest_id] = []
+                taskMap[task.quest_id].push(task)
               })
               setQuestTasks(taskMap)
             })

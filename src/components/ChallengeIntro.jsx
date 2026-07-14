@@ -14,17 +14,30 @@ import './ChallengeIntro.css'
 const SLIDES = [
   {
     heading: 'Something cracked.',
-    body: 'Maybe it was burnout. Maybe it was a quiet realisation that the life you built isn\'t the one you want. Either way, you\'re here because the old version stopped working.',
+    body: [
+      'Maybe it was burnout.',
+      'Maybe it was a quiet realisation that the life you built isn\'t the one you want.',
+      'Either way, you\'re here because the old version stopped working.',
+    ],
     duration: 7000,
   },
   {
     heading: 'That\'s not a breakdown. That\'s your origin story.',
-    body: 'Every hero starts in the Ordinary World. Then something breaks them open. Right now you\'re answering the Call to Adventure. This app is your map through the journey.',
+    body: [
+      'Every hero starts in the Ordinary World. Then something breaks them open.',
+      'Right now you\'re answering the Call to Adventure.',
+      'This app is your map through the journey.',
+    ],
     duration: 8000,
   },
   {
     heading: 'Your journey starts with self-knowledge.',
-    body: 'Map your curiosities. Trace your life story. See which paths are open to you. Then start doing the things that scare you a little.',
+    body: [
+      'Map your curiosities.',
+      'Trace your life story.',
+      'See which paths are open to you.',
+      'Then start doing the things that scare you a little.',
+    ],
     duration: null,
     hasButton: true,
   },
@@ -75,7 +88,11 @@ export default function ChallengeIntro({ userId, onComplete }) {
       <div className={`challenge-intro-content ${fading ? 'fading' : ''}`}>
         <h1 className="challenge-intro-heading">{slide.heading}</h1>
         {slide.body && (
-          <p className="challenge-intro-body">{slide.body}</p>
+          <div className="challenge-intro-body">
+            {slide.body.map((line, i) => (
+              <p key={i} className="challenge-intro-line">{line}</p>
+            ))}
+          </div>
         )}
         {slide.hasButton && (
           <button className="challenge-intro-cta" onClick={handleComplete}>

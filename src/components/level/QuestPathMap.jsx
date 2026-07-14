@@ -39,9 +39,9 @@ function scaledY(state) {
 
 // ── Vertical overview constants (Y=depth L0-L4, X=state) ──
 const OV_W = 420
-const OV_H = 600
+const OV_H = 900
 const OV_TOP = 60
-const OV_BOTTOM = OV_H - 80
+const OV_BOTTOM = OV_H - 100
 
 // Depth level Y positions (L0=bottom, L4=top)
 const DEPTH_LEVELS = [
@@ -96,7 +96,7 @@ export default function QuestPathMap({
   const lightMode = true
 
   const activeQuests = useMemo(() =>
-    quests.filter(q => q.label !== 'Healing Work'),
+    quests.filter(q => q.label !== 'Healing Work' && q.close_reason !== 'archived'),
     [quests]
   )
 
@@ -126,9 +126,22 @@ export default function QuestPathMap({
   useEffect(() => {
     if (!userId) return
     supabase.from('quest_cross_pollination')
-      .select('source_quest_id, target_quest_id, created_at')
+      .select('id, source_quest_id, target_quest_id, groan_challenge_id, created_at')
       .eq('user_id', userId)
-      .then(({ data }) => { if (data) setCrossPollination(data) })
+      .then(async ({ data }) => {
+        if (!data) return
+        // Fetch merge challenge depths
+        const mergeIds = data.filter(cp => cp.groan_challenge_id).map(cp => cp.groan_challenge_id)
+        let mergeDepths = {}
+        if (mergeIds.length > 0) {
+          const { data: depths } = await supabase.from('groan_challenges').select('id, depth_level').in('id', mergeIds)
+          depths?.forEach(d => { mergeDepths[d.id] = d.depth_level })
+        }
+        setCrossPollination(data.map(cp => ({
+          ...cp,
+          merge_depth: mergeDepths[cp.groan_challenge_id] || null,
+        })))
+      })
   }, [userId])
 
   // Load hero avatar
@@ -247,6 +260,27 @@ export default function QuestPathMap({
 
       <div className="qpm-swipe-hint">← swipe →</div>
 
+      {/* Merge connections */}
+      {crossPollination.length > 0 && (
+        <div className="qpm-merges">
+          <div className="qpm-merges-title">Connections</div>
+          {crossPollination.map(cp => {
+            const source = activeQuests.find(q => q.id === cp.source_quest_id)
+            const target = activeQuests.find(q => q.id === cp.target_quest_id)
+            if (!source || !target) return null
+            const sourceColour = SAFE_COLOURS[source.predicted_state] || '#5e17eb'
+            const targetColour = SAFE_COLOURS[target.predicted_state] || '#5e17eb'
+            return (
+              <div key={cp.id} className="qpm-merge-row">
+                <span style={{ color: sourceColour, fontWeight: 600 }}>{source.label}</span>
+                <span className="qpm-merge-arrow">→</span>
+                <span style={{ color: targetColour, fontWeight: 600 }}>{target.label}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {/* Bottom sheet for task details */}
       {sheetTask && (
         <QuestTaskSheet
@@ -289,6 +323,16 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, l
       ids.forEach((id, i) => { offsets[id] = zone.center + (i * spacing - total / 2) })
     })
     return offsets
+  }, [quests])
+
+  // Find the most advanced quest (highest depth) for avatar placement
+  const mostAdvancedId = useMemo(() => {
+    let best = null, bestDepth = -1
+    quests.forEach(q => {
+      const d = DEPTH_ORDER[q.depth_level] ?? 0
+      if (d > bestDepth) { bestDepth = d; best = q.id }
+    })
+    return best
   }, [quests])
 
   return (
@@ -338,33 +382,143 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, l
           )
         })}
 
-        {/* Quest dots at (state, depth) */}
+        {/* Quest flow lines + courage challenge dots */}
         {quests.map(quest => {
           const x = laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')
-          const y = depthY(quest.depth_level || 'education')
           const colour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
-          const isClosed = quest.status === 'closed'
+          const isClosed = quest.status === 'closed' || quest.status === 'completed'
           const tasks = questTasks[quest.id] || []
-          const doneCount = tasks.filter(t => t.done).length
+          const courageTasks = tasks
+            .filter(t => t.is_courage_challenge && t.depth_level)
+            .sort((a, b) => new Date(a.backdated_date || a.created_at) - new Date(b.backdated_date || b.created_at))
+
+          if (courageTasks.length === 0) {
+            // No courage tasks — just show label + position dot
+            const y = depthY(quest.depth_level || 'education')
+            return (
+              <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
+                <circle cx={x} cy={y} r="6" fill={colour} opacity="0.6" />
+                <text x={x} y={OV_BOTTOM + 16} fill={colour} opacity={isClosed ? 0.3 : 0.5}
+                  fontSize="10" fontWeight="700" textAnchor="end"
+                  transform={`rotate(-45, ${x}, ${OV_BOTTOM + 16})`}>
+                  {quest.label?.slice(0, 22)}
+                </text>
+              </g>
+            )
+          }
+
+          // Place dots vertically: within each depth band, spread chronologically
+          // Band boundaries: each depth zone gets equal vertical space
+          const bandH = (OV_BOTTOM - OV_TOP) / 5 // 5 levels, each gets a band
+          const dotPoints = courageTasks.map(t => {
+            const depthIdx = DEPTH_ORDER[t.depth_level] ?? 0
+            return { task: t, depthIdx }
+          })
+
+          // Within each depth band, assign Y positions chronologically
+          const byDepth = {}
+          dotPoints.forEach(p => {
+            if (!byDepth[p.depthIdx]) byDepth[p.depthIdx] = []
+            byDepth[p.depthIdx].push(p)
+          })
+
+          const positioned = []
+          Object.entries(byDepth).forEach(([depthIdx, points]) => {
+            const idx = parseInt(depthIdx)
+            const bandTop = OV_BOTTOM - (idx + 1) * bandH
+            const bandBottom = OV_BOTTOM - idx * bandH
+            const padding = 12
+            const usableH = bandBottom - bandTop - padding * 2
+            points.forEach((p, i) => {
+              const t = points.length > 1 ? i / (points.length - 1) : 0.5
+              const y = bandBottom - padding - t * usableH
+              positioned.push({ ...p, y })
+            })
+          })
+
+          // Sort all positioned dots by Y (bottom to top) for the line path
+          positioned.sort((a, b) => b.y - a.y)
+
+          // Build smooth path through all dots
+          const pathPoints = positioned.map(p => ({ x, y: p.y }))
+          const firstY = pathPoints.length > 0 ? pathPoints[0].y : OV_BOTTOM
+          const lastY = pathPoints.length > 0 ? pathPoints[pathPoints.length - 1].y : OV_TOP
 
           return (
             <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
-              {/* Glow */}
-              <circle cx={x} cy={y} r="14" fill={colour} opacity="0.08"
-                filter={`url(#${uid}glow)`} />
-              {/* Dot */}
-              <circle cx={x} cy={y} r="7" fill={colour} opacity={isClosed ? 0.5 : 0.85} />
-              {doneCount > 0 && (
-                <text x={x} y={y + 3} fill="white" fontSize="7" fontWeight="800" textAnchor="middle">
-                  {doneCount}
-                </text>
+              {/* Flow line */}
+              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
+                stroke={colour} strokeWidth="2.5" strokeLinecap="round" opacity="0.4" />
+              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
+                stroke={colour} strokeWidth="8" strokeLinecap="round" opacity="0.04" />
+
+              {/* Courage dots along the line */}
+              {positioned.map(({ task, y }) => (
+                <g key={task.id}>
+                  <circle cx={x} cy={y} r="4.5"
+                    fill={task.done ? colour : 'none'}
+                    stroke={task.done ? 'none' : colour}
+                    strokeWidth={task.done ? 0 : 1}
+                    opacity={task.done ? 0.75 : 0.3} />
+                </g>
+              ))}
+
+              {/* Current position — avatar on most advanced, dot on others */}
+              {quest.id === mostAdvancedId && heroAvatarUrl ? (
+                <g>
+                  <circle cx={x} cy={lastY} r="12" fill={colour} opacity="0.15" />
+                  <circle cx={x} cy={lastY} r="10" fill="#f5f5f0" />
+                  <defs>
+                    <clipPath id={`${uid}av-${quest.id}`}>
+                      <circle cx={x} cy={lastY} r="9" />
+                    </clipPath>
+                  </defs>
+                  <image href={heroAvatarUrl} x={x - 9} y={lastY - 9} width="18" height="18"
+                    clipPath={`url(#${uid}av-${quest.id})`} preserveAspectRatio="xMidYMid slice" />
+                  <circle cx={x} cy={lastY} r="10" fill="none" stroke={colour} strokeWidth="1.5" opacity="0.6" />
+                  <circle cx={x} cy={lastY} r="13" fill="none" stroke={colour} strokeWidth="1" opacity="0.1">
+                    <animate attributeName="r" values="13;20;13" dur="2.5s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite" />
+                  </circle>
+                </g>
+              ) : (
+                <circle cx={x} cy={lastY} r="7"
+                  fill={colour} opacity="0.9" stroke="white" strokeWidth="2" />
               )}
+
               {/* Label */}
               <text x={x} y={OV_BOTTOM + 16} fill={colour} opacity={isClosed ? 0.3 : 0.5}
                 fontSize="10" fontWeight="700" textAnchor="end"
                 transform={`rotate(-45, ${x}, ${OV_BOTTOM + 16})`}>
                 {quest.label?.slice(0, 22)}
               </text>
+            </g>
+          )
+        })}
+
+        {/* Merge curves from cross-pollination — source flows into target */}
+        {crossPollination.map(cp => {
+          const sourceX = laneOffsets[cp.source_quest_id]
+          const targetX = laneOffsets[cp.target_quest_id]
+          if (sourceX == null || targetX == null) return null
+          const sourceQuest = quests.find(q => q.id === cp.source_quest_id)
+          const targetQuest = quests.find(q => q.id === cp.target_quest_id)
+          if (!sourceQuest || !targetQuest) return null
+          const sourceColour = SAFE_COLOURS[sourceQuest.predicted_state] || '#5e17eb'
+          // Source departs from its highest depth
+          const sourceTasks = (questTasks[cp.source_quest_id] || []).filter(t => t.is_courage_challenge && t.depth_level)
+          const sourceMaxDepth = sourceTasks.length > 0
+            ? Math.max(...sourceTasks.map(t => DEPTH_ORDER[t.depth_level] ?? 0))
+            : (DEPTH_ORDER[sourceQuest.depth_level] ?? 0)
+          const sourceDepthKey = Object.keys(DEPTH_ORDER).find(k => DEPTH_ORDER[k] === sourceMaxDepth) || 'education'
+          const sy = depthY(sourceDepthKey)
+          // Target: use merge challenge depth, or fall back to quest depth
+          const ty = depthY(cp.merge_depth || targetQuest.depth_level || 'education')
+          return (
+            <g key={cp.id || `merge-${cp.source_quest_id}-${cp.target_quest_id}`}>
+              <path d={`M ${sourceX} ${sy} C ${(sourceX + targetX) / 2} ${sy}, ${(sourceX + targetX) / 2} ${ty}, ${targetX} ${ty}`}
+                fill="none" stroke={sourceColour} strokeWidth="2" strokeLinecap="round" opacity="0.35" />
+              <circle cx={targetX} cy={ty} r="4" fill={sourceColour} opacity="0.3" />
             </g>
           )
         })}

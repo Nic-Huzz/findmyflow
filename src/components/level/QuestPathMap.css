@@ -183,6 +183,38 @@
   padding: 6px 0 env(safe-area-inset-bottom, 12px);
 }
 
+/* ── Merge connections list ── */
+.qpm-merges {
+  padding: 12px 20px 16px;
+}
+
+.qpm-merges-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.qpm-merge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.qpm-merge-row:last-child {
+  border-bottom: none;
+}
+
+.qpm-merge-arrow {
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 0.75rem;
+}
+
 /* ── Locked card (for gate) ── */
 .quest-locked-card {
   display: flex; flex-direction: column; align-items: center;
