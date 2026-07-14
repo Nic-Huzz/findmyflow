@@ -303,7 +303,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .from('groan_challenges')
       .select('id')
       .eq('user_id', userId)
-      .not('wahoo_category', 'is', null)
+      .in('status', ['active', 'completed'])
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) setHasWahoos(true)

@@ -322,6 +322,7 @@ function Challenge() {
   // Fantasy category scores + opponent matchup data for header
   const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } = useMatchupData({
     completions,
+    contentSubmissions,
     userTeam, league, teams,
     getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
   })
@@ -394,7 +395,7 @@ function Challenge() {
         // or legacy play-skills picked (PlaySkillPicker, pre-2026-06)
         Promise.all([
           supabase.from('groan_challenges')
-            .select('id').eq('user_id', user.id).not('wahoo_category', 'is', null).limit(1),
+            .select('id').eq('user_id', user.id).in('status', ['active', 'completed']).limit(1),
           supabase.from('nikigai_clusters')
             .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
         ]).then(([wahoos, skills]) => {
@@ -1615,7 +1616,7 @@ function Challenge() {
           />
         )}
 
-        {/* Play-list Tab — Wahoo challenges */}
+        {/* Courage Tab — Wahoo challenges + Reach (league) */}
         {activeCategory === 'Courage' && (
           <PlayListTab
             userId={user?.id}
@@ -1623,6 +1624,17 @@ function Challenge() {
             onQuestComplete={handleQuestComplete}
             onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }}
             wahooCount={wahooCountThisWeek}
+            leagueData={{
+              league,
+              userTeam,
+              isOnTeam,
+              teams,
+              standings,
+              getCurrentWeek,
+              contentSubmissions,
+              onContentSubmitted: reloadContent,
+              userData,
+            }}
           />
         )}
 
