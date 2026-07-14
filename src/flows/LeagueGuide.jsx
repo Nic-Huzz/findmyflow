@@ -14,7 +14,7 @@ import './FlowFinderExplainer.css'
 const CATEGORY_DESCRIPTIONS = {
   tune: 'Balance. Daily practices that keep your nervous system regulated.',
   courage: 'Expression. Do the things that scare you and make you feel alive.',
-  reach: 'Visibility. Share your journey and grow your community presence.',
+  reach: 'Connection. Share your journey and lift up the people around you.',
 }
 
 export default function LeagueGuide() {

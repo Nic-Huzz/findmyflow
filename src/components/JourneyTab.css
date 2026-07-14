@@ -1,7 +1,7 @@
 /* JourneyTab — light theme, .jt- prefix scoping */
 
 .jt-container {
-  padding: 20px;
+  padding: 0;
 }
 
 .jt-loading {
@@ -211,10 +211,10 @@
   border-left: 3px solid transparent;
 }
 
-.jt-path-state-vibe { border-left-color: #c084fc; background: rgba(192, 132, 252, 0.04); }
+.jt-path-state-vibe { border-left-color: #E9A23B; background: rgba(233, 162, 59, 0.04); }
 .jt-path-state-peace { border-left-color: #10b981; background: rgba(16, 185, 129, 0.04); }
-.jt-path-state-anxious { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.04); }
-.jt-path-state-shutdown { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.04); }
+.jt-path-state-anxious { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.04); }
+.jt-path-state-shutdown { border-left-color: #6b7280; background: rgba(107, 114, 128, 0.04); }
 
 .jt-path-dot {
   width: 10px;

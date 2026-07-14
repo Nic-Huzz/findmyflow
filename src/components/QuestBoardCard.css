@@ -131,6 +131,19 @@
   flex-shrink: 0;
 }
 
+.qbc-show-more {
+  width: 100%;
+  padding: 6px;
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+}
+
 .qbc-healing-badge {
   font-size: 12px;
   flex-shrink: 0;

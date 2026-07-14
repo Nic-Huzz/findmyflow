@@ -36,6 +36,7 @@ export default function SkillsDisplay({ userId }) {
 
               {isExpanded && (
                 <div className="sk-detail">
+                  <span className="sk-detail-explainer">{s.explainer}</span>
                   <span className="sk-detail-count">{s.count} {s.unit}</span>
                   {s.nextThreshold ? (
                     <span className="sk-detail-next">

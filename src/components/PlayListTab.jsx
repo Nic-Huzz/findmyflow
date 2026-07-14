@@ -324,56 +324,7 @@ export default function PlayListTab({
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
-      {/* What's blocking you? — standalone healing entry */}
-      <div className="plt-blocking-input">
-        <div className="plt-blocking-row">
-          <span className="plt-blocking-icon">💚</span>
-          <input
-            className="plt-blocking-field"
-            type="text"
-            value={blockingText}
-            onChange={e => {
-              setBlockingText(e.target.value)
-              if (showBlockingQuestPicker) setShowBlockingQuestPicker(false)
-            }}
-            placeholder="What's blocking you right now?"
-            onKeyDown={e => {
-              if (e.key === 'Enter' && blockingText.trim()) setShowBlockingQuestPicker(true)
-            }}
-          />
-          {blockingText.trim() && !showBlockingQuestPicker && (
-            <button className="plt-blocking-go" onClick={() => setShowBlockingQuestPicker(true)}>
-              Explore
-            </button>
-          )}
-        </div>
-        {showBlockingQuestPicker && (
-          <div style={{ marginTop: 8 }}>
-            <QuestSelector
-              userId={userId}
-              value={blockingQuestId}
-              onChange={async (questId) => {
-                if (!questId || !blockingText.trim()) return
-                setBlockingQuestId(questId)
-                const { data: task } = await supabase.from('quest_tasks').insert({
-                  quest_id: questId,
-                  user_id: userId,
-                  text: blockingText.trim(),
-                  is_courage_challenge: true,
-                  sort_order: 0,
-                }).select('id').single()
-                if (task) {
-                  setBlockingTaskId(task.id)
-                  setShowBlockingHealingModal(true)
-                  setShowBlockingQuestPicker(false)
-                } else {
-                  setBlockingQuestId(null)
-                }
-              }}
-            />
-          </div>
-        )}
-      </div>
+      {/* "What's blocking you?" archived — healing tied to wahoo cards only */}
 
       {/* Add a Wahoo button */}
       <button
@@ -427,7 +378,7 @@ export default function PlayListTab({
         <div className="plt-reach-section">
           <div className="plt-reach-header">
             <span className="plt-reach-icon">📣</span>
-            <span className="plt-reach-title">Reach</span>
+            <span className="plt-reach-title">Community</span>
             <span className="plt-reach-subtitle">Share your journey to earn league points</span>
           </div>
           <ContentChallenges

@@ -12,8 +12,17 @@ import './JourneyTab.css'
 
 // Hero stage names (Campbell) + movie references
 const HERO_STAGES = [
-  { stage: 0, name: 'Not Started', references: [] },
-  { stage: 1, name: 'Ordinary World', references: [] },
+  // Stages 0-1 are pre-app. New users start seeing Stage 2 (signing up = answering the call)
+  { stage: 0, name: 'Call to Adventure', references: [
+    'Ariel seeing the surface world for the first time.',
+    'Peter Parker getting bitten by the spider.',
+    'Neo seeing the Matrix for the first time.',
+  ]},
+  { stage: 1, name: 'Call to Adventure', references: [
+    'Ariel seeing the surface world for the first time.',
+    'Peter Parker getting bitten by the spider.',
+    'Neo seeing the Matrix for the first time.',
+  ]},
   { stage: 2, name: 'Call to Adventure', references: [
     'Ariel seeing the surface world for the first time.',
     'Peter Parker getting bitten by the spider.',
@@ -68,6 +77,7 @@ export default function JourneyTab({ userId }) {
   const [loading, setLoading] = useState(true)
   const [showUnstickFlow, setShowUnstickFlow] = useState(false)
   const [lifePaths, setLifePaths] = useState([])
+  const [allQuests, setAllQuests] = useState([])
   const [questTasks, setQuestTasks] = useState({})
   const [trunkState, setTrunkState] = useState(null)
   const [safety, setSafety] = useState(0)
@@ -101,9 +111,8 @@ export default function JourneyTab({ userId }) {
         .select('brief')
         .eq('user_id', userId).maybeSingle(),
       supabase.from('quests')
-        .select('id, label, status, predicted_state, depth_level')
+        .select('id, label, status, predicted_state, depth_level, close_reason')
         .eq('user_id', userId)
-        .eq('status', 'active')
         .neq('label', 'Healing Work')
         .order('created_at'),
       supabase.auth.getUser(),
@@ -134,7 +143,9 @@ export default function JourneyTab({ userId }) {
       })
       setVoiceCounts(counts)
 
-      const activeQuests = questsRes.data || []
+      const allQuestsData = questsRes.data || []
+      setAllQuests(allQuestsData)
+      const activeQuests = allQuestsData.filter(q => q.status === 'active')
       setLifePaths(activeQuests)
 
       // Orphaned wahoos (no further queries needed)
@@ -160,13 +171,13 @@ export default function JourneyTab({ userId }) {
         )
       }
 
-      // Quest tasks for Flow Map (needs quest IDs)
-      if (activeQuests.length > 0) {
+      // Quest tasks for Flow Map (needs all quest IDs, not just active)
+      if (allQuestsData.length > 0) {
         batch2.push(
           supabase
             .from('quest_tasks')
             .select('*')
-            .in('quest_id', activeQuests.map(q => q.id))
+            .in('quest_id', allQuestsData.map(q => q.id))
             .order('sort_order')
             .then(({ data: allTasks }) => {
               if (!active) return
@@ -220,7 +231,7 @@ export default function JourneyTab({ userId }) {
     <div className="jt-container">
       {/* Current Stage — unified card with next step + progress */}
       <div className="jt-stage-card">
-        <div className="jt-stage-number">Stage {heroStage}</div>
+        <div className="jt-stage-number">Stage {Math.max(heroStage, 2)}</div>
         <h2 className="jt-stage-name">{stageInfo.name}</h2>
         {stageInfo.references?.length > 0 && (
           <div className="jt-stage-refs">
@@ -231,48 +242,54 @@ export default function JourneyTab({ userId }) {
           </div>
         )}
 
-        {/* Next step (with progress indicator merged for stages 5-6) */}
+        {/* Next step — clear action + where to go */}
         <div className="jt-stage-next">
-          {heroStage === 2 && (
-            <a href="/life-paths" className="jt-next-inline">
+          {heroStage <= 2 && (
+            <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Map your life paths to see what futures are possible</span>
-              <span className="jt-next-arrow">→</span>
-            </a>
+              <span className="jt-next-text">Complete the Getting Started steps below to begin your journey.</span>
+              <span className="jt-next-arrow">↓</span>
+            </div>
           )}
           {heroStage === 3 && (
             <a href="/essence-mirror" className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Discover your essence archetype and create your hero avatar</span>
+              <span className="jt-next-text">Create your hero avatar. Go to the Essence Mirror.</span>
               <span className="jt-next-arrow">→</span>
             </a>
           )}
           {heroStage === 4 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Do a courage challenge that makes you feel alive</span>
+              <span className="jt-next-text">Go to the Courage tab and do a courage challenge that makes you feel Vibe Rise.</span>
             </div>
           )}
           {heroStage === 5 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Get a life path to Vibe Rise at Charging or Teaching depth</span>
+              <span className="jt-next-text">Keep doing courage challenges on one life path until it reaches Charging or Teaching depth. Go to the Courage tab.</span>
             </div>
           )}
-          {heroStage === 6 && dominant && (
+          {heroStage === 6 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">
-                {dominant[1] < 3 && `Keep exploring what blocks you. A pattern is emerging.`}
-                {dominant[1] === 3 && `The ${formatVoice(dominant[0])} keeps showing up. Keep going.`}
-                {dominant[1] === 4 && `Four times the ${formatVoice(dominant[0])}. One more and something becomes clear.`}
-                {dominant[1] >= 5 && `The ${formatVoice(dominant[0])}. Five times. You're ready to face the root.`}
+                Name the voice that stops you. When you complete a courage challenge, tap "Want to explore what makes this scary?" to start a healing flow.
               </span>
-              <div className="jt-voice-dots" style={{ marginTop: 8 }}>
-                {[1, 2, 3, 4, 5].map(i => (
-                  <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
-                ))}
-              </div>
+              {dominant && (
+                <>
+                  <div className="jt-voice-dots" style={{ marginTop: 8 }}>
+                    {[1, 2, 3, 4, 5].map(i => (
+                      <span key={i} className={`jt-dot ${i <= dominant[1] ? 'jt-dot-filled' : ''}`} />
+                    ))}
+                  </div>
+                  <span className="jt-next-text" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                    {dominant[1] < 5
+                      ? `${dominant[1]}/5 protective voice entries. The ${formatVoice(dominant[0])} is your most common.`
+                      : `5/5 done. The ${formatVoice(dominant[0])} is your pattern. You're ready.`}
+                  </span>
+                </>
+              )}
               {solidarityCount > 0 && (
                 <span className="jt-solidarity">
                   {solidarityCount} other{solidarityCount > 1 ? 's' : ''} identified the same voice this month.
@@ -310,9 +327,6 @@ export default function JourneyTab({ userId }) {
           )}
         </div>
       )}
-
-      {/* Self-Knowledge Skills */}
-      <SkillsDisplay userId={userId} />
 
       {/* Orphaned Wahoos — prompt to link */}
       {orphanedWahoos.length > 0 && !showOrphanLinker && (
@@ -357,13 +371,16 @@ export default function JourneyTab({ userId }) {
         <div className="jt-section">
           <h3 className="jt-section-title">Your Life Paths</h3>
           <div className="jt-paths-list">
-            {lifePaths.map(path => (
+            {[...lifePaths].sort((a, b) => {
+              const order = { vibe: 0, peace: 1, anxious: 2, shutdown: 3 }
+              return (order[a.predicted_state] ?? 4) - (order[b.predicted_state] ?? 4)
+            }).map(path => (
               <div key={path.id} className={`jt-path-row jt-path-state-${path.predicted_state || 'none'}`}>
                 <span className="jt-path-dot" style={{
-                  background: path.predicted_state === 'vibe' ? '#c084fc'
+                  background: path.predicted_state === 'vibe' ? '#E9A23B'
                     : path.predicted_state === 'peace' ? '#10b981'
-                    : path.predicted_state === 'anxious' ? '#f59e0b'
-                    : path.predicted_state === 'shutdown' ? '#ef4444'
+                    : path.predicted_state === 'anxious' ? '#ef4444'
+                    : path.predicted_state === 'shutdown' ? '#6b7280'
                     : '#d1d5db'
                 }} />
                 <span className="jt-path-name">{path.label}</span>
@@ -389,7 +406,7 @@ export default function JourneyTab({ userId }) {
       {/* Flow Map overlay */}
       {showFlowMap && (
         <QuestPathMap
-          quests={lifePaths}
+          quests={allQuests}
           questTasks={questTasks}
           trunkState={trunkState}
           safety={safety}
@@ -397,14 +414,21 @@ export default function JourneyTab({ userId }) {
           userId={userId}
           onUpdate={() => {
             supabase.from('quests')
-              .select('id, label, status, predicted_state, depth_level')
-              .eq('user_id', userId).eq('status', 'active').neq('label', 'Healing Work')
+              .select('id, label, status, predicted_state, depth_level, close_reason')
+              .eq('user_id', userId).neq('label', 'Healing Work')
               .order('created_at')
-              .then(({ data }) => { if (data) setLifePaths(data) })
+              .then(({ data }) => {
+                if (!data) return
+                setAllQuests(data)
+                setLifePaths(data.filter(q => q.status === 'active'))
+              })
           }}
           onClose={() => setShowFlowMap(false)}
         />
       )}
+
+      {/* Self-Knowledge Skills */}
+      <SkillsDisplay userId={userId} />
 
       {/* Zone Assessments — archived, re-enable when redesigned */}
 

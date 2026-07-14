@@ -62,7 +62,7 @@
 }
 
 .sk-dot-filled {
-  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  background: #5e17eb;
 }
 
 .sk-level {
@@ -77,10 +77,18 @@
 /* Expanded detail */
 .sk-detail {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   padding: 6px 0 2px;
+  gap: 2px 8px;
   animation: sk-expand 0.2s ease;
+}
+
+.sk-detail-explainer {
+  font-size: 11px;
+  color: #999;
+  width: 100%;
 }
 
 @keyframes sk-expand {

@@ -237,7 +237,6 @@ export default function WahooCreator({
           rows={2}
         />
 
-        <div className="wc-field-label">Which life path is this for?</div>
         <QuestSelector userId={userId} value={linkedQuestId}
           onChange={(id) => setLinkedQuestId(id)} />
 

@@ -24,9 +24,9 @@ const WEEK_TYPES = {
 
 // Lighter variants for category score text in solo mode
 const CATEGORY_TEXT_COLORS = {
-  tune: '#5e17eb',
+  tune: '#f9a8d4',
   courage: '#E9A23B',
-  reach: '#10b981',
+  reach: '#67e8f9',
 }
 
 function ChallengeHeader({

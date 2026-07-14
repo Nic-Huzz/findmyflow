@@ -167,7 +167,7 @@ export default function JourneyOnboarding({ userId }) {
           )}
 
           {/* 4. Explore Your Quests — unlocks Quests tab (locked until Life Paths) */}
-          {hasLifePaths && (
+          {hasLifePaths ? (
             <div className="level-deep-dive" style={{ cursor: 'default' }}>
               <div className="level-dd-icon">🧭</div>
               <div className="level-dd-info">
@@ -175,6 +175,15 @@ export default function JourneyOnboarding({ userId }) {
                 <div className="level-dd-narrative">Your Quests tab is now unlocked. See your life paths as active quests.</div>
               </div>
               <span className="level-dd-status" style={{ color: '#10b981', fontWeight: 700 }}>Unlocked</span>
+            </div>
+          ) : (
+            <div className="level-deep-dive" style={{ opacity: 0.5 }}>
+              <div className="level-dd-icon">🔒</div>
+              <div className="level-dd-info">
+                <div className="level-dd-name">Explore Your Quests</div>
+                <div className="level-dd-narrative">Complete Life Paths first.</div>
+              </div>
+              <span className="level-dd-status locked">Locked</span>
             </div>
           )}
 

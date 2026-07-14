@@ -15,6 +15,7 @@ import './QuestBoardCard.css'
 
 export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [expanded, setExpanded] = useState(false)
+  const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
   const [isCourage, setIsCourage] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -164,7 +165,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         points_earned: 3,
         challenge_day: 0,
         project_id: null,
-      }).catch(() => {})
+      }).then(() => {}).catch(() => {})
     }
     if (!newDone && !task.is_courage_challenge) {
       supabase.from('quest_completions').delete()
@@ -216,7 +217,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           points_earned: 10,
           challenge_day: 0,
           project_id: null,
-        }).catch(() => {})
+        }).then(() => {}).catch(() => {})
 
         // Mystery box: first quest achieved
         supabase.from('quests')
@@ -225,7 +226,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           .eq('close_reason', 'achieved')
           .then(({ count }) => {
             if (count === 1) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'first_quest_achieved', 'silver'))
-          }).catch(() => {})
+          }).then(() => {}).catch(() => {})
       }
       setShowClose(false); onUpdate?.()
     }
@@ -252,18 +253,35 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           {/* Task list */}
           {tasks.length > 0 && (
             <div className="qbc-tasks">
-              {tasks.map(task => (
-                <div key={task.id} className={`qbc-task ${task.done ? 'done' : ''}`}>
-                  <button className={`qbc-check ${task.done ? 'checked' : ''}`} onClick={() => toggleTask(task)}>
-                    {task.done ? '✓' : ''}
-                  </button>
-                  <span className="qbc-task-text">{task.text}</span>
-                  {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
-                  {healingIntentions[task.id] && (
-                    <span className="qbc-healing-badge" title="Healing flow completed">💚</span>
-                  )}
-                </div>
-              ))}
+              {(() => {
+                const incomplete = tasks.filter(t => !t.done)
+                const completed = tasks.filter(t => t.done)
+                return (
+                  <>
+                    {incomplete.map(task => (
+                      <div key={task.id} className="qbc-task">
+                        <button className="qbc-check" onClick={() => toggleTask(task)} />
+                        <span className="qbc-task-text">{task.text}</span>
+                        {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                        {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                      </div>
+                    ))}
+                    {completed.length > 0 && (
+                      <button className="qbc-show-more" onClick={(e) => { e.stopPropagation(); setShowAllTasks(!showAllTasks) }}>
+                        {showAllTasks ? 'Hide completed' : `Show ${completed.length} completed`}
+                      </button>
+                    )}
+                    {showAllTasks && completed.map(task => (
+                      <div key={task.id} className="qbc-task done">
+                        <button className="qbc-check checked" onClick={() => toggleTask(task)}>✓</button>
+                        <span className="qbc-task-text">{task.text}</span>
+                        {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                        {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                      </div>
+                    ))}
+                  </>
+                )
+              })()}
             </div>
           )}
 

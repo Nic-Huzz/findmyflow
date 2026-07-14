@@ -83,7 +83,7 @@ export default function QuestPathMap({
   const lightMode = true
 
   const activeQuests = useMemo(() =>
-    quests.filter(q => q.status === 'active' && q.label !== 'Healing Work'),
+    quests.filter(q => q.label !== 'Healing Work'),
     [quests]
   )
 

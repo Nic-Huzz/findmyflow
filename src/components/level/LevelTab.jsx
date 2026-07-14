@@ -26,11 +26,10 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
-// QuestPathMap now at /quest-map route (QuestMapPage.jsx)
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
+export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onRefreshPoints = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
@@ -418,6 +417,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       {/* ══════ QUEST BOARD ══════ */}
 
       {/* Active Quests */}
+      {/* Life Path Progress button — above quests */}
+      {hasLifePaths && quests.filter(q => q.status === 'active').length > 0 && (
+        <button className="quest-path-btn" onClick={() => navigate('/quest-map')}>
+          <span className="quest-path-btn-icon">✦</span>
+          <span>Your Life Paths</span>
+          <span className="quest-path-btn-arrow">→</span>
+        </button>
+      )}
+
       <div className="quest-section">
         <div className="quest-section-header">
           <span className="quest-section-icon">⚔️</span>
@@ -439,8 +447,11 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <a href="/try/life-paths">Complete Life Paths</a> to see your progress map
           </div>
         )}
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').map(q => (
-          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={loadQuests} />
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').sort((a, b) => {
+          const order = { vibe: 0, peace: 1, anxious: 2, shutdown: 3 }
+          return (order[a.predicted_state] ?? 4) - (order[b.predicted_state] ?? 4)
+        }).map(q => (
+          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
         ))}
         {hasLifePaths && !showAddQuest && (
           <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>

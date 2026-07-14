@@ -10,19 +10,27 @@ export const SKILL_THRESHOLDS = {
 }
 
 const SKILL_LABELS = {
-  presence: 'Presence',
+  presence: 'Commitment',
   courage: 'Courage',
-  depth: 'Depth',
-  recovery: 'Recovery',
+  depth: 'Compassion',
+  recovery: 'Capacity',
   curiosity: 'Curiosity',
 }
 
 const SKILL_UNITS = {
   presence: 'check-ins',
-  courage: 'wahoos',
+  courage: 'courage challenges',
   depth: 'healing flows',
   recovery: 'recoveries',
   curiosity: 'paths explored',
+}
+
+const SKILL_EXPLAINERS = {
+  presence: 'How often you show up. Tune tab, daily check-in.',
+  courage: 'Challenges you faced. Courage tab.',
+  depth: 'Times you went into what blocks you. Healing flow on your quests.',
+  recovery: 'Bouncing back after a hard day. Tune tab, drains section.',
+  curiosity: 'Life paths you explored. Journey tab.',
 }
 
 export function computeLevel(count, thresholds) {
@@ -97,6 +105,7 @@ export function useSkills(userId) {
           nextThreshold: getNextThreshold(count, thresholds),
           label: SKILL_LABELS[key],
           unit: SKILL_UNITS[key],
+          explainer: SKILL_EXPLAINERS[key],
         }
       }
 
