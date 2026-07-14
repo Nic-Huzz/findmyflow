@@ -4,7 +4,7 @@
  * Play-List tab for the 7-Day Challenge page.
  *
  * States:
- *   All users see the same UI: active wahoos + WahooCreator + inspiration
+ *   1. No playskills and no active challenges → WahooDiscoveryFlow (first-visit)
  *   2. Otherwise → Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration
  *
  * Active Wahoos come from priority_weekly_picks.
@@ -19,7 +19,7 @@ import { findSkillSegment } from '../lib/wheelTaxonomy'
 import { hapticLight } from '../lib/haptics'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
-// WahooDiscoveryFlow removed — all users use the same WahooCreator flow
+import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
 import HealingFlowModal from './HealingFlowModal'
 import QuestSelector from './QuestSelector'
@@ -287,7 +287,37 @@ export default function PlayListTab({
     return <div className="playlist-tab"><div className="loading-state"><div className="spinner" /></div></div>
   }
 
-  // ─── Main render (same for first visit and returning users) ─────────────────
+  // ─── State 1: First visit (no playskills, no active challenges) ─────────────
+
+  if (playskills.length === 0 && activeChallenges.length === 0) {
+    return (
+      <div className="playlist-tab">
+        <WahooDiscoveryFlow
+          userId={userId}
+          currentVisibilityLayer={currentVisibilityLayer}
+          onComplete={() => {
+            fetchActiveChallenges()
+            onRefreshPoints?.()
+          }}
+        />
+
+        {completingChallenge && (
+          <GroanCompletionModal
+            challenge={completingChallenge}
+            userId={userId}
+            onComplete={() => {
+              setCompletingChallenge(null)
+              fetchActiveChallenges()
+              onRefreshPoints?.()
+            }}
+            onClose={() => setCompletingChallenge(null)}
+          />
+        )}
+      </div>
+    )
+  }
+
+  // ─── State 2: Has wahoos or playskills → WahooCreator ──────────────────────
 
   return (
     <div className="playlist-tab">
