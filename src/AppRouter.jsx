@@ -583,6 +583,7 @@ function AppRouter() {
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
               <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
+              <Route path="/login" element={<Navigate to="/log-in" replace />} />
               <Route path="/unsubscribe" element={<Unsubscribe />} />
               <Route path="/rule-break-tree" element={<Suspense fallback={<LoadingSpinner />}><RuleBreakTree /></Suspense>} />
               <Route path="/create/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />

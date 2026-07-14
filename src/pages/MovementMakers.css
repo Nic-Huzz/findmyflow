@@ -102,6 +102,13 @@
   font-size: 0.85rem; font-weight: 600; color: var(--text-3); font-style: italic;
 }
 .mm .mm-hero-screenshot span { font-size: 2rem; font-style: normal; }
+.mm .mm-hero-screenshot--filled {
+  padding: 0; min-height: auto; background: none;
+  overflow: hidden;
+}
+.mm .mm-hero-screenshot--filled img {
+  width: 100%; height: auto; display: block; border-radius: 16px;
+}
 
 /* ═══ SECTIONS ═══ */
 .mm .mm-section { padding: 6rem 0; }
@@ -218,6 +225,13 @@
   margin-top: 1rem; border-radius: 10px; border: 1px solid var(--border);
   background: var(--off-white); padding: 1.25rem; font-size: 0.75rem;
   color: var(--text-3); font-style: italic; text-align: center;
+}
+.mm .mm-phase-screenshot--filled {
+  padding: 0; background: none; overflow: hidden;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.mm .mm-phase-screenshot--filled img {
+  width: 100%; height: auto; display: block; border-radius: 10px;
 }
 .mm .mm-phase-grid--single { grid-template-columns: 1fr; max-width: 560px; }
 .mm .mm-block-label {

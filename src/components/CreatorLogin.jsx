@@ -96,7 +96,7 @@ export default function CreatorLogin() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(160deg, #0d0520 0%, #1a0a3e 50%, #0d0520 100%)',
+      background: 'linear-gradient(160deg, #2a0a6e 0%, #5e17eb 50%, #2a0a6e 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -105,20 +105,16 @@ export default function CreatorLogin() {
       <div style={{ width: '100%', maxWidth: 380 }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: 14,
-            background: 'linear-gradient(135deg, #5e17eb, #E9A23B)',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            marginBottom: 16,
-            boxShadow: '0 4px 20px rgba(94, 23, 235, 0.4)',
-          }}>
-            <span style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>S</span>
-          </div>
+          <img
+            src="/icon-creator-192.png"
+            alt="Scale"
+            style={{ width: 56, height: 56, borderRadius: 14, marginBottom: 16 }}
+          />
           <div style={{ fontSize: 32, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
             Scale
           </div>
-          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>
-            Creator Portal
+          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
+            Your Impact + Income
           </div>
         </div>
 

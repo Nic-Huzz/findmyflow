@@ -18,13 +18,20 @@ import { supabase } from './supabaseClient'
 export async function checkSubscription(userId) {
   if (!userId) return { active: false, plan: null, expires: null }
 
-  const { data, error } = await supabase
+  // User may have multiple plan rows (pro + creator), so fetch all and pick best
+  const { data: rows, error } = await supabase
     .from('user_subscriptions')
     .select('status, plan_type, current_period_end')
     .eq('user_id', userId)
-    .maybeSingle()
+    .eq('status', 'active')
 
   if (error) return { active: false, plan: null, expires: null }
+
+  // Pick the best active plan: prefer 'creator' over 'pro'
+  const data = rows?.find(r => r.plan_type === 'creator')
+    || rows?.find(r => r.plan_type === 'pro')
+    || rows?.[0]
+    || null
 
   // If no subscription found, try claiming a pending one via edge function
   if (!data) {
