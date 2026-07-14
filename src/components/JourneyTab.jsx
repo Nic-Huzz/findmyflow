@@ -7,7 +7,6 @@ import JourneyOnboarding from './journey/JourneyOnboarding'
 import JourneyCompleted from './journey/JourneyCompleted'
 import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import SkillsDisplay from './journey/SkillsDisplay'
-import { useFigurine } from '../hooks/useFigurine'
 import './JourneyTab.css'
 
 // Hero stage names (Campbell) + movie references
@@ -88,7 +87,9 @@ export default function JourneyTab({ userId }) {
   const [showTimeline, setShowTimeline] = useState(false)
   const [showOrphanLinker, setShowOrphanLinker] = useState(false)
   const [userEmail, setUserEmail] = useState(null)
-  const figurine = useFigurine()
+
+  // Lightweight figurine display data (replaces heavy useFigurine hook)
+  const [figurineDisplay, setFigurineDisplay] = useState(null)
 
   useEffect(() => {
     if (!userId) return
@@ -97,7 +98,7 @@ export default function JourneyTab({ userId }) {
     // ─── Batch 1: all independent queries in parallel ───
     Promise.all([
       supabase.from('user_stage_progress')
-        .select('current_journey_level')
+        .select('current_journey_level, essence_mirror_completed, hero_avatar_url')
         .eq('user_id', userId).maybeSingle(),
       supabase.from('healing_intentions')
         .select('protective_voice')
@@ -125,11 +126,37 @@ export default function JourneyTab({ userId }) {
         .select('groan_challenge_id')
         .eq('user_id', userId)
         .not('groan_challenge_id', 'is', null),
-    ]).then(([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes, authRes, completedRes, linkedRes]) => {
+      // Lightweight figurine display data (no RPCs, no memories)
+      supabase.from('lead_flow_profiles')
+        .select('essence_archetype, custom_essence_name')
+        .eq('user_id', userId).maybeSingle(),
+      supabase.from('nervous_system_checkins')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId).eq('checkin_type', 'daily'),
+      supabase.from('quest_completions')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId).eq('quest_category', 'Groans'),
+    ]).then(([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes, authRes, completedRes, linkedRes, profileRes, checkinCountRes, wahooCountRes]) => {
       if (!active) return
 
-      setHeroStage(stageRes.data?.current_journey_level || 0)
+      const stage = stageRes.data?.current_journey_level || 0
+      setHeroStage(stage)
       setBrief(briefRes.data?.brief || null)
+
+      // Compute figurine display (lightweight, no useFigurine hook)
+      const isUnlocked = stage >= 4 && stageRes.data?.essence_mirror_completed
+      const checkinCount = checkinCountRes.count || 0
+      const wahooCount = wahooCountRes.count || 0
+      const isMirrorMode = wahooCount < 3 || checkinCount < 7
+      if (isUnlocked && profileRes.data) {
+        setFigurineDisplay({
+          avatarUrl: stageRes.data?.hero_avatar_url || null,
+          name: profileRes.data.custom_essence_name || profileRes.data.essence_archetype || 'Your Mentor',
+          phaseName: 'Your Essence Voice Mentor',
+          isMirrorMode,
+          canChat: !isMirrorMode,
+        })
+      }
 
       const email = authRes.data?.user?.email
       setUserEmail(email || null)
@@ -309,20 +336,20 @@ export default function JourneyTab({ userId }) {
       {/* Timeline dropdown */}
       {showTimeline && <JourneyTimeline userId={userId} heroStage={heroStage} userEmail={userEmail} />}
 
-      {/* Figurine Presence */}
-      {figurine.isUnlocked && (
+      {/* Figurine Presence (lightweight display, no heavy hook) */}
+      {figurineDisplay && (
         <div className="jt-section jt-figurine-presence">
-          {figurine.avatarUrl && <img src={figurine.avatarUrl} alt="" className="jt-figurine-avatar" />}
+          {figurineDisplay.avatarUrl && <img src={figurineDisplay.avatarUrl} alt="" className="jt-figurine-avatar" />}
           <div className="jt-figurine-info">
-            <span className="jt-figurine-name">{figurine.profile?.custom_essence_name || figurine.profile?.essence_archetype || 'Your Mentor'}</span>
-            <span className="jt-figurine-phase">{figurine.phaseName}</span>
+            <span className="jt-figurine-name">{figurineDisplay.name}</span>
+            <span className="jt-figurine-phase">{figurineDisplay.phaseName}</span>
           </div>
-          {!figurine.isMirrorMode && figurine.canChat && (
+          {figurineDisplay.canChat && (
             <button className="jt-figurine-chat-btn" onClick={() => {/* TODO: open figurine chat */}}>
               Talk to your mentor
             </button>
           )}
-          {figurine.isMirrorMode && (
+          {figurineDisplay.isMirrorMode && (
             <p className="jt-figurine-mirror-msg">Your mentor is still learning about you.</p>
           )}
         </div>
