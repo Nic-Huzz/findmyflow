@@ -14,33 +14,6 @@ import { awardMovementXP } from './movementXP'
 // Sections where [lightning bolt] conversion is available
 export const CONVERTIBLE_SECTIONS = ['marketing', 'followup']
 
-// Default scary/wahoo scores by checklist label pattern
-// Higher scary = more resistance. Higher wahoo = more exciting when done.
-const SCORE_DEFAULTS = [
-  { match: /DM.*warm leads|personally/i, scary: 8, wahoo: 8 },
-  { match: /announce.*email list/i, scary: 6, wahoo: 7 },
-  { match: /post.*teaser|social/i, scary: 5, wahoo: 6 },
-  { match: /testimonial/i, scary: 7, wahoo: 8 },
-  { match: /booking.*page|sales.*page/i, scary: 6, wahoo: 7 },
-  { match: /last chance|reminder/i, scary: 5, wahoo: 6 },
-  { match: /behind.the.scenes/i, scary: 4, wahoo: 6 },
-  { match: /confirmation email/i, scary: 3, wahoo: 4 },
-  { match: /thank.you.*email/i, scary: 3, wahoo: 5 },
-  { match: /feedback.*request|review.*request/i, scary: 5, wahoo: 6 },
-  { match: /upsell|next.*experience.*invite/i, scary: 7, wahoo: 8 },
-  { match: /upload.*photo|highlights/i, scary: 4, wahoo: 5 },
-  { match: /upload.*attendee|contact.*data/i, scary: 3, wahoo: 4 },
-  { match: /one.line.*promise|transformation/i, scary: 6, wahoo: 7 },
-]
-
-function getScoreDefaults(label) {
-  for (const rule of SCORE_DEFAULTS) {
-    if (rule.match.test(label)) {
-      return { scary: rule.scary, wahoo: rule.wahoo }
-    }
-  }
-  return { scary: 5, wahoo: 5 }
-}
 
 // DNA-based challenge framing variants
 const DNA_FRAMINGS = {
@@ -124,7 +97,6 @@ export async function convertChecklistToChallenge({
   deadline = null,
   knowledgeStyle = null,
 }) {
-  const { scary, wahoo } = getScoreDefaults(checklistItem.label)
   const challengeType = getChallengeType(knowledgeStyle)
   const description = frameChallengeDescription(checklistItem.label, challengeType)
 
@@ -139,8 +111,6 @@ export async function convertChecklistToChallenge({
       source_value: 'checklist',
       source_label: experience.name,
       visibility_layer: 'screen',
-      scary_score: scary,
-      wahoo_score: wahoo,
       status: 'active',
       accepted_at: new Date().toISOString(),
       challenge_source: 'checklist',
@@ -195,8 +165,6 @@ export async function createIntentionChallenge({
       source_value: 'intention',
       source_label: 'Group Call Intention',
       visibility_layer: 'screen',
-      scary_score: 5,
-      wahoo_score: 5,
       status: 'active',
       accepted_at: new Date().toISOString(),
       challenge_source: 'intention',

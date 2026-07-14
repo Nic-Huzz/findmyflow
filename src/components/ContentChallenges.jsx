@@ -1,19 +1,18 @@
 /**
- * ContentChallenges — Fantasy League content challenge cards
+ * ContentChallenges — Fantasy League Reach challenge cards
  *
- * Renders 8 content challenge types inside the Bonus tab's "Content" sub-tab.
+ * Renders 6 Reach tasks on the Courage tab (league members only).
  * URL-based challenges open an inline URL input.
  * "Comment & Engage" uses a player picker (select 3 league players).
- * Challenges with a templateType show a "Template" button that opens
- * a shareable image modal (ContentTemplateModal).
+ * "Accountability Post" uses a quest task picker (multi-select courage tasks).
+ * Challenges with crossPostToFeed also post to the community feed.
  */
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CONTENT_POINT_VALUES } from '../lib/league/leagueConfig'
 import { submitContent } from '../lib/league/leagueService'
 import { supabase } from '../lib/supabaseClient'
-import { essenceProfiles } from '../data/essenceProfiles'
-import { getEssenceImagePath } from '../lib/essencePreferences'
+import { postFeedEvent } from '../lib/communityFeed'
 import ContentTemplateModal from './ContentTemplateModal'
 import './ContentChallenges.css'
 
@@ -29,7 +28,7 @@ export default function ContentChallenges({
   teams,
   contentSubmissions,
   onSubmitted,
-  // Template data props — passed from Challenge.jsx
+  // Template data props
   standings,
   userTeam,
   userData,
@@ -37,8 +36,10 @@ export default function ContentChallenges({
   const [expandedCard, setExpandedCard] = useState(null)
   const [urlInput, setUrlInput] = useState('')
   const [selectedPlayers, setSelectedPlayers] = useState(new Set())
+  const [selectedTasks, setSelectedTasks] = useState(new Set())
+  const [questTasks, setQuestTasks] = useState([])
   const [submitting, setSubmitting] = useState(false)
-  const [activeTemplate, setActiveTemplate] = useState(null) // { type, data }
+  const [activeTemplate, setActiveTemplate] = useState(null)
 
   // Build a map of content_type → latest submission this week
   const submissionMap = useMemo(() => {
@@ -46,7 +47,6 @@ export default function ContentChallenges({
     if (!contentSubmissions) return map
     contentSubmissions.forEach(sub => {
       if (sub.week_number === weekNumber) {
-        // Keep the most recent per type
         if (!map[sub.content_type] || new Date(sub.created_at) > new Date(map[sub.content_type].created_at)) {
           map[sub.content_type] = sub
         }
@@ -97,19 +97,30 @@ export default function ContentChallenges({
     }))
   }, [allPlayerIds, playerNames])
 
+  // Fetch active courage quest tasks for Accountability Post
+  useEffect(() => {
+    if (expandedCard !== 'accountability_post' || !userId) return
+    supabase
+      .from('quest_tasks')
+      .select('id, text, quest_id, quests!inner(title, user_id)')
+      .eq('quests.user_id', userId)
+      .eq('is_courage_challenge', true)
+      .eq('done', false)
+      .then(({ data }) => setQuestTasks(data || []))
+  }, [expandedCard, userId])
+
   // Empty state — no league or not on team
   if (!leagueId || !isOnTeam) {
     return (
       <div className="content-challenges">
         <div className="content-empty-state">
-          <p>Join the Fantasy League to unlock content challenges!</p>
+          <p>Join the Fantasy League to unlock Reach challenges!</p>
           <Link to="/league" className="content-empty-link">Go to Fantasy League</Link>
         </div>
       </div>
     )
   }
 
-  // Allow submissions for upcoming + active leagues, block completed/cancelled
   const canSubmit = leagueStatus === 'upcoming' || leagueStatus === 'active'
 
   const handleToggleCard = (key) => {
@@ -117,10 +128,12 @@ export default function ContentChallenges({
       setExpandedCard(null)
       setUrlInput('')
       setSelectedPlayers(new Set())
+      setSelectedTasks(new Set())
     } else {
       setExpandedCard(key)
       setUrlInput('')
       setSelectedPlayers(new Set())
+      setSelectedTasks(new Set())
     }
   }
 
@@ -129,10 +142,7 @@ export default function ContentChallenges({
     setSubmitting(true)
     try {
       const submission = await submitContent({
-        leagueId,
-        userId,
-        teamId,
-        weekNumber,
+        leagueId, userId, teamId, weekNumber,
         contentType,
         linkUrl: urlInput.trim(),
         description: null,
@@ -141,7 +151,16 @@ export default function ContentChallenges({
       setUrlInput('')
       onSubmitted?.()
 
-      // Fire-and-forget: scrape OG metadata in the background
+      // Cross-post to community feed if flagged
+      const config = CONTENT_POINT_VALUES[contentType]
+      if (config?.crossPostToFeed) {
+        postFeedEvent(userId, 'reach_share', config.label, urlInput.trim(), {
+          contentType,
+          points: config.points,
+        })
+      }
+
+      // Fire-and-forget: scrape OG metadata
       if (submission?.id) {
         supabase.functions.invoke('scrape-og-metadata', {
           body: { submissionId: submission.id },
@@ -160,10 +179,7 @@ export default function ContentChallenges({
     setSubmitting(true)
     try {
       await submitContent({
-        leagueId,
-        userId,
-        teamId,
-        weekNumber,
+        leagueId, userId, teamId, weekNumber,
         contentType: 'comment_engage',
         linkUrl: JSON.stringify([...selectedPlayers]),
         description: null,
@@ -182,13 +198,49 @@ export default function ContentChallenges({
   const togglePlayer = (playerId) => {
     setSelectedPlayers(prev => {
       const next = new Set(prev)
-      if (next.has(playerId)) {
-        next.delete(playerId)
-      } else if (next.size < 3) {
-        next.add(playerId)
-      }
+      if (next.has(playerId)) next.delete(playerId)
+      else if (next.size < 3) next.add(playerId)
       return next
     })
+  }
+
+  const toggleTask = (taskId) => {
+    setSelectedTasks(prev => {
+      const next = new Set(prev)
+      if (next.has(taskId)) next.delete(taskId)
+      else next.add(taskId)
+      return next
+    })
+  }
+
+  const handleAccountabilitySubmit = async () => {
+    if (selectedTasks.size === 0) return
+    setSubmitting(true)
+    try {
+      const selectedNames = questTasks
+        .filter(t => selectedTasks.has(t.id))
+        .map(t => t.text)
+      const commitmentText = selectedNames.map(n => `\u2713 ${n}`).join('\n')
+
+      await submitContent({
+        leagueId, userId, teamId, weekNumber,
+        contentType: 'accountability_post',
+        linkUrl: JSON.stringify([...selectedTasks]),
+        description: commitmentText,
+      })
+
+      // Post to community feed
+      postFeedEvent(userId, 'accountability', 'Accountability Post', commitmentText)
+
+      setExpandedCard(null)
+      setSelectedTasks(new Set())
+      onSubmitted?.()
+    } catch (err) {
+      console.error('Error submitting accountability post:', err)
+      alert('Error submitting. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const getStatusBadge = (contentType) => {
@@ -224,47 +276,14 @@ export default function ContentChallenges({
         })
         break
 
-      case 'hero': {
-        const archetypeProfile = essenceProfiles.essence_archetypes.find(
-          a => a.name === userData?.essence_archetype
-        )
-        const imagePath = getEssenceImagePath(userData)
-        setActiveTemplate({
-          type: 'hero',
-          data: {
-            ...baseData,
-            userName: userData?.user_name || userData?.persona || 'Hero',
-            archetype: userData?.custom_essence_name || userData?.essence_archetype || 'The Explorer',
-            imagePath,
-            superpower: archetypeProfile?.superpower || '',
-            poeticLine: archetypeProfile?.poetic_line || '',
-            poeticVision: archetypeProfile?.poetic_vision || '',
-            characters: archetypeProfile?.characters || [],
-          },
-        })
-        break
-      }
-
       case 'scorecard':
         setActiveTemplate({
           type: 'scorecard',
           data: {
             ...baseData,
             opponentName: 'Opponent',
-            score: '0 – 0',
+            score: '0 \u2013 0',
             categories: [],
-          },
-        })
-        break
-
-      case 'intentions':
-        setActiveTemplate({
-          type: 'intentions',
-          data: {
-            ...baseData,
-            weekType: 'Flow',
-            weekDesc: 'Balanced productivity',
-            goals: [],
           },
         })
         break
@@ -276,8 +295,6 @@ export default function ContentChallenges({
             ...baseData,
             challengeText: 'Share a courage challenge you completed',
             visibilityLayer: 'Screen',
-            scaryScore: 0,
-            wahooScore: 0,
           },
         })
         break
@@ -289,12 +306,10 @@ export default function ContentChallenges({
 
   return (
     <div className="content-challenges">
-      <h2 className="section-title">Content Challenges</h2>
       <div className="content-card-list">
         {CONTENT_TYPES.map(([key, config]) => {
           const isExpanded = expandedCard === key
           const existingSub = submissionMap[key]
-          // Only block resubmission for pending or approved — rejected can be resubmitted
           const isBlocked = existingSub && (existingSub.status === 'pending' || existingSub.status === 'approved')
 
           return (
@@ -380,6 +395,40 @@ export default function ContentChallenges({
                     disabled={submitting || selectedPlayers.size < 3}
                   >
                     {submitting ? 'Submitting...' : 'Submit'}
+                  </button>
+                </div>
+              )}
+
+              {isExpanded && !isBlocked && config.submissionType === 'quest_task_picker' && (
+                <div className="content-card-form">
+                  <p className="content-picker-hint">
+                    Pick courage challenges you're committing to this week
+                    <span className="content-picker-count">{selectedTasks.size} selected</span>
+                  </p>
+                  <div className="content-player-grid">
+                    {questTasks.map(task => {
+                      const isSelected = selectedTasks.has(task.id)
+                      return (
+                        <button
+                          key={task.id}
+                          className={`content-player-chip ${isSelected ? 'selected' : ''}`}
+                          onClick={() => toggleTask(task.id)}
+                        >
+                          <span className="player-chip-check">{isSelected ? '✓' : ''}</span>
+                          <span className="player-chip-name">{task.text}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {questTasks.length === 0 && (
+                    <p className="content-picker-empty">No active courage challenges. Add some on the Courage tab first.</p>
+                  )}
+                  <button
+                    className="content-submit-btn"
+                    onClick={handleAccountabilitySubmit}
+                    disabled={submitting || selectedTasks.size === 0}
+                  >
+                    {submitting ? 'Posting...' : 'Post Commitment'}
                   </button>
                 </div>
               )}

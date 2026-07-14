@@ -25,9 +25,9 @@ const WEEK_TYPES = {
 
 // Lighter variants for category score text in solo mode
 const CATEGORY_TEXT_COLORS = {
-  tune: '#10b981',
-  play_list: '#E9A23B',
-  healing: '#34d399',
+  tune: '#5e17eb',
+  courage: '#E9A23B',
+  reach: '#10b981',
 }
 
 function ChallengeHeader({
@@ -93,8 +93,8 @@ function ChallengeHeader({
   const animatedCategoryScores = useScoreAnimation(categoryScores)
   const animatedWeeklyPoints = useScoreAnimation({ pts: weeklyPoints })
 
-  // Display: Tune, Play-list (Wahoos), Healing
-  const DISPLAY_KEYS = ['tune', 'play_list', 'healing']
+  // Display: Tune, Courage, Reach
+  const DISPLAY_KEYS = ['tune', 'courage', 'reach']
 
   // Build score data for display
   const bars = DISPLAY_KEYS.map(key => {

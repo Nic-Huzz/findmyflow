@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess, hapticError } from '../lib/haptics'
-import { calculateEssenceZone } from '../lib/stageConfig'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import './StrikeDesignFlow.css'
 
@@ -70,8 +69,6 @@ export default function StrikeDesignFlow() {
   const [strikeTitle, setStrikeTitle] = useState('')
   const [strikeDescription, setStrikeDescription] = useState('')
   const [selectedExperienceId, setSelectedExperienceId] = useState(null)
-  const [scaryScore, setScaryScore] = useState(7)
-  const [wahooScore, setWahooScore] = useState(7)
   const [pillarEducate, setPillarEducate] = useState(false)
   const [pillarPosition, setPillarPosition] = useState(false)
   const [pillarConvert, setPillarConvert] = useState(false)
@@ -209,7 +206,6 @@ export default function StrikeDesignFlow() {
     setSaveError(null)
 
     try {
-      const ez = calculateEssenceZone(scaryScore, wahooScore)
       const { error } = await supabase.from('groan_challenges').insert({
         user_id: user.id,
         challenge_text: strikeTitle.trim(),
@@ -220,10 +216,6 @@ export default function StrikeDesignFlow() {
         source_label: movement?.ruleStatement || 'Lightning Strike',
         source_id: remarkableAngleId || null,
         visibility_layer: 'authority',
-        scary_score: scaryScore,
-        wahoo_score: wahooScore,
-        essence_zone: ez.zone,
-        essence_insight: ez.insight,
         status: 'active',
         accepted_at: new Date().toISOString(),
         challenge_source: 'strike',
@@ -465,7 +457,6 @@ export default function StrikeDesignFlow() {
 
   // ── STEP 5: QUALITY CHECK ──
   if (step === STEPS.QUALITY) {
-    const ez = calculateEssenceZone(scaryScore, wahooScore)
     const allPillars = pillarEducate && pillarPosition && pillarConvert
 
     return (
@@ -476,30 +467,6 @@ export default function StrikeDesignFlow() {
 
           <div className="stk-strike-preview">
             <div className="stk-strike-preview-title">{strikeTitle}</div>
-          </div>
-
-          {/* Scary / Wahoo sliders */}
-          <div className="stk-slider-group">
-            <label className="stk-slider-label">
-              How scary is this? <span className="stk-slider-val">{scaryScore}</span>
-            </label>
-            <input type="range" min="1" max="10" value={scaryScore} onChange={(e) => setScaryScore(Number(e.target.value))} className="stk-slider" />
-          </div>
-          <div className="stk-slider-group">
-            <label className="stk-slider-label">
-              How exciting? <span className="stk-slider-val">{wahooScore}</span>
-            </label>
-            <input type="range" min="1" max="10" value={wahooScore} onChange={(e) => setWahooScore(Number(e.target.value))} className="stk-slider" />
-          </div>
-
-          {/* Essence zone indicator */}
-          <div className={`stk-zone stk-zone-${ez.zone}`}>
-            {ez.isEssenceZone
-              ? 'Essence zone. This is a real Wahoo.'
-              : scaryScore < 7 || wahooScore < 7
-                ? 'This doesn\'t feel like a Wahoo yet. What would make it scarier or more exciting?'
-                : ez.insight
-            }
           </div>
 
           {/* 3-Pillar Check */}

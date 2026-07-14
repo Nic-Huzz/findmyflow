@@ -3882,3 +3882,36 @@
   cursor: pointer;
   font-family: inherit;
 }
+
+/* ── Reach Section (league-only, bottom of Courage tab) ── */
+.playlist-tab .plt-reach-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.playlist-tab .plt-reach-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.playlist-tab .plt-reach-icon {
+  font-size: 1.2rem;
+}
+
+.playlist-tab .plt-reach-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.playlist-tab .plt-reach-subtitle {
+  font-size: 0.75rem;
+  color: #888;
+  width: 100%;
+}

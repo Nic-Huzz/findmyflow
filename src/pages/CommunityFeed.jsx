@@ -32,6 +32,8 @@ const EVENT_ICONS = {
   shared_wahoo: '💪',
   shared_healing: '💚',
   shared_weekly_review: '📊',
+  reach_share: '📣',
+  accountability: '📝',
 }
 
 // Variant CSS class for auto-event accent borders

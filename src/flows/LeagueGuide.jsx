@@ -12,9 +12,9 @@ import { hapticLight } from '../lib/haptics'
 import './FlowFinderExplainer.css'
 
 const CATEGORY_DESCRIPTIONS = {
-  play_list: 'Expression. Do the things that scare you and make you feel alive.',
-  healing: 'Safety. Recognise, release, and rewire what keeps you stuck.',
   tune: 'Balance. Daily practices that keep your nervous system regulated.',
+  courage: 'Expression. Do the things that scare you and make you feel alive.',
+  reach: 'Visibility. Share your journey and grow your community presence.',
 }
 
 export default function LeagueGuide() {

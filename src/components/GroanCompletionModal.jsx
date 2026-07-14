@@ -30,18 +30,6 @@ const WAHOO_RP = {
   routine: 7,
 }
 
-// Wahoo classification → scary/wahoo score mapping (4 states)
-const WAHOO_SCORES = {
-  vibe:     { scary: 8, wahoo: 9 },    // Vibe Rise — scared AND alive
-  peace:    { scary: 3, wahoo: 8 },    // Fun — alive, not scary
-  anxious:  { scary: 8, wahoo: 3 },    // Pressure — pushed too far
-  shutdown: { scary: 3, wahoo: 3 },    // Uninterested — flat
-  // Legacy compat
-  wahoo: { scary: 8, wahoo: 9 },
-  vibe_rise: { scary: 3, wahoo: 8 },
-  routine: { scary: 3, wahoo: 3 },
-}
-
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
   const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'share'
 
@@ -112,21 +100,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     setSaving(true)
     setError(null)
     try {
-      // 1. Mark groan challenge as completed with user-reported scores
+      // 1. Mark groan challenge as completed
       const reflectionText = reflection
-      const scores = WAHOO_SCORES[wahooClassification] || WAHOO_SCORES.routine
       const { error: groanError } = await completeGroanChallenge(challenge.id, {
         reflectionText,
-        scaryScoreAfter: scores.scary,
-        wahooScoreAfter: scores.wahoo,
       })
       if (groanError) throw groanError
-
-      // Update scary/wahoo scores on the challenge record (user self-report replaces AI prediction)
-      await supabase
-        .from('groan_challenges')
-        .update({ scary_score: scores.scary, wahoo_score: scores.wahoo })
-        .eq('id', challenge.id)
 
       // 2. Upsert quest_completions record (delete old first to prevent RP farming)
       const questId = `play_list_challenge_${challenge.id}`
@@ -200,7 +179,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       checkNewCategoryBox(userId, challenge.visibility_layer).catch(() => {})
 
       // 4b. Track wahoo analytics
-      trackWahooCompleted({ challengeId: challenge.id, wahooScore: scores.wahoo, scaryScore: scores.scary })
+      trackWahooCompleted({ challengeId: challenge.id })
 
       // 4c. Award Movement XP for Strike completion
       if (challenge.challenge_source === 'strike') {

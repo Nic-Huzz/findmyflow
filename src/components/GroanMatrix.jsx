@@ -528,16 +528,6 @@ function GroanMatrix({
                               </>
                             )}
                           </div>
-                          {!compact && challenge.scary_score && challenge.wahoo_score && (
-                            <div className="groan-cell-scores">
-                              <span className="groan-score scary">
-                                😰 {challenge.scary_score}
-                              </span>
-                              <span className="groan-score wahoo">
-                                🎉 {challenge.wahoo_score}
-                              </span>
-                            </div>
-                          )}
                         </div>
                       ) : (
                         <div className="groan-cell-empty">
@@ -690,16 +680,6 @@ function GroanMatrix({
                               </>
                             )}
                           </div>
-                          {!compact && challenge.scary_score && challenge.wahoo_score && (
-                            <div className="groan-cell-scores">
-                              <span className="groan-score scary">
-                                😰 {challenge.scary_score}
-                              </span>
-                              <span className="groan-score wahoo">
-                                🎉 {challenge.wahoo_score}
-                              </span>
-                            </div>
-                          )}
                         </div>
                       ) : (
                         <div className="groan-cell-empty">

@@ -23,6 +23,7 @@ import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
 import HealingFlowModal from './HealingFlowModal'
 import QuestSelector from './QuestSelector'
+import ContentChallenges from './ContentChallenges'
 import { fetchFeed } from '../lib/communityFeed'
 
 export default function PlayListTab({
@@ -31,6 +32,7 @@ export default function PlayListTab({
   onQuestComplete,
   onRefreshPoints,
   wahooCount = 0,
+  leagueData = null,
 }) {
   const navigate = useNavigate()
   const [playskills, setPlayskills] = useState([])
@@ -419,6 +421,31 @@ export default function PlayListTab({
         onWahooSaved={fetchBucketListWahoos}
         onPlaySkillsUpdated={fetchPlayskills}
       />
+
+      {/* Reach section — only if in active league */}
+      {leagueData?.league?.status === 'active' && leagueData?.isOnTeam && (
+        <div className="plt-reach-section">
+          <div className="plt-reach-header">
+            <span className="plt-reach-icon">📣</span>
+            <span className="plt-reach-title">Reach</span>
+            <span className="plt-reach-subtitle">Share your journey to earn league points</span>
+          </div>
+          <ContentChallenges
+            leagueId={leagueData.league.id}
+            userId={userId}
+            teamId={leagueData.userTeam?.id}
+            weekNumber={leagueData.getCurrentWeek?.()}
+            leagueStatus={leagueData.league.status}
+            isOnTeam={leagueData.isOnTeam}
+            teams={leagueData.teams}
+            contentSubmissions={leagueData.contentSubmissions}
+            onSubmitted={leagueData.onContentSubmitted}
+            standings={leagueData.standings}
+            userTeam={leagueData.userTeam}
+            userData={leagueData.userData}
+          />
+        </div>
+      )}
 
       {/* Community Courage — recent shared wahoos */}
       {communityItems.length > 0 && (

@@ -75,17 +75,6 @@ export default function FeedCard({ post, userReactions = new Set(), onReact, isA
 
         {post.caption && <p className="pfc-caption">{post.caption}</p>}
 
-        {(post.scary_score != null || post.wahoo_score != null) && (
-          <div className="pfc-scores">
-            {post.scary_score != null && (
-              <span className="pfc-score-pill">😰 {post.scary_score}/10</span>
-            )}
-            {post.wahoo_score != null && (
-              <span className="pfc-score-pill">🤩 {post.wahoo_score}/10</span>
-            )}
-          </div>
-        )}
-
         <div className="pfc-reactions">
           {REACTIONS.map(({ type, icon }) => {
             const count = post.reaction_counts?.[type] || 0

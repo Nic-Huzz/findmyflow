@@ -64,8 +64,6 @@ export async function createFeedPost({
       groan_challenge_id: groanChallengeId || null,
       challenge_title: challengeTitle || null,
       visibility_layer: visibilityLayer || null,
-      scary_score: null,
-      wahoo_score: null,
       media_url: mediaUrl,
       media_width: mediaWidth ?? null,
       media_height: mediaHeight ?? null,
