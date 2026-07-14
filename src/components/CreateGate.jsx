@@ -79,6 +79,14 @@ export default function CreateGate({ children }) {
     )
   }
 
+  // Hide bottom toolbar when gate is blocking
+  useEffect(() => {
+    if (!loading && !hasAccess) {
+      document.body.classList.add('hide-toolbar')
+      return () => document.body.classList.remove('hide-toolbar')
+    }
+  }, [loading, hasAccess])
+
   if (hasAccess) return children
 
   return (
