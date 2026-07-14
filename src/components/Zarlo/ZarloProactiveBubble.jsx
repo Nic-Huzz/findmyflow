@@ -30,7 +30,6 @@ export default function ZarloProactiveBubble({ message, onTap, onDismiss }) {
       className={`zarlo-proactive ${exiting ? 'zarlo-proactive-exit' : ''}`}
       onClick={() => { onTap?.(); onDismiss?.() }}
     >
-      <span className="zarlo-proactive-avatar">🌞</span>
       <span className="zarlo-proactive-text">{message}</span>
     </div>
   )

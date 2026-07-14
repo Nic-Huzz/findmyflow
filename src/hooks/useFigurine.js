@@ -340,13 +340,15 @@ export function useFigurine() {
 
       // Save conversation summary to memory (after response complete)
       if (fullText) {
-        await supabase.from('essence_avatar_memory').insert({
-          user_id: user.id,
-          memory_type: 'conversation',
-          content: `User asked: "${text.slice(0, 100)}". Mentor responded about: ${fullText.slice(0, 150)}`,
-          source: 'conversation',
-          confidence: 0.7,
-        }).catch(() => {})
+        try {
+          await supabase.from('essence_avatar_memory').insert({
+            user_id: user.id,
+            memory_type: 'conversation',
+            content: `User asked: "${text.slice(0, 100)}". Mentor responded about: ${fullText.slice(0, 150)}`,
+            source: 'conversation',
+            confidence: 0.7,
+          })
+        } catch {}
       }
 
       // Increment daily conversation count

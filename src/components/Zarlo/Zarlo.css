@@ -747,25 +747,38 @@
 
 /* ============================================
    PROACTIVE BUBBLE (Phase 3)
+   Speech bubble positioned above Zarlo FAB
    ============================================ */
 
 .zarlo-proactive {
   position: fixed;
-  bottom: 90px;
+  bottom: 148px; /* Above the 56px FAB at bottom:80px + 12px gap */
   right: 20px;
-  max-width: 300px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 16px;
+  max-width: 260px;
+  padding: 10px 14px;
   background: white;
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(94, 23, 235, 0.15);
   cursor: pointer;
   z-index: 1001;
   animation: zarlo-bubble-in 0.3s ease;
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Speech bubble tail pointing down toward FAB */
+.zarlo-proactive::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 18px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-right: 1px solid rgba(94, 23, 235, 0.15);
+  border-bottom: 1px solid rgba(94, 23, 235, 0.15);
+  transform: rotate(45deg);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.04);
 }
 
 .zarlo-proactive:hover {
@@ -778,16 +791,17 @@
   transform: translateY(10px);
 }
 
-.zarlo-proactive-avatar {
-  font-size: 20px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
 .zarlo-proactive-text {
   font-size: 13px;
   line-height: 1.4;
   color: #1a1a2e;
+}
+
+@media (min-width: 768px) {
+  .zarlo-proactive {
+    bottom: 92px; /* Desktop: FAB at bottom:24px + 56px + 12px gap */
+    right: 24px;
+  }
 }
 
 @keyframes zarlo-bubble-in {
