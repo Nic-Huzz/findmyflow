@@ -65,11 +65,12 @@ const VISIBILITY_EXAMPLES = {
 export default function WahooCreator({
   userId,
   bucketList = [],
+  initialText = '',
   onWahooAccepted,
   onClose,
 }) {
   const [step, setStep] = useState('freetext')
-  const [freeText, setFreeText] = useState('')
+  const [freeText, setFreeText] = useState(initialText)
   const [linkedQuestId, setLinkedQuestId] = useState(null)
   const [depthLevel, setDepthLevel] = useState(null)
   const [visibilityLayers, setVisibilityLayers] = useState([])
