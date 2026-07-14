@@ -102,6 +102,13 @@
   font-size: 0.85rem; font-weight: 600; color: var(--text-3); font-style: italic;
 }
 .mm .mm-hero-screenshot span { font-size: 2rem; font-style: normal; }
+.mm .mm-hero-screenshot--filled {
+  padding: 0; min-height: auto; background: none;
+  overflow: hidden;
+}
+.mm .mm-hero-screenshot--filled img {
+  width: 100%; height: auto; display: block; border-radius: 16px;
+}
 
 /* ═══ SECTIONS ═══ */
 .mm .mm-section { padding: 6rem 0; }
@@ -219,13 +226,28 @@
   background: var(--off-white); padding: 1.25rem; font-size: 0.75rem;
   color: var(--text-3); font-style: italic; text-align: center;
 }
-.mm .mm-group-bar {
-  max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 1rem;
-  background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem 1.5rem; text-align: center;
+.mm .mm-phase-screenshot--filled {
+  padding: 0; background: none; overflow: hidden;
+  display: flex; flex-direction: column; gap: 0.5rem;
 }
-.mm .mm-group-bar-icon { font-size: 1.5rem; flex-shrink: 0; }
-.mm .mm-group-bar-title { font-size: 0.95rem; font-weight: 700; }
-.mm .mm-group-bar-desc { font-size: 0.8rem; color: var(--text-2); }
+.mm .mm-phase-screenshot--filled img {
+  width: 100%; height: auto; display: block; border-radius: 10px;
+}
+.mm .mm-phase-grid--single { grid-template-columns: 1fr; max-width: 560px; }
+.mm .mm-block-label {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  margin: 2.5rem 0 0.35rem;
+}
+.mm .mm-block-name {
+  font-family: 'Inconsolata', monospace; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.15em; color: var(--text);
+}
+.mm .mm-block-price {
+  font-family: 'Inconsolata', monospace; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.06em; color: var(--gold); background: var(--gold-light);
+  border-radius: 100px; padding: 0.25rem 0.8rem;
+}
+.mm .mm-block-sub { font-size: 0.88rem; color: var(--text-3); text-align: center; margin: 0 0 1.25rem; }
 
 /* ═══ PRICING ═══ */
 .mm .mm-price-card {
@@ -239,7 +261,17 @@
 .mm .mm-price-tagline { font-size: 0.95rem; color: var(--text-2); margin-bottom: 1.5rem; }
 .mm .mm-price-amount { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--black); margin-bottom: 0.25rem; }
 .mm .mm-price-amount span { font-size: 1.2rem; font-weight: 600; color: var(--text-2); }
-.mm .mm-price-was { font-size: 0.85rem; color: var(--text-3); margin-bottom: 1.5rem; }
+.mm .mm-price-then { font-size: 1.1rem; font-weight: 700; color: var(--text-2); margin-bottom: 1.5rem; }
+.mm .mm-price-then span { font-size: 0.85rem; font-weight: 600; color: var(--text-3); }
+.mm .mm-price-join { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+.mm .mm-price-email {
+  width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border);
+  border-radius: 12px; font-size: 0.95rem; font-family: inherit; color: var(--text);
+  background: var(--off-white); text-align: center;
+}
+.mm .mm-price-email:focus { outline: none; border-color: var(--purple); background: var(--white); }
+.mm .mm-price-cta:disabled { opacity: 0.5; cursor: default; }
+.mm .mm-price-error { font-size: 0.8rem; color: #dc2626; }
 .mm .mm-price-roi { font-size: 0.88rem; font-weight: 600; color: var(--gold); background: var(--gold-light); padding: 0.6rem 1rem; border-radius: 10px; margin-bottom: 1.5rem; display: inline-block; }
 .mm .mm-price-cta {
   display: block; width: 100%; background: var(--black); color: var(--white);

@@ -2,8 +2,8 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 import Stripe from 'https://esm.sh/stripe@14.14.0?target=deno'
 
-// Scale creator portal product ID — payments for this product grant plan_type 'creator'
-const SCALE_PRODUCT_ID = 'prod_UsdZD0VH5q0wwe'
+// Scale product IDs — payments for either grant plan_type 'creator'
+const SCALE_PRODUCT_IDS = ['prod_UsdZD0VH5q0wwe', 'prod_UsyctdcmpVwlCs']
 
 const DMG_ARM64 = 'https://github.com/Nic-Huzz/findmyflow/releases/download/v1.0.0/Vibe-Rise-mac-arm64.dmg'
 const DMG_X64 = 'https://github.com/Nic-Huzz/findmyflow/releases/download/v1.0.0/Vibe-Rise-mac-x64.dmg'
@@ -125,7 +125,7 @@ serve(async (req) => {
           const hasScaleProduct = sub.items.data.some((item: any) => {
             const product = item.price.product
             const productId = typeof product === 'string' ? product : product.id
-            return productId === SCALE_PRODUCT_ID
+            return SCALE_PRODUCT_IDS.includes(productId)
           })
           if (hasScaleProduct) planType = 'creator'
         } catch (e) {
@@ -173,7 +173,7 @@ serve(async (req) => {
         current_period_start: new Date().toISOString(),
         current_period_end: null,
         updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id' })
+      }, { onConflict: 'user_id,plan_type' })
 
       // Send welcome email + notify Huzz (fire-and-forget)
       const resendKey2 = Deno.env.get('RESEND_API_KEY')
@@ -186,33 +186,24 @@ serve(async (req) => {
 
     case 'customer.subscription.updated': {
       const subscription = event.data.object as Stripe.Subscription
-      const customerId = subscription.customer as string
+      const subId = subscription.id
 
-      const { data: sub } = await supabase
-        .from('user_subscriptions')
-        .select('user_id')
-        .eq('stripe_customer_id', customerId)
-        .maybeSingle()
-
-      if (sub) {
-        await supabase.from('user_subscriptions').update({
-          status: subscription.status === 'active' ? 'active' : subscription.status,
-          current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-          updated_at: new Date().toISOString()
-        }).eq('user_id', sub.user_id)
-      }
+      await supabase.from('user_subscriptions').update({
+        status: subscription.status === 'active' ? 'active' : subscription.status,
+        current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        updated_at: new Date().toISOString()
+      }).eq('stripe_subscription_id', subId)
       break
     }
 
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as Stripe.Subscription
-      const customerId = subscription.customer as string
 
       await supabase.from('user_subscriptions').update({
         status: 'expired',
         updated_at: new Date().toISOString()
-      }).eq('stripe_customer_id', customerId)
+      }).eq('stripe_subscription_id', subscription.id)
       break
     }
   }

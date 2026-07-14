@@ -115,9 +115,8 @@ export default function MovementMakers() {
             <span className="mm-badge">Built From 200+ Events</span>
             <span className="mm-badge">Cancel Anytime</span>
           </div>
-          <div className="mm-hero-screenshot">
-            <span>📸</span>
-            [Screenshot: Creator Portal dashboard]
+          <div className="mm-hero-screenshot mm-hero-screenshot--filled">
+            <img src="/images/landing/portal-dashboard.png" alt="Scale Creator Portal dashboard" />
           </div>
         </div>
       </section>
@@ -356,7 +355,7 @@ export default function MovementMakers() {
                 <div className="mm-phase-feature"><strong>The Blow Up Brand Pipeline</strong><span>Find your rule break, how your story spreads, and what's blocking people from saying yes</span></div>
                 <div className="mm-phase-feature"><strong>Your Scale Score</strong><span>A report card showing how ready your experience is to blow up, and exactly what to fix</span></div>
               </div>
-              <div className="mm-phase-screenshot">[Screenshot: Playbook tab stepper]</div>
+              <div className="mm-phase-screenshot mm-phase-screenshot--filled"><img src="/images/landing/playbook-stepper.png" alt="Blow Up Brand playbook stepper" /></div>
             </div>
           </div>
 
@@ -380,7 +379,9 @@ export default function MovementMakers() {
                 <div className="mm-phase-feature"><strong>Fill Checklists</strong><span>Every marketing task laid out with nothing forgotten</span></div>
                 <div className="mm-phase-feature"><strong>The Price-It-Right Calculator</strong><span>Know exactly what to charge based on your value stack</span></div>
               </div>
-              <div className="mm-phase-screenshot">[Screenshot: Experience pipeline view]</div>
+              <div className="mm-phase-screenshot mm-phase-screenshot--filled">
+                <img src="/images/landing/experience-pipeline.png" alt="Experience pipeline" />
+              </div>
             </div>
 
             {/* Run */}
@@ -410,7 +411,10 @@ export default function MovementMakers() {
                 <div className="mm-phase-feature"><strong>The 3% Note</strong><span>One small improvement per event that compounds into mastery</span></div>
                 <div className="mm-phase-feature"><strong>A Contact List That Builds Itself</strong><span>Every attendee saved without spreadsheets</span></div>
               </div>
-              <div className="mm-phase-screenshot">[Screenshot: Grow metrics view]</div>
+              <div className="mm-phase-screenshot mm-phase-screenshot--filled">
+                <img src="/images/landing/grow-metrics.png" alt="Growth metrics dashboard" />
+                <img src="/images/landing/grow-pulse.png" alt="Brand Pulse score" />
+              </div>
             </div>
           </div>
         </div>

@@ -284,7 +284,14 @@ export default function ExperienceCreatorFlow({ embedded = false, onComplete }) 
     if (selected.size === 0) return
     hapticSuccess()
     setScreen('result')
-    if (!embedded) window.scrollTo(0, 0)
+    if (embedded) {
+      // Scroll to top of the embedded container so results are visible
+      setTimeout(() => {
+        document.querySelector('.mm-matching-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
+    } else {
+      window.scrollTo(0, 0)
+    }
   }
 
   // Back to browse
