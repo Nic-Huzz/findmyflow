@@ -380,7 +380,7 @@ export default function MovementMakers() {
                 <div className="mm-phase-feature"><strong>The Price-It-Right Calculator</strong><span>Know exactly what to charge based on your value stack</span></div>
               </div>
               <div className="mm-phase-screenshot mm-phase-screenshot--filled">
-                <img src="/images/landing/experience-pipeline.png" alt="Experience pipeline" />
+                <img src="/images/landing/experience-library.png" alt="Experience library" />
               </div>
             </div>
 
