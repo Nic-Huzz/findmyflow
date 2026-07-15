@@ -80,6 +80,15 @@
   margin-bottom: 16px;
 }
 
+.fo-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+  margin: 0 0 8px;
+}
+
 .fo-message {
   font-size: 1.05rem;
   line-height: 1.7;

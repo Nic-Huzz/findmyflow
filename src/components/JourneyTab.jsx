@@ -69,7 +69,7 @@ const HERO_STAGES = [
   ]},
 ]
 
-export default function JourneyTab({ userId }) {
+export default function JourneyTab({ userId, onUnlockTab }) {
   const [heroStage, setHeroStage] = useState(0)
   const [voiceCounts, setVoiceCounts] = useState({})
   const [brief, setBrief] = useState(null)
@@ -367,11 +367,9 @@ export default function JourneyTab({ userId }) {
           )}
         </div>
 
-        {heroStage > 1 && (
-          <button className="jt-stage-history-btn" onClick={() => setShowTimeline(!showTimeline)}>
-            Your Hero's Journey {showTimeline ? '▴' : '▾'}
-          </button>
-        )}
+        <button className="jt-stage-history-btn" onClick={() => setShowTimeline(!showTimeline)}>
+          Your Hero's Journey {showTimeline ? '▴' : '▾'}
+        </button>
       </div>
 
       {/* Timeline dropdown */}
@@ -432,7 +430,7 @@ export default function JourneyTab({ userId }) {
       )}
 
       {/* Onboarding — only if items incomplete */}
-      <JourneyOnboarding userId={userId} />
+      <JourneyOnboarding userId={userId} onUnlockTab={onUnlockTab} />
 
       {/* Life Paths Summary */}
       {lifePaths.length > 0 && (

@@ -294,9 +294,32 @@ export default function CuriosityMapFlow() {
           <div className="cmf-welcome">
             <div className="cmf-welcome-content">
               <div className="cmf-greeting">Your Curiosities</div>
-              <p><strong>What can't you stop reading, watching, and listening to?</strong></p>
-              <p>Your favourite books, podcasts, and documentaries reveal what you're genuinely drawn to. Not what you think you should be interested in. What you actually are.</p>
-              <p>Add at least 5 and we'll map your curiosity landscape. The patterns might surprise you.</p>
+              <p><strong>Your curiosity is a compass.</strong></p>
+              <p>The books you can't put down, the podcasts you binge, the rabbit holes you fall into at 2am. They're not random. They're your essence guiding you towards a life you love.</p>
+              <p>Most people ignore these signals. You're about to map them.</p>
+
+              {/* Collect → Connect → Emerge */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 0, margin: '20px auto 16px', maxWidth: 320 }}>
+                <div style={{ flex: 1, textAlign: 'center' }}>
+                  <div style={{ fontSize: 22 }}>🔍</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24', marginTop: 4 }}>Collect dots</div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)' }}>Add what you love</div>
+                </div>
+                <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 16, marginTop: 8 }}>→</div>
+                <div style={{ flex: 1, textAlign: 'center' }}>
+                  <div style={{ fontSize: 22 }}>🧩</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Connect dots</div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>Find the patterns</div>
+                </div>
+                <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 16, marginTop: 8 }}>→</div>
+                <div style={{ flex: 1, textAlign: 'center' }}>
+                  <div style={{ fontSize: 22 }}>🚀</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Emerge</div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>See what's forming</div>
+                </div>
+              </div>
+
+              <p style={{ fontSize: '0.85rem', opacity: 0.55 }}>Add at least 5 and we'll map your curiosity landscape.</p>
             </div>
             <button className="cmf-primary-btn" onClick={() => { hapticLight(); setStep(STEPS.ADD_CONTENT) }}>
               Map my curiosities
@@ -489,8 +512,32 @@ export default function CuriosityMapFlow() {
         </div>
         <div className="cmf-container">
           <div className="cmf-greeting">Your Curiosity Map</div>
-          <div className="cmf-subtext" style={{ marginBottom: 8 }}>
+          <div className="cmf-subtext" style={{ marginBottom: 16 }}>
             Based on {items.length} pieces of content you love. These are the themes you keep returning to.
+          </div>
+
+          {/* Diverge → Converge → Emerge visual */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, margin: '0 auto 20px', maxWidth: 340 }}>
+            {/* Diverge */}
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{ fontSize: 20 }}>🔍</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.9)', marginTop: 4 }}>Collect dots</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)' }}>You did this</div>
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }}>→</div>
+            {/* Converge */}
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{ fontSize: 20 }}>🧩</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24', marginTop: 4 }}>Connect dots</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)' }}>You are here</div>
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }}>→</div>
+            {/* Emerge */}
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{ fontSize: 20 }}>🚀</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Emerge</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>What comes next</div>
+            </div>
           </div>
 
           <div className="cmf-clusters">
@@ -509,14 +556,14 @@ export default function CuriosityMapFlow() {
           )}
 
           <div className="cmf-results-actions">
-            <button className="cmf-primary-btn" onClick={() => navigate('/career-alignment')}>
-              See how aligned your career is
-            </button>
-            <button className="cmf-secondary-btn" onClick={() => navigate('/7-day-challenge')}>
-              Return to quests
+            <button className="cmf-primary-btn" onClick={() => navigate('/life-map')}>
+              Next step: Your Life Map
             </button>
             <button className="cmf-secondary-btn" onClick={() => { setStep(STEPS.ADD_CONTENT) }}>
               Feel like some curiosities are missing? Add more content
+            </button>
+            <button className="cmf-secondary-btn" onClick={() => navigate('/7-day-challenge')}>
+              Return to quests
             </button>
           </div>
         </div>

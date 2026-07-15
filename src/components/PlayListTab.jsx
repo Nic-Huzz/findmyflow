@@ -124,14 +124,18 @@ export default function PlayListTab({
         seen.add(pick.reference_id)
         return true
       })
-      // Enrich with source label from groan_challenges
+      // Enrich with source label + quest name
       const enriched = await Promise.all(unique.map(async pick => {
-        const { data: challenge } = await supabase
-          .from('groan_challenges')
-          .select('source_label, status')
-          .eq('id', pick.reference_id)
-          .single()
-        return { ...pick, _source_label: challenge?.source_label, _status: challenge?.status }
+        const [{ data: challenge }, { data: questTask }] = await Promise.all([
+          supabase.from('groan_challenges').select('source_label, status').eq('id', pick.reference_id).single(),
+          supabase.from('quest_tasks').select('quest_id').eq('groan_challenge_id', pick.reference_id).limit(1).maybeSingle(),
+        ])
+        let questName = null
+        if (questTask?.quest_id) {
+          const { data: quest } = await supabase.from('quests').select('label').eq('id', questTask.quest_id).single()
+          questName = quest?.label
+        }
+        return { ...pick, _source_label: questName || challenge?.source_label, _status: challenge?.status }
       }))
       setActiveChallenges(enriched.filter(e => e._status !== 'completed'))
     }
@@ -188,7 +192,7 @@ export default function PlayListTab({
         <div className="plt-section-header">
           <div className="plt-section-header-left">
             <span className="plt-section-icon">🔥</span>
-            <span className="plt-section-title">Active Wahoos</span>
+            <span className="plt-section-title">Active Courage Challenges</span>
           </div>
           <span className="plt-section-count">{activeChallenges.length}</span>
         </div>

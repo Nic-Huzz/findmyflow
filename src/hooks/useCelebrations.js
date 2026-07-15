@@ -152,21 +152,27 @@ export function useCelebrations() {
   const celebrateStageGraduation = useCallback((fromStage, toStage, context = {}) => {
     const CELEBRATIONS = {
       '0-2': { confetti: 'purple', emoji: '\u{1F331}',
-        message: 'Something just shifted. Welcome.' },
+        title: 'Stage 2: Call to Adventure',
+        message: 'You showed up. That takes more than most people realise. Your hero\'s journey has begun.' },
       '2-3': { confetti: 'purple', emoji: '\u{1F5FA}\uFE0F',
-        message: 'You can see the paths now. That\'s the first step.' },
+        title: 'Stage 3: Mapping Your World',
+        message: 'You\'ve started collecting dots. Your curiosities, your life story, your paths. Now the patterns can start forming.' },
       '3-4': { confetti: 'side_cannons', emoji: '\u{1FA9E}',
+        title: 'Stage 4: Meeting the Mentor',
         message: context.essenceName
-          ? `You've been called this your whole life without knowing it. ${context.essenceName}.`
-          : 'Your archetype has been revealed.' },
+          ? `Your essence voice has a name. ${context.essenceName}. This is who you\'ve always been underneath the noise.`
+          : 'Your essence archetype has been revealed. This is who you are underneath the noise.' },
       '4-5': { confetti: 'gold', emoji: '\u{1F525}',
-        message: 'There it is. You felt it. Remember this next time the voice gets loud.' },
+        title: 'Stage 5: Crossing the Threshold',
+        message: 'You did something brave and felt it land. That feeling is your compass. Follow it.' },
       '5-6': { confetti: 'purple', emoji: '\u2694\uFE0F',
-        message: 'You\'re ready for the arena. Time to train with others.' },
+        title: 'Stage 6: Tests, Allies, Enemies',
+        message: 'You\'re going deeper on one path. The courage challenges are building something real.' },
       '6-7': { confetti: null, emoji: '\u{1F441}\uFE0F',
+        title: 'Stage 7: The Inmost Cave',
         message: context.voiceName
-          ? `The ${context.voiceName.charAt(0).toUpperCase() + context.voiceName.slice(1).replace(/_/g, ' ')}. Five times. You're ready to face the root.`
-          : 'The pattern is clear now. You\'re ready to face the root.' },
+          ? `The ${context.voiceName.charAt(0).toUpperCase() + context.voiceName.slice(1).replace(/_/g, ' ')}. Five times. The pattern is clear. You\'re ready to face what\'s underneath.`
+          : 'The pattern is clear. You\'re ready to face what\'s underneath.' },
     }
 
     const key = `${fromStage}-${toStage}`
@@ -183,9 +189,9 @@ export function useCelebrations() {
     // 6→7: no confetti (reverent)
 
     setShowLevelUp({
-      name: c.message,
+      name: c.title,
       emoji: c.emoji,
-      description: '',
+      description: c.message,
       isGraduation: true,
       avatarUrl: context.avatarUrl || null,
       useFigurineOverlay: context.useFigurineOverlay || false,

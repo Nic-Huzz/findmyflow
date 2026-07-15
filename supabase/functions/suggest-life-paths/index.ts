@@ -40,8 +40,10 @@ ${skillsSection}
 ${problemsSection}
 
 GUIDELINES:
-- Each path should be a specific, inspiring career direction, not a generic title like "consultant" or "coach" or "entrepreneur"
-- Name them creatively. They should feel like a calling, not a job title.
+- Each path should be a specific career direction that clearly says what the person DOES. Not a poetic title.
+- Name them in plain language a 12-year-old would understand. Say what the job is, not what it sounds like.
+  * GOOD: "Workshop Host for Burnt-Out Professionals", "Breathwork Facilitator", "App Builder for Healing Tools"
+  * BAD: "The Possibility Cartographer", "Consciousness Systems Designer", "Architect of Intentional Communities"
 - Each path should draw from at least 2 of the 3 data sources (curiosity + skill, or curiosity + problem, or skill + problem)
 - Include a mix: some that feel safe/obvious, some that feel exciting but stretchy, and one that feels like a wild card they haven't considered
 - Keep descriptions to one sentence: what this path looks like day-to-day

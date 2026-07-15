@@ -22,7 +22,7 @@ export default function JourneyTimeline({ userId, heroStage, userEmail }) {
   const [evidence, setEvidence] = useState({})
 
   useEffect(() => {
-    if (!userId || heroStage < 2) return
+    if (!userId) return
     let active = true
 
     // Stage 1: always show (pre-app, no date)
@@ -96,9 +96,9 @@ export default function JourneyTimeline({ userId, heroStage, userEmail }) {
     return () => { active = false }
   }, [userId, heroStage, userEmail])
 
-  if (heroStage < 2) return null
-
-  const completedStages = HERO_STAGES.filter(s => s.stage < heroStage)
+  // Always show at least stage 1 (Ordinary World) as completed — signing up = the crack happened
+  const effectiveStage = Math.max(heroStage, 2)
+  const completedStages = HERO_STAGES.filter(s => s.stage < effectiveStage)
 
   return (
     <div className="jtl-timeline">

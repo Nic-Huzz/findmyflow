@@ -18,7 +18,7 @@ export const STUCK_REASONS = [
 export const STATE_META = {
   vibe:     { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', felt: 'alive, lit up' },
   peace:    { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', felt: 'fun, settled' },
-  anxious:  { y: 380, color: '#ef4444', label: 'Pressure',       emoji: '😰', felt: 'stressed, tight' },
+  anxious:  { y: 380, color: '#ef4444', label: 'Stress',          emoji: '😰', felt: 'stressed, tight' },
   shutdown: { y: 520, color: '#6b7280', label: 'Uninterested',   emoji: '😶', felt: 'bored, flat' },
 }
 
@@ -139,11 +139,11 @@ export function subBranchPaths(endX, endY, index, trunkY = TRUNK_Y) {
 export function getThemeOpacities(theme) {
   const isLight = theme === 'light'
   return {
-    bandFill:     isLight ? 0.08  : 0.025,
-    guideLine:    isLight ? 0.25  : 0.1,
-    guideWidth:   isLight ? 1     : 0.5,
-    stateLabel:   isLight ? 0.75  : 0.5,
-    feltLabel:    isLight ? 0.5   : 0.3,
+    bandFill:     isLight ? 0.15  : 0.025,
+    guideLine:    isLight ? 0.35  : 0.1,
+    guideWidth:   isLight ? 1.5   : 0.5,
+    stateLabel:   isLight ? 0.9   : 0.5,
+    feltLabel:    isLight ? 0.65  : 0.3,
     parkedBranch: isLight ? 0.3   : 0.28,
     parkedDot:    isLight ? 0.35  : 0.35,
     parkedDotR:   isLight ? 5     : 5,
@@ -151,11 +151,11 @@ export function getThemeOpacities(theme) {
     parkedWeight: isLight ? '500' : '400',
     parkedStroke: isLight ? 1.5   : 1.8,
     litBranch:    isLight ? 0.9   : 0.85,
-    coneEdge:     isLight ? 0.3   : 0.12,
-    coneEdgeW:    isLight ? 1     : 0.5,
-    conePeak:     isLight ? 0.14  : 0.18,
-    coneMid:      isLight ? 0.09  : 0.12,
-    coneTail:     isLight ? 0.04  : 0.05,
+    coneEdge:     isLight ? 0.45  : 0.12,
+    coneEdgeW:    isLight ? 1.5   : 0.5,
+    conePeak:     isLight ? 0.22  : 0.18,
+    coneMid:      isLight ? 0.14  : 0.12,
+    coneTail:     isLight ? 0.06  : 0.05,
     zoneSafe:     isLight ? 'rgba(160,100,10,0.55)' : 'rgba(233,162,59,0.35)',
     zoneDark:     isLight ? 'rgba(80,60,140,0.5)'   : 'rgba(167,139,250,0.25)',
     future:       isLight ? '#aaa' : '#333',

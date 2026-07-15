@@ -23,6 +23,9 @@ ${contentList}
 Respond as JSON only:
 {"research": [{"title": "...", "summary": "...", "core_themes": ["theme1", "theme2"], "why_drawn": "..."}]}`
 
+  // Scale tokens: 5-10 items = 2000, larger inputs get more room
+  const researchTokens = Math.min(Math.max(items.length * 200, 2000), 4096)
+
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -32,7 +35,7 @@ Respond as JSON only:
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 2000,
+      max_tokens: researchTokens,
       messages: [{ role: 'user', content: researchPrompt }],
     }),
   })
@@ -110,7 +113,7 @@ Respond ONLY as JSON:
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1500,
+        max_tokens: 2500,
         messages: [{ role: 'user', content: prompt }],
       }),
     })

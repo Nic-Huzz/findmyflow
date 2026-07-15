@@ -13,7 +13,7 @@ import './FigurineOverlay.css'
  *  - onDismiss: () => void
  *  - autoDismiss: number (ms, default 10000)
  */
-export default function FigurineOverlay({ avatarUrl, message, emoji, onDismiss, autoDismiss = 10000 }) {
+export default function FigurineOverlay({ avatarUrl, message, description, emoji, onDismiss, autoDismiss = 10000 }) {
   const [visible, setVisible] = useState(false)
   const delayedRef = useRef(null)
 
@@ -46,7 +46,8 @@ export default function FigurineOverlay({ avatarUrl, message, emoji, onDismiss, 
           </div>
         )}
         {!avatarUrl && emoji && <span className="fo-emoji-standalone">{emoji}</span>}
-        <p className="fo-message">{message}</p>
+        <p className="fo-title">{message}</p>
+        {description && <p className="fo-message">{description}</p>}
         <button className="fo-dismiss" onClick={handleDismiss}>Continue</button>
       </div>
     </div>

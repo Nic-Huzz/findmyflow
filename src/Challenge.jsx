@@ -404,28 +404,24 @@ function Challenge() {
         }
       }
 
-      // 4. Tab unlock logic for Level 0 users
-      if (level === 0) {
-        const email = (await supabase.auth.getUser()).data?.user?.email
-        Promise.all([
-          // Unlock Courage if any wahoos or play-skills exist
-          supabase.from('groan_challenges')
-            .select('id').eq('user_id', user.id).in('status', ['active', 'completed']).limit(1),
-          supabase.from('nikigai_clusters')
-            .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
-          // Unlock Quests if life paths mapped
-          email
-            ? supabase.from('life_path_sessions').select('id').eq('client_email', email).limit(1)
-            : Promise.resolve({ data: [] }),
-        ]).then(([wahoos, skills, lifePaths]) => {
-          const unlocks = []
-          if (wahoos.data?.length > 0 || skills.data?.length > 0) unlocks.push('Courage')
-          if (lifePaths.data?.length > 0) unlocks.push('Quests')
-          if (unlocks.length > 0) {
-            setUnlockedTabs(prev => new Set([...prev, ...unlocks]))
-          }
-        })
-      }
+      // 4. Tab unlock logic — runs at ALL levels (not just level 0)
+      const email = (await supabase.auth.getUser()).data?.user?.email
+      Promise.all([
+        supabase.from('groan_challenges')
+          .select('id').eq('user_id', user.id).in('status', ['active', 'completed']).limit(1),
+        supabase.from('nikigai_clusters')
+          .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
+        email
+          ? supabase.from('life_path_sessions').select('id').eq('client_email', email).limit(1)
+          : Promise.resolve({ data: [] }),
+      ]).then(([wahoos, skills, lifePaths]) => {
+        const unlocks = []
+        if (wahoos.data?.length > 0 || skills.data?.length > 0) unlocks.push('Courage')
+        if (lifePaths.data?.length > 0) unlocks.push('Quests')
+        if (unlocks.length > 0) {
+          setUnlockedTabs(prev => new Set([...prev, ...unlocks]))
+        }
+      })
     }
 
     loadStageAndCheckGraduation()
@@ -1527,7 +1523,7 @@ function Challenge() {
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
           const isComingSoon = lockedCategories?.has(category)
-          const isLocked = isComingSoon || ((currentJourneyLevel ?? 0) === 0 && !unlockedTabs.has(category))
+          const isLocked = isComingSoon || !unlockedTabs.has(category)
           return (
             <button
               key={category}
@@ -1667,7 +1663,7 @@ function Challenge() {
 
         {/* Journey Tab — hero stage, voice progress, thresholds */}
         {activeCategory === 'Journey' && (
-          <JourneyTab userId={user?.id} />
+          <JourneyTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
         )}
 
         {/* Level Tab */}
@@ -1733,6 +1729,7 @@ function Challenge() {
         <FigurineOverlay
           avatarUrl={showLevelUp.avatarUrl}
           message={showLevelUp.name}
+          description={showLevelUp.description}
           emoji={showLevelUp.emoji}
           onDismiss={closeLevelUp}
         />

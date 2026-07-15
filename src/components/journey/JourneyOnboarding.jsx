@@ -16,7 +16,7 @@ import DeepDiveCard from '../level/DeepDiveCard'
 import '../level/LevelTab.css'
 import './JourneyOnboarding.css'
 
-export default function JourneyOnboarding({ userId }) {
+export default function JourneyOnboarding({ userId, onUnlockTab }) {
   const { user } = useAuth()
   const [hasCuriosityMap, setHasCuriosityMap] = useState(false)
   const [hasLifeMap, setHasLifeMap] = useState(false)
@@ -110,6 +110,7 @@ export default function JourneyOnboarding({ userId }) {
       .then(({ data }) => {
         if (data?.length > 0) setHasHealingCompletion(true)
       })
+
       .finally(() => setLoaded(true))
   }, [userId, user?.email])
 
@@ -166,17 +167,8 @@ export default function JourneyOnboarding({ userId }) {
             )
           )}
 
-          {/* 4. Explore Your Quests — unlocks Quests tab (locked until Life Paths) */}
-          {hasLifePaths ? (
-            <div className="level-deep-dive" style={{ cursor: 'default' }}>
-              <div className="level-dd-icon">🧭</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Explore Your Quests</div>
-                <div className="level-dd-narrative">Your Quests tab is now unlocked. See your life paths as active quests.</div>
-              </div>
-              <span className="level-dd-status" style={{ color: '#10b981', fontWeight: 700 }}>Unlocked</span>
-            </div>
-          ) : (
+          {/* 4. Explore Your Quests — hidden once Life Paths complete, locked until then */}
+          {hasLifePaths ? null : (
             <div className="level-deep-dive" style={{ opacity: 0.5 }}>
               <div className="level-dd-icon">🔒</div>
               <div className="level-dd-info">
@@ -192,18 +184,8 @@ export default function JourneyOnboarding({ userId }) {
             <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
           )}
 
-          {/* 6. First Courage Challenge — unlocks Courage tab (locked until Life Paths) */}
-          {!hasCourage && hasLifePaths && (
-            <div className="level-deep-dive" style={{ cursor: 'default' }}>
-              <div className="level-dd-icon">🔥</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Start Your First Courage Challenge</div>
-                <div className="level-dd-narrative">Face something that scares you a little. Head to the Courage tab.</div>
-              </div>
-              <span className="level-dd-status start">Start</span>
-            </div>
-          )}
-          {!hasCourage && !hasLifePaths && (
+          {/* 6. First Courage Challenge — hidden once wahoos exist or Life Paths done with stuck points */}
+          {!hasWahoos && !hasLifePaths && (
             <div className="level-deep-dive" style={{ opacity: 0.5 }}>
               <div className="level-dd-icon">🔒</div>
               <div className="level-dd-info">

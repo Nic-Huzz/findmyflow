@@ -31,12 +31,12 @@ const SLIDES = [
     duration: 8000,
   },
   {
-    heading: 'Your journey starts with self-knowledge.',
+    heading: "Your Hero's Journey.",
     body: [
-      'Map your curiosities.',
-      'Trace your life story.',
-      'See which paths are open to you.',
-      'Then start doing the things that scare you a little.',
+      'Map what you love.',
+      'Face what scares you.',
+      'Heal what holds you back.',
+      'Your flow is on the other side.',
     ],
     duration: null,
     hasButton: true,
@@ -76,8 +76,10 @@ export default function ChallengeIntro({ userId, onComplete }) {
     if (userId) {
       supabase
         .from('user_stage_progress')
-        .update({ has_seen_challenge_intro: true })
-        .eq('user_id', userId)
+        .upsert({
+          user_id: userId,
+          has_seen_challenge_intro: true,
+        }, { onConflict: 'user_id' })
         .then()
     }
     onComplete()
