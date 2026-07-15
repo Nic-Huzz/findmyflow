@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Flow — The Missing Piece</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #08080f;
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(94,23,235,0.08) 0%, rgba(233,162,59,0.04) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  .hero-question {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-style: italic;
+    color: #888;
+    max-width: 600px;
+    line-height: 1.5;
+    margin-bottom: 48px;
+  }
+
+  /* Feeder books grid */
+  .feeder-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    position: relative;
+  }
+  .feeder-book {
+    width: 140px;
+    padding: 16px 12px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+  .feeder-book:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.12);
+    transform: translateY(-4px);
+  }
+  .feeder-book.active {
+    border-color: rgba(94,23,235,0.4);
+    background: rgba(94,23,235,0.06);
+  }
+  .feeder-emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+  .feeder-title { font-size: 11px; font-weight: 600; color: #ccc; line-height: 1.3; margin-bottom: 4px; }
+  .feeder-author { font-size: 9px; color: #555; }
+  .feeder-gave {
+    font-size: 9px;
+    color: #666;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.4;
+  }
+  .feeder-missed {
+    font-size: 9px;
+    color: #f87171;
+    margin-top: 4px;
+    line-height: 1.4;
+    opacity: 0.7;
+  }
+
+  /* Arrows */
+  .arrows {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .arrow-line {
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(94,23,235,0.3));
+    position: relative;
+  }
+  .arrow-line::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid rgba(94,23,235,0.3);
+  }
+
+  /* The book */
+  .the-book {
+    max-width: 480px;
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(94,23,235,0.08), rgba(233,162,59,0.05));
+    border: 1.5px solid rgba(94,23,235,0.2);
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 80px rgba(94,23,235,0.08);
+  }
+  .book-title {
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  .book-tagline {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: #999;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .book-mechanism {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .mech-pill {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+  }
+  .mech-curiosity { background: rgba(167,139,250,0.12); color: #a78bfa; }
+  .mech-ns { background: rgba(248,113,113,0.12); color: #f87171; }
+  .mech-exp { background: rgba(233,162,59,0.12); color: #E9A23B; }
+  .mech-arrow-small { color: #333; font-size: 14px; }
+  .book-line {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+  }
+
+  /* Detail panel */
+  .detail-panel {
+    max-width: 700px;
+    margin: 60px auto 0;
+    padding: 0 24px 80px;
+  }
+  .detail-card {
+    padding: 28px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .detail-card.visible { display: block; }
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .detail-header .feeder-emoji { font-size: 32px; margin: 0; }
+  .detail-header h3 { font-size: 18px; font-weight: 700; color: #e0e0e0; }
+  .detail-header .detail-author { font-size: 12px; color: #666; }
+  .detail-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .detail-box {
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .detail-gave {
+    background: rgba(74,222,128,0.04);
+    border: 1px solid rgba(74,222,128,0.1);
+    color: #999;
+  }
+  .detail-gave-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #4ade80; margin-bottom: 6px; font-weight: 600; }
+  .detail-missed {
+    background: rgba(248,113,113,0.04);
+    border: 1px solid rgba(248,113,113,0.1);
+    color: #999;
+  }
+  .detail-missed-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #f87171; margin-bottom: 6px; font-weight: 600; }
+  .detail-adds {
+    padding: 14px;
+    background: rgba(94,23,235,0.04);
+    border: 1px solid rgba(94,23,235,0.1);
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #bbb;
+  }
+  .detail-adds-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #a78bfa; margin-bottom: 6px; font-weight: 600; }
+  .detail-chapters {
+    font-size: 10px;
+    color: #555;
+    margin-top: 12px;
+  }
+
+  .scroll-hint {
+    color: #333;
+    font-size: 11px;
+    margin-top: 32px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-label">The Missing Piece</div>
+  <div class="hero-question">"You've read the books. You have the clarity.<br>You're still stuck. That's not a knowledge problem.<br>That's a safety problem."</div>
+
+  <div class="feeder-grid">
+    <div class="feeder-book" onclick="showDetail(0)">
+      <span class="feeder-emoji">⚛️</span>
+      <div class="feeder-title">Atomic Habits</div>
+      <div class="feeder-author">James Clear</div>
+      <div class="feeder-gave">Gave you the system</div>
+      <div class="feeder-missed">Not the safety</div>
+    </div>
+    <div class="feeder-book" onclick="showDetail(1)">
+      <span class="feeder-emoji">🧘</span>
+      <div class="feeder-title">The Power of Now</div>
+      <div class="feeder-author">Eckhart Tolle</div>
+      <div class="feeder-gave">Gave you presence</div>
+      <div class="feeder-missed">Not the action</div>
+    </div>
+    <div class="feeder-book" onclick="showDetail(2)">
+      <span class="feeder-emoji">🛡️</span>
+      <div class="feeder-title">Daring Greatly</div>
+      <div class="feeder-author">Brene Brown</div>
+      <div class="feeder-gave">Gave you permission</div>
+      <div class="feeder-missed">Not the mechanism</div>
+    </div>
+    <div class="feeder-book" onclick="showDetail(3)">
+      <span class="feeder-emoji">🖕</span>
+      <div class="feeder-title">Subtle Art of Not Giving a F*ck</div>
+      <div class="feeder-author">Mark Manson</div>
+      <div class="feeder-gave">Gave you the frame</div>
+      <div class="feeder-missed">Not the direction</div>
+    </div>
+    <div class="feeder-book" onclick="showDetail(4)">
+      <span class="feeder-emoji">🌍</span>
+      <div class="feeder-title">Sapiens</div>
+      <div class="feeder-author">Yuval Noah Harari</div>
+      <div class="feeder-gave">Gave you the critique</div>
+      <div class="feeder-missed">Not the personal exit</div>
+    </div>
+    <div class="feeder-book" onclick="showDetail(5)">
+      <span class="feeder-emoji">✏️</span>
+      <div class="feeder-title">Designing Your Life</div>
+      <div class="feeder-author">Burnett & Evans</div>
+      <div class="feeder-gave">Gave you the design</div>
+      <div class="feeder-missed">Not the body</div>
+    </div>
+    <div class="feeder-book" onclick="showDetail(6)">
+      <span class="feeder-emoji">🧠</span>
+      <div class="feeder-title">Breaking the Habit of Being Yourself</div>
+      <div class="feeder-author">Joe Dispenza</div>
+      <div class="feeder-gave">Gave you meditation</div>
+      <div class="feeder-missed">Not the groan</div>
+    </div>
+  </div>
+
+  <div class="arrows">
+    <div class="arrow-line"></div>
+    <div class="arrow-line"></div>
+    <div class="arrow-line"></div>
+  </div>
+
+  <div class="the-book">
+    <div class="book-title">Find Your Flow</div>
+    <div class="book-tagline">"You already know the life you want.<br>Your body won't let you go get it."</div>
+    <div class="book-mechanism">
+      <span class="mech-pill mech-curiosity">Curiosity</span>
+      <span class="mech-arrow-small">→</span>
+      <span class="mech-pill mech-ns">Nervous System</span>
+      <span class="mech-arrow-small">→</span>
+      <span class="mech-pill mech-exp">Experience</span>
+    </div>
+    <div class="book-line">The first book that addresses all four quadrants through one mechanism:<br>the nervous system as the bridge between knowing and doing.</div>
+  </div>
+
+  <div class="scroll-hint">Click any book above to see the gap ↑</div>
+</section>
+
+<section class="detail-panel">
+  <div class="detail-card" id="detail-0">
+    <div class="detail-header">
+      <span class="feeder-emoji">⚛️</span>
+      <div><h3>Atomic Habits</h3><div class="detail-author">James Clear</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        "Every action is a vote for the type of person you want to become." Identity-based habits. The system that makes change automatic.
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        WHY the first vote is so hard to cast. Clear can't explain why you know the habit but can't start it. The answer: casting the first vote crosses an identity boundary the nervous system reads as threat.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      The dome. The cone of safety. The reason your habits cap out isn't discipline. It's what your nervous system feels safe doing. Expand the dome and the habits follow. The 4Rs (Recognise, Reconnect, Release, Rewire) address what Clear skips entirely: the somatic barrier.
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 53 (One Scary Thing), Ch 61 (Identity Flip), Ch 62 (Dome), Ch 71 (3% Better)</div>
+  </div>
+
+  <div class="detail-card" id="detail-1">
+    <div class="detail-header">
+      <span class="feeder-emoji">🧘</span>
+      <div><h3>The Power of Now</h3><div class="detail-author">Eckhart Tolle</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        Presence. Awareness. The understanding that you are not your thoughts. Transcending the ego. The pain-body concept.
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        Action. You can be fully present and still not DO the scary thing. Tolle gives you the observer but not the mover. Presence without courage = Head Full of Dreams.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      The groan challenges. The 5 layers of fear (Screen, Live, Money, Vulnerable, Authority). Progressive courage that trains the body, not just the mind. Presence is step 1. Action from essence is the destination.
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 6 (Essence), Ch 44 (Recognise), Ch 64 (The Groan), Ch 75 (Essence Louder)</div>
+  </div>
+
+  <div class="detail-card" id="detail-2">
+    <div class="detail-header">
+      <span class="feeder-emoji">🛡️</span>
+      <div><h3>Daring Greatly</h3><div class="detail-author">Brene Brown</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        Permission to be vulnerable. The armour concept. Shame resilience. "Vulnerability is not weakness."
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        The HOW. Brown says "walk into the arena." But your nervous system decides whether you can. She names shame but doesn't give you a progressive system for expanding what feels safe.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      The 5 visibility layers as a progressive exposure system. Screen → Live → Money → Vulnerable → Authority. Each layer is a specific courage challenge. The dome expands through practice, not just permission.
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 65-70 (Five Layers), Ch 69 (Vulnerable), Ch 15 (Protector's Job)</div>
+  </div>
+
+  <div class="detail-card" id="detail-3">
+    <div class="detail-header">
+      <span class="feeder-emoji">🖕</span>
+      <div><h3>The Subtle Art of Not Giving a F*ck</h3><div class="detail-author">Mark Manson</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        "Stop caring about everything." Choose your struggles. Values-based living. The counterintuitive approach to a good life.
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        What to care ABOUT. Manson says choose better values but doesn't give you a system for discovering them. No curiosity mapping, no skills/problems/people, no intersection.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      The Curiosity → Safety → Experience chain. Your values aren't chosen cognitively. They emerge from experiences. The intersection of your skills, problems, and people IS what you care about. Purpose from action, not from thinking.
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 32-37 (Skills, Problems, People, Intersection), Ch 7 (Direction)</div>
+  </div>
+
+  <div class="detail-card" id="detail-4">
+    <div class="detail-header">
+      <span class="feeder-emoji">🌍</span>
+      <div><h3>Sapiens</h3><div class="detail-author">Yuval Noah Harari</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        The cultural critique. "We live inside stories we invented." The agricultural revolution as the great trap. Collective fictions.
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        The personal exit. Harari shows the cage but doesn't hand you the key. No individual mechanism for breaking free. No nervous system, no courage system, no personal installation map.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      YOUR specific installation. The 3 boxes: Essence → Wound → Protection. The system isn't malicious, your wellbeing is a negative externality. But now you have a map of what was installed in YOU, and a method to uninstall it.
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 1 (The Promise), Ch 11 (School), Ch 13 (Installation Map), Ch 19 (Software Not Identity)</div>
+  </div>
+
+  <div class="detail-card" id="detail-5">
+    <div class="detail-header">
+      <span class="feeder-emoji">✏️</span>
+      <div><h3>Designing Your Life</h3><div class="detail-author">Burnett & Evans</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        Design thinking for careers. Prototyping life paths. Reframing "What should I do?" as "What can I try?" Odyssey plans.
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        All cognitive. No body. No nervous system. No explanation for why you DESIGN the perfect life on paper and then don't build it. The gap between the Odyssey plan and actual movement.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      The body decides what's possible, not the plan. Your Odyssey plan sits inside a dome of safety. Expand the dome and the plan becomes actionable. The Life Paths exercise with a cone of safety overlay: which paths feel Safe, Fun, Pressure, or Vibe Rise?
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 25 (Head Full of Dreams), Ch 37 (Intersection), Ch 51-52 (Gap, What Closes It)</div>
+  </div>
+
+  <div class="detail-card" id="detail-6">
+    <div class="detail-header">
+      <span class="feeder-emoji">🧠</span>
+      <div><h3>Breaking the Habit of Being Yourself</h3><div class="detail-author">Joe Dispenza</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-box detail-gave">
+        <div class="detail-gave-label">What it gave you</div>
+        The science of rewiring. "Your personality creates your personal reality." Meditation as the mechanism. Changing neural pathways through visualization.
+      </div>
+      <div class="detail-box detail-missed">
+        <div class="detail-missed-label">What it missed</div>
+        All mind (UL quadrant). No body work, no courage challenges, no community container. You can meditate for years and still not DO the scary thing. Mental rewiring without somatic evidence = affirmations.
+      </div>
+    </div>
+    <div class="detail-adds">
+      <div class="detail-adds-label">Find Your Flow adds</div>
+      The 4Rs: Recognise → Reconnect → Release → Rewire. Body-first, not mind-first. You can't rewrite a file that isn't open. Memory reconsolidation requires the encoding to be LIVE in the body before the mismatch can rewrite it. Lived rewrites, not mental ones.
+    </div>
+    <div class="detail-chapters">Book chapters: Ch 44-47 (4Rs), Ch 45 (Reconnect), Ch 52 (What Closes the Gap), Ch 62 (Dome)</div>
+  </div>
+</section>
+
+<script>
+function showDetail(index) {
+  // Hide all
+  document.querySelectorAll('.detail-card').forEach(c => c.classList.remove('visible'));
+  document.querySelectorAll('.feeder-book').forEach(b => b.classList.remove('active'));
+  // Show selected
+  document.getElementById('detail-' + index).classList.add('visible');
+  document.querySelectorAll('.feeder-book')[index].classList.add('active');
+  // Scroll to detail
+  document.getElementById('detail-' + index).scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>

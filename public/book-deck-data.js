@@ -77,7 +77,8 @@ const SLIDES = [
       { date: '2022-09-26', text: 'My search for purpose was a search to end my suffering.', protoIp: 'The Crack' },
       { date: '2022-09-26', text: 'Lost passion for Rudder because I thought it was the answer for people like me only to find it didn\'t solve anything. Dark night of the soul my instincts came to being a Buddhist monk.' },
       { date: '2022-09-26', text: 'Every stage of your dream, you only ever feel the same emotions.' },
-      { date: '2022-10-22', text: 'Thesis: we are only ever our present experience. Our memories are a story we tell ourselves. Hedonic adaption ensures the outer never changes the inner.' }
+      { date: '2022-10-22', text: 'Thesis: we are only ever our present experience. Our memories are a story we tell ourselves. Hedonic adaption ensures the outer never changes the inner.' },
+      { date: '2026-07-15', text: 'DRAFT NOTE — Write from 23yo Nic: The weird thing was I didn\'t know what was missing. I just knew something was. What was missing was a feeling of aliveness. I\'d seen that feeling as a necessary sacrifice for 15 years (school, uni, internships) because it was going to get me to a promised place. But then I arrived at the promised place and still didn\'t feel it. The problem now: I wasn\'t sacrificing for anything. This was supposed to be it. Looking back it seems silly to think anything was ever going to change. Reminds me of Michael Neill\'s equation from The Inside-Out Revolution: Struggle + Stress + Sacrifice = Success = Happiness. Simplify it: Unhappiness = Success = Happiness. Which leaves you with: Unhappiness = Happiness. I ran that equation for 15 years. Why would I find happiness in a system built on unhappiness?' }
     ],
     connects: [
       { ch: 'Ch 1', num: '01', text: 'The promise that set up the earthquake' },
@@ -234,7 +235,8 @@ const SLIDES = [
       { date: '2024-09-16', text: 'Our essence is love. However this essence becomes blocked by fear. Three reasons: 1) Survival. 2) Protection: we experience trauma that leads us to adopt behaviours to protect ourselves. 3) Conditioning. Return to love is the ultimate role of "healing."', protoIp: 'The Water Model' },
       { date: '2024-09-07', text: 'What makes us unique? The combination of things that we love. There\'s no one on earth with your combination.' },
       { date: '2023-09-15', text: 'Art is the natural expression of the spirit. It\'s opportunity to share a piece of itself.' },
-      { date: '2026-07-10', text: 'Your art is like journaling. Journaling frees up one of the 6 spots in your conscious mind, allowing the next layer of the thought to come through. Creation is excavation. Understanding deepens by resolution increasing, not by seeing more. You don\'t need to see MORE. You need to see the same thing in higher resolution. Creation is the tool that increases resolution.', protoIp: 'Creation is excavation' }
+      { date: '2026-07-10', text: 'Your art is like journaling. Journaling frees up one of the 6 spots in your conscious mind, allowing the next layer of the thought to come through. Creation is excavation. Understanding deepens by resolution increasing, not by seeing more. You don\'t need to see MORE. You need to see the same thing in higher resolution. Creation is the tool that increases resolution.', protoIp: 'Creation is excavation' },
+      { date: '2026-07-15', text: 'Instagram insight: "Depression = suppressed expression." Once I heard this it broke my heart to see all the uniforms life gives us. From primary school into the workplace. The shirt rip is about reconnecting to the essence underneath these uniforms.' }
     ],
     connects: [
       { ch: 'Ch 5', num: '05', text: 'The kid who had this essence' },
@@ -793,7 +795,8 @@ const SLIDES = [
       { date: '2024-04-29', text: 'Self-worth thoughts: Unconditional self-worth = accepting every part of you = releasing all standards / expectations. What creates standards? Conditioning. By being hurt (protection).' },
       { date: '2023-11-18', text: 'Intellectual understanding doesn\'t connect to an emotional pattern.' },
       { date: '2023-08-21', text: 'Performance improvement evolution: moving away from mindset into the body. Rather than giving yourself a statement, removing the trauma that causes you to need the statement.' },
-      { date: '2026-07-12', text: 'Hero Stage 7: Pattern Revealed. Surface patterns (Ghost, Perfectionist, People Pleaser, Controller) all trace back to ONE root belief, usually "I\'m not good enough." The software isn\'t random. It\'s all connected to a single file that was installed early and deep.' }
+      { date: '2026-07-12', text: 'Hero Stage 7: Pattern Revealed. Surface patterns (Ghost, Perfectionist, People Pleaser, Controller) all trace back to ONE root belief, usually "I\'m not good enough." The software isn\'t random. It\'s all connected to a single file that was installed early and deep.' },
+      { date: '2025-09-10', text: 'The specific software files (encoded beliefs): Success = status (salary, title, followers). Happiness = future (keep pushing, one day you\'ll be happy). Worth = outcomes (how good you perform). Emotions = unsafe (expressing negative emotions is frowned upon). Vulnerability = painful (hide under masks). Safety = sameness (safer to fit in than stand out). These aren\'t your beliefs. They were installed. It\'s not about rebellion. It\'s about remembrance.' }
     ],
     connects: [
       { ch: 'Ch 13', num: '13', text: 'The installation that created the software' },
@@ -1165,7 +1168,8 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-01-01', text: 'Theme: Learning self-trust. Biggest key to embracing uncertainty. Without it we expect the worst = fear. Fear of not being good enough comes from a lack of trust in performance.' },
       { date: '2024-08-07', text: 'To get paid you need to be remarkable. We\'re all unique so we\'re all remarkable. Never taught who we are so don\'t know our remarkableness.' },
-      { date: '2024-01-27', text: 'Fear of non-authentic act can be rationalised away. Fear of authentic act can\'t. You think I\'m silly, I think I\'m beautiful.' }
+      { date: '2024-01-27', text: 'Fear of non-authentic act can be rationalised away. Fear of authentic act can\'t. You think I\'m silly, I think I\'m beautiful.' },
+      { date: '2026-07-15', text: 'Instagram reframe: Rather than call them "limiting beliefs" I prefer to call them "safety stories." You didn\'t wake up today and decide to believe in a limiting belief. Something happened that caused it. A moment of shame, pain or fear. Your body adopted that belief to keep you safe. It\'s not a belief problem. It\'s a safety story your NS wrote to protect you.' }
     ],
     connects: [
       { ch: 'Ch 26', num: '26', text: 'Bottom-right of the Belief Graph' },
@@ -2806,7 +2810,8 @@ const SLIDES = [
     rawEntries: [
       { date: '2023-09-28', text: 'We hide the parts we love the most because we love them so much we don\'t want them to be hurt.' },
       { date: '2025-06-05', text: 'Is a vulnerability hangover simply our body\'s reaction to trauma?' },
-      { date: '2024-10-01', text: 'Being vulnerable = leads to them feeling seen. For people listening = leads to them feeling safe.' }
+      { date: '2024-10-01', text: 'Being vulnerable = leads to them feeling seen. For people listening = leads to them feeling safe.' },
+      { date: '2026-07-15', text: 'Instagram week 90 insight: "After 90 weeks it has dawned on me that doing these things that scare me hasn\'t been about overcoming fear like I first thought. It\'s been about stepping closer to love. Doing things we love is covered in fear because to love is vulnerable. To be rejected, judged or to fail is to feel the deepest pain."' }
     ],
     connects: [
       { ch: 'Ch 68', num: '68', text: 'Money: the layer below' },
@@ -3003,7 +3008,9 @@ const SLIDES = [
       { date: '2025-03-19', text: 'Manifestation = aligning frequency. Align frequency = habits + safety + visualise (mind doesn\'t know difference between reality + thought).' },
       { date: '2024-06-23', text: 'Self-actualisation keeps moving with your growth.' },
       { date: '2025-03-09', text: 'Make decisions based on future self. Decisions grounded in values / methodology / habits.' },
-      { date: '2026-07-13', text: 'When you find your flow you no longer compare yourself to others. Because your flow is unique to you. Your combination of curiosities, wounds, skills, and people is un-replicable. Comparison dies on the diagonal because there\'s nobody walking the same path. The thing that used to torture you (why am I not as far as them?) dissolves because "as far as them" doesn\'t apply to a path only you can walk.' }
+      { date: '2026-07-13', text: 'When you find your flow you no longer compare yourself to others. Because your flow is unique to you. Your combination of curiosities, wounds, skills, and people is un-replicable. Comparison dies on the diagonal because there\'s nobody walking the same path. The thing that used to torture you (why am I not as far as them?) dissolves because "as far as them" doesn\'t apply to a path only you can walk.' },
+      { date: '2026-07-15', text: 'Leaving the matrix isn\'t quitting your job. It\'s changing your beliefs. I left one matrix for another and once I climbed to the top of that mountain I felt the same. Nomads travel as a form of escape. The constant change keeps them stimulated without addressing what makes them fear being stationary. The diagonal isn\'t a location. It\'s an operating system. You can walk it in a corporate job or on a beach in Bali. The question isn\'t where you are. It\'s which beliefs are running.' },
+      { date: '2025-09-10', text: 'Instagram carousel "Escape the Matrix": The matrix isn\'t your job. It\'s the voice that fears what others think, compares you to others, is scared to take action. The matrix is ENCODED BELIEFS: success = status, happiness = future, worth = outcomes, emotions = unsafe, vulnerability = painful, safety = sameness. There\'s just as many people struggling in Bali who allegedly "escaped" as there are happy people still allegedly "trapped." Escaping means: question the beliefs you inherited, release the ones that aren\'t yours, rewire your system to feel safe being fully expressed. It\'s not about rebellion. It\'s about remembrance.' }
     ],
     connects: [
       { ch: 'Ch 29', num: '29', text: 'The diagonal on the Belief Graph' },
