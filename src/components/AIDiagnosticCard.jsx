@@ -68,8 +68,11 @@ export default function AIDiagnosticCard({ results, businessModel, painLabel, on
     // Header label
     ctx.font = `bold 12px ${FONT}`
     ctx.fillStyle = '#E9A23B'
-    ctx.letterSpacing = '2px'
+    // letterSpacing is a newer Canvas API — supported in Chrome 99+, Safari 16.4+
+    // Falls back gracefully to no spacing on older browsers
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '2px'
     ctx.fillText('AI POSSIBILITY SCORE', CARD_WIDTH / 2, 50)
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '0px'
 
     // Business model + pain subtitle
     ctx.font = `14px ${FONT}`
@@ -115,7 +118,7 @@ export default function AIDiagnosticCard({ results, businessModel, painLabel, on
         x + DOT_SIZE / 2, y + DOT_SIZE / 2, DOT_SIZE
       )
       dotGlow.addColorStop(0, COLORS[color] + '40')
-      dotGlow.addColorStop(1, 'transparent')
+      dotGlow.addColorStop(1, 'rgba(0,0,0,0)')
       ctx.beginPath()
       ctx.arc(x + DOT_SIZE / 2, y + DOT_SIZE / 2, DOT_SIZE, 0, Math.PI * 2)
       ctx.fillStyle = dotGlow
