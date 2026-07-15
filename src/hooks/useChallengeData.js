@@ -44,10 +44,11 @@ const TAB_TO_CATEGORY = {
   'business': 'Quests',      // backward compat
   'create': 'Quests',        // backward compat
   'groans': 'Courage',       // backward compat
-  'healing': 'Healing',
+  'healing': 'Courage',
   'tracker': 'Courage',      // backward compat
   'tune': 'Tune',
   'bonus': 'Tune',           // backward compat
+  'journey': 'Journey',
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
   'healing-summary': 'HealingSummary'
@@ -68,8 +69,6 @@ export function useChallengeData() {
   // UI State
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(getInitialCategory)
-  const [activeRTypeFilter, setActiveRTypeFilter] = useState('All')
-  const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('daily')
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [onboardingScreen, setOnboardingScreen] = useState('install-app') // 'install-app' | 'enable-notifications'
   const [showGroupSelection, setShowGroupSelection] = useState(false)
@@ -115,8 +114,8 @@ export function useChallengeData() {
   const [activeStageTab, setActiveStageTab] = useState(1)
   const [projectStage, setProjectStage] = useState(1)
 
-  // Sub-Tab State (for Healing and Bonus tabs)
-  const [healingSubTab, setHealingSubTab] = useState('daily') // 'daily' | 'weekly'
+  // Sub-Tab State
+  // healingSubTab archived — Healing tab merged into Courage
   // bonusSubTab archived — Bonus tab replaced by Tune
   const [playlistSubTab, setPlaylistSubTab] = useState('playlist') // 'flow-finder' | 'playlist' | 'play-profile'
 
@@ -136,7 +135,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Quests', 'Tune', 'Courage', 'Healing']
+  const categories = ['Journey', 'Quests', 'Tune', 'Courage']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 
@@ -1791,10 +1790,6 @@ export function useChallengeData() {
     loading,
     activeCategory,
     setActiveCategory,
-    activeRTypeFilter,
-    setActiveRTypeFilter,
-    activeFrequencyFilter,
-    setActiveFrequencyFilter,
     showOnboarding,
     setShowOnboarding,
     onboardingScreen,
@@ -1863,8 +1858,6 @@ export function useChallengeData() {
     setProjectStage,
 
     // Sub-Tabs
-    healingSubTab,
-    setHealingSubTab,
     playlistSubTab,
     setPlaylistSubTab,
 

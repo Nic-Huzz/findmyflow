@@ -2,7 +2,7 @@
  * leagueScoring.js — Fantasy League scoring engine
  *
  * Queries quest_completions for 3 fantasy categories:
- * Wahoos, Healing, Tune. Win 2 of 3 to take the week.
+ * Tune, Courage, Reach. Win 2 of 3 to take the week.
  */
 import { supabase } from '../supabaseClient'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS, MATCH_POINTS } from './leagueConfig'
@@ -43,6 +43,9 @@ export async function calculateUserCategoryScores(userId, startDate, endDate, ap
       }
     }
   })
+
+  // Reach: approved content submission points
+  scores.reach = approvedContentPoints
 
   return scores
 }
@@ -90,6 +93,14 @@ export async function calculateTeamScores(memberUserIds, startDate, endDate, con
       }
     }
   })
+
+  // Wire content points to reach
+  for (const [uid, pts] of Object.entries(contentPointsByUser)) {
+    if (memberScores[uid]) {
+      memberScores[uid].reach = (memberScores[uid].reach || 0) + pts
+    }
+    teamTotals.reach = (teamTotals.reach || 0) + pts
+  }
 
   return { ...teamTotals, members: memberScores }
 }

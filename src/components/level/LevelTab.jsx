@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../auth/AuthProvider'
 import confetti from 'canvas-confetti'
@@ -25,12 +26,12 @@ import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
-import QuestPathMap from './QuestPathMap'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import './LevelTab.css'
 
-export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
+export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onRefreshPoints = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   const { user } = useAuth()
+  const navigate = useNavigate()
   // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
   const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
@@ -49,10 +50,11 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasFlowDeepDive, setHasFlowDeepDive] = useState({}) // generic tracker for flow-based deep dives
   const [hasWoundMap, setHasWoundMap] = useState(false)
   const [hasLifePaths, setHasLifePaths] = useState(false)
+  const [hasCareerAlignment, setHasCareerAlignment] = useState(false)
   const [lifePathCareers, setLifePathCareers] = useState([]) // careers from life_path_sessions
   const [lifePathCurrentState, setLifePathCurrentState] = useState(null)
   const [lifePathSafety, setLifePathSafety] = useState(0)
-  const [showPathMap, setShowPathMap] = useState(false)
+  // showPathMap removed — now navigates to /quest-map
 
   // Quest board state
   const [quests, setQuests] = useState([])
@@ -64,8 +66,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [addQuestCareerId, setAddQuestCareerId] = useState(null) // career_id from life paths dropdown
   const [addQuestCustom, setAddQuestCustom] = useState(false) // true = typing new path, false = picked from dropdown
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
-  const [allLevelProgress, setAllLevelProgress] = useState({}) // { level: { zone, milestone_completed, ... } }
-  const [zoneModalLevel, setZoneModalLevel] = useState(null) // which zone card modal is open
   const [unlockExplainer, setUnlockExplainer] = useState(null) // 'courage' | 'healing' | null
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
@@ -208,6 +208,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .then(({ data }) => {
         if (data?.length > 0) setHasCareerClarity(true)
       })
+    // Check if career alignment completed
+    supabase
+      .from('career_alignments')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0) setHasCareerAlignment(true)
+      })
     // Check if people matching completed (saved favourites in localStorage)
     try {
       const savedPeople = localStorage.getItem('findmyflow_saved_people')
@@ -275,19 +284,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     }
     // Load quests + tasks
     loadQuests()
-    // Load all level progress for zone + milestone scroll strips
-    supabase
-      .from('user_level_progress')
-      .select('current_level, zone_diagnosis_zone, zone_diagnosis_boss, milestone_commitment, milestone_completed')
-      .eq('user_id', userId)
-      .then(({ data }) => {
-        if (data) {
-          const byLevel = {}
-          data.forEach(d => { byLevel[d.current_level] = d })
-          setAllLevelProgress(byLevel)
-        }
-      })
-
     // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
       .from('nikigai_clusters')
@@ -306,7 +302,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .from('groan_challenges')
       .select('id')
       .eq('user_id', userId)
-      .not('wahoo_category', 'is', null)
+      .in('status', ['active', 'completed'])
       .limit(1)
       .then(({ data }) => {
         if (data?.length > 0) setHasWahoos(true)
@@ -420,75 +416,16 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       {/* ══════ QUEST BOARD ══════ */}
 
-      {/* Your Journey — only show if any item is incomplete */}
-      {(!hasLifeMap || !hasLifePaths || !hasEssenceAvatar || !(hasWahoos || hasPlaySkills) || !hasHealingCompletion) && (
-        <div className="quest-section">
-          <div className="quest-section-header">
-            <span className="quest-section-icon">📖</span>
-            <span className="quest-section-title">Your Journey</span>
-          </div>
-          {!hasLifeMap && (
-            <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story holds the answers.', icon: '📖' }} isCompleted={false} />
-          )}
-          {!hasLifePaths && (
-            <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={false} />
-          )}
-          {!hasEssenceAvatar && (
-            <DeepDiveCard deepDive={{ id: 'hero_avatar', name: 'Create Your Hero Avatar', route: '/essence-mirror', narrative: 'Define who you are.', icon: '🦸' }} isCompleted={false} />
-          )}
-          {!(hasWahoos || hasPlaySkills) && hasLifePaths && (
-            <div className="level-deep-dive" onClick={() => setUnlockExplainer('courage')} style={{ cursor: 'pointer' }}>
-              <div className="level-dd-icon">🔥</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Courage Tab</div>
-                <div className="level-dd-narrative">Name what would light you up.</div>
-              </div>
-              <span className="level-dd-status start">Start</span>
-            </div>
-          )}
-          {!(hasWahoos || hasPlaySkills) && !hasLifePaths && (
-            <div className="level-deep-dive" style={{ opacity: 0.5 }}>
-              <div className="level-dd-icon">🔒</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Courage Tab</div>
-                <div className="level-dd-narrative">Complete Life Paths first.</div>
-              </div>
-              <span className="level-dd-status locked">Locked</span>
-            </div>
-          )}
-          {!hasHealingCompletion && hasLifePaths && (
-            <div className="level-deep-dive" onClick={() => setUnlockExplainer('healing')} style={{ cursor: 'pointer' }}>
-              <div className="level-dd-icon">💚</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Healing Tab</div>
-                <div className="level-dd-narrative">Remove what's blocking your path.</div>
-              </div>
-              <span className="level-dd-status start">Start</span>
-            </div>
-          )}
-          {!hasHealingCompletion && !hasLifePaths && (
-            <div className="level-deep-dive" style={{ opacity: 0.5 }}>
-              <div className="level-dd-icon">🔒</div>
-              <div className="level-dd-info">
-                <div className="level-dd-name">Unlock Your Healing Tab</div>
-                <div className="level-dd-narrative">Complete Life Paths first.</div>
-              </div>
-              <span className="level-dd-status locked">Locked</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Life Path Progress button */}
+      {/* Active Quests */}
+      {/* Life Path Progress button — above quests */}
       {hasLifePaths && quests.filter(q => q.status === 'active').length > 0 && (
-        <button className="quest-path-btn" onClick={() => setShowPathMap(true)}>
+        <button className="quest-path-btn" onClick={() => navigate('/quest-map')}>
           <span className="quest-path-btn-icon">✦</span>
           <span>Your Life Paths</span>
           <span className="quest-path-btn-arrow">→</span>
         </button>
       )}
 
-      {/* Active Quests */}
       <div className="quest-section">
         <div className="quest-section-header">
           <span className="quest-section-icon">⚔️</span>
@@ -510,8 +447,11 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <a href="/try/life-paths">Complete Life Paths</a> to see your progress map
           </div>
         )}
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').map(q => (
-          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={loadQuests} />
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').sort((a, b) => {
+          const order = { vibe: 0, peace: 1, anxious: 2, shutdown: 3 }
+          return (order[a.predicted_state] ?? 4) - (order[b.predicted_state] ?? 4)
+        }).map(q => (
+          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
         ))}
         {hasLifePaths && !showAddQuest && (
           <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>
@@ -584,7 +524,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         <div className="struggle-pills">
           <button className={`struggle-pill ${activeStruggle === 'direction' ? 'active' : ''}`}
             onClick={() => setActiveStruggle(activeStruggle === 'direction' ? null : 'direction')}>
-            🧭 Should I start my own thing?
+            🧭 What career path is best?
           </button>
           <button className={`struggle-pill ${activeStruggle === 'fear' ? 'active' : ''}`}
             onClick={() => setActiveStruggle(activeStruggle === 'fear' ? null : 'fear')}>
@@ -598,7 +538,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
         {activeStruggle === 'direction' && (
           <div className="struggle-flows">
-            <DeepDiveCard deepDive={{ id: 'career_clarity', name: 'Career Clarity Quiz', route: '/career-clarity', narrative: 'Should you stay, pivot, or build?', icon: '🧭' }} isCompleted={hasCareerClarity} />
+            <DeepDiveCard deepDive={{ id: 'career_alignment', name: 'What career path is best?', route: '/career-alignment', narrative: 'See how aligned your current career is with your curiosities.', icon: '🎯' }} isCompleted={hasCareerAlignment} />
+            <DeepDiveCard deepDive={{ id: 'career_clarity', name: 'Career Clarity Quiz', route: '/career-clarity', narrative: 'Different job or start own thing?', icon: '🧭' }} isCompleted={hasCareerClarity} />
           </div>
         )}
 
@@ -616,96 +557,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           </div>
         )}
       </div>
-
-      {/* Zone Assessments — horizontal scroll */}
-      <div className="quest-section">
-        <div className="quest-section-header">
-          <span className="quest-section-icon">📊</span>
-          <span className="quest-section-title">Zone Assessments</span>
-        </div>
-        <div className="quest-scroll-strip">
-          {Object.entries(LEVEL_CONFIG).filter(([n]) => parseInt(n) >= 1 && parseInt(n) <= 8).map(([num, lvl]) => {
-            const n = parseInt(num)
-            const progress = allLevelProgress[n]
-            const hasZone = !!progress?.zone_diagnosis_zone
-            return (
-              <button key={n} className={`quest-scroll-card ${hasZone ? 'completed' : ''}`}
-                onClick={() => setZoneModalLevel(n)}>
-                <div className="quest-scroll-label">{lvl.name}</div>
-                {hasZone && <div className="quest-scroll-check">✅</div>}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Zone Modal */}
-      {zoneModalLevel && (() => {
-        const lvl = LEVEL_CONFIG[zoneModalLevel]
-        const progress = allLevelProgress[zoneModalLevel]
-        return (
-          <div className="quest-modal-overlay" onClick={() => setZoneModalLevel(null)}>
-            <div className="quest-modal" onClick={e => e.stopPropagation()}>
-              <button className="quest-modal-close" onClick={() => setZoneModalLevel(null)}>✕</button>
-              <h2 className="quest-modal-title">{lvl.name}</h2>
-              <p className="quest-modal-question">{lvl.question}</p>
-
-              {lvl.graph && lvl.zones && (
-                <div style={{ margin: '0 0 14px' }}>
-                  <SweetSpotGraph title={lvl.graph} yAxis={lvl.yAxis} xAxis={lvl.xAxis} zones={lvl.zones} />
-                </div>
-              )}
-
-              {progress?.zone_diagnosis_zone ? (
-                <div className="quest-modal-result">
-                  <div className="quest-modal-result-label">Your zone:</div>
-                  <div className="quest-modal-result-name">{lvl.zones?.[progress.zone_diagnosis_zone]?.name}</div>
-                  <div className="quest-modal-result-desc">{lvl.zones?.[progress.zone_diagnosis_zone]?.description}</div>
-                </div>
-              ) : null}
-
-              <a href={`/zone-diagnosis/${zoneModalLevel}?returnTo=/7-day-challenge`}
-                className="quest-modal-cta" style={{ textDecoration: 'none' }}>
-                {progress?.zone_diagnosis_zone ? 'Retake Zone Diagnosis' : 'Start Zone Diagnosis'} →
-              </a>
-
-              {lvl.zones?.[progress?.zone_diagnosis_zone]?.boss && (
-                <div className="quest-modal-boss">
-                  <div className="quest-modal-boss-label">Boss Fight:</div>
-                  <div className="quest-modal-boss-name">{lvl.zones[progress.zone_diagnosis_zone].boss}</div>
-                </div>
-              )}
-
-              {lvl.essenceQuestion && (
-                <p className="quest-modal-essence">{lvl.essenceQuestion}</p>
-              )}
-            </div>
-          </div>
-        )
-      })()}
-
-      {/* Completed — Life Map, Life Paths (viewable), closed quests */}
-      {(quests.some(q => q.status !== 'active') || hasLifeMap || hasLifePaths) && (
-        <div className="quest-section quest-completed-section">
-          <div className="quest-section-header">
-            <span className="quest-section-icon">✅</span>
-            <span className="quest-section-title">Completed</span>
-          </div>
-          {hasLifeMap && (
-            <DeepDiveCard deepDive={{ id: 'life_map', name: 'Life Map', route: '/life-map', narrative: 'Your life story.', icon: '📖' }} isCompleted={true} />
-          )}
-          {hasLifePaths && (
-            <DeepDiveCard deepDive={{ id: 'life_paths', name: 'Map Your Life Paths', route: '/life-paths', narrative: 'See which life paths are open to you right now.', icon: '🗺️' }} isCompleted={true} />
-          )}
-          {quests.filter(q => q.status !== 'active').map(q => (
-            <div key={q.id} className="quest-closed-item">
-              <span className="quest-closed-icon">{q.close_reason === 'achieved' ? '🎉' : q.close_reason === 'lost_interest' ? '🤔' : '⏳'}</span>
-              <span className="quest-closed-label">{q.label}</span>
-              <span className="quest-closed-status">{q.close_reason === 'achieved' ? 'Achieved' : q.close_reason === 'lost_interest' ? 'Lost interest' : 'Paused'}</span>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Unlock explainer modals */}
       {unlockExplainer === 'courage' && (
@@ -730,15 +581,15 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         <div className="quest-modal-overlay" onClick={() => setUnlockExplainer(null)}>
           <div className="quest-modal" onClick={e => e.stopPropagation()}>
             <button className="quest-modal-close" onClick={() => setUnlockExplainer(null)}>✕</button>
-            <h2 className="quest-modal-title">💚 Your Healing Tab</h2>
+            <h2 className="quest-modal-title">💚 Your Courage Tab</h2>
             <p className="quest-modal-question" style={{ fontStyle: 'italic', color: '#5e17eb' }}>Removing what blocks your path.</p>
             <p className="quest-modal-question">Every fear you feel has a source. A moment in your past where expressing yourself like this felt unsafe.</p>
             <p className="quest-modal-question">Your nervous system remembers. It created a protective voice to stop you from ever feeling that way again. That voice is why you hesitate, avoid, and play small.</p>
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
             <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Healing') }}>
-              Open Healing Tab →
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Courage') }}>
+              Open Courage Tab →
             </button>
           </div>
         </div>
@@ -907,7 +758,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Healing')}
+                  onClick={() => onNavigateTab?.('Courage')}
                   style={{ cursor: 'pointer' }}
                 >
                   {healingDone > 0 ? `${healingDone}/${healingTarget}` : 'Start'}
@@ -982,19 +833,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       )}
       </div>{/* end hidden wrapper */}
 
-      {/* Life Path Progress Map */}
-      {showPathMap && (
-        <QuestPathMap
-          quests={quests}
-          questTasks={questTasks}
-          trunkState={lifePathCurrentState}
-          safety={lifePathSafety}
-          careers={lifePathCareers}
-          userId={userId}
-          onUpdate={loadQuests}
-          onClose={() => setShowPathMap(false)}
-        />
-      )}
     </div>
   )
 }

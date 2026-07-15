@@ -13,6 +13,7 @@ import LifePathMap from '../components/LifePathMap/LifePathMap'
 import { STATES, STATE_META, STUCK_REASONS, stateColor, stateY } from '../components/LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import { hapticLight } from '../lib/haptics'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import './FacilitateLifePaths.css'
@@ -20,15 +21,15 @@ import './FacilitateLifePaths.css'
 const STEPS = {
   INTRO: 'intro',
   CURRENT: 'current',
+  SUGGESTIONS: 'suggestions',
   ENTER: 'enter',
   TAG: 'tag',
   SPRING: 'spring',
   TAG_NEW: 'tag_new',
   READING: 'reading',
   MAP: 'map',
-  STUCK: 'stuck',
-  STUCK_SPRING: 'stuck_spring',
-  WAHOOS: 'wahoos',
+  SELECT_QUESTS: 'select_quests',
+  STUCK_ALL: 'stuck_all',
   COMPLETE: 'complete',
 }
 
@@ -55,6 +56,7 @@ export default function LifePathFlow() {
   const [pulseActive, setPulseActive] = useState(false)
   const [highlightId, setHighlightId] = useState(null)
   const [selectedWahooId, setSelectedWahooId] = useState(null)
+  const [selectedQuestIds, setSelectedQuestIds] = useState(new Set())
   const [wahooSteps, setWahooSteps] = useState({})
   const [wahooInput, setWahooInput] = useState('')
   const [springReady, setSpringReady] = useState(false)
@@ -66,6 +68,11 @@ export default function LifePathFlow() {
   const wahooInputRef = useRef(null)
   const stuckInputRef = useRef(null)
   const reasonTimerRef = useRef(null)
+
+  // AI suggestions
+  const [suggestedPaths, setSuggestedPaths] = useState([])
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false)
+  const [selectedSuggestions, setSelectedSuggestions] = useState(new Set())
 
   // Derived
   const taggedCareers = careers.filter(c => c.predictedState)
@@ -109,8 +116,10 @@ export default function LifePathFlow() {
           setStuckPoints(data.stuck_points || [])
           setWahooSteps(data.wahoo_steps || {})
           setSafety(data.safety || 0)
-          // Resume at saved step, or MAP if completed (so they can explore another career)
-          const savedStep = data.step === 'complete' ? STEPS.MAP : (STEPS[data.step?.toUpperCase()] || data.step)
+          // Resume at saved step, or MAP if completed. Map old step names to new.
+          const stepMap = { stuck: 'select_quests', stuck_spring: 'select_quests', wahoos: 'select_quests', courage_tag: 'select_quests' }
+          const rawStep = data.step === 'complete' ? STEPS.MAP : (stepMap[data.step] || data.step)
+          const savedStep = STEPS[rawStep?.toUpperCase()] || rawStep
           setStep(STEP_ORDER.includes(savedStep) ? savedStep : STEPS.MAP)
           // Restore tagTotal if resuming mid-TAG
           const restoredCareers = data.careers || []
@@ -136,7 +145,7 @@ export default function LifePathFlow() {
     if (step === STEPS.CURRENT || step === STEPS.ENTER) {
       setTimeout(() => inputRef.current?.focus(), 100)
     }
-    if (step === STEPS.STUCK || step === STEPS.STUCK_SPRING) {
+    if (step === STEPS.STUCK_ALL) {
       setTimeout(() => stuckInputRef.current?.focus(), 100)
     }
   }, [step])
@@ -153,6 +162,46 @@ export default function LifePathFlow() {
     }
   }, [step])
 
+  // Fetch AI suggestions when entering SUGGESTIONS step
+  useEffect(() => {
+    if (step !== STEPS.SUGGESTIONS || suggestedPaths.length > 0) return
+    ;(async () => {
+      setSuggestionsLoading(true)
+      try {
+        // Fetch curiosity clusters + life map skills/problems
+        const [{ data: clusters }, { data: skillsData }, { data: problemsData }] = await Promise.all([
+          supabase.from('curiosity_clusters').select('cluster_name, branch, why').eq('user_id', user.id),
+          supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', user.id).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
+          supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', user.id).eq('cluster_type', 'problems').eq('cluster_stage', 'final'),
+        ])
+
+        const hasData = clusters?.length || skillsData?.length || problemsData?.length
+        if (!hasData) {
+          // No data to suggest from — skip to manual entry
+          setStep(STEPS.ENTER)
+          setSuggestionsLoading(false)
+          return
+        }
+
+        const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
+          body: {
+            curiosityClusters: clusters || [],
+            skills: (skillsData || []).map(s => s.cluster_label),
+            problems: (problemsData || []).map(p => p.cluster_label),
+          },
+        })
+
+        if (error) throw error
+        if (data?.paths?.length) setSuggestedPaths(data.paths)
+      } catch (err) {
+        console.error('Path suggestions failed:', err)
+        // AI failed — skip to manual entry rather than showing misleading "no data" message
+        setStep(STEPS.ENTER)
+      }
+      setSuggestionsLoading(false)
+    })()
+  }, [step, suggestedPaths.length, user?.id])
+
   useEffect(() => {
     if (step === STEPS.READING) {
       setShowPunchline(false); setShowPunchline2(false); setShowContinue(false)
@@ -168,9 +217,7 @@ export default function LifePathFlow() {
   // Cleanup reason timer on unmount
   useEffect(() => { return () => clearTimeout(reasonTimerRef.current) }, [])
 
-  useEffect(() => {
-    if (selectedWahooId && step === STEPS.WAHOOS) setTimeout(() => wahooInputRef.current?.focus(), 200)
-  }, [selectedWahooId, step])
+  // wahooInputRef focus removed — WAHOOS step no longer exists
 
   // ── Save ──
   const saveSession = useCallback(async (overrides = {}) => {
@@ -246,23 +293,26 @@ export default function LifePathFlow() {
   }, [careers])
 
   // ── Stuck point actions ──
-  const addStuckPoint = useCallback((fromSpring = false) => {
-    if (!stuckInput.trim() || !selectedWahooId) return
+  // currentStuckCareerId tracks which career section the user is typing in on STUCK_ALL
+  const [currentStuckCareerId, setCurrentStuckCareerId] = useState(null)
+
+  const addStuckPoint = useCallback((careerId) => {
+    if (!stuckInput.trim() || !careerId) return
     const newSp = {
       id: 'sp' + spNextId++,
-      careerId: selectedWahooId,
+      careerId,
       text: stuckInput.trim(),
       reason: null,
       reasonLabel: null,
       reasonEmoji: null,
-      fromSpring,
+      fromSpring: false,
       addedToWahoos: false,
     }
     setStuckPoints(prev => [...prev, newSp])
     setStuckInput('')
     setActiveReasonId(newSp.id)
     setTimeout(() => stuckInputRef.current?.focus(), 50)
-  }, [stuckInput, selectedWahooId])
+  }, [stuckInput])
 
   const setStuckReason = useCallback((spId, reason) => {
     setStuckPoints(prev => prev.map(sp =>
@@ -282,7 +332,7 @@ export default function LifePathFlow() {
     setStuckPoints(prev => prev.map(s => s.id === spId ? { ...s, addedToWahoos: true } : s))
     setWahooSteps(prev => ({
       ...prev,
-      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: sp.text, done: false, fromStuckPoint: spId }],
+      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: sp.text, done: false, isCourage: false, fromStuckPoint: spId }],
     }))
   }, [stuckPoints, selectedWahooId])
 
@@ -291,7 +341,7 @@ export default function LifePathFlow() {
     if (!wahooInput.trim() || !selectedWahooId) return
     setWahooSteps(prev => ({
       ...prev,
-      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: wahooInput.trim(), done: false }],
+      [selectedWahooId]: [...(prev[selectedWahooId] || []), { text: wahooInput.trim(), done: false, isCourage: false }],
     }))
     setWahooInput('')
     setTimeout(() => wahooInputRef.current?.focus(), 50)
@@ -333,7 +383,7 @@ export default function LifePathFlow() {
     const savedEntries = [] // { idx, groanId }
     for (let i = 0; i < steps.length; i++) {
       const ws = steps[i]
-      if (ws.savedToGroan) continue
+      if (ws.savedToGroan || !ws.isCourage) continue
       try {
         const sp = ws.fromStuckPoint ? stuckPoints.find(s => s.id === ws.fromStuckPoint) : null
         const { data: dbRecord } = await createGroanChallenge({
@@ -510,8 +560,8 @@ export default function LifePathFlow() {
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: 14, opacity: 0.4, letterSpacing: '0.5px', marginBottom: 12 }}>{currentCareer.label}</div>
-                  <div style={{ fontSize: 13, opacity: 0.45, marginBottom: 8 }}>Your body has four modes.</div>
+                  <div style={{ fontSize: 14, color: 'rgba(0,0,0,0.5)', letterSpacing: '0.5px', marginBottom: 12 }}>{currentCareer.label}</div>
+                  <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.55)', marginBottom: 8 }}>Your body has four modes.</div>
                   <div style={{ display: 'flex', gap: 6, marginBottom: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
                     {[...STATES].reverse().map(s => {
                       const m = STATE_META[s]
@@ -519,20 +569,78 @@ export default function LifePathFlow() {
                       return (
                         <div key={s} style={{
                           padding: '6px 12px', borderRadius: 20, fontSize: 12, fontWeight: isActive ? 600 : 400,
-                          background: isActive ? `${m.color}20` : 'rgba(255,255,255,0.04)',
-                          color: isActive ? m.color : 'rgba(255,255,255,0.25)',
-                          border: isActive ? `1px solid ${m.color}40` : '1px solid transparent',
+                          background: isActive ? `${m.color}20` : 'rgba(0,0,0,0.04)',
+                          color: isActive ? m.color : 'rgba(0,0,0,0.35)',
+                          border: isActive ? `1px solid ${m.color}40` : '1px solid rgba(0,0,0,0.08)',
                         }}>
                           {m.emoji} {m.label}
                         </div>
                       )
                     })}
                   </div>
-                  <div style={{ fontSize: 14, opacity: 0.5, lineHeight: 1.7, maxWidth: 300, textAlign: 'center', marginBottom: 20 }}>
+                  <div style={{ fontSize: 14, color: 'rgba(0,0,0,0.55)', lineHeight: 1.7, maxWidth: 300, textAlign: 'center', marginBottom: 20 }}>
                     <p style={{ margin: '0 0 8px' }}>The one you spend the most time in decides which life paths feel possible.</p>
-                    <p style={{ margin: 0 }}>Right now, you're walking the <span style={{ color: STATE_META[currentCareer.state]?.color, opacity: 1 }}>{STATE_META[currentCareer.state]?.label}</span> path.</p>
+                    <p style={{ margin: 0 }}>Right now, you're walking the <span style={{ color: STATE_META[currentCareer.state]?.color }}>{STATE_META[currentCareer.state]?.label}</span> path.</p>
                   </div>
-                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>What else is out there? →</button>
+                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.SUGGESTIONS)}>What else is out there? →</button>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* SUGGESTIONS */}
+          {step === STEPS.SUGGESTIONS && (
+            <div className="flp-panel-step">
+              {suggestionsLoading ? (
+                <>
+                  <div className="flp-panel-step-prompt">Finding paths that match your curiosities...</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: 20 }}>
+                    <div style={{ width: 32, height: 32, border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#fbbf24', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  </div>
+                </>
+              ) : suggestedPaths.length > 0 ? (
+                <>
+                  <div className="flp-panel-step-prompt">Based on your curiosities and skills, these paths might light you up.</div>
+                  <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.4)', fontStyle: 'italic', marginBottom: 12 }}>Tap any that resonate. You can also add your own on the next screen.</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                    {suggestedPaths.map((path, i) => {
+                      const selected = selectedSuggestions.has(i)
+                      return (
+                        <button key={i} onClick={() => {
+                          hapticLight()
+                          setSelectedSuggestions(prev => {
+                            const next = new Set(prev)
+                            if (next.has(i)) { next.delete(i); const match = careers.find(c => c.label === path.name); if (match) removeCareer(match.id) }
+                            else { next.add(i); addCareer(path.name) }
+                            return next
+                          })
+                        }} style={{
+                          textAlign: 'left', padding: '12px 14px', borderRadius: 12, cursor: 'pointer', fontFamily: 'inherit',
+                          border: selected ? '2px solid #E9A23B' : '1px solid rgba(0,0,0,0.1)',
+                          background: selected ? 'rgba(233,162,59,0.08)' : 'white',
+                          transition: 'all 0.2s',
+                          color: '#1a1a2e',
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontSize: 16, flexShrink: 0, color: selected ? '#E9A23B' : 'rgba(0,0,0,0.25)' }}>{selected ? '\u2713' : '\u{25CB}'}</span>
+                            <div>
+                              <div style={{ fontSize: 14, fontWeight: 700, color: selected ? '#E9A23B' : '#1a1a2e' }}>{path.name}</div>
+                              <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.5)', lineHeight: 1.4, marginTop: 2 }}>{path.description}</div>
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>
+                    {selectedSuggestions.size > 0 ? `Continue with ${selectedSuggestions.size} selected →` : 'Skip, I\'ll add my own →'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="flp-panel-step-prompt">What are all the career options available to you?</div>
+                  <div style={{ fontSize: 13, opacity: 0.4, fontStyle: 'italic', marginBottom: 8 }}>Complete your Curiosity Map and Life Map for personalised suggestions.</div>
+                  <button className="flp-advance-btn" onClick={() => setStep(STEPS.ENTER)}>Add paths manually →</button>
                 </>
               )}
             </div>
@@ -614,8 +722,8 @@ export default function LifePathFlow() {
                     <p>We don't rise to the level of our ambitions.</p><p>We fall to the level that feels emotionally safe.</p>
                   </div>
                   <div className={`flp-punchline flp-punchline-2 ${showPunchline2 ? 'visible' : ''}`}>
-                    <p style={{ margin: '0 0 12px' }}>The cone of light on your map is where you feel safe right now.</p>
-                    <p style={{ margin: 0 }}>Want help expanding it to reach the height of your ambitions?</p>
+                    <p style={{ margin: '0 0 12px' }}>The golden cone on your map is where you feel safe right now. Everything outside it feels too risky.</p>
+                    <p style={{ margin: 0 }}>Vibe Rise expands what feels possible.</p>
                   </div>
                 </>
               )}
@@ -641,229 +749,166 @@ export default function LifePathFlow() {
             </div>
           )}
 
-          {/* ── MAP: pick a career ── */}
-          {step === STEPS.MAP && (
+          {/* ── MAP / SELECT_QUESTS: multi-select careers to pursue ── */}
+          {(step === STEPS.MAP || step === STEPS.SELECT_QUESTS) && (
             <div className="flp-panel-step">
-              <div className="flp-panel-step-prompt">Which career path pulls you most?</div>
+              <div className="flp-panel-step-prompt">Which of these do you want to actively pursue?</div>
+              <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.4)', marginBottom: 12 }}>Pick as many as feel right. We recommend 1-3 to start.</div>
               <div className="flp-wahoo-career-list">
                 {careers.filter(c => c.predictedState).map(c => {
-                  const spCount = stuckPoints.filter(sp => sp.careerId === c.id).length
-                  const wsCount = (wahooSteps[c.id] || []).length
+                  const isSelected = selectedQuestIds.has(c.id)
                   return (
-                    <div key={c.id} className={`flp-wahoo-career ${selectedWahooId === c.id ? 'active' : ''}`}
-                      onClick={() => { setSelectedWahooId(c.id); setHighlightId(c.id) }}>
+                    <div key={c.id} className={`flp-wahoo-career ${isSelected ? 'active' : ''}`}
+                      onClick={() => {
+                        hapticLight()
+                        setSelectedQuestIds(prev => {
+                          const next = new Set(prev)
+                          if (next.has(c.id)) next.delete(c.id)
+                          else next.add(c.id)
+                          return next
+                        })
+                        setHighlightId(c.id)
+                      }}>
+                      <span style={{ fontSize: 14, flexShrink: 0 }}>{isSelected ? '✓' : '○'}</span>
                       <div className="flp-wahoo-dot" style={{ background: stateColor(c.predictedState) }} />
                       <span style={{ flex: 1 }}>{c.label}</span>
-                      {(spCount > 0 || wsCount > 0) && (
-                        <span style={{ fontSize: 11, opacity: 0.35 }}>{spCount > 0 ? `${spCount} blocks` : ''}{spCount > 0 && wsCount > 0 ? ', ' : ''}{wsCount > 0 ? `${wsCount} steps` : ''}</span>
-                      )}
                     </div>
                   )
                 })}
               </div>
-              {selectedWahooId && (
-                <button className="flp-advance-btn" onClick={() => setStep(STEPS.STUCK)} style={{ marginTop: 12 }}>
-                  Break it down →
+              {selectedQuestIds.size > 0 && (
+                <button className="flp-advance-btn" onClick={() => setStep(STEPS.STUCK_ALL)} style={{ marginTop: 12 }}>
+                  Break these down →
                 </button>
               )}
             </div>
           )}
 
-          {/* ── STUCK: what have you been avoiding? ── */}
-          {step === STEPS.STUCK && selectedWahooId && (
+          {/* ── STUCK_ALL: one screen, all selected careers ── */}
+          {step === STEPS.STUCK_ALL && (
             <div className="flp-panel-step">
-              <div className="flp-panel-step-prompt">
-                What have you wanted to do to get closer to "{careers.find(c => c.id === selectedWahooId)?.label}" but haven't yet?
-              </div>
-              <div className="flp-input-row">
-                <input ref={stuckInputRef} className="flp-input" type="text" value={stuckInput}
-                  onChange={e => { setStuckInput(e.target.value); if (e.target.value) { setActiveReasonId(null); clearTimeout(reasonTimerRef.current) } }}
-                  onKeyDown={e => { if (e.key === 'Enter' && stuckInput.trim()) addStuckPoint(false) }}
-                  placeholder="Something you've been putting off..." />
-                <button className="flp-input-submit" onClick={() => addStuckPoint(false)} disabled={!stuckInput.trim()}>Add</button>
-              </div>
-              <div className="flp-career-list-display" style={{ marginTop: 8 }}>
-                {careerStuckPoints.filter(sp => !sp.fromSpring).map(sp => (
-                  <div key={sp.id}>
-                    <div className="flp-career-list-item">
-                      <span className="flp-career-list-name">{sp.text}</span>
-                      {sp.reason && <span style={{ fontSize: 12, opacity: 0.5 }}>{sp.reasonEmoji} {sp.reasonLabel}</span>}
-                      <span className="flp-pill-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
+              <div className="flp-panel-step-prompt">What have you been putting off?</div>
+              <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.4)', marginBottom: 16 }}>For each path, add the things you've wanted to do but haven't yet. These become your courage challenges.</div>
+
+              {careers.filter(c => selectedQuestIds.has(c.id)).map(c => {
+                const cStuck = stuckPoints.filter(sp => sp.careerId === c.id)
+                return (
+                  <div key={c.id} style={{ marginBottom: 20, padding: '14px 16px', background: 'rgba(0,0,0,0.02)', borderRadius: 14, border: '1px solid rgba(0,0,0,0.06)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                      <div className="flp-wahoo-dot" style={{ background: stateColor(c.predictedState) }} />
+                      <span style={{ fontSize: 14, fontWeight: 700, color: '#1a1a2e' }}>{c.label}</span>
                     </div>
-                    {activeReasonId === sp.id && (
-                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', padding: '4px 8px 8px', animation: 'flpFadeIn 0.3s ease' }}>
-                        {STUCK_REASONS.map(r => (
-                          <button key={r.id} onClick={() => setStuckReason(sp.id, r)}
-                            style={{ padding: '4px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent',
-                              color: 'inherit', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', opacity: 0.6, transition: 'opacity 0.15s' }}
-                            onMouseEnter={e => e.target.style.opacity = 1} onMouseLeave={e => e.target.style.opacity = 0.6}>
-                            {r.emoji} {r.label}
-                          </button>
-                        ))}
+
+                    {/* Existing stuck points for this career */}
+                    {cStuck.map(sp => (
+                      <div key={sp.id} className="flp-career-list-item" style={{ background: 'white', borderRadius: 10, marginBottom: 4, padding: '8px 12px' }}>
+                        <span className="flp-career-list-name">{sp.text}</span>
+                        <span className="flp-pill-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {careerStuckPoints.filter(sp => !sp.fromSpring).length > 0 && (
-                <button className="flp-advance-btn" onClick={() => setStep(STEPS.STUCK_SPRING)} style={{ marginTop: 12 }}>
-                  That's all I can think of →
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* ── STUCK_SPRING: push for more ── */}
-          {step === STEPS.STUCK_SPRING && selectedWahooId && (
-            <div className="flp-panel-step">
-              <div className="flp-panel-step-prompt">
-                Is that really all? What are all the moments you felt inspired to do something but didn't end up actually doing it?
-              </div>
-              <div className="flp-input-row">
-                <input ref={stuckInputRef} className="flp-input" type="text" value={stuckInput}
-                  onChange={e => { setStuckInput(e.target.value); if (e.target.value) { setActiveReasonId(null); clearTimeout(reasonTimerRef.current) } }}
-                  onKeyDown={e => { if (e.key === 'Enter' && stuckInput.trim()) addStuckPoint(true) }}
-                  placeholder="Actually, also..." />
-                <button className="flp-input-submit" onClick={() => addStuckPoint(true)} disabled={!stuckInput.trim()}>Add</button>
-              </div>
-              <div className="flp-career-list-display" style={{ marginTop: 8 }}>
-                {careerStuckPoints.filter(sp => sp.fromSpring).map(sp => (
-                  <div key={sp.id}>
-                    <div className="flp-career-list-item">
-                      <span className="flp-career-list-name">{sp.text}</span>
-                      {sp.reason && <span style={{ fontSize: 12, opacity: 0.5 }}>{sp.reasonEmoji} {sp.reasonLabel}</span>}
-                      <span className="flp-pill-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
-                    </div>
-                    {activeReasonId === sp.id && (
-                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', padding: '4px 8px 8px', animation: 'flpFadeIn 0.3s ease' }}>
-                        {STUCK_REASONS.map(r => (
-                          <button key={r.id} onClick={() => setStuckReason(sp.id, r)}
-                            style={{ padding: '4px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent',
-                              color: 'inherit', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', opacity: 0.6, transition: 'opacity 0.15s' }}
-                            onMouseEnter={e => e.target.style.opacity = 1} onMouseLeave={e => e.target.style.opacity = 0.6}>
-                            {r.emoji} {r.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <button className="flp-advance-btn" onClick={() => setStep(STEPS.WAHOOS)} style={{ marginTop: 12 }}>
-                {careerStuckPoints.filter(sp => sp.fromSpring).length > 0 ? "That's everything →" : "Skip, no more →"}
-              </button>
-            </div>
-          )}
-
-          {/* ── WAHOOS with stuck point bubbles ── */}
-          {step === STEPS.WAHOOS && selectedWahooId && (
-            <>
-              <div className="flp-panel-step-prompt" style={{ fontSize: 14, marginBottom: 4 }}>
-                If we broke down living the "{careers.find(c => c.id === selectedWahooId)?.label}" life path into tiny steps, what are they?
-              </div>
-
-              {/* Stuck point bubbles */}
-              {stuckPointsNotInWahoos.length > 0 && (
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: 11, opacity: 0.4, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Things you've been putting off</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {stuckPointsNotInWahoos.map(sp => (
-                      <button key={sp.id} onClick={() => moveStuckToWahoo(sp.id)}
-                        style={{ padding: '6px 12px', borderRadius: 20, border: '1px solid rgba(233,162,59,0.3)', background: 'rgba(233,162,59,0.08)',
-                          color: '#E9A23B', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s' }}>
-                        {sp.text} {sp.reasonEmoji || ''}
-                      </button>
                     ))}
+
+                    {/* Input for this career */}
+                    <div className="flp-input-row" style={{ marginTop: 6 }}>
+                      <input className="flp-input" type="text"
+                        ref={currentStuckCareerId === c.id ? stuckInputRef : undefined}
+                        value={currentStuckCareerId === c.id ? stuckInput : ''}
+                        onFocus={() => { setCurrentStuckCareerId(c.id); setSelectedWahooId(c.id) }}
+                        onChange={e => { setCurrentStuckCareerId(c.id); setSelectedWahooId(c.id); setStuckInput(e.target.value) }}
+                        onKeyDown={e => { if (e.key === 'Enter' && stuckInput.trim()) addStuckPoint(c.id) }}
+                        placeholder="Something you've been putting off..." />
+                      <button className="flp-input-submit" onClick={() => addStuckPoint(c.id)} disabled={currentStuckCareerId !== c.id || !stuckInput.trim()}>Add</button>
+                    </div>
                   </div>
-                  <div style={{ fontSize: 10, opacity: 0.25, marginTop: 4 }}>↑ Tap to add as a step</div>
-                </div>
-              )}
+                )
+              })}
 
-              {/* Wahoo steps list */}
-              <div className="flp-wahoo-steps">
-                {(wahooSteps[selectedWahooId] || []).map((ws, i) => (
-                  <div key={i} className="flp-wahoo-step">
-                    <button className={`flp-wahoo-check ${ws.done ? 'done' : ''}`} onClick={() => toggleWahooStep(selectedWahooId, i)}>
-                      {ws.done ? '✓' : ''}
-                    </button>
-                    <span className={`flp-wahoo-step-text ${ws.done ? 'done' : ''}`}>{ws.text}</span>
-                    <span className="flp-pill-remove" onClick={() => removeWahooStep(selectedWahooId, i)}>✕</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flp-input-row" style={{ marginTop: 12 }}>
-                <input ref={wahooInputRef} className="flp-input flp-input-sm" type="text" value={wahooInput}
-                  onChange={e => setWahooInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && addWahooStep()}
-                  placeholder="One small step..." />
-                <button className="flp-input-submit" onClick={addWahooStep} disabled={!wahooInput.trim()}>Add</button>
-              </div>
-
-              <button className="flp-advance-btn" style={{ width: '100%', marginTop: 16 }}
+              <button className="flp-advance-btn" style={{ width: '100%', marginTop: 8 }}
                 onClick={async () => {
-                  const saved = await saveWahoosToGroan()
-                  // Build groan ID lookup from returned entries (avoids stale closure)
-                  const groanIdByIdx = {}
-                  saved.forEach(({ idx, groanId }) => { groanIdByIdx[idx] = groanId })
-                  // Create quest if one doesn't exist for this career
-                  if (user?.id && selectedWahooId) {
-                    const career = careers.find(c => c.id === selectedWahooId)
-                    if (career) {
-                      const { data: existing } = await supabase.from('quests')
-                        .select('id').eq('user_id', user.id).eq('career_id', selectedWahooId).limit(1)
-                      let questId = existing?.[0]?.id
-                      if (!questId) {
-                        const { data: newQuest } = await supabase.from('quests').insert({
-                          user_id: user.id, label: career.label, career_id: selectedWahooId,
-                          predicted_state: career.predictedState, status: 'active',
-                        }).select('id').single()
-                        questId = newQuest?.id
-                      }
-                      if (questId) {
-                        // Get existing task texts to prevent duplicates
-                        const { data: existingTasks } = await supabase.from('quest_tasks')
-                          .select('text').eq('quest_id', questId)
-                        const existingTexts = new Set((existingTasks || []).map(t => t.text.toLowerCase()))
-                        const steps = wahooSteps[selectedWahooId] || []
-                        const newTasks = steps.filter(ws => !existingTexts.has(ws.text.toLowerCase()))
-                        if (newTasks.length > 0) {
-                          await supabase.from('quest_tasks').insert(newTasks.map((ws, i) => {
-                            // Use groan ID from returned entries (fresh), fall back to state (for previously saved)
-                            const origIdx = steps.indexOf(ws)
-                            const groanId = groanIdByIdx[origIdx] || ((typeof ws.savedToGroan === 'string') ? ws.savedToGroan : null)
-                            return {
-                              quest_id: questId, user_id: user.id, text: ws.text,
-                              is_courage_challenge: !!groanId || !!ws.savedToGroan,
-                              groan_challenge_id: groanId,
-                              stuck_point_id: ws.fromStuckPoint || null,
-                              sort_order: (existingTasks?.length || 0) + i,
-                            }
-                          }))
+                  if (!user?.id) return
+                  // Create quests + courage challenges for all selected careers
+                  for (const careerId of selectedQuestIds) {
+                    const career = careers.find(c => c.id === careerId)
+                    if (!career) continue
+
+                    // Upsert quest
+                    const { data: existing } = await supabase.from('quests')
+                      .select('id').eq('user_id', user.id).eq('career_id', careerId).limit(1)
+                    let questId = existing?.[0]?.id
+                    if (!questId) {
+                      const { data: newQuest } = await supabase.from('quests').insert({
+                        user_id: user.id, label: career.label, career_id: careerId,
+                        predicted_state: career.predictedState, status: 'active',
+                      }).select('id').single()
+                      questId = newQuest?.id
+                    }
+
+                    // Create courage challenges from stuck points
+                    if (questId) {
+                      const careerStuck = stuckPoints.filter(sp => sp.careerId === careerId)
+                      for (const sp of careerStuck) {
+                        // Check for duplicate
+                        const { data: existingGroan } = await supabase.from('groan_challenges')
+                          .select('id').eq('user_id', user.id).eq('title', sp.text).limit(1)
+                        let groanId = existingGroan?.[0]?.id
+                        if (!groanId) {
+                          const { data: newGroan } = await supabase.from('groan_challenges').insert({
+                            user_id: user.id, title: sp.text, challenge_text: sp.text,
+                            status: 'active', source_type: 'skill', challenge_source: 'life_paths',
+                            scary_score: 5, wahoo_score: 5,
+                            accepted_at: new Date().toISOString(),
+                          }).select('id').single()
+                          // Also create priority_weekly_pick so it appears on Courage tab
+                          if (newGroan?.id) {
+                            try {
+                              await supabase.from('priority_weekly_picks').upsert({
+                                user_id: user.id,
+                                week_start_date: getWeekStartLocal(),
+                                pick_type: 'groan',
+                                reference_id: newGroan.id,
+                                display_name: sp.text,
+                              }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
+                            } catch {}
+                          }
+                          groanId = newGroan?.id
+                        }
+                        if (groanId) {
+                          // Check for existing task with same text on this quest
+                          const { data: existingTask } = await supabase.from('quest_tasks')
+                            .select('id').eq('quest_id', questId).eq('text', sp.text).limit(1)
+                          if (!existingTask?.length) {
+                            try {
+                              await supabase.from('quest_tasks').insert({
+                                quest_id: questId, user_id: user.id, text: sp.text,
+                                is_courage_challenge: true, groan_challenge_id: groanId,
+                                sort_order: careerStuck.indexOf(sp),
+                              })
+                            } catch {}
+                          }
                         }
                       }
                     }
                   }
-                  setTimeout(() => { saveRef.current({ step: 'complete' }); setStep(STEPS.COMPLETE) }, 200)
+                  saveRef.current({ step: 'complete' })
+                  setStep(STEPS.COMPLETE)
                 }}>
                 Save & finish →
               </button>
-            </>
+            </div>
           )}
 
           {/* COMPLETE */}
           {step === STEPS.COMPLETE && (
             <div className="flp-reading-panel">
-              <div className="flp-punchline visible"><p>Your life path map is saved.</p></div>
-              <div style={{ fontSize: 14, opacity: 0.5, lineHeight: 1.6, maxWidth: 320, textAlign: 'center', marginTop: 8 }}>
-                <p style={{ margin: '0 0 10px' }}>This app is designed to help you unlock the life paths above where you are now.</p>
-                <p style={{ margin: 0 }}>Your wahoos expand what feels possible. Your healing work removes what's been holding you back.</p>
+              <div className="flp-punchline visible"><p>Your quests are ready.</p></div>
+              <div style={{ fontSize: 14, color: 'rgba(0,0,0,0.5)', lineHeight: 1.6, maxWidth: 320, textAlign: 'center', marginTop: 8 }}>
+                <p style={{ margin: '0 0 10px' }}>Your life paths are now active quests. The things you've been putting off are your courage challenges.</p>
+                <p style={{ margin: 0 }}>Head to your Quests tab to see them.</p>
               </div>
-              <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: 16 }}>
-                Back to challenge →
+              <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge?tab=Quests')} style={{ marginTop: 16 }}>
+                Go to my quests →
               </button>
-              <button className="flp-advance-btn" onClick={() => setStep(STEPS.MAP)} style={{ marginTop: 8, opacity: 0.5, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'inherit' }}>
-                Explore another career path
+              <button className="flp-advance-btn" onClick={() => setStep(STEPS.MAP)} style={{ marginTop: 8, opacity: 0.5, background: 'transparent', border: '1px solid rgba(0,0,0,0.1)', color: '#1a1a2e' }}>
+                Explore the map
               </button>
             </div>
           )}

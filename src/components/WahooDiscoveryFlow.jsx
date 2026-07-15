@@ -16,10 +16,10 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
-import { getWeekStartLocal } from '../lib/dateUtils'
+import { createGroanChallenge } from '../lib/crm/groanChallengeService'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { STATES, STATE_META } from './LifePathMap/lifePaths'
+import WahooCreator from './WahooCreator'
 import './WahooDiscoveryFlow.css'
 import './HealingIntentionsList.css' // qs- styles
 
@@ -79,10 +79,11 @@ export default function WahooDiscoveryFlow({
   const [newQuestState, setNewQuestState] = useState(null)
   const [newQuestSaving, setNewQuestSaving] = useState(false)
   const lastQuestId = useRef(null) // auto-fill from previous selection
+  // WahooCreator modal for the picked wahoo
+  const [showCreator, setShowCreator] = useState(false)
+  const [creatorText, setCreatorText] = useState('')
   // Dedupe guard so a retry after partial failure never double-saves
   const savedRef = useRef({}) // key `${category}:${title}` -> challenge id
-  // Remembers the pick across an error retry (state updates are async)
-  const pendingPickRef = useRef(null)
 
   // Load quests once
   useEffect(() => {
@@ -167,73 +168,69 @@ export default function WahooDiscoveryFlow({
     setStep(s => s - 1)
   }
 
-  async function handleFinish(pick) {
+  // Save all entries as bucket-list wahoos (generated), optionally excluding the picked one
+  async function saveBucketList(excludePick = null) {
+    for (const cat of CATEGORY_PAGES) {
+      for (let i = 0; i < entries[cat.id].length; i++) {
+        const title = entries[cat.id][i].trim()
+        if (!title) continue
+        // Skip the picked entry (WahooCreator handles it)
+        if (excludePick && excludePick.category === cat.id && excludePick.index === i) continue
+        const key = `${cat.id}:${title}`
+        if (savedRef.current[key]) continue
+        const { data, error: saveError } = await createGroanChallenge({
+          userId,
+          title,
+          description: title,
+          visibilityLayer: currentVisibilityLayer,
+          sourceType: 'skill',
+          sourceLabel: 'Wahoo Discovery',
+          wahooCategory: cat.id,
+        })
+        if (saveError || !data) throw saveError || new Error('Wahoo was not saved')
+        savedRef.current[key] = data.id
+
+        // Create quest_task if linked
+        const questId = entryQuests[cat.id]?.[i]
+        if (questId) {
+          supabase.from('quest_tasks').insert({
+            quest_id: questId,
+            user_id: userId,
+            text: title,
+            is_courage_challenge: true,
+            groan_challenge_id: data.id,
+            sort_order: 0,
+          }).catch(() => {})
+        }
+      }
+    }
+  }
+
+  // "Start with this one" → save bucket list, then open WahooCreator for the picked entry
+  async function handlePickAndCreate(pick) {
     if (saving) return
-    pendingPickRef.current = pick
     setSaving(true)
     setError(null)
-
     try {
-      // 1. Save every entry as a 'generated' bucket-list wahoo
-      for (const cat of CATEGORY_PAGES) {
-        for (const title of cleanEntries(cat.id)) {
-          const key = `${cat.id}:${title}`
-          if (savedRef.current[key]) continue // already saved on a prior attempt
-          const { data, error: saveError } = await createGroanChallenge({
-            userId,
-            title,
-            description: title,
-            visibilityLayer: currentVisibilityLayer,
-            sourceType: 'skill',
-            sourceLabel: 'Wahoo Discovery',
-            scaryScore: 7,
-            wahooScore: 7,
-            wahooCategory: cat.id,
-          })
-          if (saveError || !data) throw saveError || new Error('Wahoo was not saved')
-          savedRef.current[key] = data.id
-        }
-      }
+      await saveBucketList(pick)
+      const title = entries[pick.category][pick.index]?.trim()
+      setCreatorText(title || '')
+      setShowCreator(true)
+    } catch (err) {
+      console.error('Wahoo discovery save error:', err)
+      setError('Something went wrong saving your wahoos. Tap to try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
 
-      // 2. Accept the chosen one and make it this week's active wahoo
-      if (pick) {
-        const title = entries[pick.category][pick.index]?.trim()
-        const challengeId = title ? savedRef.current[`${pick.category}:${title}`] : null
-        if (challengeId) {
-          const { error: acceptError } = await acceptGroanChallenge(challengeId)
-          if (acceptError) throw acceptError
-
-          const { error: pickError } = await supabase.from('priority_weekly_picks').insert({
-            user_id: userId,
-            week_start_date: getWeekStartLocal(),
-            pick_type: 'groan',
-            reference_id: challengeId,
-            display_name: title,
-          })
-          if (pickError) throw pickError
-        }
-      }
-
-      // 3. Create quest_tasks for wahoos with quest links
-      for (const cat of CATEGORY_PAGES) {
-        entries[cat.id].forEach((raw, i) => {
-          const title = raw.trim()
-          if (!title) return
-          const questId = entryQuests[cat.id]?.[i]
-          const groanId = savedRef.current[`${cat.id}:${title}`]
-          if (questId && groanId) {
-            supabase.from('quest_tasks').insert({
-              quest_id: questId,
-              user_id: userId,
-              text: title,
-              is_courage_challenge: true,
-              groan_challenge_id: groanId,
-              sort_order: 0,
-            }).then(() => {}).catch(() => {})
-          }
-        })
-      }
-
+  // "Save all, choose later" → save everything as bucket list, no WahooCreator
+  async function handleSaveAll() {
+    if (saving) return
+    setSaving(true)
+    setError(null)
+    try {
+      await saveBucketList()
       hapticSuccess()
       setStep(4)
     } catch (err) {
@@ -270,7 +267,7 @@ export default function WahooDiscoveryFlow({
       <div className="wahoo-discovery-flow">
         <div className="wdf-card">
           <ProgressDots step={step} />
-          <h3 className="wdf-headline">Pick your first Wahoo</h3>
+          <h3 className="wdf-headline">Pick your first courage challenge</h3>
           <p className="wdf-explainer">
             Choose one to start with this week. The rest stay on your list.
           </p>
@@ -306,13 +303,13 @@ export default function WahooDiscoveryFlow({
           })}
 
           {error && (
-            <button className="wdf-error" onClick={() => handleFinish(pendingPickRef.current)}>{error}</button>
+            <p className="wdf-error">{error}</p>
           )}
 
           <button
             className="wdf-primary-btn"
             disabled={!selected || saving}
-            onClick={() => handleFinish(selected)}
+            onClick={() => handlePickAndCreate(selected)}
           >
             {saving ? 'Saving...' : 'Start with this one 🔥'}
           </button>
@@ -321,12 +318,31 @@ export default function WahooDiscoveryFlow({
             <button
               className="wdf-text-btn"
               disabled={saving}
-              onClick={() => handleFinish(null)}
+              onClick={handleSaveAll}
             >
               Save all, choose later
             </button>
           </div>
         </div>
+
+        {/* WahooCreator modal for structured capture */}
+        {showCreator && (
+          <div className="wc-modal-overlay" onClick={() => setShowCreator(false)}>
+            <div className="wc-modal" onClick={e => e.stopPropagation()}>
+              <button className="wc-modal-close" onClick={() => setShowCreator(false)}>&times;</button>
+              <WahooCreator
+                userId={userId}
+                initialText={creatorText}
+                onWahooAccepted={() => {
+                  setShowCreator(false)
+                  hapticSuccess()
+                  setStep(4)
+                }}
+                onClose={() => setShowCreator(false)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     )
   }

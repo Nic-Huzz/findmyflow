@@ -172,6 +172,9 @@ const PlayListUpdateFlow = lazyRetry(() => import('./flows/PlayListUpdateFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
 const CuriosityCompassFlow = lazyRetry(() => import('./flows/CuriosityCompassFlow'))
+const CuriosityMapFlow = lazyRetry(() => import('./flows/CuriosityMapFlow'))
+const CareerAlignmentFlow = lazyRetry(() => import('./flows/CareerAlignmentFlow'))
+const QuestMapPage = lazyRetry(() => import('./pages/QuestMapPage'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 // const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap')) // archived
 
@@ -302,6 +305,9 @@ const LifePathWidgetTest = lazyRetry(() => import('./pages/LifePathWidgetTest'))
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
 const PlaylistFeedAdmin = lazyRetry(() => import('./pages/PlaylistFeedAdmin'))
 
+// Community Feed
+const CommunityFeed = lazyRetry(() => import('./pages/CommunityFeed'))
+
 import './App.css'
 import './PersonaAssessment.css'
 import './flows/AttractionOfferFlow.css'
@@ -373,6 +379,7 @@ import './pages/league/LeagueAdmin.css'
 import './pages/league/NewsfeedPage.css'
 import './pages/PlaylistFeed.css'
 import './pages/PlaylistFeedAdmin.css'
+import './pages/CommunityFeed.css'
 import './flows/PayRentFlow.css'
 import './flows/ScaleIncomeFlow.css'
 
@@ -458,6 +465,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/pre-launch' ||
                         location.pathname.startsWith('/facilitate/') ||
                         location.pathname === '/life-paths' ||
+                        location.pathname === '/community' ||
                         (location.pathname.startsWith('/create/') &&
                          location.pathname !== '/create/' &&
                          location.pathname !== '/create/experiences' &&
@@ -726,6 +734,7 @@ function AppRouter() {
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
+            <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
 
@@ -783,6 +792,16 @@ function AppRouter() {
             <Route path="/limiting-belief-rewire" element={
               <AuthGate>
                 <LimitingBeliefRewire />
+              </AuthGate>
+            } />
+            <Route path="/curiosity-map" element={
+              <AuthGate>
+                <CuriosityMapFlow />
+              </AuthGate>
+            } />
+            <Route path="/career-alignment" element={
+              <AuthGate>
+                <CareerAlignmentFlow />
               </AuthGate>
             } />
             <Route path="/life-map" element={
@@ -1474,6 +1493,13 @@ function AppRouter() {
             <Route path="/newsfeed" element={
               <AuthGate>
                 <NewsfeedPage />
+              </AuthGate>
+            } />
+
+            {/* Community Feed */}
+            <Route path="/community" element={
+              <AuthGate>
+                <CommunityFeed />
               </AuthGate>
             } />
 

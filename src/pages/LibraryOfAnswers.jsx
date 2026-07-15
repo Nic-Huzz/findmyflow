@@ -496,7 +496,7 @@ function LibraryOfAnswers() {
   const fetchEssenceZones = async () => {
     const { data, error } = await supabase
       .from('groan_challenges')
-      .select('id, title, source_label, visibility_layer, scary_score, wahoo_score, status, completed_at, created_at')
+      .select('id, title, source_label, visibility_layer, status, completed_at, created_at')
       .eq('user_id', user.id)
       .eq('essence_zone', 'essence')
       .order('created_at', { ascending: false })

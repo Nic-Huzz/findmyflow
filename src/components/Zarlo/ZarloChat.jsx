@@ -28,7 +28,11 @@ import {
   determinePublicZarloAction,
   INTAKE_STRUGGLES,
   ACCOUNTABILITY_RESPONSES,
-  STANDARD_PROMPTS
+  STANDARD_PROMPTS,
+  loadSkills,
+  getRecentActions,
+  buildZarloPrompt,
+  streamZarloResponse
 } from '../../lib/zarlo/zarloEngine'
 import { getPageContent, getChallengeTabContent, getOnboardingContent, ROUTING_OPTIONS, SOUTH_MODE, isPublicRoute } from '../../lib/zarlo/zarloPageContent'
 import { useOnboarding } from '../../context/OnboardingContext'
@@ -155,6 +159,17 @@ function ZarloChat({ onClose, challengeTab = null }) {
   const [commitmentText, setCommitmentText] = useState('')
   const [showCommitmentInput, setShowCommitmentInput] = useState(false)
 
+  // V2: AI chat state
+  const [freeTextInput, setFreeTextInput] = useState('')
+  const [isStreaming, setIsStreaming] = useState(false)
+  const [skills, setSkills] = useState(null)
+  const [recentActions, setRecentActions] = useState([])
+  const [conversationHistory, setConversationHistory] = useState([]) // [{role, content}] for AI context
+  const [userMessageCount, setUserMessageCount] = useState(0) // 5 per session cap
+  const streamingMsgIdRef = useRef(null)
+  const abortRef = useRef(null)
+  const MAX_MESSAGES_PER_SESSION = 5
+
   // Current route for page awareness
   const currentRoute = location.pathname
 
@@ -181,6 +196,11 @@ function ZarloChat({ onClose, challengeTab = null }) {
     initializeZarlo()
   }, [])
 
+  // Cleanup: abort any in-flight stream on unmount
+  useEffect(() => {
+    return () => { abortRef.current?.abort() }
+  }, [])
+
   const initializeZarlo = async () => {
     // Check if this is a public route (sales mode)
     if (isPublicRoute(currentRoute)) {
@@ -190,21 +210,25 @@ function ZarloChat({ onClose, challengeTab = null }) {
     }
 
     if (!user?.id) {
-      // Show page context without personalization
-      showPageContext()
+      // Show page context without personalization (scripted fallback)
+      showPageContextScripted()
       setLoading(false)
       return
     }
 
     try {
-      // Load state and context in parallel
-      const [state, context] = await Promise.all([
+      // Load state, context, skills, and recent actions in parallel
+      const [state, context, userSkills, actions] = await Promise.all([
         loadZarloState(user.id),
-        getUserContext(user.id)
+        getUserContext(user.id),
+        loadSkills(user.id),
+        getRecentActions(user.id)
       ])
 
       setZarloState(state)
       setUserContext(context)
+      setSkills(userSkills)
+      setRecentActions(actions)
 
       // Determine what to show
       const action = determineZarloAction(state, context, currentRoute)
@@ -230,12 +254,12 @@ function ZarloChat({ onClose, challengeTab = null }) {
           break
         case 'context':
         default:
-          showPageContext()
+          showAIGreeting(context, userSkills, actions)
           break
       }
     } catch (err) {
       console.error('Error initializing Zarlo:', err)
-      showPageContext()
+      showPageContextScripted()
     } finally {
       setLoading(false)
     }
@@ -259,16 +283,33 @@ function ZarloChat({ onClose, challengeTab = null }) {
   }
 
   // ============================================
-  // PAGE CONTEXT MODE
+  // PAGE CONTEXT MODE (V2: AI-powered)
   // ============================================
 
-  const showPageContext = () => {
+  /**
+   * Get the page context string for AI prompt injection.
+   */
+  const getPageContextString = () => {
+    let pageContent
+    if (onboardingScreen) {
+      pageContent = getOnboardingContent(onboardingScreen)
+    } else if (currentRoute === '/7-day-challenge' && challengeTab) {
+      pageContent = getChallengeTabContent(challengeTab)
+    } else {
+      pageContent = getPageContent(currentRoute)
+    }
+    return `${pageContent.pageName} (${currentRoute}${challengeTab ? `, ${challengeTab} tab` : ''})`
+  }
+
+  /**
+   * Scripted fallback (no user, or error). Used for unauthenticated users.
+   */
+  const showPageContextScripted = () => {
     setCurrentMode('context')
     setShowCommitmentInput(false)
 
     let pageContent
     if (onboardingScreen) {
-      // Use onboarding-specific content when in onboarding flow
       pageContent = getOnboardingContent(onboardingScreen)
     } else if (currentRoute === '/7-day-challenge' && challengeTab) {
       pageContent = getChallengeTabContent(challengeTab)
@@ -276,31 +317,147 @@ function ZarloChat({ onClose, challengeTab = null }) {
       pageContent = getPageContent(currentRoute)
     }
 
-    // Time-based greeting with page name
     const timeGreeting = getTimeGreeting()
-    const greeting = `${timeGreeting}! You're in **${pageContent.pageName}**`
-    addMessage('zarlo', greeting)
+    addMessage('zarlo', `${timeGreeting}! You're in **${pageContent.pageName}**`)
 
-    // Skip next best action for public validation flows (no NS map suggestions)
-    const isPublicValidation = currentRoute.startsWith('/v/')
+    const prompts = getPromptsForPage(currentRoute, challengeTab)
+    setCurrentOptions([...prompts, { id: 'report_bug', label: 'Report a bug' }])
+  }
 
-    // Check for next best action suggestion (skip for public validation)
-    const nextAction = isPublicValidation ? null : getNextBestAction(userContext)
-    if (nextAction?.message) {
-      // Add the suggestion as a follow-up message
-      setTimeout(() => {
-        addMessage('zarlo', nextAction.message)
-      }, 400)
+  /**
+   * AI-powered greeting. Streams the greeting message letter by letter.
+   * Quick-replies appear instantly (no wait).
+   */
+  const showAIGreeting = async (ctx, userSkills, actions) => {
+    setCurrentMode('context')
+    setShowCommitmentInput(false)
+
+    // Show quick-replies immediately (no waiting for AI)
+    const prompts = getPromptsForPage(currentRoute, challengeTab)
+    setCurrentOptions([...prompts, { id: 'report_bug', label: 'Report a bug' }])
+
+    // Confidence floor: no Brief and no actions = use scripted greeting
+    if (!ctx?.zarloBrief && (!actions || actions.length === 0)) {
+      const pageContent = getPageContent(currentRoute)
+      const timeGreeting = getTimeGreeting()
+      addMessage('zarlo', `${timeGreeting}! You're in **${pageContent.pageName}**`)
+      return
     }
 
-    // Build prompts - add next best action if available
-    const prompts = getPromptsForPage(currentRoute, challengeTab)
-    const bugReportOption = { id: 'report_bug', label: 'Report a bug' }
-    if (nextAction?.action) {
-      // Insert the suggested action at the top
-      setCurrentOptions([nextAction.action, ...prompts, bugReportOption])
-    } else {
-      setCurrentOptions([...prompts, bugReportOption])
+    // Add a placeholder streaming message
+    const msgId = Date.now() + Math.random()
+    streamingMsgIdRef.current = msgId
+    setMessages([{ id: msgId, sender: 'zarlo', text: '', timestamp: new Date() }])
+    setIsStreaming(true)
+
+    try {
+      abortRef.current = new AbortController()
+      const pageContext = getPageContextString()
+      const systemPrompt = buildZarloPrompt(ctx, userSkills, actions, pageContext)
+      const greetingPrompt = [{ role: 'user', content: 'Greet me briefly. Reference what I\'ve been up to recently or my current state if you have data. Keep it to 1-2 sentences.' }]
+
+      const fullText = await streamZarloResponse(systemPrompt, greetingPrompt, (textSoFar) => {
+        setMessages(prev => prev.map(m =>
+          m.id === msgId ? { ...m, text: textSoFar } : m
+        ))
+      }, abortRef.current.signal)
+
+      // If stream returned empty, fall back to scripted
+      if (!fullText?.trim()) {
+        throw new Error('Empty AI response')
+      }
+
+      // Store only the greeting response (no synthetic user turn)
+      setConversationHistory([
+        { role: 'assistant', content: fullText }
+      ])
+    } catch (err) {
+      if (err.name === 'AbortError') return // unmounted, silently exit
+      console.error('Zarlo AI greeting error:', err)
+      // Fallback to scripted greeting
+      const pageContent = getPageContent(currentRoute)
+      const timeGreeting = getTimeGreeting()
+      setMessages(prev => prev.map(m =>
+        m.id === msgId ? { ...m, text: `${timeGreeting}! You're in **${pageContent.pageName}**` } : m
+      ))
+    } finally {
+      setIsStreaming(false)
+      streamingMsgIdRef.current = null
+    }
+  }
+
+  /**
+   * Send a message to Zarlo AI (free-text or quick-reply prompt).
+   * Streams the response.
+   */
+  const sendAIMessage = async (text) => {
+    if (isStreaming || !user?.id) return
+
+    if (userMessageCount >= MAX_MESSAGES_PER_SESSION) {
+      addMessage('user', text)
+      addMessage('zarlo', "That's enough from me for now. Close and reopen if you need me again, or tap your Mentor for a deeper conversation.")
+      return
+    }
+
+    // Confidence floor: if no Brief and no recent actions, don't let AI improvise
+    if (!userContext?.zarloBrief && (!recentActions || recentActions.length === 0)) {
+      addMessage('user', text)
+      addMessage('zarlo', "I don't have enough data on you yet. Keep checking in and doing courage challenges. I'll have something specific to say soon.")
+      return
+    }
+
+    setUserMessageCount(n => n + 1)
+
+    // Add user message
+    addMessage('user', text)
+
+    // Add streaming placeholder
+    const msgId = Date.now() + Math.random()
+    streamingMsgIdRef.current = msgId
+    setMessages(prev => [...prev, { id: msgId, sender: 'zarlo', text: '', timestamp: new Date() }])
+    setIsStreaming(true)
+
+    // Build messages for AI (include conversation history)
+    const aiMessages = [
+      ...conversationHistory,
+      { role: 'user', content: text }
+    ]
+
+    try {
+      abortRef.current = new AbortController()
+      const pageContext = getPageContextString()
+      const systemPrompt = buildZarloPrompt(userContext, skills, recentActions, pageContext)
+
+      const fullText = await streamZarloResponse(systemPrompt, aiMessages, (textSoFar) => {
+        setMessages(prev => prev.map(m =>
+          m.id === msgId ? { ...m, text: textSoFar } : m
+        ))
+      }, abortRef.current.signal)
+
+      if (!fullText?.trim()) {
+        throw new Error('Empty AI response')
+      }
+
+      // Update conversation history (keep last 10 turns to stay within token limits)
+      setConversationHistory(prev => {
+        const updated = [...prev, { role: 'user', content: text }, { role: 'assistant', content: fullText }]
+        return updated.slice(-10)
+      })
+
+      // Track AI response
+      trackEvent('zarlo_ai_response', {
+        input_type: 'free_text',
+        route: currentRoute
+      })
+    } catch (err) {
+      if (err.name === 'AbortError') return // unmounted, silently exit
+      console.error('Zarlo AI response error:', err)
+      setMessages(prev => prev.map(m =>
+        m.id === msgId ? { ...m, text: "Something went wrong. Try again or tap a quick option." } : m
+      ))
+    } finally {
+      setIsStreaming(false)
+      streamingMsgIdRef.current = null
     }
   }
 
@@ -566,7 +723,7 @@ Now go make it happen. Your future self is counting on you.`)
 
     const milestone = getMilestoneMessage(groanCount, userContext)
     if (!milestone) {
-      showPageContext()
+      showPageContextScripted()
       return
     }
 
@@ -719,7 +876,7 @@ That's it. No action required. Just awareness.`)
           setTimeout(() => {
             addMessage('zarlo', SOUTH_MODE.restResponse)
             setCurrentOptions([
-              { id: 'gentle_release', label: 'Show me a gentle release', route: '/7-day-challenge?tab=healing' },
+              { id: 'gentle_release', label: 'Show me a gentle release', route: '/7-day-challenge?tab=courage' },
               { id: 'just_log', label: 'Just log how I feel', route: '/7-day-challenge?tab=tracker' },
               { id: 'close', label: 'Thanks, I\'ll rest' }
             ])
@@ -752,10 +909,9 @@ That's it. No action required. Just awareness.`)
   }
 
   const handleContextPrompt = (option) => {
-    addMessage('user', option.label)
-
-    // Handle "something else" specially
+    // Handle "something else" specially (stays scripted — routing)
     if (option.id === 'something_else') {
+      addMessage('user', option.label)
       setCurrentMode('routing')
       setTimeout(() => {
         addMessage('zarlo', 'No problem! What do you want to focus on?')
@@ -764,7 +920,14 @@ That's it. No action required. Just awareness.`)
       return
     }
 
-    // Get response for the prompt
+    // V2: Use AI for all context-mode responses
+    if (user?.id) {
+      sendAIMessage(option.label)
+      return
+    }
+
+    // Fallback: scripted response for unauthenticated users
+    addMessage('user', option.label)
     const response = getPromptResponse(currentRoute, option.id, challengeTab)
 
     if (typeof response === 'object' && response.type === 'routing') {
@@ -776,7 +939,6 @@ That's it. No action required. Just awareness.`)
     } else {
       setTimeout(() => {
         addMessage('zarlo', response)
-        // Show prompts again
         const prompts = getPromptsForPage(currentRoute, challengeTab)
         setCurrentOptions(prompts.filter(p => p.id !== option.id))
       }, 300)
@@ -840,6 +1002,41 @@ That's it. No action required. Just awareness.`)
     )
   }
 
+  // V2: Free-text input for context mode
+  const handleFreeTextSubmit = (e) => {
+    e.preventDefault()
+    if (!freeTextInput.trim() || isStreaming) return
+    sendAIMessage(freeTextInput.trim())
+    setFreeTextInput('')
+  }
+
+  const renderFreeTextInput = () => {
+    // Only show in context mode for authenticated users
+    if (currentMode !== 'context' || !user?.id) return null
+    if (showCommitmentInput) return null
+    if (userMessageCount >= MAX_MESSAGES_PER_SESSION) return null
+
+    return (
+      <form className="zarlo-free-text" onSubmit={handleFreeTextSubmit}>
+        <input
+          className="zarlo-free-text-input"
+          type="text"
+          value={freeTextInput}
+          onChange={e => setFreeTextInput(e.target.value)}
+          placeholder="Ask Zarlo..."
+          disabled={isStreaming}
+        />
+        <button
+          className="zarlo-free-text-send"
+          type="submit"
+          disabled={!freeTextInput.trim() || isStreaming}
+        >
+          →
+        </button>
+      </form>
+    )
+  }
+
   if (loading) {
     return (
       <div className="zarlo-chat">
@@ -848,7 +1045,7 @@ That's it. No action required. Just awareness.`)
             <span className="zarlo-avatar">🌞</span>
             <div className="zarlo-header-info">
               <h3>Zarlo</h3>
-              <span className="zarlo-subtitle">Your flow guide</span>
+              <span className="zarlo-subtitle">Your game guide</span>
             </div>
           </div>
           <button className="zarlo-close-btn" onClick={onClose}>×</button>
@@ -863,7 +1060,7 @@ That's it. No action required. Just awareness.`)
   }
 
   // Determine subtitle based on mode
-  const zarloSubtitle = currentMode === 'public_sales' ? 'Your guide' : 'Your flow guide'
+  const zarloSubtitle = currentMode === 'public_sales' ? 'Your guide' : 'Your game guide'
 
   return (
     <div className="zarlo-chat">
@@ -907,6 +1104,7 @@ That's it. No action required. Just awareness.`)
       )}
 
       {renderCommitmentInput()}
+      {renderFreeTextInput()}
     </div>
   )
 }

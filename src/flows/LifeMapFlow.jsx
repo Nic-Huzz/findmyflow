@@ -115,6 +115,9 @@ export default function LifeMapFlow() {
   const [muralUrl, setMuralUrl] = useState(null)
   const [muralLoading, setMuralLoading] = useState(false)
 
+  // Curiosity clusters (context for later periods)
+  const [curiosityClusters, setCuriosityClusters] = useState([])
+
   // Ref to always have current responses (avoids stale closure in async runClustering)
   const responsesRef = useRef(responses)
   useEffect(() => { responsesRef.current = responses }, [responses])
@@ -183,7 +186,16 @@ export default function LifeMapFlow() {
     if (!user?.id) return
     checkPreviousCompletion()
     fetchEssenceArchetype()
+    fetchCuriosityClusters()
   }, [user?.id])
+
+  const fetchCuriosityClusters = async () => {
+    const { data } = await supabase
+      .from('curiosity_clusters')
+      .select('cluster_name, branch, why')
+      .eq('user_id', user.id)
+    if (data?.length) setCuriosityClusters(data)
+  }
 
   const checkPreviousCompletion = async () => {
     const { data } = await supabase
@@ -656,6 +668,37 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             <div key={p.id} className={`lm-progress-dot ${i < periodIdx ? 'done' : ''} ${i === periodIdx ? 'active' : ''}`} />
           ))}
         </div>
+
+        {/* Curiosity context cards for later periods */}
+        {curiosityClusters.length > 0 && period.id === 'young_adult' && (
+          <div className="lm-curiosity-context">
+            <div className="lm-curiosity-context-label">Your Curiosity Map</div>
+            <div className="lm-curiosity-context-text">
+              You're curious about {curiosityClusters.map(c => c.cluster_name).join(', ')}. Did any of these interests exist back then, even in small ways?
+            </div>
+          </div>
+        )}
+        {curiosityClusters.length > 0 && period.id === 'career' && (
+          <div className="lm-curiosity-context">
+            <div className="lm-curiosity-context-label">Your Curiosity Map</div>
+            <div className="lm-curiosity-context-text">
+              You're curious about {curiosityClusters.map(c => c.cluster_name).join(', ')}. Did your work give you space for these, or were they the things you kept for after hours?
+            </div>
+          </div>
+        )}
+        {curiosityClusters.length > 0 && period.id === 'now' && (
+          <div className="lm-curiosity-context lm-curiosity-context-gold">
+            <div className="lm-curiosity-context-label" style={{ color: '#fbbf24' }}>Your Curiosity Map</div>
+            {curiosityClusters.map((c, i) => (
+              <div key={i} className="lm-curiosity-cluster-item">
+                {c.cluster_name}
+              </div>
+            ))}
+            <div className="lm-curiosity-context-text" style={{ marginTop: 8 }}>
+              Does your life right now reflect these? Name what's alive, and anything this list missed.
+            </div>
+          </div>
+        )}
 
         <div className="lm-questions">
           {CATEGORIES.map(cat => (

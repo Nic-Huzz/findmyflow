@@ -53,6 +53,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
               quest_task_id: questTaskId,
               user_id: userId,
               pattern: d.pattern,
+              protective_voice: d.pattern || null,
               fear_text: d.fearText?.trim() || null,
               origin_text: d.originText?.trim() || null,
               insight_text: insightText,
@@ -90,6 +91,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
       quest_task_id: questTaskId,
       user_id: userId,
       pattern: pattern || null,
+      protective_voice: pattern || null,
       fear_text: fearText.trim() || null,
       origin_text: originText.trim() || null,
       insight_text: insightText,
@@ -124,7 +126,20 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
         })
       } catch (e2) { /* non-blocking */ }
 
+      // Mystery box: first healing flow
+      supabase.from('healing_intentions')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .in('healing_stage', ['recognised', 'released'])
+        .then(({ count }) => {
+          if (count === 1) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'first_healing', 'bronze'))
+        }).catch(() => {})
+
       hapticSuccess()
+      // Notify Zarlo of healing completion (proactive bubble)
+      window.dispatchEvent(new CustomEvent('zarlo:reaction', {
+        detail: { actionType: 'healing_completed', actionData: { stage: 'recognised', pattern: pattern || 'unnamed' } }
+      }))
       onComplete?.()
     } catch (e) {
       console.error('Healing flow save error:', e)

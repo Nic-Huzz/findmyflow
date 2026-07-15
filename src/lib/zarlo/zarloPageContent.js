@@ -699,7 +699,7 @@ export const ROUTING_OPTIONS = [
   { id: 'stuck', label: 'Understand why I\'m stuck', icon: '🔍', route: '/nervous-system' },
   { id: 'build', label: 'Figure out what to build', icon: '🎯', route: '/nikigai/skills' },
   { id: 'push', label: 'Push my comfort zone', icon: '💪', route: '/7-day-challenge' },
-  { id: 'heal', label: 'Heal and process emotions', icon: '🧘', route: '/7-day-challenge?tab=healing' },
+  { id: 'heal', label: 'Heal and process emotions', icon: '🧘', route: '/7-day-challenge?tab=courage' },
   { id: 'offer', label: 'Work on my offer/business', icon: '💰', route: '/attraction-offer' },
   { id: 'progress', label: 'See my progress', icon: '📊', route: '/library' }
 ]
@@ -963,4 +963,16 @@ export function getOnboardingContent(screen) {
   }
 
   return PAGE_CONTENT[screenMap[screen]] || PAGE_CONTENT['onboarding_welcome']
+}
+
+/**
+ * Build Zarlo Brief injection text for the system prompt.
+ * Returns empty string if no Brief is available.
+ * @param {object} userContext - Context object from getUserContext (contains zarloBrief)
+ * @returns {string} System prompt injection text
+ */
+export function getZarloBriefPromptInjection(userContext) {
+  if (!userContext?.zarloBrief) return ''
+
+  return `\n\nZARLO BRIEF (pre-computed daily summary of this user's full journey):\n${JSON.stringify(userContext.zarloBrief, null, 2)}\n\nUse this data to notice patterns, name contradictions, and signal approaching thresholds. Be warm but direct. Never shame. Name what you see.`
 }

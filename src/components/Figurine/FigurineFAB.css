@@ -1,0 +1,51 @@
+.figurine-fab-container {
+  position: fixed;
+  bottom: 80px;
+  left: 20px;
+  z-index: 1000;
+  /* Force GPU compositing layer — prevents iOS PWA position:fixed detach during scroll */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+@media (min-width: 768px) {
+  .figurine-fab-container {
+    bottom: 24px;
+    left: 24px;
+  }
+}
+
+.figurine-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #E9A23B;
+  background: white;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.2);
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.figurine-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.3);
+}
+
+.figurine-fab:active { transform: scale(0.95); }
+
+.figurine-fab.open {
+  border-color: #5e17eb;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.2);
+}
+
+.figurine-fab-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.figurine-fab-icon {
+  font-size: 24px;
+}

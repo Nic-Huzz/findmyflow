@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
@@ -24,19 +24,14 @@ import TuneTab from './components/TuneTab'
 import './components/TuneTab.css'
 import PriorityTab from './components/PriorityTab'
 import CompassCheckin from './components/CompassCheckin'
-import NervousSystemCheckin from './components/NervousSystemCheckin'
-import { needsArchetype } from './lib/nervousSystemConstants'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import HealingCompletionModal from './components/HealingCompletionModal'
-import GroanMatrix from './components/GroanMatrix'
 import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostActionModal'
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
-import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge, fetchFlowFinderData } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
-import { GROAN_VISIBILITY_LAYERS, getLayerLockStatus } from './lib/stageConfig'
 import { getScoringCategory } from './lib/scoringCategories'
 // ContentChallenges archived — moves to Fantasy League when reactivated
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
@@ -48,11 +43,20 @@ import ChallengeIntro from './components/ChallengeIntro'
 import DailyCheckin from './components/DailyCheckin'
 import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
-import HealingIntentionsList from './components/HealingIntentionsList'
+import JourneyTab from './components/JourneyTab'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
+import { checkHeroGraduation } from './lib/heroStageChecker'
+import { postFeedEvent } from './lib/communityFeed'
+import { checkStreakBox } from './lib/mysteryBoxes'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
+import { useInsightDrops } from './hooks/useInsightDrops'
+import InsightDrop from './components/InsightDrop'
+import FigurineFAB from './components/Figurine/FigurineFAB'
+import FigurineOverlay from './components/Figurine/FigurineOverlay'
+import ZarloProactiveBubble from './components/Zarlo/ZarloProactiveBubble'
+import { generateZarloReaction } from './lib/zarlo/zarloEngine'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -81,10 +85,6 @@ function Challenge() {
     loading,
     activeCategory,
     setActiveCategory,
-    activeRTypeFilter,
-    setActiveRTypeFilter,
-    activeFrequencyFilter,
-    setActiveFrequencyFilter,
     showOnboarding,
     onboardingScreen,
     setOnboardingScreen,
@@ -130,8 +130,6 @@ function Challenge() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
-    healingSubTab,
-    setHealingSubTab,
     playlistSubTab,
     setPlaylistSubTab,
     userArchetypes,
@@ -177,6 +175,16 @@ function Challenge() {
     lifetimeScores
   } = useChallengeData()
 
+  // Chat conflict management (Figurine vs Zarlo)
+  const [activeChat, setActiveChat] = useState(null)
+
+  // Figurine: Mirror→Mentor transition moment (Step 9)
+  const [showMentorTransition, setShowMentorTransition] = useState(false)
+  const [mentorTransitionAvatar, setMentorTransitionAvatar] = useState(null)
+
+  // Figurine: Monthly cryptic hook (Step 10)
+  const [crypticHook, setCrypticHook] = useState(null)
+
   // First-visit story intro (persisted in DB)
   const [showIntro, setShowIntro] = useState(false)
   const [introChecked, setIntroChecked] = useState(false)
@@ -199,6 +207,9 @@ function Challenge() {
   // Daily nervous system check-in (3x per day: first login, 1pm, 6pm)
   const [showDailyCheckin, setShowDailyCheckin] = useState(false)
   const [capacityRefresh, setCapacityRefresh] = useState(0)
+
+  // Zarlo proactive bubble state
+  const [zarloReaction, setZarloReaction] = useState(null)
 
   // Weekly Review state
   const [weeklyReviewNeeded, setWeeklyReviewNeeded] = useState(false)
@@ -252,8 +263,70 @@ function Challenge() {
       })
   }, [user?.id])
 
+  // Step 9: Mirror→Mentor transition moment (fires once when user crosses threshold)
+  useEffect(() => {
+    if (localStorage.getItem('figurine_mentor_transition_shown')) return
+    if (!user?.id) return
+    Promise.all([
+      supabase.from('quest_completions').select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).eq('quest_category', 'Groans'),
+      supabase.from('nervous_system_checkins').select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).eq('checkin_type', 'daily'),
+      supabase.from('user_stage_progress').select('essence_mirror_completed, hero_avatar_url')
+        .eq('user_id', user.id).maybeSingle(),
+    ]).then(([wahoos, checkins, stage]) => {
+      if (wahoos.count >= 3 && checkins.count >= 7 && stage.data?.essence_mirror_completed) {
+        if (!localStorage.getItem('figurine_mentor_transition_shown')) {
+          setShowMentorTransition(true)
+          setMentorTransitionAvatar(stage.data?.hero_avatar_url)
+          localStorage.setItem('figurine_mentor_transition_shown', 'true')
+        }
+      }
+    })
+  }, [user?.id])
+
+  // Step 10: Monthly cryptic hook from Figurine
+  useEffect(() => {
+    const month = new Date().toISOString().slice(0, 7) // "2026-07"
+    if (localStorage.getItem(`figurine_cryptic_${month}`)) return
+    if (!user?.id) return
+
+    supabase.from('user_stage_progress')
+      .select('current_journey_level, hero_avatar_url')
+      .eq('user_id', user.id).maybeSingle()
+      .then(({ data }) => {
+        if (!data || data.current_journey_level < 4) return // Only for Stage 4+
+
+        const hooks = [
+          "There's something connecting your paths. You're not ready to see it yet.",
+          "The voice you keep fighting? It's trying to protect something real.",
+          "What if the thing you're avoiding is the thing you're meant to do?",
+          "You're closer than you think. But not to what you expect.",
+          "The pattern will break. Not because you forced it. Because you outgrew it.",
+        ]
+        const hookIndex = parseInt(month.replace('-', '')) % hooks.length
+
+        setCrypticHook({ message: hooks[hookIndex], avatarUrl: data.hero_avatar_url })
+        localStorage.setItem(`figurine_cryptic_${month}`, 'true')
+      })
+  }, [user?.id])
+
+  // Zarlo proactive reaction listener (wahoo, healing events from child components)
+  useEffect(() => {
+    const handler = (e) => {
+      const { actionType, actionData } = e.detail || {}
+      if (!user?.id || !actionType) return
+      generateZarloReaction(user.id, actionType, actionData).then(r => { if (r) setZarloReaction(r) })
+    }
+    window.addEventListener('zarlo:reaction', handler)
+    return () => window.removeEventListener('zarlo:reaction', handler)
+  }, [user?.id])
+
   // Celebrations (level-up modal)
-  const { showLevelUp, levelUpKey, celebrateLevelUp, closeLevelUp } = useCelebrations()
+  const { showLevelUp, levelUpKey, celebrateLevelUp, celebrateStageGraduation, closeLevelUp } = useCelebrations()
+
+  // Insight Drops (self-knowledge cards, max 1 per session)
+  const { insight, dismissInsight } = useInsightDrops(user?.id)
 
   // League data for nudge banner + content challenges
   const {
@@ -265,6 +338,7 @@ function Challenge() {
   // Fantasy category scores + opponent matchup data for header
   const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } = useMatchupData({
     completions,
+    contentSubmissions,
     userTeam, league, teams,
     getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
   })
@@ -283,43 +357,75 @@ function Challenge() {
   // Wahoo count: all completed challenges this week
   const [wahooCountThisWeek, setWahooCountThisWeek] = useState(0)
 
-  // Dynamic level detection
+  // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Quests', 'Tune']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Journey', 'Tune']))
+
+  // Post-action trigger: bumped by completion handlers to re-check graduation immediately
+  const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
+  const recheckStage = useCallback(() => setStageCheckTrigger(n => n + 1), [])
+
   useEffect(() => {
     if (!user?.id) return
-    supabase
-      .from('user_stage_progress')
-      .select('current_journey_level')
-      .eq('user_id', user.id)
-      .maybeSingle()
-      .then(({ data }) => {
-        const level = data?.current_journey_level || 0
-        setCurrentJourneyLevel(level)
-        // Pre-unlock tabs based on DB state for Level 0
-        if (level === 0) {
-          // Unlock Courage tab if wahoos identified (discovery flow / quick-add)
-          // or legacy play-skills picked (PlaySkillPicker, pre-2026-06)
-          Promise.all([
-            supabase.from('groan_challenges')
-              .select('id').eq('user_id', user.id).not('wahoo_category', 'is', null).limit(1),
-            supabase.from('nikigai_clusters')
-              .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
-          ]).then(([wahoos, skills]) => {
-            if (wahoos.data?.length > 0 || skills.data?.length > 0) {
-              setUnlockedTabs(prev => new Set([...prev, 'Courage']))
-            }
+
+    const loadStageAndCheckGraduation = async () => {
+      // 1. Check for graduation FIRST (may update the stage in DB)
+      const graduation = await checkHeroGraduation(user.id)
+
+      // 2. Load current stage (may have just been updated by graduation check)
+      const { data } = await supabase
+        .from('user_stage_progress')
+        .select('current_journey_level')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      const level = data?.current_journey_level || 0
+      setCurrentJourneyLevel(level)
+
+      // 3. Celebrate graduation if detected
+      if (graduation) {
+        const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
+        localStorage.setItem('last_hero_stage', String(graduation.to))
+
+        // Only celebrate if user has visited before (not first load ever)
+        if (lastKnown > 0) {
+          celebrateStageGraduation(graduation.from, graduation.to, {
+            essenceName: graduation.stageData?.essence_name,
+            voiceName: graduation.dominantVoice,
+            avatarUrl: graduation.stageData?.hero_avatar_url,
+            useFigurineOverlay: graduation.to >= 4,
           })
-          // Unlock Healing if any healing quest completed
-          supabase.from('quest_completions')
-            .select('id').eq('user_id', user.id).eq('quest_category', 'Healing').limit(1)
-            .then(({ data: d }) => {
-              if (d?.length > 0) setUnlockedTabs(prev => new Set([...prev, 'Healing']))
-            })
+        }
+      } else {
+        const lastKnown = parseInt(localStorage.getItem('last_hero_stage') || '0')
+        if (lastKnown === 0 && level > 0) {
+          localStorage.setItem('last_hero_stage', String(level))
+        }
+      }
+
+      // 4. Tab unlock logic — runs at ALL levels (not just level 0)
+      const email = (await supabase.auth.getUser()).data?.user?.email
+      Promise.all([
+        supabase.from('groan_challenges')
+          .select('id').eq('user_id', user.id).in('status', ['active', 'completed']).limit(1),
+        supabase.from('nikigai_clusters')
+          .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
+        email
+          ? supabase.from('life_path_sessions').select('id').eq('client_email', email).limit(1)
+          : Promise.resolve({ data: [] }),
+      ]).then(([wahoos, skills, lifePaths]) => {
+        const unlocks = []
+        if (wahoos.data?.length > 0 || skills.data?.length > 0) unlocks.push('Courage')
+        if (lifePaths.data?.length > 0) unlocks.push('Quests')
+        if (unlocks.length > 0) {
+          setUnlockedTabs(prev => new Set([...prev, ...unlocks]))
         }
       })
-  }, [user?.id])
+    }
+
+    loadStageAndCheckGraduation()
+  }, [user?.id, stageCheckTrigger])
 
   // Wahoo count: all completed challenges this week
   useEffect(() => {
@@ -356,9 +462,6 @@ function Challenge() {
   // State for showing hidden (non-planned) reconnect quests
   const [showHiddenReconnect, setShowHiddenReconnect] = useState(false)
 
-  // State for selected groan challenge modal
-  const [selectedGroanChallenge, setSelectedGroanChallenge] = useState(null)
-
   // State for POST-ACTION modal (3% reflection after completing milestones)
   const [postActionQuest, setPostActionQuest] = useState(null)
   const [splinterCheckinData, setSplinterCheckinData] = useState(null)
@@ -371,37 +474,14 @@ function Challenge() {
   // State for PRE-ACTION modal (resistance capture before starting milestones)
   const [preActionQuest, setPreActionQuest] = useState(null)
   const [preActionPendingData, setPreActionPendingData] = useState(null)
-  const [groanChallengeLoading, setGroanChallengeLoading] = useState(false)
-  const [groanReflectionStep, setGroanReflectionStep] = useState(false)
-  const [groanReflection, setGroanReflection] = useState({ beforeState: null, afterState: null, protectiveArchetype: null, reflection: '', didThreePercent: null })
-  const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
-  const [customChallengeText, setCustomChallengeText] = useState('')
-  const [threePercentText, setThreePercentText] = useState('')
-  const [groanCellContext, setGroanCellContext] = useState(null) // Cell data when opening popup without a challenge
-
-  // Play-list: problem/persona mapping for skills-only matrix
-  const [mappedProblemId, setMappedProblemId] = useState('')
-  const [mappedPersonaId, setMappedPersonaId] = useState('')
-  const [customProblem, setCustomProblem] = useState('')
-  const [customPersona, setCustomPersona] = useState('')
-  const [flowFinderData, setFlowFinderData] = useState(null)
 
   // Hide bottom toolbar when any modal is open
   useEffect(() => {
-    if (healingModalQuest || selectedGroanChallenge || groanCellContext) {
+    if (healingModalQuest) {
       document.body.classList.add('modal-active')
       return () => document.body.classList.remove('modal-active')
     }
-  }, [healingModalQuest, selectedGroanChallenge, groanCellContext])
-
-  // Load Flow Finder data for Play-list problem/persona mapping
-  useEffect(() => {
-    if (activeCategory === 'Courage' && user?.id && !flowFinderData) {
-      fetchFlowFinderData(user.id).then(result => {
-        if (result?.data) setFlowFinderData(result.data)
-      })
-    }
-  }, [activeCategory, user?.id])
+  }, [healingModalQuest])
 
   // Graduation modal state
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
@@ -970,7 +1050,9 @@ function Challenge() {
         const freshXP = freshScores?.lifetime_total_score || 0
         const priorXP = freshXP - quest.points
         if (getLevelNumber(freshXP) > getLevelNumber(priorXP)) {
-          setTimeout(() => celebrateLevelUp(getLevel(freshXP)), 800)
+          const newLevel = getLevel(freshXP)
+          setTimeout(() => celebrateLevelUp(newLevel), 800)
+          postFeedEvent(user.id, 'level_up', `Reached ${newLevel?.name || 'a new level'}`)
         }
 
         // Refresh user's scores from new tables
@@ -991,7 +1073,17 @@ function Challenge() {
       // User-level quests (Healing, Voices) skip challenge_progress and project updates.
       // Their scoring is handled entirely by increment_scores RPC above.
       if (!isUserLevelCategory) {
-        await handleStreakUpdate(user.id, progress.challenge_instance_id)
+        const streakResult = await handleStreakUpdate(user.id, progress.challenge_instance_id)
+
+        // Auto-post streak milestones to community feed + mystery box
+        if (streakResult?.streak_incremented && streakResult.streak_days) {
+          const STREAK_MILESTONES = [7, 14, 30, 60, 100]
+          const days = streakResult.streak_days
+          if (STREAK_MILESTONES.includes(days)) {
+            postFeedEvent(user.id, 'streak_milestone', `${days} day streak`, `${days} days in a row`)
+          }
+          checkStreakBox(user.id, days)
+        }
 
         const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
         const hasPointsColumn = rTypesWithColumns.includes(rType)
@@ -1117,6 +1209,9 @@ function Challenge() {
         }
       }
 
+      // Re-check hero stage graduation after any quest completion
+      recheckStage()
+
       // Check for project graduation
       if (selectedProject?.id && progress?.challenge_instance_id) {
         try {
@@ -1216,446 +1311,6 @@ function Challenge() {
     }
   }, [user?.id, user?.email])
 
-  // Handler for generating challenges from the Groan Matrix
-  const handleGenerateChallenge = async (cellData) => {
-    try {
-      // Check if this is a Skill × Problem request
-      const isSkillProblem = cellData.sourceType === 'skill_x_problem'
-
-      // Build the request body based on challenge type
-      const requestBody = isSkillProblem
-        ? {
-            sourceType: 'skill_x_problem',
-            skillId: cellData.skillId,
-            skillLabel: cellData.skillLabel,
-            skillInsight: cellData.skillInsight || '',
-            problemId: cellData.problemId,
-            problemLabel: cellData.problemLabel,
-            problemInsight: cellData.problemInsight || '',
-            personaId: cellData.personaId || null,
-            personaLabel: cellData.personaLabel || null,
-            personaInsight: cellData.personaInsight || null
-          }
-        : {
-            sourceType: cellData.sourceType,
-            sourceLabel: cellData.sourceLabel,
-            sourceInsight: cellData.sourceInsight || '',
-            visibilityLayer: cellData.visibilityLayer,
-            // Include Play-list problem/persona context for richer AI generation
-            ...(cellData.mappedProblemLabel && { mappedProblemLabel: cellData.mappedProblemLabel }),
-            ...(cellData.mappedPersonaLabel && { mappedPersonaLabel: cellData.mappedPersonaLabel }),
-          }
-
-      const { data, error } = await supabase.functions.invoke('groan-challenge-generator', {
-        body: requestBody
-      })
-
-      if (error) {
-        console.error('Edge function error details:', error)
-        throw error
-      }
-
-      if (data?.title) {
-        // Save the generated challenge based on type
-        if (isSkillProblem) {
-          const { error: saveError } = await createSkillProblemChallenge({
-            userId: user.id,
-            title: data.title,
-            description: data.description,
-            skillId: cellData.skillId,
-            skillLabel: cellData.skillLabel,
-            problemId: cellData.problemId,
-            problemLabel: cellData.problemLabel,
-            personaId: cellData.personaId || null,
-            personaLabel: cellData.personaLabel || null,
-            scaryScore: data.scaryScore || 5,
-            wahooScore: data.wahooScore || 5,
-            generationPrompt: data.prompt
-          })
-
-          if (saveError) {
-            console.error('Error saving skill × problem challenge:', saveError)
-          }
-        } else {
-          // Standard challenge save
-          const { error: saveError } = await createGroanChallenge({
-            userId: user.id,
-            title: data.title,
-            description: data.description,
-            visibilityLayer: cellData.visibilityLayer,
-            sourceType: cellData.sourceType,
-            sourceId: cellData.sourceId,
-            sourceLabel: cellData.sourceLabel,
-            scaryScore: data.scaryScore || 5,
-            wahooScore: data.wahooScore || 5,
-            generationPrompt: data.prompt
-          })
-
-          if (saveError) {
-            console.error('Error saving challenge:', saveError)
-          }
-        }
-      }
-
-      return data
-    } catch (error) {
-      console.error('Error generating challenge:', error)
-      alert('Error generating challenge. Please try again.')
-      return null
-    }
-  }
-
-  // Handler for matrix cell clicks — opens popup immediately
-  const handleMatrixCellClick = (cellData) => {
-    // Normalize: ensure visibilityLayer is always a string ID
-    // handleCellClick passes `layer` (object), empty-cell button passes `visibilityLayer` (string)
-    const normalized = {
-      ...cellData,
-      visibilityLayer: cellData.visibilityLayer || cellData.layer?.id || cellData.challenge?.visibility_layer,
-      sourceId: cellData.sourceId || cellData.sourceItem?.id,
-      sourceLabel: cellData.sourceLabel || cellData.sourceItem?.cluster_label,
-      sourceInsight: cellData.sourceInsight || cellData.sourceItem?.insight,
-    }
-    if (normalized.challenge) {
-      setSelectedGroanChallenge(normalized.challenge)
-      setGroanCellContext(normalized)
-    } else {
-      // No challenge yet — open popup with cell context for creating one
-      setSelectedGroanChallenge(null)
-      setGroanCellContext(normalized)
-    }
-  }
-
-  // Build enriched cell context with Play-list mapping data
-  // On Play-list, keeps sourceType as 'skill' so it maps back to the skills matrix,
-  // but includes problem/persona as supplementary context for AI generation.
-  const getEnrichedCellContext = () => {
-    if (!groanCellContext) return null
-    // When on Play-list and user has mapped a problem, enrich with problem/persona context
-    // but keep sourceType as 'skill' so the challenge appears on the skills matrix
-    if (activeCategory === 'Courage' && groanCellContext.sourceType === 'skill' && mappedProblemId && mappedProblemId !== 'not_specified') {
-      const problem = mappedProblemId === 'custom'
-        ? { id: null, label: customProblem || 'Custom problem' }
-        : flowFinderData?.problems?.find(p => p.id === mappedProblemId)
-      const persona = mappedPersonaId === 'custom'
-        ? { id: null, label: customPersona || 'Custom persona' }
-        : mappedPersonaId && mappedPersonaId !== 'not_specified'
-          ? flowFinderData?.personas?.find(p => p.id === mappedPersonaId)
-          : null
-      return {
-        ...groanCellContext,
-        // Keep sourceType as 'skill' — the matrix is skills-only
-        mappedProblemLabel: problem?.cluster_label || problem?.label || customProblem,
-        mappedPersonaLabel: persona?.cluster_label || persona?.label || null,
-      }
-    }
-    return groanCellContext
-  }
-
-  // Generate challenge via AI from within the popup
-  const handleGenerateFromPopup = async () => {
-    if (!groanCellContext) return
-    setGroanChallengeLoading(true)
-    try {
-      const enrichedContext = getEnrichedCellContext()
-      const result = await handleGenerateChallenge(enrichedContext)
-      if (result?.title) {
-        // Fetch the newly created challenge from DB
-        const { data: newChallenges } = await supabase
-          .from('groan_challenges')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-        if (newChallenges?.[0]) {
-          setSelectedGroanChallenge(newChallenges[0])
-          // Append 3% improvement text if provided
-          if (threePercentText.trim() && newChallenges[0]) {
-            const updatedDesc = `${newChallenges[0].description}\n3% improvement: ${threePercentText.trim()}`
-            await supabase
-              .from('groan_challenges')
-              .update({ description: updatedDesc })
-              .eq('id', newChallenges[0].id)
-            setSelectedGroanChallenge(prev => ({ ...prev, description: updatedDesc }))
-          }
-        }
-        setGroanMatrixKey(prev => prev + 1)
-      }
-    } catch (err) {
-      console.error('Error generating from popup:', err)
-    } finally {
-      setGroanChallengeLoading(false)
-    }
-  }
-
-  // Handle saving a custom challenge (user-entered text)
-  const handleSaveCustomChallenge = async () => {
-    if (!customChallengeText.trim()) return
-    if (!selectedGroanChallenge && !groanCellContext) return
-    setGroanChallengeLoading(true)
-    try {
-      if (selectedGroanChallenge) {
-        // Update existing challenge with custom text
-        const { error } = await supabase
-          .from('groan_challenges')
-          .update({
-            title: customChallengeText.trim(),
-            description: `Custom challenge: ${customChallengeText.trim()}`,
-          })
-          .eq('id', selectedGroanChallenge.id)
-        if (error) throw error
-        setSelectedGroanChallenge(prev => ({
-          ...prev,
-          title: customChallengeText.trim(),
-          description: `Custom challenge: ${customChallengeText.trim()}`,
-        }))
-      } else {
-        // Create a new challenge from cell context with custom text
-        const ctx = getEnrichedCellContext() || groanCellContext
-        // Build description with problem/persona context if mapped
-        let description = `Custom challenge: ${customChallengeText.trim()}`
-        if (threePercentText.trim()) {
-          description += `\n3% improvement: ${threePercentText.trim()}`
-        }
-        if (ctx.mappedProblemLabel) {
-          description += `\nProblem: ${ctx.mappedProblemLabel}`
-        }
-        if (ctx.mappedPersonaLabel) {
-          description += `\nPersona: ${ctx.mappedPersonaLabel}`
-        }
-        // Always create as standard challenge (keeps sourceType for matrix lookup)
-        const saveResult = await createGroanChallenge({
-          userId: user.id,
-          title: customChallengeText.trim(),
-          description,
-          visibilityLayer: ctx.visibilityLayer,
-          sourceType: ctx.sourceType,
-          sourceId: ctx.sourceId,
-          sourceLabel: ctx.sourceLabel,
-          scaryScore: 5,
-          wahooScore: 5,
-        })
-        if (saveResult?.error) throw saveResult.error
-        // Fetch the newly created challenge and auto-accept it
-        const { data: newChallenges } = await supabase
-          .from('groan_challenges')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-        if (newChallenges?.[0]) {
-          await acceptGroanChallenge(newChallenges[0].id)
-        }
-        setGroanMatrixKey(prev => prev + 1)
-        // Close modal — challenge is now active on the matrix
-        closeGroanModal()
-      }
-      setCustomChallengeText('')
-    } catch (err) {
-      console.error('Error saving custom challenge:', err)
-    } finally {
-      setGroanChallengeLoading(false)
-    }
-  }
-
-  // Handle accepting a groan challenge
-  const handleAcceptGroanChallenge = async () => {
-    if (!selectedGroanChallenge) return
-    setGroanChallengeLoading(true)
-    try {
-      const { error } = await acceptGroanChallenge(selectedGroanChallenge.id)
-      if (error) throw error
-      // Update local state
-      setSelectedGroanChallenge(prev => ({ ...prev, accepted_at: new Date().toISOString() }))
-    } catch (err) {
-      console.error('Error accepting challenge:', err)
-    } finally {
-      setGroanChallengeLoading(false)
-    }
-  }
-
-  // Handle completing a groan challenge - show reflection step
-  const handleStartCompletion = () => {
-    setGroanReflection({ beforeState: null, afterState: null, protectiveArchetype: null, reflection: '', didThreePercent: null })
-    setGroanReflectionStep(true)
-  }
-
-  // Handle final completion with reflection data
-  const handleCompleteGroanChallenge = async () => {
-    if (!selectedGroanChallenge) return
-    setGroanChallengeLoading(true)
-    try {
-      // Build reflection text with 3% improvement data
-      let reflectionText = groanReflection.reflection || ''
-      if (groanReflection.didThreePercent !== null) {
-        reflectionText += `${reflectionText ? '\n' : ''}3% improvement: ${groanReflection.didThreePercent ? 'Yes' : 'No'}`
-      }
-      const { error } = await completeGroanChallenge(selectedGroanChallenge.id, {
-        reflectionText,
-        scaryScoreAfter: null,
-        wahooScoreAfter: null
-      })
-      if (error) throw error
-
-      // Award points: insert quest_completions record for the Groans category
-      // quest_id includes challenge ID so the unique index allows multiple completions
-      const PLAY_LIST_POINTS = 7
-      const questId = `play_list_challenge_${selectedGroanChallenge.id}`
-      const { error: questError } = await supabase
-        .from('quest_completions')
-        .insert({
-          user_id: user.id,
-          challenge_instance_id: progress?.challenge_instance_id || null,
-          quest_id: questId,
-          quest_category: 'Groans',
-          quest_type: 'Rewire',
-          points_earned: PLAY_LIST_POINTS,
-          challenge_day: progress?.current_day || 0,
-          project_id: selectedProject?.id || null,
-          reflection_text: JSON.stringify({
-            challenge_id: selectedGroanChallenge.id,
-            source_label: selectedGroanChallenge.source_label,
-            visibility_layer: selectedGroanChallenge.visibility_layer,
-            before_state: groanReflection.beforeState,
-            after_state: groanReflection.afterState,
-            protective_archetype: groanReflection.protectiveArchetype,
-            reflection: groanReflection.reflection
-          })
-        })
-      if (questError) {
-        console.warn('Error awarding play-list points:', questError)
-      } else {
-        // Update local completions state so points reflect immediately
-        setCompletions(prev => [...prev, {
-          user_id: user.id,
-          quest_id: questId,
-          quest_category: 'Groans',
-          quest_type: 'Rewire',
-          points_earned: PLAY_LIST_POINTS,
-          completed_at: new Date().toISOString()
-        }])
-      }
-
-      // Insert nervous system check-in
-      try {
-        await supabase.from('nervous_system_checkins').insert({
-          user_id: user.id,
-          before_state: groanReflection.beforeState,
-          after_state: groanReflection.afterState,
-          protective_archetype: groanReflection.protectiveArchetype,
-          checkin_type: 'playlist',
-          source_quest_id: questId,
-          source_challenge_id: selectedGroanChallenge.id,
-        })
-      } catch (e) {
-        console.warn('NS check-in insert error:', e)
-      }
-
-      // Remove from priority_weekly_picks so it no longer shows as active
-      try {
-        await supabase
-          .from('priority_weekly_picks')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('pick_type', 'groan')
-          .eq('reference_id', selectedGroanChallenge.id)
-      } catch (e) {
-        console.warn('Error removing weekly pick:', e)
-      }
-
-      // Trigger confetti
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
-
-      // Reset and close modal, refresh matrix
-      setGroanReflectionStep(false)
-      setSelectedGroanChallenge(null)
-      setGroanMatrixKey(prev => prev + 1)
-    } catch (err) {
-      console.error('Error completing challenge:', err)
-    } finally {
-      setGroanChallengeLoading(false)
-    }
-  }
-
-  // Handle compass check-in after Play-list challenge completion
-  // handleCompassAfterGroan removed — compass step replaced by NS check-in
-
-  // Handle regenerating a challenge (generate new first, then delete old)
-  const handleRegenerateChallenge = async () => {
-    if (!selectedGroanChallenge) return
-    setGroanChallengeLoading(true)
-
-    const challenge = selectedGroanChallenge
-    const isSkillProblem = challenge.skill_cluster_id && challenge.problem_cluster_id
-
-    try {
-      // Generate the new challenge FIRST — if this fails, old challenge is preserved
-      let generateResult
-      if (isSkillProblem) {
-        generateResult = await handleGenerateChallenge({
-          sourceType: 'skill_x_problem',
-          skillId: challenge.skill_cluster_id,
-          skillLabel: challenge.source_label?.split(' × ')[0] || 'Skill',
-          problemId: challenge.problem_cluster_id,
-          problemLabel: challenge.source_label?.split(' × ')[1]?.split(' (for ')[0] || 'Problem',
-          personaId: challenge.persona_cluster_id || null,
-          personaLabel: null
-        })
-      } else {
-        generateResult = await handleGenerateChallenge({
-          sourceType: challenge.source_type,
-          sourceId: challenge.source_id,
-          sourceLabel: challenge.source_label,
-          visibilityLayer: challenge.visibility_layer
-        })
-      }
-
-      // Only delete old challenge if new one was generated successfully
-      if (!generateResult) {
-        // Generation failed — handleGenerateChallenge already showed an alert
-        return
-      }
-
-      const { error: deleteError } = await supabase
-        .from('groan_challenges')
-        .delete()
-        .eq('id', challenge.id)
-
-      if (deleteError) {
-        console.error('Error deleting old challenge:', deleteError)
-      }
-
-      setSelectedGroanChallenge(null)
-
-      // Refresh matrix
-      setGroanMatrixKey(prev => prev + 1)
-    } catch (err) {
-      console.error('Error regenerating challenge:', err)
-    } finally {
-      setGroanChallengeLoading(false)
-    }
-  }
-
-  // Close groan modal and reset state
-  const closeGroanModal = () => {
-    setSelectedGroanChallenge(null)
-    setGroanCellContext(null)
-    setGroanReflectionStep(false)
-    setCustomChallengeText('')
-    setThreePercentText('')
-    // Reset Play-list mapping state
-    setMappedProblemId('')
-    setMappedPersonaId('')
-    setCustomProblem('')
-    setCustomPersona('')
-  }
-
-  // Compute which visibility layers are locked based on progress
-  const layerLockStatus = getLayerLockStatus(
-    flowFinderComplete,
-    selectedProject?.current_stage ?? 0
-  )
-
   // Extract all Flow Finder quests for the Play-list > Flow Finder sub-tab
   // Include flow_finder_skills despite being archived (shown under Skills group)
   const flowFinderQuests = (challengeData?.quests || []).filter(q =>
@@ -1682,18 +1337,8 @@ function Challenge() {
     return 0
   })
 
-  // Apply R-type and frequency filters for Healing tab
-  let displayQuests = filteredQuests
-  if (activeCategory === 'Healing') {
-    if (activeRTypeFilter !== 'All') {
-      displayQuests = displayQuests.filter(q => q.type === activeRTypeFilter)
-    }
-    if (activeFrequencyFilter !== 'all') {
-      displayQuests = displayQuests.filter(q => q.frequency === activeFrequencyFilter)
-    }
-  }
-
   // Apply search filter
+  let displayQuests = filteredQuests
   if (searchQuery.trim()) {
     const query = searchQuery.toLowerCase()
     displayQuests = displayQuests.filter(q =>
@@ -1807,7 +1452,12 @@ function Challenge() {
   return (
     <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
-      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => { setShowDailyCheckin(false); setCapacityRefresh(n => n + 1) }} />}
+      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={(state) => {
+        setShowDailyCheckin(false)
+        setCapacityRefresh(n => n + 1)
+        recheckStage()
+        if (state) generateZarloReaction(user?.id, 'daily_checkin', { state }).then(r => { if (r) setZarloReaction(r) })
+      }} />}
       <NotificationPrompt />
       <ChallengeHeader
         navigate={navigate}
@@ -1873,7 +1523,7 @@ function Challenge() {
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
           const isComingSoon = lockedCategories?.has(category)
-          const isLocked = isComingSoon || ((currentJourneyLevel ?? 0) === 0 && !unlockedTabs.has(category))
+          const isLocked = isComingSoon || !unlockedTabs.has(category)
           return (
             <button
               key={category}
@@ -1921,7 +1571,7 @@ function Challenge() {
         {/* Healing Summary */}
         {activeCategory === 'HealingSummary' && (
           <HealingSummary
-            onBack={() => setActiveCategory('Healing')}
+            onBack={() => setActiveCategory('Courage')}
             progress={progress}
           />
         )}
@@ -1929,26 +1579,10 @@ function Challenge() {
         {/* Quest Content - only show if not on Summary tabs */}
         {activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
-        {/* Artifact Progress — hidden on Play-list tab */}
-        {artifactProgress && activeCategory !== 'Courage' && activeCategory !== 'Healing' && (() => {
-          const stageConfig = null
-
-          // Healing: per-frequency title and description
-          const healingFreqMeta = {
-            daily: { name: '☀️ Daily Healing', desc: 'Clear what blocks your Vibe Rise. Small daily reps that add up.' },
-            weekly: { name: '📅 Weekly Healing', desc: 'Go deeper. Process the patterns your protective voice built.' },
-            deepdive: { name: '🌊 Deep Dive', desc: 'One-time flows to map your nervous system and find the wound.' },
-            explainer: { name: '📖 Explainers', desc: 'Understand the foundations of healing, emotional splinters, and the Four R\'s.' },
-            all: { name: '🧘 Healing Mastery', desc: 'Your combined healing progress across all practices.' }
-          }
-          const healingMeta = activeCategory === 'Healing' ? healingFreqMeta[activeFrequencyFilter] : null
-
-          const artifactName = healingMeta ? healingMeta.name
-            : stageConfig ? `${stageConfig.icon} ${stageConfig.name}`
-            : artifactProgress.name
-          const artifactDesc = healingMeta ? healingMeta.desc
-            : stageConfig ? stageConfig.description
-            : artifactProgress.description
+        {/* Artifact Progress — hidden on Courage tab */}
+        {artifactProgress && activeCategory !== 'Courage' && (() => {
+          const artifactName = artifactProgress.name
+          const artifactDesc = artifactProgress.description
           return (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
@@ -1958,66 +1592,18 @@ function Challenge() {
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                {activeCategory === 'Healing' && artifactProgress.frequencyCategories ? (
-                  (() => {
-                    // Show per-tab progress bar based on selected frequency
-                    const freqMap = { daily: 'Daily', weekly: 'Weekly', deepdive: 'Deep Dive', explainer: 'Explainer' }
-                    const iconMap = { Daily: '☀️', Weekly: '📅', 'Deep Dive': '🌊', Explainer: '📖' }
-
-                    if (activeFrequencyFilter === 'all') {
-                      // Combined total across all frequencies
-                      const totalCurrent = Object.values(artifactProgress.frequencyCategories)
-                        .reduce((sum, f) => sum + (f.currentPoints || 0), 0)
-                      const totalRequired = Object.values(artifactProgress.frequencyCategories)
-                        .reduce((sum, f) => sum + (f.pointsRequired || 0), 0)
-                      return (
-                        <div className="progress-bar-container">
-                          <div className="progress-bar-label">
-                            <span>📋 All Progress</span>
-                            <span>{totalCurrent}/{totalRequired}</span>
-                          </div>
-                          <div className="progress-bar">
-                            <div
-                              className="progress-bar-fill"
-                              style={{ width: `${Math.min((totalCurrent / totalRequired) * 100, 100)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      )
-                    }
-
-                    const freqKey = freqMap[activeFrequencyFilter]
-                    const freqData = freqKey && artifactProgress.frequencyCategories[freqKey]
-                    if (!freqData) return null
-                    return (
-                      <div className="progress-bar-container">
-                        <div className="progress-bar-label">
-                          <span>{iconMap[freqKey] || '📋'} {freqKey}</span>
-                          <span>{freqData.currentPoints}/{freqData.pointsRequired}</span>
-                        </div>
-                        <div className="progress-bar">
-                          <div
-                            className={`progress-bar-fill ${activeFrequencyFilter}`}
-                            style={{ width: `${Math.min((freqData.currentPoints / freqData.pointsRequired) * 100, 100)}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  })()
-                ) : (
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-label">
-                      <span>Progress</span>
-                      <span>{artifactProgress.currentPoints || 0}/{artifactProgress.pointsRequired}</span>
-                    </div>
-                    <div className="progress-bar">
-                      <div
-                        className="progress-bar-fill"
-                        style={{ width: `${Math.min(((artifactProgress.currentPoints || 0) / artifactProgress.pointsRequired) * 100, 100)}%` }}
-                      ></div>
-                    </div>
+                <div className="progress-bar-container">
+                  <div className="progress-bar-label">
+                    <span>Progress</span>
+                    <span>{artifactProgress.currentPoints || 0}/{artifactProgress.pointsRequired}</span>
                   </div>
-                )}
+                  <div className="progress-bar">
+                    <div
+                      className="progress-bar-fill"
+                      style={{ width: `${Math.min(((artifactProgress.currentPoints || 0) / artifactProgress.pointsRequired) * 100, 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
                 {(() => {
                   const tabStatus = getTabCompletionStatus(activeCategory)
                   if (tabStatus.totalQuests === 0) return null
@@ -2053,7 +1639,7 @@ function Challenge() {
           />
         )}
 
-        {/* Play-list Tab — Wahoo challenges */}
+        {/* Courage Tab — Wahoo challenges + Reach (league) */}
         {activeCategory === 'Courage' && (
           <PlayListTab
             userId={user?.id}
@@ -2061,17 +1647,28 @@ function Challenge() {
             onQuestComplete={handleQuestComplete}
             onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }}
             wahooCount={wahooCountThisWeek}
+            leagueData={{
+              league,
+              userTeam,
+              isOnTeam,
+              teams,
+              standings,
+              getCurrentWeek,
+              contentSubmissions,
+              onContentSubmitted: reloadContent,
+              userData,
+            }}
           />
         )}
 
-        {/* Healing tab — per-task healing intentions */}
-        {activeCategory === 'Healing' && (
-          <HealingIntentionsList userId={user?.id} />
+        {/* Journey Tab — hero stage, voice progress, thresholds */}
+        {activeCategory === 'Journey' && (
+          <JourneyTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
         )}
 
         {/* Level Tab */}
         {activeCategory === 'Quests' && (
-          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
+          <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)
           }} onGraduate={(newLevel) => {
@@ -2084,341 +1681,6 @@ function Challenge() {
 
         {/* Tracker tab removed — content moved to Play-list tab and /me page */}
       </>
-      )}
-
-      {/* Groan Challenge Detail Modal */}
-      {(selectedGroanChallenge || groanCellContext) && (
-        <div className="groan-modal-overlay" onClick={closeGroanModal}>
-          <div className="groan-modal" onClick={e => e.stopPropagation()}>
-            <button className="groan-modal-close" onClick={closeGroanModal}>×</button>
-
-            {!groanReflectionStep ? (
-              <>
-                {/* Header with layer badge */}
-                <div className="groan-modal-header">
-                  {/* Show challenge title if we have one, otherwise show layer explanation */}
-                  {selectedGroanChallenge ? (
-                    <h2>{selectedGroanChallenge.title}</h2>
-                  ) : (
-                    <h2>
-                      {(() => {
-                        const layerId = groanCellContext?.visibilityLayer
-                        const layerInfo = GROAN_VISIBILITY_LAYERS.find(l => l.id === layerId)
-                        return layerInfo ? `${layerInfo.icon} ${layerInfo.label} Challenge` : 'New Challenge'
-                      })()}
-                    </h2>
-                  )}
-                </div>
-
-                {/* Visibility layer selector for Skill × Problem (no layer pre-set) */}
-                {!selectedGroanChallenge && groanCellContext?.sourceType === 'skill_x_problem' && !groanCellContext?.visibilityLayer && (
-                  <div className="groan-layer-selector">
-                    <label className="groan-custom-label">Choose visibility level:</label>
-                    <div className="groan-layer-options">
-                      {GROAN_VISIBILITY_LAYERS.map(layer => {
-                        const isLocked = layerLockStatus[layer.id]?.locked
-                        return (
-                          <button
-                            key={layer.id}
-                            className={`groan-layer-option ${isLocked ? 'locked' : ''}`}
-                            disabled={isLocked}
-                            onClick={() => setGroanCellContext(prev => ({ ...prev, visibilityLayer: layer.id }))}
-                          >
-                            <span className="groan-layer-option-icon">{isLocked ? '🔒' : layer.icon}</span>
-                            <span className="groan-layer-option-label">{layer.label}</span>
-                            {isLocked && <span className="groan-layer-option-lock-msg">{layerLockStatus[layer.id].message}</span>}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Layer description when no challenge yet */}
-                {!selectedGroanChallenge && groanCellContext?.visibilityLayer && (
-                  <p className="groan-modal-description">
-                    {(() => {
-                      const layerInfo = GROAN_VISIBILITY_LAYERS.find(l => l.id === groanCellContext.visibilityLayer)
-                      return layerInfo?.description || ''
-                    })()}
-                  </p>
-                )}
-
-                {/* Challenge description when we have one */}
-                {selectedGroanChallenge && (() => {
-                  const desc = selectedGroanChallenge.description || ''
-                  const lines = desc.split('\n')
-                  const mainText = lines[0] || ''
-                  const metaLines = lines.slice(1).filter(l => l.trim())
-                  return (
-                    <div className="groan-modal-description">
-                      <p className="groan-desc-main">{mainText}</p>
-                      {metaLines.length > 0 && (
-                        <div className="groan-desc-meta">
-                          {metaLines.map((line, i) => {
-                            const colonIdx = line.indexOf(':')
-                            if (colonIdx > 0) {
-                              const label = line.slice(0, colonIdx).trim()
-                              const value = line.slice(colonIdx + 1).trim()
-                              return (
-                                <div key={i} className="groan-desc-meta-row">
-                                  <span className="groan-desc-meta-label">{label}</span>
-                                  <span className="groan-desc-meta-value">{value}</span>
-                                </div>
-                              )
-                            }
-                            return <p key={i} className="groan-desc-main">{line}</p>
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  )
-                })()}
-
-                {/* Source label — show skill × problem combo */}
-                {groanCellContext?.sourceType === 'skill_x_problem' && !selectedGroanChallenge && (
-                  <div className="groan-modal-source">
-                    <span className="source-icon">⚡</span>
-                    <span className="source-text">{groanCellContext.skillLabel} × {groanCellContext.problemLabel}</span>
-                  </div>
-                )}
-                {/* Source label — standard */}
-                {groanCellContext?.sourceType !== 'skill_x_problem' && (selectedGroanChallenge?.source_label || groanCellContext?.sourceLabel) && (
-                  <div className="groan-modal-source">
-                    <span className="source-icon">🎯</span>
-                    <span className="source-text">{selectedGroanChallenge?.source_label || groanCellContext?.sourceLabel}</span>
-                  </div>
-                )}
-
-                {/* Play-list: Required problem/persona mapping for skills-only matrix */}
-                {activeCategory === 'Courage' && !selectedGroanChallenge && groanCellContext?.sourceType === 'skill' && groanCellContext?.visibilityLayer && (
-                  <div className="groan-mapping-step">
-                    <label className="groan-custom-label">Which problem does this skill address?</label>
-                    <select
-                      className="groan-mapping-select"
-                      value={mappedProblemId}
-                      onChange={(e) => setMappedProblemId(e.target.value)}
-                    >
-                      <option value="not_specified">Not specified</option>
-                      {flowFinderData?.problems?.map(p => (
-                        <option key={p.id} value={p.id}>{p.cluster_label}</option>
-                      ))}
-                      <option value="custom">Enter custom...</option>
-                    </select>
-                    {mappedProblemId === 'custom' && (
-                      <input
-                        className="groan-custom-input"
-                        type="text"
-                        placeholder="Describe the problem..."
-                        value={customProblem}
-                        onChange={(e) => setCustomProblem(e.target.value)}
-                      />
-                    )}
-
-                    <label className="groan-custom-label" style={{ marginTop: '0.75rem' }}>Who is this for?</label>
-                    <select
-                      className="groan-mapping-select"
-                      value={mappedPersonaId}
-                      onChange={(e) => setMappedPersonaId(e.target.value)}
-                    >
-                      <option value="not_specified">Not specified</option>
-                      {flowFinderData?.personas?.map(p => (
-                        <option key={p.id} value={p.id}>{p.cluster_label}</option>
-                      ))}
-                      <option value="custom">Enter custom...</option>
-                    </select>
-                    {mappedPersonaId === 'custom' && (
-                      <input
-                        className="groan-custom-input"
-                        type="text"
-                        placeholder="Describe the persona..."
-                        value={customPersona}
-                        onChange={(e) => setCustomPersona(e.target.value)}
-                      />
-                    )}
-                  </div>
-                )}
-
-                {/* Custom challenge input + Generate AI — shown when layer is selected and no challenge or before accepting */}
-                {(groanCellContext?.visibilityLayer || selectedGroanChallenge) && (!selectedGroanChallenge || (!selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed')) && (
-                  <div className="groan-custom-challenge">
-                    <label className="groan-custom-label">Enter your own here:</label>
-                    <input
-                      type="text"
-                      className="groan-custom-input"
-                      placeholder="Type your own challenge..."
-                      value={customChallengeText}
-                      onChange={(e) => setCustomChallengeText(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && customChallengeText.trim() && handleSaveCustomChallenge()}
-                    />
-                    <label className="groan-custom-label">How can you make this 3% better?</label>
-                    <input
-                      type="text"
-                      className="groan-custom-input"
-                      placeholder="Type your 3% improvement..."
-                      value={threePercentText}
-                      onChange={(e) => setThreePercentText(e.target.value)}
-                    />
-                    {customChallengeText.trim() && (
-                      <button
-                        className="groan-btn groan-btn-save-custom"
-                        onClick={handleSaveCustomChallenge}
-                        disabled={groanChallengeLoading}
-                      >
-                        {groanChallengeLoading ? 'Saving...' : '✏️ Use This Challenge'}
-                      </button>
-                    )}
-                    <button
-                      className="groan-btn groan-btn-regenerate"
-                      onClick={selectedGroanChallenge ? handleRegenerateChallenge : handleGenerateFromPopup}
-                      disabled={groanChallengeLoading}
-                    >
-                      {groanChallengeLoading ? 'Generating...' : '✨ Generate with AI'}
-                    </button>
-                  </div>
-                )}
-
-                <div className="groan-modal-actions">
-                  {/* Accept — only when we have a challenge that's not yet accepted */}
-                  {selectedGroanChallenge && !selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed' && (
-                    <button
-                      className="groan-btn groan-btn-accept"
-                      onClick={handleAcceptGroanChallenge}
-                      disabled={groanChallengeLoading}
-                    >
-                      {groanChallengeLoading ? 'Accepting...' : '💪 Accept Challenge'}
-                    </button>
-                  )}
-
-                  {/* Accepted - show Complete + Change */}
-                  {selectedGroanChallenge?.accepted_at && selectedGroanChallenge.status !== 'completed' && (
-                    <>
-                      <button
-                        className="groan-btn groan-btn-complete"
-                        onClick={handleStartCompletion}
-                        disabled={groanChallengeLoading}
-                      >
-                        ✅ I Did It!
-                      </button>
-                      <button
-                        className="groan-btn groan-btn-change"
-                        onClick={() => {
-                          setCustomChallengeText(selectedGroanChallenge.title || '')
-                          setSelectedGroanChallenge(prev => ({ ...prev, accepted_at: null }))
-                        }}
-                        disabled={groanChallengeLoading}
-                      >
-                        🔄 Change Challenge
-                      </button>
-                    </>
-                  )}
-
-                  {/* Completed */}
-                  {selectedGroanChallenge?.status === 'completed' && (
-                    <>
-                      <div className="groan-completed-badge">
-                        ✅ Challenge Completed
-                      </div>
-                      <button
-                        className="groan-btn groan-btn-new-challenge"
-                        onClick={() => {
-                          // Clear current challenge to show new challenge form for same cell
-                          setSelectedGroanChallenge(null)
-                          setCustomChallengeText('')
-                          setThreePercentText('')
-                        }}
-                      >
-                        🎯 New Challenge
-                      </button>
-                    </>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Reflection Step */}
-                <div className="groan-modal-header">
-                  <span className="groan-modal-layer groan-modal-layer-reflection">REFLECTION</span>
-                  <h2>How did it go?</h2>
-                </div>
-
-                <div className="groan-reflection-form">
-                  <NervousSystemCheckin
-                    mode="both"
-                    beforeState={groanReflection.beforeState}
-                    afterState={groanReflection.afterState}
-                    onBeforeChange={(v) => setGroanReflection(prev => ({
-                      ...prev, beforeState: v,
-                      protectiveArchetype: needsArchetype(v, prev.afterState) ? prev.protectiveArchetype : null,
-                    }))}
-                    onAfterChange={(v) => setGroanReflection(prev => ({
-                      ...prev, afterState: v,
-                      protectiveArchetype: needsArchetype(prev.beforeState, v) ? prev.protectiveArchetype : null,
-                    }))}
-                    protectiveArchetype={groanReflection.protectiveArchetype}
-                    onArchetypeChange={(v) => setGroanReflection(prev => ({ ...prev, protectiveArchetype: v }))}
-                    hideButton
-                  />
-
-                  {/* 3% improvement toggle — only show if the challenge had a 3% item */}
-                  {selectedGroanChallenge?.description?.includes('3% improvement:') && (() => {
-                    const match = selectedGroanChallenge.description.match(/3% improvement:\s*(.+?)(?:\n|$)/)
-                    const improvementText = match?.[1]?.trim()
-                    return (
-                    <div className="groan-three-percent-toggle">
-                      <label className="groan-three-percent-label">Did you implement your 3% improvement?</label>
-                      {improvementText && (
-                        <div className="groan-three-percent-quote">&quot;{improvementText}&quot;</div>
-                      )}
-                      <div className="groan-toggle-buttons">
-                        <button
-                          className={`groan-toggle-btn ${groanReflection.didThreePercent === true ? 'active yes' : ''}`}
-                          onClick={() => setGroanReflection(prev => ({ ...prev, didThreePercent: true }))}
-                        >
-                          Yes
-                        </button>
-                        <button
-                          className={`groan-toggle-btn ${groanReflection.didThreePercent === false ? 'active no' : ''}`}
-                          onClick={() => setGroanReflection(prev => ({ ...prev, didThreePercent: false }))}
-                        >
-                          No
-                        </button>
-                      </div>
-                    </div>
-                    )
-                  })()}
-
-                  <div className="groan-reflection-text">
-                    <label>Quick reflection (optional)</label>
-                    <textarea
-                      placeholder="What did you learn? How do you feel?"
-                      value={groanReflection.reflection}
-                      onChange={(e) => setGroanReflection(prev => ({ ...prev, reflection: e.target.value }))}
-                      rows={3}
-                    />
-                  </div>
-                </div>
-
-                <div className="groan-modal-actions">
-                  <button
-                    className="groan-btn groan-btn-complete"
-                    onClick={handleCompleteGroanChallenge}
-                    disabled={groanChallengeLoading || !groanReflection.beforeState || !groanReflection.afterState || (needsArchetype(groanReflection.beforeState, groanReflection.afterState) && !groanReflection.protectiveArchetype)}
-                  >
-                    {groanChallengeLoading ? 'Saving...' : 'Complete Challenge'}
-                  </button>
-                  <button
-                    className="groan-btn groan-btn-back"
-                    onClick={() => setGroanReflectionStep(false)}
-                    disabled={groanChallengeLoading}
-                  >
-                    ← Back
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
       )}
 
       {/* PRE-ACTION Modal for resistance capture before starting milestones */}
@@ -2462,8 +1724,17 @@ function Challenge() {
         onClose={() => setGraduationModal({ isOpen: false, celebration: null })}
       />
 
-      {/* Level-up celebration modal */}
-      {showLevelUp && (
+      {/* Level-up / graduation celebration modal */}
+      {showLevelUp && showLevelUp.useFigurineOverlay && (
+        <FigurineOverlay
+          avatarUrl={showLevelUp.avatarUrl}
+          message={showLevelUp.name}
+          description={showLevelUp.description}
+          emoji={showLevelUp.emoji}
+          onDismiss={closeLevelUp}
+        />
+      )}
+      {showLevelUp && !showLevelUp.useFigurineOverlay && (
         <LevelUpModal key={levelUpKey} level={showLevelUp} onClose={closeLevelUp} />
       )}
 
@@ -2487,6 +1758,7 @@ function Challenge() {
           onComplete={async (quest, textInput) => {
             const inputValue = quest.inputType === 'checkbox' ? 'completed' : textInput
             await handleQuestComplete(quest, inputValue)
+            recheckStage()
           }}
           onClose={() => setHealingModalQuest(null)}
         />
@@ -2514,6 +1786,43 @@ function Challenge() {
             setShowIntentionCheckin(false)
           }}
           onClose={() => setShowIntentionCheckin(false)}
+        />
+      )}
+
+      {/* Insight Drop (self-knowledge card, max 1 per session) */}
+      {insight && <InsightDrop insight={insight} onDismiss={dismissInsight} />}
+
+      {/* Zarlo proactive bubble (Phase 3) — hidden when Zarlo chat is open */}
+      {zarloReaction && activeChat !== 'zarlo' && (
+        <ZarloProactiveBubble
+          message={zarloReaction}
+          onTap={() => setActiveChat('zarlo')}
+          onDismiss={() => setZarloReaction(null)}
+        />
+      )}
+
+      {/* Figurine FAB (bottom-left, chat conflict managed) */}
+      <FigurineFAB activeChat={activeChat} setActiveChat={setActiveChat} />
+
+      {/* Figurine: Mirror→Mentor transition overlay (Step 9) */}
+      {showMentorTransition && (
+        <FigurineOverlay
+          avatarUrl={mentorTransitionAvatar}
+          message="I'm the essence you've always felt but couldn't name. I'm here now, and I'm not going anywhere. Talk to me whenever you need."
+          emoji="🪞"
+          onDismiss={() => setShowMentorTransition(false)}
+          autoDismiss={15000}
+        />
+      )}
+
+      {/* Figurine: Monthly cryptic hook (Step 10) */}
+      {crypticHook && (
+        <FigurineOverlay
+          avatarUrl={crypticHook.avatarUrl}
+          message={crypticHook.message}
+          emoji="🔮"
+          onDismiss={() => setCrypticHook(null)}
+          autoDismiss={12000}
         />
       )}
       </div>

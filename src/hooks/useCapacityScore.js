@@ -250,17 +250,33 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
       })
 
       // Persist capacity to user_lifetime_scores for cross-user leaderboard reads
+      // Also check for zone transition (mystery box trigger)
       supabase
         .from('user_lifetime_scores')
-        .update({
-          capacity_score: thisWeek.capacity,
-          capacity_zone: thisWeek.zone,
-          safety_score: thisWeek.safety,
-          expression_score: thisWeek.expression,
-        })
+        .select('capacity_zone')
         .eq('user_id', userId)
         .is('project_id', null)
-        .then(() => {}) // fire-and-forget
+        .maybeSingle()
+        .then(({ data: prev }) => {
+          const previousZone = prev?.capacity_zone
+          supabase
+            .from('user_lifetime_scores')
+            .update({
+              capacity_score: thisWeek.capacity,
+              capacity_zone: thisWeek.zone,
+              safety_score: thisWeek.safety,
+              expression_score: thisWeek.expression,
+            })
+            .eq('user_id', userId)
+            .is('project_id', null)
+            .then(() => {
+              if (previousZone && thisWeek.zone !== previousZone) {
+                import('../lib/mysteryBoxes').then(({ checkZoneTransitionBox }) => {
+                  checkZoneTransitionBox(userId, thisWeek.zone, previousZone)
+                }).catch(() => {})
+              }
+            })
+        })
     }).catch(err => {
       console.error('useCapacityScore error:', err)
       setData(prev => ({ ...prev, loading: false }))

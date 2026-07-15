@@ -25,13 +25,27 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
     if (authError || !user) throw new Error('Unauthorized')
 
-    const { return_url } = await req.json()
+    const { return_url, plan_type = 'pro' } = await req.json()
+
+    // Per-plan price IDs (set as Supabase Edge Function secrets)
+    const PRICE_MAP: Record<string, string | undefined> = {
+      pro: Deno.env.get('STRIPE_PRICE_PRO'),
+      creator: Deno.env.get('STRIPE_PRICE_CREATOR'),
+      accelerator: Deno.env.get('STRIPE_PRICE_ACCELERATOR'),
+    }
+    const priceId = PRICE_MAP[plan_type] || Deno.env.get('STRIPE_PRICE_ID')
+    if (!priceId) throw new Error(`No Stripe price configured for plan: ${plan_type}`)
+
+    // Determine checkout mode from plan type
+    const isSubscription = plan_type !== 'accelerator'
 
     // Find or create Stripe customer
     const { data: existingSub } = await supabase
       .from('user_subscriptions')
       .select('stripe_customer_id')
       .eq('user_id', user.id)
+      .not('stripe_customer_id', 'is', null)
+      .limit(1)
       .maybeSingle()
 
     let customerId = existingSub?.stripe_customer_id
@@ -44,23 +58,14 @@ serve(async (req) => {
       customerId = customer.id
     }
 
-    // Create checkout session
-    // NOTE: mode: 'payment' = one-time purchase = lifetime access (no expiry check runs).
-    // To switch to recurring: change to 'subscription', ensure STRIPE_PRICE_ID points to a
-    // recurring price, and the stripe-webhook handler's subscription.updated/deleted events
-    // will then fire to manage expiry. Until then those webhook handlers are dormant.
-    // TODO: Replace STRIPE_PRICE_ID with actual Stripe Price ID once pricing is decided
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      mode: 'payment',
-      line_items: [{
-        price: Deno.env.get('STRIPE_PRICE_ID'),
-        quantity: 1,
-      }],
+      mode: isSubscription ? 'subscription' : 'payment',
+      line_items: [{ price: priceId, quantity: 1 }],
       allow_promotion_codes: true,
-      success_url: `${return_url}?payment=success`,
+      success_url: `${return_url}?payment=success&plan=${plan_type}`,
       cancel_url: `${return_url}?payment=cancelled`,
-      metadata: { supabase_user_id: user.id }
+      metadata: { supabase_user_id: user.id, plan: plan_type },
     })
 
     return new Response(

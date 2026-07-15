@@ -153,8 +153,8 @@ export async function trackDailyCheckin({ state }) {
   return sendEvent('daily_checkin', { state })
 }
 
-export async function trackWahooCompleted({ challengeId, wahooScore, scaryScore }) {
-  return sendEvent('wahoo_completed', { challengeId, wahooScore, scaryScore })
+export async function trackWahooCompleted({ challengeId }) {
+  return sendEvent('wahoo_completed', { challengeId })
 }
 
 export async function trackTunePractice({ practiceId }) {

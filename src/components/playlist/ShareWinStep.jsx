@@ -12,6 +12,7 @@ import {
   createFeedPost,
   fetchPostEnrichment,
 } from '../../lib/playlistFeedService'
+import { postSharedWahoo } from '../../lib/communityFeed'
 import './ShareWinStep.css'
 
 const MAX_CAPTION = 140
@@ -79,6 +80,13 @@ export default function ShareWinStep({
         caption,
         enrichment,
       })
+      // Also post to community_feed (new unified feed table)
+      await postSharedWahoo(
+        userId,
+        challenge?.title || challenge?.source_label || 'Shared a wahoo',
+        caption,
+        publicUrl
+      )
       setSharing(false)
       onDone?.({ shared: true })
     } catch (err) {

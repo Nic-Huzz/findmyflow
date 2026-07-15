@@ -23,6 +23,7 @@ import { fetchTicketsSold } from '../../hooks/useExperiencePipeline'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
+import PastExperienceStats from '../pipeline/PastExperienceStats'
 import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
 import ContentIntel from '../pipeline/ContentIntel'
@@ -776,12 +777,19 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         {/* ═══ EXPERIENCES TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'experiences' ? ' active' : ''}`}>
 
-          {/* ── Growth Line Pipeline (when experience selected) ── */}
+          {/* ── Growth Line Pipeline or Past Stats (when experience selected) ── */}
           {selectedExperienceId ? (
-            <ExperiencePipeline
-              experienceId={selectedExperienceId}
-              onBack={() => setSelectedExperienceId(null)}
-            />
+            past.some(e => e.id === selectedExperienceId) ? (
+              <PastExperienceStats
+                experienceId={selectedExperienceId}
+                onBack={() => setSelectedExperienceId(null)}
+              />
+            ) : (
+              <ExperiencePipeline
+                experienceId={selectedExperienceId}
+                onBack={() => setSelectedExperienceId(null)}
+              />
+            )
           ) : (
           <>
           {/* Fill this event — nearest upcoming */}

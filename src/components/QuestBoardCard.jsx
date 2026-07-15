@@ -7,22 +7,23 @@
 import { useState, useEffect, useRef } from 'react'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
-import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
-import { getWeekStartLocal } from '../lib/dateUtils'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
+import WahooCreator from './WahooCreator'
 import './QuestBoardCard.css'
 
 export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [expanded, setExpanded] = useState(false)
+  const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
   const [isCourage, setIsCourage] = useState(false)
+  const [showWahooCreator, setShowWahooCreator] = useState(false)
+  const [wahooCreatorText, setWahooCreatorText] = useState('')
   const [saving, setSaving] = useState(false)
   const [showClose, setShowClose] = useState(false)
   const [healingTaskId, setHealingTaskId] = useState(null) // which task's healing modal is open
   const [healingTaskText, setHealingTaskText] = useState('')
-  const [healingPromptTaskId, setHealingPromptTaskId] = useState(null) // show "explore fear?" prompt
-  const [healingPromptStep, setHealingPromptStep] = useState('ask') // 'ask' | 'when'
+  const [healingExistingData, setHealingExistingData] = useState(null)
   const [healingIntentions, setHealingIntentions] = useState({}) // { taskId: healingIntention }
   const [outcomeTaskId, setOutcomeTaskId] = useState(null) // show outcome prompt after completion
   const [groanModalChallenge, setGroanModalChallenge] = useState(null) // courage completion modal
@@ -53,54 +54,28 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
 
   const addTask = async () => {
     if (!taskInput.trim() || saving) return
+
+    // Courage challenge → open WahooCreator for depth + visibility capture
+    if (isCourage) {
+      setWahooCreatorText(taskInput.trim())
+      setShowWahooCreator(true)
+      return
+    }
+
+    // Regular task → save inline
     setSaving(true)
     try {
-      let groanId = null
-      if (isCourage) {
-        const { data: dbRecord } = await createGroanChallenge({
-          userId,
-          title: taskInput.trim(),
-          description: `Life path: ${quest.label}`,
-          visibilityLayer: 'screen',
-          sourceType: 'life_path',
-          sourceLabel: quest.label,
-          scaryScore: 5,
-          wahooScore: 5,
-          wahooCategory: null,
-        })
-        if (dbRecord) {
-          await acceptGroanChallenge(dbRecord.id)
-          await supabase.from('priority_weekly_picks').upsert({
-            user_id: userId,
-            week_start_date: getWeekStartLocal(),
-            pick_type: 'groan',
-            reference_id: dbRecord.id,
-            display_name: taskInput.trim(),
-          }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
-          groanId = dbRecord.id
-        }
-      }
-
-      const { data: insertedTask, error } = await supabase.from('quest_tasks').insert({
+      const { error } = await supabase.from('quest_tasks').insert({
         quest_id: quest.id,
         user_id: userId,
         text: taskInput.trim(),
-        is_courage_challenge: isCourage,
-        groan_challenge_id: groanId,
+        is_courage_challenge: false,
         sort_order: totalCount,
       }).select('id').single()
 
       if (error) console.error('Add task error:', error)
       else {
-        const savedText = taskInput.trim()
         setTaskInput('')
-        setIsCourage(false)
-
-        // Option C: if courage tagged, show healing prompt
-        if (isCourage && insertedTask?.id) {
-          setHealingPromptTaskId(insertedTask.id)
-          setHealingTaskText(savedText)
-        }
 
         // Award 2 RP for adding a quest task
         await supabase.from('quest_completions').insert({
@@ -111,7 +86,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           points_earned: 2,
           challenge_day: 0,
           project_id: null,
-        })
+        }).then(() => {}).catch(() => {})
 
         onUpdate?.()
       }
@@ -164,7 +139,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         points_earned: 3,
         challenge_day: 0,
         project_id: null,
-      }).catch(() => {})
+      }).then(() => {}).catch(() => {})
     }
     if (!newDone && !task.is_courage_challenge) {
       supabase.from('quest_completions').delete()
@@ -216,7 +191,16 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           points_earned: 10,
           challenge_day: 0,
           project_id: null,
-        }).catch(() => {})
+        }).then(() => {}).catch(() => {})
+
+        // Mystery box: first quest achieved
+        supabase.from('quests')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .eq('close_reason', 'achieved')
+          .then(({ count }) => {
+            if (count === 1) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'first_quest_achieved', 'silver'))
+          }).then(() => {}).catch(() => {})
       }
       setShowClose(false); onUpdate?.()
     }
@@ -243,78 +227,39 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           {/* Task list */}
           {tasks.length > 0 && (
             <div className="qbc-tasks">
-              {tasks.map(task => (
-                <div key={task.id} className={`qbc-task ${task.done ? 'done' : ''}`}>
-                  <button className={`qbc-check ${task.done ? 'checked' : ''}`} onClick={() => toggleTask(task)}>
-                    {task.done ? '✓' : ''}
-                  </button>
-                  <span className="qbc-task-text">{task.text}</span>
-                  {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
-                  {healingIntentions[task.id] && (
-                    <span className="qbc-healing-badge" title="Healing flow completed">💚</span>
-                  )}
-                </div>
-              ))}
+              {(() => {
+                const incomplete = tasks.filter(t => !t.done)
+                const completed = tasks.filter(t => t.done)
+                return (
+                  <>
+                    {incomplete.map(task => (
+                      <div key={task.id} className="qbc-task">
+                        <button className="qbc-check" onClick={() => toggleTask(task)} />
+                        <span className="qbc-task-text">{task.text}</span>
+                        {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                        {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                      </div>
+                    ))}
+                    {completed.length > 0 && (
+                      <button className="qbc-show-more" onClick={(e) => { e.stopPropagation(); setShowAllTasks(!showAllTasks) }}>
+                        {showAllTasks ? 'Hide completed' : `Show ${completed.length} completed`}
+                      </button>
+                    )}
+                    {showAllTasks && completed.map(task => (
+                      <div key={task.id} className="qbc-task done">
+                        <button className="qbc-check checked" onClick={() => toggleTask(task)}>✓</button>
+                        <span className="qbc-task-text">{task.text}</span>
+                        {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                        {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                      </div>
+                    ))}
+                  </>
+                )
+              })()}
             </div>
           )}
 
-          {/* Healing prompt (Option C) — appears after adding a courage task */}
-          {healingPromptTaskId && healingPromptStep === 'ask' && (
-            <div className="qbc-healing-prompt">
-              <div className="qbc-healing-prompt-text">Want to explore what makes this scary?</div>
-              <div className="qbc-healing-prompt-actions">
-                <button className="qbc-healing-prompt-yes"
-                  onClick={() => setHealingPromptStep('when')}>
-                  Yes, dig in 💚
-                </button>
-                <button className="qbc-healing-prompt-no"
-                  onClick={() => { setHealingPromptTaskId(null); setHealingPromptStep('ask') }}>
-                  No, just do it ⚡
-                </button>
-              </div>
-            </div>
-          )}
-
-          {healingPromptTaskId && healingPromptStep === 'when' && (
-            <div className="qbc-healing-prompt">
-              <div className="qbc-healing-prompt-text">Deep dive now?</div>
-              <div className="qbc-healing-prompt-actions">
-                <button className="qbc-healing-prompt-yes"
-                  onClick={async () => {
-                    // Create minimal healing_intention so it persists even if flow is closed early
-                    try {
-                      await supabase.from('healing_intentions').upsert({
-                        quest_task_id: healingPromptTaskId,
-                        user_id: userId,
-                        healing_stage: 'in_progress',
-                        updated_at: new Date().toISOString(),
-                      }, { onConflict: 'quest_task_id' })
-                    } catch (e) { /* non-blocking */ }
-                    setHealingTaskId(healingPromptTaskId)
-                    setHealingPromptTaskId(null)
-                    setHealingPromptStep('ask')
-                  }}>
-                  Now 💚
-                </button>
-                <button className="qbc-healing-prompt-later"
-                  onClick={async () => {
-                    try {
-                      await supabase.from('healing_intentions').upsert({
-                        quest_task_id: healingPromptTaskId,
-                        user_id: userId,
-                        healing_stage: 'in_progress',
-                        updated_at: new Date().toISOString(),
-                      }, { onConflict: 'quest_task_id' })
-                    } catch (e) { /* non-blocking */ }
-                    setHealingPromptTaskId(null)
-                    setHealingPromptStep('ask')
-                  }}>
-                  Later
-                </button>
-              </div>
-              <div className="qbc-healing-prompt-hint">You can always continue from the Healing tab</div>
-            </div>
-          )}
+          {/* Healing prompt removed — healing flow opens directly as bottom sheet */}
 
           {/* Outcome prompt — appears after completing a task with healing expectation */}
           {outcomeTaskId && (
@@ -371,8 +316,9 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           taskText={healingTaskText}
           userId={userId}
           questTaskId={healingTaskId}
-          onComplete={() => { setHealingTaskId(null); setHealingTaskText(''); onUpdate?.() }}
-          onClose={() => { setHealingTaskId(null); setHealingTaskText('') }}
+          existingData={healingExistingData}
+          onComplete={() => { setHealingTaskId(null); setHealingTaskText(''); setHealingExistingData(null); onUpdate?.() }}
+          onClose={() => { setHealingTaskId(null); setHealingTaskText(''); setHealingExistingData(null) }}
         />
       )}
 
@@ -384,6 +330,34 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           onComplete={() => { setGroanModalChallenge(null); onUpdate?.() }}
           onClose={() => setGroanModalChallenge(null)}
         />
+      )}
+
+      {/* WahooCreator popup for courage challenges */}
+      {showWahooCreator && (
+        <div className="wc-modal-overlay" onClick={() => setShowWahooCreator(false)}>
+          <div className="wc-modal" onClick={e => e.stopPropagation()}>
+            <button className="wc-modal-close" onClick={() => setShowWahooCreator(false)}>&times;</button>
+            <WahooCreator
+              userId={userId}
+              initialText={wahooCreatorText}
+              initialQuestId={quest.id}
+              initialSourceLabel={quest.label}
+              onWahooAccepted={(healingTask, voiceId) => {
+                setShowWahooCreator(false)
+                setTaskInput('')
+                setIsCourage(false)
+                onUpdate?.()
+                // If user chose "dive in now", open HealingFlowModal with voice pre-filled
+                if (healingTask?.id) {
+                  setHealingTaskId(healingTask.id)
+                  setHealingTaskText(healingTask.text || '')
+                  setHealingExistingData(voiceId ? { pattern: voiceId } : null)
+                }
+              }}
+              onClose={() => { setShowWahooCreator(false); setTaskInput(''); setIsCourage(false) }}
+            />
+          </div>
+        </div>
       )}
     </div>
   )

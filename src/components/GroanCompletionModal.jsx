@@ -8,6 +8,8 @@ import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
+import { postFeedEvent } from '../lib/communityFeed'
+import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -16,18 +18,16 @@ function CrossPollinationSkip({ onSkip }) {
   return null
 }
 
-const PLAY_LIST_POINTS = 7
-
-// Wahoo classification → scary/wahoo score mapping (4 states)
-const WAHOO_SCORES = {
-  vibe:     { scary: 8, wahoo: 9 },    // Vibe Rise — scared AND alive
-  peace:    { scary: 3, wahoo: 8 },    // Fun — alive, not scary
-  anxious:  { scary: 8, wahoo: 3 },    // Pressure — pushed too far
-  shutdown: { scary: 3, wahoo: 3 },    // Uninterested — flat
+// RP per wahoo classification (Hades model: harder states earn MORE)
+const WAHOO_RP = {
+  vibe: 10,      // 7 base + 3 identity bonus
+  peace: 7,      // base
+  anxious: 10,   // 7 base + 3 edge-push bonus (Pressure is as brave as Vibe Rise)
+  shutdown: 9,   // 7 base + 2 honesty bonus
   // Legacy compat
-  wahoo: { scary: 8, wahoo: 9 },
-  vibe_rise: { scary: 3, wahoo: 8 },
-  routine: { scary: 3, wahoo: 3 },
+  wahoo: 10,
+  vibe_rise: 7,
+  routine: 7,
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
@@ -100,21 +100,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     setSaving(true)
     setError(null)
     try {
-      // 1. Mark groan challenge as completed with user-reported scores
+      // 1. Mark groan challenge as completed
       const reflectionText = reflection
-      const scores = WAHOO_SCORES[wahooClassification] || WAHOO_SCORES.routine
       const { error: groanError } = await completeGroanChallenge(challenge.id, {
         reflectionText,
-        scaryScoreAfter: scores.scary,
-        wahooScoreAfter: scores.wahoo,
       })
       if (groanError) throw groanError
-
-      // Update scary/wahoo scores on the challenge record (user self-report replaces AI prediction)
-      await supabase
-        .from('groan_challenges')
-        .update({ scary_score: scores.scary, wahoo_score: scores.wahoo })
-        .eq('id', challenge.id)
 
       // 2. Upsert quest_completions record (delete old first to prevent RP farming)
       const questId = `play_list_challenge_${challenge.id}`
@@ -126,7 +117,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         quest_id: questId,
         quest_category: 'Groans',
         quest_type: 'Rewire',
-        points_earned: PLAY_LIST_POINTS,
+        points_earned: WAHOO_RP[wahooClassification] || 7,
         challenge_day: 0,
         project_id: null,
         reflection_text: JSON.stringify({
@@ -136,7 +127,8 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           before_state: beforeState,
           after_state: afterState,
           wahoo_classification: wahooClassification,
-          identity_statement: identityStatement || null,
+          identity_statement: wahooClassification === 'anxious' ? null : (identityStatement || null),
+          voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
           expectation_result: expectationResult,
           reflection,
         }),
@@ -163,15 +155,31 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           p_user_id: userId,
           p_project_id: null,
           p_category: getScoringCategory('Groans'),
-          p_points: PLAY_LIST_POINTS,
+          p_points: WAHOO_RP[wahooClassification] || 7,
           p_week_start: getWeekStartLocal(),
         })
       } catch (e) {
         console.warn('Score increment error:', e)
       }
 
+      // 4a2. Auto-post first_wahoo + mystery box checks
+      try {
+        const { count } = await supabase
+          .from('quest_completions')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .eq('quest_category', 'Groans')
+        if (count === 1) {
+          postFeedEvent(userId, 'first_wahoo', 'Completed their first wahoo')
+          earnMysteryBox(userId, 'first_wahoo', 'bronze')
+        }
+      } catch (e) { /* best effort */ }
+
+      // 4a3. Mystery box: new wahoo category check
+      checkNewCategoryBox(userId, challenge.visibility_layer).catch(() => {})
+
       // 4b. Track wahoo analytics
-      trackWahooCompleted({ challengeId: challenge.id, wahooScore: scores.wahoo, scaryScore: scores.scary })
+      trackWahooCompleted({ challengeId: challenge.id })
 
       // 4c. Award Movement XP for Strike completion
       if (challenge.challenge_source === 'strike') {
@@ -252,13 +260,16 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Error updating level courage progress:', e)
       }
 
-      // Celebration based on classification
+      // Celebration based on classification (Hades model: every state gets appropriate response)
       if (wahooClassification === 'vibe' || wahooClassification === 'wahoo') {
+        // Gold confetti — peak experience
         confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#E9A23B', '#f5c55a', '#fbbf24'] })
         setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 }, colors: ['#E9A23B', '#f5c55a'] }), 300)
-      } else {
-        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } })
+      } else if (wahooClassification === 'peace') {
+        // Gentle purple — warm acknowledgment
+        confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#5e17eb', '#8b5cf6', '#c4b5fd'] })
       }
+      // Pressure + Uninterested: no confetti (intentional — the copy IS the response)
       setStep('share')
     } catch (err) {
       console.error('Error completing challenge:', err)
@@ -272,6 +283,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     if (shared) {
       confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } })
     }
+    // Notify Zarlo of wahoo completion (proactive bubble)
+    window.dispatchEvent(new CustomEvent('zarlo:reaction', {
+      detail: { actionType: 'wahoo_completed', actionData: { category: challenge?.wahoo_category || 'unknown', classification: wahooClassification || 'unknown' } }
+    }))
     onComplete?.()
     onClose()
   }
@@ -334,16 +349,42 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 <span className="gcm-wahoo-label">Uninterested</span>
               </button>
             </div>
-            {wahooClassification && (
+            {/* Per-state response copy (Hades inversion: every state gets a meaningful response) */}
+            {wahooClassification === 'vibe' && (
               <div className="gcm-identity-prompt">
+                {essenceName && <div className="gcm-identity-line">That's the {essenceName} in you.</div>}
                 <label className="gcm-identity-label">Now that I {challenge.title?.toLowerCase()}, I've proven I'm someone who...</label>
                 <input className="gcm-identity-input" type="text" value={identityStatement}
                   onChange={e => setIdentityStatement(e.target.value)}
                   placeholder="e.g. takes risks, shows up, backs themselves" />
               </div>
             )}
-            {wahooClassification === 'vibe' && essenceName && (
-              <div className="gcm-identity-line">That's the {essenceName} in you.</div>
+            {wahooClassification === 'peace' && (
+              <div className="gcm-identity-prompt">
+                <div className="gcm-reframe-line">That landed. Good.</div>
+                <label className="gcm-identity-label">Now that I {challenge.title?.toLowerCase()}, I've proven I'm someone who...</label>
+                <input className="gcm-identity-input" type="text" value={identityStatement}
+                  onChange={e => setIdentityStatement(e.target.value)}
+                  placeholder="e.g. takes risks, shows up, backs themselves" />
+              </div>
+            )}
+            {wahooClassification === 'anxious' && (
+              <div className="gcm-identity-prompt">
+                <div className="gcm-reframe-line gcm-reframe-pressure">
+                  That wasn't easy. The voice probably told you to stop. You didn't.
+                </div>
+                <label className="gcm-identity-label">What did the voice say before you did it?</label>
+                <input className="gcm-identity-input" type="text" value={identityStatement}
+                  onChange={e => setIdentityStatement(e.target.value)}
+                  placeholder="e.g. you're not ready, people will judge, it won't work" />
+              </div>
+            )}
+            {wahooClassification === 'shutdown' && (
+              <div className="gcm-identity-prompt">
+                <div className="gcm-reframe-line gcm-reframe-neutral">
+                  This one didn't land. That's useful information. Not everything that scares you matters to you.
+                </div>
+              </div>
             )}
             <button
               className="gcm-gold-btn"

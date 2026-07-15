@@ -2,10 +2,12 @@
 // Hook for managing celebration animations
 
 import { useState, useCallback } from 'react'
+import confetti from 'canvas-confetti'
 import {
   triggerConfetti,
   triggerCelebration,
-  triggerFireConfetti
+  triggerFireConfetti,
+  triggerSideCannons
 } from '../components/Celebrations'
 import { sendAchievementNotification } from '../lib/notifications'
 
@@ -55,6 +57,7 @@ export function useCelebrations() {
 
   /**
    * Celebrate leveling up
+   * Note: community feed auto-post handled in Challenge.jsx (has userId)
    */
   const celebrateLevelUp = useCallback((newLevel) => {
     setShowLevelUp(newLevel)
@@ -76,6 +79,8 @@ export function useCelebrations() {
 
   /**
    * Celebrate hitting a streak milestone
+   * Note: celebrateStreakMilestone is currently unused (not called anywhere).
+   * When wired, community feed auto-post should be added at the call site (where userId is available).
    */
   const celebrateStreakMilestone = useCallback((days) => {
     triggerFireConfetti()
@@ -141,6 +146,60 @@ export function useCelebrations() {
     setFloatingPoints(prev => prev.filter(p => p.id !== id))
   }, [])
 
+  /**
+   * Celebrate a hero stage graduation (e.g. Stage 3→4)
+   */
+  const celebrateStageGraduation = useCallback((fromStage, toStage, context = {}) => {
+    const CELEBRATIONS = {
+      '0-2': { confetti: 'purple', emoji: '\u{1F331}',
+        title: 'Stage 2: Call to Adventure',
+        message: 'You showed up. That takes more than most people realise. Your hero\'s journey has begun.' },
+      '2-3': { confetti: 'purple', emoji: '\u{1F5FA}\uFE0F',
+        title: 'Stage 3: Mapping Your World',
+        message: 'You\'ve started collecting dots. Your curiosities, your life story, your paths. Now the patterns can start forming.' },
+      '3-4': { confetti: 'side_cannons', emoji: '\u{1FA9E}',
+        title: 'Stage 4: Meeting the Mentor',
+        message: context.essenceName
+          ? `Your essence voice has a name. ${context.essenceName}. This is who you\'ve always been underneath the noise.`
+          : 'Your essence archetype has been revealed. This is who you are underneath the noise.' },
+      '4-5': { confetti: 'gold', emoji: '\u{1F525}',
+        title: 'Stage 5: Crossing the Threshold',
+        message: 'You did something brave and felt it land. That feeling is your compass. Follow it.' },
+      '5-6': { confetti: 'purple', emoji: '\u2694\uFE0F',
+        title: 'Stage 6: Tests, Allies, Enemies',
+        message: 'You\'re going deeper on one path. The courage challenges are building something real.' },
+      '6-7': { confetti: null, emoji: '\u{1F441}\uFE0F',
+        title: 'Stage 7: The Inmost Cave',
+        message: context.voiceName
+          ? `The ${context.voiceName.charAt(0).toUpperCase() + context.voiceName.slice(1).replace(/_/g, ' ')}. Five times. The pattern is clear. You\'re ready to face what\'s underneath.`
+          : 'The pattern is clear. You\'re ready to face what\'s underneath.' },
+    }
+
+    const key = `${fromStage}-${toStage}`
+    const c = CELEBRATIONS[key]
+    if (!c) return
+
+    if (c.confetti === 'side_cannons') triggerSideCannons()
+    else if (c.confetti === 'gold') {
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#E9A23B', '#f5c55a', '#fbbf24'] })
+      setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 }, colors: ['#E9A23B', '#f5c55a'] }), 300)
+    } else if (c.confetti === 'purple') {
+      confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#5e17eb', '#8b5cf6', '#c4b5fd'] })
+    }
+    // 6→7: no confetti (reverent)
+
+    setShowLevelUp({
+      name: c.title,
+      emoji: c.emoji,
+      description: c.message,
+      isGraduation: true,
+      avatarUrl: context.avatarUrl || null,
+      useFigurineOverlay: context.useFigurineOverlay || false,
+    })
+    setLevelUpKey(k => k + 1)
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200])
+  }, [])
+
   return {
     // State
     showLevelUp,
@@ -155,6 +214,7 @@ export function useCelebrations() {
     celebrateStreakMilestone,
     celebrateImprovementSuccess,
     celebrateFirstTask,
+    celebrateStageGraduation,
 
     // Cleanup
     clearToast,

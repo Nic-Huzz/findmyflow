@@ -216,7 +216,6 @@ export {
   acceptGroanChallenge,
   completeGroanChallenge,
   skipGroanChallenge,
-  updateChallengeScores,
   // Proof Collection
   addGroanProof,
   fetchGroanProof,

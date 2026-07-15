@@ -309,6 +309,44 @@
   background: rgba(249, 115, 22, 0.04);
 }
 
+/* Inline tracker (drains inside expression, stalls inside safety) */
+.tt-inline-tracker {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.tt-inline-tracker-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.tt-inline-tracker-icon {
+  font-size: 0.9rem;
+}
+
+.tt-inline-tracker-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tt-inline-tracker-meta {
+  font-size: 0.7rem;
+  color: #999;
+  margin-left: auto;
+}
+
+.tt-inline-tracker-sub {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0 0 8px;
+}
+
 /* Drain form */
 .tt-drain-form {
   margin-top: 12px;

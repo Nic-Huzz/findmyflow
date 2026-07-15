@@ -20,10 +20,11 @@ const corsHeaders = {
 const STALE_MS = 15 * 60 * 1000 // 15 minutes — match the cron interval
 
 // Fantasy scoring categories — mirrors leagueConfig.js (3 categories)
+// Tune + Courage + Reach (win 2 of 3). Healing merged into Courage.
 const FANTASY_CATEGORIES: Record<string, { key: string; label: string; dbFilter: string[]; scoringType: string }> = {
-  play_list: { key: 'play_list', label: 'Wahoos', dbFilter: ['Groans'], scoringType: 'raw' },
-  healing: { key: 'healing', label: 'Healing', dbFilter: ['Healing', 'Daily', 'Weekly'], scoringType: 'raw' },
   tune: { key: 'tune', label: 'Tune', dbFilter: ['Tune'], scoringType: 'raw' },
+  courage: { key: 'courage', label: 'Courage', dbFilter: ['Groans', 'Healing', 'Daily', 'Weekly'], scoringType: 'raw' },
+  reach: { key: 'reach', label: 'Reach', dbFilter: [], scoringType: 'content' },
 }
 
 const CATEGORY_KEYS = Object.keys(FANTASY_CATEGORIES)
@@ -237,6 +238,9 @@ async function calculateUserScores(
     if (!catEntry) continue
     scores[catEntry.key] += (c.points_earned || 0)
   }
+
+  // Reach: approved content submission points
+  scores.reach = approvedContentPoints
 
   return scores
 }

@@ -1,0 +1,179 @@
+.owl-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.owl-popup {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.owl-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.owl-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 6px;
+}
+
+.owl-intro {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.owl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.owl-item {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.owl-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.owl-item-row:active {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.owl-item-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.owl-item-text {
+  flex: 1;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.owl-item-arrow {
+  font-size: 0.7rem;
+  color: rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.owl-quest-picker {
+  padding: 0 14px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.owl-saving {
+  font-size: 0.75rem;
+  color: #E9A23B;
+  font-weight: 600;
+  display: block;
+  margin-top: 4px;
+}
+
+.owl-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.owl-count {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.owl-skip {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.owl-depth-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 12px 0 6px;
+}
+
+.owl-depth-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.owl-depth-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.owl-depth-btn.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+}
+
+.owl-link-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: #5e17eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.owl-link-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

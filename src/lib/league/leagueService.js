@@ -256,7 +256,9 @@ export async function deleteMatchup(matchupId) {
 // ============================================
 
 export async function submitContent({ leagueId, userId, teamId, weekNumber, contentType, linkUrl, description }) {
-  const pointsValue = CONTENT_POINT_VALUES[contentType]?.points || 0
+  const config = CONTENT_POINT_VALUES[contentType]
+  const pointsValue = config?.points || 0
+  const status = config?.autoApprove ? 'approved' : 'pending'
 
   const { data, error } = await supabase
     .from('league_content_submissions')
@@ -269,7 +271,7 @@ export async function submitContent({ leagueId, userId, teamId, weekNumber, cont
       link_url: linkUrl,
       description,
       points_value: pointsValue,
-      status: 'pending',
+      status,
     })
     .select()
     .single()

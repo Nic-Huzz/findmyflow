@@ -126,6 +126,26 @@
   font-style: italic;
   animation: fadeIn 0.5s ease;
 }
+
+.gcm-reframe-line {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5e17eb;
+  margin: 0.75rem 0 0.5rem;
+  line-height: 1.5;
+  animation: fadeIn 0.5s ease;
+}
+
+.gcm-reframe-pressure {
+  color: #9333ea;
+}
+
+.gcm-reframe-neutral {
+  color: #6b7280;
+  font-weight: 500;
+}
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
 .gcm-gold-btn {

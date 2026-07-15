@@ -53,6 +53,14 @@
   animation: introTextIn 0.6s ease 0.15s both;
 }
 
+.challenge-intro-line {
+  margin: 0 0 12px;
+}
+
+.challenge-intro-line:last-child {
+  margin-bottom: 0;
+}
+
 @keyframes introTextIn {
   from {
     opacity: 0;

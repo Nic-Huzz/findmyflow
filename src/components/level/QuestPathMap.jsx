@@ -18,6 +18,8 @@ import { supabase } from '../../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../../lib/crm/groanChallengeService'
 import { getWeekStartLocal } from '../../lib/dateUtils'
 import HealingFlowModal from '../HealingFlowModal'
+import BackdatePanel from './BackdatePanel'
+import QuestTaskSheet from './QuestTaskSheet'
 import {
   TRUNK_X, CAREER_X, stateY, STATE_META, STATES,
   branchPath, computeCone, isInCone,
@@ -35,12 +37,25 @@ function scaledY(state) {
   return stateY(state) * SCALE_Y
 }
 
-// ── Vertical overview constants (Y=time, X=state) ──
-const OV_W = 420   // overview viewBox width
-const OV_H = 800   // overview viewBox height (taller for more dot visibility)
-const OV_BOTTOM = OV_H - 100 // Y for earliest (bottom, room for rotated labels)
-const OV_TOP_PAD = 50        // room at top for NOW
-const OV_TOP = OV_TOP_PAD     // Y for most recent (top)
+// ── Vertical overview constants (Y=depth L0-L4, X=state) ──
+const OV_W = 420
+const OV_H = 900
+const OV_TOP = 60
+const OV_BOTTOM = OV_H - 100
+
+// Depth level Y positions (L0=bottom, L4=top)
+const DEPTH_LEVELS = [
+  { id: 'education',   label: 'L0 Learning',    short: 'L0' },
+  { id: 'testing',     label: 'L1 Testing',     short: 'L1' },
+  { id: 'practising',  label: 'L2 Practising',  short: 'L2' },
+  { id: 'charging',    label: 'L3 Charging',    short: 'L3' },
+  { id: 'teaching',    label: 'L4 Teaching',     short: 'L4' },
+]
+const DEPTH_ORDER = { education: 0, testing: 1, practising: 2, charging: 3, teaching: 4 }
+function depthY(d) {
+  const idx = DEPTH_ORDER[d] ?? 0
+  return OV_BOTTOM - (idx / 4) * (OV_BOTTOM - OV_TOP)
+}
 
 // State zone X ranges (left=uninterested, right=vibe rise)
 const STATE_ZONES = {
@@ -75,10 +90,13 @@ export default function QuestPathMap({
   const [activeSlide, setActiveSlide] = useState(0)
   const [healingIntentions, setHealingIntentions] = useState({})
   const [crossPollination, setCrossPollination] = useState([])
+  const [heroAvatarUrl, setHeroAvatarUrl] = useState(null)
+  const [sheetTask, setSheetTask] = useState(null)
+  const [sheetData, setSheetData] = useState(null)
   const lightMode = true
 
   const activeQuests = useMemo(() =>
-    quests.filter(q => q.status === 'active' && q.label !== 'Healing Work'),
+    quests.filter(q => q.label !== 'Healing Work' && q.close_reason !== 'archived'),
     [quests]
   )
 
@@ -108,9 +126,34 @@ export default function QuestPathMap({
   useEffect(() => {
     if (!userId) return
     supabase.from('quest_cross_pollination')
-      .select('source_quest_id, target_quest_id, created_at')
+      .select('id, source_quest_id, target_quest_id, groan_challenge_id, created_at')
       .eq('user_id', userId)
-      .then(({ data }) => { if (data) setCrossPollination(data) })
+      .then(async ({ data }) => {
+        if (!data) return
+        // Fetch merge challenge depths
+        const mergeIds = data.filter(cp => cp.groan_challenge_id).map(cp => cp.groan_challenge_id)
+        let mergeDepths = {}
+        if (mergeIds.length > 0) {
+          const { data: depths } = await supabase.from('groan_challenges').select('id, depth_level').in('id', mergeIds)
+          depths?.forEach(d => { mergeDepths[d.id] = d.depth_level })
+        }
+        setCrossPollination(data.map(cp => ({
+          ...cp,
+          merge_depth: mergeDepths[cp.groan_challenge_id] || null,
+        })))
+      })
+  }, [userId])
+
+  // Load hero avatar
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('user_stage_progress')
+      .select('hero_avatar_url')
+      .eq('user_id', userId)
+      .not('hero_avatar_url', 'is', null)
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => { if (data?.hero_avatar_url) setHeroAvatarUrl(data.hero_avatar_url) })
   }, [userId])
 
   // Scroll sync for dot indicators
@@ -126,25 +169,24 @@ export default function QuestPathMap({
     return () => document.body.classList.remove('modal-active')
   }, [])
 
-  const trunkS = trunkState || 'anxious'
-  const trunkYPos = scaledY(trunkS)
-
-  // Compute global cone
-  const cone = useMemo(() => {
-    if (!careers?.length) return { centerY: trunkYPos, topY: 0, botY: VB_H, empty: true }
-    const mapped = careers.filter(c => c.predictedState).map(c => ({
-      predictedState: c.predictedState,
-      realistic: true,
-    }))
-    const raw = computeCone(mapped, safety || 0)
-    // Scale cone Y values to our viewBox
-    return {
-      ...raw,
-      centerY: raw.centerY * SCALE_Y,
-      topY: raw.topY * SCALE_Y,
-      botY: raw.botY * SCALE_Y,
+  // Tap handler for ⚡/💚 icons
+  const handleDotTap = useCallback(async (task) => {
+    setSheetTask(task)
+    setSheetData(null)
+    if (task.groan_challenge_id) {
+      try {
+        const { data } = await supabase.from('quest_completions')
+          .select('reflection_text')
+          .eq('quest_id', `play_list_challenge_${task.groan_challenge_id}`)
+          .maybeSingle()
+        if (data?.reflection_text) {
+          setSheetData(JSON.parse(data.reflection_text))
+        }
+      } catch (e) { /* non-blocking */ }
     }
-  }, [careers, safety, trunkYPos])
+  }, [])
+
+  const trunkS = trunkState || 'anxious'
 
   return (
     <div className="qpm-overlay">
@@ -174,9 +216,12 @@ export default function QuestPathMap({
             uid={uid}
             quests={activeQuests}
             questTasks={questTasks}
+            healingIntentions={healingIntentions}
             trunkState={trunkS}
             light={lightMode}
             crossPollination={crossPollination}
+            heroAvatarUrl={heroAvatarUrl}
+            onDotTap={handleDotTap}
           />
         </div>
 
@@ -200,10 +245,6 @@ export default function QuestPathMap({
               quest={quest}
               tasks={questTasks[quest.id] || []}
               healingIntentions={healingIntentions}
-              trunkState={trunkS}
-              trunkY={trunkYPos}
-              cone={cone}
-              light={lightMode}
             />
             <FocusFooter
               quest={quest}
@@ -218,6 +259,45 @@ export default function QuestPathMap({
       </div>
 
       <div className="qpm-swipe-hint">← swipe →</div>
+
+      {/* Merge connections */}
+      {crossPollination.length > 0 && (
+        <div className="qpm-merges">
+          <div className="qpm-merges-title">Connections</div>
+          {crossPollination.map(cp => {
+            const source = activeQuests.find(q => q.id === cp.source_quest_id)
+            const target = activeQuests.find(q => q.id === cp.target_quest_id)
+            if (!source || !target) return null
+            const sourceColour = SAFE_COLOURS[source.predicted_state] || '#5e17eb'
+            const targetColour = SAFE_COLOURS[target.predicted_state] || '#5e17eb'
+            return (
+              <div key={cp.id} className="qpm-merge-row">
+                <span style={{ color: sourceColour, fontWeight: 600 }}>{source.label}</span>
+                <span className="qpm-merge-arrow">→</span>
+                <span style={{ color: targetColour, fontWeight: 600 }}>{target.label}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Bottom sheet for task details */}
+      {sheetTask && (
+        <QuestTaskSheet
+          task={sheetTask}
+          quest={activeQuests.find(q => (questTasks[q.id] || []).some(t => t.id === sheetTask.id))}
+          completionData={sheetData}
+          healingIntention={healingIntentions[sheetTask.id]}
+          crossPollination={crossPollination
+            .filter(cp => sheetTask.groan_challenge_id && cp.groan_challenge_id === sheetTask.groan_challenge_id)
+            .map(cp => {
+              const targetQuest = activeQuests.find(q => q.id === cp.target_quest_id)
+              const sourceQuest = activeQuests.find(q => q.id === cp.source_quest_id)
+              return { questLabel: targetQuest?.label || sourceQuest?.label || 'Another path' }
+            })}
+          onClose={() => { setSheetTask(null); setSheetData(null) }}
+        />
+      )}
     </div>
   )
 }
@@ -225,16 +305,7 @@ export default function QuestPathMap({
 
 // ─── Overview SVG (vertical: Y=time, X=state) ────────────────────────────────
 
-function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollination }) {
-  // Compute global date range across all tasks
-  const dateRange = useMemo(() => {
-    const allDates = quests.flatMap(q =>
-      (questTasks[q.id] || []).filter(t => t.created_at).map(t => new Date(t.created_at).getTime())
-    )
-    if (!allDates.length) return { minDate: Date.now() - 86400000, maxDate: Date.now() }
-    return { minDate: Math.min(...allDates), maxDate: Math.max(...allDates) }
-  }, [quests, questTasks])
-
+function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, light, crossPollination, heroAvatarUrl, onDotTap }) {
   // Compute lane offsets: quests sharing a predicted_state get spread horizontally
   const laneOffsets = useMemo(() => {
     const groups = {}
@@ -254,26 +325,15 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
     return offsets
   }, [quests])
 
-  // Compute merged pairs from cross-pollination signals
-  // Each unique pair that has ANY signal becomes a merge
-  const mergedPairs = useMemo(() => {
-    const seen = {}
-    const pairs = []
-    crossPollination.forEach(cp => {
-      const key = [cp.source_quest_id, cp.target_quest_id].sort().join(':')
-      if (seen[key]) return // only first signal per pair
-      seen[key] = true
-      // Compute merge Y from signal date
-      const signalDate = new Date(cp.created_at).getTime()
-      const { minDate, maxDate } = dateRange
-      const timeSpan = maxDate - minDate || 1
-      const t = (signalDate - minDate) / timeSpan
-      const mergeY = OV_BOTTOM - t * (OV_BOTTOM - OV_TOP)
-      const [idA, idB] = key.split(':')
-      pairs.push({ idA, idB, mergeY, key })
+  // Find the most advanced quest (highest depth) for avatar placement
+  const mostAdvancedId = useMemo(() => {
+    let best = null, bestDepth = -1
+    quests.forEach(q => {
+      const d = DEPTH_ORDER[q.depth_level] ?? 0
+      if (d > bestDepth) { bestDepth = d; best = q.id }
     })
-    return pairs
-  }, [crossPollination, dateRange])
+    return best
+  }, [quests])
 
   return (
     <div className="qpm-canvas qpm-canvas-vertical">
@@ -285,13 +345,9 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
             <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
-          <radialGradient id={`${uid}avGlow`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#E9A23B" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#E9A23B" stopOpacity="0" />
-          </radialGradient>
         </defs>
 
-        {/* State zone columns */}
+        {/* State zone columns (X axis) */}
         {STATES.map(s => {
           const zone = STATE_ZONES[s]
           if (!zone) return null
@@ -307,396 +363,274 @@ function OverviewSVG({ uid, quests, questTasks, trunkState, light, crossPollinat
           )
         })}
 
-        {/* Zone dividers */}
+        {/* Column dividers */}
         <line x1="110" y1={OV_TOP - 10} x2="110" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
         <line x1="210" y1={OV_TOP - 10} x2="210" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
         <line x1="310" y1={OV_TOP - 10} x2="310" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
 
-        {/* Quest paths (vertical lines) */}
-        {quests.map(quest => (
-          <VerticalQuestLine
-            key={quest.id}
-            uid={uid}
-            quest={quest}
-            tasks={questTasks[quest.id] || []}
-            laneX={laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')}
-            dateRange={dateRange}
-          />
-        ))}
-
-        {/* Merge lines: when a cross-pollination signal exists, merge two lines */}
-        {mergedPairs.map(({ idA, idB, mergeY, key }) => {
-          const xA = laneOffsets[idA]
-          const xB = laneOffsets[idB]
-          if (xA == null || xB == null) return null
-          const mergeX = (xA + xB) / 2
-          const questA = quests.find(q => q.id === idA)
-          const questB = quests.find(q => q.id === idB)
-          const mergeColour = '#5e17eb'
+        {/* Depth level rows (Y axis) */}
+        {DEPTH_LEVELS.map((d, i) => {
+          const y = depthY(d.id)
           return (
-            <g key={key}>
-              {/* Lines converging to merge point */}
-              <path d={`M ${xA} ${mergeY + 30} Q ${xA} ${mergeY + 10}, ${mergeX} ${mergeY}`}
-                fill="none" stroke={SAFE_COLOURS[questA?.predicted_state] || mergeColour}
-                strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-              <path d={`M ${xB} ${mergeY + 30} Q ${xB} ${mergeY + 10}, ${mergeX} ${mergeY}`}
-                fill="none" stroke={SAFE_COLOURS[questB?.predicted_state] || mergeColour}
-                strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-              {/* Merged thick line continuing upward */}
-              <line x1={mergeX} y1={mergeY} x2={mergeX} y2={OV_TOP}
-                stroke={mergeColour} strokeWidth="4.5" strokeLinecap="round" opacity="0.6" />
-              <line x1={mergeX} y1={mergeY} x2={mergeX} y2={OV_TOP}
-                stroke={mergeColour} strokeWidth="12" strokeLinecap="round" opacity="0.04"
-                filter={`url(#${uid}glow)`} />
-              {/* Merge node */}
-              <circle cx={mergeX} cy={mergeY} r="5" fill={mergeColour} opacity="0.3" />
-              <circle cx={mergeX} cy={mergeY} r="3" fill={mergeColour} opacity="0.5" />
-              {/* Merge avatar */}
-              <circle cx={mergeX} cy={OV_TOP + 15} r="8" fill={mergeColour} opacity="0.7" />
-              <text x={mergeX} y={OV_TOP + 18} fill="#fff" fontSize="8" fontWeight="700" textAnchor="middle">🔥</text>
-              <circle cx={mergeX} cy={OV_TOP + 15} r="11" fill="none" stroke={mergeColour}
-                strokeWidth="1" opacity="0.12">
-                <animate attributeName="r" values="11;17;11" dur="2.5s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite" />
-              </circle>
+            <g key={d.id}>
+              <line x1="25" y1={y} x2={OV_W - 15} y2={y} stroke="rgba(0,0,0,0.04)" strokeDasharray="4 4" />
+              <text x="18" y={y + 4} fill="rgba(0,0,0,0.2)"
+                fontSize="8" fontWeight="700" textAnchor="end">
+                {d.short}
+              </text>
             </g>
           )
         })}
 
-        {/* NOW marker at top */}
-        <text x={OV_W - 20} y={OV_TOP - 5} fill="rgba(0,0,0,0.2)"
-          fontSize="8" fontWeight="600" textAnchor="end">NOW ↑</text>
+        {/* Quest flow lines + courage challenge dots */}
+        {quests.map(quest => {
+          const x = laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')
+          const colour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
+          const isClosed = quest.status === 'closed' || quest.status === 'completed'
+          const tasks = questTasks[quest.id] || []
+          const courageTasks = tasks
+            .filter(t => t.is_courage_challenge && t.depth_level)
+            .sort((a, b) => new Date(a.backdated_date || a.created_at) - new Date(b.backdated_date || b.created_at))
+
+          if (courageTasks.length === 0) {
+            // No courage tasks — just show label + position dot
+            const y = depthY(quest.depth_level || 'education')
+            return (
+              <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
+                <circle cx={x} cy={y} r="6" fill={colour} opacity="0.6" />
+                <text x={x} y={OV_BOTTOM + 16} fill={colour} opacity={isClosed ? 0.3 : 0.5}
+                  fontSize="10" fontWeight="700" textAnchor="end"
+                  transform={`rotate(-45, ${x}, ${OV_BOTTOM + 16})`}>
+                  {quest.label?.slice(0, 22)}
+                </text>
+              </g>
+            )
+          }
+
+          // Place dots vertically: within each depth band, spread chronologically
+          // Band boundaries: each depth zone gets equal vertical space
+          const bandH = (OV_BOTTOM - OV_TOP) / 5 // 5 levels, each gets a band
+          const dotPoints = courageTasks.map(t => {
+            const depthIdx = DEPTH_ORDER[t.depth_level] ?? 0
+            return { task: t, depthIdx }
+          })
+
+          // Within each depth band, assign Y positions chronologically
+          const byDepth = {}
+          dotPoints.forEach(p => {
+            if (!byDepth[p.depthIdx]) byDepth[p.depthIdx] = []
+            byDepth[p.depthIdx].push(p)
+          })
+
+          const positioned = []
+          Object.entries(byDepth).forEach(([depthIdx, points]) => {
+            const idx = parseInt(depthIdx)
+            const bandTop = OV_BOTTOM - (idx + 1) * bandH
+            const bandBottom = OV_BOTTOM - idx * bandH
+            const padding = 12
+            const usableH = bandBottom - bandTop - padding * 2
+            points.forEach((p, i) => {
+              const t = points.length > 1 ? i / (points.length - 1) : 0.5
+              const y = bandBottom - padding - t * usableH
+              positioned.push({ ...p, y })
+            })
+          })
+
+          // Sort all positioned dots by Y (bottom to top) for the line path
+          positioned.sort((a, b) => b.y - a.y)
+
+          // Build smooth path through all dots
+          const pathPoints = positioned.map(p => ({ x, y: p.y }))
+          const firstY = pathPoints.length > 0 ? pathPoints[0].y : OV_BOTTOM
+          const lastY = pathPoints.length > 0 ? pathPoints[pathPoints.length - 1].y : OV_TOP
+
+          return (
+            <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
+              {/* Flow line */}
+              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
+                stroke={colour} strokeWidth="2.5" strokeLinecap="round" opacity="0.4" />
+              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
+                stroke={colour} strokeWidth="8" strokeLinecap="round" opacity="0.04" />
+
+              {/* Courage dots along the line */}
+              {positioned.map(({ task, y }) => (
+                <g key={task.id}>
+                  <circle cx={x} cy={y} r="4.5"
+                    fill={task.done ? colour : 'none'}
+                    stroke={task.done ? 'none' : colour}
+                    strokeWidth={task.done ? 0 : 1}
+                    opacity={task.done ? 0.75 : 0.3} />
+                </g>
+              ))}
+
+              {/* Current position — avatar on most advanced, dot on others */}
+              {quest.id === mostAdvancedId && heroAvatarUrl ? (
+                <g>
+                  <circle cx={x} cy={lastY} r="12" fill={colour} opacity="0.15" />
+                  <circle cx={x} cy={lastY} r="10" fill="#f5f5f0" />
+                  <defs>
+                    <clipPath id={`${uid}av-${quest.id}`}>
+                      <circle cx={x} cy={lastY} r="9" />
+                    </clipPath>
+                  </defs>
+                  <image href={heroAvatarUrl} x={x - 9} y={lastY - 9} width="18" height="18"
+                    clipPath={`url(#${uid}av-${quest.id})`} preserveAspectRatio="xMidYMid slice" />
+                  <circle cx={x} cy={lastY} r="10" fill="none" stroke={colour} strokeWidth="1.5" opacity="0.6" />
+                  <circle cx={x} cy={lastY} r="13" fill="none" stroke={colour} strokeWidth="1" opacity="0.1">
+                    <animate attributeName="r" values="13;20;13" dur="2.5s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite" />
+                  </circle>
+                </g>
+              ) : (
+                <circle cx={x} cy={lastY} r="7"
+                  fill={colour} opacity="0.9" stroke="white" strokeWidth="2" />
+              )}
+
+              {/* Label */}
+              <text x={x} y={OV_BOTTOM + 16} fill={colour} opacity={isClosed ? 0.3 : 0.5}
+                fontSize="10" fontWeight="700" textAnchor="end"
+                transform={`rotate(-45, ${x}, ${OV_BOTTOM + 16})`}>
+                {quest.label?.slice(0, 22)}
+              </text>
+            </g>
+          )
+        })}
+
+        {/* Merge curves from cross-pollination — source flows into target */}
+        {crossPollination.map(cp => {
+          const sourceX = laneOffsets[cp.source_quest_id]
+          const targetX = laneOffsets[cp.target_quest_id]
+          if (sourceX == null || targetX == null) return null
+          const sourceQuest = quests.find(q => q.id === cp.source_quest_id)
+          const targetQuest = quests.find(q => q.id === cp.target_quest_id)
+          if (!sourceQuest || !targetQuest) return null
+          const sourceColour = SAFE_COLOURS[sourceQuest.predicted_state] || '#5e17eb'
+          // Source departs from its highest depth
+          const sourceTasks = (questTasks[cp.source_quest_id] || []).filter(t => t.is_courage_challenge && t.depth_level)
+          const sourceMaxDepth = sourceTasks.length > 0
+            ? Math.max(...sourceTasks.map(t => DEPTH_ORDER[t.depth_level] ?? 0))
+            : (DEPTH_ORDER[sourceQuest.depth_level] ?? 0)
+          const sourceDepthKey = Object.keys(DEPTH_ORDER).find(k => DEPTH_ORDER[k] === sourceMaxDepth) || 'education'
+          const sy = depthY(sourceDepthKey)
+          // Target: use merge challenge depth, or fall back to quest depth
+          const ty = depthY(cp.merge_depth || targetQuest.depth_level || 'education')
+          return (
+            <g key={cp.id || `merge-${cp.source_quest_id}-${cp.target_quest_id}`}>
+              <path d={`M ${sourceX} ${sy} C ${(sourceX + targetX) / 2} ${sy}, ${(sourceX + targetX) / 2} ${ty}, ${targetX} ${ty}`}
+                fill="none" stroke={sourceColour} strokeWidth="2" strokeLinecap="round" opacity="0.35" />
+              <circle cx={targetX} cy={ty} r="4" fill={sourceColour} opacity="0.3" />
+            </g>
+          )
+        })}
       </svg>
     </div>
   )
 }
 
 
-// ─── Vertical quest line (single path in overview) ────────────────────────────
+// ─── Focus SVG (single quest, vertical) ───────────────────────────────────────
 
-function VerticalQuestLine({ uid, quest, tasks, laneX, dateRange }) {
+function FocusSVG({ uid, quest, tasks, healingIntentions }) {
   const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
   const n = tasks.length
+  const FH = 500
+  const FW = 320
+  const FTop = 30
+  const FBottom = FH - 30
+  const centerX = FW / 2
 
-  // No tasks — just show label
-  if (n === 0) {
-    return (
-      <text x={laneX} y={OV_BOTTOM + 12} fill={destColour} opacity="0.4"
-        fontSize="7" fontWeight="700" textAnchor="middle">
-        {quest.label?.slice(0, 14)}
-      </text>
-    )
-  }
+  const getDate = (t) => t.backdated_date || t.created_at
 
-  // Map tasks to Y positions based on created_at dates
-  const { minDate, maxDate } = dateRange
-  const timeSpan = maxDate - minDate || 1
+  const sortedTasks = useMemo(() =>
+    [...tasks].filter(t => getDate(t)).sort((a, b) => new Date(getDate(a)) - new Date(getDate(b))),
+    [tasks]
+  )
 
   const taskPoints = useMemo(() =>
-    tasks
-      .filter(t => t.created_at)
-      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-      .map(task => {
-        const t = (new Date(task.created_at) - minDate) / timeSpan
-        const y = OV_BOTTOM - t * (OV_BOTTOM - OV_TOP)
-        return { x: laneX, y, task }
-      }),
-    [tasks, laneX, minDate, maxDate, timeSpan]
+    sortedTasks.map((task, i) => {
+      const frac = sortedTasks.length > 1 ? i / (sortedTasks.length - 1) : 0.5
+      const y = FBottom - frac * (FBottom - FTop)
+      return { x: centerX, y, task }
+    }),
+    [sortedTasks, centerX]
   )
 
-  // Find the most recent completed task for the character marker
-  const lastDone = [...taskPoints].reverse().find(p => p.task.done)
+  const firstY = taskPoints.length > 0 ? taskPoints[0].y : FBottom
+  const lastY = taskPoints.length > 0 ? taskPoints[taskPoints.length - 1].y : FTop
 
-  // Build path through all task points (straight vertical with the lane X)
-  const firstY = taskPoints.length > 0 ? taskPoints[0].y : OV_BOTTOM
-  const lastY = taskPoints.length > 0 ? taskPoints[taskPoints.length - 1].y : OV_TOP
+  if (n === 0) return null
 
-  return (
-    <g>
-      {/* Line from first to last task */}
-      <line x1={laneX} y1={firstY} x2={laneX} y2={lastY}
-        stroke={destColour} strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
-      {/* Glow */}
-      <line x1={laneX} y1={firstY} x2={laneX} y2={lastY}
-        stroke={destColour} strokeWidth="7" strokeLinecap="round" opacity="0.05"
-        filter={`url(#${uid}glow)`} />
-
-      {/* Task dots */}
-      {taskPoints.map(({ x, y, task }) => (
-        <circle key={task.id} cx={x} cy={y} r={task.done ? 3 : 2}
-          fill={task.done ? destColour : 'none'}
-          stroke={task.done ? 'none' : `${destColour}40`}
-          strokeWidth={task.done ? 0 : 1}
-          opacity={task.done ? 0.7 : 1} />
-      ))}
-
-      {/* Character marker at most recent completed task */}
-      {lastDone && (
-        <g>
-          <circle cx={lastDone.x} cy={lastDone.y} r="7" fill={destColour} opacity="0.8" />
-          <text x={lastDone.x} y={lastDone.y + 3} fill="#fff" fontSize="7"
-            fontWeight="700" textAnchor="middle">
-            {STATE_META[quest.predicted_state]?.emoji?.slice(0, 2) || '•'}
-          </text>
-          <circle cx={lastDone.x} cy={lastDone.y} r="10" fill="none"
-            stroke={destColour} strokeWidth="1" opacity="0.12">
-            <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite" />
-          </circle>
-        </g>
-      )}
-
-      {/* Quest label at bottom (rotated) */}
-      <text x={laneX} y={OV_BOTTOM + 16} fill={destColour} opacity="0.9"
-        fontSize="11" fontWeight="800" textAnchor="end"
-        transform={`rotate(-45, ${laneX}, ${OV_BOTTOM + 16})`}>
-        {quest.label?.slice(0, 22)}
-      </text>
-    </g>
-  )
-}
-
-
-// ─── Focus SVG (single quest) ─────────────────────────────────────────────────
-
-function FocusSVG({ uid, quest, tasks, healingIntentions, trunkState, trunkY, cone, light }) {
   return (
     <div className="qpm-canvas qpm-canvas-focus">
-      <svg viewBox={`0 0 ${VB_W} 380`} preserveAspectRatio="xMidYMid meet">
-        <rect width={VB_W} height="380" fill={light ? '#f5f5f0' : '#0a0a14'} rx="16" />
+      <svg viewBox={`0 0 ${FW} ${FH}`} preserveAspectRatio="xMidYMid meet">
+        <rect width={FW} height={FH} fill="#f5f5f0" rx="16" />
+
         <defs>
-          <filter id={`${uid}glow`} x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="5" result="blur" />
+          <filter id={`${uid}fglow`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
-          <linearGradient id={`${uid}sg`} x1="0" y1="1" x2="0.8" y2="0">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState] || '#10b981'} />
-            <stop offset="100%" stopColor={SAFE_COLOURS[quest.predicted_state] || '#c084fc'} />
-          </linearGradient>
-          <linearGradient id={`${uid}sgg`} x1="0" y1="1" x2="0.8" y2="0">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState] || '#10b981'} stopOpacity={light ? 0.3 : 0.06} />
-            <stop offset="100%" stopColor={SAFE_COLOURS[quest.predicted_state] || '#c084fc'} stopOpacity={light ? 0.3 : 0.06} />
-          </linearGradient>
-          <radialGradient id={`${uid}ftg`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={SAFE_COLOURS[trunkState]} stopOpacity="0.25" />
-            <stop offset="100%" stopColor={SAFE_COLOURS[trunkState]} stopOpacity="0" />
-          </radialGradient>
-          <linearGradient id={`${uid}fcg`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#f59e0b" stopOpacity={light ? 0.22 : 0.05} />
-            <stop offset="60%" stopColor="#f59e0b" stopOpacity={light ? 0.1 : 0.015} />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
-        {/* Cone (subtle) */}
-        {!cone.empty && (
-          <path d={`M ${TX} ${trunkY * (380 / VB_H)} L ${CX + 10} ${cone.topY * (380 / VB_H)} L ${CX + 10} ${cone.botY * (380 / VB_H)} Z`}
-            fill={`url(#${uid}fcg)`} />
-        )}
+        {/* Vertical line */}
+        <line x1={centerX} y1={firstY} x2={centerX} y2={lastY}
+          stroke={destColour} strokeWidth="3" strokeLinecap="round" opacity="0.5" />
+        <line x1={centerX} y1={firstY} x2={centerX} y2={lastY}
+          stroke={destColour} strokeWidth="8" strokeLinecap="round" opacity="0.04"
+          filter={`url(#${uid}fglow)`} />
 
-        <QuestPath
-          uid={uid}
-          quest={quest}
-          tasks={tasks}
-          healingIntentions={healingIntentions}
-          trunkState={trunkState}
-          trunkY={trunkY * (380 / VB_H)}
-          cone={{ ...cone, topY: cone.topY * (380 / VB_H), botY: cone.botY * (380 / VB_H), centerY: cone.centerY * (380 / VB_H) }}
-          viewH={380}
-          showLabels
-          light={light}
-        />
+        {/* Task dots with labels */}
+        {taskPoints.map(({ x, y, task }, i) => {
+          const hi = healingIntentions?.[task.id]
+          const hasHealing = hi && !hi.outcome && hi.healing_stage
+          const isHealed = hi && hi.outcome
+          const isCourage = task.is_courage_challenge
+          const labelSide = i % 2 === 0 ? 'left' : 'right'
+          const labelX = labelSide === 'left' ? x - 16 : x + 16
+          const anchor = labelSide === 'left' ? 'end' : 'start'
 
-        {/* Trunk */}
-        <circle cx={TX} cy={trunkY * (380 / VB_H)} r="20" fill={`url(#${uid}ftg)`} />
-        <circle cx={TX} cy={trunkY * (380 / VB_H)} r="5" fill={SAFE_COLOURS[trunkState]} opacity="0.85" />
-        <circle cx={TX} cy={trunkY * (380 / VB_H)} r="2.5" fill={light ? '#333' : '#fff'} opacity="0.5" />
-        <text x={TX} y={trunkY * (380 / VB_H) + 18} fill={light ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.3)'}
-          fontSize="8" textAnchor="middle" fontWeight="600">YOU</text>
+          return (
+            <g key={task.id}>
+              {/* Healing block */}
+              {hasHealing && (
+                <>
+                  <rect x={x - 12} y={y - 8} width="24" height="16" rx="8"
+                    fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.25)" strokeWidth="1" />
+                  <text x={x} y={y + 4} fill="rgba(239,68,68,0.6)" fontSize="9" textAnchor="middle">💚</text>
+                </>
+              )}
+              {/* Healed block */}
+              {isHealed && (
+                <circle cx={x} cy={y} r="6" fill="rgba(16,185,129,0.06)"
+                  stroke="#10b981" strokeWidth="1" strokeDasharray="3,2" opacity="0.5" />
+              )}
+              {/* Dot */}
+              {!hasHealing && (
+                <circle cx={x} cy={y} r={task.done ? 4 : 2.5}
+                  fill={task.done ? destColour : 'none'}
+                  stroke={task.done ? 'none' : `${destColour}40`}
+                  strokeWidth={task.done ? 0 : 1}
+                  opacity={task.done ? 0.7 : 1} />
+              )}
+              {/* Courage badge */}
+              {isCourage && task.done && !hasHealing && (
+                <text x={x + 7} y={y + 3} fill={destColour} fontSize="7" opacity="0.6">⚡</text>
+              )}
+              {/* Label */}
+              <text x={labelX} y={y + 4} fill="rgba(0,0,0,0.5)" fontSize="8"
+                fontWeight={task.done ? '600' : '400'} textAnchor={anchor}
+                opacity={task.done ? 0.7 : 0.4}>
+                {task.text?.slice(0, 25)}
+              </text>
+            </g>
+          )
+        })}
+
+        {/* NOW label at top */}
+        <text x={centerX} y={FTop - 10} fill="rgba(0,0,0,0.2)"
+          fontSize="8" fontWeight="600" textAnchor="middle">NOW ↑</text>
       </svg>
     </div>
-  )
-}
-
-
-// ─── Shared: single quest path rendering ──────────────────────────────────────
-
-function QuestPath({ uid, quest, tasks, healingIntentions = {}, trunkState, trunkY, cone, viewH, mini, showLabels, light, destOffset = 0 }) {
-  const pathRef = useRef(null)
-  const [points, setPoints] = useState(null)
-  const h = viewH || VB_H
-  const destY = scaledY(quest.predicted_state || 'anxious') * (h / VB_H) + destOffset
-  const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
-
-  const dx = CX - TX
-  const pathD = `M ${TX} ${trunkY} C ${TX + dx * 0.35} ${trunkY}, ${TX + dx * 0.65} ${destY}, ${CX} ${destY}`
-
-  const doneTasks = useMemo(() => tasks.filter(t => t.done), [tasks])
-  const safeTasks = useMemo(() => tasks.filter(t => t.safety_status === 'safe'), [tasks])
-  const n = tasks.length
-  const doneFrac = n > 0 ? doneTasks.length / n : 0
-  const safeFrac = n > 0 ? safeTasks.length / n : 0
-
-  useEffect(() => {
-    if (!pathRef.current || !n) return
-    const path = pathRef.current
-    const totalLen = path.getTotalLength()
-    const pts = tasks.map((task, i) => {
-      const frac = n > 1 ? i / (n - 1) : 0.5
-      const pt = path.getPointAtLength(frac * totalLen)
-      return { x: pt.x, y: pt.y, task }
-    })
-    const doneLen = doneFrac * totalLen
-    const safeLen = safeFrac * totalLen
-    const charPt = n > 0 ? path.getPointAtLength(doneLen) : null
-    setPoints({ pts, charPt, totalLen, doneLen, safeLen })
-  }, [pathD, n, doneFrac, safeFrac])
-
-  return (
-    <g>
-      {/* Hidden reference path (stroke="transparent" + positive width required for Safari/iOS getPointAtLength) */}
-      <path ref={pathRef} d={pathD} fill="none" stroke="transparent" strokeWidth="1" />
-
-      {/* Ghost (full path) */}
-      <path d={pathD} fill="none" stroke={light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.04)'}
-        strokeWidth={mini ? 1.5 : 2.5} strokeDasharray="5,12" strokeLinecap="round" />
-
-      {/* Done but not safe (grey solid) */}
-      {points && points.doneLen > 0 && (
-        <path d={pathD} fill="none" stroke={light ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.13)'}
-          strokeWidth={mini ? 2 : 3} strokeLinecap="round"
-          strokeDasharray={`${points.doneLen} ${points.totalLen}`} />
-      )}
-
-      {/* Safe (coloured gradient) */}
-      {points && points.safeLen > 0 && (
-        <>
-          <path d={pathD} fill="none" stroke={mini ? destColour : `url(#${uid}sg)`}
-            strokeWidth={mini ? 2.5 : 3.5} strokeLinecap="round"
-            strokeDasharray={`${points.safeLen} ${points.totalLen}`}>
-            <animate attributeName="strokeOpacity" values="0.85;1;0.85" dur="4s" repeatCount="indefinite" />
-          </path>
-          {/* Glow */}
-          <path d={pathD} fill="none" stroke={mini ? destColour : `url(#${uid}sgg)`}
-            strokeWidth={mini ? 6 : 12} strokeLinecap="round"
-            strokeDasharray={`${points.safeLen} ${points.totalLen}`}
-            opacity="0.5" filter={`url(#${uid}glow)`} />
-        </>
-      )}
-
-      {/* Healing blocks (active fears — 💚 pill) */}
-      {points?.pts.map(({ x, y, task }) => {
-        const hi = healingIntentions?.[task.id]
-        if (!hi) return null
-        // Healed block (outcome recorded — green dashed circle + strikethrough)
-        if (hi.outcome) {
-          return (
-            <g key={`heal-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 5 : 8} fill={light ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.05)'}
-                stroke="#10b981" strokeWidth="1" strokeDasharray="3,2" opacity="0.5" />
-              {showLabels && (
-                <text x={x} y={y - 12} fill={light ? 'rgba(16,185,129,0.4)' : 'rgba(16,185,129,0.3)'}
-                  fontSize="7" textAnchor="middle" textDecoration="line-through">
-                  {hi.pattern?.slice(0, 18) || 'healed'}
-                </text>
-              )}
-            </g>
-          )
-        }
-        // Active healing block (fear blocking path)
-        return (
-          <g key={`heal-${task.id}`}>
-            <rect x={x - 14} y={y - 9} width="28" height="18" rx="9"
-              fill={light ? 'rgba(239,68,68,0.08)' : 'rgba(239,68,68,0.06)'}
-              stroke={light ? 'rgba(239,68,68,0.25)' : 'rgba(239,68,68,0.18)'} strokeWidth="1" />
-            <text x={x} y={y + 4} fill={light ? 'rgba(239,68,68,0.7)' : 'rgba(239,68,68,0.5)'}
-              fontSize="10" textAnchor="middle">💚</text>
-            {showLabels && (
-              <text x={x} y={y - 14} fill={light ? 'rgba(239,68,68,0.5)' : 'rgba(239,68,68,0.35)'}
-                fontSize="7" textAnchor="middle">{hi.pattern?.slice(0, 18) || 'fear'}</text>
-            )}
-          </g>
-        )
-      })}
-
-      {/* Milestone dots */}
-      {points?.pts.map(({ x, y, task }, i) => {
-        const hi = healingIntentions?.[task.id]
-        if (hi) return null // rendered as healing block instead
-
-        // Courage challenge — done + safe (⚡ with coloured dot)
-        if (task.done && task.is_courage_challenge && task.safety_status === 'safe') {
-          return (
-            <g key={`m-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 3.5 : 5} fill={destColour} opacity="0.8" />
-              {!mini && <text x={x + 8} y={y + 3} fill={destColour} fontSize="8" opacity="0.7">⚡</text>}
-              {showLabels && (
-                <text x={x} y={y - 10} fill={light ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.35)'} fontSize="8"
-                  textAnchor="middle">{task.text?.slice(0, 20)}</text>
-              )}
-            </g>
-          )
-        }
-        // Courage challenge — done + not safe (⚡ with grey dot)
-        if (task.done && task.is_courage_challenge && task.safety_status === 'not_safe') {
-          return (
-            <g key={`m-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 3 : 4.5} fill={light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.15)'} />
-              {!mini && <text x={x + 7} y={y + 3} fill={light ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.2)'} fontSize="8">⚡</text>}
-              {showLabels && (
-                <text x={x} y={y - 10} fill={light ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.2)'} fontSize="8"
-                  textAnchor="middle">{task.text?.slice(0, 20)}</text>
-              )}
-            </g>
-          )
-        }
-        // Regular completed task (not courage)
-        if (task.done) {
-          return (
-            <g key={`m-${task.id}`}>
-              <circle cx={x} cy={y} r={mini ? 2 : 3.5} fill={destColour} opacity="0.4" />
-              {showLabels && (
-                <text x={x} y={y - 10} fill={light ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.25)'} fontSize="8"
-                  textAnchor="middle">{task.text?.slice(0, 20)}</text>
-              )}
-            </g>
-          )
-        }
-        // Future task (empty circle)
-        return (
-          <g key={`m-${task.id}`}>
-            <circle cx={x} cy={y} r={mini ? 2 : 3} fill="none"
-              stroke={light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.08)'} strokeWidth="1.5" />
-            {showLabels && (
-              <text x={x} y={y + (y < trunkY ? 16 : -8)} fill={light ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.1)'}
-                fontSize="7" textAnchor="middle">{task.text?.slice(0, 18)}</text>
-            )}
-          </g>
-        )
-      })}
-
-      {/* Character marker */}
-      {points?.charPt && doneFrac > 0 && (
-        <g>
-          <circle cx={points.charPt.x} cy={points.charPt.y} r={mini ? 3.5 : 5} fill={light ? '#1a1a2e' : '#fff'} opacity="0.9" />
-          <circle cx={points.charPt.x} cy={points.charPt.y} r={mini ? 7 : 10}
-            fill="none" stroke={light ? '#1a1a2e' : '#fff'} strokeWidth="1.5" opacity={light ? 0.15 : 0.1}>
-            <animate attributeName="r" values={mini ? '7;12;7' : '10;18;10'} dur="2.5s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite" />
-          </circle>
-        </g>
-      )}
-
-      {/* Destination label */}
-      <text x={CX} y={destY - (mini ? 10 : 14)} fill={`${destColour}${light ? (doneFrac > 0.5 ? 'cc' : '90') : (doneFrac > 0.5 ? '60' : '30')}`}
-        fontSize={mini ? 9 : 10} fontWeight="700" textAnchor="middle">
-        {mini ? quest.label?.slice(0, 16) : STATE_META[quest.predicted_state]?.emoji}
-      </text>
-      {!mini && (
-        <circle cx={CX} cy={destY} r="5" fill={`${destColour}${light ? '40' : '15'}`}
-          stroke={`${destColour}30`} strokeWidth="1" />
-      )}
-    </g>
   )
 }
 
@@ -729,24 +663,7 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
   return (
     <>
     <div className="qpm-footer">
-      {/* Dual progress bar */}
-      {n > 0 && (
-        <>
-          <div className="qpm-progress-row">
-            <div className="qpm-progress-bg">
-              <div className="qpm-progress-done" style={{ width: `${donePct}%` }} />
-              <div className="qpm-progress-safe" style={{
-                width: `${safePct}%`,
-                background: `linear-gradient(90deg, ${SAFE_COLOURS[trunkState] || '#10b981'}, ${SAFE_COLOURS[quest.predicted_state] || '#c084fc'})`,
-              }} />
-            </div>
-          </div>
-          <div className="qpm-progress-labels">
-            <span style={{ color: 'rgba(16,185,129,0.5)' }}>{safePct}% safe</span>
-            <span>{donePct}% done</span>
-          </div>
-        </>
-      )}
+      {/* Progress bar archived — tasks are infinite, % done is misleading */}
 
       {/* All incomplete tasks grouped by type */}
       {tasks.filter(t => !t.done).map(t => {
@@ -868,6 +785,14 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
         </div>
       )}
     </div>
+
+    {/* Backdate panel — last item */}
+    <BackdatePanel
+      quest={quest}
+      existingTasks={tasks}
+      userId={userId}
+      onSaved={onUpdate}
+    />
 
     {healingTaskId && (
       <HealingFlowModal

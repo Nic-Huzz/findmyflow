@@ -7,6 +7,8 @@
 import { useState, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { trackDailyCheckin } from '../lib/analytics'
+import { getWeekStartLocal } from '../lib/dateUtils'
+import { getScoringCategory } from '../lib/scoringCategories'
 import { NERVOUS_SYSTEM_STATES } from '../lib/nervousSystemConstants'
 import RegulationCard from './RegulationCard'
 import './DailyCheckin.css'
@@ -94,6 +96,30 @@ export default function DailyCheckin({ userId, onComplete }) {
       before_state: selectedState,
       checkin_type: 'daily',
     })
+
+    // Award +2 RP for showing up (all states equal — Celeste model)
+    const today = new Date().toISOString().slice(0, 10)
+    try {
+      await supabase.from('quest_completions').insert({
+        user_id: userId,
+        quest_id: `daily_checkin_${today}`,
+        quest_category: 'Tune',
+        quest_type: 'DailyCheckin',
+        points_earned: 2,
+        challenge_day: 0,
+        project_id: null,
+      })
+      await supabase.rpc('increment_scores', {
+        p_user_id: userId,
+        p_project_id: null,
+        p_category: getScoringCategory('Tune'),
+        p_points: 2,
+        p_week_start: getWeekStartLocal(),
+      })
+    } catch (e) {
+      // Date-stamped quest_id prevents double-awarding. Dupe insert fails silently.
+      console.warn('Daily checkin RP:', e?.message?.includes('duplicate') ? 'already awarded today' : e)
+    }
 
     trackDailyCheckin({ state: selectedState })
 

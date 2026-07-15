@@ -36,7 +36,8 @@ const SLIDES = [
       { date: '2022-09-26', text: 'Thesis to save the world: need to change culture from current capitalistic orientation. Self-knowledge plays a role through person by person creating and changing their beliefs.' },
       { date: '2022-11-01', text: 'I realise now my crisis was triggered by recognising this is what capitalism built to. My struggle since has been trying to rationalise and fit in to make it work.' },
       { date: '2026-02-12', text: 'All we are is a human having an experience, it\'s no surprise things like a job title don\'t make us happy. Focus on things that improve the lived experiences we\'re having.' },
-      { date: '2026-06-23', text: 'Everything that makes you fulfilled in life is free: relationships, creation, sex are experiences you can create with no money. Money allows you to remove discomfort or create more pleasure. Dopamine diet: money allows more fast food dopamine.' }
+      { date: '2026-06-23', text: 'Everything that makes you fulfilled in life is free: relationships, creation, sex are experiences you can create with no money. Money allows you to remove discomfort or create more pleasure. Dopamine diet: money allows more fast food dopamine.' },
+      { date: '2026-07-12', text: 'Hero Stage 1: The Matrix. The Misguided Zone — high action, low self-knowledge. Building the wrong life faster. The promise isn\'t just wrong. It\'s the misguided zone. You\'re sprinting, in the wrong direction, and the speed feels like progress.' }
     ],
     connects: [
       { ch: 'Ch 2', num: '02', text: 'The promise breaks in The Earthquake' },
@@ -44,7 +45,7 @@ const SLIDES = [
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams is where the promise leaves you' }
     ],
     beats: {
-      scene: 'Year 12 graduation. Everyone clapping. The golden road laid out: university, graduate job, salary, house. I believed every word.',
+      scene: 'I never questioned it. Not once. Because everyone in my life, my parents, my parents\' friends, my friends, were all living that way. The golden road wasn\'t sold to me. It was the water I swam in. School, uni, job, salary, house. Nobody questioned it because nobody could see it. You don\'t question water when you\'re a fish.ouse. I believed every word.',
       tension: 'The promise is universal, unquestioned, and wrong. Nobody asks whether the destination actually contains what it claims.',
       turn: 'The pitch isn\'t a lie. It\'s a map to someone else\'s destination. You can follow it perfectly and arrive somewhere you never wanted to be.',
       land: 'I followed it perfectly. That was the problem.',
@@ -162,7 +163,7 @@ const SLIDES = [
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams is the aftermath' }
     ],
     beats: {
-      scene: 'Not a dramatic moment. A Tuesday. Sitting in traffic. And suddenly the gap between who I was performing as and who I actually was became physically unbearable.',
+      scene: 'One month into my first full-time week at my dream job. A hollow fear crept in. The Monday-to-Friday office grind stretching out ahead of me forever. "Is this it?" Two weeks later, Covid lockdowns hit. The earthquake wasn\'t the virus. The virus just removed every distraction that was holding the cracks together.en who I was performing as and who I actually was became physically unbearable.',
       tension: 'Your nervous system can hold the contradiction for years. Decades. Until it can\'t. The crack isn\'t a choice. It\'s a threshold.',
       turn: 'The crack doesn\'t mean you\'re broken. It means the mask finally failed. And the mask failing is the beginning.',
       land: 'The crack happens when the gap between who you\'re pretending to be and who you actually are gets too wide for your nervous system to hold.',
@@ -201,7 +202,7 @@ const SLIDES = [
       { ch: 'Ch 33', num: '33', text: 'The kid knew what skills mattered' }
     ],
     beats: {
-      scene: 'Seven years old. Building cubby houses in the backyard. Making up games with rules nobody taught me. Time didn\'t exist.',
+      scene: 'Seven years old. Building cubby houses in the backyard. Designing treasure hunts with rules I invented. Making up games nobody asked for. Junior footy on Saturdays, showered in accolades because I hit my growth spurt early. And a boy who wore every colour of the rainbow in fluoro. That kid didn\'t know any of this would be taken from him.',
       tension: 'That kid didn\'t need a purpose workshop. They already knew who they were. Something between then and now made them forget.',
       turn: 'The kid isn\'t gone. They\'re buried. And buried things can be found.',
       land: 'That kid had an essence. Something that lit them up before anyone told them to stop.',
@@ -232,7 +233,8 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-09-16', text: 'Our essence is love. However this essence becomes blocked by fear. Three reasons: 1) Survival. 2) Protection: we experience trauma that leads us to adopt behaviours to protect ourselves. 3) Conditioning. Return to love is the ultimate role of "healing."', protoIp: 'The Water Model' },
       { date: '2024-09-07', text: 'What makes us unique? The combination of things that we love. There\'s no one on earth with your combination.' },
-      { date: '2023-09-15', text: 'Art is the natural expression of the spirit. It\'s opportunity to share a piece of itself.' }
+      { date: '2023-09-15', text: 'Art is the natural expression of the spirit. It\'s opportunity to share a piece of itself.' },
+      { date: '2026-07-10', text: 'Your art is like journaling. Journaling frees up one of the 6 spots in your conscious mind, allowing the next layer of the thought to come through. Creation is excavation. Understanding deepens by resolution increasing, not by seeing more. You don\'t need to see MORE. You need to see the same thing in higher resolution. Creation is the tool that increases resolution.', protoIp: 'Creation is excavation' }
     ],
     connects: [
       { ch: 'Ch 5', num: '05', text: 'The kid who had this essence' },
@@ -241,7 +243,7 @@ const SLIDES = [
       { ch: 'Ch 39', num: '39', text: 'What the essence voice sounds like' }
     ],
     beats: {
-      scene: 'Sitting in a breathwork session in Bali. For 45 minutes, the noise stopped. And underneath it all, something was still there. Warm. Familiar. Mine.',
+      scene: 'A holotropic breathwork session in Bali. Four years of buried grief from a breakup erupted. And underneath the tears, underneath the grief, underneath everything I\'d been performing, something was still there. Warm. Playful. The same kid who wore the rainbow. Still glowing.here. Warm. Familiar. Mine.',
       tension: 'We\'ve been told essence is something you discover. It\'s not. It\'s something you uncover. It was always there. We just piled things on top of it.',
       turn: 'Essence isn\'t a skill. It isn\'t a job title. It\'s the energy you were born with. The thing that made you come alive before you learned that coming alive wasn\'t safe.',
       land: 'Your essence is who you were before the world edited you.',
@@ -282,7 +284,7 @@ const SLIDES = [
       { ch: 'Ch 78', num: '78', text: 'The path reveals itself through action, not planning' }
     ],
     beats: {
-      scene: 'Watching a mate struggle after university. Same degree, same debt, same confusion. And I felt the pull. Not to fix them. To change the system that failed them.',
+      scene: 'Lockdown. Fortnightly Zoom calls with Errol, a gentleman in his 70s with white wispy hair who my manager\'s dad connected me with. He asked me to write my first personal mission. What came out: "Empower Aspirational Changemakers to find their Zest." Zest was Dad\'s word for me. The direction had been there all along. I just hadn\'t had anyone ask. To change the system that failed them.',
       tension: 'Direction isn\'t a career path. It\'s a gravitational pull toward certain problems, certain people, certain fights. School never taught you to feel it.',
       turn: 'You don\'t need a five-year plan. You need to notice what already pulls you. The anger, the empathy, the things your hands reach for without being told.',
       land: 'Essence is WHO you are. Direction is WHERE you\'d naturally go.',
@@ -322,7 +324,7 @@ const SLIDES = [
       { ch: 'Ch 19', num: '19', text: 'Software, not identity' }
     ],
     beats: {
-      scene: 'It\'s not one moment you can point to. It\'s a thousand. A comment from a teacher. A laugh from a friend. A look from a parent. Each one so small you barely noticed. Each one so powerful it rewired you.',
+      scene: 'Three splinters. Nine years old: primary school formed a boy dancing group. All my friends got chosen. I didn\'t. Bye bye love of dancing. Thirteen: wore every colour of the rainbow in fluoro. Teenage boys laughed. Comment by comment, emotional splinter by emotional splinter, that rainbow disappeared. Then the CEO of my dream internship: "too playful to be a serious employee." Three events. Thirteen years apart. Same message: who you are is not welcome here.rent. Each one so small you barely noticed. Each one so powerful it rewired you.',
       tension: 'Nobody installs a protective voice on purpose. It accumulates. Event by event. Micro-trauma by micro-trauma. Until one day you wake up and the voice is louder than your own.',
       turn: 'The protective voice wasn\'t malicious. It was adaptive. Something happened, and your system did the best it could to keep you safe. The tragedy is that it never stopped.',
       land: 'You didn\'t wake up today and decide to have a protective voice and a limiting belief.',
@@ -361,7 +363,7 @@ const SLIDES = [
       { ch: 'Ch 62', num: '62', text: 'You fall to the level of what feels safe' }
     ],
     beats: {
-      scene: 'A baby in a cot. Crying. What happens next writes the first lines of their operating system. Are they held? Are they seen? Are they safe?',
+      scene: 'I was showered in accolades as a kid. Growth spurt meant I was good at footy early. The world saw me and said: "You\'re special." But the seeing was conditional. It was for what I did, not who I was. Safe? Yes. Seen? Only the performing version. The playful, rainbow-wearing version was never the one getting the trophies.n? Are they safe?',
       tension: 'You didn\'t get to choose your first programming. Your nervous system was writing code before you could speak. Seen but unsafe? Alert forever. Safe but unseen? Invisible forever.',
       turn: 'This isn\'t blame. Your parents did the best they could with their own installation. But understanding stage one explains why your body reacts the way it does today.',
       land: 'You arrived needing two things. To be seen. To be safe.',
@@ -400,7 +402,7 @@ const SLIDES = [
       { ch: 'Ch 15', num: '15', text: 'The protector\'s job emerges here' }
     ],
     beats: {
-      scene: 'Eight years old. Drawing something at school. Showing it to a parent. The response writes the next line of code. Pride? Keep going. Indifference? Try harder. Criticism? Stop showing people.',
+      scene: 'Redlands cricket. Won best player in the comp. Walked home buzzing. Didn\'t tell my friends. Not because I forgot. Because I didn\'t want to come across as arrogant. In that moment I learnt to dim my brilliance to be accepted. A trophy that taught me the opposite of what trophies are supposed to teach.Keep going. Indifference? Try harder. Criticism? Stop showing people.',
       tension: 'A child doesn\'t know they\'re being programmed. They just know what gets love and what costs love. And they adjust.',
       turn: 'The adaptation wasn\'t weakness. It was intelligence. Your system found the fastest route to belonging. The cost was authenticity.',
       land: 'If your full expression cost you connection, you learned: being myself is dangerous.',
@@ -440,7 +442,7 @@ const SLIDES = [
       { ch: 'Ch 1', num: '01', text: 'School delivers the promise' }
     ],
     beats: {
-      scene: 'Year 9. A classroom. Thirty kids in the same uniform. One kid cracks a joke. The class laughs. The teacher shuts it down. The kid learns: expression has a cost.',
+      scene: 'Thirteen. Rainbow fluoro clothes. Teenage boys laughed, teased, called names. "Gay rainbow." Comment by comment, the rainbow disappeared. Thirteen years of no rainbow, no playfulness, no dancing. Basically all the things that light me up and make me, me. Why else could I and every third bloke in Sydney be found wearing blue chinos and Ralph Lauren every weekend?. The kid learns: expression has a cost.',
       tension: 'School doesn\'t just teach subjects. It teaches a way of being. Sit still. Don\'t stand out. Perform on command. Get graded. The kids who comply get rewarded. The kids who resist get punished.',
       turn: 'The ones who comply aren\'t winning. They\'re losing themselves so slowly they don\'t notice until the crack hits twenty years later.',
       land: 'Most kids comply. They get praised. And lose themselves so gradually they don\'t notice.',
@@ -479,7 +481,7 @@ const SLIDES = [
       { ch: 'Ch 17', num: '17', text: 'The Ghost response to not belonging' }
     ],
     beats: {
-      scene: 'Fifteen. A new friend group. They liked footy, not the weird games I liked. So I liked footy. They were loud, so I was loud. By the end of the year, I couldn\'t tell where I ended and the group began.',
+      scene: 'Fifteen. A new friend group. They liked footy, not the weird games I invented. So I stopped inventing games. They partied hard, so I partied harder. The social butterfly who flourished in groups learned that belonging meant becoming whoever the group needed. The Jackass era began: Venice bridge jumps at 4am in underwear, Dad asking "what\'s coming first, maturity or a body bag?"oud. By the end of the year, I couldn\'t tell where I ended and the group began.',
       tension: 'Friend groups are the final installation stage because they come with the highest stakes: belong or be alone. Most teenagers choose belonging. And belonging requires editing.',
       turn: 'The tragedy isn\'t that you changed. It\'s that the change felt like survival. And your system still thinks it is.',
       land: 'If belonging required you to change, you changed.',
@@ -599,7 +601,7 @@ const SLIDES = [
       { ch: 'Ch 40', num: '40', text: 'What the protective voice sounds like' }
     ],
     beats: {
-      scene: 'A door opens. The dream is right there. And something inside says "not yet." Not the mind. Deeper. The body. Blocking the door. Not to hurt you. To protect you.',
+      scene: 'Dream internship. Nailed it. The CEO pulls me aside: "You\'re too playful to be a serious employee." I always saw my playfulness as my superpower. In that moment, it became the thing to hide. The protector installed a new rule: playfulness is a liability. Be serious. Perform. For the next five years at Investible, I did exactly that.e door. Not to hurt you. To protect you.',
       tension: 'The protective voice will sacrifice everything. Dreams, relationships, income, joy. It doesn\'t care about your quality of life. It only cares about one thing: keeping the wound buried.',
       turn: 'The protector isn\'t your enemy. It was installed to keep you safe. The tragedy is that it never received the memo that the war is over.',
       land: 'It\'s not your enemy. It\'s your bodyguard who doesn\'t know the war is over.',
@@ -639,7 +641,7 @@ const SLIDES = [
       { ch: 'Ch 41', num: '41', text: 'The Controller controlling healing' }
     ],
     beats: {
-      scene: 'My trophy shelf in Sydney. Full. School awards, uni awards, work awards. Standing in front of it at 25 feeling absolutely nothing.',
+      scene: 'Five years at Investible. VC firm in Sydney. Good job, good money, good ladder. I knew for three years it wasn\'t my calling. But stopping felt like dying. So I worked harder, took on every project, managed everything. The trophy shelf was full. School awards, uni awards, work awards. Standing in front of it at 25, feeling absolutely nothing.y nothing.',
       tension: 'The Controller\'s trick is that it looks like success. From the outside, you\'re killing it. From the inside, you\'re running. Not toward something. Away from the wound.',
       turn: 'Performing is just controlling what people think of you. The Controller doesn\'t build your dream. It builds the most impressive thing it can find to prove you\'re enough.',
       land: 'I worked harder, achieved more, managed everything. Not because it lit me up. Because stopping felt like dying.',
@@ -679,7 +681,7 @@ const SLIDES = [
       { ch: 'Ch 67', num: '67', text: 'The Ghost disappears from live settings' }
     ],
     beats: {
-      scene: 'An invitation to speak at an event. Three hundred people. My finger hovered over "accept" for twenty minutes. Then I closed the email. The Ghost in action.',
+      scene: 'Post-Covid. The social butterfly who once flourished in large groups started leaving engagement parties early. Six weeks went by without seeing my best friends. I didn\'t reach out. Not because I was busy. Because I didn\'t have the energy to perform. The Ghost doesn\'t fight. It just stops showing up. And hopes nobody notices.sed the email. The Ghost in action.',
       tension: 'The Ghost isn\'t lazy. It\'s strategic. Disappearing is the safest move in a world where showing up risks rejection. You can\'t be hurt if you\'re not there.',
       turn: 'But you also can\'t be seen. The Ghost\'s strategy is airtight protection with one fatal cost: invisibility.',
       land: 'You can\'t be rejected if you\'re not there.',
@@ -759,7 +761,7 @@ const SLIDES = [
       { ch: 'Ch 2', num: '02', text: 'The earthquake wakes you from absence' }
     ],
     beats: {
-      scene: 'A dinner party. Everyone laughing. Telling stories. And I\'m there. Smiling at the right moments. Nodding. But inside: flatline. Not sad. Not happy. Just... operating.',
+      scene: 'Lockdown. First time I couldn\'t go out on weekends and get my hit of social approval. Forced to confront that sitting at a pub on Saturday nights wasn\'t actually fun. Going six weeks without seeing my best friends and not even noticing. Everyone laughing at a dinner party post-lockdown. Smiling at the right moments. Nodding. But inside: flatline. Nobody home.e right moments. Nodding. But inside: flatline. Not sad. Not happy. Just... operating.',
       tension: 'The Auto-Pilot is the most dangerous response because nobody notices it. Not even you. You can be absent from your own life for decades and call it "fine."',
       turn: 'Most people aren\'t in crisis when the crack hits. They\'re in absence. And the cruelest part of absence is that it feels like nothing at all.',
       land: 'They\'re not in crisis. They\'re in absence. And they\'ve been calling it "fine" for years.',
@@ -790,7 +792,8 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-04-29', text: 'Self-worth thoughts: Unconditional self-worth = accepting every part of you = releasing all standards / expectations. What creates standards? Conditioning. By being hurt (protection).' },
       { date: '2023-11-18', text: 'Intellectual understanding doesn\'t connect to an emotional pattern.' },
-      { date: '2023-08-21', text: 'Performance improvement evolution: moving away from mindset into the body. Rather than giving yourself a statement, removing the trauma that causes you to need the statement.' }
+      { date: '2023-08-21', text: 'Performance improvement evolution: moving away from mindset into the body. Rather than giving yourself a statement, removing the trauma that causes you to need the statement.' },
+      { date: '2026-07-12', text: 'Hero Stage 7: Pattern Revealed. Surface patterns (Ghost, Perfectionist, People Pleaser, Controller) all trace back to ONE root belief, usually "I\'m not good enough." The software isn\'t random. It\'s all connected to a single file that was installed early and deep.' }
     ],
     connects: [
       { ch: 'Ch 13', num: '13', text: 'The installation that created the software' },
@@ -839,7 +842,7 @@ const SLIDES = [
       { ch: 'Ch 79', num: '79', text: 'The sentence revisited at the end' }
     ],
     beats: {
-      scene: 'Writing the sentence for the first time. "I am a Playful Creator. The world told me play wasn\'t serious. That installed the Performer. Now the Performer runs my life instead of the Creator." Twenty-six years in one line.',
+      scene: 'Poland. Staying at Tamara\'s. Sitting with a pen and a blank page. Writing the sentence for the first time. "I am a Playful Creator. The world told me play wasn\'t serious. That installed the Performer. Now the Performer runs my life instead of the Creator." Twenty-six years in one line.',
       tension: 'One sentence shouldn\'t be able to contain an entire life. But this one does. And writing it is terrifying because it means you can no longer pretend you don\'t know.',
       turn: 'The sentence isn\'t the end of Part 1. It\'s the beginning of awareness. You now have words for what was previously just a feeling.',
       land: '"I am a Playful Creator. The world told me play wasn\'t serious. That installed the Performer. Now the Performer runs my life instead of the Creator."',
@@ -878,7 +881,7 @@ const SLIDES = [
       { ch: 'Ch 75', num: '75', text: 'Making essence louder than protection' }
     ],
     beats: {
-      scene: 'After a breathwork session. Crying. Not from sadness. From recognition. Something underneath all the noise was still there. Still warm. Still mine.',
+      scene: 'A Buddhist monastery in Thailand. Hiking up alone. Sitting on a rock. Journaling: "I feel like I\'m a playful person but there\'s been no space for me to play. I feel trapped and rigid in my body. As if my spirit is trying to break free but I\'ve reined it in and put it in a cage." The kid from Chapter 5 wasn\'t dead. He was caged. And he was writing me letters.re. Still warm. Still mine.',
       tension: 'The fear is that the crack destroyed you. That you\'re too far gone. That the kid from Chapter 5 is dead.',
       turn: 'Buried is not broken. Everything that lit you up is still underneath. It\'s been waiting.',
       land: 'Buried things can be excavated. Broken things can\'t.',
@@ -917,7 +920,7 @@ const SLIDES = [
       { ch: 'Ch 51', num: '51', text: 'The gap between knowing and doing' }
     ],
     beats: {
-      scene: 'End of Part 1. You\'ve done the work. Named the crack. Mapped the installation. Written the sentence. You know more than ever. And you\'re standing at the edge, unable to move.',
+      scene: 'Errol asked me to set goals. Fortnightly Zoom, lockdown, the gentleman with white wispy hair. I was shocked to find I couldn\'t. Not one. I\'d never extrapolated my life forward and consciously set a direction. "The truth hurt: I never actually set goals before, I just warped myself as I moved between circumstances." I could see the installation now. I could name the voices. And I couldn\'t move. ever. And you\'re standing at the edge, unable to move.',
       tension: 'This is the cruelest part of the journey. Knowing doesn\'t produce doing. The nervous system doesn\'t care about your insights. It cares about what feels safe.',
       turn: 'What comes next is worse than not knowing. It\'s knowing everything and being unable to act on any of it. Welcome to the flood.',
       land: 'You\'re about to know everything and be able to do nothing.',
@@ -1287,7 +1290,7 @@ const SLIDES = [
       { ch: 'Ch 72', num: '72', text: 'Capturing the proof' }
     ],
     beats: {
-      scene: 'First Instagram post with my face on it. Heart pounding. Posted at 11pm hoping nobody would see it. Woke up to DMs from people saying "I needed this." One data point. Twenty years of fear, gone.',
+      scene: 'Messaged Hugh Van Cuylenburg on Instagram. Founder of the Resilience Project. Thanked him for his work. Inner voice: "YOU IDIOT! You just wasted 5 seconds of his life. He\'s going to hate you forever." Meditated for 20 minutes to calm my brain. Checked my phone. Two one-minute audio replies. He was 15 minutes late to a meeting because my keynote was so good. I couldn\'t wipe the smile off my face.obody would see it. Woke up to DMs from people saying "I needed this." One data point. Twenty years of fear, gone.',
       tension: 'We think we need to process the belief, journal about it, understand it, therapy it. We don\'t. We need to test it.',
       turn: 'One data point is worth more than twenty years of assumption. The belief that felt like a mountain dissolves on first contact with reality.',
       land: 'Most beliefs dissolve on first contact with evidence.',
@@ -1444,7 +1447,7 @@ const SLIDES = [
       { ch: 'Ch 7', num: '07', text: 'Direction: where you\'d naturally go' }
     ],
     beats: {
-      scene: 'Realising that every person I wanted to help was a version of me from twelve months ago. The school kid who lost their spark. The corporate worker who felt nothing. The person stuck in Head Full of Dreams.',
+      scene: 'ManCave rejection. Applied for a vulnerability workshop role for teenage boys. Everyone said I was perfect. Group interview: I overcompensated, first to speak every time, denying airspace. Rejection email. Shame spiral. Three months later my uncle asks: "Why don\'t you go into schools?" I threw my head back and groaned. Called my old school Redlands. Resounding yes. The wound became the credential.ths ago. The school kid who lost their spark. The corporate worker who felt nothing. The person stuck in Head Full of Dreams.',
       tension: 'The wound feels like disqualification. "Who am I to help? I\'m still broken." But the wound is the qualification. You understand the problem because you ARE the problem, healed.',
       turn: 'Your scar IS your compass. The worst thing that happened to you points directly at the work you\'re meant to do.',
       land: 'The worst thing that happened to you is your qualification for the work you\'re meant to do.',
@@ -1517,7 +1520,8 @@ const SLIDES = [
       { date: '2022-10-21', text: 'What do I want to build? Self-knowledge movement with a lens of the ego?' },
       { date: '2026-07-09', text: 'The most remarkable creators didn\'t specialise. They pursued multiple genuine curiosities until those curiosities collided into something nobody else could create. Your intersection might not be ONE thing. It might be the MERGE of multiple curiosities. The wider your cone of safety, the more branches you can hold, the more unique your convergence.' },
       { date: '2026-07-10', text: 'Purpose emerges FROM experiences, not before them. You don\'t find your intersection by thinking. You find it by DOING. Have enough experiences that light you up and the intersection reveals itself. The intersection isn\'t a destination you plan for. It\'s a convergence that emerges from action.' },
-      { date: '2026-07-10', text: 'Education says "specialise, pick one lane." But your weird combination of curiosities IS your competitive advantage. The rule break lives at the merge point. You can\'t get there by staying in one lane.' }
+      { date: '2026-07-10', text: 'Education says "specialise, pick one lane." But your weird combination of curiosities IS your competitive advantage. The rule break lives at the merge point. You can\'t get there by staying in one lane.' },
+      { date: '2026-07-12', text: 'Hero Stage 9: Flow Statement. Post-ordeal, the fog clears. Curiosities that were blocked merge. "The path only I can walk is ___." The intersection isn\'t crafted. It\'s RECOGNISED. It emerges after the healing, not before. The Flow Statement is the reward for surviving the ordeal.' }
     ],
     connects: [
       { ch: 'Ch 32', num: '32', text: 'Skills: the first circle' },
@@ -1567,7 +1571,7 @@ const SLIDES = [
       { ch: 'Ch 54', num: '54', text: 'The Essence Test: the diagnostic tool' }
     ],
     beats: {
-      scene: 'Two voices in my head. One says: "Post it. Share it. It might help someone." The other says: "Not yet. It\'s not ready. What if they judge you?" Both feel like me. Only one is.',
+      scene: 'Nick\'s Instagram Live. I agreed to help, assuming only his followers would see. Every one of my 1,200 followers got notified. High school acquaintances. Sporting peers. People who only knew Jackass Nic. I never had an issue with judgement of "crazy Nic" because that was a mask. Any judgement could be rationalised away. But now I was being myself. If you ridicule THAT person, it\'s a condemnation of my soul. other says: "Not yet. It\'s not ready. What if they judge you?" Both feel like me. Only one is.',
       tension: 'The protective voice is convincing because it\'s been practicing for twenty years. It sounds reasonable. It sounds cautious. It sounds like wisdom. It\'s not.',
       turn: 'Learning to tell the difference between essence and protection is the entire game. Every tool, framework, and model in this book exists to sharpen that one distinction.',
       land: 'Learning to tell the difference is the entire game.',
@@ -1645,7 +1649,7 @@ const SLIDES = [
       { ch: 'Ch 56', num: '56', text: 'Protective Voice quadrant on the Essence Test' }
     ],
     beats: {
-      scene: 'About to post something real. Finger hovering. And the voice: "Who are you to do this? What if they judge you? Maybe next week." It sounds so reasonable. So wise. So responsible.',
+      scene: 'Week 1 of the challenge. Recording an Instagram story talking to the camera. Dating back to being called a "gay rainbow" I realised I was so scared of judgement, so scared to be seen as my vulnerable, authentic self, that even uploading an Instagram story terrified me. The voice: "Who are you to do this? You\'re the party guy. Nobody wants to hear you be serious. this? What if they judge you? Maybe next week." It sounds so reasonable. So wise. So responsible.',
       tension: 'The protective voice is the greatest impersonator. It wears the mask of wisdom, caution, and responsibility. But its only job is to keep you from being seen.',
       turn: '"Maybe next week" is the protective voice\'s favourite sentence. Because next week never comes.',
       land: '"Let\'s just do a bit more research first." The protective voice disguised as wisdom.',
@@ -1763,7 +1767,7 @@ const SLIDES = [
       { ch: 'Ch 48', num: '48', text: 'The River: where healing gets blocked' }
     ],
     beats: {
-      scene: 'Three years in. Therapy weekly. Breathwork Tuesdays. Journaling daily. Plant medicine ceremonies in the jungle. My inner world was pristine. My outer world hadn\'t moved an inch.',
+      scene: 'Spiff said something that stopped me. "Healing is the most amazing thing, it turns us into these beautiful butterflies. But the process can be such a fucking drag. If we\'re turning into these beautiful things, shouldn\'t we enjoy the process?" I looked at my life: therapy weekly, breathwork Tuesdays, journaling daily, plant medicine twice a year. My inner world was pristine. My outer world hadn\'t moved an inch. I was performing healing.icine ceremonies in the jungle. My inner world was pristine. My outer world hadn\'t moved an inch.',
       tension: 'The healing industry has a dirty secret: it can become the destination. The work never ends because ending means you have to act.',
       turn: 'Healing is a road, not a postcode. If your external life hasn\'t changed in three years of healing, the healing has become another hiding strategy.',
       land: 'You\'re not healing. You\'re hiding.',
@@ -1842,7 +1846,7 @@ const SLIDES = [
       { ch: 'Ch 6', num: '06', text: 'Essence: what you\'re reconnecting TO' }
     ],
     beats: {
-      scene: 'A somatic session. The facilitator says: "You\'ve named it. Now find it. Where does it live in your body? Put your hand there. Don\'t fix it. Just be with it." My hand goes to my chest. Something heavy. Something old. Something that\'s been waiting.',
+      scene: 'Holotropic breathwork. Four years of buried grief from a 2018 breakup erupted. I\'d visualised putting the emotion into a black box at the Opera House. The breathwork reopened it. "My mind became a dictator over my emotions." Four years numb to love with family, with my next partner. The facilitator said: "You\'ve named it. Now find it. Where does it live?"es it live in your body? Put your hand there. Don\'t fix it. Just be with it." My hand goes to my chest. Something heavy. Something old. Something that\'s been waiting.',
       tension: 'Intellectual understanding doesn\'t connect to an emotional pattern. You can name your wound perfectly and still not feel it. Reconnect closes that gap. It opens the file in edit mode.',
       turn: 'You can\'t rewrite a file that isn\'t open. The encoding has to be LIVE, in the body, felt, before anything can change. This is why talking about it never worked.',
       land: 'You can\'t rewrite a file that isn\'t open.',
@@ -1882,7 +1886,7 @@ const SLIDES = [
       { ch: 'Ch 48', num: '48', text: 'The River: where release gets blocked' }
     ],
     beats: {
-      scene: 'A breathwork session. The facilitator says: "Don\'t think about it. The file is open. Just let it move." Ninety seconds of trembling, tears, breath. Then: peace. The body did what no amount of thinking could.',
+      scene: 'Same session. The black box from the Opera House was open. Four years of grief flooding in. The facilitator: "Don\'t think about it. The file is open. Just let it move." Ninety seconds of trembling. The 2018 breakup completing itself in my body, four years after my mind had "dealt with it."pen. Just let it move." Ninety seconds of trembling, tears, breath. Then: peace. The body did what no amount of thinking could.',
       tension: 'We interrupt emotions at second four because the body\'s communication feels dangerous. We scroll, think, distract. The emotion doesn\'t disappear. It stores. Now that the encoding is live (Reconnect), the stored energy can finally complete its journey.',
       turn: 'Ninety seconds. That\'s all an emotion needs to pass through your nervous system. If you let it. Most people have never let it.',
       land: 'An emotion takes 90 seconds to pass through your nervous system. Let the 90 seconds finish.',
@@ -1915,7 +1919,8 @@ const SLIDES = [
       { date: '2023-04-03', text: 'If all we are is experience. And the past is simply stories. Then there\'s no inherent sense of self. Only the stories we tell ourselves. Change the story. Change yourself.' },
       { date: '2023-08-21', text: 'Rather than giving yourself a statement, removing the trauma that causes you to need the statement.' },
       { date: '2023-11-18', text: 'Intellectual understanding doesn\'t connect to an emotional pattern.' },
-      { date: '2026-07-09', text: 'Rewire = juxtaposition/mismatch. Body encounters something contradicting its prediction while the prediction is live. Brain detects "these can\'t both be true" and rewrites the file. Edit window ~5 hours. This is memory reconsolidation (Ecker, van der Kolk, Levine).' }
+      { date: '2026-07-09', text: 'Rewire = juxtaposition/mismatch. Body encounters something contradicting its prediction while the prediction is live. Brain detects "these can\'t both be true" and rewrites the file. Edit window ~5 hours. This is memory reconsolidation (Ecker, van der Kolk, Levine).' },
+      { date: '2026-07-10', text: 'Creation is excavation. Journaling frees up conscious mind, allowing the next layer to come through. The Vibe Rise app has been the same: creating something allows the next layer to emerge. You don\'t figure it out then create. You create to figure it out. Creation IS the mismatch mechanism — you produce something and the body encounters a reality it didn\'t predict.' }
     ],
     connects: [
       { ch: 'Ch 46', num: '46', text: 'Release: energy discharged, file still open' },
@@ -2042,7 +2047,7 @@ const SLIDES = [
       { ch: 'Ch 29', num: '29', text: 'The diagonal: where to go from here' }
     ],
     beats: {
-      scene: 'Peak of the flood. I could describe my essence. Name my wound. Map my skills, problems, people. And I was paralysed. Maximum capability. Minimum belief. The most qualified person who was convinced he had no right to be there.',
+      scene: '2021. Eighteen months into lockdown. Stuck at home in Sydney. I could describe my essence. Name my wound. Map my skills, problems, people. Frameworks for my frameworks. $30K deep in courses. And I was in the exact same room, in the exact same life, with the exact same paralysis. Maximum capability. Minimum belief. Bottom right of the graph.oblems, people. And I was paralysed. Maximum capability. Minimum belief. The most qualified person who was convinced he had no right to be there.',
       tension: 'Bottom-right is the most painful place on the graph because you can SEE everything you\'re capable of. And you can\'t reach it.',
       turn: 'This is where Part 2 ends. Extreme bottom-right. The most capable, least believing version of yourself. The only direction from here is up and to the left: toward the diagonal.',
       land: 'Maximum capability. Minimum belief. The most qualified person in the room who was convinced he had no right to be there.',
@@ -2092,7 +2097,7 @@ const SLIDES = [
       { ch: 'Ch 52', num: '52', text: 'What actually closes it' }
     ],
     beats: {
-      scene: 'Staring at the two cliffs. Everything I wanted on the other side. The gap was narrow enough to jump. And I couldn\'t move my feet.',
+      scene: 'Working for myself. Living in Bali. The life I wanted was right there. I could see it clearly. But the gap between knowing and doing was still open. Everything on the other side: freedom, creation, experiences, purpose. Everything on this side: safety, familiarity, the patterns I knew. And I couldn\'t move my feet.',
       tension: 'The gap isn\'t knowledge, motivation, or discipline. It\'s safety. Your nervous system hasn\'t experienced the other side as survivable yet.',
       turn: 'The gap closes when you jump, not when you understand why you should jump.',
       land: 'The gap between knowing and doing isn\'t motivation. It isn\'t discipline. It isn\'t another course.',
@@ -2164,7 +2169,9 @@ const SLIDES = [
       { date: '2025-02-20', text: 'Mission: Make people high on life. How? By raising their frequency. How? By reconnecting them to their child-like frequency. How? Experiences that put them in that state + rewire their subconscious.' },
       { date: '2025-01-18', text: 'I never understand quotes like "do what sets your heart on fire" until I came across disco\'s.' },
       { date: '2024-01-27', text: 'Fear of non-authentic act can be rationalised away. Fear of authentic act can\'t.' },
-      { date: '2026-06-28', text: 'Every action is a vote for the type of person you want to become. But the first vote is the hardest to cast. Because casting it requires crossing an identity boundary that the nervous system reads as threat. Until you build enough safety to tolerate the risk, the vote stays uncast. That first scary thing IS the first vote.' }
+      { date: '2026-06-28', text: 'Every action is a vote for the type of person you want to become. But the first vote is the hardest to cast. Because casting it requires crossing an identity boundary that the nervous system reads as threat. Until you build enough safety to tolerate the risk, the vote stays uncast. That first scary thing IS the first vote.' },
+      { date: '2026-07-10', text: 'The learning/life loop: Curate curiosities → train state to take action → have experience → report on state triggered → proceed or kill. This is the Curiosity → Safety → Experience chain as a repeatable cycle. Each loop expands the cone and deepens the resolution.', protoIp: 'Curiosity-Safety-Experience loop' },
+      { date: '2026-07-12', text: 'Hero Stage 5: First Vibe Rise. The point of no return. Not just "I did it" but "I felt ALIVE doing it." The body knows now, not just the mind. You can\'t pretend you don\'t know what alive feels like after this. There\'s no going back.' }
     ],
     connects: [
       { ch: 'Ch 52', num: '52', text: 'What actually closes the gap' },
@@ -2330,7 +2337,7 @@ const SLIDES = [
       { ch: 'Ch 58', num: '58', text: 'Not Aligned: where nothing happens' }
     ],
     beats: {
-      scene: 'Sunday morning. Surfing with mates. Low fear. High excitement. Safe. Fun. Not growing, but recovering. And that\'s OK, today.',
+      scene: 'Venice. 4am. Jumping off the tallest bridge in underwear and a poncho. Dad: "What\'s coming first, maturity or a body bag?" High excitement. Low fear. Because it was the MASK. The Jackass era was all comfort zone dressed as courage. My drunk tomfoolery was my armour. The most reckless version of me was actually the safest, because none of it was real.owing, but recovering. And that\'s OK, today.',
       tension: 'The comfort zone isn\'t the enemy. It\'s where you recover. The danger is mistaking it for the destination.',
       turn: 'Good for momentum. Bad for growth. Rest here, but don\'t live here.',
       land: 'Use it for recovery. Don\'t mistake it for progress.',
@@ -2489,7 +2496,7 @@ const SLIDES = [
       { ch: 'Ch 79', num: '79', text: 'The one sentence revisited' }
     ],
     beats: {
-      scene: 'Week six. Something shifted. A scary thing came up and instead of the usual dread, I felt something new: the dread of NOT doing it. The identity had flipped.',
+      scene: 'I told myself I\'d do 5 magic tricks at the open mic. I did 4. Walked off feeling like I\'d failed. But the next week, I sang on Instagram. Without fear. Without planning. Without the voice. The flip had happened and I didn\'t even notice until it was already done. The pain of NOT doing the scary thing was now worse than doing it.d, I felt something new: the dread of NOT doing it. The identity had flipped.',
       tension: 'Identity is the most powerful force in human behaviour. You will always act in alignment with who you believe you are.',
       turn: 'After the flip, not doing the scary thing felt worse than doing it. The pain of betraying my new identity was greater than the pain of the fear.',
       land: 'The pain of betraying my new identity was greater than the pain of the fear.',
@@ -2523,7 +2530,8 @@ const SLIDES = [
       { date: '2024-08-12', text: 'Nervous system observations: there\'s a level of money it can handle. There\'s a level of attractiveness in a woman it can handle.' },
       { date: '2025-01-08', text: 'Procrastination = not feeling safe / comfortable to take action. Reason we take action at the last minute is the thought of not delivering is more unsafe / uncomfortable than taking action.', protoIp: 'Procrastination as safety' },
       { date: '2026-06-17', text: 'Performance = flow state. Flow state requires feeling safe. Way to make team feel safe quicker in big games is visualisations or anything that creates familiarity.', protoIp: 'Safety × Performance' },
-      { date: '2026-06-28', text: 'The class ceiling isn\'t money. It\'s nervous system state. Affluent people access better choices because they have enough baseline safety that their NS has spare capacity for identity risks and cognitive effort. Poor NS regulation = locked in the same patterns regardless of price.', protoIp: 'Class ceiling = NS state' }
+      { date: '2026-06-28', text: 'The class ceiling isn\'t money. It\'s nervous system state. Affluent people access better choices because they have enough baseline safety that their NS has spare capacity for identity risks and cognitive effort. Poor NS regulation = locked in the same patterns regardless of price.', protoIp: 'Class ceiling = NS state' },
+      { date: '2026-07-10', text: 'Life is a game. Your beliefs determine what\'s possible. Your comfort zone determines your reality. Your experience is the reward. That\'s why it\'s called the present. The dome isn\'t just a ceiling on your ambitions. It\'s the boundary of your entire reality. Expand it and reality itself changes.' }
     ],
     connects: [
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams: ambitions with no safety' },
@@ -2571,7 +2579,7 @@ const SLIDES = [
       { ch: 'Ch 73', num: '73', text: 'What actually changed: bigger dome' }
     ],
     beats: {
-      scene: 'Two tools. The scary thing: pushing against the dome from outside. The healing work: dissolving the dome from inside. Both happening at once. The dome starts cracking with light.',
+      scene: 'Week 9: the rainbow clothing returned. Week 12: ear piercings, bandana, finger nail cartoons. Each week something came back that had been buried since thirteen. The dome was expanding visibly. Two forces at once: the scary things pushing from outside, the healing work dissolving from inside. Both happening simultaneously. The dome cracking with light.ork: dissolving the dome from inside. Both happening at once. The dome starts cracking with light.',
       tension: 'Most people try only one. Action-takers push without healing (hustle). Healers dissolve without pushing (therapy). The dome needs both.',
       turn: 'Best approach: both. Simultaneously. Push the dome with scary things while healing the wound that built it.',
       land: 'Best approach: both. Simultaneously.',
@@ -2610,7 +2618,7 @@ const SLIDES = [
       { ch: 'Ch 71', num: '71', text: '3% Better: making the groan more survivable' }
     ],
     beats: {
-      scene: 'The moment before posting something real. The moment before walking on stage. The moment before quoting your real price. That sound: "ughhhhh... let\'s go." That\'s the groan.',
+      scene: 'Bondi Beach. Week 4. Starting a silent disco by myself. "If I started it and no one joined there would be literally nowhere to hide." That sound in my chest: "ughhhhh... let\'s go." Not a panic attack. Not a yawn. A groan. The exact midpoint between terror and aliveness.e moment before quoting your real price. That sound: "ughhhhh... let\'s go." That\'s the groan.',
       tension: 'The groan is uncomfortable because it\'s the sound of two forces in conflict: essence pushing forward and protection pulling back. Neither will win. Both are real.',
       turn: 'The groan is the signal that you\'re at the exact right threshold. Not too safe (yawn). Not too dangerous (panic). The sweet spot.',
       land: 'The sound of your essence and your protection arguing in real time.',
@@ -2689,7 +2697,7 @@ const SLIDES = [
       { ch: 'Ch 31', num: '31', text: 'One test changes everything' }
     ],
     beats: {
-      scene: 'Hovering over the "Post" button. A photo of my face next to words I actually believe. Three months of building this courage. The button is right there.',
+      scene: 'Week 1. Recording an Instagram story. Just my face. Just my voice. No filter, no joke, no Jackass mask. "Dating back to being called a gay rainbow I realised I was so scared of judgement that even uploading an Instagram story talking to the camera terrified me." Posted. Waited. The world didn\'t end.ieve. Three months of building this courage. The button is right there.',
       tension: 'For some people, posting online is nothing. For others it\'s the first time they\'ve ever shown the internet who they really are.',
       turn: 'The screen layer is the gateway. Once you\'ve been seen online and survived, every layer above it becomes slightly more possible.',
       land: 'Start here if: you\'ve never told the internet who you really are.',
@@ -2728,7 +2736,7 @@ const SLIDES = [
       { ch: 'Ch 17', num: '17', text: 'The Ghost disappears here' }
     ],
     beats: {
-      scene: 'A workshop. Camera on. Forty faces looking at me. No script. No edits. No retakes. Just me, in real time, with nowhere to hide.',
+      scene: 'Nick\'s Instagram Live. Ten interviews in ten days. I agreed to help a friend. Didn\'t know my 1,200 followers would be notified. High school acquaintances joining. Sporting peers. Alcohol-fuelled escapade friends. Nick probing about purpose, vulnerability, "finding your Zest." "I would have honestly preferred to walk naked down the busiest street in Sydney than have done this."s. Just me, in real time, with nowhere to hide.',
       tension: 'The Performer thrives here because they can control the room. The Ghost disappears because there\'s no escape. Both are running from the same thing: being seen as they really are.',
       turn: 'Live is the layer where curated versions of yourself can\'t survive. What comes out is closer to real. That\'s why it\'s terrifying.',
       land: 'Both are running from the same thing.',
@@ -2806,7 +2814,7 @@ const SLIDES = [
       { ch: 'Ch 38', num: '38', text: 'Essence vs Protective: sharing the real version' }
     ],
     beats: {
-      scene: 'A workshop where I shared the real story. Not the polished version. The messy one. The one with the breakdown, the $30K on courses, the nights in Bali wondering if I\'d wasted my life.',
+      scene: 'After the Instagram Live, I finally saw friends again. Braced for snide remarks. Instead: "A few friends were inspired by the way I\'ve put myself out there." To my shock, by putting myself out there I became more accepted than Jackass Nic ever was. My fear of social isolation was a facade. An irrational fear by prehistoric brain software. It wasn\'t a choice between isolation and authenticity. It was authenticity that ended the isolation.e. The one with the breakdown, the $30K on courses, the nights in Bali wondering if I\'d wasted my life.',
       tension: 'This layer is where most people stop forever. Because here, there\'s no product to hide behind. No skill to deflect with. Just you.',
       turn: 'Being rejected for a polished version of yourself is survivable. Being rejected for the real version feels like annihilation. That\'s why this layer is the wall.',
       land: 'This is where most people stop forever.',
@@ -2845,7 +2853,7 @@ const SLIDES = [
       { ch: 'Ch 28', num: '28', text: 'Limiting Belief: "Who am I to do this?"' }
     ],
     beats: {
-      scene: 'Someone introduces me as "an expert in this space." My first instinct: correct them. "I\'m not an expert, I just..." The imposter syndrome in real time.',
+      scene: 'Running a workshop. Afterwards, someone described me as "teaching the teacher." My first instinct: deflect. "I\'m not a teacher. I\'m just figuring this out." But I was teaching. And the people in the room saw it before I did. Claiming authority isn\'t arrogance. It\'s letting other people\'s evidence override your protective voice.hem. "I\'m not an expert, I just..." The imposter syndrome in real time.',
       tension: 'Every imposter syndrome lives at the authority layer. The fear isn\'t about being exposed. It\'s about being seen as yourself, and that not being enough.',
       turn: 'Claiming authority isn\'t about being the best. It\'s about being honest about what you know and being willing to be seen knowing it.',
       land: 'The fear is that you\'ll be seen as who you actually are, and it won\'t be enough.',
@@ -2884,7 +2892,7 @@ const SLIDES = [
       { ch: 'Ch 29', num: '29', text: 'The Diagonal: growing through evidence' }
     ],
     beats: {
-      scene: 'Not twice as brave. 3% braver. This week\'s scary thing is slightly scarier than last week\'s. Not dramatically. Just slightly. The body barely notices the increment.',
+      scene: 'Week 1: Instagram story. Week 4: silent disco at Bondi. Week 8: moved to Bali. Week 9: rainbow returned. Week 12: piercings and nail art. Week 18: quit the VC job. Week 20: Opera House solo disco. Each one 3% scarier than the last. Not a revolution. A compound curve.last week\'s. Not dramatically. Just slightly. The body barely notices the increment.',
       tension: '3% feels like nothing. That\'s the point. The nervous system doesn\'t resist what it can\'t detect. By the time it notices, you\'ve doubled.',
       turn: '3% compounds. In 24 iterations, you\'ve doubled. Not transformation. Compounding. The most powerful force in the universe applied to courage.',
       land: '3% compounds. In 24 iterations, you\'ve doubled.',
@@ -2915,7 +2923,8 @@ const SLIDES = [
     rawEntries: [
       { date: '2024-08-17', text: 'Number 1 source of all fears: Our worth is dependent on our actions. Accept fear, 9 seconds, then move through. Body is a vessel of beliefs.' },
       { date: '2024-01-27', text: 'Fear of non-authentic act can be rationalised away. Fear of authentic act can\'t.' },
-      { date: '2025-02-20', text: 'Seeing my quarter-life crisis as a belief breaking event that changed my thoughts + habits and changed my life.' }
+      { date: '2025-02-20', text: 'Seeing my quarter-life crisis as a belief breaking event that changed my thoughts + habits and changed my life.' },
+      { date: '2026-07-12', text: 'Hero Stage 11: Resurrection. The courage challenge isn\'t skill practice. It\'s proof of transformation. "Prove you\'re a different person in front of witnesses." The proof isn\'t for your resume. It\'s for your nervous system. And it\'s for the people watching, who now know it\'s possible.' }
     ],
     connects: [
       { ch: 'Ch 71', num: '71', text: '3% Better: the increment to capture' },
@@ -2962,7 +2971,7 @@ const SLIDES = [
       { ch: 'Ch 77', num: '77', text: 'Silent discos: what the bigger dome produced' }
     ],
     beats: {
-      scene: 'Looking at my life a year later. Same world. Same opportunities. Same people. But the dome was three times wider. I could reach things I couldn\'t even see before.',
+      scene: 'Looking at my life a year later. Same world. Same Sydney. Same friends. But rainbow clothes, ear piercings, finger nail cartoons, living in Bali, running silent discos on beaches, quit the VC job, dancing at the Opera House. Same world. Same person underneath. The only thing that changed: what my nervous system felt safe doing.t the dome was three times wider. I could reach things I couldn\'t even see before.',
       tension: 'We think we need to change the world to change our results. We don\'t. We need to change the dome.',
       turn: 'Nothing external changed. Everything internal did. Same world. Bigger dome. That\'s the whole transformation.',
       land: 'Same world. Bigger dome.',
@@ -3079,7 +3088,7 @@ const SLIDES = [
       { ch: 'Ch 16', num: '16', text: 'The Controller: the hustler archetype' }
     ],
     beats: {
-      scene: 'Watching someone hustle. Same energy I used to have. Twelve-hour days. "Crush it." "Grind." And recognising the Performer in their eyes. Building fast. In the wrong direction.',
+      scene: 'Watching my old self. Investible. Twelve-hour days. Taking on every project. "Crush it." Five years of sprinting in the wrong direction and calling it discipline. The speed felt like progress. It wasn\'t. It was the Performer on the Y-axis. Action without self-knowledge. Building faster, not better.." "Grind." And recognising the Performer in their eyes. Building fast. In the wrong direction.',
       tension: 'Hustle culture tells you the problem is speed. The diagonal tells you the problem is direction. Moving fast without self-knowledge is the Performer on steroids.',
       turn: 'The diagonal is not hustle. Know and Move in sync. Left foot. Right foot. Neither faster than the other.',
       land: 'They move together. That\'s alignment.',
@@ -3237,7 +3246,8 @@ const SLIDES = [
       { date: '2024-09-16', text: 'Seek moments you love. Stack enough moments you love together and you live a life you love.' },
       { date: '2026-06-27', text: 'My why: It\'s not that I don\'t want anyone to feel the pain I did. It\'s when they do, they have a place that gives them inspiration, hope, safety, when they do.', protoIp: 'Mission reframe' },
       { date: '2026-06-27', text: 'Every innovation in human history is a rule break — someone challenged an inherited assumption everyone else accepted and built something new on the other side. Your personal rule break follows the same pattern: essence → installation → break through → flow. Same mechanism, different scale.', protoIp: 'Rule Break Tree connection' },
-      { date: '2026-06-28', text: 'The tree doesn\'t just grow. It breathes. Expand (industries grow outward) → Break (biology can\'t keep up) → Repair (loop back to what the vessel needs) → Expand again. Your personal journey follows the same rhythm: you expanded (The Promise), you broke (The Crack), you\'re repairing (The Diagonal). The repaired vessel can handle more experience.', protoIp: 'The Breathing Tree / Phase 3 loop-back' }
+      { date: '2026-06-28', text: 'The tree doesn\'t just grow. It breathes. Expand (industries grow outward) → Break (biology can\'t keep up) → Repair (loop back to what the vessel needs) → Expand again. Your personal journey follows the same rhythm: you expanded (The Promise), you broke (The Crack), you\'re repairing (The Diagonal). The repaired vessel can handle more experience.', protoIp: 'The Breathing Tree / Phase 3 loop-back' },
+      { date: '2026-07-12', text: 'Hero Stage 12: Your First Graduate. Someone else transforms because of you. Not just "I helped" but "their life shifted because I showed up as my Flow." The cycle completes. The elixir leaves your hands. The story doesn\'t end with finding your flow. It ends when someone else finds theirs because of you.' }
     ],
     connects: [
       { ch: 'Ch 1', num: '01', text: 'The Promise: where the story begins (Phase 1: expand)' },

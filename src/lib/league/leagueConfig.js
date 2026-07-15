@@ -2,7 +2,8 @@
  * leagueConfig.js — Fantasy League constants and category definitions
  */
 
-// Content submission point values
+// Content submission point values (Reach category tasks)
+// Keys match league_content_submissions.content_type — DO NOT rename keys (breaks existing rows)
 export const CONTENT_POINT_VALUES = {
   share_leaderboard: {
     label: 'Share the Leaderboard',
@@ -16,89 +17,72 @@ export const CONTENT_POINT_VALUES = {
     label: 'Comment & Engage',
     points: 2,
     icon: '💬',
-    description: 'Engage with 3 league players — comment, DM, or reply to their content',
+    description: 'Engage with 3 league players this week',
     submissionType: 'player_picker',
+    autoApprove: true,
   },
   accountability_post: {
     label: 'Accountability Post',
     points: 4,
     icon: '📝',
-    description: 'Share your weekly plan or goals publicly',
-    submissionType: 'url',
-    templateType: 'intentions',
+    description: 'Commit to courage challenges publicly this week',
+    submissionType: 'quest_task_picker',
+    autoApprove: true,
   },
   shoutout_teammate: {
     label: 'Shout Out a Player',
     points: 4,
     icon: '🙌',
-    description: 'Celebrate a teammate with a public shout-out post',
+    description: 'Celebrate a teammate with a public shout-out',
     submissionType: 'url',
     templateType: 'scorecard',
-  },
-  share_hero_profile: {
-    label: 'Share Your Hero Profile',
-    points: 4,
-    icon: '🦸',
-    description: 'Share your hero profile to your story or feed',
-    submissionType: 'url',
-    templateType: 'hero',
-  },
-  carousel_highlights: {
-    label: 'Carousel Highlights',
-    points: 8,
-    icon: '🎠',
-    description: 'Create a carousel post highlighting your week',
-    submissionType: 'url',
+    autoApprove: true,
   },
   playlist_proof: {
-    label: 'Play-List Proof',
+    label: 'Courage Proof',
     points: 8,
-    icon: '🎭',
+    icon: '💪',
     description: 'Share evidence of a courage challenge you completed',
     submissionType: 'url',
     templateType: 'courage',
-  },
-  customise_hero: {
-    label: 'Customise Your Hero Profile',
-    points: 10,
-    icon: '🦸',
-    description: 'Personalise your hero profile — name, image, superpower, or vision',
-    submissionType: 'url',
+    crossPostToFeed: true,
   },
   offer_in_wild: {
-    label: 'Offer in the Wild',
+    label: 'Flow in the Wild',
     points: 10,
-    icon: '🎯',
-    description: 'Show proof of your offer out there — a screenshot, DM, or conversation',
+    icon: '🌍',
+    description: 'Proof of your flow in the real world: screenshot, DM, or testimonial',
     submissionType: 'url',
+    crossPostToFeed: true,
   },
 }
 
 // Fantasy scoring categories — maps to quest_completions.quest_category
+// Tune + Courage + Reach (win 2 of 3). Healing merged into Courage.
 export const FANTASY_CATEGORIES = {
-  play_list: {
-    key: 'play_list',
-    label: 'Wahoos',
-    icon: '🔥',
-    color: '#E9A23B',
-    dbFilter: ['Groans'],
-    scoringType: 'raw', // Raw SUM(points)
-  },
-  healing: {
-    key: 'healing',
-    label: 'Healing',
-    icon: '💚',
-    color: '#10b981',
-    dbFilter: ['Healing', 'Daily', 'Weekly'],
-    scoringType: 'raw',
-  },
   tune: {
     key: 'tune',
     label: 'Tune',
     icon: '☀️',
-    color: '#5e17eb',
+    color: '#f9a8d4',
     dbFilter: ['Tune'],
     scoringType: 'raw',
+  },
+  courage: {
+    key: 'courage',
+    label: 'Courage',
+    icon: '🔥',
+    color: '#E9A23B',
+    dbFilter: ['Groans', 'Healing', 'Daily', 'Weekly'],
+    scoringType: 'raw',
+  },
+  reach: {
+    key: 'reach',
+    label: 'Community',
+    icon: '📣',
+    color: '#67e8f9',
+    dbFilter: [],
+    scoringType: 'content',
   },
 }
 

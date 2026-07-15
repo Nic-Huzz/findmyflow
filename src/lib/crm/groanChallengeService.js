@@ -15,7 +15,6 @@ import {
   GROAN_VISIBILITY_LAYERS,
   GROAN_SOURCE_TYPES,
   GROAN_CHALLENGE_STATUS,
-  calculateEssenceZone,
   getStreakBadge
 } from '../stageConfig'
 
@@ -105,16 +104,12 @@ export async function createGroanChallenge(challengeData) {
     sourceType,
     sourceId = null,
     sourceLabel = null,
-    scaryScore = 5,
-    wahooScore = 5,
     linkedContractId = null,
     generationPrompt = null,
-    wahooCategory = null
+    wahooCategory = null,
+    depthLevel = null,
+    visibilityLayers = [],
   } = challengeData
-
-  // Calculate essence zone (only if scores provided)
-  const hasScores = scaryScore != null && wahooScore != null
-  const essenceZone = hasScores ? calculateEssenceZone(scaryScore, wahooScore) : null
 
   const { data, error } = await supabase
     .from('groan_challenges')
@@ -126,13 +121,11 @@ export async function createGroanChallenge(challengeData) {
       source_type: sourceType,
       source_id: sourceId,
       source_label: sourceLabel,
-      scary_score: scaryScore,
-      wahoo_score: wahooScore,
-      essence_zone: essenceZone?.zone || null,
-      essence_insight: essenceZone?.insight || null,
       linked_contract_id: linkedContractId,
       generation_prompt: generationPrompt,
       wahoo_category: wahooCategory,
+      depth_level: depthLevel,
+      visibility_layers: visibilityLayers,
       status: GROAN_CHALLENGE_STATUS.GENERATED
     })
     .select()
@@ -174,8 +167,6 @@ export async function acceptGroanChallenge(challengeId) {
 export async function completeGroanChallenge(challengeId, completionData) {
   const {
     reflectionText = null,
-    scaryScoreAfter = null,
-    wahooScoreAfter = null
   } = completionData
 
   const { data, error } = await supabase
@@ -184,8 +175,6 @@ export async function completeGroanChallenge(challengeId, completionData) {
       status: GROAN_CHALLENGE_STATUS.COMPLETED,
       completed_at: new Date().toISOString(),
       reflection_text: reflectionText,
-      scary_score_after: scaryScoreAfter,
-      wahoo_score_after: wahooScoreAfter
     })
     .eq('id', challengeId)
     .select()
@@ -222,35 +211,6 @@ export async function skipGroanChallenge(challengeId, skipData) {
 
   if (error) {
     console.error('Error skipping challenge:', error)
-    return { data: null, error }
-  }
-
-  return { data, error: null }
-}
-
-/**
- * Update scary/wahoo scores (pre-completion rating)
- */
-export async function updateChallengeScores(challengeId, scores) {
-  const { scaryScore, wahooScore } = scores
-
-  // Recalculate essence zone
-  const essenceZone = calculateEssenceZone(scaryScore, wahooScore)
-
-  const { data, error } = await supabase
-    .from('groan_challenges')
-    .update({
-      scary_score: scaryScore,
-      wahoo_score: wahooScore,
-      essence_zone: essenceZone.zone,
-      essence_insight: essenceZone.insight
-    })
-    .eq('id', challengeId)
-    .select()
-    .single()
-
-  if (error) {
-    console.error('Error updating challenge scores:', error)
     return { data: null, error }
   }
 
@@ -903,13 +863,8 @@ export async function createSkillProblemChallenge(challengeData) {
     problemLabel,
     personaId = null,
     personaLabel = null,
-    scaryScore = 5,
-    wahooScore = 5,
     generationPrompt = null
   } = challengeData
-
-  // Calculate essence zone
-  const essenceZone = calculateEssenceZone(scaryScore, wahooScore)
 
   // Combine labels for source_label field
   const combinedLabel = personaLabel
@@ -930,11 +885,6 @@ export async function createSkillProblemChallenge(challengeData) {
       skill_cluster_id: skillId,
       problem_cluster_id: problemId,
       persona_cluster_id: personaId,
-      // Scores
-      scary_score: scaryScore,
-      wahoo_score: wahooScore,
-      essence_zone: essenceZone.zone,
-      essence_insight: essenceZone.insight,
       generation_prompt: generationPrompt,
       status: GROAN_CHALLENGE_STATUS.GENERATED
     })

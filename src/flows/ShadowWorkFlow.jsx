@@ -1025,9 +1025,9 @@ export default function ShadowWorkFlow() {
       <div className="ns-hc-sticky-nav">
         <button
           className="ns-hc-primary-button"
-          onClick={() => navigate('/7-day-challenge?tab=healing')}
+          onClick={() => navigate('/7-day-challenge?tab=courage')}
         >
-          Back to Healing Quests
+          Back to Courage
         </button>
       </div>
     </div>

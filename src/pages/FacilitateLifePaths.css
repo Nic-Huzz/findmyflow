@@ -191,7 +191,7 @@
 }
 
 .flp-page.light .flp-punchline {
-  color: #5e17eb;
+  color: #1a1a2e;
 }
 
 .flp-punchline.visible {
@@ -211,7 +211,7 @@
 }
 
 .flp-page.light .flp-punchline-2 {
-  color: rgba(94, 23, 235, 0.5);
+  color: rgba(0, 0, 0, 0.55);
 }
 
 /* ── Controls panel (right) ── */

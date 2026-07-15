@@ -1,0 +1,448 @@
+/* JourneyTab — light theme, .jt- prefix scoping */
+
+.jt-container {
+  padding: 0;
+}
+
+.jt-loading {
+  padding: 40px 16px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* Current Stage Card */
+.jt-stage-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.08);
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, #5e17eb, #E9A23B) 1;
+  border-image-slice: 1;
+  overflow: hidden;
+}
+
+.jt-stage-number {
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #5e17eb;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 6px;
+  background: rgba(94, 23, 235, 0.06);
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+.jt-stage-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.jt-stage-feeling {
+  font-style: italic;
+  color: #5e17eb;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.jt-stage-refs {
+  margin-top: 14px;
+  padding: 12px;
+  background: rgba(94, 23, 235, 0.03);
+  border-radius: 10px;
+}
+
+.jt-stage-ref-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5e17eb;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jt-stage-ref {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  margin: 0 0 3px;
+  line-height: 1.4;
+}
+
+.jt-stage-ref:last-child { margin-bottom: 0; }
+
+.jt-stage-history-btn {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: rgba(94, 23, 235, 0.4);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+}
+
+.jt-stage-history-btn:active {
+  color: #5e17eb;
+}
+
+/* Generic section card */
+.jt-section {
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.jt-section + .jt-section {
+  margin-top: 12px;
+}
+
+.jt-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+/* Voice progress card */
+.jt-voice-progress {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 12px;
+}
+
+.jt-voice-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.jt-voice-progress-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5e17eb;
+  text-transform: capitalize;
+}
+
+.jt-voice-progress-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
+.jt-voice-bar {
+  height: 6px;
+  background: rgba(94, 23, 235, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.jt-voice-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #8b5cf6);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.jt-voice-progress-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+/* Voice hint text */
+.jt-voice-hint {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-align: center;
+  margin: 8px 0 0 0;
+  line-height: 1.4;
+}
+
+/* Stuck section */
+.jt-stuck-section {
+  border-left: 3px solid #E9A23B;
+}
+
+.jt-stuck-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.jt-stuck-message {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+.jt-stuck-cta {
+  margin-top: 12px;
+  background: none;
+  border: 1px solid #E9A23B;
+  color: #E9A23B;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.jt-stuck-cta:active {
+  background: rgba(233, 162, 59, 0.06);
+}
+
+/* Threshold hint text */
+.jt-threshold-hint {
+  font-size: 0.9rem;
+  color: #9333ea;
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Life Paths Summary */
+.jt-paths-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.jt-path-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+  border-left: 3px solid transparent;
+}
+
+.jt-path-state-vibe { border-left-color: #E9A23B; background: rgba(233, 162, 59, 0.04); }
+.jt-path-state-peace { border-left-color: #10b981; background: rgba(16, 185, 129, 0.04); }
+.jt-path-state-anxious { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.04); }
+.jt-path-state-shutdown { border-left-color: #6b7280; background: rgba(107, 114, 128, 0.04); }
+
+.jt-path-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.jt-path-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.jt-path-depth {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(233, 162, 59, 0.7);
+  background: rgba(233, 162, 59, 0.08);
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Flow Map button */
+.jt-flowmap-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  border-radius: 12px;
+  background: rgba(94, 23, 235, 0.04);
+  color: #5e17eb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.jt-flowmap-btn:active {
+  background: rgba(94, 23, 235, 0.08);
+}
+
+.jt-solidarity {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+/* ── Progress indicator inside stage card ── */
+.jt-stage-progress {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ── Next step inside stage card ── */
+.jt-stage-next {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(233, 162, 59, 0.04);
+  border-radius: 10px;
+  border-left: 2px solid #E9A23B;
+}
+
+.jt-next-inline {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.jt-next-label {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: #E9A23B; margin-bottom: 4px;
+  display: block;
+}
+
+.jt-next-text {
+  font-size: 0.85rem; color: rgba(0, 0, 0, 0.6); line-height: 1.4;
+  display: block;
+}
+
+.jt-next-cta-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jt-next-cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(94, 23, 235, 0.25);
+}
+
+.jt-next-sub {
+  font-size: 0.75rem; color: rgba(94, 23, 235, 0.5);
+  margin-top: 4px; font-weight: 600;
+  display: block;
+}
+
+.jt-next-arrow {
+  float: right;
+  font-size: 1.1rem; color: #E9A23B; font-weight: 700;
+  margin-top: -20px;
+}
+
+/* ── Figurine Presence ── */
+.jt-figurine-presence {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.jt-figurine-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E9A23B;
+}
+
+.jt-figurine-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.jt-figurine-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.jt-figurine-phase {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.jt-figurine-chat-btn {
+  padding: 6px 12px;
+  border: 1px solid #E9A23B;
+  border-radius: 10px;
+  background: none;
+  color: #E9A23B;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.jt-figurine-mirror-msg {
+  width: 100%;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin: 4px 0 0;
+}
+
+/* ── Orphaned Wahoos ── */
+.jt-orphan-section { border-left: 3px solid #E9A23B; }
+
+.jt-orphan-intro {
+  font-size: 0.85rem; color: rgba(0,0,0,0.5);
+  line-height: 1.4; margin: 0 0 12px;
+}
+
+.jt-orphan-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.jt-orphan-icon { font-size: 0.9rem; }
+.jt-orphan-text { font-size: 0.85rem; color: #1a1a1a; }
+
+.jt-orphan-more {
+  font-size: 0.75rem; color: rgba(0,0,0,0.3);
+  padding: 6px 0; font-style: italic;
+}
+
+.jt-orphan-hint {
+  font-size: 0.8rem; color: rgba(0,0,0,0.4);
+  margin: 12px 0 0; line-height: 1.4;
+}
+
+.jt-orphan-cta {
+  display: block; width: 100%; text-align: center;
+  padding: 10px; border-radius: 10px;
+  background: rgba(233,162,59,0.08); color: #E9A23B;
+  font-size: 0.85rem; font-weight: 600;
+  text-decoration: none; margin-top: 12px;
+  border: none; cursor: pointer; font-family: inherit;
+}

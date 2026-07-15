@@ -16,6 +16,7 @@ import { supabase } from '../lib/supabaseClient'
 
 export function useMatchupData({
   completions,
+  contentSubmissions,
   userTeam,
   league,
   teams,
@@ -34,23 +35,33 @@ export function useMatchupData({
   // ─── Phase 1: Derive user's category scores from in-memory completions ───
   const categoryScores = useMemo(() => {
     const scores = Object.fromEntries(CATEGORY_KEYS.map(k => [k, 0]))
-    if (!completions || completions.length === 0) return scores
 
-    const weekStart = new Date(getWeekStartLocal() + 'T00:00:00')
-    const weekCompletions = completions.filter(
-      c => new Date(c.completed_at) >= weekStart
-    )
-
-    weekCompletions.forEach(c => {
-      const catEntry = Object.values(FANTASY_CATEGORIES).find(f =>
-        f.dbFilter.includes(c.quest_category)
+    if (completions?.length > 0) {
+      const weekStart = new Date(getWeekStartLocal() + 'T00:00:00')
+      const weekCompletions = completions.filter(
+        c => new Date(c.completed_at) >= weekStart
       )
-      if (!catEntry) return
-      scores[catEntry.key] += (c.points_earned || 0)
-    })
+
+      weekCompletions.forEach(c => {
+        const catEntry = Object.values(FANTASY_CATEGORIES).find(f =>
+          f.dbFilter.includes(c.quest_category)
+        )
+        if (!catEntry) return
+        scores[catEntry.key] += (c.points_earned || 0)
+      })
+    }
+
+    // Reach: sum approved content submissions for current week
+    const currentWeek = getCurrentWeek?.()
+    if (contentSubmissions?.length > 0 && currentWeek) {
+      const weekApproved = contentSubmissions.filter(s =>
+        s.status === 'approved' && s.week_number === currentWeek
+      )
+      scores.reach = weekApproved.reduce((sum, s) => sum + (s.points_value || 0), 0)
+    }
 
     return scores
-  }, [completions])
+  }, [completions, contentSubmissions, getCurrentWeek])
 
   // ─── Phase 2: Fetch opponent scores and compute matchup ───
   const fetchOpponentData = useCallback(async () => {

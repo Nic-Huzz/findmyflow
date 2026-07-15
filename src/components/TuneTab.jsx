@@ -989,6 +989,89 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
           <div className="tt-quest-list">
             {safetyPractices.map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>
+
+          {/* Stalls — inline after safety */}
+          <div className="tt-inline-tracker">
+            <div className="tt-inline-tracker-header">
+              <span className="tt-inline-tracker-icon">🧊</span>
+              <span className="tt-inline-tracker-label">Stalls</span>
+            </div>
+            <p className="tt-inline-tracker-sub">Where did your protective voice win?</p>
+            <div className="tt-drain-form">
+              <div className="tt-drain-categories">
+                {STALL_CATEGORIES.map(cat => (
+                  <button
+                    key={cat.id}
+                    className={`tt-drain-cat-btn ${stallCategory === cat.id ? 'selected' : ''}`}
+                    onClick={() => { hapticLight(); setStallCategory(stallCategory === cat.id ? null : cat.id) }}
+                  >
+                    <span>{cat.icon}</span>
+                    <span>{cat.label}</span>
+                  </button>
+                ))}
+              </div>
+              {stallCategory && (
+                <input type="text" className="tt-drain-note" placeholder="What happened? (optional)"
+                  value={stallNote} onChange={e => setStallNote(e.target.value)} />
+              )}
+              {stallCategory && (
+                <div className="tt-drain-state">
+                  <span className="tt-state-label">How did it leave you?</span>
+                  <div className="tt-state-buttons">
+                    <button className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
+                      onClick={() => { setStallState('sympathetic'); setStallVoice(null) }}>
+                      <span>😬</span> Activated
+                    </button>
+                    <button className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
+                      onClick={() => { setStallState('dorsal'); setStallVoice(null) }}>
+                      <span>😶</span> Shutdown
+                    </button>
+                  </div>
+                </div>
+              )}
+              {stallState && (
+                <div className="tt-stall-voice">
+                  <span className="tt-state-label">Which voice showed up?</span>
+                  <div className="tt-voice-buttons">
+                    {VOICES_BY_STATE[stallState].map(v => (
+                      <button key={v.id} className={`tt-voice-btn ${stallVoice === v.id ? 'selected' : ''}`}
+                        onClick={() => { hapticLight(); setStallVoice(v.id) }}>
+                        <span>{v.icon}</span> {v.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {stallCategory && (
+                <div className="tt-drain-actions">
+                  <button className="tt-drain-save tt-stall-save"
+                    disabled={!stallCategory || !stallState || !stallVoice || savingStall}
+                    onClick={handleSaveStall}>
+                    {savingStall ? 'Saving...' : 'Log Stall'}
+                  </button>
+                </div>
+              )}
+            </div>
+            {recentStalls.length > 0 && (
+              <div className="tt-drain-list">
+                {recentStalls.slice(0, 3).map((stall, i) => {
+                  const cat = STALL_CATEGORIES.find(c => c.id === stall.source_quest_id)
+                  return (
+                    <div key={stall.id || i} className="tt-drain-item">
+                      <span className="tt-drain-item-icon">{cat?.icon || '🧊'}</span>
+                      <div className="tt-drain-item-body">
+                        <span className="tt-drain-item-cat">{cat?.label || 'Stall'}{stall.protective_voice ? ` · ${stall.protective_voice}` : ''}</span>
+                        {stall.drain_note && <span className="tt-drain-item-note">{stall.drain_note}</span>}
+                      </div>
+                      <span className={`tt-drain-item-state ${stall.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
+                        {stall.after_state === 'dorsal' ? '😶' : '😬'}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Expression sub-section */}
@@ -1073,224 +1156,88 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             {/* Remaining expression practices: Social Media, Peak State */}
             {expressionPractices.slice(2).map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>
-        </div>
-      </div>
 
-      {/* Section 2: Drains */}
-      <div className="tt-section">
-        <div className="tt-section-header">
-          <div className="tt-section-header-left">
-            <span className="tt-section-icon">⚡</span>
-            <span className="tt-section-title">Drains</span>
-            {expression !== null && <span className="tt-score-badge tt-score-expression">🔥 {expression}/10</span>}
-          </div>
-          <div className="tt-section-header-right">
-            {avgRecoveryLabel && (
-              <span className="tt-section-count tt-recovery-avg">⏱ {avgRecoveryLabel} avg recovery</span>
-            )}
-          </div>
-        </div>
-        <p className="tt-section-sub">What&apos;s depleting your energy? Drains pull you out of expression faster than practices can refill it.</p>
-
-        <div className="tt-drain-form">
-          {/* Step 1: Category */}
-          <div className="tt-drain-categories">
-            {DRAIN_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                className={`tt-drain-cat-btn ${drainCategory === cat.id ? 'selected' : ''}`}
-                onClick={() => { hapticLight(); setDrainCategory(drainCategory === cat.id ? null : cat.id) }}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Step 2: Note (optional) */}
-          {drainCategory && (
-            <input
-              type="text"
-              className="tt-drain-note"
-              placeholder="What drained you? (optional)"
-              value={drainNote}
-              onChange={e => setDrainNote(e.target.value)}
-            />
-          )}
-
-          {/* Step 3: State check */}
-          {drainCategory && (
-            <div className="tt-drain-state">
-              <span className="tt-state-label">How did it leave you?</span>
-              <div className="tt-state-buttons">
-                <button
-                  className={`tt-state-btn tt-state-activated ${drainState === 'sympathetic' ? 'selected' : ''}`}
-                  onClick={() => setDrainState('sympathetic')}
-                >
-                  <span>😬</span> Activated
-                </button>
-                <button
-                  className={`tt-state-btn tt-state-shutdown ${drainState === 'dorsal' ? 'selected' : ''}`}
-                  onClick={() => setDrainState('dorsal')}
-                >
-                  <span>😶</span> Shutdown
-                </button>
-              </div>
+          {/* Drains — inline after expression */}
+          <div className="tt-inline-tracker">
+            <div className="tt-inline-tracker-header">
+              <span className="tt-inline-tracker-icon">⚡</span>
+              <span className="tt-inline-tracker-label">Drains</span>
+              {avgRecoveryLabel && (
+                <span className="tt-inline-tracker-meta">⏱ {avgRecoveryLabel} avg</span>
+              )}
             </div>
-          )}
-
-          {/* Actions */}
-          {drainCategory && (
-            <div className="tt-drain-actions">
-              <button
-                className="tt-drain-save"
-                disabled={!drainCategory || !drainState || savingDrain}
-                onClick={handleSaveDrain}
-              >
-                {savingDrain ? 'Saving...' : 'Log Drain'}
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Recent drains list */}
-        {recentDrains.length > 0 && (
-          <div className="tt-drain-list">
-            {recentDrains.slice(0, 5).map((drain, i) => {
-              const cat = DRAIN_CATEGORIES.find(c => c.id === drain.source_quest_id)
-              return (
-                <div key={drain.id || i} className="tt-drain-item">
-                  <span className="tt-drain-item-icon">{cat?.icon || '⚡'}</span>
-                  <div className="tt-drain-item-body">
-                    <span className="tt-drain-item-cat">{cat?.label || 'Drain'}</span>
-                    {drain.drain_note && <span className="tt-drain-item-note">{drain.drain_note}</span>}
-                  </div>
-                  <span className={`tt-drain-item-state ${drain.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
-                    {drain.after_state === 'dorsal' ? '😶' : '😬'}
-                  </span>
-                  {drain.recovered_at ? (
-                    <span className="tt-recovered-badge">✓ {formatRecoveryTime(drain.created_at, drain.recovered_at)}</span>
-                  ) : drain.id && isToday(drain.created_at) ? (
-                    <button
-                      type="button"
-                      className="tt-recover-btn"
-                      onClick={(e) => { e.stopPropagation(); hapticLight(); setRecoveryItem({ ...drain, type: 'drain' }) }}
-                    >
-                      Recovered?
-                    </button>
-                  ) : null}
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* Section 4: Stalls */}
-      <div className="tt-section">
-        <div className="tt-section-header">
-          <div className="tt-section-header-left">
-            <span className="tt-section-icon">🧊</span>
-            <span className="tt-section-title">Stalls</span>
-            {safety !== null && <span className="tt-score-badge tt-score-safety">🛡️ {safety}/10</span>}
-          </div>
-        </div>
-        <p className="tt-section-sub">Where did your protective voice win? Stalls erode safety and keep you stuck in the smaller version of yourself.</p>
-
-        <div className="tt-drain-form">
-          <div className="tt-drain-categories">
-            {STALL_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                className={`tt-drain-cat-btn ${stallCategory === cat.id ? 'selected' : ''}`}
-                onClick={() => { hapticLight(); setStallCategory(stallCategory === cat.id ? null : cat.id) }}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {stallCategory && (
-            <input
-              type="text"
-              className="tt-drain-note"
-              placeholder="What happened? (optional)"
-              value={stallNote}
-              onChange={e => setStallNote(e.target.value)}
-            />
-          )}
-
-          {stallCategory && (
-            <div className="tt-drain-state">
-              <span className="tt-state-label">How did it leave you?</span>
-              <div className="tt-state-buttons">
-                <button
-                  className={`tt-state-btn tt-state-activated ${stallState === 'sympathetic' ? 'selected' : ''}`}
-                  onClick={() => { setStallState('sympathetic'); setStallVoice(null) }}
-                >
-                  <span>😬</span> Activated
-                </button>
-                <button
-                  className={`tt-state-btn tt-state-shutdown ${stallState === 'dorsal' ? 'selected' : ''}`}
-                  onClick={() => { setStallState('dorsal'); setStallVoice(null) }}
-                >
-                  <span>😶</span> Shutdown
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Voice picker — shows after state selection */}
-          {stallState && (
-            <div className="tt-stall-voice">
-              <span className="tt-state-label">Which voice showed up?</span>
-              <div className="tt-voice-buttons">
-                {VOICES_BY_STATE[stallState].map(v => (
+            <p className="tt-inline-tracker-sub">What's depleting your energy?</p>
+            <div className="tt-drain-form">
+              <div className="tt-drain-categories">
+                {DRAIN_CATEGORIES.map(cat => (
                   <button
-                    key={v.id}
-                    className={`tt-voice-btn ${stallVoice === v.id ? 'selected' : ''}`}
-                    onClick={() => { hapticLight(); setStallVoice(v.id) }}
+                    key={cat.id}
+                    className={`tt-drain-cat-btn ${drainCategory === cat.id ? 'selected' : ''}`}
+                    onClick={() => { hapticLight(); setDrainCategory(drainCategory === cat.id ? null : cat.id) }}
                   >
-                    <span>{v.icon}</span> {v.name}
+                    <span>{cat.icon}</span>
+                    <span>{cat.label}</span>
                   </button>
                 ))}
               </div>
-            </div>
-          )}
-
-          {stallCategory && (
-            <div className="tt-drain-actions">
-              <button
-                className="tt-drain-save tt-stall-save"
-                disabled={!stallCategory || !stallState || !stallVoice || savingStall}
-                onClick={handleSaveStall}
-              >
-                {savingStall ? 'Saving...' : 'Log Stall'}
-              </button>
-            </div>
-          )}
-        </div>
-
-        {recentStalls.length > 0 && (
-          <div className="tt-drain-list">
-            {recentStalls.slice(0, 5).map((stall, i) => {
-              const cat = STALL_CATEGORIES.find(c => c.id === stall.source_quest_id)
-              return (
-                <div key={stall.id || i} className="tt-drain-item">
-                  <span className="tt-drain-item-icon">{cat?.icon || '🧊'}</span>
-                  <div className="tt-drain-item-body">
-                    <span className="tt-drain-item-cat">{cat?.label || 'Stall'}{stall.protective_voice ? ` · ${stall.protective_voice}` : ''}</span>
-                    {stall.drain_note && <span className="tt-drain-item-note">{stall.drain_note}</span>}
+              {drainCategory && (
+                <input type="text" className="tt-drain-note" placeholder="What drained you? (optional)"
+                  value={drainNote} onChange={e => setDrainNote(e.target.value)} />
+              )}
+              {drainCategory && (
+                <div className="tt-drain-state">
+                  <span className="tt-state-label">How did it leave you?</span>
+                  <div className="tt-state-buttons">
+                    <button className={`tt-state-btn tt-state-activated ${drainState === 'sympathetic' ? 'selected' : ''}`}
+                      onClick={() => setDrainState('sympathetic')}>
+                      <span>😬</span> Activated
+                    </button>
+                    <button className={`tt-state-btn tt-state-shutdown ${drainState === 'dorsal' ? 'selected' : ''}`}
+                      onClick={() => setDrainState('dorsal')}>
+                      <span>😶</span> Shutdown
+                    </button>
                   </div>
-                  <span className={`tt-drain-item-state ${stall.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
-                    {stall.after_state === 'dorsal' ? '😶' : '😬'}
-                  </span>
                 </div>
-              )
-            })}
+              )}
+              {drainCategory && (
+                <div className="tt-drain-actions">
+                  <button className="tt-drain-save"
+                    disabled={!drainCategory || !drainState || savingDrain}
+                    onClick={handleSaveDrain}>
+                    {savingDrain ? 'Saving...' : 'Log Drain'}
+                  </button>
+                </div>
+              )}
+            </div>
+            {recentDrains.length > 0 && (
+              <div className="tt-drain-list">
+                {recentDrains.slice(0, 3).map((drain, i) => {
+                  const cat = DRAIN_CATEGORIES.find(c => c.id === drain.source_quest_id)
+                  return (
+                    <div key={drain.id || i} className="tt-drain-item">
+                      <span className="tt-drain-item-icon">{cat?.icon || '⚡'}</span>
+                      <div className="tt-drain-item-body">
+                        <span className="tt-drain-item-cat">{cat?.label || 'Drain'}</span>
+                        {drain.drain_note && <span className="tt-drain-item-note">{drain.drain_note}</span>}
+                      </div>
+                      <span className={`tt-drain-item-state ${drain.after_state === 'dorsal' ? 'tt-shutdown' : 'tt-activated'}`}>
+                        {drain.after_state === 'dorsal' ? '😶' : '😬'}
+                      </span>
+                      {drain.recovered_at ? (
+                        <span className="tt-recovered-badge">✓ {formatRecoveryTime(drain.created_at, drain.recovered_at)}</span>
+                      ) : drain.id && isToday(drain.created_at) ? (
+                        <button type="button" className="tt-recover-btn"
+                          onClick={(e) => { e.stopPropagation(); hapticLight(); setRecoveryItem({ ...drain, type: 'drain' }) }}>
+                          Recovered?
+                        </button>
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Today's Experiences — archived, re-enable when ready */}

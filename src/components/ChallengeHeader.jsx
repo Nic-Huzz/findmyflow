@@ -24,9 +24,9 @@ const WEEK_TYPES = {
 
 // Lighter variants for category score text in solo mode
 const CATEGORY_TEXT_COLORS = {
-  tune: '#10b981',
-  play_list: '#E9A23B',
-  healing: '#34d399',
+  tune: '#f9a8d4',
+  courage: '#E9A23B',
+  reach: '#67e8f9',
 }
 
 function ChallengeHeader({
@@ -92,8 +92,8 @@ function ChallengeHeader({
   const animatedCategoryScores = useScoreAnimation(categoryScores)
   const animatedWeeklyPoints = useScoreAnimation({ pts: weeklyPoints })
 
-  // Display: Tune, Play-list (Wahoos), Healing
-  const DISPLAY_KEYS = ['tune', 'play_list', 'healing']
+  // Display: Tune, Courage, Reach
+  const DISPLAY_KEYS = ['tune', 'courage', 'reach']
 
   // Build score data for display
   const bars = DISPLAY_KEYS.map(key => {
@@ -189,6 +189,12 @@ function ChallengeHeader({
             onClick={() => setShowLeaderboard(true)}
           >
             🏆 Leaderboard
+          </button>
+          <button
+            className="challenge-journey-btn"
+            onClick={() => navigate('/community')}
+          >
+            📣 Community
           </button>
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button

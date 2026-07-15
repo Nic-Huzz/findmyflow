@@ -77,6 +77,15 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
       hapticSuccess()
       confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } })
       setSavedReview(data)
+
+      // Mystery box: 4th weekly review
+      supabase.from('weekly_reviews')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .then(({ count }) => {
+          if (count === 4) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'weekly_review_streak_4', 'silver'))
+        }).catch(() => {})
+
       onComplete?.()
     } catch (err) {
       console.error('Weekly review save error:', err)

@@ -7,13 +7,21 @@ import { getLevel, LEVELS } from '../../lib/crm/statsService'
 import './Celebrations.css'
 
 export default function LevelUpModal({ level, onClose }) {
+  const isGraduation = level?.isGraduation
+  const dismissTime = isGraduation ? 10000 : 8000
+
   useEffect(() => {
-    triggerSideCannons()
-    // Second burst after a beat
-    const burst2 = setTimeout(() => triggerSideCannons(), 600)
-    const timer = setTimeout(() => onClose?.(), 8000)
-    return () => { clearTimeout(timer); clearTimeout(burst2) }
-  }, [onClose])
+    if (!isGraduation) {
+      triggerSideCannons()
+      // Second burst after a beat
+      const burst2 = setTimeout(() => triggerSideCannons(), 600)
+      const timer = setTimeout(() => onClose?.(), dismissTime)
+      return () => { clearTimeout(timer); clearTimeout(burst2) }
+    }
+    // Graduation confetti is handled by celebrateStageGraduation
+    const timer = setTimeout(() => onClose?.(), dismissTime)
+    return () => clearTimeout(timer)
+  }, [onClose, isGraduation, dismissTime])
 
   if (!level) return null
 
@@ -24,15 +32,15 @@ export default function LevelUpModal({ level, onClose }) {
 
   return (
     <div className="level-up-overlay" onClick={onClose}>
-      <div className="level-up-modal" onClick={e => e.stopPropagation()}>
-        <div className="level-badge">{levelInfo.emoji || '⭐'}</div>
-        <h2>Level Up!</h2>
-        <div className="level-up-name">{levelInfo.name}</div>
+      <div className={`level-up-modal${isGraduation ? ' graduation' : ''}`} onClick={e => e.stopPropagation()}>
+        <div className="level-badge">{levelInfo.emoji || '\u2B50'}</div>
+        {!isGraduation && <h2>Level Up!</h2>}
+        <div className={`level-up-name${isGraduation ? ' graduation-message' : ''}`}>{levelInfo.name}</div>
         {levelInfo.description && (
           <p className="level-up-desc">{levelInfo.description}</p>
         )}
         <button onClick={onClose}>
-          Keep Rising
+          {isGraduation ? 'Continue' : 'Keep Rising'}
         </button>
       </div>
     </div>

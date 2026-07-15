@@ -4,11 +4,11 @@
  * Play-List tab for the 7-Day Challenge page.
  *
  * States:
- *   1. No category wahoos and no playskills → WahooDiscoveryFlow (first-visit)
- *   2. Otherwise → category bubbles + Active Wahoos + WahooCreator (free text
- *      + bucket list) + WahooInspiration ("Need inspiration?")
+ *   1. No playskills and no active challenges → WahooDiscoveryFlow (first-visit)
+ *   2. Otherwise → Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration
  *
  * Active Wahoos come from priority_weekly_picks.
+ * Bucket list wahoos come from groan_challenges with status='generated' and no accepted_at.
  */
 
 import { useMemo, useState, useEffect, useCallback } from 'react'
@@ -16,18 +16,13 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { findSkillSegment } from '../lib/wheelTaxonomy'
-import { createGroanChallenge } from '../lib/crm/groanChallengeService'
 import { hapticLight } from '../lib/haptics'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
-
-const WAHOO_CATEGORIES = [
-  { id: 'appearance', name: 'Appearance', icon: '👤' },
-  { id: 'creation', name: 'Creation', icon: '🎨' },
-  { id: 'connection', name: 'Connection', icon: '🤝' },
-]
+import HealingFlowModal from './HealingFlowModal'
+import QuestSelector from './QuestSelector'
 
 export default function PlayListTab({
   userId,
@@ -35,6 +30,7 @@ export default function PlayListTab({
   onQuestComplete,
   onRefreshPoints,
   wahooCount = 0,
+  leagueData = null,
 }) {
   const navigate = useNavigate()
   const [playskills, setPlayskills] = useState([])
@@ -44,6 +40,17 @@ export default function PlayListTab({
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
   const [showWahooModal, setShowWahooModal] = useState(false)
+  const [bucketListWahoos, setBucketListWahoos] = useState([])
+
+  // Healing data for inline display
+  const [healingByChallenge, setHealingByChallenge] = useState({})
+
+  // Standalone healing flow state
+  const [blockingText, setBlockingText] = useState('')
+  const [showBlockingQuestPicker, setShowBlockingQuestPicker] = useState(false)
+  const [blockingQuestId, setBlockingQuestId] = useState(null)
+  const [blockingTaskId, setBlockingTaskId] = useState(null)
+  const [showBlockingHealingModal, setShowBlockingHealingModal] = useState(false)
 
   useEffect(() => {
     if (showWahooModal) {
@@ -52,29 +59,19 @@ export default function PlayListTab({
     }
   }, [showWahooModal])
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
-  const [categoryWahoos, setCategoryWahoos] = useState({ appearance: [], creation: [], connection: [] })
-  const [expandedBubble, setExpandedBubble] = useState(null)
-  const [quickAddText, setQuickAddText] = useState('')
-  const [quickAddSaving, setQuickAddSaving] = useState(false)
 
-  // Fetch all wahoos with categories (completed + queued bucket list)
-  const fetchCategoryWahoos = useCallback(async () => {
+  // Fetch bucket list wahoos (generated, not yet accepted)
+  const fetchBucketListWahoos = useCallback(async () => {
     if (!userId) return
     const { data } = await supabase
       .from('groan_challenges')
-      .select('id, title, challenge_text, description, status, wahoo_category, completed_at, accepted_at')
+      .select('id, title, challenge_text, status, accepted_at')
       .eq('user_id', userId)
-      .not('wahoo_category', 'is', null)
+      .eq('status', 'generated')
+      .is('accepted_at', null)
       .order('created_at', { ascending: false })
-    if (data) {
-      const grouped = { appearance: [], creation: [], connection: [] }
-      data.forEach(w => {
-        if (grouped[w.wahoo_category]) {
-          grouped[w.wahoo_category].push(w)
-        }
-      })
-      setCategoryWahoos(grouped)
-    }
+      .limit(20)
+    if (data) setBucketListWahoos(data)
   }, [userId])
 
   // Fetch playskills (extracted so WahooInspiration's PlaySkillPicker can refresh)
@@ -88,7 +85,7 @@ export default function PlayListTab({
     if (data) setPlayskills(data)
   }, [userId])
 
-  // Fetch playskills + active challenges + category wahoos
+  // Fetch playskills + active challenges + bucket list
   useEffect(() => {
     if (!userId) return
 
@@ -100,7 +97,7 @@ export default function PlayListTab({
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .eq('status', 'completed'),
-      fetchCategoryWahoos(),
+      fetchBucketListWahoos(),
     ]).then(([, , { count }]) => {
       setAllTimeWahoos(count || 0)
       setLoading(false)
@@ -109,31 +106,6 @@ export default function PlayListTab({
       setLoading(false)
     })
   }, [userId])
-
-  // Quick-add a future wahoo (saved as generated, not accepted)
-  async function handleQuickAdd(catId) {
-    if (!quickAddText.trim() || quickAddSaving) return
-    setQuickAddSaving(true)
-    try {
-      await createGroanChallenge({
-        userId,
-        title: quickAddText.trim(),
-        description: quickAddText.trim(),
-        visibilityLayer: 'screen',
-        sourceType: 'skill',
-        sourceLabel: 'Bucket list',
-        scaryScore: 7,
-        wahooScore: 7,
-        wahooCategory: catId,
-      })
-      setQuickAddText('')
-      fetchCategoryWahoos()
-    } catch (err) {
-      console.error('Quick-add error:', err)
-    } finally {
-      setQuickAddSaving(false)
-    }
-  }
 
   const fetchActiveChallenges = async () => {
     // Fetch all picks (not just current week) — wahoos persist until completed
@@ -152,18 +124,55 @@ export default function PlayListTab({
         seen.add(pick.reference_id)
         return true
       })
-      // Enrich with source label from groan_challenges
+      // Enrich with source label + quest name
       const enriched = await Promise.all(unique.map(async pick => {
-        const { data: challenge } = await supabase
-          .from('groan_challenges')
-          .select('source_label, status')
-          .eq('id', pick.reference_id)
-          .single()
-        return { ...pick, _source_label: challenge?.source_label, _status: challenge?.status }
+        const [{ data: challenge }, { data: questTask }] = await Promise.all([
+          supabase.from('groan_challenges').select('source_label, status').eq('id', pick.reference_id).single(),
+          supabase.from('quest_tasks').select('quest_id').eq('groan_challenge_id', pick.reference_id).limit(1).maybeSingle(),
+        ])
+        let questName = null
+        if (questTask?.quest_id) {
+          const { data: quest } = await supabase.from('quests').select('label').eq('id', questTask.quest_id).single()
+          questName = quest?.label
+        }
+        return { ...pick, _source_label: questName || challenge?.source_label, _status: challenge?.status }
       }))
       setActiveChallenges(enriched.filter(e => e._status !== 'completed'))
     }
   }
+
+  // Stable key from challenge IDs — re-fetches when actual challenges change, not just count
+  const challengeKey = useMemo(() =>
+    activeChallenges.map(c => c.reference_id).filter(Boolean).join(','),
+    [activeChallenges]
+  )
+
+  // Fetch healing intentions linked to active challenges
+  useEffect(() => {
+    if (!userId || !challengeKey) {
+      setHealingByChallenge({})
+      return
+    }
+    const challengeIds = challengeKey.split(',')
+
+    supabase
+      .from('quest_tasks')
+      .select('groan_challenge_id, id, healing_intentions!quest_task_id(id, pattern, fear_text, origin_text, healing_stage, outcome, protective_voice, quest_task_id)')
+      .in('groan_challenge_id', challengeIds)
+      .not('groan_challenge_id', 'is', null)
+      .then(({ data }) => {
+        if (!data) return
+        const map = {}
+        data.forEach(qt => {
+          const intentions = qt.healing_intentions || []
+          const active = intentions.find(h => !h.outcome)
+          if (active && qt.groan_challenge_id) {
+            map[qt.groan_challenge_id] = { ...active, questTaskId: qt.id }
+          }
+        })
+        setHealingByChallenge(map)
+      })
+  }, [userId, challengeKey])
 
   // Extract category ids from playskills
   const categoryIds = useMemo(() => {
@@ -183,19 +192,42 @@ export default function PlayListTab({
         <div className="plt-section-header">
           <div className="plt-section-header-left">
             <span className="plt-section-icon">🔥</span>
-            <span className="plt-section-title">Active Wahoos</span>
+            <span className="plt-section-title">Active Courage Challenges</span>
           </div>
           <span className="plt-section-count">{activeChallenges.length}</span>
         </div>
         <div className="plt-section-items">
           {activeChallenges.map(pick => {
             const isLoading = loadingChallengeId === pick.reference_id
+            const healing = healingByChallenge[pick.reference_id]
+            const hasActiveHealing = healing && !healing.outcome && healing.healing_stage
+
             return (
               <div key={pick.id || pick.reference_id} className="plt-item-row">
                 <span className="plt-item-check"></span>
                 <div className="plt-item-body">
                   <div className="plt-item-name">{pick.display_name}</div>
                   <div className="plt-item-meta">{pick._source_label || 'Courage'}</div>
+
+                  {hasActiveHealing && healing.protective_voice && (
+                    <div
+                      className="plt-healing-inline"
+                      onClick={() => {
+                        setBlockingTaskId(healing.questTaskId)
+                        setBlockingText(pick.display_name)
+                        setShowBlockingHealingModal(true)
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <span className="plt-healing-icon">💚</span>
+                      <div className="plt-healing-body">
+                        <div className="plt-healing-voice">
+                          {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
+                        </div>
+                        <div className="plt-healing-cta">Continue healing flow →</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <button
                   className="plt-item-action"
@@ -225,20 +257,15 @@ export default function PlayListTab({
     return <div className="playlist-tab"><div className="loading-state"><div className="spinner" /></div></div>
   }
 
-  // ─── State 1: First visit (no category wahoos, no playskills) ──────────────
+  // ─── State 1: First visit (no playskills, no active challenges) ─────────────
 
-  const hasCategoryWahoos = Object.values(categoryWahoos).flat().length > 0
-
-  if (playskills.length === 0 && !hasCategoryWahoos) {
+  if (playskills.length === 0 && activeChallenges.length === 0) {
     return (
       <div className="playlist-tab">
-        {activeChallenges.length > 0 && renderActiveWahoos()}
-
         <WahooDiscoveryFlow
           userId={userId}
           currentVisibilityLayer={currentVisibilityLayer}
           onComplete={() => {
-            fetchCategoryWahoos()
             fetchActiveChallenges()
             onRefreshPoints?.()
           }}
@@ -264,87 +291,17 @@ export default function PlayListTab({
 
   return (
     <div className="playlist-tab">
-      {/* Expression Header + Category Bubbles */}
-      <div className="plt-expression-header">
-        <div className="plt-expression-tagline">Actions that expand what feels possible for your path</div>
-        <div className="plt-category-bubbles">
-          {WAHOO_CATEGORIES.map(cat => {
-            const items = categoryWahoos[cat.id] || []
-            const completedCount = items.length
-            const isExpanded = expandedBubble === cat.id
-            return (
-              <div key={cat.id} className="plt-bubble-wrapper">
-                <button
-                  className={`plt-category-bubble ${isExpanded ? 'expanded' : ''}`}
-                  onClick={() => { hapticLight(); setExpandedBubble(isExpanded ? null : cat.id); setQuickAddText('') }}
-                >
-                  <span className="plt-bubble-icon">{cat.icon}</span>
-                  <span className="plt-bubble-name">{cat.name}</span>
-                  <span className="plt-bubble-count">{completedCount}</span>
-                </button>
-                {isExpanded && (
-                  <div className="plt-bubble-modal-overlay" onClick={() => { setExpandedBubble(null); setQuickAddText('') }}>
-                    <div className="plt-bubble-modal" onClick={e => e.stopPropagation()}>
-                      <div className="plt-modal-header">
-                        <span className="plt-modal-title">{cat.icon} {cat.name} Wahoos</span>
-                        <button className="plt-modal-close" onClick={() => { setExpandedBubble(null); setQuickAddText('') }}>✕</button>
-                      </div>
-                      <div className="plt-quickadd">
-                        <input
-                          className="plt-quickadd-input"
-                          placeholder="Add a future wahoo..."
-                          value={quickAddText}
-                          onChange={e => setQuickAddText(e.target.value)}
-                          autoFocus
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' && quickAddText.trim()) {
-                              handleQuickAdd(cat.id)
-                            }
-                          }}
-                        />
-                        <button
-                          className="plt-quickadd-btn"
-                          disabled={!quickAddText.trim() || quickAddSaving}
-                          onClick={() => handleQuickAdd(cat.id)}
-                        >
-                          {quickAddSaving ? '...' : '+'}
-                        </button>
-                      </div>
-                      {items.length === 0 && (
-                        <div className="plt-dropdown-empty">No wahoos yet</div>
-                      )}
-                      {[...items].sort((a, b) => {
-                        if (a.status === 'completed' && b.status !== 'completed') return 1
-                        if (a.status !== 'completed' && b.status === 'completed') return -1
-                        return 0
-                      }).map(w => {
-                        const name = w.title || w.challenge_text
-                        const isDone = w.status === 'completed'
-                        return (
-                          <div key={w.id} className={`plt-dropdown-item ${isDone ? 'done' : ''}`}>
-                            <span className="plt-dropdown-check">{isDone ? '✓' : '○'}</span>
-                            <span className={`plt-dropdown-name ${isDone ? 'crossed' : ''}`}>{name}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
-      {/* Add a Wahoo button */}
+      {/* "What's blocking you?" archived — healing tied to wahoo cards only */}
+
+      {/* Add a courage challenge button */}
       <button
         className="wc-add-btn"
         onClick={() => setShowWahooModal(true)}
       >
-        + Add a Wahoo
+        + Add a Courage Challenge
       </button>
 
       {/* WahooCreator Modal */}
@@ -355,16 +312,20 @@ export default function PlayListTab({
             <WahooCreator
               key={wahooCreatorKey}
               userId={userId}
-              currentVisibilityLayer={currentVisibilityLayer}
-              bucketList={Object.values(categoryWahoos).flat().filter(w => w.status !== 'completed' && !w.accepted_at)}
-              onWahooAccepted={() => {
+              bucketList={bucketListWahoos}
+              onWahooAccepted={(healingTask) => {
                 fetchActiveChallenges()
-                fetchCategoryWahoos()
+                fetchBucketListWahoos()
                 onRefreshPoints?.()
+                if (healingTask?.id) {
+                  setBlockingTaskId(healingTask.id)
+                  setBlockingText(healingTask.text || '')
+                  setShowBlockingHealingModal(true)
+                }
               }}
               onClose={() => {
                 fetchActiveChallenges()
-                fetchCategoryWahoos()
+                fetchBucketListWahoos()
                 setWahooCreatorKey(k => k + 1)
                 setShowWahooModal(false)
               }}
@@ -373,19 +334,20 @@ export default function PlayListTab({
         </div>
       )}
 
-      {/* Need inspiration? — play-skills + Ikigai Mix (+ future pillar gaps) */}
-      <WahooInspiration
-        userId={userId}
-        categories={categoryIds}
-        currentVisibilityLayer={currentVisibilityLayer}
-        onWahooAccepted={() => {
-          fetchActiveChallenges()
-          fetchCategoryWahoos()
-          onRefreshPoints?.()
-        }}
-        onWahooSaved={fetchCategoryWahoos}
-        onPlaySkillsUpdated={fetchPlayskills}
-      />
+      {/* WahooInspiration archived — play-skills + Ikigai Mix deferred */}
+
+      {/* Community Tasks CTA */}
+      <button className="plt-community-cta" onClick={() => navigate('/community?tab=tasks')}>
+        <span className="plt-community-cta-glow" />
+        <span className="plt-community-cta-inner">
+          <span className="plt-community-cta-icon">📣</span>
+          <span className="plt-community-cta-text">
+            <span className="plt-community-cta-title">Earn Community Points</span>
+            <span className="plt-community-cta-sub">Share your journey with the community</span>
+          </span>
+          <span className="plt-community-cta-badge">⚡ RP</span>
+        </span>
+      </button>
 
       {/* Completion modal */}
       {completingChallenge && (
@@ -398,6 +360,28 @@ export default function PlayListTab({
             onRefreshPoints?.()
           }}
           onClose={() => setCompletingChallenge(null)}
+        />
+      )}
+
+      {/* Healing flow modal (standalone or resume) */}
+      {showBlockingHealingModal && blockingTaskId && (
+        <HealingFlowModal
+          taskText={blockingText}
+          userId={userId}
+          questTaskId={blockingTaskId}
+          onComplete={() => {
+            setShowBlockingHealingModal(false)
+            setBlockingText('')
+            setBlockingTaskId(null)
+            setBlockingQuestId(null)
+            fetchActiveChallenges()
+            onRefreshPoints?.()
+          }}
+          onClose={() => {
+            setShowBlockingHealingModal(false)
+            setBlockingText('')
+            setBlockingTaskId(null)
+          }}
         />
       )}
     </div>

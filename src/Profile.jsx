@@ -15,6 +15,7 @@ import GraduationModal from './components/GraduationModal'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import FlowMapRiver from './components/FlowMapRiver'
 import SeeYourFlow from './components/SeeYourFlow'
+import AIMirrorsCollection from './components/MysteryBox/AIMirrorsCollection'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -938,6 +939,9 @@ const Profile = () => {
           celebration={graduationModal.celebration}
           onClose={closeGraduationModal}
         />
+
+        {/* AI Mirrors — opened mystery box insights */}
+        <AIMirrorsCollection userId={user?.id} />
 
         {/* Ready To Find Your Flow Section */}
         <h2 className="section-heading">Ready To Find Your Flow?</h2>

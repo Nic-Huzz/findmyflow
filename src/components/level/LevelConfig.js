@@ -46,7 +46,7 @@ export const LEVEL_CONFIG = {
         route: null,
         narrative: 'Complete your first healing quest.',
         icon: '💚',
-        navigateTo: 'Healing',
+        navigateTo: 'Courage',
         lockedUntil: 'life_paths',
       },
       {
@@ -324,7 +324,7 @@ export function getLevelConfig(level) {
         ? 'Complete 1 weekly healing quest.'
         : `Complete ${config.courageCount} weekly healing quests.`,
       icon: '💜',
-      navigateTo: 'Healing',
+      navigateTo: 'Courage',
     })
   }
 

@@ -19,9 +19,127 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 | **CD7** Curiosity | 5 | AI-generated Groan challenges, essence zone discovery (scary+wahoo scoring), Zarlo context-aware variable responses, protective voice archetypes with kryptonite, Mind Space graph |
 | **CD8** Loss | 5 | Streak loss mechanics, protective voice as therapeutic loss framing, longest vs current streak gap, CRM nudge engine, Smart Alerts, deal pipeline won/lost tracking, weekly planning forced |
 
-**Current Score: 49 + 36 + 25 + 25 + 16 + 16 + 25 + 25 = 217** (Moderate)
+**Pre-Sprint Score: 49 + 36 + 25 + 25 + 16 + 16 + 25 + 25 = 217** (Moderate)
 
-*Scores updated February 2025 after full codebase audit*
+*Scores from February 2025 codebase audit*
+
+---
+
+## Post-Octalysis Sprint Score (July 2026)
+
+After Sprints 1-4 (DCC/Hades/Celeste-inspired gamification):
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD1** Epic Meaning | 7 | **8** | +1 | 12-stage hero journey with named stages + feeling targets. Graduation celebrations frame transitions as meaningful. Stuck messaging reframes stuckness as part of the story. |
+| **CD2** Accomplishment | 6 | **8** | +2 | RP differentiation per wahoo state (Pressure = Vibe Rise = 10). Daily check-in +2 RP. 6 stage graduations with celebrations/confetti. Journey tab with stage display. Voice dots (●●●○○). Insight Drops V1 (Common + Uncommon). |
+| **CD3** Creativity | 5 | **6** | +1 | Per-state wahoo feedback (4 responses, not generic). Pressure captures voice objection (creative self-reflection). UnstickFlow 3-step modal (name fear → worst case → create wahoo). |
+| **CD4** Ownership | 5 | **7** | +2 | Hero stage visible on Journey tab (permanent). Voice dots accumulate. Insight Drops are personal discoveries. UnstickFlow creates your own wahoo from your own fear. |
+| **CD5** Social | 4 | **5** | +1 | Zarlo now proactive companion (Brief-based observations, not just reactive). Creates "being witnessed" feeling. No real social features shipped yet (V2). |
+| **CD6** Scarcity | 4 | **5** | +1 | "Almost there" moments (voice count 4/5, streak approaching milestone). Graduation thresholds create anticipation. |
+| **CD7** Curiosity | 5 | **7** | +2 | Insight Drops slide up unexpectedly (2 rarity tiers). Proactive Zarlo bubbles unpredictable. Graduation celebrations surprising on first occurrence. Voice dots create "what happens at 5?" |
+| **CD8** Loss | 5 | **5** | 0 | **Intentionally held (Celeste model).** Pressure earns MORE not less. "Streak resets. Learning doesn't." No new loss mechanics. |
+
+**Post-Sprint 1-4 Score: 64 + 64 + 36 + 49 + 25 + 25 + 49 + 25 = 337** (Moderate-Strong)
+
+---
+
+## Post-Social V1 Score (July 2026)
+
+After Social V1 (community feed, auto-posts, reactions, two entry points):
+
+| Core Drive | Before Social | After Social | Change | What Changed |
+|---|---|---|---|---|
+| **CD5** Social | 5 | **7** | +2 | Community feed with auto-posted achievements (stage graduations, insight unlocks). 4 reaction types (Kudos). Two entry points (header button + Courage tab section). ShareWinStep posts visible. Cumulative monthly counter. |
+
+All other drives unchanged from Sprint 1-4 scores.
+
+**Post-Social Score: 64 + 64 + 36 + 49 + 49 + 25 + 49 + 25 = 361** (Strong)
+
+---
+
+## Post-Tab Restructure + L0-L4 Depth + Social Gaps Score (July 2026)
+
+After tab restructure (Journey/Quests/Tune/Courage), L0-L4 depth scale on wahoo creation, healing merged into Courage, and Social V1 gaps (level-up auto-posts + anonymous solidarity):
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD3** Creativity | 6 | **7** | +1 | L0-L4 depth capture on wahoo creation = meaningful choices about WHERE you are. Visibility multi-select adapts to depth = creative boundary decisions. WahooCreator is now a 4-step creative exercise. |
+| **CD4** Ownership | 7 | **8** | +1 | Depth level visible per quest ("L2 Practising"). Life paths summary on Journey tab with state + depth. Your relationship to each path is now VISIBLE and YOURS. |
+| **CD7** Curiosity | 7 | **8** | +1 | Visibility examples adapt to depth ("what options appear at L3?"). Flow Map accessible from Journey tab. Tab restructure reveals Journey as first tab (new content to explore). |
+
+All other drives unchanged.
+
+**Post-Tab/Depth Score: 64 + 64 + 49 + 64 + 49 + 25 + 64 + 25 = 404** (Strong)
+
+---
+
+## Post-Figurine Mentor Score (July 2026)
+
+After Figurine Mentor (4-phase build: hook, overlay, chat, FAB, integration, transitions, cryptic hooks):
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD5** Social | 7 | **8** | +1 | Figurine is a rich NPC mentor relationship (Hades model). Archetype-voiced, remembers conversations, adapts to NS state, deepens over intelligence phases. Combined with community feed = target hit. |
+| **CD7** Curiosity | 8 | **9** | +1 | Monthly cryptic hooks create open loops. Mirror→Mentor transition is a surprise unlock. Intelligence phases create "what happens when the Figurine gets smarter?" curiosity. Target hit. |
+
+All other drives unchanged.
+
+**Current Score: 64 + 64 + 49 + 64 + 64 + 25 + 81 + 25 = 436** (Strong)
+
+**Full journey: 217 → 337 → 361 → 404 → 436 (+219 points, +101%)**
+
+```
+                    Start (217)      Now (436)        Target (479)
+CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD2 Accomplishment  ██████░░░░ (6)   ████████░░ (8)   █████████░ (9)
+CD3 Creativity      █████░░░░░ (5)   ███████░░░ (7)   ████████░░ (8)
+CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD5 Social          ████░░░░░░ (4)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD6 Scarcity        ████░░░░░░ (4)   █████░░░░░ (5)   ██████░░░░ (6)
+CD7 Curiosity       █████░░░░░ (5)   █████████░ (9)   █████████░ (9) ✅ Hit
+CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
+```
+
+**5 drives at target** (CD1, CD4, CD5, CD7, CD8). 3 remaining.
+
+*Scores updated July 2026 after Figurine Mentor build*
+
+---
+
+## Post-Mystery Boxes + Skills + Triggers Score (July 2026)
+
+After Mystery Boxes v1 (10 triggers, 3 AI content types, opening animation, AI Mirrors collection), Self-Knowledge Skills (5 skills L1-L5, Journey tab display, Figurine/mystery box prompt injection), additional community feed auto-events, Zarlo light theme redesign:
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD2** Accomplishment | 8 | **9** | +1 | Self-Knowledge Skills L1-L5 with visible progress dots. Skill levels surface in Figurine prompt ("Your Courage is L4"). 10 mystery box triggers reward milestones. Achievement feels tracked across multiple dimensions, not just RP. |
+| **CD3** Creativity | 7 | **8** | +1 | Mystery box content is unique per user (AI-generated from YOUR data). Pattern Mirror, Shadow Reveal, Capacity Insight all reflect creative self-discovery. The AI creates something new for each box, never repeatable. |
+| **CD7** Curiosity | 9 | **10** | +1 | Mystery boxes are the purest CD7 mechanic: variable reward, unknown content, "what will the AI say about me?". 10 triggers mean boxes arrive unpredictably. AI Mirrors collection on /me creates desire to collect more. Skill-based Figurine tone changes create "what happens when I reach L3?" |
+
+All other drives unchanged.
+
+**Current Score: 64 + 81 + 64 + 64 + 64 + 36 + 100 + 25 = 498** (Exceptional)
+
+**Full journey: 217 → 337 → 361 → 404 → 436 → 487 → 498 (+281 points, +129%)**
+
+```
+                    Start (217)      Now (498)        Target (479)
+CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD2 Accomplishment  ██████░░░░ (6)   █████████░ (9)   █████████░ (9) ✅ Hit
+CD3 Creativity      █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD5 Social          ████░░░░░░ (4)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD6 Scarcity        ████░░░░░░ (4)   ██████░░░░ (6)   ██████░░░░ (6) ✅ Hit
+CD7 Curiosity       █████░░░░░ (5)   ██████████ (10)  █████████░ (9) ✅ Exceeded
+CD8 Loss            █████░░░░░ (5)   █████░░░░░ (5)   █████░░░░░ (5) ✅ Hit
+```
+
+**8 of 8 drives at or above target.** All targets hit.
+
+**CD6 closed by:** Zarlo V2 open loop hooks (skill-threshold teasers create "do X more and I'll tell you something" anticipation), weekly countdown ("2 days left in the week"), data-gated reveals (skills approaching next level). These create natural scarcity without artificial time pressure.
+
+*Scores updated July 2026 after Zarlo V2 Phase 1 + Phase 2 + Phase 4 build*
 
 ---
 
