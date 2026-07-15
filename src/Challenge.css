@@ -3466,6 +3466,23 @@
   border-top: 1px solid #f0f0f5;
 }
 
+.playlist-tab .plt-quest-group {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.playlist-tab .plt-quest-group:last-child {
+  border-bottom: none;
+}
+
+.playlist-tab .plt-quest-group-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 18px 2px;
+}
+
 .playlist-tab .plt-item-row {
   display: flex;
   align-items: flex-start;

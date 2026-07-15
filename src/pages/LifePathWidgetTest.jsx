@@ -302,9 +302,9 @@ export default function LifePathFlow() {
       id: 'sp' + spNextId++,
       careerId,
       text: stuckInput.trim(),
-      reason: null,
-      reasonLabel: null,
-      reasonEmoji: null,
+      depthLevel: null,
+      wahooCategory: null,
+      protectiveVoice: null,
       fromSpring: false,
       addedToWahoos: false,
     }
@@ -313,6 +313,12 @@ export default function LifePathFlow() {
     setActiveReasonId(newSp.id)
     setTimeout(() => stuckInputRef.current?.focus(), 50)
   }, [stuckInput])
+
+  const updateStuckField = useCallback((spId, field, value) => {
+    setStuckPoints(prev => prev.map(sp =>
+      sp.id === spId ? { ...sp, [field]: value } : sp
+    ))
+  }, [])
 
   const setStuckReason = useCallback((spId, reason) => {
     setStuckPoints(prev => prev.map(sp =>
@@ -801,9 +807,49 @@ export default function LifePathFlow() {
 
                     {/* Existing stuck points for this career */}
                     {cStuck.map(sp => (
-                      <div key={sp.id} className="flp-career-list-item" style={{ background: 'white', borderRadius: 10, marginBottom: 4, padding: '8px 12px' }}>
-                        <span className="flp-career-list-name">{sp.text}</span>
-                        <span className="flp-pill-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
+                      <div key={sp.id} style={{ marginBottom: 8, background: 'white', borderRadius: 10, padding: '10px 12px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span className="flp-career-list-name" style={{ flex: 1 }}>{sp.text}</span>
+                          <span className="flp-pill-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
+                        </div>
+                        {activeReasonId === sp.id && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
+                            <select value={sp.depthLevel || ''} onChange={e => updateStuckField(sp.id, 'depthLevel', e.target.value || null)}
+                              style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.1)', fontSize: 13, fontFamily: 'inherit', color: '#1a1a2e', background: 'white' }}>
+                              <option value="">Where are you with this?</option>
+                              <option value="education">Still learning about it</option>
+                              <option value="testing">Starting to test it</option>
+                              <option value="practising">Practising it</option>
+                              <option value="charging">Getting paid for it</option>
+                              <option value="teaching">Teaching others</option>
+                            </select>
+                            <select value={sp.wahooCategory || ''} onChange={e => updateStuckField(sp.id, 'wahooCategory', e.target.value || null)}
+                              style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.1)', fontSize: 13, fontFamily: 'inherit', color: '#1a1a2e', background: 'white' }}>
+                              <option value="">What part pushes your boundary?</option>
+                              <option value="screen">Sharing it online</option>
+                              <option value="live">Doing it in front of people</option>
+                              <option value="money">Asking for money</option>
+                              <option value="vulnerable">Being emotionally open about it</option>
+                              <option value="authority">Claiming expertise</option>
+                            </select>
+                            <select value={sp.protectiveVoice || ''} onChange={e => updateStuckField(sp.id, 'protectiveVoice', e.target.value || null)}
+                              style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.1)', fontSize: 13, fontFamily: 'inherit', color: '#1a1a2e', background: 'white' }}>
+                              <option value="">What voice tries to stop you?</option>
+                              <option value="controller">Controller (pushes too hard)</option>
+                              <option value="ghost">Ghost (disappears, avoids)</option>
+                              <option value="people-pleaser">People Pleaser (says yes when you mean no)</option>
+                              <option value="auto-pilot">Auto-Pilot (goes through the motions)</option>
+                              <option value="perfectionist">Perfectionist (won't start until it's perfect)</option>
+                            </select>
+                          </div>
+                        )}
+                        {!activeReasonId && sp.depthLevel && (
+                          <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
+                            {sp.depthLevel && <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: 'rgba(94,23,235,0.08)', color: '#5e17eb' }}>{sp.depthLevel}</span>}
+                            {sp.wahooCategory && <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: 'rgba(233,162,59,0.08)', color: '#E9A23B' }}>{sp.wahooCategory}</span>}
+                            {sp.protectiveVoice && <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: 'rgba(0,0,0,0.05)', color: '#6b7280' }}>{sp.protectiveVoice}</span>}
+                          </div>
+                        )}
                       </div>
                     ))}
 
@@ -854,7 +900,12 @@ export default function LifePathFlow() {
                           const { data: newGroan } = await supabase.from('groan_challenges').insert({
                             user_id: user.id, title: sp.text, challenge_text: sp.text,
                             status: 'active', source_type: 'skill', challenge_source: 'life_paths',
+                            source_label: career.label,
                             scary_score: 5, wahoo_score: 5,
+                            depth_level: sp.depthLevel || null,
+                            wahoo_category: sp.wahooCategory || null,
+                            visibility_layer: sp.wahooCategory || 'screen',
+                            visibility_layers: sp.wahooCategory ? [sp.wahooCategory] : [],
                             accepted_at: new Date().toISOString(),
                           }).select('id').single()
                           // Also create priority_weekly_pick so it appears on Courage tab
@@ -877,11 +928,22 @@ export default function LifePathFlow() {
                             .select('id').eq('quest_id', questId).eq('text', sp.text).limit(1)
                           if (!existingTask?.length) {
                             try {
-                              await supabase.from('quest_tasks').insert({
+                              const { data: taskRow } = await supabase.from('quest_tasks').insert({
                                 quest_id: questId, user_id: user.id, text: sp.text,
                                 is_courage_challenge: true, groan_challenge_id: groanId,
                                 sort_order: careerStuck.indexOf(sp),
-                              })
+                              }).select('id').single()
+
+                              // Pre-create healing intention if protective voice was selected
+                              if (taskRow?.id && sp.protectiveVoice) {
+                                await supabase.from('healing_intentions').upsert({
+                                  quest_task_id: taskRow.id,
+                                  user_id: user.id,
+                                  pattern: sp.protectiveVoice,
+                                  protective_voice: sp.protectiveVoice,
+                                  healing_stage: 'in_progress',
+                                }, { onConflict: 'quest_task_id' })
+                              }
                             } catch {}
                           }
                         }

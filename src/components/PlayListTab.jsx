@@ -197,57 +197,73 @@ export default function PlayListTab({
           <span className="plt-section-count">{activeChallenges.length}</span>
         </div>
         <div className="plt-section-items">
-          {activeChallenges.map(pick => {
-            const isLoading = loadingChallengeId === pick.reference_id
-            const healing = healingByChallenge[pick.reference_id]
-            const hasActiveHealing = healing && !healing.outcome && healing.healing_stage
+          {(() => {
+            // Group by quest label
+            const groups = {}
+            activeChallenges.forEach(pick => {
+              const label = pick._source_label || 'Courage'
+              if (!groups[label]) groups[label] = []
+              groups[label].push(pick)
+            })
 
-            return (
-              <div key={pick.id || pick.reference_id} className="plt-item-row">
-                <span className="plt-item-check"></span>
-                <div className="plt-item-body">
-                  <div className="plt-item-name">{pick.display_name}</div>
-                  <div className="plt-item-meta">{pick._source_label || 'Courage'}</div>
+            return Object.entries(groups).map(([label, picks]) => (
+              <div key={label} className="plt-quest-group">
+                {Object.keys(groups).length > 1 && (
+                  <div className="plt-quest-group-label">{label}</div>
+                )}
+                {picks.map(pick => {
+                  const isLoading = loadingChallengeId === pick.reference_id
+                  const healing = healingByChallenge[pick.reference_id]
+                  const hasActiveHealing = healing && !healing.outcome && healing.healing_stage
 
-                  {hasActiveHealing && healing.protective_voice && (
-                    <div
-                      className="plt-healing-inline"
-                      onClick={() => {
-                        setBlockingTaskId(healing.questTaskId)
-                        setBlockingText(pick.display_name)
-                        setShowBlockingHealingModal(true)
-                      }}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <span className="plt-healing-icon">💚</span>
-                      <div className="plt-healing-body">
-                        <div className="plt-healing-voice">
-                          {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
-                        </div>
-                        <div className="plt-healing-cta">Continue healing flow →</div>
+                  return (
+                    <div key={pick.id || pick.reference_id} className="plt-item-row">
+                      <span className="plt-item-check"></span>
+                      <div className="plt-item-body">
+                        <div className="plt-item-name">{pick.display_name}</div>
+
+                        {hasActiveHealing && healing.protective_voice && (
+                          <div
+                            className="plt-healing-inline"
+                            onClick={() => {
+                              setBlockingTaskId(healing.questTaskId)
+                              setBlockingText(pick.display_name)
+                              setShowBlockingHealingModal(true)
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <span className="plt-healing-icon">💚</span>
+                            <div className="plt-healing-body">
+                              <div className="plt-healing-voice">
+                                {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
+                              </div>
+                              <div className="plt-healing-cta">Continue healing flow →</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
+                      <button
+                        className="plt-item-action"
+                        disabled={isLoading}
+                        onClick={async () => {
+                          setLoadingChallengeId(pick.reference_id)
+                          const { data } = await supabase
+                            .from('groan_challenges')
+                            .select('*')
+                            .eq('id', pick.reference_id)
+                            .single()
+                          setLoadingChallengeId(null)
+                          if (data) setCompletingChallenge(data)
+                        }}
+                      >
+                        {isLoading ? '...' : 'I Did It!'}
+                      </button>
                     </div>
-                  )}
-                </div>
-                <button
-                  className="plt-item-action"
-                  disabled={isLoading}
-                  onClick={async () => {
-                    setLoadingChallengeId(pick.reference_id)
-                    const { data } = await supabase
-                      .from('groan_challenges')
-                      .select('*')
-                      .eq('id', pick.reference_id)
-                      .single()
-                    setLoadingChallengeId(null)
-                    if (data) setCompletingChallenge(data)
-                  }}
-                >
-                  {isLoading ? '...' : 'I Did It!'}
-                </button>
+                  )
+                })}
               </div>
-            )
-          })}
+            ))
+          })()}
         </div>
       </div>
     )
