@@ -15,6 +15,7 @@ import {
   BUDGET_OPTIONS, PLATFORM_OPTIONS, AUTOMATION_OPTIONS,
   CAPABILITIES, buildBrowseLink, getMatchingCapabilities,
 } from '../data/aiDiagnosticData'
+import AIDiagnosticCard from '../components/AIDiagnosticCard'
 import './AIDiagnostic.css'
 
 const STEPS = {
@@ -492,6 +493,13 @@ export default function AIDiagnostic() {
                 </div>
               )
             })()}
+
+            {/* Shareable scorecard */}
+            <AIDiagnosticCard
+              results={results}
+              businessModel={BUSINESS_MODELS.find(m => m.key === businessModel)?.label}
+              painLabel={PAIN_POINTS.find(p => p.key === pain)?.label}
+            />
 
             {/* Top 3 actions */}
             {getTopActions().length > 0 && (
