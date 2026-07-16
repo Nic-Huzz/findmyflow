@@ -264,6 +264,9 @@
   .progress-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.03); z-index: 100; }
   .progress-fill { height: 100%; background: linear-gradient(90deg,#5e17eb,#E9A23B); transition: width 0.4s ease; }
 
+  /* ── Editor note banner ── */
+  .editor-note { padding: 8px 14px; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.15); border-radius: 8px; margin-bottom: 12px; font-size: 11px; color: #E9A23B; line-height: 1.4; }
+
   /* ── Mobile responsive ── */
   @media (max-width: 768px) {
     .slide { flex-direction: column; }
@@ -562,6 +565,7 @@ function renderSlideContent(el, slide, i) {
 
     el.innerHTML = `
       <div class="slide-left">
+        ${slide.editorNote ? '<div class="editor-note">' + esc(slide.editorNote) + '</div>' : ''}
         <div class="ch-header">
           <div class="ch-number">Chapter ${slide.number}</div>
           <div class="ch-status-dot ${status}" data-ch="${slide.number}" onclick="handleStatusClick(this)" title="Click to change status: not started → drafting → done"></div>
