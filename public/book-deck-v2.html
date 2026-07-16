@@ -264,6 +264,35 @@
   .progress-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.03); z-index: 100; }
   .progress-fill { height: 100%; background: linear-gradient(90deg,#5e17eb,#E9A23B); transition: width 0.4s ease; }
 
+  /* ── Mobile responsive ── */
+  @media (max-width: 768px) {
+    .slide { flex-direction: column; }
+    .slide-left { max-width: 100%; padding: 24px 20px 16px; }
+    .slide-right { padding: 16px 20px 80px; }
+    .ch-title { font-size: 24px; }
+    .ch-epigraph { font-size: 15px; }
+    .ch-description { font-size: 14px; }
+    .nav-bar { padding: 0 12px; }
+    .nav-controls { gap: 4px; }
+    .nav-btn { width: 30px; height: 30px; font-size: 13px; }
+    .nav-counter { font-size: 10px; min-width: 44px; }
+    .section-pill { font-size: 8px; padding: 3px 8px; }
+    .progress-stat { display: none; }
+    .key-hint { display: none; }
+    .beat { padding: 8px 10px; }
+    .beat-marker { width: 22px; height: 22px; font-size: 10px; }
+    .raw-entry { font-size: 11px; padding: 8px 10px; }
+    .framework-slide, .mechanism-slide, .instructions-slide { padding: 32px 16px; }
+    .fw-mapping td, .fw-mapping th { font-size: 10px; padding: 6px; }
+    .mech-node { padding: 14px 16px; }
+    .mech-node-title { font-size: 16px; }
+    .birds-eye { padding: 64px 16px 40px; }
+    .be-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .title-slide .book-title { font-size: 36px; }
+    .title-slide .book-concept { font-size: 14px; }
+    .section-slide .section-name { font-size: 28px; }
+  }
+
   /* ── Key hint ── */
   .key-hint { position: fixed; bottom: 12px; right: 24px; font-size: 10px; color: #333; z-index: 100; }
   .key-hint kbd { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 2px 5px; border-radius: 4px; font-family: 'Inter',sans-serif; font-size: 10px; }
@@ -356,6 +385,9 @@ function cycleStatus(chNum) {
 // Writing: stored in localStorage
 function getDraft(chNum, beat) { return localStorage.getItem(`fyf-draft-${chNum}-${beat}`) || ''; }
 function saveDraft(chNum, beat, text) { localStorage.setItem(`fyf-draft-${chNum}-${beat}`, text); }
+
+// ── HTML escape helper ──
+function esc(str) { if (!str) return ''; return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 // ── Slide index map (chapter number → slide index) ──
 const chapterSlideMap = {};
@@ -507,11 +539,11 @@ SLIDES.forEach((slide, i) => {
         <div class="ch-title">${slide.title}</div>
         <div class="ch-epigraph">${slide.epigraph}</div>
         <div class="ch-epigraph-date">— ${slide.epigraphDate}</div>
-        <div class="ch-description">${slide.description.replace(/\n\n/g, '<br><br>')}</div>
+        <div class="ch-description">${esc(slide.description).replace(/\n\n/g, '<br><br>')}</div>
         ${slide.screenshotLine ? `<div class="ch-screenshot-line">"${slide.screenshotLine}"</div>` : ''}
         <div class="ch-image-concept">
           <div class="ch-image-label">Pixar Image Concept</div>
-          ${slide.imageConcept}
+          ${esc(slide.imageConcept)}
           <button class="pixar-copy-btn" data-ch-num="${slide.number}" onclick="copyPixarForChapter(this)">Copy full prompt</button>
         </div>
       </div>
@@ -722,6 +754,19 @@ function copyExport() {
   navigator.clipboard.writeText(textarea.value);
 }
 function closeExport() { document.getElementById('exportOverlay').classList.remove('visible'); }
+
+// ── Touch/swipe for mobile ──
+let touchStartX = 0;
+let touchEndX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  const diff = touchStartX - touchEndX;
+  if (Math.abs(diff) > 60) { // minimum swipe distance
+    if (diff > 0) nextSlide(); // swipe left = next
+    else prevSlide(); // swipe right = prev
+  }
+}, { passive: true });
 
 // ── Keyboard ──
 document.addEventListener('keydown', (e) => {
