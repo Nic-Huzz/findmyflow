@@ -206,7 +206,9 @@ docs/                         # Documentation files
 
 **Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
 
-**Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`
+**Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
+
+**Self-Knowledge Flows**: `/curiosity-map` (curiosity mapping → clusters), `/life-paths` (career tagging → quest + courage challenge creation), `/career-alignment` (career alignment check), `/life-map` (life story chapters)
 
 **Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
 
@@ -260,7 +262,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 ### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
-**Tabs**: Quests → Tune → Courage → Healing. Layout: Header (streak + Wahoo Counter ⚡ + score pills + Rise bar) → Category tabs → Tab content.
+**Tabs**: Journey → Quests → Tune → Courage. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Journey + Tune always open. Quests unlocks when life paths completed. Courage unlocks via "Unlock →" button in Getting Started (Journey tab).
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
@@ -268,7 +270,7 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 5 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown), Experience Check-in (predict activity outcomes, "How did it go?" closure, wahoo conversion). Weekly Focus "Value" category (renamed from "Boundary").
 
-**Courage tab** (`PlayListTab.jsx`): "Actions that expand what feels possible for your path." First visit → WahooDiscoveryFlow (3 category pages). Otherwise → category bubbles + Active Wahoos (persist across weeks until completed) + WahooCreator (free text + category + optional QuestSelector to link to life path) + WahooInspiration. Unlock/quest signal: `groan_challenges.wahoo_category` not null, OR'd with legacy play-skills rows.
+**Courage tab** (`PlayListTab.jsx`): "Actions that expand what feels possible for your path." Shows Active Courage Challenges (grouped by quest name) + WahooCreator (free text + depth level + boundary type + protective voice + quest link) + Community Tasks CTA (links to `/community?tab=tasks`). Challenges come from `/life-paths` stuck points (auto-created) or manual WahooCreator entries. Each challenge shows inline healing card if a `healing_intention` exists. WahooInspiration archived.
 
 **Healing tab** (`HealingIntentionsList.jsx`): Per-task healing intentions anchored to quests. Shows active intentions (collapsible cards with pattern/fear/rewire/expectation), in-progress items (tap to resume), resolved items (with outcome). "What's blocking you?" input opens `QuestSelector` to pick a life path, then `HealingFlowModal` (7-step flow: Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best). Old Recognise/Release/Rewire exercises removed. DB: `healing_intentions` table linked to `quest_tasks`.
 
@@ -348,7 +350,8 @@ Sequential locking: Reach locked until `remarkable_angles` exists, Growth locked
 ### 13. Other Features
 
 - **Money Model Flows**: 6 flows in `MoneyModelFlowBase.jsx` + `moneyModelConfigs.js`. Each wrapper ~35 lines.
-- **Zarlo AI Co-Founder**: Floating widget on all pages. Streams responses, context-aware. Engine: `zarloEngine.js`, `zarloPageContent.js`.
+- **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Phase 1: AI personality + free-text input (5 msgs/session) + streaming greeting. Phase 2: Voiced achievement toasts (MicroToast). Phase 3: Proactive observations after wahoo/checkin/healing (2/day max, ZarloProactiveBubble above FAB). Phase 4: Open loop hooks + weekly countdown. Confidence floor: no Brief + no actions = scripted fallback. Edge function: `agent-chat` (Haiku). Engine: `zarloEngine.js`, `zarloPageContent.js`. Subtitle: "Your game guide".
+- **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor speaking from the book's worldview (nervous system as bottleneck, curiosities as essence signalling, protective voices as software). 3 conversations/day, 10 messages each. Confidence floor: no Brief + phase < 2 = refuses to improvise. Confidence % on every response. Proactive: FigurineOverlay for stage graduations + monthly cryptic hooks. Edge function: `agent-chat` (Haiku). Key file: `useFigurine.js`.
 - **Stripe Payment Gating**: Stages 1-7 locked. Free: Flow Finder, Play-List, Healing, Setup, explainers, Stage 4 Attraction Offer, CRM. Key: `useSubscription.js`, `UpgradePrompt.jsx`.
 - **Flow Compass** (`/flow-compass`): Energy tracking (N=Flow, E=Redirect, S=Rest, W=Honour). Purple gradient design.
 - **Funnel Calculator** (`/funnel-calculator`): Actual + Planner modes. 8-stage pipeline tracking.
@@ -440,7 +443,10 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `founder_dna_results` | `founder_dna_sessions`
 
 ### Challenge & Review
-`experience_checkins` | `weekly_reviews` | `healing_intentions` (quest_task_id FK, pattern, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
+`experience_checkins` | `weekly_reviews` | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
+
+### Life Paths → Quests → Courage Pipeline
+`life_path_sessions` (careers JSON, stuck_points JSON, step, safety) | `curiosity_clusters` | `curiosity_inputs`. On `/life-paths` completion: selected careers → `quests` (upsert on user_id+career_id), stuck points → `groan_challenges` (status: active, with depth_level + wahoo_category) + `quest_tasks` (is_courage_challenge: true) + `priority_weekly_picks`. If protective voice selected → `healing_intentions` pre-created. Architecture doc: `docs/architecture/life-paths-quests-courage-pipeline.md`.
 
 ### Blow Up Brand Pipeline
 `remarkable_angles` | `narrative_builders` (vehicle_type, vehicle_desc) | `access_architectures` | `scale_diagnostics` (score_body, score_culture, score_identity, score_ancestral, score_format, score_irreplaceable, score_rulebreak, branch, total_score, phase_classification) | `lead_captures` (email, source, scores)
