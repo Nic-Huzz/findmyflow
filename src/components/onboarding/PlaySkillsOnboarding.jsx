@@ -32,9 +32,9 @@ const BEATS = {
 }
 
 const HOOK_SLIDES = [
-  { id: 'states', text: 'The state you live in decides the path you walk.', subtext: 'There are four states.', image: '/images/life-map-cropped.png' },
-  { id: 'school', text: 'School trained us to live in the bottom two:\nPressure + Uninterested.', subtext: 'This app trains the top two:\nFun + Vibe Rise.', goldSubtext: true },
-  { id: 'cta', text: 'So you live your ambitions faster.', subtext: 'Ready?' },
+  { id: 'ikigai', text: 'Imagine going on your own hero\'s journey to find your Ikigai. And every step of it was a game.', subtext: 'This is the app.' },
+  { id: 'compass', text: 'We believe your curiosities are a compass.', subtext: 'Guiding you to a path only you can walk.' },
+  { id: 'origin', text: 'Your life to date is your superhero origin story.', subtext: 'Ready to have the impact you were born to make?' },
 ]
 
 // ─── Component ──────────────────────────────────────────────────────────────

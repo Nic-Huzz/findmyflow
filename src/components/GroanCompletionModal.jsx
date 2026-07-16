@@ -122,7 +122,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         points_earned: WAHOO_RP[wahooClassification] || 7,
         challenge_day: 0,
         project_id: null,
-        reflection_text: JSON.stringify({
+        response_data: {
           challenge_id: challenge.id,
           source_label: challenge.source_label,
           visibility_layer: challenge.visibility_layer,
@@ -133,7 +133,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
           expectation_result: expectationResult,
           reflection,
-        }),
+        },
       })
       if (questError) throw questError
 
