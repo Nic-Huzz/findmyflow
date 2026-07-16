@@ -446,6 +446,12 @@ function renderSlideContent(el, slide, i) {
         <span style="color:#555">Each chapter: 4-beat skeleton (Scene → Tension → Turn → Land)</span><br>
         <span style="color:#555">→ Arrow keys to navigate · B for bird's eye · W for writing mode</span>
       </div></div>`;
+  } else if (slide.type === 'prologue') {
+    el.innerHTML = `<div class="title-slide">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:3px;color:#555;margin-bottom:32px">Author's Note</div>
+      <div style="font-family:'Crimson Pro',serif;font-size:clamp(18px,3vw,24px);color:#ccc;max-width:500px;line-height:1.8;font-style:italic;margin-bottom:24px">${slide.text}</div>
+      <div style="font-size:11px;color:#444">${slide.note}</div>
+    </div>`;
   } else if (slide.type === 'instructions') {
     el.innerHTML = `<div class="instructions-slide">
       <h2>How to Voice-Record a Chapter</h2>

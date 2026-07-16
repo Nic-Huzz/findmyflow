@@ -3,6 +3,12 @@ const SLIDES = [
   // INTRO SLIDES
   // ============================================================
   { type: 'title', section: 'intro' },
+  {
+    type: 'prologue',
+    section: 'intro',
+    text: "This book isn't designed to remove the crack. It's designed for once you experience it. To minimise how long you suffer. What took me five years to figure out can become five months with this book as your guide.",
+    note: "Author's note / first page before any chapters. The contract with the reader."
+  },
   { type: 'instructions', section: 'intro' },
   { type: 'framework', section: 'intro' },
   { type: 'mechanism', section: 'intro' },
