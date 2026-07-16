@@ -185,6 +185,125 @@
   //  DATA — 10 Primal Branches, 8 Industries
   // ═══════════════════════════════════════════
 
+  // Spiral Dynamics tags — which value system drove each innovation
+  const SD_TAGS = {
+    // Cars
+    'car-1886': 'orange',   // Engineering achievement, individual power
+    'car-1913': 'orange',   // Mass production, efficiency, scale
+    'car-1919': 'orange',   // Financial engineering, market access
+    'car-1924': 'orange',   // Consumer identity, market segmentation
+    'car-1956': 'blue',     // Government infrastructure, institutional planning
+    'car-1959': 'green',    // Counter-culture, "the people's car," small is beautiful
+    'car-1966': 'green',    // Collective welfare over corporate profit
+    'car-1973': 'yellow',   // Systems thinking, whole-system optimisation, kaizen
+    'car-1990': 'orange',   // Bigger margins, consumer desire
+    'car-1997': 'green',    // Environmental consciousness
+    'car-2008': 'green',    // Luxury + environmental — breaks Orange's "must burn gas"
+    'car-2010': 'orange',   // Market disruption, efficiency
+    'car-2020': 'yellow',   // AI systems integration, autonomous
+
+    // Technology
+    'tech-1971': 'orange',  // Miniaturisation, engineering achievement
+    'tech-1975': 'orange',  // Individual empowerment through technology
+    'tech-1984': 'green',   // Democratising access, intuitive for everyone
+    'tech-1991': 'green',   // Open access, free information, decentralised
+    'tech-1995': 'orange',  // Commercialisation, market creation
+    'tech-1998': 'orange',  // Organisation, efficiency, ad model
+    'tech-2006': 'orange',  // Cost optimisation, scalability
+    'tech-2007': 'orange',  // Convergence, personal empowerment
+    'tech-2008a': 'orange', // Marketplace, entrepreneurial platform
+    'tech-2004': 'orange',  // Monetised relationships, ad-driven social graph
+
+    // AI / Intelligence
+    'ai-1997': 'orange',    // Competition, beating humans at chess
+    'ai-2012': 'orange',    // Technical breakthrough, pattern recognition
+    'ai-2016': 'orange',    // Superhuman performance, competitive
+    'ai-2017': 'yellow',    // Architectural paradigm shift, parallel processing
+    'ai-2020': 'yellow',    // Emergent capabilities from scale, systems-level
+    'ai-2022': 'green',     // Democratisation of AI access for everyone
+
+    // Energy
+    'energy-1776': 'orange', // Industrial power, progress
+    'energy-1882': 'orange', // Centralised efficiency
+    'energy-1893': 'orange', // Competing technology, scaling
+    'energy-1954': 'orange', // Scientific/technical breakthrough
+    'energy-1956': 'blue',   // Institutional science, government-scale project
+    'energy-1991': 'orange', // Engineering breakthrough
+    'energy-2008': 'orange', // Extraction, profit-driven
+    'energy-2017': 'yellow', // Renewable integration, systems thinking
+
+    // Media & Story
+    'media-1440': 'blue',   // Standardisation, institutional knowledge
+    'media-1826': 'orange', // Mechanical reproduction, scientific
+    'media-1895': 'orange', // Entertainment industry, mass market
+    'media-1920': 'blue',   // Institutional broadcast, one-to-many
+    'media-1948': 'orange', // Advertising model, consumer culture
+    'media-1991': 'green',  // Anyone can publish, democratised
+    'media-2004': 'green',  // Everyone is a broadcaster
+    'media-2007': 'orange', // Disruption, consumer choice
+    'media-2018': 'orange', // Algorithm-driven, attention economy
+    'media-2022': 'yellow', // Authorship dissolves, systems-level shift
+
+    // Food & Agriculture
+    'food-1730': 'blue',    // Systematic approach, ordered farming
+    'food-1810': 'orange',  // Preservation technology, scaling
+    'food-1834': 'orange',  // Mechanisation, efficiency
+    'food-1876': 'orange',  // Global trade, technology
+    'food-1948': 'orange',  // Standardisation, speed, assembly line
+    'food-1968': 'orange',  // Scientific yield optimisation
+    'food-1994': 'orange',  // Genetic engineering, optimisation
+    'food-2002': 'green',   // Sustainability, anti-industrial, authenticity
+    'food-2013': 'orange',  // Convenience, market disruption
+
+    // Communications
+    'comms-1775': 'blue',   // Institutional infrastructure
+    'comms-1844': 'orange', // Speed, technology
+    'comms-1876': 'orange', // Technology, personal connection
+    'comms-1901': 'orange', // Range extension, technology
+    'comms-1971': 'orange', // Speed, efficiency
+    'comms-1983': 'orange', // Personal freedom, technology
+    'comms-1992': 'orange', // Convenience, asynchronous
+    'comms-2009': 'green',  // Free, global, democratised
+    'comms-2020': 'green',  // Connection despite distance, pandemic community
+
+    // Medicine
+    'med-1867': 'orange',   // Scientific method, evidence-based
+    'med-1882': 'orange',   // Scientific breakthrough
+    'med-1928': 'orange',   // Pharmaceutical innovation
+    'med-1955': 'blue',     // Institutional public health
+    'med-1952': 'orange',   // Medicalisation of mental health
+    'med-2003': 'orange',   // Precision, personalisation, data
+    'med-2015': 'green',    // Access, convenience, telemedicine
+    'med-2020': 'yellow',   // Programmable platform, systems approach
+
+    // Fashion & Status
+    'fashion-1852': 'orange', // Mass market, fixed prices
+    'fashion-1858': 'orange', // Branded identity, the designer as author
+    'fashion-1916': 'orange', // Aspiration, celebrity, consumer identity
+    'fashion-1975': 'orange', // Speed, disposable consumption
+    'fashion-2013': 'green',  // Individual empowerment, attention as currency
+    'fashion-2021': 'green',  // Audience as asset, individual sovereignty
+
+    // Property & Shelter
+    'property-1885': 'orange', // Engineering, vertical growth
+    'property-1908': 'orange', // Standardisation, mass production
+    'property-1947': 'blue',   // Institutional planning + assembly line thinking
+    'property-2008': 'green',  // Sharing economy, peer-to-peer trust
+    'property-2011': 'orange', // Technology, IoT optimisation
+    'property-2021': 'yellow', // Radical systems innovation, 3D printing
+
+    // Defence & Security
+    'defense-1617': 'blue',  // Institutional order, permanent hierarchy
+    'defense-1688': 'orange', // Financial innovation, risk management
+    'defense-1945': 'red',   // Absolute power, total destruction
+    'defense-1968': 'blue',  // Institutional surveillance, control
+    'defense-1988': 'orange', // Technical defence, new threat landscape
+    'defense-2001': 'orange', // Precision, efficiency, remote
+    'defense-2017': 'red',   // Authoritarian control, total monitoring
+  }
+  const SD_COLORS = { red: '#ef4444', blue: '#3b82f6', orange: '#f97316', green: '#22c55e', yellow: '#eab308', purple: '#7c3aed' }
+  const SD_LABELS = { red: 'Red / Power', blue: 'Blue / Order', orange: 'Orange / Achievement', green: 'Green / Community', yellow: 'Yellow / Integrative', purple: 'Purple / Tribal' }
+
   const S = 2 * Math.PI / 10 // 36° step for 10 primals
 
   const PRIMALS = [
@@ -979,6 +1098,8 @@
       html += `<div class="tt-rule"><b>The rule: </b>${d.assumption}</div>`
       html += `<div class="tt-break"><b>The break: </b>${d.ruleBreak}</div>`
       if (d.mergeWith) html += `<div class="tt-merge">&#9889; Merge: ${d.branch} &times; ${d.mergeWith}</div>`
+      const sdTag = SD_TAGS[d.id]
+      if (sdTag && SD_COLORS[sdTag]) html += `<div style="font-size:0.6rem;margin-top:0.35rem;padding-top:0.3rem;border-top:1px solid rgba(255,255,255,0.06)"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${SD_COLORS[sdTag]};margin-right:4px;vertical-align:middle"></span><span style="color:${SD_COLORS[sdTag]};font-weight:600;letter-spacing:0.5px">${SD_LABELS[sdTag] || sdTag}</span></div>`
     } else if (d.desc) {
       html = `<div class="tt-who" style="color:${d.color||'#fff'}">${(d.label||'').replace(/\n/g,' ')}</div>`
       html += `<div class="tt-desc">${d.desc}</div>`

@@ -272,10 +272,27 @@ export const unsubscribeFromPushNotifications = async (userId) => {
 
 // Show a local notification
 export const showLocalNotification = async (title, options = {}) => {
-  // Native: local notifications not available without @capacitor/local-notifications
-  // Remote push notifications will work via APNs; local ones are skipped in native
+  // Native iOS: use @capacitor/local-notifications
   if (isNativePushSupported()) {
-    console.log('[Notifications] Local notification skipped in native app:', title)
+    try {
+      const { LocalNotifications } = await import('@capacitor/local-notifications')
+      const { display } = await LocalNotifications.checkPermissions()
+      if (display !== 'granted') {
+        await LocalNotifications.requestPermissions()
+      }
+      await LocalNotifications.schedule({
+        notifications: [{
+          title,
+          body: options.body || '',
+          id: Date.now() % 2147483647,
+          schedule: { at: new Date(Date.now() + 100) },
+          sound: undefined,
+          smallIcon: 'ic_notification',
+        }]
+      })
+    } catch (e) {
+      console.warn('[Notifications] Native local notification failed:', e)
+    }
     return
   }
 

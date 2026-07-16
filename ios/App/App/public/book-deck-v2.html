@@ -165,6 +165,46 @@
   .title-slide .book-meta { font-size: 12px; color: #444; line-height: 2; }
   .title-slide .book-concept { font-size: 16px; font-style: italic; color: #888; margin-bottom: 28px; font-family: 'Crimson Pro',serif; }
 
+  /* ── Instructions slide ── */
+  .instructions-slide { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 48px 24px; max-width: 640px; margin: 0 auto; overflow-y: auto; }
+  .instructions-slide h2 { font-size: 22px; font-weight: 800; color: #e0e0e0; margin-bottom: 24px; text-align: center; }
+  .inst-section { width: 100%; margin-bottom: 20px; }
+  .inst-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #555; font-weight: 600; margin-bottom: 10px; }
+  .inst-steps { display: flex; flex-direction: column; gap: 8px; }
+  .inst-step { display: flex; gap: 12px; padding: 12px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; }
+  .inst-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: rgba(94,23,235,0.15); color: #a78bfa; }
+  .inst-text { font-size: 13px; color: #bbb; line-height: 1.5; }
+  .inst-text strong { color: #e0e0e0; }
+  .inst-text em { color: #888; font-style: italic; }
+  .inst-beat-example { margin-top: 16px; padding: 16px; background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; }
+  .inst-beat-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .inst-beat-marker { font-size: 10px; font-weight: 700; width: 20px; flex-shrink: 0; text-align: center; padding-top: 2px; }
+  .inst-beat-text { font-size: 12px; color: #999; line-height: 1.4; }
+  .inst-tip { display: flex; gap: 10px; padding: 10px 14px; background: rgba(233,162,59,0.04); border: 1px solid rgba(233,162,59,0.1); border-radius: 10px; margin-bottom: 8px; }
+  .inst-tip-icon { font-size: 16px; flex-shrink: 0; }
+  .inst-tip-text { font-size: 12px; color: #999; line-height: 1.5; }
+
+  /* ── Mechanism slide ── */
+  .mechanism-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 40px; text-align: center; max-width: 800px; margin: 0 auto; }
+  .mechanism-slide h2 { font-size: 22px; font-weight: 800; color: #e0e0e0; margin-bottom: 32px; }
+  .mech-chain { display: flex; flex-direction: column; gap: 0; align-items: center; width: 100%; max-width: 500px; }
+  .mech-node { padding: 20px 28px; border-radius: 14px; text-align: center; width: 100%; }
+  .mech-node-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 4px; }
+  .mech-node-title { font-size: 20px; font-weight: 800; color: #f0f0f0; margin-bottom: 6px; }
+  .mech-node-sub { font-size: 13px; color: #999; font-style: italic; line-height: 1.5; }
+  .mech-node-detail { font-size: 11px; color: #555; margin-top: 8px; line-height: 1.5; }
+  .mech-arrow { font-size: 20px; color: #333; padding: 6px 0; }
+  .mech-node-curiosity { background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.15); }
+  .mech-node-curiosity .mech-node-label { color: #a78bfa; }
+  .mech-node-ns { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.15); }
+  .mech-node-ns .mech-node-label { color: #f87171; }
+  .mech-node-exp { background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.15); }
+  .mech-node-exp .mech-node-label { color: #E9A23B; }
+  .mech-enemies { display: flex; gap: 24px; margin-top: 28px; width: 100%; max-width: 500px; }
+  .mech-enemy { flex: 1; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; text-align: left; }
+  .mech-enemy-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; font-weight: 600; margin-bottom: 4px; }
+  .mech-enemy-text { font-size: 11px; color: #777; line-height: 1.5; }
+
   /* ── Section divider ── */
   .section-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px; }
   .section-slide .section-number { font-size: 120px; font-weight: 900; opacity: 0.06; position: absolute; }
@@ -223,6 +263,35 @@
   /* ── Progress bar ── */
   .progress-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.03); z-index: 100; }
   .progress-fill { height: 100%; background: linear-gradient(90deg,#5e17eb,#E9A23B); transition: width 0.4s ease; }
+
+  /* ── Mobile responsive ── */
+  @media (max-width: 768px) {
+    .slide { flex-direction: column; }
+    .slide-left { max-width: 100%; padding: 24px 20px 16px; }
+    .slide-right { padding: 16px 20px 80px; }
+    .ch-title { font-size: 24px; }
+    .ch-epigraph { font-size: 15px; }
+    .ch-description { font-size: 14px; }
+    .nav-bar { padding: 0 12px; }
+    .nav-controls { gap: 4px; }
+    .nav-btn { width: 30px; height: 30px; font-size: 13px; }
+    .nav-counter { font-size: 10px; min-width: 44px; }
+    .section-pill { font-size: 8px; padding: 3px 8px; }
+    .progress-stat { display: none; }
+    .key-hint { display: none; }
+    .beat { padding: 8px 10px; }
+    .beat-marker { width: 22px; height: 22px; font-size: 10px; }
+    .raw-entry { font-size: 11px; padding: 8px 10px; }
+    .framework-slide, .mechanism-slide, .instructions-slide { padding: 32px 16px; }
+    .fw-mapping td, .fw-mapping th { font-size: 10px; padding: 6px; }
+    .mech-node { padding: 14px 16px; }
+    .mech-node-title { font-size: 16px; }
+    .birds-eye { padding: 64px 16px 40px; }
+    .be-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .title-slide .book-title { font-size: 36px; }
+    .title-slide .book-concept { font-size: 14px; }
+    .section-slide .section-name { font-size: 28px; }
+  }
 
   /* ── Key hint ── */
   .key-hint { position: fixed; bottom: 12px; right: 24px; font-size: 10px; color: #333; z-index: 100; }
@@ -296,6 +365,12 @@
 
 <script src="book-deck-data.js"></script>
 <script>
+if (typeof SLIDES === 'undefined') {
+  document.body.innerHTML = '<div style="padding:40px;color:#f87171;font-family:Inter,sans-serif"><h2>Failed to load chapter data</h2><p>book-deck-data.js did not load. Check your connection and refresh.</p></div>';
+  throw new Error('SLIDES not defined');
+}
+</script>
+<script>
 // ── State ──
 let current = 0;
 let writingMode = false;
@@ -317,6 +392,9 @@ function cycleStatus(chNum) {
 function getDraft(chNum, beat) { return localStorage.getItem(`fyf-draft-${chNum}-${beat}`) || ''; }
 function saveDraft(chNum, beat, text) { localStorage.setItem(`fyf-draft-${chNum}-${beat}`, text); }
 
+// ── HTML escape helper ──
+function esc(str) { if (!str) return ''; return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
 // ── Slide index map (chapter number → slide index) ──
 const chapterSlideMap = {};
 SLIDES.forEach((s,i) => { if (s.type === 'chapter') chapterSlideMap[s.number] = i; });
@@ -324,8 +402,32 @@ SLIDES.forEach((s,i) => { if (s.type === 'chapter') chapterSlideMap[s.number] = 
 // ── Render slides ──
 const wrapper = document.getElementById('slidesWrapper');
 
+// ── Lazy render: only build DOM for visible + nearby slides ──
+const slideElements = [];
+const renderedSlides = new Set();
+
+function ensureSlideRendered(index) {
+  if (renderedSlides.has(index) || index < 0 || index >= SLIDES.length) return;
+  renderedSlides.add(index);
+  const el = slideElements[index];
+  const slide = SLIDES[index];
+  renderSlideContent(el, slide, index);
+}
+
+// Create empty shells for all slides first (lightweight)
 SLIDES.forEach((slide, i) => {
   const el = document.createElement('div');
+  el.className = `slide ${i === 0 ? 'active' : ''}`;
+  el.dataset.index = i;
+  el.dataset.section = slide.section;
+  wrapper.appendChild(el);
+  slideElements.push(el);
+});
+
+// Render first 5 slides immediately
+for (let i = 0; i < Math.min(5, SLIDES.length); i++) ensureSlideRendered(i);
+
+function renderSlideContent(el, slide, i) {
   el.className = `slide ${i === 0 ? 'active' : ''}`;
   el.dataset.index = i;
   el.dataset.section = slide.section;
@@ -333,7 +435,7 @@ SLIDES.forEach((slide, i) => {
   if (slide.type === 'title') {
     el.innerHTML = `<div class="title-slide">
       <div class="book-title">Find Your Flow</div>
-      <div class="book-concept">"If you live in Vibe Rise, you will find your flow."</div>
+      <div class="book-concept">"You already know the life you want. Your body won't let you go get it."</div>
       <div class="book-subtitle">Chapter Writing Deck — 80 chapters, one idea per page</div>
       <div class="book-meta">
         Original IP: Huzz Hurrell<br>Format: Derek Sivers meets picture book<br>
@@ -341,6 +443,55 @@ SLIDES.forEach((slide, i) => {
         <span style="color:#555">Each chapter: 4-beat skeleton (Scene → Tension → Turn → Land)</span><br>
         <span style="color:#555">→ Arrow keys to navigate · B for bird's eye · W for writing mode</span>
       </div></div>`;
+  } else if (slide.type === 'instructions') {
+    el.innerHTML = `<div class="instructions-slide">
+      <h2>How to Voice-Record a Chapter</h2>
+
+      <div class="inst-section">
+        <div class="inst-label">Before you record</div>
+        <div class="inst-steps">
+          <div class="inst-step"><div class="inst-num">1</div><div class="inst-text">Navigate to the chapter slide. <strong>Read the epigraph</strong> (left side, top). Let it sit for a moment.</div></div>
+          <div class="inst-step"><div class="inst-num">2</div><div class="inst-text">Scan the <strong>Story Skeleton</strong> (right side). Read the 4 beats: Scene, Tension, Turn, Land. These are prompts, not scripts.</div></div>
+          <div class="inst-step"><div class="inst-num">3</div><div class="inst-text">Glance at the <strong>Raw Material</strong> (right side, below skeleton). These are your thought entries and stories that feed this chapter.</div></div>
+        </div>
+      </div>
+
+      <div class="inst-section">
+        <div class="inst-label">Recording</div>
+        <div class="inst-steps">
+          <div class="inst-step"><div class="inst-num">4</div><div class="inst-text"><strong>Be 23-year-old Nic.</strong> Talk from the version of you who was LIVING this, not the 29-year-old looking back. The confusion, not the clarity.</div></div>
+          <div class="inst-step"><div class="inst-num">5</div><div class="inst-text"><strong>Open your voice recorder.</strong> Start talking as if explaining to a friend at 1am. No structure needed. Just tell the story.</div></div>
+          <div class="inst-step"><div class="inst-num">6</div><div class="inst-text"><strong>Use the 4 prompts</strong> if you get stuck:<br><em>"So there I was..." (Scene)</em><br><em>"And the thing is..." (Tension)</em><br><em>"But here's what I realised..." (Turn)</em><br><em>"That's the whole thing." (Land)</em></div></div>
+          <div class="inst-step"><div class="inst-num">7</div><div class="inst-text"><strong>Don't edit. Don't restart.</strong> Messy is right. If it sounds like an author, it's wrong. If it sounds like 1am Huzz, it's right.</div></div>
+        </div>
+      </div>
+
+      <div class="inst-section">
+        <div class="inst-label">What to describe</div>
+        <div class="inst-steps">
+          <div class="inst-step"><div class="inst-num">👁</div><div class="inst-text">What did you <strong>see</strong>? The room, the office, the beach, the person's face.</div></div>
+          <div class="inst-step"><div class="inst-num">🫀</div><div class="inst-text">What did you <strong>feel in your body</strong>? Chest tight, hands shaking, stomach drop, warmth.</div></div>
+          <div class="inst-step"><div class="inst-num">🗣</div><div class="inst-text">What did the <strong>voice say</strong>? The exact words. "Not yet." "Who are you to do this?"</div></div>
+          <div class="inst-step"><div class="inst-num">⚡</div><div class="inst-text">What <strong>changed</strong>? The moment the old story cracked. What you see now that you couldn't then.</div></div>
+        </div>
+      </div>
+
+      <div class="inst-section">
+        <div class="inst-label">Tips</div>
+        <div class="inst-tip"><div class="inst-tip-icon">🎯</div><div class="inst-tip-text"><strong>One chapter = one idea.</strong> If you start talking about two things, pick one. The other is a different chapter.</div></div>
+        <div class="inst-tip"><div class="inst-tip-icon">⏱</div><div class="inst-tip-text"><strong>2-5 minutes per chapter.</strong> Written up, that's 200-500 words (1-3 pages with a Pixar image).</div></div>
+        <div class="inst-tip"><div class="inst-tip-icon">🔊</div><div class="inst-tip-text"><strong>Read-aloud test:</strong> If you played this back, would you cringe? Good. If it sounds polished, rerecord messier.</div></div>
+        <div class="inst-tip"><div class="inst-tip-icon">📱</div><div class="inst-tip-text"><strong>After recording:</strong> Mark the chapter status (tap the dot: not started → drafting → done). Send the memo to Claude to shape into the 4 beats.</div></div>
+      </div>
+
+      <div class="inst-beat-example">
+        <div class="inst-label" style="margin-bottom:8px">Example: Ch 2 (The Earthquake)</div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#a78bfa">S</div><div class="inst-beat-text">"One month into Investible. Corner office. Everything I was told to want. And I felt... nothing."</div></div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#f87171">T</div><div class="inst-beat-text">"I didn't know what was missing. I just knew something was. What was missing was aliveness."</div></div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#E9A23B">↻</div><div class="inst-beat-text">"The happiness they promised wasn't late."</div></div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#4ade80">.</div><div class="inst-beat-text">"It was never coming."</div></div>
+      </div>
+    </div>`;
   } else if (slide.type === 'framework') {
     el.innerHTML = `<div class="framework-slide">
       <h2>Story Skeleton — Quick Reference</h2>
@@ -357,6 +508,45 @@ SLIDES.forEach((slide, i) => {
         <strong style="color:#888;">Longer chapters (3-5 pages):</strong> Expand into all 5 C's.<br>
         <strong style="color:#888;">The test:</strong> Read aloud. Sounds like 1am Huzz? Keep. Sounds like an author? Rewrite.
       </div></div>`;
+  } else if (slide.type === 'mechanism') {
+    el.innerHTML = `<div class="mechanism-slide">
+      <h2>The Book's Mechanism — Quick Reference</h2>
+      <div class="mech-chain">
+        <div class="mech-node mech-node-curiosity">
+          <div class="mech-node-label">Mind</div>
+          <div class="mech-node-title">Curiosity</div>
+          <div class="mech-node-sub">"You already know what you want"</div>
+          <div class="mech-node-detail">Your bookshelf, podcast queue, midnight YouTube. They've been telling you for years.</div>
+        </div>
+        <div class="mech-arrow">↓</div>
+        <div class="mech-node mech-node-ns">
+          <div class="mech-node-label">Body</div>
+          <div class="mech-node-title">Nervous System</div>
+          <div class="mech-node-sub">"Your body won't let you go get it"</div>
+          <div class="mech-node-detail">The cone of safety determines which curiosities become action. This is THE GAP that self-help skips.</div>
+        </div>
+        <div class="mech-arrow">↓</div>
+        <div class="mech-node mech-node-exp">
+          <div class="mech-node-label">Life</div>
+          <div class="mech-node-title">Experience</div>
+          <div class="mech-node-sub">"When the cone expands, curiosity becomes lived experience"</div>
+          <div class="mech-node-detail">Purpose emerges FROM experiences, not before them. Curiosities merge through action. That's where you find your flow.</div>
+        </div>
+      </div>
+      <div class="mech-enemies">
+        <div class="mech-enemy">
+          <div class="mech-enemy-label">Enemy 1: Self-Help</div>
+          <div class="mech-enemy-text">Attacks curiosity: "find your passion." Wrong. You already know. The bottleneck is safety.</div>
+        </div>
+        <div class="mech-enemy">
+          <div class="mech-enemy-label">Enemy 2: Education</div>
+          <div class="mech-enemy-text">Attacks experience: "specialise." Wrong. The merge of multiple curiosities IS the flow.</div>
+        </div>
+      </div>
+      <div style="margin-top:24px;font-size:11px;color:#444;max-width:500px;line-height:1.7;">
+        Part 1 (Crack): why curiosities got buried. Part 2 (Flood): curiosities resurface but NS won't let you act. Part 3 (Diagonal): expanding the cone turns curiosities into experiences → flow.
+      </div>
+    </div>`;
   } else if (slide.type === 'section') {
     const num = slide.name === 'The Crack' ? '1' : slide.name === 'The Flood' ? '2' : '3';
     el.innerHTML = `<div class="section-slide">
@@ -379,11 +569,11 @@ SLIDES.forEach((slide, i) => {
         <div class="ch-title">${slide.title}</div>
         <div class="ch-epigraph">${slide.epigraph}</div>
         <div class="ch-epigraph-date">— ${slide.epigraphDate}</div>
-        <div class="ch-description">${slide.description.replace(/\n\n/g, '<br><br>')}</div>
+        <div class="ch-description">${esc(slide.description).replace(/\n\n/g, '<br><br>')}</div>
         ${slide.screenshotLine ? `<div class="ch-screenshot-line">"${slide.screenshotLine}"</div>` : ''}
         <div class="ch-image-concept">
           <div class="ch-image-label">Pixar Image Concept</div>
-          ${slide.imageConcept}
+          ${esc(slide.imageConcept)}
           <button class="pixar-copy-btn" data-ch-num="${slide.number}" onclick="copyPixarForChapter(this)">Copy full prompt</button>
         </div>
       </div>
@@ -412,8 +602,7 @@ SLIDES.forEach((slide, i) => {
         </div>
       </div>`;
   }
-  wrapper.appendChild(el);
-});
+}
 
 function renderBeats(slide) {
   const beats = [
@@ -466,9 +655,13 @@ function updateUI() {
 
 function goToSlide(n) {
   if (n < 0 || n >= total || n === current) return;
+  // Lazy render: ensure target + neighbors are built
+  ensureSlideRendered(n);
+  ensureSlideRendered(n - 1);
+  ensureSlideRendered(n + 1);
   const direction = n > current ? 'left' : 'right';
   const prev = document.querySelector('.slide.active');
-  const next = wrapper.children[n];
+  const next = slideElements[n];
   if (prev) { prev.classList.remove('active'); prev.classList.add(direction === 'left' ? 'exit-left' : 'exit-right'); setTimeout(() => { prev.classList.remove('exit-left','exit-right'); }, 500); }
   next.classList.add('active');
   // Reset scroll on right panel
@@ -594,6 +787,19 @@ function copyExport() {
   navigator.clipboard.writeText(textarea.value);
 }
 function closeExport() { document.getElementById('exportOverlay').classList.remove('visible'); }
+
+// ── Touch/swipe for mobile ──
+let touchStartX = 0;
+let touchEndX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  const diff = touchStartX - touchEndX;
+  if (Math.abs(diff) > 60) { // minimum swipe distance
+    if (diff > 0) nextSlide(); // swipe left = next
+    else prevSlide(); // swipe right = prev
+  }
+}, { passive: true });
 
 // ── Keyboard ──
 document.addEventListener('keydown', (e) => {
