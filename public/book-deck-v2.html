@@ -165,6 +165,25 @@
   .title-slide .book-meta { font-size: 12px; color: #444; line-height: 2; }
   .title-slide .book-concept { font-size: 16px; font-style: italic; color: #888; margin-bottom: 28px; font-family: 'Crimson Pro',serif; }
 
+  /* ── Instructions slide ── */
+  .instructions-slide { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 48px 24px; max-width: 640px; margin: 0 auto; overflow-y: auto; }
+  .instructions-slide h2 { font-size: 22px; font-weight: 800; color: #e0e0e0; margin-bottom: 24px; text-align: center; }
+  .inst-section { width: 100%; margin-bottom: 20px; }
+  .inst-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #555; font-weight: 600; margin-bottom: 10px; }
+  .inst-steps { display: flex; flex-direction: column; gap: 8px; }
+  .inst-step { display: flex; gap: 12px; padding: 12px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; }
+  .inst-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: rgba(94,23,235,0.15); color: #a78bfa; }
+  .inst-text { font-size: 13px; color: #bbb; line-height: 1.5; }
+  .inst-text strong { color: #e0e0e0; }
+  .inst-text em { color: #888; font-style: italic; }
+  .inst-beat-example { margin-top: 16px; padding: 16px; background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; }
+  .inst-beat-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .inst-beat-marker { font-size: 10px; font-weight: 700; width: 20px; flex-shrink: 0; text-align: center; padding-top: 2px; }
+  .inst-beat-text { font-size: 12px; color: #999; line-height: 1.4; }
+  .inst-tip { display: flex; gap: 10px; padding: 10px 14px; background: rgba(233,162,59,0.04); border: 1px solid rgba(233,162,59,0.1); border-radius: 10px; margin-bottom: 8px; }
+  .inst-tip-icon { font-size: 16px; flex-shrink: 0; }
+  .inst-tip-text { font-size: 12px; color: #999; line-height: 1.5; }
+
   /* ── Mechanism slide ── */
   .mechanism-slide { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 40px; text-align: center; max-width: 800px; margin: 0 auto; }
   .mechanism-slide h2 { font-size: 22px; font-weight: 800; color: #e0e0e0; margin-bottom: 32px; }
@@ -362,6 +381,55 @@ SLIDES.forEach((slide, i) => {
         <span style="color:#555">Each chapter: 4-beat skeleton (Scene → Tension → Turn → Land)</span><br>
         <span style="color:#555">→ Arrow keys to navigate · B for bird's eye · W for writing mode</span>
       </div></div>`;
+  } else if (slide.type === 'instructions') {
+    el.innerHTML = `<div class="instructions-slide">
+      <h2>How to Voice-Record a Chapter</h2>
+
+      <div class="inst-section">
+        <div class="inst-label">Before you record</div>
+        <div class="inst-steps">
+          <div class="inst-step"><div class="inst-num">1</div><div class="inst-text">Navigate to the chapter slide. <strong>Read the epigraph</strong> (left side, top). Let it sit for a moment.</div></div>
+          <div class="inst-step"><div class="inst-num">2</div><div class="inst-text">Scan the <strong>Story Skeleton</strong> (right side). Read the 4 beats: Scene, Tension, Turn, Land. These are prompts, not scripts.</div></div>
+          <div class="inst-step"><div class="inst-num">3</div><div class="inst-text">Glance at the <strong>Raw Material</strong> (right side, below skeleton). These are your thought entries and stories that feed this chapter.</div></div>
+        </div>
+      </div>
+
+      <div class="inst-section">
+        <div class="inst-label">Recording</div>
+        <div class="inst-steps">
+          <div class="inst-step"><div class="inst-num">4</div><div class="inst-text"><strong>Be 23-year-old Nic.</strong> Talk from the version of you who was LIVING this, not the 29-year-old looking back. The confusion, not the clarity.</div></div>
+          <div class="inst-step"><div class="inst-num">5</div><div class="inst-text"><strong>Open your voice recorder.</strong> Start talking as if explaining to a friend at 1am. No structure needed. Just tell the story.</div></div>
+          <div class="inst-step"><div class="inst-num">6</div><div class="inst-text"><strong>Use the 4 prompts</strong> if you get stuck:<br><em>"So there I was..." (Scene)</em><br><em>"And the thing is..." (Tension)</em><br><em>"But here's what I realised..." (Turn)</em><br><em>"That's the whole thing." (Land)</em></div></div>
+          <div class="inst-step"><div class="inst-num">7</div><div class="inst-text"><strong>Don't edit. Don't restart.</strong> Messy is right. If it sounds like an author, it's wrong. If it sounds like 1am Huzz, it's right.</div></div>
+        </div>
+      </div>
+
+      <div class="inst-section">
+        <div class="inst-label">What to describe</div>
+        <div class="inst-steps">
+          <div class="inst-step"><div class="inst-num">👁</div><div class="inst-text">What did you <strong>see</strong>? The room, the office, the beach, the person's face.</div></div>
+          <div class="inst-step"><div class="inst-num">🫀</div><div class="inst-text">What did you <strong>feel in your body</strong>? Chest tight, hands shaking, stomach drop, warmth.</div></div>
+          <div class="inst-step"><div class="inst-num">🗣</div><div class="inst-text">What did the <strong>voice say</strong>? The exact words. "Not yet." "Who are you to do this?"</div></div>
+          <div class="inst-step"><div class="inst-num">⚡</div><div class="inst-text">What <strong>changed</strong>? The moment the old story cracked. What you see now that you couldn't then.</div></div>
+        </div>
+      </div>
+
+      <div class="inst-section">
+        <div class="inst-label">Tips</div>
+        <div class="inst-tip"><div class="inst-tip-icon">🎯</div><div class="inst-tip-text"><strong>One chapter = one idea.</strong> If you start talking about two things, pick one. The other is a different chapter.</div></div>
+        <div class="inst-tip"><div class="inst-tip-icon">⏱</div><div class="inst-tip-text"><strong>2-5 minutes per chapter.</strong> Written up, that's 200-500 words (1-3 pages with a Pixar image).</div></div>
+        <div class="inst-tip"><div class="inst-tip-icon">🔊</div><div class="inst-tip-text"><strong>Read-aloud test:</strong> If you played this back, would you cringe? Good. If it sounds polished, rerecord messier.</div></div>
+        <div class="inst-tip"><div class="inst-tip-icon">📱</div><div class="inst-tip-text"><strong>After recording:</strong> Mark the chapter status (tap the dot: not started → drafting → done). Send the memo to Claude to shape into the 4 beats.</div></div>
+      </div>
+
+      <div class="inst-beat-example">
+        <div class="inst-label" style="margin-bottom:8px">Example: Ch 2 (The Earthquake)</div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#a78bfa">S</div><div class="inst-beat-text">"One month into Investible. Corner office. Everything I was told to want. And I felt... nothing."</div></div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#f87171">T</div><div class="inst-beat-text">"I didn't know what was missing. I just knew something was. What was missing was aliveness."</div></div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#E9A23B">↻</div><div class="inst-beat-text">"The happiness they promised wasn't late."</div></div>
+        <div class="inst-beat-row"><div class="inst-beat-marker" style="color:#4ade80">.</div><div class="inst-beat-text">"It was never coming."</div></div>
+      </div>
+    </div>`;
   } else if (slide.type === 'framework') {
     el.innerHTML = `<div class="framework-slide">
       <h2>Story Skeleton — Quick Reference</h2>

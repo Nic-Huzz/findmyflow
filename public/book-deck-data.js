@@ -3,6 +3,7 @@ const SLIDES = [
   // INTRO SLIDES
   // ============================================================
   { type: 'title', section: 'intro' },
+  { type: 'instructions', section: 'intro' },
   { type: 'framework', section: 'intro' },
   { type: 'mechanism', section: 'intro' },
 
