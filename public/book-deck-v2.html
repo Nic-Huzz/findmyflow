@@ -365,6 +365,12 @@
 
 <script src="book-deck-data.js"></script>
 <script>
+if (typeof SLIDES === 'undefined') {
+  document.body.innerHTML = '<div style="padding:40px;color:#f87171;font-family:Inter,sans-serif"><h2>Failed to load chapter data</h2><p>book-deck-data.js did not load. Check your connection and refresh.</p></div>';
+  throw new Error('SLIDES not defined');
+}
+</script>
+<script>
 // ── State ──
 let current = 0;
 let writingMode = false;
@@ -396,8 +402,32 @@ SLIDES.forEach((s,i) => { if (s.type === 'chapter') chapterSlideMap[s.number] = 
 // ── Render slides ──
 const wrapper = document.getElementById('slidesWrapper');
 
+// ── Lazy render: only build DOM for visible + nearby slides ──
+const slideElements = [];
+const renderedSlides = new Set();
+
+function ensureSlideRendered(index) {
+  if (renderedSlides.has(index) || index < 0 || index >= SLIDES.length) return;
+  renderedSlides.add(index);
+  const el = slideElements[index];
+  const slide = SLIDES[index];
+  renderSlideContent(el, slide, index);
+}
+
+// Create empty shells for all slides first (lightweight)
 SLIDES.forEach((slide, i) => {
   const el = document.createElement('div');
+  el.className = `slide ${i === 0 ? 'active' : ''}`;
+  el.dataset.index = i;
+  el.dataset.section = slide.section;
+  wrapper.appendChild(el);
+  slideElements.push(el);
+});
+
+// Render first 5 slides immediately
+for (let i = 0; i < Math.min(5, SLIDES.length); i++) ensureSlideRendered(i);
+
+function renderSlideContent(el, slide, i) {
   el.className = `slide ${i === 0 ? 'active' : ''}`;
   el.dataset.index = i;
   el.dataset.section = slide.section;
@@ -572,8 +602,7 @@ SLIDES.forEach((slide, i) => {
         </div>
       </div>`;
   }
-  wrapper.appendChild(el);
-});
+}
 
 function renderBeats(slide) {
   const beats = [
@@ -626,9 +655,13 @@ function updateUI() {
 
 function goToSlide(n) {
   if (n < 0 || n >= total || n === current) return;
+  // Lazy render: ensure target + neighbors are built
+  ensureSlideRendered(n);
+  ensureSlideRendered(n - 1);
+  ensureSlideRendered(n + 1);
   const direction = n > current ? 'left' : 'right';
   const prev = document.querySelector('.slide.active');
-  const next = wrapper.children[n];
+  const next = slideElements[n];
   if (prev) { prev.classList.remove('active'); prev.classList.add(direction === 'left' ? 'exit-left' : 'exit-right'); setTimeout(() => { prev.classList.remove('exit-left','exit-right'); }, 500); }
   next.classList.add('active');
   // Reset scroll on right panel
