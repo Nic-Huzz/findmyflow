@@ -109,8 +109,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
       // 2. Upsert quest_completions record (delete old first to prevent RP farming)
       const questId = `play_list_challenge_${challenge.id}`
-      await supabase.from('quest_completions').delete()
-        .eq('user_id', userId).eq('quest_id', questId).catch(() => {})
+      try {
+        await supabase.from('quest_completions').delete()
+          .eq('user_id', userId).eq('quest_id', questId)
+      } catch {} // ignore if no existing record
       const { error: questError } = await supabase.from('quest_completions').insert({
         user_id: userId,
         challenge_instance_id: null,
