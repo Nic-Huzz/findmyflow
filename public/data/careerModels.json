@@ -2,17 +2,17 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-07",
-    "totalProfiles": 292,
+    "totalProfiles": 299,
     "confidenceDistribution": {
       "high": 296,
       "medium": 1,
       "low": 1
     },
     "sourceDistribution": {
-      "founder": 72,
-      "nonfounder": 226
+      "founder": 78,
+      "nonfounder": 206
     },
-    "totalPeople": 292
+    "totalPeople": 299
   },
   "profiles": [
     {
@@ -49,7 +49,8 @@
       "domain": "oil refining and distribution",
       "primaryProblem": "work_hollows",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building"
       ],
       "careerModel": {
         "type": "industrial_monopoly",
@@ -100,7 +101,9 @@
       "domain": "quantitative finance",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building",
+        "teaching"
       ],
       "careerModel": {
         "type": "investment_fund",
@@ -125,7 +128,9 @@
       "domain": "retail",
       "primaryProblem": "locked_out",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building",
+        "designing"
       ],
       "careerModel": {
         "type": "franchise",
@@ -229,7 +234,9 @@
       "domain": "investment",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "coaching",
+        "storytelling"
       ],
       "careerModel": {
         "type": "investment_conglomerate",
@@ -254,7 +261,9 @@
       "domain": "investment and law",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "coaching",
+        "storytelling"
       ],
       "careerModel": {
         "type": "investment_partnership",
@@ -279,7 +288,9 @@
       "domain": "e-commerce and cloud computing",
       "primaryProblem": "work_hollows",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building",
+        "designing"
       ],
       "careerModel": {
         "type": "platform_company",
@@ -573,7 +584,8 @@
       "domain": "personal computers",
       "primaryProblem": "locked_out",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building"
       ],
       "careerModel": {
         "type": "product_company",
@@ -598,7 +610,9 @@
       "domain": "logistics and industrial services",
       "primaryProblem": "feeling_stupid",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building",
+        "coaching"
       ],
       "careerModel": {
         "type": "roll_up_acquisition",
@@ -807,7 +821,10 @@
       "domain": "basketball and venture capital",
       "primaryProblem": "work_treated_nothing",
       "primarySkills": [
-        "coaching"
+        "coaching",
+        "performing",
+        "leading",
+        "storytelling"
       ],
       "careerModel": {
         "type": "career_stacking",
@@ -859,7 +876,9 @@
       "domain": "real estate investment",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building",
+        "storytelling"
       ],
       "careerModel": {
         "type": "investment",
@@ -1042,7 +1061,9 @@
       "domain": "automotive manufacturing",
       "primaryProblem": "work_hollows",
       "primarySkills": [
-        "building"
+        "building",
+        "leading",
+        "designing"
       ],
       "careerModel": {
         "type": "product_company",
@@ -1256,7 +1277,9 @@
       "domain": "duty-free retail and philanthropy",
       "primaryProblem": "left_behind",
       "primarySkills": [
-        "leading"
+        "leading",
+        "building",
+        "connecting"
       ],
       "careerModel": {
         "type": "retail_to_philanthropy",
@@ -1280,7 +1303,9 @@
       "domain": "quantitative finance",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "connecting"
+        "connecting",
+        "building",
+        "teaching"
       ],
       "careerModel": {
         "type": "investment_fund",
@@ -1727,7 +1752,9 @@
       "domain": "collaboration software",
       "primaryProblem": "feeling_stupid",
       "primarySkills": [
-        "designing"
+        "designing",
+        "building",
+        "connecting"
       ],
       "careerModel": {
         "type": "saas",
@@ -1859,7 +1886,9 @@
       "domain": "consumer goods (CEO)",
       "primaryProblem": "work_hollows",
       "primarySkills": [
-        "leading"
+        "leading",
+        "coaching",
+        "storytelling"
       ],
       "careerModel": {
         "type": "corporate_transformation",
@@ -2068,7 +2097,9 @@
       "domain": "developmental psychology",
       "primaryProblem": "kids_deserved_better",
       "primarySkills": [
-        "creating"
+        "creating",
+        "teaching",
+        "coaching"
       ],
       "careerModel": {
         "type": "academic",
@@ -2491,7 +2522,9 @@
       "domain": "structural anthropology",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "creating"
+        "creating",
+        "teaching",
+        "storytelling"
       ],
       "careerModel": {
         "type": "academic",
@@ -2515,7 +2548,9 @@
       "domain": "paleogenetics",
       "primaryProblem": "feeling_stupid",
       "primarySkills": [
-        "creating"
+        "creating",
+        "building",
+        "teaching"
       ],
       "careerModel": {
         "type": "academic",
@@ -3075,7 +3110,7 @@
       "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
-        "leading"
+        "designing"
       ],
       "careerModel": {
         "type": "artist",
@@ -3457,7 +3492,8 @@
       "domain": "genetics",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "creating"
       ],
       "careerModel": {
         "type": "academic",
@@ -3480,7 +3516,8 @@
       "domain": "applied mathematics and orbital mechanics",
       "primaryProblem": "voice_taken",
       "primarySkills": [
-        "building"
+        "building",
+        "teaching"
       ],
       "careerModel": {
         "type": "government_scientist",
@@ -3633,7 +3670,9 @@
       "domain": "US diplomacy and Cold War strategy",
       "primaryProblem": "left_behind",
       "primarySkills": [
-        "leading"
+        "leading",
+        "storytelling",
+        "teaching"
       ],
       "careerModel": {
         "type": "government_diplomat",
@@ -4302,7 +4341,9 @@
       "domain": "heterodox economics",
       "primaryProblem": "life_not_yours",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "storytelling",
+        "speaking_up"
       ],
       "careerModel": {
         "type": "academic",
@@ -4463,7 +4504,9 @@
       "domain": "psychiatry and neuropsychology",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "storytelling",
+        "creating"
       ],
       "careerModel": {
         "type": "academic",
@@ -4567,7 +4610,9 @@
       "domain": "macro-history",
       "primaryProblem": "feeling_stupid",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "storytelling",
+        "speaking_up"
       ],
       "careerModel": {
         "type": "author",
@@ -5714,7 +5759,9 @@
       "domain": "educational psychology",
       "primaryProblem": "kids_deserved_better",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "creating",
+        "coaching"
       ],
       "careerModel": {
         "type": "academic",
@@ -5738,7 +5785,9 @@
       "domain": "food science writing",
       "primaryProblem": "feeling_stupid",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "creating",
+        "storytelling"
       ],
       "careerModel": {
         "type": "author",
@@ -5835,7 +5884,9 @@
       "domain": "comparative literature and translation",
       "primaryProblem": "feeling_stupid",
       "primarySkills": [
-        "storytelling"
+        "storytelling",
+        "teaching",
+        "speaking_up"
       ],
       "careerModel": {
         "type": "academic",
@@ -5909,7 +5960,9 @@
       "domain": "anthropology",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "storytelling"
+        "storytelling",
+        "teaching",
+        "creating"
       ],
       "careerModel": {
         "type": "academic",
@@ -5932,7 +5985,9 @@
       "domain": "sociology of science",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "creating",
+        "storytelling"
       ],
       "careerModel": {
         "type": "academic",
@@ -6032,7 +6087,9 @@
       "domain": "history of religion",
       "primaryProblem": "forgot_what_for",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "storytelling",
+        "creating"
       ],
       "careerModel": {
         "type": "academic",
@@ -6055,7 +6112,9 @@
       "domain": "anthropology and systems",
       "primaryProblem": "world_losing",
       "primarySkills": [
-        "teaching"
+        "teaching",
+        "connecting",
+        "creating"
       ],
       "careerModel": {
         "type": "academic",
@@ -6079,7 +6138,9 @@
       "domain": "Renaissance intellectual history",
       "primaryProblem": "left_behind",
       "primarySkills": [
-        "creating"
+        "creating",
+        "teaching",
+        "storytelling"
       ],
       "careerModel": {
         "type": "academic",
@@ -6102,7 +6163,10 @@
       "domain": "philosophy and ethics",
       "primaryProblem": "stopped_wondering",
       "primarySkills": [
-        "coaching"
+        "coaching",
+        "teaching",
+        "speaking_up",
+        "storytelling"
       ],
       "careerModel": {
         "type": "academic",
@@ -6446,7 +6510,9 @@
       "domain": "military strategy",
       "primaryProblem": "left_behind",
       "primarySkills": [
-        "leading"
+        "leading",
+        "teaching",
+        "storytelling"
       ],
       "careerModel": {
         "type": "military_theorist",
@@ -7771,6 +7837,201 @@
       },
       "confidence": "high",
       "displayName": "Burning Man: Larry Harvey"
+    },
+    {
+      "name": "Walt Disney",
+      "source": "founder",
+      "domain": "entertainment and theme parks",
+      "primaryProblem": "stopped_wondering",
+      "primarySkills": [
+        "creating",
+        "storytelling",
+        "building",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "entertainment_empire",
+        "primaryRevenue": "Animated films, theme parks, and licensed merchandise",
+        "revenueStreams": [
+          "film production",
+          "theme parks",
+          "merchandise licensing",
+          "television"
+        ],
+        "trajectory": "Failed first studio -> moved to Hollywood -> Mickey Mouse -> Snow White risk -> Disneyland -> died building Disney World",
+        "keyDecision": "Bet everything on Snow White (first full-length animated film) when everyone called it folly",
+        "scaleModel": "Create beloved characters, then build immersive worlds around them",
+        "lessonsForUser": "If you create stories and build worlds: make one thing people love, then expand the universe around it"
+      },
+      "confidence": "high",
+      "oneLiner": "All our dreams can come true, if we have the courage to pursue them."
+    },
+    {
+      "name": "P.T. Barnum",
+      "source": "founder",
+      "domain": "entertainment and spectacle",
+      "primaryProblem": "feeling_stupid",
+      "primarySkills": [
+        "performing",
+        "storytelling",
+        "connecting",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "entertainment_venture",
+        "primaryRevenue": "Live entertainment shows, museum attractions, and touring spectacles",
+        "revenueStreams": [
+          "ticket sales",
+          "touring shows",
+          "museum exhibitions",
+          "publicity stunts"
+        ],
+        "trajectory": "Failed businesses -> bought museum -> hoaxes and spectacles -> circus empire -> mayor and philanthropist",
+        "keyDecision": "Merged with rival Bailey instead of competing, creating the greatest show on earth",
+        "scaleModel": "Make the ordinary extraordinary through storytelling and spectacle",
+        "lessonsForUser": "If you perform and tell stories: the show IS the marketing — make everything an event"
+      },
+      "confidence": "high",
+      "oneLiner": "The noblest art is that of making others happy."
+    },
+    {
+      "name": "Jose Andres",
+      "source": "founder",
+      "domain": "restaurant and humanitarian food relief",
+      "primaryProblem": "locked_out",
+      "primarySkills": [
+        "creating",
+        "leading",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "social_enterprise",
+        "primaryRevenue": "Restaurant group with humanitarian relief as mission extension",
+        "revenueStreams": [
+          "restaurants",
+          "media appearances",
+          "World Central Kitchen donations",
+          "consulting"
+        ],
+        "trajectory": "Spanish immigrant chef -> DC restaurants -> Haiti earthquake response -> World Central Kitchen -> feeding millions in disasters",
+        "keyDecision": "Flew to Haiti after the earthquake and started cooking, turning his restaurant skills into disaster relief infrastructure",
+        "scaleModel": "Use commercial success to fund humanitarian mission at global scale",
+        "lessonsForUser": "If you create and lead: your commercial skills may be the infrastructure for your real mission"
+      },
+      "confidence": "high",
+      "oneLiner": "Food is a national security issue. It is a humanitarian issue. It is an equity issue."
+    },
+    {
+      "name": "Jesse Itzler",
+      "source": "founder",
+      "domain": "lifestyle brands and endurance",
+      "primaryProblem": "forgot_what_for",
+      "primarySkills": [
+        "performing",
+        "building",
+        "storytelling",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "serial_lifestyle",
+        "primaryRevenue": "Multiple lifestyle ventures from private jets to coconut water to endurance events",
+        "revenueStreams": [
+          "Marquis Jet",
+          "Zico coconut water",
+          "speaking",
+          "books",
+          "29029 endurance events"
+        ],
+        "trajectory": "Rapper -> jingle writer -> sold jingle company -> co-founded Marquis Jet -> Zico -> married Sara Blakely -> 29029 Everesting",
+        "keyDecision": "Invited a Navy SEAL to live with him for 31 days to break his comfort zone",
+        "scaleModel": "Build brands around peak experiences and personal transformation",
+        "lessonsForUser": "If you perform and build: create businesses around the experiences that transform you personally"
+      },
+      "confidence": "high",
+      "oneLiner": "Build your life resume, not just your work resume."
+    },
+    {
+      "name": "Tim Ferriss",
+      "source": "founder",
+      "domain": "productivity and lifestyle design",
+      "primaryProblem": "work_hollows",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "building",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "media_platform",
+        "primaryRevenue": "Books, podcast, and angel investing informed by audience insights",
+        "revenueStreams": [
+          "book royalties",
+          "podcast sponsorships",
+          "angel investing",
+          "speaking"
+        ],
+        "trajectory": "Overworked startup founder -> 4-Hour Workweek -> podcast empire -> angel investor -> psychedelic research funder",
+        "keyDecision": "Shifted from selling a supplement to documenting his lifestyle experiments, making himself the product",
+        "scaleModel": "Extract principles from world-class performers and teach them to ambitious generalists",
+        "lessonsForUser": "If you teach and connect: become the bridge between world-class performers and ambitious learners"
+      },
+      "confidence": "high",
+      "oneLiner": "A person's success in life can usually be measured by the number of uncomfortable conversations he or she is willing to have."
+    },
+    {
+      "name": "Alex Hormozi",
+      "source": "founder",
+      "domain": "business education and acquisition",
+      "primaryProblem": "work_hollows",
+      "primarySkills": [
+        "teaching",
+        "building",
+        "storytelling",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "holding_company",
+        "primaryRevenue": "Acquiring and scaling portfolio companies using proven offer/sales frameworks",
+        "revenueStreams": [
+          "Acquisition.com portfolio",
+          "book royalties",
+          "content/brand",
+          "minority investments"
+        ],
+        "trajectory": "Management consultant -> gym launch -> Gym Launch licensing -> sold for 46M -> Acquisition.com -> free content empire -> portfolio company model",
+        "keyDecision": "Gave away all his frameworks for free via content, building massive trust before monetizing through equity deals",
+        "scaleModel": "Teach everything for free, then acquire companies that need what you teach",
+        "lessonsForUser": "If you teach and build: give away your best frameworks freely, then monetize through ownership not fees"
+      },
+      "confidence": "high",
+      "oneLiner": "The goal is not to get rich. The goal is to be valuable."
+    },
+    {
+      "name": "Naval Ravikant",
+      "source": "founder",
+      "domain": "technology investing and philosophy",
+      "primaryProblem": "life_not_yours",
+      "primarySkills": [
+        "teaching",
+        "building",
+        "connecting",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "platform_investor",
+        "primaryRevenue": "Angel investing and platform building (AngelList)",
+        "revenueStreams": [
+          "AngelList platform",
+          "angel investments",
+          "content/thought leadership"
+        ],
+        "trajectory": "Immigrant -> failed startups -> Epinions lawsuit -> AngelList -> prolific angel investor -> philosopher of wealth and happiness",
+        "keyDecision": "Built AngelList to democratize startup fundraising, solving the opacity that frustrated him as a founder",
+        "scaleModel": "Build platforms that remove gatekeepers, invest in what you understand deeply",
+        "lessonsForUser": "If you teach and build: specific knowledge is found by pursuing genuine curiosity, not by grinding"
+      },
+      "confidence": "high",
+      "oneLiner": "Seek wealth, not money or status. Wealth is having assets that earn while you sleep."
     }
   ]
 }
