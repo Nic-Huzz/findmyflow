@@ -113,6 +113,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         await supabase.from('quest_completions').delete()
           .eq('user_id', userId).eq('quest_id', questId)
       } catch {} // ignore if no existing record
+      const completionData = {
+        challenge_id: challenge.id,
+        source_label: challenge.source_label,
+        visibility_layer: challenge.visibility_layer,
+        before_state: beforeState,
+        after_state: afterState,
+        wahoo_classification: wahooClassification,
+        identity_statement: wahooClassification === 'anxious' ? null : (identityStatement || null),
+        voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
+        expectation_result: expectationResult,
+        reflection,
+      }
       const { error: questError } = await supabase.from('quest_completions').insert({
         user_id: userId,
         challenge_instance_id: null,
@@ -122,18 +134,8 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         points_earned: WAHOO_RP[wahooClassification] || 7,
         challenge_day: 0,
         project_id: null,
-        response_data: {
-          challenge_id: challenge.id,
-          source_label: challenge.source_label,
-          visibility_layer: challenge.visibility_layer,
-          before_state: beforeState,
-          after_state: afterState,
-          wahoo_classification: wahooClassification,
-          identity_statement: wahooClassification === 'anxious' ? null : (identityStatement || null),
-          voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
-          expectation_result: expectationResult,
-          reflection,
-        },
+        reflection_text: JSON.stringify(completionData),
+        response_data: completionData,
       })
       if (questError) throw questError
 
