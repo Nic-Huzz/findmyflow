@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rule Break Radar — Merge Predictions + Opportunity Map</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(ellipse at center, #0d0a1a 0%, #07060b 65%);
+      color: #fff; font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .header { text-align: center; padding: 2rem 1.5rem 0.5rem; }
+    .header h1 {
+      font-size: 1.8rem; font-weight: 800;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header p { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-top: 0.3rem; max-width: 550px; margin-left: auto; margin-right: auto; }
+
+    .nav-tabs {
+      display: flex; justify-content: center; gap: 0.5rem; padding: 1.2rem 1rem;
+      flex-wrap: wrap;
+    }
+    .nav-tab {
+      padding: 0.5rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+      background: transparent; color: rgba(255,255,255,0.5); font-size: 0.75rem;
+      font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .nav-tab:hover { border-color: rgba(94,23,235,0.3); color: rgba(255,255,255,0.8); }
+    .nav-tab.active { background: rgba(94,23,235,0.15); border-color: #5e17eb; color: #fff; }
+
+    .section { display: none; max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+    .section.active { display: block; }
+    .section h2 {
+      font-size: 1.2rem; font-weight: 800; margin-bottom: 0.3rem;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .section .section-sub { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-bottom: 1.5rem; }
+
+    /* ── MERGE RADAR ── */
+    .merge-insight {
+      background: rgba(233,162,59,0.06); border: 1px solid rgba(233,162,59,0.12);
+      border-radius: 12px; padding: 1.2rem; margin-bottom: 1.5rem;
+    }
+    .merge-insight h3 { font-size: 0.8rem; color: #E9A23B; font-weight: 700; margin-bottom: 0.4rem; }
+    .merge-insight p { font-size: 0.78rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+    .merge-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+    .merge-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 1.2rem; transition: border-color 0.2s;
+    }
+    .merge-card:hover { border-color: rgba(94,23,235,0.25); }
+    .merge-card.high { border-left: 3px solid #E9A23B; }
+    .merge-card.medium { border-left: 3px solid #a78bfa; }
+    .merge-card.emerging { border-left: 3px solid rgba(255,255,255,0.15); }
+    .merge-branches {
+      display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem;
+    }
+    .merge-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .merge-x { font-size: 0.65rem; color: rgba(255,255,255,0.25); font-weight: 700; }
+    .merge-name { font-size: 0.75rem; font-weight: 700; }
+    .merge-sd { font-size: 0.6rem; color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .merge-desc { font-size: 0.78rem; color: rgba(255,255,255,0.55); line-height: 1.45; }
+    .merge-evidence { font-size: 0.65rem; color: rgba(255,255,255,0.3); margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.05); }
+    .merge-conf {
+      display: inline-block; font-size: 0.55rem; padding: 2px 6px; border-radius: 3px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0.4rem;
+    }
+    .merge-conf.high { background: rgba(233,162,59,0.15); color: #E9A23B; }
+    .merge-conf.medium { background: rgba(167,139,250,0.15); color: #a78bfa; }
+    .merge-conf.low { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); }
+
+    /* ── EMPTY CELL MAP ── */
+    .opp-legend {
+      display: flex; gap: 1rem; margin-bottom: 1rem; font-size: 0.65rem;
+      color: rgba(255,255,255,0.35); flex-wrap: wrap;
+    }
+    .opp-legend-item { display: flex; align-items: center; gap: 0.3rem; }
+    .opp-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+    .opp-grid {
+      display: grid;
+      grid-template-columns: 120px repeat(6, 1fr);
+      gap: 2px; overflow-x: auto;
+    }
+    .opp-corner { background: transparent; }
+    .opp-col {
+      padding: 0.5rem 0.2rem; text-align: center;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .opp-row-header {
+      display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.5rem;
+      background: rgba(255,255,255,0.02); border-radius: 4px 0 0 4px;
+    }
+    .opp-row-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .opp-row-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .opp-cell {
+      padding: 0.4rem; border-radius: 4px; min-height: 52px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; position: relative; cursor: default;
+    }
+    .opp-cell .opp-label {
+      font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .opp-cell .opp-detail {
+      font-size: 0.5rem; color: rgba(255,255,255,0.3); margin-top: 0.15rem; line-height: 1.3;
+    }
+
+    .opp-cell.saturated { background: rgba(255,255,255,0.02); }
+    .opp-cell.saturated .opp-label { color: rgba(255,255,255,0.15); }
+    .opp-cell.competitive { background: rgba(255,255,255,0.04); }
+    .opp-cell.competitive .opp-label { color: rgba(255,255,255,0.35); }
+    .opp-cell.open { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.15); }
+    .opp-cell.open .opp-label { color: #22c55e; }
+    .opp-cell.wide-open {
+      background: rgba(233,162,59,0.1); border: 1px solid rgba(233,162,59,0.3);
+      animation: oppPulse 3s ease-in-out infinite;
+    }
+    .opp-cell.wide-open .opp-label { color: #E9A23B; }
+    @keyframes oppPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(233,162,59,0); }
+      50% { box-shadow: 0 0 12px rgba(233,162,59,0.08); }
+    }
+
+    /* ── CIVILISATION TIMELINE ── */
+    .timeline-wrap { overflow-x: auto; padding-bottom: 1rem; }
+    .timeline {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 0; min-width: 900px;
+    }
+    .tl-row-label {
+      display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .tl-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tl-name { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tl-track {
+      position: relative; height: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .tl-node {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 10px; height: 10px; border-radius: 50%; border: 2px solid;
+      cursor: default;
+    }
+    .tl-node.frontier-node {
+      width: 14px; height: 14px;
+      animation: tlPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes tlPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(233,162,59,0); }
+      50% { box-shadow: 0 0 8px rgba(233,162,59,0.3); }
+    }
+    .tl-now {
+      position: absolute; top: 0; bottom: 0; width: 2px;
+      background: rgba(233,162,59,0.3);
+    }
+    .tl-now-label {
+      position: absolute; top: -18px; left: -10px;
+      font-size: 0.55rem; color: #E9A23B; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .tl-era {
+      position: absolute; bottom: -20px; font-size: 0.5rem;
+      color: rgba(255,255,255,0.15); text-transform: uppercase; letter-spacing: 1px;
+    }
+    .tl-sd-legend {
+      display: flex; gap: 0.8rem; margin-top: 1.5rem; font-size: 0.6rem;
+      color: rgba(255,255,255,0.3); flex-wrap: wrap; justify-content: center;
+    }
+    .tl-sd-item { display: flex; align-items: center; gap: 0.3rem; }
+    .tl-sd-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── PRICING ── */
+    .price-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .price-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 1.2rem;
+    }
+    .price-card h3 { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .price-premium { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+    .price-gap {
+      font-size: 0.75rem; color: #E9A23B; font-weight: 600; margin: 0.5rem 0;
+      padding: 0.5rem; background: rgba(233,162,59,0.06); border-radius: 6px;
+    }
+    .price-bar-wrap { margin-top: 0.6rem; }
+    .price-bar-label { font-size: 0.6rem; color: rgba(255,255,255,0.3); margin-bottom: 0.2rem; display: flex; justify-content: space-between; }
+    .price-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+    .price-bar-fill { height: 100%; border-radius: 3px; }
+
+    /* ── PREDICTION ENGINE ── */
+    .pred-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .pred-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 1.2rem;
+    }
+    .pred-card h3 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .pred-card .pred-sub { font-size: 0.65rem; color: rgba(255,255,255,0.35); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .pred-card p { font-size: 0.78rem; color: rgba(255,255,255,0.5); line-height: 1.5; margin-bottom: 0.4rem; }
+    .pred-card .pred-example { font-size: 0.7rem; color: rgba(94,23,235,0.7); font-style: italic; }
+    .pred-card .pred-action {
+      margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.7rem; color: #E9A23B; font-weight: 600;
+    }
+
+    .footer {
+      text-align: center; padding: 2rem 1rem; font-size: 0.6rem; color: rgba(255,255,255,0.15);
+    }
+    .footer a { color: rgba(94,23,235,0.5); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Rule Break Radar</h1>
+  <p>Where are the next rule breaks hiding? Merge predictions, empty cells, and the civilisation-wide transition.</p>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" data-tab="merges">Merge Radar</button>
+  <button class="nav-tab" data-tab="empty">Empty Cell Map</button>
+  <button class="nav-tab" data-tab="timeline">Civilisation Timeline</button>
+  <button class="nav-tab" data-tab="pricing">Pricing Problem</button>
+  <button class="nav-tab" data-tab="predictions">Prediction Engine</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TAB 1: MERGE RADAR                       -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section active" id="merges">
+  <h2>Merge Radar</h2>
+  <p class="section-sub">When two branches at different SD levels collide, the most transformative innovations emerge. These are the merges forming now.</p>
+
+  <div class="merge-insight">
+    <h3>The Pattern: AI Is the Next Universal Merge Catalyst</h3>
+    <p>In the 20th century, Technology (Orange) merged with EVERYTHING: cars, media, food, medicine, communications. It was the universal enabler. In the 2020s-30s, AI (Yellow) is playing the same role but one SD level higher. The most transformative merges of the next decade will be AI meeting Green-frontier branches and catalysing their Yellow transition.</p>
+  </div>
+
+  <div class="merge-grid" id="mergeGrid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TAB 2: EMPTY CELL MAP                    -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section" id="empty">
+  <h2>Empty Cell Opportunity Map</h2>
+  <p class="section-sub">Which matrix cells have almost no products? The first creator to fill an empty frontier cell owns that intersection.</p>
+
+  <div class="opp-legend">
+    <div class="opp-legend-item"><div class="opp-swatch" style="background:rgba(255,255,255,0.02)"></div> Saturated (many products)</div>
+    <div class="opp-legend-item"><div class="opp-swatch" style="background:rgba(255,255,255,0.05)"></div> Competitive (some products)</div>
+    <div class="opp-legend-item"><div class="opp-swatch" style="background:rgba(22,163,74,0.12); border:1px solid rgba(22,163,74,0.2)"></div> Open (few products)</div>
+    <div class="opp-legend-item"><div class="opp-swatch" style="background:rgba(233,162,59,0.15); border:1px solid rgba(233,162,59,0.3)"></div> Wide open (almost nothing)</div>
+  </div>
+
+  <div class="opp-grid" id="oppGrid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TAB 3: CIVILISATION TIMELINE              -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section" id="timeline">
+  <h2>Civilisation Timeline</h2>
+  <p class="section-sub">Every node from the Rule Break Tree, colored by Spiral Dynamics level. Watch the Orange-to-Yellow transition unfold across all branches simultaneously.</p>
+
+  <div class="timeline-wrap">
+    <div class="timeline" id="tlGrid"></div>
+  </div>
+
+  <div class="tl-sd-legend">
+    <div class="tl-sd-item"><div class="tl-sd-dot" style="background:#3b82f6"></div> Blue / Order</div>
+    <div class="tl-sd-item"><div class="tl-sd-dot" style="background:#f97316"></div> Orange / Achievement</div>
+    <div class="tl-sd-item"><div class="tl-sd-dot" style="background:#22c55e"></div> Green / Community</div>
+    <div class="tl-sd-item"><div class="tl-sd-dot" style="background:#eab308"></div> Yellow / Integrative</div>
+    <div class="tl-sd-item"><div class="tl-sd-dot" style="background:#ef4444"></div> Red / Power</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TAB 4: PRICING PROBLEM                   -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section" id="pricing">
+  <h2>The Class Ceiling</h2>
+  <p class="section-sub">Phase 3 products consistently serve affluent early adopters. The bottom 60% is still deepening in Phase 2. Whoever cracks Phase 3 at mass-market prices wins the biggest market in the world.</p>
+
+  <div class="merge-insight" style="margin-bottom:1.5rem">
+    <h3>The Accidental Proof: Podcasts + Candles</h3>
+    <p>Podcasts (Story-Purple loop-back) and candles ($12B Fire-Purple loop-back) are the two biggest Phase 3 successes at mass-market prices. Neither was DESIGNED as Phase 3. They succeeded BECAUSE they're cheap, not despite it. The next CrossFit-scale blow-up might not be a $200/mo gym. It might be free software with a physical community anchor.</p>
+  </div>
+
+  <div class="price-grid" id="priceGrid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  TAB 5: PREDICTION ENGINE                  -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section" id="predictions">
+  <h2>Prediction Engine</h2>
+  <p class="section-sub">Six methods for finding rule breaks and personal monopolies before anyone else sees them.</p>
+
+  <div class="pred-grid" id="predGrid"></div>
+</div>
+
+<div class="footer">
+  <p>Original IP: Huzz Hurrell. <a href="rule-break-matrix.html">View the Matrix</a> | <a href="rule-break-tree.html">View the Tree</a></p>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  SHARED DATA
+// ═══════════════════════════════════════════
+
+const BRANCHES = [
+  { id: 'movement',    label: 'Movement',    color: '#7c3aed', industry: 'Transport' },
+  { id: 'nourishment', label: 'Nourishment', color: '#22c55e', industry: 'Food' },
+  { id: 'tools',       label: 'Tools',       color: '#0ea5e9', industry: 'Technology' },
+  { id: 'status',      label: 'Status',      color: '#e879f9', industry: 'Fashion' },
+  { id: 'bonds',       label: 'Bonds',       color: '#f472b6', industry: 'Comms' },
+  { id: 'shelter',     label: 'Shelter',      color: '#38bdf8', industry: 'Property' },
+  { id: 'story',       label: 'Story',        color: '#fb923c', industry: 'Media' },
+  { id: 'fire',        label: 'Fire',         color: '#f59e0b', industry: 'Energy' },
+  { id: 'healing',     label: 'Healing',      color: '#a78bfa', industry: 'Wellness' },
+  { id: 'threat',      label: 'Threat',       color: '#ef4444', industry: 'Security' },
+]
+
+const SD = [
+  { id: 'purple', label: 'Purple', color: '#7c3aed' },
+  { id: 'red',    label: 'Red',    color: '#ef4444' },
+  { id: 'blue',   label: 'Blue',   color: '#3b82f6' },
+  { id: 'orange', label: 'Orange', color: '#f97316' },
+  { id: 'green',  label: 'Green',  color: '#22c55e' },
+  { id: 'yellow', label: 'Yellow', color: '#eab308' },
+]
+
+const SD_C = { purple:'#7c3aed', red:'#ef4444', blue:'#3b82f6', orange:'#f97316', green:'#22c55e', yellow:'#eab308' }
+
+// ═══════════════════════════════════════════
+//  TAB SWITCHING
+// ═══════════════════════════════════════════
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'))
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'))
+    tab.classList.add('active')
+    document.getElementById(tab.dataset.tab).classList.add('active')
+  })
+})
+
+// ═══════════════════════════════════════════
+//  MERGE RADAR
+// ═══════════════════════════════════════════
+
+const MERGES = [
+  { a: 'tools', b: 'healing', conf: 'high',
+    sd: 'Yellow + Yellow-emerging',
+    desc: 'AI-powered therapeutic tools that route people to the right modality based on nervous system state. Precision wellness. The LLM doesn\'t replace the therapist. It TRIAGES before the therapist, matching wound depth to treatment type.',
+    evidence: 'Historical: Tech + Medicine produced genome mapping, mRNA vaccines, telemedicine. Each was transformative. The AI + Healing merge will be bigger because it operates at Yellow, not Orange.',
+    example: 'Vibe Rise\'s Zarlo is an early prototype. AI coaching that adapts to your polyvagal state.' },
+
+  { a: 'tools', b: 'story', conf: 'high',
+    sd: 'Yellow + Yellow-frontier',
+    desc: 'New narrative forms that couldn\'t exist without AI. Not "AI writes your blog post" (that\'s Orange automation). Interactive, personalised, adaptive story that responds to the reader/viewer in real time.',
+    evidence: 'Historical: Tech + Media has 4 major merges (web publishing, social, streaming, TikTok). Each created a new format. The AI merge will create formats we can\'t imagine yet.',
+    example: 'Claude/ChatGPT as creative partner. AI Dungeon was Phase 1. The next Gutenberg moment is Phase 2.' },
+
+  { a: 'tools', b: 'bonds', conf: 'high',
+    sd: 'Yellow + Green-frontier',
+    desc: 'AI-facilitated community formation that goes beyond "Slack channel + bot." Systems that match people into groups based on complementary growth edges, mediate conflict before it escalates, and adapt community structure to what the group actually needs.',
+    evidence: 'Historical: Tech + Comms produced email, mobile, WhatsApp, Zoom. Each collapsed distance. AI + Bonds will collapse the matching problem: who should be in a room together?',
+    example: 'AI-powered cohort matching. Automated conflict detection in communities.' },
+
+  { a: 'nourishment', b: 'healing', conf: 'high',
+    sd: 'Green-frontier + Green-frontier',
+    desc: 'Food as medicine, taken seriously. Not supplements or superfoods (Orange). Personalised nutrition based on gut microbiome, inflammation markers, and nervous system state. Your diet adapts to your healing phase.',
+    evidence: 'Both branches at Green frontier simultaneously. Functional medicine already bridges them. But no scaled product integrates both branches\' Phase 3 insights.',
+    example: 'Zoe (personalised nutrition) is Orange-level. The Yellow version would route food recommendations by polyvagal state.' },
+
+  { a: 'bonds', b: 'movement', conf: 'high',
+    sd: 'Green-frontier + Green-frontier',
+    desc: 'Social fitness that creates genuine community, not just "workout together." Movement as the bonding mechanism. The CrossFit model applied to walking, dancing, martial arts, play.',
+    evidence: 'CrossFit IS this merge and scored 15/15 on Phase 3 viability. Ruck clubs, November Project, parkrun are early signals of the pattern spreading beyond CrossFit.',
+    example: 'Vibe Rise Sessions: structured movement + healing + play in physical community.' },
+
+  { a: 'shelter', b: 'fire', conf: 'medium',
+    sd: 'Green-frontier + Green-frontier',
+    desc: 'Net-zero buildings that generate, store, and share energy. The home becomes a node in an intelligent energy network, not just a consumer of grid power.',
+    evidence: 'Both branches stuck at Orange (property as investment + fossil fuel economics). Green breaks in both are converging: sustainable building + renewable energy.',
+    example: 'Passive House + Tesla Powerwall + solar. But no integrated product at affordable price point.' },
+
+  { a: 'tools', b: 'nourishment', conf: 'medium',
+    sd: 'Yellow + Green-frontier',
+    desc: 'AI-personalised nutrition that adapts in real time. Not calorie counting (Orange). Contextual food recommendations based on sleep, stress, activity, microbiome, and what\'s locally available.',
+    evidence: 'Historical: Tech + Food produced delivery apps (Orange). The next merge operates at Green/Yellow.',
+    example: 'Continuous glucose monitors + AI coaching. But current products are Orange (optimise metrics). Yellow version adapts to your whole state.' },
+
+  { a: 'status', b: 'story', conf: 'medium',
+    sd: 'Green-frontier + Green-frontier',
+    desc: 'Post-influencer identity. When "authenticity" becomes performative and AI content floods every platform, what does genuine status look like? Skill-based reputation that can\'t be faked.',
+    evidence: 'De-influencing trend + AI content explosion are converging. Both branches questioning Orange assumptions simultaneously.',
+    example: 'Craft revival, "made by humans" branding, skill-over-follower-count culture.' },
+
+  { a: 'healing', b: 'threat', conf: 'medium',
+    sd: 'Green-frontier + Orange-frontier',
+    desc: 'Trauma-informed security. Nervous system awareness applied to conflict resolution, policing, and community safety. Security that heals rather than punishes.',
+    evidence: 'Restorative justice programs are the early signal. Both branches are behind the civilisation curve, which means the merge has less competition.',
+    example: 'Trauma-informed policing training. Somatic mediation. Almost nothing scaled.' },
+
+  { a: 'tools', b: 'movement', conf: 'medium',
+    sd: 'Yellow + Green-frontier',
+    desc: 'AI-optimised urban mobility that eliminates car dependence. Not just autonomous vehicles (still car-centric). Multimodal routing that makes walking, cycling, and transit seamless.',
+    evidence: 'Historical: Tech + Cars produced Uber and Waymo. But both are still car-centric. The next merge breaks the car as the unit.',
+    example: 'Citymapper, Google Maps multimodal. But these are Orange tools. Yellow version redesigns the city, not just the route.' },
+
+  { a: 'tools', b: 'threat', conf: 'emerging',
+    sd: 'Yellow + Orange-frontier',
+    desc: 'AI-powered community resilience. Security systems that make communities anti-fragile rather than surveilled. Distributed, adaptive, transparent.',
+    evidence: 'Almost completely empty cell. AI + Security currently produces surveillance (Red/Blue). The Yellow version would produce resilience.',
+    example: 'Early-warning systems for natural disasters using community sensors. Neighbourhood mesh networks.' },
+
+  { a: 'fire', b: 'story', conf: 'emerging',
+    sd: 'Green-frontier + Yellow-frontier',
+    desc: 'Immersive narrative environments. Lighting, temperature, and atmosphere that adapt to the story being told. The physical space becomes part of the narrative.',
+    evidence: 'Immersive theatre (Sleep No More) + circadian lighting + smart environments are converging.',
+    example: 'Meow Wolf, teamLab. But these are fixed installations. The merge is adaptive, responsive spaces.' },
+]
+
+const mergeGrid = document.getElementById('mergeGrid')
+MERGES.forEach(m => {
+  const brA = BRANCHES.find(b => b.id === m.a)
+  const brB = BRANCHES.find(b => b.id === m.b)
+  const card = document.createElement('div')
+  card.className = `merge-card ${m.conf}`
+  card.innerHTML = `
+    <div class="merge-branches">
+      <div class="merge-dot" style="background:${brA.color}"></div>
+      <span class="merge-name" style="color:${brA.color}">${brA.label}</span>
+      <span class="merge-x">&times;</span>
+      <div class="merge-dot" style="background:${brB.color}"></div>
+      <span class="merge-name" style="color:${brB.color}">${brB.label}</span>
+    </div>
+    <div class="merge-sd">${m.sd}</div>
+    <div class="merge-desc">${m.desc}</div>
+    <div class="merge-evidence">${m.evidence}</div>
+    ${m.example ? `<div class="merge-evidence" style="color:rgba(233,162,59,0.5)">Signal: ${m.example}</div>` : ''}
+    <div class="merge-conf ${m.conf}">${m.conf} confidence</div>
+  `
+  mergeGrid.appendChild(card)
+})
+
+// ═══════════════════════════════════════════
+//  EMPTY CELL MAP
+// ═══════════════════════════════════════════
+
+// Opportunity density: how many products exist in each cell
+// saturated = many, competitive = some, open = few, wide-open = almost none
+const OPP = {
+  'movement-purple': { o:'competitive', l:'Loop-back', d:'Camino, barefoot, ruck clubs' },
+  'movement-red': { o:'saturated', l:'Saturated', d:'Racing, competitive cycling' },
+  'movement-blue': { o:'saturated', l:'Saturated', d:'Public transit, rail' },
+  'movement-orange': { o:'saturated', l:'Saturated', d:'Cars, ride-share, EV' },
+  'movement-green': { o:'open', l:'Open', d:'E-bikes outselling EVs but cities unchanged' },
+  'movement-yellow': { o:'wide-open', l:'Wide open', d:'No city has integrated multimodal' },
+
+  'nourishment-purple': { o:'competitive', l:'Loop-back', d:'Ancestral diet, cacao, fasting' },
+  'nourishment-red': { o:'saturated', l:'Saturated', d:'Food empires, fast food chains' },
+  'nourishment-blue': { o:'saturated', l:'Saturated', d:'FDA, regulated food industry' },
+  'nourishment-orange': { o:'saturated', l:'Saturated', d:'Industrial agriculture, GMO' },
+  'nourishment-green': { o:'competitive', l:'Competitive', d:'Organic, farm-to-table (premium)' },
+  'nourishment-yellow': { o:'wide-open', l:'Wide open', d:'Regenerative + personalised. Academic only.' },
+
+  'tools-purple': { o:'competitive', l:'Loop-back', d:'Maker movement, hand tools' },
+  'tools-red': { o:'saturated', l:'Saturated', d:'Big Tech monopolies' },
+  'tools-blue': { o:'saturated', l:'Saturated', d:'Enterprise software, gov tech' },
+  'tools-orange': { o:'saturated', l:'Saturated', d:'SaaS, VC, startups' },
+  'tools-green': { o:'competitive', l:'Competitive', d:'Open source, digital rights' },
+  'tools-yellow': { o:'open', l:'Open', d:'AI co-creation, barely started' },
+
+  'status-purple': { o:'competitive', l:'Loop-back', d:'Heritage brands, lineage' },
+  'status-red': { o:'saturated', l:'Saturated', d:'Luxury, flex culture' },
+  'status-blue': { o:'competitive', l:'Weakening', d:'Credentials declining but present' },
+  'status-orange': { o:'saturated', l:'Saturated', d:'Follower counts, hustle culture' },
+  'status-green': { o:'competitive', l:'Competitive', d:'De-influencing (closing fast)' },
+  'status-yellow': { o:'wide-open', l:'Wide open', d:'See all games as games. Almost nobody.' },
+
+  'bonds-purple': { o:'competitive', l:'Loop-back', d:'Circles, retreats, CrossFit' },
+  'bonds-red': { o:'saturated', l:'Saturated', d:'Influencer-follower dynamics' },
+  'bonds-blue': { o:'competitive', l:'Declining', d:'Institutional membership falling' },
+  'bonds-orange': { o:'saturated', l:'Saturated', d:'LinkedIn, networking' },
+  'bonds-green': { o:'competitive', l:'Competitive', d:'Community-washing everywhere' },
+  'bonds-yellow': { o:'wide-open', l:'Wide open', d:'Context-dependent community. Nobody.' },
+
+  'shelter-purple': { o:'competitive', l:'Loop-back', d:'Land stewardship, sacred arch' },
+  'shelter-red': { o:'saturated', l:'Saturated', d:'Property speculation' },
+  'shelter-blue': { o:'saturated', l:'Saturated', d:'Zoning, regulation' },
+  'shelter-orange': { o:'saturated', l:'Saturated', d:'Housing as investment' },
+  'shelter-green': { o:'open', l:'Open', d:'Co-housing, tiny. Very niche.' },
+  'shelter-yellow': { o:'wide-open', l:'Wide open', d:'3D printing early. $50K adaptive homes.' },
+
+  'story-purple': { o:'competitive', l:'Loop-back', d:'Podcasts, live storytelling' },
+  'story-red': { o:'saturated', l:'Saturated', d:'State media, propaganda' },
+  'story-blue': { o:'saturated', l:'Saturated', d:'Traditional publishing' },
+  'story-orange': { o:'saturated', l:'Saturated', d:'TikTok, content mills' },
+  'story-green': { o:'competitive', l:'Competitive', d:'Substack, indie media' },
+  'story-yellow': { o:'open', l:'Open', d:'AI co-creation. No new FORM yet.' },
+
+  'fire-purple': { o:'saturated', l:'Loop-back', d:'$12B candle market, campfires' },
+  'fire-red': { o:'saturated', l:'Saturated', d:'Oil wars, petrostates' },
+  'fire-blue': { o:'saturated', l:'Saturated', d:'Grid utilities, nuclear' },
+  'fire-orange': { o:'saturated', l:'Saturated', d:'Fossil fuel economics' },
+  'fire-green': { o:'competitive', l:'Competitive', d:'Solar, wind growing but grid issues' },
+  'fire-yellow': { o:'open', l:'Open', d:'Microgrids, AI energy mgmt. Early.' },
+
+  'healing-purple': { o:'competitive', l:'Loop-back', d:'Plant medicine, psilocybin, sweat lodge' },
+  'healing-red': { o:'saturated', l:'Saturated', d:'Doctor authority persists' },
+  'healing-blue': { o:'saturated', l:'Saturated', d:'Pharma, licensing, FDA' },
+  'healing-orange': { o:'saturated', l:'Saturated', d:'Pharmaceuticals, data-driven' },
+  'healing-green': { o:'saturated', l:'Saturated', d:'Integrative medicine, crowded' },
+  'healing-yellow': { o:'open', l:'Open', d:'Contextual routing. Vibe Rise is here.' },
+
+  'threat-purple': { o:'competitive', l:'Loop-back', d:'Boundary rituals, sage, evil eye' },
+  'threat-red': { o:'saturated', l:'Saturated', d:'Military, police force' },
+  'threat-blue': { o:'saturated', l:'Saturated', d:'Courts, intelligence agencies' },
+  'threat-orange': { o:'competitive', l:'Competitive', d:'Cybersecurity, AI surveillance' },
+  'threat-green': { o:'wide-open', l:'Wide open', d:'Restorative justice. Almost nothing.' },
+  'threat-yellow': { o:'wide-open', l:'Wide open', d:'Anti-fragile communities. Nothing.' },
+}
+
+const oppGrid = document.getElementById('oppGrid')
+
+// Corner
+oppGrid.innerHTML = '<div class="opp-corner"></div>'
+
+// Column headers
+SD.forEach(sd => {
+  oppGrid.innerHTML += `<div class="opp-col" style="color:${sd.color}">${sd.label}</div>`
+})
+
+// Rows
+BRANCHES.forEach(br => {
+  oppGrid.innerHTML += `<div class="opp-row-header"><div class="opp-row-dot" style="background:${br.color}"></div><div class="opp-row-label">${br.label}</div></div>`
+  SD.forEach(sd => {
+    const key = `${br.id}-${sd.id}`
+    const data = OPP[key]
+    if (!data) {
+      oppGrid.innerHTML += '<div class="opp-cell saturated"><span class="opp-label">-</span></div>'
+      return
+    }
+    oppGrid.innerHTML += `<div class="opp-cell ${data.o}">
+      <span class="opp-label">${data.l}</span>
+      <span class="opp-detail">${data.d}</span>
+    </div>`
+  })
+})
+
+// ═══════════════════════════════════════════
+//  CIVILISATION TIMELINE
+// ═══════════════════════════════════════════
+
+// Nodes from the Rule Break Tree with SD tags
+const TL_NODES = [
+  // Movement
+  { br:'movement', year:1886, sd:'orange', label:'Motorcar' },
+  { br:'movement', year:1913, sd:'orange', label:'Assembly Line' },
+  { br:'movement', year:1956, sd:'blue', label:'Highways' },
+  { br:'movement', year:1959, sd:'green', label:'VW Beetle' },
+  { br:'movement', year:1966, sd:'green', label:'Safety' },
+  { br:'movement', year:1973, sd:'yellow', label:'Lean Mfg' },
+  { br:'movement', year:1997, sd:'green', label:'Hybrid' },
+  { br:'movement', year:2008, sd:'green', label:'Tesla' },
+  { br:'movement', year:2010, sd:'orange', label:'Uber' },
+  { br:'movement', year:2020, sd:'yellow', label:'Waymo' },
+  // Nourishment
+  { br:'nourishment', year:1730, sd:'blue', label:'Crop Rotation' },
+  { br:'nourishment', year:1834, sd:'orange', label:'Reaper' },
+  { br:'nourishment', year:1876, sd:'orange', label:'Refrigeration' },
+  { br:'nourishment', year:1948, sd:'orange', label:'Fast Food' },
+  { br:'nourishment', year:1968, sd:'orange', label:'Green Rev' },
+  { br:'nourishment', year:1994, sd:'orange', label:'GMO' },
+  { br:'nourishment', year:2002, sd:'green', label:'Organic' },
+  { br:'nourishment', year:2013, sd:'orange', label:'Delivery' },
+  // Tools
+  { br:'tools', year:1971, sd:'orange', label:'CPU' },
+  { br:'tools', year:1975, sd:'orange', label:'PC' },
+  { br:'tools', year:1984, sd:'green', label:'GUI' },
+  { br:'tools', year:1991, sd:'green', label:'WWW' },
+  { br:'tools', year:1998, sd:'orange', label:'Google' },
+  { br:'tools', year:2004, sd:'orange', label:'Facebook' },
+  { br:'tools', year:2007, sd:'orange', label:'iPhone' },
+  { br:'tools', year:2017, sd:'yellow', label:'Transformer' },
+  { br:'tools', year:2022, sd:'green', label:'ChatGPT' },
+  // Status
+  { br:'status', year:1858, sd:'orange', label:'Fashion House' },
+  { br:'status', year:1916, sd:'orange', label:'Cosmetics' },
+  { br:'status', year:1975, sd:'orange', label:'Fast Fashion' },
+  { br:'status', year:2013, sd:'green', label:'Influencer' },
+  { br:'status', year:2021, sd:'green', label:'Creator Econ' },
+  // Bonds
+  { br:'bonds', year:1844, sd:'orange', label:'Telegraph' },
+  { br:'bonds', year:1876, sd:'orange', label:'Telephone' },
+  { br:'bonds', year:1983, sd:'orange', label:'Mobile' },
+  { br:'bonds', year:2009, sd:'green', label:'WhatsApp' },
+  { br:'bonds', year:2020, sd:'green', label:'Zoom' },
+  // Shelter
+  { br:'shelter', year:1885, sd:'orange', label:'Skyscraper' },
+  { br:'shelter', year:1947, sd:'blue', label:'Levittown' },
+  { br:'shelter', year:2008, sd:'green', label:'Airbnb' },
+  { br:'shelter', year:2021, sd:'yellow', label:'3D Print' },
+  // Story
+  { br:'story', year:1440, sd:'blue', label:'Printing Press' },
+  { br:'story', year:1895, sd:'orange', label:'Cinema' },
+  { br:'story', year:1920, sd:'blue', label:'Radio' },
+  { br:'story', year:1948, sd:'orange', label:'TV' },
+  { br:'story', year:1991, sd:'green', label:'Web Publishing' },
+  { br:'story', year:2004, sd:'green', label:'Social Media' },
+  { br:'story', year:2018, sd:'orange', label:'TikTok' },
+  { br:'story', year:2022, sd:'yellow', label:'AI Content' },
+  // Fire
+  { br:'fire', year:1776, sd:'orange', label:'Steam' },
+  { br:'fire', year:1882, sd:'orange', label:'DC Grid' },
+  { br:'fire', year:1954, sd:'orange', label:'Solar Cell' },
+  { br:'fire', year:1956, sd:'blue', label:'Nuclear' },
+  { br:'fire', year:2008, sd:'orange', label:'Shale' },
+  { br:'fire', year:2017, sd:'yellow', label:'Grid Storage' },
+  // Healing
+  { br:'healing', year:1867, sd:'orange', label:'Antiseptic' },
+  { br:'healing', year:1928, sd:'orange', label:'Antibiotics' },
+  { br:'healing', year:1952, sd:'orange', label:'Psych Drugs' },
+  { br:'healing', year:1955, sd:'blue', label:'Vaccines' },
+  { br:'healing', year:2003, sd:'orange', label:'Genome' },
+  { br:'healing', year:2015, sd:'green', label:'Telehealth' },
+  { br:'healing', year:2020, sd:'yellow', label:'mRNA' },
+  // Threat
+  { br:'threat', year:1617, sd:'blue', label:'Standing Army' },
+  { br:'threat', year:1688, sd:'orange', label:'Insurance' },
+  { br:'threat', year:1945, sd:'red', label:'Nuclear' },
+  { br:'threat', year:1968, sd:'blue', label:'CCTV' },
+  { br:'threat', year:1988, sd:'orange', label:'Cyber' },
+  { br:'threat', year:2017, sd:'red', label:'AI Surveillance' },
+]
+
+const tlGrid = document.getElementById('tlGrid')
+const TL_MIN = 1400, TL_MAX = 2030
+
+BRANCHES.forEach(br => {
+  // Row label
+  tlGrid.innerHTML += `<div class="tl-row-label"><div class="tl-dot" style="background:${br.color}"></div><div class="tl-name">${br.label}</div></div>`
+
+  // Track
+  const track = document.createElement('div')
+  track.className = 'tl-track'
+
+  // Now line (only on first row for the label)
+  const nowPct = ((2026 - TL_MIN) / (TL_MAX - TL_MIN)) * 100
+  const nowLine = document.createElement('div')
+  nowLine.className = 'tl-now'
+  nowLine.style.left = nowPct + '%'
+  if (br.id === 'movement') {
+    nowLine.innerHTML = '<div class="tl-now-label">Now</div>'
+  }
+  track.appendChild(nowLine)
+
+  // Nodes for this branch
+  const brNodes = TL_NODES.filter(n => n.br === br.id)
+  brNodes.forEach((n, i) => {
+    const pct = ((n.year - TL_MIN) / (TL_MAX - TL_MIN)) * 100
+    const node = document.createElement('div')
+    node.className = 'tl-node' + (i === brNodes.length - 1 ? ' frontier-node' : '')
+    node.style.left = pct + '%'
+    node.style.background = SD_C[n.sd]
+    node.style.borderColor = SD_C[n.sd]
+    node.title = `${n.label} (${n.year}) — ${n.sd.charAt(0).toUpperCase() + n.sd.slice(1)}`
+    track.appendChild(node)
+  })
+
+  tlGrid.appendChild(track)
+})
+
+// ═══════════════════════════════════════════
+//  PRICING PROBLEM
+// ═══════════════════════════════════════════
+
+const PRICES = [
+  { branch: 'Movement', color: '#7c3aed', premium: 'CrossFit: $150-250/mo', massGap: 'Ruck clubs (free), park workouts, 12-3-30. Movement is closest to solving the ceiling.', accessibility: 60, quality: 90 },
+  { branch: 'Healing', color: '#a78bfa', premium: 'Breathwork retreat: $2-5K, Therapy: $150/session', massGap: 'YouTube breathwork is free but has no community. The gap between free content and paid retreat is enormous.', accessibility: 25, quality: 85 },
+  { branch: 'Food', color: '#22c55e', premium: 'Regenerative farm box: $200-400/mo, Whole Foods premium: 2-3x', massGap: 'No affordable Phase 3 food at scale. Farmer\'s markets are local. Bottom 60% eats ultra-processed.', accessibility: 20, quality: 70 },
+  { branch: 'Bonds', color: '#f472b6', premium: 'Men\'s circle: $500-3K, Retreat: $2-5K', massGap: 'Discord/Slack is free but shallow. No affordable deep-community product exists.', accessibility: 15, quality: 75 },
+  { branch: 'Status', color: '#e879f9', premium: 'Personal branding course: $1-5K', massGap: 'No affordable identity work. Status is either free (social media) or premium (coaching).', accessibility: 20, quality: 60 },
+  { branch: 'Shelter', color: '#38bdf8', premium: 'Co-housing: $500K+, Tiny home: $50-100K', massGap: 'Almost nothing affordable. The biggest gap on the entire map.', accessibility: 5, quality: 50 },
+  { branch: 'Story', color: '#fb923c', premium: 'Live storytelling: $30-100', massGap: 'Podcasts SOLVED this. Free, Phase 3, mass-market. Story has the smallest gap.', accessibility: 90, quality: 80 },
+  { branch: 'Fire', color: '#f59e0b', premium: 'Off-grid: $20-50K, Circadian lighting: $500+', massGap: 'Candles ($12B) are accidental Phase 3 at $5. The market found its own mass-market solution.', accessibility: 75, quality: 40 },
+  { branch: 'Threat', color: '#ef4444', premium: 'Martial arts: $100-200/mo', massGap: 'No Phase 3 security product exists at any price. The category doesn\'t exist yet.', accessibility: 0, quality: 10 },
+]
+
+const priceGrid = document.getElementById('priceGrid')
+PRICES.forEach(p => {
+  const card = document.createElement('div')
+  card.className = 'price-card'
+  card.innerHTML = `
+    <h3 style="color:${p.color}">${p.branch}</h3>
+    <div class="price-premium">${p.premium}</div>
+    <div class="price-gap">${p.massGap}</div>
+    <div class="price-bar-wrap">
+      <div class="price-bar-label"><span>Mass-market accessibility</span><span>${p.accessibility}%</span></div>
+      <div class="price-bar"><div class="price-bar-fill" style="width:${p.accessibility}%; background:${p.color}"></div></div>
+    </div>
+    <div class="price-bar-wrap">
+      <div class="price-bar-label"><span>Phase 3 quality available</span><span>${p.quality}%</span></div>
+      <div class="price-bar"><div class="price-bar-fill" style="width:${p.quality}%; background:rgba(233,162,59,0.6)"></div></div>
+    </div>
+  `
+  priceGrid.appendChild(card)
+})
+
+// ═══════════════════════════════════════════
+//  PREDICTION ENGINE
+// ═══════════════════════════════════════════
+
+const PREDS = [
+  { title: 'Assumption Age Index', sub: 'Older assumptions are more ripe',
+    desc: 'The longer an assumption has been dominant, the more pressure has built. Threat-Blue (standing armies) has held for 409 years. Healing-Orange (evidence-based medicine) for 159 years. Food-Orange (industrial agriculture) for 78 years. The oldest = most overdue.',
+    example: 'Threat-Blue is the most overdue break on the entire matrix. 409 years of "security requires institutional force." The first person to crack community resilience at scale has zero competition.',
+    action: 'Sort frontier cells by assumption age. Start with the oldest.' },
+
+  { title: 'Counter-Break Detector', sub: 'Every break creates its own backlash',
+    desc: 'Social media created digital detox. Fast fashion created de-influencing. Uber created worker rights movements. AI content is creating "made by humans" branding. The backlash is predictable AND the creator who names it first wins.',
+    example: '"AI-generated content" (Story-Yellow) is already producing its counter-break: "verified human" certification for content. This counter-break IS the next rule break.',
+    action: 'Track which recent innovations are generating visible backlash. The backlash = your content angle AND your product opportunity.' },
+
+  { title: 'Adjacent Possible Scanner', sub: 'New capabilities unlock frontier cells',
+    desc: 'Innovation is constrained to what just became possible. Psychedelic legalisation (2020-25) unlocked Healing-Purple. LLM consumer AI (2022-23) unlocked Tools-Yellow, Story-Yellow, Healing-Yellow. Remote work normalisation (2020-23) unlocked Shelter-Green and Bonds-Green.',
+    example: 'When a new capability appears, immediately check which frontier cells it unlocks. First mover advantage in a freshly-unlocked cell = personal monopoly.',
+    action: 'Monitor: new legislation, new technology releases, new cultural shifts. Each one opens a cell that was previously locked.' },
+
+  { title: 'Personal Monopoly Finder', sub: 'Your unique intersection = your empty cell',
+    desc: 'A personal monopoly exists where YOUR combination of skills, problems, and life experience meets an empty frontier cell. A therapist who does CrossFit is at Healing-Yellow + Movement-Green. A software engineer who does breathwork is at Tools-Yellow + Healing-Yellow. The INTERSECTION is the monopoly.',
+    example: 'The thing you think is a liability (career change, unusual combination, "I don\'t fit in one box") is actually what positions you in an empty cell. Nobody else has your exact intersection.',
+    action: 'Map your skills to branches. Map your worldview to SD level. Find the cell where those meet. If it\'s empty, you own it.' },
+
+  { title: 'Remarkability Half-Life Map', sub: 'Vehicle breaks decay fast. Results breaks last.',
+    desc: 'A vehicle break (new medium or new action on existing medium) has a 3-5 year window before competitors copy it. A results break (producing outcomes nobody thought possible) lasts decades. Nicole LePera\'s Instagram psychology: ~5 year vehicle window, now closing. Wim Hof\'s cold therapy results: 30+ years, still remarkable.',
+    example: 'De-influencing as a content format (Status-Green vehicle break) has ~2 years left. But regenerative agriculture yields (Food-Green results break) has 20+ years of runway.',
+    action: 'Steer toward results breaks in frontier cells. The vehicle window closes fast. The results window stays open.' },
+
+  { title: 'Geographic Arbitrage Map', sub: 'Different countries are at different SD levels',
+    desc: 'The US food industry is at Orange-to-Green. India\'s might be at Blue-to-Orange. A creator can be early in one geography by importing an innovation from a more advanced SD position. CrossFit (US) exported globally. Wim Hof (Netherlands) exported globally.',
+    example: 'If a Phase 3 product works in one country, look for countries where that branch is at an earlier SD level. First mover advantage = import the break before a local version appears.',
+    action: 'Identify which SD transitions are furthest along in your geography. Then look for geographies where you\'d be first.' },
+]
+
+const predGrid = document.getElementById('predGrid')
+PREDS.forEach(p => {
+  const card = document.createElement('div')
+  card.className = 'pred-card'
+  card.innerHTML = `
+    <h3>${p.title}</h3>
+    <div class="pred-sub">${p.sub}</div>
+    <p>${p.desc}</p>
+    <p class="pred-example">${p.example}</p>
+    <div class="pred-action">${p.action}</div>
+  `
+  predGrid.appendChild(card)
+})
+</script>
+</body>
+</html>
