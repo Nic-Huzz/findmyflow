@@ -3,11 +3,11 @@
  * The home for Clarity. Shows who you are and how that's evolving.
  * Clusters with resonance ratings, identity statements, re-generation prompts.
  */
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
-import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { hapticLight } from '../lib/haptics'
 import './MirrorPage.css'
 
 export default function MirrorPage() {
@@ -27,8 +27,6 @@ export default function MirrorPage() {
   const [removedIds, setRemovedIds] = useState(new Set())
   const [identityStatements, setIdentityStatements] = useState([])
   const [courageCount, setCourageCount] = useState(0)
-  const [saving, setSaving] = useState(false)
-  const [dirty, setDirty] = useState(false)
   const [regenClusters, setRegenClusters] = useState([]) // clusters with behavioral_evidence >= 5
   const [addClusterText, setAddClusterText] = useState('')
   const [addClusterType, setAddClusterType] = useState('skills')
@@ -117,20 +115,34 @@ export default function MirrorPage() {
   const handleRate = (clusterId, value) => {
     hapticLight()
     setRatings(prev => ({ ...prev, [clusterId]: value }))
-    setDirty(true)
+    // Auto-save rating immediately
+    supabase.from('nikigai_clusters').update({
+      resonance_rating: value,
+      resonance_updated_at: new Date().toISOString(),
+    }).eq('id', clusterId).then(({ error }) => {
+      if (error) console.warn('Rating save failed:', error)
+    })
   }
 
   const handleRemove = (clusterId) => {
     hapticLight()
     setRemovedIds(prev => new Set([...prev, clusterId]))
     setRatings(prev => { const n = { ...prev }; delete n[clusterId]; return n })
-    setDirty(true)
+    // Auto-save removal
+    supabase.from('nikigai_clusters').update({
+      is_removed: true,
+      resonance_updated_at: new Date().toISOString(),
+    }).eq('id', clusterId).then(() => {})
   }
 
   const handleRestore = (clusterId) => {
     hapticLight()
     setRemovedIds(prev => { const n = new Set(prev); n.delete(clusterId); return n })
-    setDirty(true)
+    // Auto-save restore
+    supabase.from('nikigai_clusters').update({
+      is_removed: false,
+      resonance_updated_at: new Date().toISOString(),
+    }).eq('id', clusterId).then(() => {})
   }
 
   const handleAddCluster = async () => {
@@ -152,46 +164,6 @@ export default function MirrorPage() {
     setAddClusterText('')
     setAddingSaving(false)
   }
-
-  const handleSave = useCallback(async () => {
-    if (saving) return
-    setSaving(true)
-
-    const updates = Object.entries(ratings)
-      .filter(([id]) => !removedIds.has(id))
-      .map(([id, rating]) =>
-        supabase.from('nikigai_clusters').update({
-          resonance_rating: rating,
-          resonance_updated_at: new Date().toISOString(),
-        }).eq('id', id)
-      )
-    const removes = [...removedIds].map(id =>
-      supabase.from('nikigai_clusters').update({
-        is_removed: true,
-        resonance_updated_at: new Date().toISOString(),
-      }).eq('id', id)
-    )
-    // Restore any previously removed clusters that are no longer in removedIds
-    const restores = clusters
-      .filter(c => c.is_removed && !removedIds.has(c.id))
-      .map(c => supabase.from('nikigai_clusters').update({
-        is_removed: false,
-        resonance_updated_at: new Date().toISOString(),
-      }).eq('id', c.id))
-
-    await Promise.all([...updates, ...removes, ...restores])
-
-    // Refresh clusters state so is_removed reflects what was just saved
-    setClusters(prev => prev.map(c => ({
-      ...c,
-      is_removed: removedIds.has(c.id),
-      resonance_rating: ratings[c.id] ?? c.resonance_rating,
-    })))
-
-    hapticSuccess()
-    setDirty(false)
-    setSaving(false)
-  }, [ratings, removedIds, clusters, saving])
 
   if (loading) {
     return (
@@ -354,14 +326,6 @@ export default function MirrorPage() {
         </div>
       )}
 
-      {/* Save button */}
-      {dirty && (
-        <div className="mp-save-bar">
-          <button className="mp-save-btn" onClick={handleSave} disabled={saving}>
-            {saving ? 'Saving...' : 'Save changes'}
-          </button>
-        </div>
-      )}
     </div>
   )
 }
