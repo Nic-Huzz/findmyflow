@@ -260,7 +260,7 @@ Key files: `src/flows/ScopeMapFlow.jsx`, `src/components/ScopeMap.jsx` (2x2 SVG)
 
 Users browse 59 experience creators organized by 6 business model archetypes, select who they resonate with, and receive a per-layer product suite recommendation (attraction/core/scale/continuity) with "hell yes or not quite" validation. 318-person corpus (75 founders + 243 non-founders). Pixar-style portraits via Gemini 3.1 Flash.
 
-Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/data/experienceCreatorOfferMap.json`, `public/images/creators/`. Brief: `docs/features/matching-dna/feature-brief-experience-creator-matching.md`.
+Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `primaryBranch` + `secondaryBranch`), `public/data/experienceCreatorOfferMap.json`, `public/images/creators/`. Brief: `docs/features/matching-dna/feature-brief-experience-creator-matching.md`.
 
 ### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
 
@@ -337,7 +337,13 @@ Sequential flow: each unlocks after the previous is completed. Three card states
 
 4. **Scale Score** (`/create/scale-diagnostic` + `/try/facilitator-score`, `FacilitatorScore.jsx`): 3-pillar Phase 3 diagnostic (RETURN · BREAK · TRIBAL). Branch selection (10 branches) → 6 questions with branch-specific examples (Ancestral, Body, Identity, Shareability, Format, Rule Break result). Pulls rule break data for logged-in users. Score /15, Phase classification (12+ Phase 3, 9-11 Strong, 6-8 Phase 2.5, <6 Phase 2). Public mode works as standalone lead magnet with email capture. Old `/scale-diagnostic` redirects. Saves to `scale_diagnostics`.
 
-**Positioning Summary** (`PositioningSummary.jsx`): Lives at bottom of Playbook tab (after Your Model, before Actions). Two inputs (life quake + transformation) → AI-generated positioning statement. Collapsed state when statement exists (shows output only with "Edit ↓" toggle). Saves to `lead_flow_profiles`.
+**Creator Position Card** (`CreatorPositionCard.jsx`): Replaces PositioningSummary. Unified card on Playbook tab showing: personal monopoly (skills × problems × personas vs 299 profiles), branch intersection (primary × secondary), Phase 2/3 adaptive frontier cards with verified market research, AI-generated "Your opportunity" positioning insight (via `generate-positioning` edge function, saved to `lead_flow_profiles.ai_monopoly_statement`), competitive density (nearby creators from 33 branch-tagged experienceCreatorDNA profiles with tappable chips), and positioning statement (life quake + transformation + AI generate). Uses `useBranchScoring` hook for branch data + `spiralDynamicsMatrix.json` for frontier text + imports `experienceCreatorDNA.json` directly for competitive map.
+
+**Branch Scoring** (`useBranchScoring.js`): Weighted algorithm computing primary/secondary branches from curiosity clusters (×2), active quests with AI-classified `branch` field (×3 vibe, ×2 other), favourited problems (×3), favourited skills (×2). Principle: action + wounds > curiosity > skills. Also computes monopoly rarity (exact match of top skill + problem + persona vs 299 careerModels profiles), gap insight (vehicle vs territory), and data completeness confidence %.
+
+**Frontier Research**: 10 branches researched with verified market data at `docs/research/frontier-*.md`. Each has 4 layers: dominant players, crowded subgroups, verified gap, loop-back. Phase 2 branches (Bonds, Tools, Status, Shelter, Threat) show "What everyone does / Why it no longer works / What would actually work / Your opportunity." Phase 3 branches (Healing, Movement, Story, Nourishment, Fire) show "What's already working / What's still missing / Your opportunity." Simplified text in `public/data/spiralDynamicsMatrix.json` (`simple` object on frontier/emerging cells). Spec: `docs/features/personal-monopoly-finder.md`.
+
+**RemarkableFlow enhancements**: "Recommended" tag on user's primary branch in branch selector. Collapsible "Stuck? Read this" hint box on assumption step showing frontier insight for selected branch.
 
 Sequential locking: Reach locked until `remarkable_angles` exists, Growth locked until `narrative_builders` exists, Scale Score locked until `access_architectures` exists.
 
@@ -466,7 +472,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `experience_checkins` | `weekly_reviews` (3 questions: narrative_revision, identity_did, compounding_text) | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
 
 ### Interior Scoreboard
-`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[] | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
+`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
 
 RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidence(p_cluster_id)`
 
