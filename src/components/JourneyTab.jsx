@@ -172,7 +172,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       const ratedClusters = clarityRes.data || []
       if (ratedClusters.length > 0) {
         const avg = ratedClusters.reduce((sum, c) => sum + c.resonance_rating, 0) / ratedClusters.length
-        setClarityPct(Math.round(avg * 20))
+        setClarityPct(Math.round(avg * 25))
       }
 
       const email = authRes.data?.user?.email

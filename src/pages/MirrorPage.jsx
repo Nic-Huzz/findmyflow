@@ -13,6 +13,12 @@ import './MirrorPage.css'
 export default function MirrorPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
+
+  // Hide bottom toolbar on this page
+  useEffect(() => {
+    document.body.classList.add('hide-toolbar')
+    return () => document.body.classList.remove('hide-toolbar')
+  }, [])
   const userId = user?.id
 
   const [loading, setLoading] = useState(true)
@@ -98,11 +104,11 @@ export default function MirrorPage() {
     return () => { active = false }
   }, [userId])
 
-  // Clarity calculation
+  // Clarity calculation (4-point scale: avg × 25 = 0-100%)
   const keptClusters = clusters.filter(c => !removedIds.has(c.id) && !c.is_removed)
   const ratedKept = keptClusters.filter(c => ratings[c.id] != null)
   const clarityPct = ratedKept.length > 0
-    ? Math.round((ratedKept.reduce((sum, c) => sum + ratings[c.id], 0) / ratedKept.length) * 20)
+    ? Math.round((ratedKept.reduce((sum, c) => sum + ratings[c.id], 0) / ratedKept.length) * 25)
     : null
 
   const handleRate = (clusterId, value) => {
@@ -199,6 +205,15 @@ export default function MirrorPage() {
         </div>
       )}
 
+      {/* Rating index */}
+      <div className="mp-rating-index">
+        <div className="mp-index-title">How to rate</div>
+        <div className="mp-index-row"><span className="mp-index-dots">●●●●</span><span className="mp-index-label">This IS me</span><span className="mp-index-desc">Goosebumps. You'd screenshot it.</span></div>
+        <div className="mp-index-row"><span className="mp-index-dots">●●●○</span><span className="mp-index-label">Yeah, that's right</span><span className="mp-index-desc">Accurate, no resistance</span></div>
+        <div className="mp-index-row"><span className="mp-index-dots">●●○○</span><span className="mp-index-label">Not quite</span><span className="mp-index-desc">See why AI said it but doesn't land</span></div>
+        <div className="mp-index-row"><span className="mp-index-dots">●○○○</span><span className="mp-index-label">That's not me</span><span className="mp-index-desc">Feels off, needs re-clustering</span></div>
+      </div>
+
       {/* Re-generation banner */}
       {regenClusters.length > 0 && (
         <div className="mp-regen-banner">
@@ -240,19 +255,12 @@ export default function MirrorPage() {
                     </div>
                   )}
                   <div className="mp-rate-dots">
-                    {[1, 2, 3, 4, 5].map(n => (
+                    {[1, 2, 3, 4].map(n => (
                       <button key={n}
                         className={`mp-rate-dot ${(ratings[cluster.id] || 0) >= n ? 'active' : ''}`}
                         onClick={() => handleRate(cluster.id, n)}
                       />
                     ))}
-                    <span className="mp-rate-hint">
-                      {ratings[cluster.id] === 5 ? 'This IS me' :
-                       ratings[cluster.id] === 4 ? "Yeah, that's right" :
-                       ratings[cluster.id] === 3 ? 'Partly' :
-                       ratings[cluster.id] === 2 ? 'Not quite' :
-                       ratings[cluster.id] === 1 ? "That's not me" : 'Rate'}
-                    </span>
                   </div>
                 </div>
               )

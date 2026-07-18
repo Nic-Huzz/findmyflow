@@ -34,6 +34,25 @@
 .mp-clarity-label { font-size: 14px; font-weight: 700; color: #5e17eb; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 .mp-clarity-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
 
+/* Rating index */
+.mp-rating-index {
+  margin: 0 16px 16px; padding: 14px 16px;
+  background: #fff; border-radius: 12px; border: 1px solid #f2f3f5;
+}
+.mp-index-title {
+  font-size: 11px; font-weight: 700; color: #adb5bd;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.mp-index-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 0; font-size: 12px;
+}
+.mp-index-dots {
+  font-size: 10px; color: #5e17eb; min-width: 40px; letter-spacing: 1px;
+}
+.mp-index-label { font-weight: 600; color: #1a1a2e; min-width: 110px; }
+.mp-index-desc { color: #6b7280; }
+
 /* Re-generation banner */
 .mp-regen-banner {
   display: flex; gap: 12px; align-items: flex-start;
@@ -112,20 +131,17 @@
   font-size: 11px; color: #E9A23B; font-weight: 600; margin-top: 4px;
 }
 
-/* Rating dots */
+/* Rating dots (4-point scale) */
 .mp-rate-dots {
   display: flex; align-items: center; gap: 8px; margin-top: 10px;
 }
 .mp-rate-dot {
-  width: 28px; height: 28px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   border: 2px solid #e9ecef; background: #fff;
   cursor: pointer; padding: 0; transition: all 0.15s ease;
 }
 .mp-rate-dot.active { background: #5e17eb; border-color: #5e17eb; }
 .mp-rate-dot:hover { border-color: #5e17eb; }
-.mp-rate-hint {
-  font-size: 11px; color: #6b7280; margin-left: 4px;
-}
 
 /* Empty state */
 .mp-empty { text-align: center; padding: 40px 20px; }

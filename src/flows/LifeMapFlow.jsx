@@ -1174,7 +1174,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       .map(c => clusterRatings[c.id])
       .filter(r => r != null)
     const clarityPct = keptRatings.length > 0
-      ? Math.round((keptRatings.reduce((a, b) => a + b, 0) / keptRatings.length) * 20)
+      ? Math.round((keptRatings.reduce((a, b) => a + b, 0) / keptRatings.length) * 25)
       : null
 
     const handleSaveRatings = async () => {
@@ -1241,7 +1241,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
               <div key={cluster.id} className="lm-rate-card">
                 <div className="lm-rate-label">{cluster.label}</div>
                 <div className="lm-rate-dots">
-                  {[1, 2, 3, 4, 5].map(n => (
+                  {[1, 2, 3, 4].map(n => (
                     <button key={n}
                       className={`lm-rate-dot ${(clusterRatings[cluster.id] || 0) >= n ? 'active' : ''}`}
                       onClick={() => setClusterRatings(prev => ({ ...prev, [cluster.id]: n }))}
