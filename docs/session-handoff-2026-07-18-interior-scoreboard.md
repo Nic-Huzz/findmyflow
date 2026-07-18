@@ -72,6 +72,54 @@
 ### Feature branch
 `feature/interior-scoreboard-sprint1` has Sprint 1 code + data gaps doc. Needs PR to main when ready.
 
+## User answers to clarifying questions (shapes Sprint 2-6)
+
+**Sprint 2 — Cluster resonance rating:**
+- New STEP after Life Map results (not inline on results page) — less clutter, only titles without descriptions
+- Clarity % displays on Journey tab, above "Your Skills" section
+- Users can remove clusters (score 1-2) and add custom ones. Clarity = average of KEPT clusters only.
+- Huzz rated all his clusters 4/5 → Clarity = 80%
+
+**Sprint 4 — Mirror re-generation:**
+- BOTH push notification AND in-app banner
+- Opens to a "Mirror page" — a new convergence point where users can also update curiosity additions, re-rate clusters, see life path updates. This becomes the HOME for Clarity, the place all updates converge. Could be a new route (/mirror) or expansion of /me page — needs design decision.
+
+**Sprint 5 — Guidance layer:**
+- Shows INLINE on quest cards + journey page (not only in Zarlo chat)
+- Zone of Excellence warning: shows on quest card when 3+ "Pressure" outcomes in a row
+
+**Sprint 6 — Skill tree:**
+- When quest is created → AI auto-tags skills → immediately asks "what level are you at with these?" L0-L4 picker per skill, right at quest creation
+- Only shows skills that appear on the quest, not all 10
+
+## How Clarity % is calculated
+
+```
+1. User completes Life Map → AI generates skill/problem/persona clusters (freeform names)
+2. New "rate_mirror" screen: each cluster shown with title + items + 1-5 rating
+   - 5 = "This IS me" (goosebumps)
+   - 4 = "Yeah, that's right"
+   - 3 = "Partly"
+   - 2 = "Not quite"
+   - 1 = "That's not me"
+3. User can REMOVE clusters (is_removed = true) or ADD custom ones
+4. Clarity % = average resonance of KEPT clusters × 20
+   (e.g., all 4s = 4.0/5 = 80%)
+5. Saves resonance_rating + resonance_updated_at on nikigai_clusters table
+6. Later (Sprint 4): after 5 courage challenges on quests sharing skill tags,
+   AI re-generates cluster → user re-rates ONE cluster → Clarity updates
+```
+
+DB fields needed (migration): `resonance_rating integer`, `resonance_updated_at timestamptz`, `behavioral_evidence integer DEFAULT 0`, `is_removed boolean DEFAULT false` — all on nikigai_clusters table.
+
+## Pre-existing bugs found during code review (not from our changes)
+
+1. **`gcm-wahoo-alive` CSS class missing** — `GroanCompletionModal.jsx:362` uses class `gcm-wahoo-alive` for the "Fun" button but `GroanCompletionModal.css` has no `.gcm-wahoo-alive.selected` definition. Fun button selected state looks identical to Pressure/Uninterested. Fix: add `.gcm-wahoo-alive.selected { border-color: #10b981; background: rgba(16, 185, 129, 0.06); }`
+
+2. **Courage task with no groan_challenge_id gets silently done** — `QuestBoardCard.jsx:103` intercept only fires when BOTH `is_courage_challenge` AND `groan_challenge_id` are truthy. If groan_challenge_id is null (from HealingIntentionsList path), task gets checked off with no classification modal, no RP, no NS check-in. Pre-existing, documented in Sprint 0 investigation.
+
+3. **Mystery box count check may read null** — `QuestBoardCard.jsx:199-205` chains `.then({ count })` on a Supabase query builder without proper await. Count could be null, preventing mystery box trigger on first quest achievement. Pre-existing.
+
 ## Gotchas discovered
 
 1. **quest_tasks.groan_challenge_id has NO FK constraint** — we added one via migration. But HealingIntentionsList.jsx creates courage quest_tasks WITHOUT groan_challenges intentionally (healing tasks aren't wahoos). Don't "fix" those 8 records.
