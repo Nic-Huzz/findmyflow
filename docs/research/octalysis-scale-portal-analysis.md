@@ -6,7 +6,7 @@
 
 ---
 
-## Current State Score
+## Pre-Gamification Score (July 14)
 
 | Core Drive | Score (0-10) | Justification |
 |------------|-------------|---------------|
@@ -19,9 +19,66 @@
 | **CD7** Unpredictability & Curiosity | 2 | Almost entirely deterministic. No surprise rewards, no variable content, no "what happens next" hooks. AI positioning generation is the only unpredictable element. Inner Game lock creates mild curiosity but no payoff yet. |
 | **CD8** Loss & Avoidance | 1 | No loss mechanics at all. No streak to lose, no progress decay, no "your competitors are ahead" pressure. Pipeline readiness can be 0% with no consequence. |
 
-**Current Score: 36 + 25 + 25 + 36 + 4 + 9 + 4 + 1 = 140** (Weak)
+**Pre-Gamification Score: 36 + 25 + 25 + 36 + 4 + 9 + 4 + 1 = 140** (Weak)
 
-For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints (including Figurine Mentor + Mystery Boxes).
+---
+
+## Post-Gamification Score (July 18, Week 1+2 shipped + Monopoly Finder)
+
+Features shipped on `feature/interior-scoreboard-sprint2` (not yet merged to main):
+
+**Gamification (this session):** Spider graph (CreatorRadarChart, Growth tab, 5-6 axes), CreatorXP + 5 levels (hero section), 14-milestone celebrations (confetti + Huzz-voiced toasts, 3s queue cooldown), origin story overlay (first visit, skipped on payment redirect), Movement Maker identity (login, portal, email), per-section launch pads (SectionLaunchPad, 3 tabs), founding member badge (first 50, gold pill), event countdown urgency (amber 14d, red 7d, pulse 3d), pipeline staleness nudge (daily, 7+ days out with zero items done), value-framed locked playbook copy, days-since-last-event mirror (Growth tab).
+
+**Monopoly Finder (prior session):** CreatorPositionCard mounted on Identity tab. Includes BranchInsightCard (branch chart + gap insight + frontier card) + useBranchScoring (weighted scoring from curiosity/quests/healing). Shows branch position, rarity vs 299 profiles, frontier card ("Is this the assumption you're breaking?"). CTA to curiosity map if no data exists.
+
+| Core Drive | Before | After | Change | What shipped |
+|------------|--------|-------|--------|---|
+| **CD1** Epic Meaning | 6 | **8** | +2 | Origin story overlay, Movement Maker identity, value-framed playbook copy, frontier card ("your industry is stuck at [X], you're breaking it"), "Co-Creator" framing via monopoly position |
+| **CD2** Accomplishment | 5 | **7** | +2 | CreatorXP + 5 levels (Dreamer→Movement Maker), 14 milestone celebrations with confetti + toasts, spider graph (6 business metric axes with tiers), per-section launch pads showing progress |
+| **CD3** Creativity | 5 | **5** | 0 | No changes this sprint |
+| **CD4** Ownership | 6 | **8** | +2 | Spider graph = unique "creator shape" that only grows. Monopoly branch chart = unique identity fingerprint. Founding badge (permanent). XP level as owned identity. |
+| **CD5** Social | 2 | **2** | 0 | No social features shipped yet. Community feed, accountability, league all deferred to user count thresholds. |
+| **CD6** Scarcity | 3 | **5** | +2 | Event countdown urgency (amber/red/pulse). Founding member badge (first 50, can never be earned again). Pipeline staleness nudge. Monopoly confidence gating ("Complete Life Map to sharpen from 60% to 75%"). |
+| **CD7** Curiosity | 2 | **5** | +3 | Monopoly progressive reveal (branch chart evolves with data). Gap insight is unpredictable (vehicle vs territory). Frontier card is Oracle Effect. Celebration toasts surprise on first occurrence. Spider tier upgrades create "what's next?" |
+| **CD8** Loss | 1 | **2** | +1 | Pipeline staleness nudge ("your audience doesn't know about it yet"). Days since last event mirror. Both honest mirrors, not punishments. |
+
+**Post-Week 1+2 + Monopoly Score: 64 + 49 + 25 + 64 + 4 + 25 + 25 + 4 = 260** (Moderate)
+
+**Gain: +120 points (140 → 260)**
+
+For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints.
+
+---
+
+### What's still weak (next priorities)
+- **CD5 (2)** — biggest gap. No social features. Need: community feed (gate at 5+ users), accountability pairs (manual), monthly call.
+- **CD3 (5)** — no changes. Need: alternative positionings (3 options).
+- **CD8 (2)** — gentle but thin. Building streak + more nudges would help.
+
+### Remaining features (specced, not built)
+
+| Feature | Days | CD impact | Spec location |
+|---|---|---|---|
+| M1 Sequential score reveal | 2 | CD2+1, CD7+1 | Implementation plan, Sprint G7 |
+| M3 Building streak | 2 | CD6+1 | Implementation plan, Sprint G8 |
+| M8 Alternative positionings | 2 | CD3+1 | Implementation plan, Sprint G9 |
+| M10 Hidden achievements (8) | 1 | CD7+1 | Implementation plan, Sprint G11 |
+| M11 Quarterly planning | 2 | CD6+1 | Implementation plan, Sprint G12 |
+| M5 Dynamic share card | 2 | CD4+1 | Implementation plan, Sprint G10 |
+| M6 Portfolio on Growth | 2 | CD2+1 | Implementation plan, Sprint G13 |
+| M14 Community feed triggers | 2 | (background, no score until UI) | Implementation plan, Sprint G14 |
+| H2 Zarlo for creators | 7 | CD5+1, CD7+1 | Implementation plan, Sprint G15 |
+| H1 AI Insight Drops | 5 | CD7+2 | Implementation plan, Sprint G16 |
+| H3 Creator profile page | 3 | CD4+1 | Implementation plan, Sprint G17 |
+| G19 Spider celebrations | 2 | CD2+1 | Implementation plan, Sprint G19 |
+| Community ops (manual) | 0 | CD5+2 | Recommendations doc, "Breaking 400" section |
+
+**If all remaining features ship: ~450-475**
+
+All specs at:
+- `docs/superpowers/plans/2026-07-18-scale-gamification-implementation-plan.md`
+- `docs/superpowers/plans/2026-07-16-scale-gamification-easy-tier.md`
+- `docs/research/octalysis-scale-gamification-recommendations.md`
 
 ---
 
