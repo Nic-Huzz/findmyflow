@@ -30,6 +30,7 @@ import ContentIntel from '../pipeline/ContentIntel'
 import RootReachCard from '../pipeline/RootReachCard'
 import CreatorRadarChart from './CreatorRadarChart'
 import CreatorCelebrations from './CreatorCelebrations'
+import SectionLaunchPad from './SectionLaunchPad'
 import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
@@ -480,6 +481,13 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       <div className="ch2-content">
         {/* ═══ IDENTITY TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'identity' ? ' active' : ''}`}>
+
+          <SectionLaunchPad title="Your launch pad" items={[
+            { label: 'Discover your essence', done: !!essenceAvatar, route: '/essence-mirror' },
+            { label: 'Find your North Stars', done: !!creatorSelection, route: '/experience-creators' },
+            { label: 'Find your rule break', done: !!remarkableAngle, route: '/create/remarkable' },
+          ]} />
+
           <div className="ch2-id-card">
             <div className="ch2-id-inner">
 
@@ -831,6 +839,14 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         {/* ═══ EXPERIENCES TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'experiences' ? ' active' : ''}`}>
 
+          {!selectedExperienceId && (
+            <SectionLaunchPad title="Your next steps" items={[
+              { label: 'Create your first experience', done: experiences.length > 0, route: '/create/experience/new' },
+              { label: 'Set up your first pipeline', done: Object.keys(checklistCounts).length > 0, action: () => experiences[0] && setSelectedExperienceId(experiences[0].id) },
+              { label: 'Run your first event', done: past.length > 0, action: () => upcoming[0] && setSelectedExperienceId(upcoming[0].id) },
+            ]} />
+          )}
+
           {/* ── Growth Line Pipeline or Past Stats (when experience selected) ── */}
           {selectedExperienceId ? (
             past.some(e => e.id === selectedExperienceId) ? (
@@ -986,6 +1002,12 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
 
         {/* ═══ GROWTH TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'growth' ? ' active' : ''}`}>
+
+          <SectionLaunchPad title="Start tracking" items={[
+            { label: 'Connect Instagram', done: false, route: '#instagram' },
+            { label: 'Run your first experience', done: past.length > 0, route: '/create/experience/new' },
+            { label: 'Log your first 3% improvement', done: threePercentChain.length > 0, action: () => past[0] && setSelectedExperienceId(past[0].id) },
+          ]} />
 
           {/* Spider Graph — Your Shape */}
           <CreatorRadarChart data={{
