@@ -291,18 +291,21 @@ None. Existing columns reused, unused ones get null. No migration needed.
 ## Sprint 11: Action Score
 
 ### What
-Aggregate existing action data into a rolling 30-day score. This is the Y-axis for Zone Calibration.
+Weekly action alignment score. Shows on the Quests tab as "This week" with a matrix graph plotting Action × Clarity. This is the Y-axis for Zone Calibration.
+
+### Scope
+**This week only** (Mon-Sun), not rolling 30 days. Resets each week. Shows the average alignment of everything you did this week.
 
 ### Formula
 ```
 Action Score = aligned_actions / total_actions × 100
 
-aligned_actions (count of positive outcomes):
+aligned_actions (count of positive outcomes THIS WEEK):
   courage_challenges with vibe/peace classification
   + tasks with task_signal = 'lit_me_up'
   + daily check-ins with vibe_rise/ventral state
 
-total_actions (count of ALL outcomes):
+total_actions (count of ALL outcomes THIS WEEK):
   all courage_challenges (any classification)
   + all tasks with any task_signal
   + all daily check-ins
@@ -316,23 +319,30 @@ More actions = more data points, not higher score.
 New utility: `src/lib/actionScore.js`
 ```javascript
 export async function calculateActionScore(userId) {
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString()
+  // Week scope: Monday to Sunday
+  const now = new Date()
+  const dayOfWeek = now.getDay() // 0=Sun, 1=Mon
+  const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+  const weekStart = new Date(now)
+  weekStart.setDate(now.getDate() - mondayOffset)
+  weekStart.setHours(0, 0, 0, 0)
+  const weekStartISO = weekStart.toISOString()
 
   const [courageRes, taskRes, checkinRes] = await Promise.all([
     supabase.from('quest_completions')
       .select('reflection_text')
       .eq('user_id', userId).eq('quest_category', 'Groans')
-      .gte('created_at', thirtyDaysAgo)
+      .gte('created_at', weekStartISO)
       .not('reflection_text', 'is', null),
     supabase.from('quest_tasks')
       .select('task_signal')
       .eq('user_id', userId)
       .not('task_signal', 'is', null)
-      .gte('completed_at', thirtyDaysAgo),
+      .gte('completed_at', weekStartISO),
     supabase.from('nervous_system_checkins')
       .select('after_state')
       .eq('user_id', userId).eq('checkin_type', 'daily')
-      .gte('created_at', thirtyDaysAgo),
+      .gte('created_at', weekStartISO),
   ])
 
   let aligned = 0
@@ -364,69 +374,66 @@ export async function calculateActionScore(userId) {
 }
 ```
 
-### Display
-Add to JourneyTab alongside Clarity %:
+### Display: Matrix graph on Quests tab
+Shows at the top of the Quests tab (LevelTab.jsx), above the quest board. Compact 2x2 matrix with a dot showing where you are this week.
+
+```
+                    HIGH ACTION
+                        │
+     Misguided Zone     │     SELF-ACTUALISATION
+     (doing without     │●    (both rising together)
+      knowing)          │     
+                        │
+   ─────────────────────┼──────────────────────
+                        │
+     Unfulfilment       │     Head Full of Dreams
+     (neither)          │     (knowing without doing)
+                        │
+                    LOW ACTION
+
+   LOW CLARITY ─────────────── HIGH CLARITY
+```
+
+The dot position: `x = clarityPct / 100`, `y = actionScore / 100`. Label shows zone name + "This week" subtitle.
+
+Zone thresholds:
+- Self-Actualisation: Action > 60 AND Clarity > 60
+- Head Full of Dreams: Action <= 60 AND Clarity > 60
+- Misguided: Action > 60 AND Clarity <= 60
+- Unfulfilment: Action <= 60 AND Clarity <= 60
+
 ```jsx
-<div className="jt-scores-row">
-  <div className="jt-score-card">
-    <div className="jt-score-number">{actionScore}</div>
-    <div className="jt-score-label">Action</div>
+<div className="lt-matrix">
+  <div className="lt-matrix-title">This week</div>
+  <div className="lt-matrix-grid">
+    <div className="lt-matrix-quadrant misguided">Doing without knowing</div>
+    <div className="lt-matrix-quadrant self-act">On the diagonal</div>
+    <div className="lt-matrix-quadrant unfulfil">Neither yet</div>
+    <div className="lt-matrix-quadrant dreams">Knowing without doing</div>
+    <div className="lt-matrix-dot" style={{
+      left: `${clarityPct}%`,
+      bottom: `${actionScore}%`
+    }} />
   </div>
-  <div className="jt-score-card">
-    <div className="jt-score-number">{clarityPct}%</div>
-    <div className="jt-score-label">Clarity</div>
-  </div>
+  <div className="lt-matrix-zone">{zoneName}</div>
 </div>
 ```
 
 ### Files to change
 | File | Change |
 |------|--------|
-| `src/lib/actionScore.js` | NEW utility |
-| `src/components/JourneyTab.jsx` | Calculate + display Action Score alongside Clarity |
+| `src/lib/actionScore.js` | NEW utility (weekly scope, not 30-day) |
+| `src/components/level/LevelTab.jsx` | Add matrix graph at top of Quests tab, fetch Action Score + Clarity |
+| `src/components/level/LevelTab.css` | Matrix graph styles |
 
 ### DB changes
 None. All data already exists.
 
 ---
 
-## Sprint 12: Cross-pollination to Clarity
+## ~~Sprint 12: Cross-pollination to Clarity~~ CUT
 
-### What
-Convergence signal (quests feeding each other) as a Clarity multiplier.
-
-### Formula
-```
-convergence_bonus = unique_cross_pollination_pairs / total_active_quests
-// 3 pairs across 3 quests = 1.0
-// 1 pair across 5 quests = 0.2
-
-Clarity (adjusted) = base_clarity × (1 + convergence_bonus × 0.25)
-// Max 25% boost from convergence (meaningful, not invisible)
-```
-
-### Implementation
-Add to Clarity calculation in JourneyTab and MirrorPage:
-```javascript
-// After base clarity calc
-const { data: crossPoll } = await supabase
-  .from('quest_cross_pollination')
-  .select('source_quest_id, target_quest_id')
-  .eq('user_id', userId)
-const uniquePairs = new Set(
-  (crossPoll || []).map(cp => [cp.source_quest_id, cp.target_quest_id].sort().join('-'))
-)
-const convergenceBonus = activeQuestCount > 0
-  ? Math.min(uniquePairs.size / activeQuestCount, 1)
-  : 0
-const adjustedClarity = Math.min(Math.round(baseClarity * (1 + convergenceBonus * 0.25)), 100)
-```
-
-### Files to change
-| File | Change |
-|------|--------|
-| `src/components/JourneyTab.jsx` | Add cross-poll query to batch, apply convergence to Clarity |
-| `src/pages/MirrorPage.jsx` | Same adjustment |
+Data already captured in `quest_cross_pollination`. Visual already shows on QuestMap. Wiring convergence into Clarity formula is premature since Sprint 7 is about to rewrite the formula with NS states. Revisit after Sprint 7 settles.
 
 ### DB changes
 None.
@@ -439,50 +446,48 @@ None.
 Visual display of skill progress (L0-L4) on the Mirror page. Data already collecting via `user_skill_progress` table.
 
 ### UI design
-Below clusters, above Clarity hero. Shows progress WITHIN current level (not total XP to max).
+Below clusters on Mirror page. 5 segments per skill (L0-L4), lit segments show completed levels. Simple, visual, no numbers.
 
-XP thresholds: L0→L1 at 3, L1→L2 at 8, L2→L3 at 15, L3→L4 at 25.
-Per-level XP needed: L0→L1 = 3, L1→L2 = 5, L2→L3 = 7, L3→L4 = 10.
-
-```javascript
-const THRESHOLDS = [0, 3, 8, 15, 25]
-const LEVEL_NAMES = ['L0 Learning', 'L1 Testing', 'L2 Practising', 'L3 Charging', 'L4 Teaching']
-
-function getProgress(xp) {
-  let levelIdx = 0
-  for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
-    if (xp >= THRESHOLDS[i]) { levelIdx = i; break }
-  }
-  if (levelIdx >= THRESHOLDS.length - 1) return { level: LEVEL_NAMES[levelIdx], pct: 100, label: 'Max' }
-  const currentMin = THRESHOLDS[levelIdx]
-  const nextMin = THRESHOLDS[levelIdx + 1]
-  const pct = Math.round(((xp - currentMin) / (nextMin - currentMin)) * 100)
-  return { level: LEVEL_NAMES[levelIdx], pct, label: `${xp - currentMin}/${nextMin - currentMin} to ${LEVEL_NAMES[levelIdx + 1]}` }
-}
+```
+Performing     [■][■][■][□][□]  L2
+Coaching       [■][□][□][□][□]  L0
+Building       [■][■][■][■][□]  L3
 ```
 
+Each segment = a level. Lit (filled) = achieved. Dim = not yet. Current level shown as text label on the right.
+
 ```jsx
+const THRESHOLDS = [0, 3, 8, 15, 25]
+const LEVEL_LABELS = ['L0', 'L1', 'L2', 'L3', 'L4']
+
+function getLevelIndex(xp) {
+  for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
+    if (xp >= THRESHOLDS[i]) return i
+  }
+  return 0
+}
+
+// In render:
 <div className="mp-section">
   <h3 className="mp-section-title" style={{ color: '#5e17eb' }}>Your Skills</h3>
   {skillProgress.map(skill => {
-    const prog = getProgress(skill.xp)
+    const levelIdx = getLevelIndex(skill.xp)
     return (
       <div className="mp-skill-row" key={skill.skill_id}>
-        <div className="mp-skill-top">
-          <span className="mp-skill-name">{SKILL_LABELS[skill.skill_id]}</span>
-          <span className="mp-skill-level">{prog.level}</span>
+        <span className="mp-skill-name">{SKILL_LABELS[skill.skill_id]}</span>
+        <div className="mp-skill-segments">
+          {[0, 1, 2, 3, 4].map(i => (
+            <div key={i} className={`mp-skill-seg ${i <= levelIdx ? 'lit' : ''}`} />
+          ))}
         </div>
-        <div className="mp-skill-track">
-          <div className="mp-skill-fill" style={{ width: `${prog.pct}%` }} />
-        </div>
-        <span className="mp-skill-next">{prog.label}</span>
+        <span className="mp-skill-level">{LEVEL_LABELS[levelIdx]}</span>
       </div>
     )
   })}
 </div>
 ```
 
-Bar fills within current level. User at L1 with 5 XP sees "2/5 to L2 Practising" with a 40% filled bar. Feels like progress, not a long empty road to L4.
+CSS: segments are small rectangles in a row. Lit segments use the purple→gold gradient. Dim segments are light grey. Compact, one line per skill.
 
 ### Data fetch
 ```javascript
@@ -549,14 +554,14 @@ None.
 ## Build order
 
 ```
-Sprint 7  (NS state swap)     — do FIRST, everything downstream uses this
-Sprint 10 (Weekly review)     — independent, quick win
-Sprint 8  (Re-gen edge func)  — needs Sprint 7 for re-rate UI
-Sprint 9  (Zarlo/Figurine)    — needs Sprint 7 for Clarity data
-Sprint 11 (Action Score)      — independent, enables Zone Detection later
-Sprint 12 (Cross-pollination) — small, independent
-Sprint 13 (Skill tree UI)     — independent
-Sprint 14 (Push notification) — needs Sprint 8
+Sprint 7  (NS state swap)       — do FIRST, everything downstream uses this
+Sprint 10 (Weekly review)       — independent, quick win
+Sprint 11 (Action Score + matrix) — independent, adds matrix graph to Quests tab
+Sprint 8  (Re-gen edge func)    — needs Sprint 7 for re-rate UI
+Sprint 9  (Zarlo/Figurine)      — needs Sprint 7 for Clarity data
+Sprint 13 (Skill tree UI)       — independent, goes on /mirror
+Sprint 14 (Push notification)   — needs Sprint 8
+~Sprint 12~ CUT                 — revisit after Sprint 7
 ```
 
 Sprints 10, 11, 12, 13 can run in parallel.
