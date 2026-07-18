@@ -530,6 +530,17 @@ export default function JourneyTab({ userId, onUnlockTab }) {
         />
       )}
 
+      {/* Mirror link — always visible above skills */}
+      {clarityPct == null && (
+        <div className="jt-section" onClick={() => navigate('/mirror')} style={{ cursor: 'pointer' }}>
+          <div className="jt-clarity-card">
+            <div className="jt-clarity-label" style={{ fontSize: 15 }}>Your Mirror</div>
+            <div className="jt-clarity-desc">See who you're becoming</div>
+            <div className="jt-clarity-link">Open mirror →</div>
+          </div>
+        </div>
+      )}
+
       {/* Self-Knowledge Skills */}
       <SkillsDisplay userId={userId} />
 

@@ -59,6 +59,8 @@ export default function PlayListTab({
     }
   }, [showWahooModal])
   const [allTimeWahoos, setAllTimeWahoos] = useState(0)
+  const [identityStatements, setIdentityStatements] = useState([])
+  const [showIdentity, setShowIdentity] = useState(false)
 
   // Fetch bucket list wahoos (generated, not yet accepted)
   const fetchBucketListWahoos = useCallback(async () => {
@@ -98,8 +100,30 @@ export default function PlayListTab({
         .eq('user_id', userId)
         .eq('status', 'completed'),
       fetchBucketListWahoos(),
-    ]).then(([, , { count }]) => {
+      supabase
+        .from('quest_completions')
+        .select('reflection_text')
+        .eq('user_id', userId)
+        .eq('quest_category', 'Groans')
+        .not('reflection_text', 'is', null),
+    ]).then(([, , { count }, , identityRes]) => {
       setAllTimeWahoos(count || 0)
+      // Parse identity statements from reflection_text JSON
+      const stmtCounts = {}
+      ;(identityRes?.data || []).forEach(row => {
+        try {
+          const parsed = JSON.parse(row.reflection_text)
+          if (parsed.identity_statement) {
+            const s = parsed.identity_statement.trim().toLowerCase()
+            if (s) stmtCounts[s] = (stmtCounts[s] || 0) + 1
+          }
+        } catch {}
+      })
+      setIdentityStatements(
+        Object.entries(stmtCounts)
+          .map(([text, ct]) => ({ text, count: ct }))
+          .sort((a, b) => b.count - a.count)
+      )
       setLoading(false)
     }).catch(err => {
       console.error('PlayListTab fetch error:', err)
@@ -307,6 +331,34 @@ export default function PlayListTab({
 
   return (
     <div className="playlist-tab">
+      {/* Courage counter + identity statements */}
+      {allTimeWahoos > 0 && (
+        <div className="plt-counter-card">
+          <button className="plt-counter-header" onClick={() => setShowIdentity(!showIdentity)}>
+            <div className="plt-counter-number">{allTimeWahoos}</div>
+            <div className="plt-counter-info">
+              <div className="plt-counter-title">courage challenges completed</div>
+              {identityStatements.length > 0 && (
+                <div className="plt-counter-top">
+                  Top: "I am someone who {identityStatements[0].text}" ({'\u00D7'}{identityStatements[0].count})
+                </div>
+              )}
+            </div>
+            <span className="plt-counter-chevron">{showIdentity ? '▲' : '▼'}</span>
+          </button>
+          {showIdentity && identityStatements.length > 0 && (
+            <div className="plt-identity-list">
+              {identityStatements.map((s, i) => (
+                <div key={i} className="plt-identity-row">
+                  <span className="plt-identity-text">I am someone who {s.text}</span>
+                  <span className="plt-identity-badge">{'\u00D7'}{s.count}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Active Wahoos */}
       {activeChallenges.length > 0 && renderActiveWahoos()}
 
