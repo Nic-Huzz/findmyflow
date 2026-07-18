@@ -93,6 +93,26 @@
   line-height: 1.4;
 }
 
+.gcm-identity-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  font-size: 14px;
+  font-family: inherit;
+  color: #868e96;
+  background: #f8f9fa;
+  outline: none;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.gcm-identity-select:focus {
+  border-color: #E9A23B;
+  color: #1a1a2e;
+}
+
 .gcm-identity-input {
   width: 100%;
   padding: 12px 14px;

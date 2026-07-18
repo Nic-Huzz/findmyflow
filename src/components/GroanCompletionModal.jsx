@@ -57,6 +57,37 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Wahoo classification
   const [wahooClassification, setWahooClassification] = useState(null)
   const [identityStatement, setIdentityStatement] = useState('')
+  const [previousStatements, setPreviousStatements] = useState([]) // Identity Statement Library
+
+  // Load previous identity statements for dropdown
+  useEffect(() => {
+    if (!userId) return
+    supabase
+      .from('quest_completions')
+      .select('reflection_text')
+      .eq('user_id', userId)
+      .eq('quest_category', 'Groans')
+      .not('reflection_text', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(100)
+      .then(({ data }) => {
+        if (!data) return
+        const counts = {}
+        data.forEach(row => {
+          try {
+            const parsed = JSON.parse(row.reflection_text)
+            const stmt = parsed?.identity_statement
+            if (stmt && stmt.trim()) {
+              const key = stmt.trim().toLowerCase()
+              counts[key] = counts[key] || { text: stmt.trim(), count: 0 }
+              counts[key].count++
+            }
+          } catch {}
+        })
+        const sorted = Object.values(counts).sort((a, b) => b.count - a.count)
+        setPreviousStatements(sorted)
+      })
+  }, [userId])
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
@@ -356,6 +387,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               <div className="gcm-identity-prompt">
                 {essenceName && <div className="gcm-identity-line">That's the {essenceName} in you.</div>}
                 <label className="gcm-identity-label">Now that I {challenge.title?.toLowerCase()}, I've proven I'm someone who...</label>
+                {previousStatements.length > 0 && (
+                  <select
+                    className="gcm-identity-select"
+                    value=""
+                    onChange={e => { if (e.target.value) setIdentityStatement(e.target.value) }}
+                  >
+                    <option value="">Pick a previous statement...</option>
+                    {previousStatements.map((s, i) => (
+                      <option key={i} value={s.text}>{s.text}{s.count > 1 ? ` (${s.count}x)` : ''}</option>
+                    ))}
+                  </select>
+                )}
                 <input className="gcm-identity-input" type="text" value={identityStatement}
                   onChange={e => setIdentityStatement(e.target.value)}
                   placeholder="e.g. takes risks, shows up, backs themselves" />
@@ -365,6 +408,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               <div className="gcm-identity-prompt">
                 <div className="gcm-reframe-line">That landed. Good.</div>
                 <label className="gcm-identity-label">Now that I {challenge.title?.toLowerCase()}, I've proven I'm someone who...</label>
+                {previousStatements.length > 0 && (
+                  <select
+                    className="gcm-identity-select"
+                    value=""
+                    onChange={e => { if (e.target.value) setIdentityStatement(e.target.value) }}
+                  >
+                    <option value="">Pick a previous statement...</option>
+                    {previousStatements.map((s, i) => (
+                      <option key={i} value={s.text}>{s.text}{s.count > 1 ? ` (${s.count}x)` : ''}</option>
+                    ))}
+                  </select>
+                )}
                 <input className="gcm-identity-input" type="text" value={identityStatement}
                   onChange={e => setIdentityStatement(e.target.value)}
                   placeholder="e.g. takes risks, shows up, backs themselves" />
