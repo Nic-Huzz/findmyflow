@@ -12,6 +12,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { onRemarkableComplete } from '../lib/brain/autoPopulate'
+import { useBranchScoring } from '../hooks/useBranchScoring'
 import dnaData from '../../public/data/experienceCreatorDNA.json'
 import './RemarkableFlow.css'
 
@@ -155,6 +156,21 @@ export default function RemarkableFlow() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [savedAngleId, setSavedAngleId] = useState(null)
+
+  // Branch scoring (for recommended tag + frontier hint)
+  const { primary: scoredPrimary } = useBranchScoring()
+  const [matrixData, setMatrixData] = useState(null)
+  const [hintOpen, setHintOpen] = useState(false)
+
+  useEffect(() => {
+    fetch('/data/spiralDynamicsMatrix.json')
+      .then(r => r.json())
+      .then(setMatrixData)
+      .catch(() => {})
+  }, [])
+
+  // Reset hint when branch changes (don't show stale content already expanded)
+  useEffect(() => { setHintOpen(false) }, [selectedBranch])
 
   // Fetch all data sources
   useEffect(() => {
@@ -531,15 +547,19 @@ export default function RemarkableFlow() {
           <p className="rmk-prompt">This shapes the examples you'll see throughout the flow.</p>
 
           <div>
-            {BRANCHES.map(b => (
-              <button key={b.key}
-                className={`rmk-problem-btn ${selectedBranch === b.key ? 'rmk-problem-selected' : ''}`}
-                style={{ marginBottom: '0.4rem' }}
-                onClick={() => { hapticLight(); setSelectedBranch(b.key) }}>
-                <span style={{ fontWeight: 700 }}>{b.icon} {b.label}</span>
-                <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginLeft: 8, fontWeight: 400 }}>{b.desc}</span>
-              </button>
-            ))}
+            {BRANCHES.map(b => {
+              const isRecommended = scoredPrimary?.branch === b.key
+              return (
+                <button key={b.key}
+                  className={`rmk-problem-btn ${selectedBranch === b.key ? 'rmk-problem-selected' : ''}`}
+                  style={{ marginBottom: '0.4rem' }}
+                  onClick={() => { hapticLight(); setSelectedBranch(b.key) }}>
+                  <span style={{ fontWeight: 700 }}>{b.icon} {b.label}</span>
+                  {isRecommended && <span className="rmk-recommended-tag">Recommended</span>}
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginLeft: 8, fontWeight: 400 }}>{b.desc}</span>
+                </button>
+              )
+            })}
           </div>
 
           <div className="rmk-nav">
@@ -667,6 +687,17 @@ export default function RemarkableFlow() {
 
   // ── SCREEN 3: ASSUMPTION ──
   if (step === STEPS.ASSUMPTION) {
+    // Look up frontier insight for selected branch
+    const frontierHint = (() => {
+      if (!matrixData?.cells || !selectedBranch) return null
+      const sdLevels = ['purple', 'red', 'blue', 'orange', 'green', 'yellow']
+      for (const sd of sdLevels) {
+        const cell = matrixData.cells[`${selectedBranch}-${sd}`]
+        if (cell?.status === 'frontier' && cell.simple) return cell.simple
+      }
+      return null
+    })()
+
     return (
       <div className="rmk">
         <div className="rmk-container rmk-screen">
@@ -674,6 +705,31 @@ export default function RemarkableFlow() {
           <div className="rmk-context-card">{problem}</div>
           <h2 className="rmk-heading">What does everyone assume is <span className="rmk-gold">required</span> to solve it?</h2>
           <p className="rmk-prompt">What rule does everyone follow that you think is wrong?</p>
+
+          {frontierHint && (
+            <div className="rmk-hint-box">
+              <button
+                type="button"
+                className="rmk-hint-toggle"
+                onClick={() => setHintOpen(!hintOpen)}
+              >
+                {hintOpen ? 'Hide hint ▴' : assumption.trim() ? 'What the market assumes ▾' : 'Stuck? Read this ▾'}
+              </button>
+              {hintOpen && (
+                <div className="rmk-hint-content">
+                  <div className="rmk-hint-label">What most people in {BRANCHES.find(b => b.key === selectedBranch)?.label || selectedBranch} assume:</div>
+                  <p className="rmk-hint-text">{frontierHint.crowded}</p>
+                  {frontierHint.stuck && (
+                    <>
+                      <div className="rmk-hint-label" style={{ marginTop: '0.6rem' }}>Why it no longer works:</div>
+                      <p className="rmk-hint-text">{frontierHint.stuck}</p>
+                    </>
+                  )}
+                  <p className="rmk-hint-nudge">Use this as a starting point, or write your own.</p>
+                </div>
+              )}
+            </div>
+          )}
 
           <textarea
             className="rmk-textarea"

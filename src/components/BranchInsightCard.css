@@ -1,0 +1,234 @@
+/* BranchInsightCard — scoped to .branch-insight parent */
+
+.branch-insight {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.branch-insight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.branch-insight-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.branch-insight-confidence {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.04);
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+/* Branch bar chart */
+.branch-insight-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.branch-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.branch-bar-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 80px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.branch-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.branch-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.branch-bar-count {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.3);
+  min-width: 24px;
+  text-align: right;
+}
+
+/* Gap insight */
+.branch-gap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.8rem;
+  background: rgba(94,23,235,0.04);
+  border: 1px solid rgba(94,23,235,0.08);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.branch-gap-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.branch-gap-text {
+  font-size: 0.78rem;
+  color: rgba(0,0,0,0.6);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Frontier card */
+.branch-frontier {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 1rem;
+  background: rgba(233,162,59,0.04);
+  border: 1px solid rgba(233,162,59,0.12);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  margin-bottom: 0.8rem;
+}
+
+.branch-frontier:hover {
+  border-color: rgba(233,162,59,0.25);
+}
+
+.branch-frontier-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.branch-frontier-badge {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #E9A23B;
+  background: rgba(233,162,59,0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.branch-frontier-branch {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.branch-frontier-assumption {
+  font-size: 0.82rem;
+  color: rgba(0,0,0,0.55);
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+}
+
+.branch-frontier-expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.branch-frontier-section {
+  padding: 0;
+}
+
+.branch-frontier-section p {
+  font-size: 0.8rem;
+  color: rgba(0,0,0,0.55);
+  line-height: 1.45;
+  margin: 0.2rem 0 0;
+}
+
+.branch-frontier-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(0,0,0,0.3);
+}
+
+.branch-frontier-phase3 {
+  font-size: 0.72rem;
+  color: rgba(94,23,235,0.6);
+  font-style: italic;
+  margin-top: 0.3rem;
+}
+
+.branch-frontier-tap {
+  font-size: 0.65rem;
+  color: rgba(0,0,0,0.25);
+  text-align: center;
+  margin-top: 0.6rem;
+  font-weight: 500;
+}
+
+/* Rarity + SD level */
+.branch-monopoly {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.8rem;
+  background: rgba(233,162,59,0.04);
+  border: 1px solid rgba(233,162,59,0.1);
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+}
+
+.branch-monopoly-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.branch-monopoly-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(0,0,0,0.3);
+}
+
+.branch-monopoly-value {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.65);
+}
+
+/* Polymath signal */
+.branch-polymath {
+  font-size: 0.72rem;
+  color: rgba(94,23,235,0.6);
+  padding: 0.6rem 0.8rem;
+  background: rgba(94,23,235,0.03);
+  border-radius: 8px;
+  line-height: 1.4;
+}

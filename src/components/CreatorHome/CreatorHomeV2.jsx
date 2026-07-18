@@ -15,7 +15,7 @@ import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { hapticLight } from '../../lib/haptics'
-import PositioningSummary from '../PositioningSummary'
+import CreatorPositionCard from '../CreatorPositionCard'
 import BlowUpBrandCard from './BlowUpBrandCard'
 import FillNextEvent from './FillNextEvent'
 import CreatorShareCard from './CreatorShareCard'
@@ -155,7 +155,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [hasReach, setHasReach] = useState(false)
   const [hasGrowth, setHasGrowth] = useState(false)
   const [hasScaleScore, setHasScaleScore] = useState(false)
-  const [hasPositioningStatement, setHasPositioningStatement] = useState(false)
+  // hasPositioningStatement removed — CreatorPositionCard handles its own state
   const [essenceAvatar, setEssenceAvatar] = useState(null)
   const [essenceName, setEssenceName] = useState(null)
   const [userSkills, setUserSkills] = useState([])
@@ -288,7 +288,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       setUserSkills(hasFavSkills ? allSkills.filter(s => s.fav).map(s => s.label) : allSkills.map(s => s.label))
       setUserProblems(hasFavProblems ? allProblems.filter(p => p.fav).map(p => p.label) : allProblems.map(p => p.label))
 
-      setHasPositioningStatement(!!essenceProfile?.positioning_statement)
+      // positioning_statement check removed — CreatorPositionCard handles its own state
 
       // Essence avatar + name
       if (essenceProfile?.essence_archetype) {
@@ -475,12 +475,20 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                   </>
                 ) : (
                   <>
-                    <p className="ch2-card-sub">Two quick flows fill this in. Most people finish both in one sitting.</p>
+                    <p className="ch2-card-sub">Three quick flows fill this in. Most people finish in one sitting.</p>
                     <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }}>
                       <div className="ch2-biz-icon">🗺️</div>
                       <div className="ch2-biz-info">
                         <div className="ch2-biz-label">Your Skills + Problems</div>
                         <div className="ch2-biz-val">Complete your Life Map to discover these</div>
+                      </div>
+                      <div className="ch2-row-chevron">›</div>
+                    </div>
+                    <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/curiosity-map') }}>
+                      <div className="ch2-biz-icon">🔍</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">Your Industry Branches</div>
+                        <div className="ch2-biz-val">Map your curiosities to see your frontier</div>
                       </div>
                       <div className="ch2-row-chevron">›</div>
                     </div>
@@ -622,24 +630,15 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* Positioning Summary — unlocks after Remarkable Results (or if a statement already exists) */}
-              {(remarkableAngle || hasPositioningStatement) ? (
-                <PositioningSummary
-                  userId={userId}
-                  essenceName={essenceName}
-                  skills={userSkills}
-                  problems={userProblems}
-                  remarkableAngle={remarkableAngle}
-                />
-              ) : (
-                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-locked" onClick={() => navigate('/create/remarkable')}>
-                    <div className="ch2-locked-title">Your Positioning 🔒</div>
-                    <div className="ch2-locked-sub">Unlocks after Remarkable Results. We use your rule break to write this.</div>
-                    <div className="ch2-locked-cta">Find Your Rule Break →</div>
-                  </div>
-                </div>
-              )}
+              {/* Creator Position Card — industry frontier + rarity + positioning (merges old PositioningSummary) */}
+              <CreatorPositionCard
+                userId={userId}
+                essenceName={essenceName}
+                skills={userSkills}
+                problems={userProblems}
+                remarkableAngle={remarkableAngle}
+                onCreatorTap={handleCreatorTap}
+              />
 
               </>}
 
