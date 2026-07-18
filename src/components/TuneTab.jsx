@@ -196,26 +196,24 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
         .order('created_at', { ascending: false }),
-      // Load weekly focus intention
+      // Load weekly focus intention — most recent setup from any week, plus this week's daily honours
       supabase
         .from('quest_completions')
-        .select('response_data, reflection_text')
+        .select('response_data, reflection_text, completed_at')
         .eq('user_id', userId)
         .eq('quest_id', 'rewire_weekly_focus')
-        .gte('completed_at', getWeekStartLocal())
-        .order('completed_at', { ascending: true })
-        .limit(5)
+        .order('completed_at', { ascending: false })
+        .limit(10)
         .then(res => res)
         .catch(() => ({ data: null })),
-      // Load peak state commitment
+      // Load peak state commitment — most recent setup from any week
       supabase
         .from('quest_completions')
-        .select('response_data, reflection_text')
+        .select('response_data, reflection_text, completed_at')
         .eq('user_id', userId)
         .eq('quest_id', 'weekly_peak_state')
-        .gte('completed_at', getWeekStartLocal())
-        .order('completed_at', { ascending: true })
-        .limit(5)
+        .order('completed_at', { ascending: false })
+        .limit(10)
         .then(res => res)
         .catch(() => ({ data: null })),
       // Load this week's experience checkins
