@@ -67,6 +67,20 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [addQuestCareerId, setAddQuestCareerId] = useState(null) // career_id from life paths dropdown
   const [addQuestCustom, setAddQuestCustom] = useState(false) // true = typing new path, false = picked from dropdown
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
+  const [matrixData, setMatrixData] = useState(null) // { actionScore, clarityPct, zone, total }
+
+  // Load matrix data (Action Score + Clarity)
+  useEffect(() => {
+    if (!userId) return
+    import('../../lib/scoreUtilities').then(async (m) => {
+      const [actionResult, clarityPct] = await Promise.all([
+        m.calculateActionScore(userId),
+        m.calculateClarityScore(userId),
+      ])
+      const zone = m.getZone(actionResult.score, clarityPct)
+      setMatrixData({ actionScore: actionResult.score, clarityPct, zone, total: actionResult.total, aligned: actionResult.aligned })
+    }).catch(err => console.warn('Matrix data load error:', err))
+  }, [userId])
   const [unlockExplainer, setUnlockExplainer] = useState(null) // 'courage' | 'healing' | null
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
@@ -423,6 +437,35 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     <div className="level-tab">
 
       {/* ══════ QUEST BOARD ══════ */}
+
+      {/* Zone Matrix — Action × Clarity */}
+      {matrixData && (matrixData.actionScore != null || matrixData.clarityPct != null) && (
+        <div className="lt-matrix-card">
+          <div className="lt-matrix-title">Last 7 days</div>
+          <div className="lt-matrix-grid">
+            <div className="lt-matrix-label lt-matrix-y-high">Aligned action</div>
+            <div className="lt-matrix-label lt-matrix-y-low">Low action</div>
+            <div className="lt-matrix-label lt-matrix-x-low">Low clarity</div>
+            <div className="lt-matrix-label lt-matrix-x-high">High clarity</div>
+            <div className="lt-matrix-quadrant lt-q-tl">Doing without knowing</div>
+            <div className="lt-matrix-quadrant lt-q-tr">On the diagonal</div>
+            <div className="lt-matrix-quadrant lt-q-bl">Neither yet</div>
+            <div className="lt-matrix-quadrant lt-q-br">Knowing without doing</div>
+            {matrixData.actionScore != null && matrixData.clarityPct != null && (
+              <div className="lt-matrix-dot" style={{
+                left: `${Math.max(5, Math.min(95, matrixData.clarityPct))}%`,
+                bottom: `${Math.max(5, Math.min(95, matrixData.actionScore))}%`,
+              }} />
+            )}
+          </div>
+          <div className="lt-matrix-zone">
+            {matrixData.total < 5
+              ? `Keep going (${matrixData.total}/5 actions)`
+              : matrixData.zone || 'Rate your clusters for Clarity'
+            }
+          </div>
+        </div>
+      )}
 
       {/* Active Quests */}
       {/* Life Path Progress button — above quests */}

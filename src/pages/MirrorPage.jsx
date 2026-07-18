@@ -28,9 +28,12 @@ export default function MirrorPage() {
   const [identityStatements, setIdentityStatements] = useState([])
   const [courageCount, setCourageCount] = useState(0)
   const [regenClusters, setRegenClusters] = useState([]) // clusters with behavioral_evidence >= 5
+  const [skillProgress, setSkillProgress] = useState([])
   const [addClusterText, setAddClusterText] = useState('')
   const [addClusterType, setAddClusterType] = useState('skills')
   const [addingSaving, setAddingSaving] = useState(false)
+  const [regenLoading, setRegenLoading] = useState(null) // cluster id being regenerated
+  const [regenResult, setRegenResult] = useState(null) // { clusterId, oldLabel, newLabel, reason }
 
   useEffect(() => {
     if (!userId) return
@@ -59,7 +62,14 @@ export default function MirrorPage() {
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .eq('quest_category', 'Groans'),
-    ]).then(([clusterRes, reflectionRes, countRes]) => {
+
+      // Skill progress
+      supabase.from('user_skill_progress')
+        .select('skill_id, xp, level')
+        .eq('user_id', userId)
+        .gt('xp', 0)
+        .order('xp', { ascending: false }),
+    ]).then(([clusterRes, reflectionRes, countRes, skillRes]) => {
       if (!active) return
 
       // Process clusters
@@ -97,6 +107,7 @@ export default function MirrorPage() {
       setIdentityStatements(sorted)
 
       setCourageCount(countRes.count || 0)
+      setSkillProgress(skillRes.data || [])
       setLoading(false)
     }).catch(err => {
       console.error('MirrorPage load error:', err)
@@ -149,6 +160,97 @@ export default function MirrorPage() {
       is_removed: false,
       resonance_updated_at: new Date().toISOString(),
     }).eq('id', clusterId).then(() => {})
+  }
+
+  const handleRegenerate = async (cluster) => {
+    if (regenLoading) return
+    setRegenLoading(cluster.id)
+    try {
+      // Fetch challenge outcomes for this cluster's skills
+      const { data: completions } = await supabase
+        .from('quest_completions')
+        .select('reflection_text')
+        .eq('user_id', userId)
+        .eq('quest_category', 'Groans')
+        .not('reflection_text', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(20)
+
+      const outcomes = []
+      ;(completions || []).forEach(row => {
+        try {
+          const p = JSON.parse(row.reflection_text)
+          if (p.wahoo_classification) outcomes.push({
+            title: p.source_label || 'Challenge',
+            classification: p.wahoo_classification,
+            identity_statement: p.identity_statement || null,
+          })
+        } catch {}
+      })
+
+      const { data, error } = await supabase.functions.invoke('regenerate-cluster', {
+        body: {
+          cluster_label: cluster.cluster_label,
+          cluster_type: cluster.cluster_type,
+          original_items: cluster.items,
+          challenge_outcomes: outcomes.slice(0, 10),
+        },
+      })
+
+      if (error || !data) throw error || new Error('No response')
+
+      if (data.confidence >= 0.6 && data.evolved_label !== cluster.cluster_label) {
+        setRegenResult({
+          clusterId: cluster.id,
+          oldLabel: cluster.cluster_label,
+          newLabel: data.evolved_label,
+          newInsight: data.evolved_insight,
+          reason: data.evolution_reason,
+        })
+      } else {
+        // Low confidence or no change — mark as attempted, suppress for 30 days
+        await supabase.from('nikigai_clusters').update({
+          regen_attempted_at: new Date().toISOString(),
+          behavioral_evidence: 0,
+        }).eq('id', cluster.id)
+        setRegenClusters(prev => prev.filter(c => c.id !== cluster.id))
+      }
+    } catch (err) {
+      console.warn('Regen error:', err)
+    }
+    setRegenLoading(null)
+  }
+
+  const handleAcceptRegen = async () => {
+    if (!regenResult) return
+    await supabase.from('nikigai_clusters').update({
+      cluster_label: regenResult.newLabel,
+      insight: regenResult.newInsight,
+      behavioral_evidence: 0,
+      regen_attempted_at: new Date().toISOString(),
+      regen_notified: false,
+      resonance_state: null,
+      resonance_rating: null,
+    }).eq('id', regenResult.clusterId)
+    setClusters(prev => prev.map(c => c.id === regenResult.clusterId
+      ? { ...c, cluster_label: regenResult.newLabel, insight: regenResult.newInsight,
+          behavioral_evidence: 0, resonance_state: null, resonance_rating: null }
+      : c
+    ))
+    setRatings(prev => { const n = { ...prev }; delete n[regenResult.clusterId]; return n })
+    setRegenClusters(prev => prev.filter(c => c.id !== regenResult.clusterId))
+    setRegenResult(null)
+  }
+
+  const handleKeepOriginal = async () => {
+    if (!regenResult) return
+    await supabase.from('nikigai_clusters').update({
+      behavioral_evidence: 0,
+      regen_attempted_at: new Date().toISOString(),
+      regen_notified: false,
+    }).eq('id', regenResult.clusterId)
+    setRegenClusters(prev => prev.filter(c => c.id !== regenResult.clusterId))
+    setRegenResult(null)
   }
 
   const handleAddCluster = async () => {
@@ -243,8 +345,15 @@ export default function MirrorPage() {
                     </button>
                   </div>
                   {isRegen && (
-                    <div className="mp-cluster-evidence">
-                      {cluster.behavioral_evidence} challenges shaping this
+                    <div className="mp-cluster-evidence-row">
+                      <div className="mp-cluster-evidence">
+                        {cluster.behavioral_evidence} challenges shaping this
+                      </div>
+                      <button className="mp-regen-btn"
+                        onClick={() => handleRegenerate(cluster)}
+                        disabled={regenLoading === cluster.id}>
+                        {regenLoading === cluster.id ? '...' : 'Review'}
+                      </button>
                     </div>
                   )}
                   <div className="mp-state-pills">
@@ -281,6 +390,38 @@ export default function MirrorPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Skill Progress */}
+      {skillProgress.length > 0 && (
+        <div className="mp-section">
+          <h3 className="mp-section-title" style={{ color: '#5e17eb' }}>Your Skills</h3>
+          {skillProgress.map(skill => {
+            const THRESHOLDS = [0, 3, 8, 15, 25]
+            const LABELS = ['L0', 'L1', 'L2', 'L3', 'L4']
+            let levelIdx = 0
+            for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
+              if (skill.xp >= THRESHOLDS[i]) { levelIdx = i; break }
+            }
+            const SKILL_NAMES = {
+              storytelling: 'Storytelling', teaching: 'Teaching', coaching: 'Coaching',
+              performing: 'Performing', creating: 'Creating', building: 'Building',
+              designing: 'Designing', leading: 'Leading', connecting: 'Connecting',
+              speaking_up: 'Speaking Up',
+            }
+            return (
+              <div key={skill.skill_id} className="mp-skill-row">
+                <span className="mp-skill-name">{SKILL_NAMES[skill.skill_id] || skill.skill_id}</span>
+                <div className="mp-skill-segments">
+                  {[0, 1, 2, 3, 4].map(i => (
+                    <div key={i} className={`mp-skill-seg ${i <= levelIdx ? 'lit' : ''}`} />
+                  ))}
+                </div>
+                <span className="mp-skill-level">{LABELS[levelIdx]}</span>
+              </div>
+            )
+          })}
         </div>
       )}
 
@@ -338,6 +479,29 @@ export default function MirrorPage() {
         </div>
       )}
 
+      {/* Re-generation comparison modal */}
+      {regenResult && (
+        <div className="mp-regen-overlay" onClick={() => setRegenResult(null)}>
+          <div className="mp-regen-modal" onClick={e => e.stopPropagation()}>
+            <div className="mp-regen-compare">
+              <div className="mp-regen-old">
+                <div className="mp-regen-label">Was</div>
+                <div className="mp-regen-name">{regenResult.oldLabel}</div>
+              </div>
+              <div className="mp-regen-arrow">→</div>
+              <div className="mp-regen-new">
+                <div className="mp-regen-label">Now</div>
+                <div className="mp-regen-name">{regenResult.newLabel}</div>
+              </div>
+            </div>
+            <p className="mp-regen-reason">{regenResult.reason}</p>
+            <div className="mp-regen-actions">
+              <button className="mp-regen-accept" onClick={handleAcceptRegen}>Accept</button>
+              <button className="mp-regen-keep" onClick={handleKeepOriginal}>Keep original</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

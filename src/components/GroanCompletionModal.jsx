@@ -321,6 +321,31 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             }
             // 7b. Skill XP (non-blocking)
             import('../lib/skillProgress').then(m => m.awardSkillXP(userId, quest.skill_tags))
+
+            // 7c. Push notification if cluster just hit re-gen threshold
+            try {
+              const { data: readyForRegen } = await supabase
+                .from('nikigai_clusters')
+                .select('id')
+                .eq('user_id', userId)
+                .gte('behavioral_evidence', 5)
+                .eq('is_removed', false)
+                .eq('regen_notified', false)
+                .limit(1)
+              if (readyForRegen?.length > 0) {
+                supabase.functions.invoke('send-push-notification', {
+                  body: {
+                    user_id: userId,
+                    title: 'Your mirror has new evidence',
+                    body: "Your challenges are showing who you're becoming. Check in.",
+                    url: '/mirror',
+                  }
+                }).catch(() => {})
+                await supabase.from('nikigai_clusters')
+                  .update({ regen_notified: true })
+                  .eq('id', readyForRegen[0].id)
+              }
+            } catch {} // best effort
           }
         } catch (e) { console.warn('Behavioral evidence / skill XP error:', e) }
       }

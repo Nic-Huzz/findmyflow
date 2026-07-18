@@ -189,6 +189,28 @@
 .mp-state-pill.active.mp-state-stressed { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #dc2626; }
 .mp-state-pill.active.mp-state-bored { background: rgba(107,114,128,0.08); border-color: #6b7280; color: #6b7280; }
 
+/* ── Skill Progress ── */
+.mp-skill-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0;
+}
+.mp-skill-name {
+  font-size: 13px; font-weight: 600; color: #1a1a2e;
+  min-width: 90px;
+}
+.mp-skill-segments { display: flex; gap: 3px; flex: 1; }
+.mp-skill-seg {
+  height: 8px; flex: 1; border-radius: 4px;
+  background: #f2f3f5; transition: background 0.2s;
+}
+.mp-skill-seg.lit {
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+}
+.mp-skill-level {
+  font-size: 11px; font-weight: 700; color: #5e17eb;
+  min-width: 24px; text-align: right;
+}
+
 /* ── Add Cluster ── */
 .mp-add-cluster {
   background: #fff; border-radius: 16px; padding: 16px;
@@ -257,6 +279,46 @@
 }
 .mp-save-btn:hover { box-shadow: 0 6px 20px rgba(94, 23, 235, 0.35); }
 .mp-save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Re-gen UI ── */
+.mp-cluster-evidence-row {
+  display: flex; align-items: center; justify-content: space-between; margin-top: 5px;
+}
+.mp-regen-btn {
+  padding: 4px 12px; border-radius: 8px; border: 1px solid #E9A23B;
+  background: rgba(233,162,59,0.08); color: #b47d1e;
+  font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.mp-regen-btn:disabled { opacity: 0.5; }
+.mp-regen-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; padding: 16px;
+}
+.mp-regen-modal {
+  background: #fff; border-radius: 20px; padding: 24px;
+  max-width: 380px; width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.mp-regen-compare {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.mp-regen-old, .mp-regen-new { flex: 1; }
+.mp-regen-label { font-size: 10px; text-transform: uppercase; color: #adb5bd; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+.mp-regen-name { font-size: 14px; font-weight: 600; color: #1a1a2e; line-height: 1.3; }
+.mp-regen-arrow { font-size: 18px; color: #E9A23B; font-weight: 700; }
+.mp-regen-reason { font-size: 13px; color: #6b7280; line-height: 1.5; margin: 0 0 20px; }
+.mp-regen-actions { display: flex; gap: 8px; }
+.mp-regen-accept {
+  flex: 1; padding: 12px; border: none; border-radius: 12px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B); color: #fff;
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.mp-regen-keep {
+  flex: 1; padding: 12px; border: 1px solid #e9ecef; border-radius: 12px;
+  background: #fff; color: #6b7280;
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
 
 /* ── Removed Section ── */
 .mp-removed-section { margin-top: 8px; padding-top: 12px; }
