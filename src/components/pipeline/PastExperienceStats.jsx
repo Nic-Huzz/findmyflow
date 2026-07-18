@@ -131,7 +131,6 @@ export default function PastExperienceStats({ experienceId, onBack }) {
           <div className="pes-title">{exp.name}</div>
         </div>
         <ExperienceResultsReveal
-          experienceId={experienceId}
           stats={stats}
           experience={exp}
           onComplete={() => { markRevealed(experienceId); setShowingReveal(false) }}

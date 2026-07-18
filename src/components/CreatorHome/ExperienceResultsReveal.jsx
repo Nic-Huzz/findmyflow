@@ -14,7 +14,7 @@ import './ExperienceResultsReveal.css'
 
 const STAGGER_MS = 800
 
-export default function ExperienceResultsReveal({ experienceId, stats, experience, onComplete }) {
+export default function ExperienceResultsReveal({ stats, experience, onComplete }) {
   const [visibleCount, setVisibleCount] = useState(0)
   const [finished, setFinished] = useState(false)
 

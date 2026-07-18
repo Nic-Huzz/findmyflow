@@ -77,8 +77,28 @@ Additional features shipped on `feature/interior-scoreboard-sprint2`:
 
 **Post-Week 4 Score: 64 + 81 + 36 + 81 + 4 + 36 + 64 + 9 = 375** (Strong)
 
-**Gain this session: +115 points (260 → 375)**
-**Total gain from baseline: +235 points (140 → 375)**
+---
+
+## Post-G15 Score (July 18, Zarlo for Creators shipped)
+
+**G15 Zarlo for Creator Portal:** ZarloWidget + ZarloProactiveBubble mounted in CreatorHomeV2. 7 proactive triggers (event approaching, pipeline ready, inactivity, 3% chain, sold out, Scale Score, quarterly empty). Max 2/day, 2h cooldown. Gated on Remarkable Results. `/create` page context added to zarloPageContent.js. Full AI chat via `agent-chat` edge function.
+
+| Core Drive | Week 4 | +G15 | Change | What shipped |
+|------------|--------|------|--------|---|
+| **CD1** Epic Meaning | 8 | **8** | 0 | — |
+| **CD2** Accomplishment | 9 | **9** | 0 | — |
+| **CD3** Creativity | 6 | **6** | 0 | — |
+| **CD4** Ownership | 9 | **9** | 0 | — |
+| **CD5** Social | 2 | **4** | +2 | Zarlo is a companion. The portal now feels like someone is watching and helping. "Your event is in 14 days and nobody knows about it" creates accountability. Chat opens for deeper conversation. |
+| **CD6** Scarcity | 6 | **7** | +1 | Proactive triggers create urgency ("14 days and nobody knows"). Inactivity nudge ("been quiet, your next step is X"). Time-aware. |
+| **CD7** Curiosity | 8 | **9** | +1 | Proactive bubbles are unpredictable (you never know when one will appear). AI chat responses are variable. "What did you do differently?" prompts reflection that reveals something new. |
+| **CD8** Loss | 3 | **4** | +1 | "Been quiet. When you're ready..." is gentle loss framing. Inactivity makes Zarlo notice and comment. Not punitive, but the silence is noticed. |
+
+**Post-G15 Score: 64 + 81 + 36 + 81 + 16 + 49 + 81 + 16 = 424** (Strong)
+
+**Gain from G15: +49 points (375 → 424)**
+**Total gain from baseline: +284 points (140 → 424)**
+**Remaining to target (450): 26 points** — achievable with community ops (manual, CD5+2) + Creator Profile page (CD4+1).
 
 For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints.
 

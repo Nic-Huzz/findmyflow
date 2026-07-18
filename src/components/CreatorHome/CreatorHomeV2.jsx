@@ -34,6 +34,9 @@ import SectionLaunchPad from './SectionLaunchPad'
 import QuarterlyPlanner from './QuarterlyPlanner'
 import InsightDrop from '../InsightDrop'
 import { useCreatorInsightDrops } from '../../hooks/useCreatorInsightDrops'
+import ZarloWidget from '../Zarlo/ZarloWidget'
+import ZarloProactiveBubble from '../Zarlo/ZarloProactiveBubble'
+import { useCreatorZarloTriggers } from '../../hooks/useCreatorZarloTriggers'
 import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown, getUnlockedAchievements, updateBuildingStreak, HIDDEN_ACHIEVEMENTS } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
@@ -418,6 +421,26 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
     branchScoring: null, // Not available at this level — type 1 insight skipped
     dnaProfiles: [], // Loaded lazily in CreatorPositionCard, pass empty for now
   })
+
+  // Zarlo for Creators (G15) — proactive triggers
+  const nearestUpcoming = upcoming[0] || null
+  const nearestAttractDone = nearestUpcoming ? (checklistCounts[nearestUpcoming.id]?.marketing?.done || 0) : 0
+  const daysSinceLastActivity = past.length > 0
+    ? Math.floor((Date.now() - new Date(past[0].experience_date || past[0].updated_at).getTime()) / (1000 * 60 * 60 * 24))
+    : 0
+
+  const { message: zarloMessage, dismiss: dismissZarlo } = useCreatorZarloTriggers({
+    nearestEvent: nearestUpcoming ? { name: nearestUpcoming.name, daysUntil: daysUntil(nearestUpcoming.experience_date) || 99, attractItemsDone: nearestAttractDone } : null,
+    pipelineReadiness: nearestUpcoming ? (nearestAttractDone > 0 ? Math.min(100, nearestAttractDone * 20) : 0) : 0,
+    daysSinceActivity: daysSinceLastActivity,
+    threePercentCount: threePercentChain.length,
+    hasSoldOut: false, // TODO: compute from capacity vs attendees
+    hasScaleScore,
+    quarterlyPlansEmpty: !getGamificationState().quarterlyPlans?.[`${new Date().getFullYear()}-Q${Math.floor(new Date().getMonth() / 3) + 1}`]?.length,
+    hasRemarkableResults: !!remarkableAngle,
+    nextLaunchPadItem: !remarkableAngle ? 'finding your rule break' : !hasReach ? 'Remarkable Reach' : !hasGrowth ? 'Remarkable Growth' : 'your next experience',
+  })
+  const [zarloChat, setZarloChat] = useState(null)
 
   // ── Gate ────────────────────────────────────────────────────────────────
   // Only redirect if data has fully loaded AND no selection exists.
@@ -1355,6 +1378,20 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           reach: null, // TODO: wire Instagram views
         }}
       />
+
+      {/* Zarlo for Creators (G15) — gated on Remarkable Results */}
+      {!!remarkableAngle && (
+        <>
+          {zarloMessage && zarloChat !== 'zarlo' && (
+            <ZarloProactiveBubble
+              message={zarloMessage}
+              onTap={() => setZarloChat('zarlo')}
+              onDismiss={dismissZarlo}
+            />
+          )}
+          <ZarloWidget activeChat={zarloChat} setActiveChat={setZarloChat} />
+        </>
+      )}
 
       {/* Origin story overlay — first visit only, skip if payment redirect */}
       {!loading && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (
