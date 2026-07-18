@@ -136,7 +136,7 @@ export default function MirrorPage() {
   const handleAddCluster = async () => {
     if (!addClusterText.trim() || addingSaving) return
     setAddingSaving(true)
-    const { data } = await supabase.from('nikigai_clusters').insert({
+    const { data, error } = await supabase.from('nikigai_clusters').insert({
       user_id: userId,
       cluster_type: addClusterType,
       cluster_stage: 'final',
@@ -144,8 +144,10 @@ export default function MirrorPage() {
       items: [],
       user_modified: true,
     }).select('*').single()
+    if (error) console.warn('Add cluster failed:', error)
     if (data) {
       setClusters(prev => [...prev, data])
+      hapticLight()
     }
     setAddClusterText('')
     setAddingSaving(false)
