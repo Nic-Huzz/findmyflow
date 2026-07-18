@@ -143,6 +143,35 @@
 .mp-rate-dot.active { background: #5e17eb; border-color: #5e17eb; }
 .mp-rate-dot:hover { border-color: #5e17eb; }
 
+/* Add your own cluster */
+.mp-add-cluster {
+  background: #fff; border-radius: 12px; padding: 14px 16px;
+  border: 1px solid #f2f3f5;
+}
+.mp-add-input {
+  width: 100%; padding: 10px 12px; border: 1px solid #e9ecef;
+  border-radius: 8px; font-size: 14px; font-family: inherit;
+  background: #fafafa; box-sizing: border-box;
+}
+.mp-add-input:focus { outline: none; border-color: #5e17eb; }
+.mp-add-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px; gap: 8px;
+}
+.mp-add-type-btns { display: flex; gap: 4px; }
+.mp-add-type-btn {
+  padding: 4px 10px; border: 1px solid #e9ecef; border-radius: 6px;
+  background: #fff; font-size: 11px; font-weight: 600; cursor: pointer;
+  font-family: inherit; color: #6b7280; transition: all 0.15s ease;
+}
+.mp-add-type-btn.active { background: #5e17eb; border-color: #5e17eb; color: #fff; }
+.mp-add-btn {
+  padding: 6px 16px; background: #5e17eb; color: #fff; border: none;
+  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: inherit;
+}
+.mp-add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
 /* Empty state */
 .mp-empty { text-align: center; padding: 40px 20px; }
 .mp-empty-text { font-size: 14px; color: #6b7280; margin-bottom: 16px; }

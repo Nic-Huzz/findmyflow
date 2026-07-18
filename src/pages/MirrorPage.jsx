@@ -30,6 +30,9 @@ export default function MirrorPage() {
   const [saving, setSaving] = useState(false)
   const [dirty, setDirty] = useState(false)
   const [regenClusters, setRegenClusters] = useState([]) // clusters with behavioral_evidence >= 5
+  const [addClusterText, setAddClusterText] = useState('')
+  const [addClusterType, setAddClusterType] = useState('skills')
+  const [addingSaving, setAddingSaving] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -130,6 +133,24 @@ export default function MirrorPage() {
     setDirty(true)
   }
 
+  const handleAddCluster = async () => {
+    if (!addClusterText.trim() || addingSaving) return
+    setAddingSaving(true)
+    const { data } = await supabase.from('nikigai_clusters').insert({
+      user_id: userId,
+      cluster_type: addClusterType,
+      cluster_stage: 'final',
+      cluster_label: addClusterText.trim(),
+      items: [],
+      user_modified: true,
+    }).select('*').single()
+    if (data) {
+      setClusters(prev => [...prev, data])
+    }
+    setAddClusterText('')
+    setAddingSaving(false)
+  }
+
   const handleSave = useCallback(async () => {
     if (saving) return
     setSaving(true)
@@ -195,15 +216,6 @@ export default function MirrorPage() {
         <h1 className="mp-title">Your Mirror</h1>
         <div style={{ width: 60 }} />
       </div>
-
-      {/* Clarity Score */}
-      {clarityPct != null && (
-        <div className="mp-clarity-hero">
-          <div className="mp-clarity-number">{clarityPct}%</div>
-          <div className="mp-clarity-label">Clarity</div>
-          <div className="mp-clarity-sub">How well you know who you are</div>
-        </div>
-      )}
 
       {/* Re-generation banner */}
       {regenClusters.length > 0 && (
@@ -283,6 +295,43 @@ export default function MirrorPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Add your own cluster */}
+      <div className="mp-section">
+        <div className="mp-add-cluster">
+          <input
+            className="mp-add-input"
+            type="text"
+            value={addClusterText}
+            onChange={e => setAddClusterText(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleAddCluster()}
+            placeholder="Add a cluster the AI missed..."
+          />
+          <div className="mp-add-row">
+            <div className="mp-add-type-btns">
+              {[['skills', 'Skill'], ['problems', 'Problem'], ['persona', 'Persona']].map(([id, label]) => (
+                <button key={id}
+                  className={`mp-add-type-btn ${addClusterType === id ? 'active' : ''}`}
+                  onClick={() => setAddClusterType(id)}
+                >{label}</button>
+              ))}
+            </div>
+            <button className="mp-add-btn" onClick={handleAddCluster}
+              disabled={!addClusterText.trim() || addingSaving}>
+              {addingSaving ? '...' : 'Add'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Clarity Score — bottom summary */}
+      {clarityPct != null && (
+        <div className="mp-clarity-hero">
+          <div className="mp-clarity-number">{clarityPct}%</div>
+          <div className="mp-clarity-label">Clarity</div>
+          <div className="mp-clarity-sub">How well you know who you are</div>
         </div>
       )}
 
