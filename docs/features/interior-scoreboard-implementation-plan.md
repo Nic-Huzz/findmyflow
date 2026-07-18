@@ -24,28 +24,33 @@ We're adding ways for you to SEE your progress:
 **Shipped:** `9fca732` (code) + migration `add_quest_id_to_groan_challenges_and_fk` (DB). FK constraint added, quest_id column added + backfilled 116/138 records, createGroanChallenge accepts questId, WahooCreator + UnstickFlow updated.
 
 ### Sprint 1: Organize tasks + remember your "I am" statements (2-3 days)
-**What:** Let people tag tasks as "this week / this month / this quarter." Show a dropdown of previous identity statements when completing a courage challenge so you can reuse your favorites.
-**Why:** Tasks are currently a flat list with no sense of time. And every "I am someone who..." statement disappears after you write it. Both should accumulate and be visible.
+**What:** When you add a task, pick "this week / this month / this quarter." When you finish a courage challenge, see all your previous "I am someone who..." statements and pick one or write a new one.
+**Why:** Tasks are a flat list right now with no sense of what's urgent vs later. And every time you write "I am someone who takes risks," it disappears. It should build into a collection you can look back on and feel proud of.
 **Confidence: 95%**
 
 ### Sprint 2: Rate your mirror + see your Clarity score (3-4 days)
-**What:** After completing Life Map, the app shows you what it thinks your skills, wounds, and audience are. You rate each one 1-5: "This IS me" to "That's not me." Your average rating = your Clarity score (shown on /me page).
-**Why:** The app already generates a mirror of who you are. But it never asks "did we get it right?" This closes the loop. Clarity score gives you one number that shows you're getting clearer over time.
+**What:** After the app tells you who you are (Life Map), it asks "did we get this right?" for each thing it found. You rate 1-5. Your average = your Clarity score, shown as one number on your profile.
+**Why:** The app already guesses your skills and wounds. But it never checks if it got it right. This closes the loop. And seeing "Clarity: 80%" going up over time shows you you're getting clearer about who you are.
 **Confidence: 85%**
 
-### Sprint 3: Tag quests with skills + start the skill tree (2-3 days)
-**What:** When you create a life path quest, the AI figures out which skills it uses (performing, coaching, building, etc). In the background, start counting XP per skill from your courage challenges. Let users set their starting level per skill.
-**Why:** So the app knows "Dance Facilitator = performing skill." Then every challenge on that quest gives you performing XP. Eventually this becomes a visible skill tree showing what you're developing.
+### Sprint 3: Tag life paths with skills (2 days)
+**What:** When you create a life path, the AI figures out which skills it uses (performing, building, coaching). Backdate existing quests. Validate accuracy before building anything on top.
+**Why:** This is the foundation for everything else: skill tree, cluster re-generation, quest alignment. If the AI tagging is inaccurate, everything built on it is wrong. Ship this alone, test it, fix any bad tags, THEN build on top.
 **Confidence: 85%**
 
-### Sprint 4: Smarter curiosity analysis + mirror re-generation (3-4 days)
-**What:** When you enter books/podcasts, the AI now also identifies which skills and wounds they relate to (not just which branch). After every 5 courage challenges on a skill, the AI re-generates your mirror cluster and asks if the updated version feels more right.
-**Why:** Your curiosities (books you read) and your actions (challenges you do) should both sharpen the same picture of who you are. The mirror gets more accurate the more you use the app.
-**Confidence: 90%**
+### Sprint 4: Mirror re-generation + Clarity that moves (2-3 days)
+**What:** After every 5 courage challenges on quests tagged with the same skill, the AI re-generates your mirror cluster and asks if the updated version feels more right. You re-rate one cluster. Your Clarity score updates.
+**Why:** Without this, Clarity from Sprint 2 is a static number that never changes. This makes it a LIVING score that sharpens the more you use the app. The mirror evolves with you. This is what makes users come back to check their Clarity.
+**Confidence: 85%**
 
-### Sprint 5: Show progress on every completion (2-3 days)
-**What:** After completing any task, see: progress bar, courage trend (🔥🔥😌🔥), identity statements collected, and quest alignment. After completing a to-do, one quick tap: "Lit me up / Was okay / Bored."
-**Why:** Every action should feel like it moved you forward. No checkmark should disappear into the void.
+### Sprint 5: Show progress + guidance on every completion (3-4 days)
+**What:** After completing any task: progress bar moves, courage trend shows (🔥🔥😌🔥), identity statements collect. After a to-do: "Lit me up / Was okay / Bored." PLUS: Zarlo/Figurine reference your scores. Low Clarity → "Try exploring a new curiosity." Quest with consistent "Pressure" outcomes → "You're skilled here but it doesn't light you up. That might be your Zone of Excellence."
+**Why:** A score without guidance is just a number. Guidance without a score is just opinion. Together they create motivation. Every completion should feel meaningful AND tell you what to do next.
+**Confidence: 75%** — progress display is clear, guidance layer needs design work with Zarlo/Figurine specs.
+
+### Sprint 6: Skill tree background + curiosity extension (3-4 days)
+**What:** Start counting XP per skill from courage challenges (background, no UI yet). "Set your starting level" per skill. Extend curiosity analysis to also identify skills and wounds from books/podcasts.
+**Why:** The skill tree is the long-term payoff: seeing your skills level up like a game. But it depends on accurate quest tagging (Sprint 3) and enough challenge data. Collecting in background now, displaying later when there's enough data to be meaningful.
 **Confidence: 85%**
 
 ---
@@ -103,32 +108,20 @@ Update all creation code paths (WahooCreator, QuestPathMap, WahooDiscoveryFlow, 
 
 ---
 
-## Sprint 3: Quest Skill Tagging + Background Skill Tree (2-3 days)
+## Sprint 3: Quest Skill Tagging Only (2 days)
 
 ### Quest auto-tagging (skills only)
 - On quest creation: AI maps label → `skill_tags[]`
 - Problems + personas stay at user level (Life Map clusters), not quest level
 - Backdate ~80 existing quests
-
-### Background skill tree collection
-- New table: `user_skill_progress` (user_id, skill_id, xp, level, updated_at)
-- On courage challenge completion: quest's skill_tags determine which skills get +1 XP
-- XP thresholds: L0→L1 at 3, L1→L2 at 8, L2→L3 at 15, L3→L4 at 25 (tunable)
-- "Set starting level" option per skill (user self-reports baseline, challenge data adds on top)
-- No UI yet — collect in background, display later
+- **VALIDATE before proceeding**: review all backdated tags for accuracy. Fix any bad tags manually. Only proceed to Sprint 4 when tagging quality is confirmed.
 
 ### DB changes
 - quests: add `skill_tags` text[]
-- New table: `user_skill_progress` (user_id, skill_id text, xp integer, level text, updated_at timestamp)
 
 ---
 
-## Sprint 4: Extend classify-curiosities + Re-generation (3-4 days)
-
-### classify-curiosities extension
-- Add skill and problem taxonomy definitions to AI prompt
-- Output: each cluster gets `skills[]` + `problems[]` alongside existing `branch`
-- Update CuriosityMapFlow.jsx to save new fields
+## Sprint 4: Mirror Re-generation + Clarity That Moves (2-3 days)
 
 ### Cluster re-generation trigger
 - After 5 courage challenges on quests sharing skill_tags with a cluster:
@@ -144,17 +137,16 @@ Update all creation code paths (WahooCreator, QuestPathMap, WahooDiscoveryFlow, 
 
 ### DB changes
 - nikigai_clusters: add `skill_tags` text[], `problem_tags` text[], `persona_tags` text[]
-- curiosity_clusters: add `skills` text[], `problems` text[]
 
 ---
 
-## Sprint 5: Per-Completion Progress + To-do Signal (2-3 days)
+## Sprint 5: Per-Completion Progress + Guidance Layer (3-4 days)
 
 ### Quest card progress
 - Progress bar: X/Y tasks done
 - Courage trend: last N wahoo classifications as emoji row (🔥🔥😌🔥)
 - Top identity statement with frequency
-- Quest alignment % (from sprint 3 tag data)
+- Quest alignment % (from Sprint 3 tag data)
 
 ### To-do "lit me up" signal
 - After tapping ✓ on any to-do, inline on quest card: 🔥 Lit me up / 😐 Was okay / 😴 Bored
@@ -166,25 +158,65 @@ Update all creation code paths (WahooCreator, QuestPathMap, WahooDiscoveryFlow, 
 - L3 extra: "What did you earn?" (Scale app)
 - L4 extra: "How many people?" (Scale app)
 
+### Guidance layer (Zarlo/Figurine integration)
+- When Clarity is low (<60%): Zarlo suggests "Try exploring a new curiosity" or "Complete your Life Map"
+- When a quest has 3+ "Pressure" outcomes in a row: warn "You're skilled here but it doesn't light you up. This might be your Zone of Excellence."
+- When Clarity increases: Figurine celebrates "Your mirror just got sharper. You rated [cluster] higher than before."
+- When identity statements repeat 5+ times: highlight "You keep saying you're someone who [X]. That's becoming part of who you are."
+
 ### DB changes
 - quest_tasks: add `task_signal` text (lit_me_up / was_okay / bored)
+
+---
+
+## Sprint 6: Skill Tree Background + Curiosity Extension (3-4 days)
+
+### Background skill tree collection
+- New table: `user_skill_progress` (user_id, skill_id, xp, level, updated_at)
+- On courage challenge completion: quest's skill_tags determine which skills get +1 XP
+- XP thresholds: L0→L1 at 3, L1→L2 at 8, L2→L3 at 15, L3→L4 at 25 (tunable)
+- "Set starting level" option per skill (user self-reports baseline, challenge data adds on top)
+- No UI yet — collect in background, display later
+
+### classify-curiosities extension
+- Add skill and problem taxonomy definitions to AI prompt
+- Output: each cluster gets `skills[]` + `problems[]` alongside existing `branch`
+- Update CuriosityMapFlow.jsx to save new fields
+
+### DB changes
+- New table: `user_skill_progress` (id uuid, user_id uuid, skill_id text, xp integer, level text, updated_at timestamp, UNIQUE(user_id, skill_id))
+- curiosity_clusters: add `skills` text[], `problems` text[]
 
 ---
 
 ## Dependencies
 
 ```
-Sprint 0 → no dependencies (do first)
-Sprint 1 → no dependencies (can start immediately)
+Sprint 0 ✅ DONE
+Sprint 1 → no dependencies (start anytime)
 Sprint 2 → no dependencies (can run parallel with Sprint 1)
-Sprint 3 → Sprint 0 (needs clean data for quest_id on groan_challenges)
-Sprint 4 → Sprint 3 (needs skill_tags on quests before re-generation)
-Sprint 5 → Sprints 3+4 (needs tags + challenge data to show progress)
+Sprint 3 → Sprint 0 ✅ (needs quest_id on groan_challenges — done)
+Sprint 4 → Sprint 3 (needs skill_tags on quests) + Sprint 2 (needs resonance rating to exist)
+Sprint 5 → Sprint 4 (needs re-generation + tags to show alignment/guidance)
+Sprint 6 → Sprint 3 (needs skill_tags for XP counting)
 ```
 
-Sprints 0+1+2 can run in parallel. Sprints 3→4→5 are sequential.
+Sprints 1+2 can run in parallel. Sprint 3 can start anytime.
+Sprint 4 needs both 2+3 done. Sprint 5 needs 4. Sprint 6 can run parallel with 5.
 
-**Total: ~12-16 days across 6 sprints.**
+```
+Week 1:  Sprint 1 + Sprint 2 (parallel)
+Week 2:  Sprint 3 (2 days) + Sprint 4 start
+Week 3:  Sprint 4 finish + Sprint 5
+Week 4:  Sprint 6
+
+Or compressed:
+Week 1:  Sprint 1 + 2 + 3 (parallel where possible)
+Week 2:  Sprint 4 + 5
+Week 3:  Sprint 6
+```
+
+**Total: ~15-19 days across 7 sprints (including Sprint 0 done).**
 
 ---
 
@@ -208,17 +240,19 @@ Sprints 0+1+2 can run in parallel. Sprints 3→4→5 are sequential.
 
 **Sprint 3:**
 - `ALTER TABLE quests ADD COLUMN skill_tags text[]`
-- New table: `CREATE TABLE user_skill_progress (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid REFERENCES auth.users(id), skill_id text NOT NULL, xp integer DEFAULT 0, level text DEFAULT 'education', updated_at timestamptz DEFAULT now(), UNIQUE(user_id, skill_id))`
 
 **Sprint 4:**
 - `ALTER TABLE nikigai_clusters ADD COLUMN skill_tags text[]`
 - `ALTER TABLE nikigai_clusters ADD COLUMN problem_tags text[]`
 - `ALTER TABLE nikigai_clusters ADD COLUMN persona_tags text[]`
-- `ALTER TABLE curiosity_clusters ADD COLUMN skills text[]`
-- `ALTER TABLE curiosity_clusters ADD COLUMN problems text[]`
 
 **Sprint 5:**
 - `ALTER TABLE quest_tasks ADD COLUMN task_signal text`
+
+**Sprint 6:**
+- New table: `CREATE TABLE user_skill_progress (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid REFERENCES auth.users(id), skill_id text NOT NULL, xp integer DEFAULT 0, level text DEFAULT 'education', updated_at timestamptz DEFAULT now(), UNIQUE(user_id, skill_id))`
+- `ALTER TABLE curiosity_clusters ADD COLUMN skills text[]`
+- `ALTER TABLE curiosity_clusters ADD COLUMN problems text[]`
 
 ---
 
