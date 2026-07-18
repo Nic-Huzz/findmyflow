@@ -69,7 +69,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       .eq('quest_category', 'Groans')
       .not('reflection_text', 'is', null)
       .order('created_at', { ascending: false })
-      .limit(50)
+      .limit(100)
       .then(({ data }) => {
         if (!data) return
         const counts = {}
