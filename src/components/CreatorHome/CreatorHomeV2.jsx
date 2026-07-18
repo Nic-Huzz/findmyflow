@@ -32,6 +32,8 @@ import CreatorRadarChart from './CreatorRadarChart'
 import CreatorCelebrations from './CreatorCelebrations'
 import SectionLaunchPad from './SectionLaunchPad'
 import QuarterlyPlanner from './QuarterlyPlanner'
+import InsightDrop from '../InsightDrop'
+import { useCreatorInsightDrops } from '../../hooks/useCreatorInsightDrops'
 import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown, getUnlockedAchievements, updateBuildingStreak, HIDDEN_ACHIEVEMENTS } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
@@ -323,10 +325,12 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         hasReach: !!reachData?.id,
         hasGrowth: !!growthData?.id,
         hasScaleScore: !!scaleScoreData?.id,
-        experienceCount: experiences.length,
+        hasPositioning: !!essenceProfile?.positioning_statement,
         pastEventCount: past.length,
         threePercentCount: threePercentNotes,
         filledEventCount: 0, // TODO: compute from capacity vs attendees when data is available
+        repeatRate: dashboardKPIs?.repeatRate || 0,
+        totalAttendees: dashboardKPIs?.totalAttendees || 0,
       }))
 
       // Max ticket price across all experiences
@@ -401,6 +405,19 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const threePercentChain = past
     .filter(e => e.three_percent_note)
     .map((e, i) => ({ num: past.filter(x => x.three_percent_note).length - i, note: e.three_percent_note, name: e.name, date: e.experience_date, attendees: e.attendee_count }))
+
+  // Creator Insight Drops (G16) — template-based, 1 per session
+  const { insight: creatorInsight, dismissInsight: dismissCreatorInsight } = useCreatorInsightDrops({
+    hasRemarkableResults: !!remarkableAngle,
+    hasReach,
+    hasGrowth,
+    hasScaleScore,
+    scaleScoreValue,
+    remarkableAngle,
+    threePercentNotes: threePercentChain,
+    branchScoring: null, // Not available at this level — type 1 insight skipped
+    dnaProfiles: [], // Loaded lazily in CreatorPositionCard, pass empty for now
+  })
 
   // ── Gate ────────────────────────────────────────────────────────────────
   // Only redirect if data has fully loaded AND no selection exists.
@@ -1306,6 +1323,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           onClose={() => setShowShareCard(false)}
         />
       )}
+
+      {/* Creator Insight Drop (max 1 per session) */}
+      {creatorInsight && <InsightDrop insight={creatorInsight} onDismiss={dismissCreatorInsight} />}
 
       {/* Milestone + achievement + spider celebrations */}
       <CreatorCelebrations

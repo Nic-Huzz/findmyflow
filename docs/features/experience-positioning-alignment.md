@@ -127,17 +127,28 @@ When delivery mode data accumulates:
 
 ---
 
-## Build Plan
+## Build Plan (revised — ship value first, collect data later)
+
+### Phase 1: Ship with existing data (no new fields needed)
 
 | Step | What | Effort |
 |------|------|--------|
-| 1 | Add `branch`, `delivery_modes`, `attendee_personas` to experiences table | Migration, 2 min |
-| 2 | AI-classify branch at experience creation (recommended tag, editable) | Low — reuse quest tagger |
-| 3 | Delivery mode multi-select on experience creation form | Low — checkbox group |
-| 4 | Post-event persona picker: "Who showed up?" (12 personas, pick 2) | Low — multi-select after event |
-| 5 | Low-sales diagnostic: remarkable flow checklist triggered when sales < 50% capacity | Medium — new component, reads remarkable_angles + narrative_builders |
-| 6 | Post-event mirror: compare results across events, surface patterns in delivery modes | Medium — new component, only when 2+ events with notable differences |
-| 7 | Feedback loop: delivery mode patterns feed back to vehicle selection | Low — data display |
+| 1 | **Low-sales diagnostic** — remarkable flow checklist triggered when sales < 50% capacity. Uses existing remarkable_angles + narrative_builders. No new DB fields. | Medium |
+| 2 | **AI-classify branch** at experience creation (recommended tag, editable). Add `branch` to experiences table. Reuse quest tagger. | Low |
+
+### Phase 2: Collect new data (progressive, when 3+ events exist)
+
+| Step | What | Effort |
+|------|------|--------|
+| 3 | Add `delivery_modes` to experiences. Multi-select on creation form. | Low |
+| 4 | Post-event persona picker: "Who showed up?" Add `attendee_personas`. | Low |
+
+### Phase 3: Surface patterns (only when enough data exists)
+
+| Step | What | Effort |
+|------|------|--------|
+| 5 | Post-event mirror: compare delivery modes + personas across events. Only when 2+ events with notable differences. | Medium |
+| 6 | Feedback loop: mode patterns feed back to vehicle selection. "Your events with play average 3x attendance." | Low |
 
 ---
 

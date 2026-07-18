@@ -49,13 +49,18 @@ function processQueue() {
 
 /**
  * Creator levels — separate from consumer movementXP.
+ * Progression should take MONTHS, not days.
+ * Dreamer → Builder: complete positioning work (~2-4 weeks)
+ * Builder → Launcher: run first events, get repeat attendees (~1-2 months)
+ * Launcher → Scaler: consistent events, growing attendance (~3-6 months)
+ * Scaler → Movement Maker: scaled, high repeat, community forming (~6-12 months)
  */
 export const CREATOR_LEVELS = [
   { name: 'Dreamer', threshold: 0 },
-  { name: 'Builder', threshold: 50 },
-  { name: 'Launcher', threshold: 150 },
-  { name: 'Scaler', threshold: 400 },
-  { name: 'Movement Maker', threshold: 1000 },
+  { name: 'Builder', threshold: 200 },
+  { name: 'Launcher', threshold: 600 },
+  { name: 'Scaler', threshold: 1500 },
+  { name: 'Movement Maker', threshold: 4000 },
 ]
 
 export function getCreatorLevel(xp) {
@@ -73,8 +78,12 @@ export function getNextLevel(xp) {
 }
 
 /**
- * Compute creator XP from available data.
+ * Compute creator XP from meaningful milestones.
  * Called client-side from CreatorHomeV2 after all data is fetched.
+ *
+ * Principle: XP for tasks COMPLETED, not for clicking buttons.
+ * Creating an empty experience = 0 XP. Running it with attendees = XP.
+ * Completing a playbook stage = XP. But the real XP comes from DOING the work.
  *
  * @param {object} data - All creator data from CreatorHomeV2 mount queries
  * @returns {number} Total XP
@@ -82,23 +91,50 @@ export function getNextLevel(xp) {
 export function computeCreatorXP(data) {
   let xp = 0
 
-  // Playbook stages: 25 XP each
-  if (data.hasRemarkableResults) xp += 25
-  if (data.hasReach) xp += 25
-  if (data.hasGrowth) xp += 25
-  if (data.hasScaleScore) xp += 25
+  // ── POSITIONING MILESTONES (one-time, ~200 XP total) ──
+  // Finding your rule break is the hardest intellectual work
+  if (data.hasRemarkableResults) xp += 50    // Found your rule break
+  if (data.hasReach) xp += 30               // Mapped your vehicle + language
+  if (data.hasGrowth) xp += 30              // Audited your barriers
+  if (data.hasScaleScore) xp += 40          // Scored your Phase 3 readiness
+  if (data.hasPositioning) xp += 50         // Generated positioning statement
 
-  // Experiences created: 10 XP each
-  xp += (data.experienceCount || 0) * 10
+  // ── EXPERIENCE MILESTONES (earned through action) ──
+  // Creating is easy. Running is hard. Filling is harder. Retaining is hardest.
+  // No XP for creating experiences — only for running them
+  const pastEvents = data.pastEventCount || 0
+  if (pastEvents >= 1) xp += 30             // First event run
+  if (pastEvents >= 3) xp += 40             // Consistent (3 events)
+  if (pastEvents >= 5) xp += 50             // Committed (5 events)
+  if (pastEvents >= 10) xp += 80            // Dedicated (10 events)
+  if (pastEvents >= 20) xp += 120           // Veteran (20 events)
 
-  // Events run (past experiences): 15 XP each
-  xp += (data.pastEventCount || 0) * 15
+  // Fill rate milestones (quality, not quantity)
+  const filledEvents = data.filledEventCount || 0    // events at 80%+ capacity
+  if (filledEvents >= 1) xp += 30           // First sold-out event
+  if (filledEvents >= 3) xp += 50           // Consistent fill
+  if (filledEvents >= 5) xp += 80           // Reliable fill
 
-  // 3% improvements logged: 5 XP each
-  xp += (data.threePercentCount || 0) * 5
+  // Repeat attendees (the hardest metric — means the experience WORKS)
+  const repeatRate = data.repeatRate || 0
+  if (repeatRate >= 20) xp += 40            // Some come back
+  if (repeatRate >= 40) xp += 60            // Strong retention
+  if (repeatRate >= 60) xp += 100           // Exceptional retention
 
-  // Events filled to 80%+: 20 XP each
-  xp += (data.filledEventCount || 0) * 20
+  // ── COMPOUNDING MILESTONES (3% improvements) ──
+  // Each 3% improvement shows the creator is learning from each event
+  const improvements = data.threePercentCount || 0
+  if (improvements >= 1) xp += 15           // First improvement logged
+  if (improvements >= 3) xp += 25           // Compounding habit
+  if (improvements >= 5) xp += 35           // Systematic improver
+  if (improvements >= 10) xp += 50          // Relentless iteration
+
+  // ── COMMUNITY MILESTONES (when others want to do what you do) ──
+  const totalAttendees = data.totalAttendees || 0
+  if (totalAttendees >= 10) xp += 20        // First 10 people impacted
+  if (totalAttendees >= 50) xp += 40        // 50 people
+  if (totalAttendees >= 100) xp += 60       // 100 people
+  if (totalAttendees >= 500) xp += 100      // Community scale
 
   return xp
 }
