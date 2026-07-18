@@ -43,6 +43,11 @@ We're adding ways for you to SEE your progress:
 **Why:** Without this, Clarity from Sprint 2 is a static number that never changes. This makes it a LIVING score that sharpens the more you use the app. The mirror evolves with you. This is what makes users come back to check their Clarity.
 **Confidence: 85%**
 
+### Sprint 4b: Courage challenge counter + identity collection (1 day)
+**What:** Above the active courage challenges list, show a counter: "23 courage challenges completed." Tap it to expand a dropdown showing all "I am someone who..." statements with reinforcement counts (e.g., "takes risks to follow passions (×5)"). 
+**Why:** Users complete challenges and the count disappears. This makes the ACCUMULATION visible. Seeing "I've done 23 brave things and my top identity is 'takes risks' reinforced 5 times" is motivating. The identity library already exists in the DB from Sprint 1, this just surfaces it permanently.
+**Confidence: 90%** — data exists, simple query + display component.
+
 ### Sprint 5: Show progress + guidance on every completion (3-4 days)
 **What:** After completing any task: progress bar moves, courage trend shows (🔥🔥😌🔥), identity statements collect. After a to-do: "Lit me up / Was okay / Bored." PLUS: Zarlo/Figurine reference your scores. Low Clarity → "Try exploring a new curiosity." Quest with consistent "Pressure" outcomes → "You're skilled here but it doesn't light you up. That might be your Zone of Excellence."
 **Why:** A score without guidance is just a number. Guidance without a score is just opinion. Together they create motivation. Every completion should feel meaningful AND tell you what to do next.
