@@ -1201,7 +1201,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
 
       {/* Origin story overlay — first visit only, skip if payment redirect */}
       {!loading && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (
-        <div className="ch2-origin-overlay" onClick={() => updateGamificationState({ origin_seen: true })}>
+        <div className="ch2-origin-overlay">
           <div className="ch2-origin-card">
             <h2 className="ch2-origin-title">The world is going to be a better place thanks to you and your work.</h2>
             <p className="ch2-origin-sub">We're here to help you create that change.</p>
