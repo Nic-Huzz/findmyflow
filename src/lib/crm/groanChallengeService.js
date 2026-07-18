@@ -109,6 +109,7 @@ export async function createGroanChallenge(challengeData) {
     wahooCategory = null,
     depthLevel = null,
     visibilityLayers = [],
+    questId = null,
   } = challengeData
 
   const { data, error } = await supabase
@@ -126,6 +127,7 @@ export async function createGroanChallenge(challengeData) {
       wahoo_category: wahooCategory,
       depth_level: depthLevel,
       visibility_layers: visibilityLayers,
+      quest_id: questId,
       status: GROAN_CHALLENGE_STATUS.GENERATED
     })
     .select()

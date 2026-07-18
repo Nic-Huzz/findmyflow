@@ -45,7 +45,8 @@ export default function UnstickFlow({ userId, heroStage, onClose, onWahooCreated
           description: `Unstick flow: Avoiding "${avoiding.trim()}". Fear: "${worstCase.trim()}". Smallest step: "${smallestStep.trim()}"`,
           status: 'active',
           challenge_source: 'unstick_flow',
-          wahoo_category: 'connection', // Default category
+          wahoo_category: 'connection',
+          quest_id: questId || null,
         })
         .select('id')
         .single()

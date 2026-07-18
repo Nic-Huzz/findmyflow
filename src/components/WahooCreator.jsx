@@ -123,6 +123,7 @@ export default function WahooCreator({
         sourceLabel: sourceLabel || 'Courage',
         depthLevel,
         visibilityLayers,
+        questId: linkedQuestId || null,
       })
       if (saveError || !dbRecord) throw saveError || new Error('Challenge was not saved')
 
@@ -244,6 +245,22 @@ export default function WahooCreator({
                       reference_id: w.id,
                       display_name: w.title || w.challenge_text,
                     }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
+                    // Link to quest_task if groan has a quest_id or linkedQuestId exists
+                    const questId = w.quest_id || linkedQuestId
+                    if (questId) {
+                      const { data: existing } = await supabase.from('quest_tasks')
+                        .select('id').eq('groan_challenge_id', w.id).limit(1)
+                      if (!existing?.length) {
+                        await supabase.from('quest_tasks').insert({
+                          quest_id: questId,
+                          user_id: userId,
+                          text: w.title || w.challenge_text,
+                          is_courage_challenge: true,
+                          groan_challenge_id: w.id,
+                          sort_order: 0,
+                        })
+                      }
+                    }
                     hapticSuccess()
                     onWahooAccepted?.()
                     setStep('success')
