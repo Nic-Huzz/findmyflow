@@ -196,7 +196,9 @@ docs/                         # Documentation files
 
 **Archetypes**: `/archetypes`, `/archetypes/essence`, `/archetypes/protective`
 
-**Life Map**: `/life-map` (replaces old `/nikigai/*` routes, which redirect here)
+**Life Map**: `/life-map` (replaces old `/nikigai/*` routes, which redirect here). Includes `rate_mirror` screen after nikigai for cluster NS state rating.
+
+**Mirror**: `/mirror` (hidden, no nav links, accessible directly). Clarity home: cluster re-rating, identity statements, skill tree, re-gen flow.
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
 
@@ -266,27 +268,19 @@ Key data: `public/data/experienceCreatorDNA.json` (247 DNA profiles), `public/da
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
-**Quests tab** (`LevelTab.jsx`): Flat quest board replacing the old 9-level system. Sections: Your Journey (onboarding items, hidden once all complete) → Active Quests (life paths being pursued, with task checklists via `QuestBoardCard`) → I need help with... (struggle pills revealing deep dive flows) → Zone Assessments (horizontal scroll strip of 8 level cards with tap-to-open modals) → Completed (closed quests + finished journey items). Add Quest form: dropdown of life paths from `life_path_sessions` (auto-fills state) or manual entry with 4-state picker. Old level system hidden in `display: none` wrapper for backwards compat. DB: `quests`, `quest_tasks`.
+**Quests tab** (`LevelTab.jsx`): Flat quest board. Sections: Your Journey (onboarding) → Active Quests (`QuestBoardCard` with progress bar, courage trend emoji row, zone of excellence warning, "lit me up" signal on task completion) → Zone Matrix (Action Score x Clarity, 4 quadrants: Self-Actualisation / Head Full of Dreams / Misguided / Unfulfilment) → I need help with... (struggle pills) → Zone Assessments (8 level cards) → Completed. Add Quest: dropdown from life paths or manual + 4-state picker. Quest creation auto-tags skills via `classify-quest-skills` edge function + shows skill level picker (L0-L4). DB: `quests` (skill_tags text[]), `quest_tasks` (task_signal text).
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 5 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown), Experience Check-in (predict activity outcomes, "How did it go?" closure, wahoo conversion). Weekly Focus "Value" category (renamed from "Boundary").
 
-**Courage tab** (`PlayListTab.jsx`): "Actions that expand what feels possible for your path." Shows Active Courage Challenges (grouped by quest name) + WahooCreator (free text + depth level + boundary type + protective voice + quest link) + Community Tasks CTA (links to `/community?tab=tasks`). Challenges come from `/life-paths` stuck points (auto-created) or manual WahooCreator entries. Each challenge shows inline healing card if a `healing_intention` exists. WahooInspiration archived.
+**Courage tab** (`PlayListTab.jsx`): Shows courage counter + identity statement dropdown (expandable, shows "I am someone who..." with reinforcement counts) → Active Courage Challenges (grouped by quest) → WahooCreator → Community Tasks CTA. Challenges from `/life-paths` stuck points or manual WahooCreator. Post-completion: 4-state NS classification → identity statement → behavioral_evidence increment on matching clusters → skill XP award via `increment_skill_xp` RPC.
 
-**Healing tab** (`HealingIntentionsList.jsx`): Per-task healing intentions anchored to quests. Shows active intentions (collapsible cards with pattern/fear/rewire/expectation), in-progress items (tap to resume), resolved items (with outcome). "What's blocking you?" input opens `QuestSelector` to pick a life path, then `HealingFlowModal` (7-step flow: Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best). Old Recognise/Release/Rewire exercises removed. DB: `healing_intentions` table linked to `quest_tasks`.
+**Healing tab** (`HealingIntentionsList.jsx`): Per-task healing intentions. "What's blocking you?" → QuestSelector → HealingFlowModal (7-step: Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best). DB: `healing_intentions` linked to `quest_tasks`.
 
-**Per-task healing flow** (`HealingFlowModal.jsx`): Triggered from QuestBoardCard when user tags courage challenge (two-step prompt: "Want to explore?" → "Now or Later?"). 7 steps with auto-save on each advance + save-on-unmount. Step 6 offers Book session with Huzz (Calendly) / Self-guided release (coming soon). Step 7 "Expect the best" with anxiety→excitement trick. Post-task-completion asks "Did the positive outcome happen?" (Yes/No/Something better). Completion stages: in_progress → recognised → released.
+**Scoring**: RP (Rise Points). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2. Levels: Getting Started (0) → Habit Builder (100) → Strong Foundation (500) → Vibe Rise (1250) → Vibe Master (2750) → Movement Maker (5750). Forgiving streak (1 day miss allowed).
 
-**QuestSelector** (`QuestSelector.jsx`): Reusable dropdown for picking or creating a quest. Used by HealingIntentionsList standalone input and WahooCreator. Ensures all courage challenges and healing intentions link back to a life path.
+**Post-courage flow**: 4-state NS classification (Vibe Rise/Fun/Pressure/Uninterested) → identity statement ("I am someone who...") → 3% reflection. Saves to `quest_completions.reflection_text` JSON. Also increments `behavioral_evidence` on matching clusters + awards skill XP.
 
-**Scoring**: Points are RP (Rise Points). Header pills: ☀️ Tune (green) | 🔥 Wahoos (gold) | 💜 Healing (purple). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2. Quest RP: add task=2, complete task=3, achieve quest=10, healing flow=5, outcome check=2. Levels: Getting Started (0) → Habit Builder (100) → Strong Foundation (500) → Vibe Rise (1250) → Vibe Master (2750) → Movement Maker (5750).
-
-**Daily check-in**: 4-state overlay on page load (Vibe Rise/Safe/Activated/Shutdown). Once per day, skippable.
-
-**"How did that feel?"**: Post-courage completion 4-state classification: Vibe Rise (🔥, gold confetti) / Fun (😌) / Pressure (😰) / Uninterested (😶). Followed by identity statement prompt: "Now that I [wahoo], I've proven I'm someone who..." Saves `wahoo_classification` + `identity_statement` to `quest_completions.reflection_text` JSON.
-
-**Forgiving streak**: 1 day miss allowed without breaking streak.
-
-**Weekly Review**: Triggers Sunday/Monday, 7 multiplier questions (Environment, Network, Bet-Sizing, Identity, Compounding, Learning, Attention), 15 RP + 5 for sharing. Produces a shareable canvas card.
+**Weekly Review**: Triggers Sunday/Monday, 3 questions: (1) "Old me would have ___. Instead I ___." (2) "Did procrastination stop you?" (yes/no + what) (3) "What brave thing are you most proud of?" 15 RP + 5 for sharing. Shareable canvas card.
 
 Key files: `Challenge.jsx`, `useChallengeData.js`, `LevelTab.jsx`, `QuestBoardCard.jsx`, `HealingFlowModal.jsx`, `HealingIntentionsList.jsx`, `QuestSelector.jsx`, `TuneTab.jsx`, `PlayListTab.jsx`, `WahooCreator.jsx`, `WahooDiscoveryFlow.jsx`, `ChallengeHeader.jsx`, `GroanCompletionModal.jsx`, `DailyCheckin.jsx`, `useCapacityScore.js`, `WeeklyReview.jsx`, `WeeklyReviewCard.jsx`
 
@@ -347,7 +341,27 @@ Sequential flow: each unlocks after the previous is completed. Three card states
 
 Sequential locking: Reach locked until `remarkable_angles` exists, Growth locked until `narrative_builders` exists, Scale Score locked until `access_architectures` exists.
 
-### 13. Other Features
+### 13. Interior Scoreboard (Clarity + Action Score)
+
+Two consumer metrics measuring self-actualisation progress:
+- **Clarity** (X axis): % of Life Map clusters rated Vibe Rise or Fun (NS state system). Displayed on Journey tab. Rated via `/mirror` page or `rate_mirror` screen after Life Map.
+- **Action Score** (Y axis): aligned_actions / total_actions over rolling 7 days. Minimum 5 actions before showing zone. Displayed as zone matrix on Quests tab.
+
+**NS state rating system**: Clusters rated with same 4 states as life paths: Vibe Rise ("I would absolutely love this"), Fun ("Yeah, sounds fun"), Stressed ("I could do it but feels stressful"), Bored ("I could but it doesn't excite me", auto-removes). Auto-saves on tap.
+
+**Mirror page** (`/mirror`, hidden): Cluster re-rating, identity statement collection, skill tree (L0-L4 lit segments), re-generation flow (when behavioral_evidence >= 5, AI evolves cluster label), add custom clusters.
+
+**Zone Matrix** (Quests tab): 2x2 graph plotting Action x Clarity. Quadrants: Self-Actualisation, Head Full of Dreams, Misguided Zone, Unfulfilment. Dot shows user position.
+
+**Behavioral evidence**: On courage completion, clusters sharing skill_tags with the quest get `behavioral_evidence` incremented (atomic RPC). At 5+, re-gen banner shows on Mirror. Push notification via `send-push-notification`.
+
+**Skill tree**: Background XP collection via `increment_skill_xp` RPC. L0→L1 at 3 XP, L1→L2 at 8, L2→L3 at 15, L3→L4 at 25. Starting level picker on quest creation. Visual: 5 lit-up segments per skill on Mirror page.
+
+Key files: `scoreUtilities.js` (shared Action/Clarity/Zone calc), `skillProgress.js`, `questSkillTagger.js`, `MirrorPage.jsx`, `GroanCompletionModal.jsx` (behavioral evidence + skill XP at step 7).
+
+Key docs: `docs/features/interior-scoreboard-spec.md`, `docs/features/interior-scoreboard-implementation-plan.md`, `docs/features/interior-scoreboard-next-sprint-spec.md`
+
+### 14. Other Features
 
 - **Money Model Flows**: 6 flows in `MoneyModelFlowBase.jsx` + `moneyModelConfigs.js`. Each wrapper ~35 lines.
 - **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Phase 1: AI personality + free-text input (5 msgs/session) + streaming greeting. Phase 2: Voiced achievement toasts (MicroToast). Phase 3: Proactive observations after wahoo/checkin/healing (2/day max, ZarloProactiveBubble above FAB). Phase 4: Open loop hooks + weekly countdown. Confidence floor: no Brief + no actions = scripted fallback. Edge function: `agent-chat` (Haiku). Engine: `zarloEngine.js`, `zarloPageContent.js`. Subtitle: "Your game guide".
@@ -371,6 +385,12 @@ const seg = findSkillSegment(savedCategoryId) // handles legacy ids
 ```
 Skills field is `placemakes` (not `playSkills`). Use `seg.placemakes || seg.playSkills || []` for backwards compat.
 Skills hue: `i * 36` (10 segments). Problems hue: `i * 30` (12 segments). Personas: `i * 30` (12 segments).
+
+### Cluster Archiving (IMPORTANT)
+When Life Map re-runs, only archive UNRATED clusters (`resonance_state IS NULL AND resonance_rating IS NULL`). User-rated clusters are curated and must survive re-runs. The `cluster_stage` constraint allows: `preview`, `intermediate`, `final`, `selected`, `archived`.
+
+### Shared Score Utilities
+Always use `src/lib/scoreUtilities.js` for Clarity and Action Score calculations. Never inline the formula. Three consumers: JourneyTab, MirrorPage, LevelTab matrix.
 
 ### Common Patterns
 ```javascript
@@ -443,7 +463,12 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `founder_dna_results` | `founder_dna_sessions`
 
 ### Challenge & Review
-`experience_checkins` | `weekly_reviews` | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
+`experience_checkins` | `weekly_reviews` (3 questions: narrative_revision, identity_did, compounding_text) | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
+
+### Interior Scoreboard
+`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[] | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
+
+RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidence(p_cluster_id)`
 
 ### Life Paths → Quests → Courage Pipeline
 `life_path_sessions` (careers JSON, stuck_points JSON, step, safety) | `curiosity_clusters` | `curiosity_inputs`. On `/life-paths` completion: selected careers → `quests` (upsert on user_id+career_id), stuck points → `groan_challenges` (status: active, with depth_level + wahoo_category) + `quest_tasks` (is_courage_challenge: true) + `priority_weekly_picks`. If protective voice selected → `healing_intentions` pre-created. Architecture doc: `docs/architecture/life-paths-quests-courage-pipeline.md`.
