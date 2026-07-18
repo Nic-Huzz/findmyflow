@@ -114,6 +114,11 @@ export default function MirrorPage() {
 
   const handleRate = (clusterId, value) => {
     hapticLight()
+    if (value <= 2) {
+      // Low rating = auto-remove (doesn't describe you)
+      handleRemove(clusterId)
+      return
+    }
     setRatings(prev => ({ ...prev, [clusterId]: value }))
     // Auto-save rating immediately
     supabase.from('nikigai_clusters').update({
@@ -212,8 +217,8 @@ export default function MirrorPage() {
         <div className="mp-index-title">How to rate</div>
         <div className="mp-index-row"><span className="mp-index-dots">●●●●</span><span className="mp-index-label">This IS me</span><span className="mp-index-desc">Goosebumps. You'd screenshot it.</span></div>
         <div className="mp-index-row"><span className="mp-index-dots">●●●○</span><span className="mp-index-label">Yeah, that's right</span><span className="mp-index-desc">Accurate, no resistance</span></div>
-        <div className="mp-index-row"><span className="mp-index-dots">●●○○</span><span className="mp-index-label">Not quite</span><span className="mp-index-desc">See why AI said it but doesn't land</span></div>
-        <div className="mp-index-row"><span className="mp-index-dots">●○○○</span><span className="mp-index-label">That's not me</span><span className="mp-index-desc">Feels off, needs re-clustering</span></div>
+        <div className="mp-index-row mp-index-row-remove"><span className="mp-index-dots">●●○○</span><span className="mp-index-label">Not quite</span><span className="mp-index-desc">Auto-removed</span></div>
+        <div className="mp-index-row mp-index-row-remove"><span className="mp-index-dots">●○○○</span><span className="mp-index-label">That's not me</span><span className="mp-index-desc">Auto-removed</span></div>
       </div>
 
       {/* Cluster cards grouped by type */}

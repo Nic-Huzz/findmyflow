@@ -1244,7 +1244,10 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                   {[1, 2, 3, 4].map(n => (
                     <button key={n}
                       className={`lm-rate-dot ${(clusterRatings[cluster.id] || 0) >= n ? 'active' : ''}`}
-                      onClick={() => setClusterRatings(prev => ({ ...prev, [cluster.id]: n }))}
+                      onClick={() => {
+                        if (n <= 2) { handleRemoveCluster(cluster.id); return }
+                        setClusterRatings(prev => ({ ...prev, [cluster.id]: n }))
+                      }}
                     />
                   ))}
                 </div>

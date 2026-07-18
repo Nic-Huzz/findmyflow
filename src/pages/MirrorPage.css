@@ -74,6 +74,7 @@
 }
 .mp-index-label { font-weight: 600; color: #1a1a2e; min-width: 115px; }
 .mp-index-desc { color: #9ca3af; font-size: 11px; }
+.mp-index-row-remove { opacity: 0.45; }
 
 /* ── Re-generation Banner ── */
 .mp-regen-banner {
