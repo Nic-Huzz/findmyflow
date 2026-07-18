@@ -507,7 +507,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         ...personasCl.map(c => ({ ...c, cluster_type: 'persona' })),
       ]
 
-      // Archive old Life Map clusters (keep for history, scoped to null step_id to avoid wiping Curiosity Compass clusters)
+      // Archive old Life Map clusters — but preserve any the user has rated (those are curated)
       await supabase
         .from('nikigai_clusters')
         .update({ cluster_stage: 'archived' })
@@ -515,6 +515,8 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         .eq('cluster_stage', 'final')
         .in('cluster_type', ['skills', 'problems', 'persona'])
         .is('step_id', null)
+        .is('resonance_state', null)
+        .is('resonance_rating', null)
 
       // Insert new clusters
       const clustersToSave = allClusters.map(c => ({
@@ -622,9 +624,9 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
     if (clusters) {
       const mapCluster = c => ({ id: c.id, label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })
-      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills' && !c.is_removed).map(mapCluster))
-      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems' && !c.is_removed).map(mapCluster))
-      setPersonasClusters(clusters.filter(c => c.cluster_type === 'persona' && !c.is_removed).map(mapCluster))
+      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills').map(mapCluster))
+      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems').map(mapCluster))
+      setPersonasClusters(clusters.filter(c => c.cluster_type === 'persona').map(mapCluster))
       // Restore favourite selections
       const favSkills = new Set(clusters.filter(c => c.cluster_type === 'skills' && c.is_favourite).map(c => c.id))
       const favProblems = new Set(clusters.filter(c => c.cluster_type === 'problems' && c.is_favourite).map(c => c.id))
