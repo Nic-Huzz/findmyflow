@@ -1,6 +1,6 @@
 # Interior Scoreboard — Implementation Plan
 
-*Created: July 2026. Status: Ready to build.*
+*Created: July 2026. Updated: July 17. Status: Sprint 0 complete, ready for Sprint 1.*
 
 ## What We're Building and Why
 
@@ -18,10 +18,10 @@ We're adding ways for you to SEE your progress:
 
 ## Sprint Overview
 
-### Sprint 0: Fix the plumbing (1-2 days)
-**What:** Make sure courage challenges and quests are properly connected in the database.
-**Why:** Right now, 4 courage challenges are orphaned (not connected to any quest) and 8 quest tasks have no matching courage challenge. If we build metrics on broken data, the numbers will be wrong and users won't trust them.
-**Confidence: 85%**
+### Sprint 0: Fix the plumbing ✅ DONE (July 17)
+**What:** Connected courage challenges to quests in the database so the app knows which challenge belongs to which life path.
+**Why:** Without this, the app couldn't count progress per skill. 22 challenges were floating in space, not connected to anything.
+**Shipped:** `9fca732` (code) + migration `add_quest_id_to_groan_challenges_and_fk` (DB). FK constraint added, quest_id column added + backfilled 116/138 records, createGroanChallenge accepts questId, WahooCreator + UnstickFlow updated.
 
 ### Sprint 1: Organize tasks + remember your "I am" statements (2-3 days)
 **What:** Let people tag tasks as "this week / this month / this quarter." Show a dropdown of previous identity statements when completing a courage challenge so you can reuse your favorites.
@@ -236,6 +236,26 @@ Sprints 0+1+2 can run in parallel. Sprints 3→4→5 are sequential.
 |---|---|---|---|
 | **Monopoly Score** | How unique your combination is vs 299 builders | Scale dashboard | Future sprint |
 | **Alignment** | % income from aligned path | Scale dashboard | Needs L3 prompts |
+
+---
+
+## Open Questions (to resolve before or during sprints)
+
+### L0 learning resources that aren't courage challenges
+Currently, to-dos on quests don't capture WHAT the user was learning. A to-do like "Read The Body Keeps the Score" looks the same as "Email 3 venues" — both are just text with a checkmark. We don't know:
+- What type of resource it was (book, podcast, course, video)
+- The title/name of the resource
+- Whether it "lit them up"
+
+This matters because learning resources feed the Curiosity Map and Clarity convergence signal. Without capturing L0 data on to-dos, we miss a major input.
+
+**Options to explore:**
+- Add an optional "learning resource" tag on to-do creation (type + title)
+- Auto-detect from text ("Read..." or "Watch..." → prompt for resource details)
+- Connect to the existing Curiosity Map: "Add this to your curiosity map?" after completing a learning to-do
+- Or accept that learning resources are captured separately via the Curiosity Map flow, and to-dos don't need this
+
+**Decision needed:** Sprint 2 or 5 timeframe.
 
 ---
 
