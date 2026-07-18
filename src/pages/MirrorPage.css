@@ -11,9 +11,7 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 16px;
   background: #fff;
-  border-bottom: 3px solid transparent;
-  border-image: linear-gradient(90deg, #5e17eb, #E9A23B) 1;
-  border-image-slice: 1;
+  border-bottom: 1px solid #f2f3f5;
   position: sticky; top: 0; z-index: 10;
 }
 .mp-back {
