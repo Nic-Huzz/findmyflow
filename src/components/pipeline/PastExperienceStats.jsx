@@ -14,6 +14,7 @@ export default function PastExperienceStats({ experienceId, onBack }) {
   const [loading, setLoading] = useState(true)
   const [exp, setExp] = useState(null)
   const [stats, setStats] = useState({})
+  const [showingReveal, setShowingReveal] = useState(() => !hasBeenRevealed(experienceId))
 
   useEffect(() => {
     if (!user?.id || !experienceId) return
@@ -117,8 +118,6 @@ export default function PastExperienceStats({ experienceId, onBack }) {
       setLoading(false)
     }
   }
-
-  const [showingReveal, setShowingReveal] = useState(() => !hasBeenRevealed(experienceId))
 
   if (loading) return <div className="pes-loading">Loading stats...</div>
   if (!exp) return <div className="pes-loading">Experience not found</div>

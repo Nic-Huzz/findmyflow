@@ -60,30 +60,34 @@ Additional features shipped on `feature/interior-scoreboard-sprint2`:
 
 **G9 Alt Positionings:** Positioning generator now returns 3 different framings. User picks the one that feels right. "Show me 3 more" replaces "Regenerate". Edge function modified to request multiple options via `|||` separator.
 
+**G7 Sequential Score Reveal:** First view of a past event shows metrics one-by-one with animated delays (attendees → fill rate → repeat → revenue). Confetti on completion. Tracked in gamification state (fires once per event).
+
+**G16 Creator Insight Drops:** 5 template-based insight types (monopoly update, playbook milestone, pattern recognition, DNA comparison, percentile). Waterfall priority, 1 per session. Client-side, no edge function. Hardcoded benchmarks for v1.
+
 | Core Drive | Week 2 | Week 4 | Change | What shipped |
 |------------|--------|--------|--------|---|
 | **CD1** Epic Meaning | 8 | **8** | 0 | No changes |
-| **CD2** Accomplishment | 7 | **8** | +1 | Spider tier celebrations, building streak milestones, hidden achievement trophies with visible counter |
+| **CD2** Accomplishment | 7 | **9** | +2 | Spider tier celebrations, building streak milestones, hidden achievement trophies, sequential score reveal (animated metrics on event completion) |
 | **CD3** Creativity | 5 | **6** | +1 | Alt positionings (3 options = creative choice). Quarterly planning (user designs their own quarter) |
 | **CD4** Ownership | 8 | **9** | +1 | Hidden achievements as trophy collection. Streak as personal record. Quarterly plan as personal commitment. |
 | **CD5** Social | 2 | **2** | 0 | Still no social features. Gated on user count. |
 | **CD6** Scarcity | 5 | **6** | +1 | Building streak (forgiving but breakable). Quarterly planning adds time pressure ("quarter ending soon"). |
-| **CD7** Curiosity | 5 | **7** | +2 | Hidden achievements (nobody knows they exist until they pop). Night Owl (time-based surprise). Spider tier upgrades are unpredictable. Alt positionings show AI variation. |
+| **CD7** Curiosity | 5 | **8** | +3 | Hidden achievements (secret until they pop). Night Owl (time-based). Spider tier upgrades. Alt positionings. Insight Drops (pattern spotted, milestone benchmarks, DNA matches). |
 | **CD8** Loss | 2 | **3** | +1 | Building streak can break (forgiving, but still a loss signal). Quarterly review shows planned vs actual gap. |
 
-**Post-Week 4 Score: 64 + 64 + 36 + 81 + 4 + 36 + 49 + 9 = 343** (Strong)
+**Post-Week 4 Score: 64 + 81 + 36 + 81 + 4 + 36 + 64 + 9 = 375** (Strong)
 
-**Gain this session: +83 points (260 → 343)**
-**Total gain from baseline: +203 points (140 → 343)**
+**Gain this session: +115 points (260 → 375)**
+**Total gain from baseline: +235 points (140 → 375)**
 
 For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints.
 
 ---
 
 ### What's still weak (next priorities)
-- **CD5 (2)** — biggest remaining gap. No social features. Need: community feed (gate at 5+ users), accountability pairs (manual), monthly Scale call.
+- **CD5 (2)** — biggest remaining gap. No social features. Need: Zarlo for creators (G15, specced + decisions confirmed), community feed (gate at 5+ users), accountability pairs (manual), monthly Scale call.
 - **CD3 (6)** — improved with alt positionings but still mostly linear flows. Need: experience design sandbox, "what if" scenarios.
-- **CD8 (3)** — gentle. Building streak helps but no competitive pressure. Need: Sequential Score Reveal (G7) to create "wow, look at my numbers" moments that make inaction feel like missing out.
+- **CD8 (3)** — gentle. Building streak + sequential score reveal help but no competitive pressure yet. Need: Zarlo nudges to create gentle FOMO.
 
 ---
 
@@ -91,16 +95,12 @@ For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints.
 
 | Feature | Days | CD impact | Spec location |
 |---|---|---|---|
-| M1 Sequential score reveal | 2 | CD2+1, CD7+1 | Implementation plan, Sprint G7 |
 | M5 Dynamic share card | 2 | CD4+1 | Implementation plan, Sprint G10 |
 | M6 Portfolio on Growth | 2 | CD2+1 | Implementation plan, Sprint G13 |
 | M14 Community feed triggers | 2 | (background, no score until UI) | Implementation plan, Sprint G14 |
-| H2 Zarlo for creators | 7 | CD5+2, CD7+1 | Implementation plan, Sprint G15 |
-| H1 AI Insight Drops | 5 | CD7+2 | Implementation plan, Sprint G16 |
+| H2 Zarlo for creators | 5 | CD5+2, CD7+1 | Implementation plan, Sprint G15 (decisions confirmed, ready to build) |
 | H3 Creator profile page | 3 | CD4+1 | Implementation plan, Sprint G17 |
 | Community ops (manual) | 0 | CD5+2 | Recommendations doc, "Breaking 400" section |
-
-**If all remaining features ship: ~450-475**
 
 ### Already built (this session)
 
@@ -111,6 +111,12 @@ For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints.
 | ~~M10 Hidden achievements (8)~~ | CD7+1 | ✅ Week 4 |
 | ~~M11 Quarterly planning~~ | CD6+1 | ✅ Week 4 |
 | ~~G19 Spider celebrations~~ | CD2+1 | ✅ Week 4 |
+| ~~M1 Sequential score reveal~~ | CD2+1, CD7+1 | ✅ Week 4 |
+| ~~H1 Creator Insight Drops~~ | CD7+2 | ✅ Week 4 (template-based, no edge function) |
+
+**Current: 375. If Zarlo (G15) + remaining ship: ~440-460. Target was 450+.**
+
+**Next single feature with biggest score impact:** Zarlo for Creators (G15). Adds CD5+2, CD7+1 = ~+40 points → 415. Then community ops (manual, CD5+2) pushes past 450.
 
 All specs at:
 - `docs/superpowers/plans/2026-07-18-scale-gamification-implementation-plan.md`
