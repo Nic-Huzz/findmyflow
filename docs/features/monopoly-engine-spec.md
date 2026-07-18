@@ -271,11 +271,146 @@ YOUR MONOPOLY FINGERPRINT
 
 AI synthesis: "You use storytelling (78% behavioral evidence) to help people whose voice was taken (85%) — specifically burnt-out professionals (62%, growing). This combination exists nowhere in our dataset. That's your monopoly."
 
+### How to Calculate the Monopoly Score (step-by-step for agents)
+
+**Step 1: Map user's Life Map clusters to taxonomy**
+
+User's nikigai_clusters (freeform AI labels) need mapping to wheel taxonomy IDs. Either:
+- AI auto-tags at Life Map completion (preferred)
+- Or post-process: take cluster_label + items, AI maps to taxonomy segments
+
+Example (Huzz):
+```
+Life Map cluster "Movement & Presence Leader" 
+  → items: dancing, playground, sport, presenting
+  → taxonomy skills: [performing, connecting]
+
+Life Map cluster "Shame & Judgment Around Expression"
+  → items: getting in trouble, failing sport expectations, expressing playfulness
+  → taxonomy problems: [voice_taken]
+```
+
+**Step 2: Score each taxonomy dimension behaviorally**
+
+For each skill/problem/persona, compute a behavioral score (0-100%) based on:
+
+```
+SKILL SCORE = weighted average of:
+  - Life Map recurrence: appears in N/5 life periods (×40% weight)
+  - Curiosity "lit me up": N items in related branch lit up (×20% weight)  
+  - Courage challenges: N challenges on quests tagged with this skill (×20% weight)
+  - Cluster resonance: user's 1-5 rating for clusters tagged with this skill (×20% weight)
+
+PROBLEM SCORE = weighted average of:
+  - Self-selected in Life Map: yes/no (×30% weight)
+  - Word count depth: relative to other problems (×20% weight)
+  - Returned in healing flow: yes/no (×30% weight)
+  - Cluster resonance: user's 1-5 rating (×20% weight)
+
+PERSONA SCORE = weighted average of:
+  - Mentioned in Life Map: N/5 periods (×40% weight)
+  - Courage challenges serve them: evidence from tagged quests (×30% weight)
+  - Cluster resonance: user's 1-5 rating (×30% weight)
+```
+
+**Step 3: Identify top scores per dimension**
+
+Take the highest-scoring skill, problem, and persona. These form the monopoly fingerprint.
+
+**Step 4: Compare against 299 careerModels dataset**
+
+The `public/data/careerModels.json` file has 299 profiles, each with:
+- `primarySkills[]` — array of skill taxonomy IDs
+- `primaryProblem` — single problem taxonomy ID
+
+Run the narrowing funnel:
+
+```javascript
+// Pseudocode
+const userSkills = ['performing', 'building']  // top 2 skills
+const userProblem = 'voice_taken'               // top problem
+
+// Level 1: Any shared skill
+const level1 = profiles.filter(p => 
+  p.primarySkills.some(s => userSkills.includes(s)))
+// → e.g., 218/299
+
+// Level 2: 2+ shared skills  
+const level2 = profiles.filter(p =>
+  p.primarySkills.filter(s => userSkills.includes(s)).length >= 2)
+// → e.g., 7/299
+
+// Level 3: 2+ skills AND same problem
+const level3 = profiles.filter(p =>
+  p.primarySkills.filter(s => userSkills.includes(s)).length >= 2
+  && p.primaryProblem === userProblem)
+// → e.g., 0/299
+
+// Monopoly Score = position on spectrum
+// 50+ matches at level 3 = "Crowded"
+// 10-50 = "Emerging"
+// 3-10 = "Rare"
+// 0-2 = "Monopoly territory"
+```
+
+**Step 5: Generate the monopoly statement**
+
+AI synthesis combining: top skill names + top problem name + rarity result + closest comparisons from dataset.
+
+### Worked Example: Huzz (huzz@nichuzz.com)
+
+**Step 1 — Taxonomy mapping:**
+```
+Skills (from Life Map behavioral evidence):
+  performing: 80% (dancing 4/5 periods, presenting 3/5)
+  building:   60% (Lego+forts childhood, no-code+startups YA, coding career)
+  storytelling: 80% (funny videos teens, writing YA+career, presenting)
+  teaching:   60% (programs YA, workshops career, alchemist now)
+
+Problems (from Life Map + identify_topics):
+  voice_taken:    90% (3+ entries, deep writing, healing evidence)
+  life_not_yours: 85% (3+ entries, "Lost in Someone Else's Vision")
+  forgot_what_for: 80% (3+ entries, "hollow achievement")
+
+Personas (who he serves):
+  seekers:   dominant (3 clusters: Seekers in Limbo, Lost Seeker, Freedom Seekers)
+  achievers: strong (Wounded Corporate Soul)
+  healers:   moderate (Healers & Creators)
+```
+
+**Step 2 — Top scores:**
+```
+Top skills:   performing (80%), storytelling (80%)
+Top problem:  voice_taken (90%)
+Top persona:  seekers (dominant)
+```
+
+**Step 3 — Narrowing funnel against 299 careerModels:**
+```
+Any of top 4 skills:                218/299 (73%)
+2+ of top skills:                    77/299 (26%)
+His top problems:                    64/299 (21%)
+2+ skills AND problem:               32/299 (11%)
+performing + building + his problem:  0/299  (0%)  ← MONOPOLY
+```
+
+**Step 4 — Closest comparisons:**
+```
+Gabrielle Roth: performing + creating + voice_taken (no building)
+Sara Blakely:   performing + building + work_hollows (different wound)
+Brené Brown:    speaking_up + storytelling + life_not_yours (no performing, no building)
+```
+
+Each shares 2 dimensions. None share 3. The gap is Huzz's.
+
+**Step 5 — Monopoly statement:**
+"You PERFORM (dance, present) AND BUILD (code, products, tools) AND are driven by the wound of having your voice taken. Nobody in our dataset of 299 builders and creators combines all three. Gabrielle Roth performs and creates from voice_taken but doesn't build products. Sara Blakely performs and builds but is driven by a different wound. The intersection is yours."
+
 ### Cold Start Handling
 
-Behavioral scoring needs data volume. Minimum viable dataset before showing any monopoly score:
-- At least 5 curiosity items entered
+Minimum dataset before showing any monopoly score:
 - Life Map completed (skills + problems + personas across 5 periods)
+- At least 5 curiosity items entered
 - At least 3 courage challenges completed
 
 Before minimum: "Your monopoly fingerprint is forming. Keep exploring." Show partial data (which dimensions are filling in) without scoring.
