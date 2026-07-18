@@ -170,6 +170,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [scaleScoreValue, setScaleScoreValue] = useState(null)
   const [maxTicketPrice, setMaxTicketPrice] = useState(null)
   const [isFoundingMember, setIsFoundingMember] = useState(false)
+  const [instagramConnected, setInstagramConnected] = useState(false)
 
   // Inner Game data
   const [nervousSystemData, setNervousSystemData] = useState(null)
@@ -326,6 +327,10 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       // Max ticket price across all experiences
       const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
       setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
+
+      // Instagram connection check
+      const { data: igIntegration } = await supabase.from('user_integrations').select('id').eq('user_id', userId).eq('platform', 'instagram').eq('status', 'connected').maybeSingle()
+      setInstagramConnected(!!igIntegration)
 
       // Founding member check (first 50 by created_at, with stripe_customer_id or manual whitelist)
       const FOUNDING_WHITELIST = ['ebe69854-2ebd-4236-a437-3a362f5e1af4', 'c649fc45-f040-4e48-8f8e-48f4a1285f58', 'cc03bd6e-c40f-4941-8d1a-bc8c502d22d4']
@@ -1004,7 +1009,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         <div className={`ch2-tab-panel${activeTab === 'growth' ? ' active' : ''}`}>
 
           <SectionLaunchPad title="Start tracking" items={[
-            { label: 'Connect Instagram', done: false, route: '#instagram' },
+            { label: 'Connect Instagram', done: instagramConnected, action: () => document.querySelector('.ig-connect-btn')?.click() },
             { label: 'Run your first experience', done: past.length > 0, route: '/create/experience/new' },
             { label: 'Log your first 3% improvement', done: threePercentChain.length > 0, action: () => past[0] && setSelectedExperienceId(past[0].id) },
           ]} />
@@ -1277,7 +1282,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         totalAttendees: dashboardKPIs.totalAttendees || 0,
         repeatRate: dashboardKPIs.repeatRate || 0,
         threePercentCount: threePercentChain.length,
-        instagramConnected: false, // TODO: lift from InstagramConnect
+        instagramConnected,
       }} />
 
       {/* Origin story overlay — first visit only, skip if payment redirect */}
