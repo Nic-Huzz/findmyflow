@@ -453,16 +453,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       {/* Onboarding — only if items incomplete */}
       <JourneyOnboarding userId={userId} onUnlockTab={onUnlockTab} />
 
-      {/* Clarity Score */}
-      {clarityPct != null && (
-        <div className="jt-section jt-clarity-section">
-          <div className="jt-clarity-card">
-            <div className="jt-clarity-number">{clarityPct}%</div>
-            <div className="jt-clarity-label">Clarity</div>
-            <div className="jt-clarity-desc">How well you know who you are</div>
-          </div>
-        </div>
-      )}
+      {/* Clarity number removed — zone matrix on Quests tab is the visualization */}
 
       {/* Guidance nudge — clarity-based */}
       {clarityPct != null && clarityPct < 60 && (

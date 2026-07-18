@@ -318,7 +318,6 @@ export default function MirrorPage() {
       {/* Rating index */}
       <div className="mp-rating-index">
         <div className="mp-index-title">How to rate</div>
-        <div className="mp-index-row"><span className="mp-index-dots">●●●●</span><span className="mp-index-label">This IS me</span><span className="mp-index-desc">Goosebumps. You'd screenshot it.</span></div>
         <div className="mp-index-row"><span className="mp-index-emoji">🔥</span><span className="mp-index-label">I would absolutely love this</span></div>
         <div className="mp-index-row"><span className="mp-index-emoji">😌</span><span className="mp-index-label">Yeah, sounds fun</span></div>
         <div className="mp-index-row"><span className="mp-index-emoji">😰</span><span className="mp-index-label">I could do it but feels stressful</span></div>
@@ -453,14 +452,7 @@ export default function MirrorPage() {
         </div>
       </div>
 
-      {/* Clarity Score — bottom summary */}
-      {clarityPct != null && (
-        <div className="mp-clarity-hero">
-          <div className="mp-clarity-number">{clarityPct}%</div>
-          <div className="mp-clarity-label">Clarity</div>
-          <div className="mp-clarity-sub">How well you know who you are</div>
-        </div>
-      )}
+      {/* Clarity number removed — zone matrix on Quests tab is the visualization */}
 
       {/* No clusters state */}
       {clusters.length === 0 && (
