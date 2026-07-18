@@ -16,6 +16,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [expanded, setExpanded] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
+  const [taskTimeframe, setTaskTimeframe] = useState('week')
   const [isCourage, setIsCourage] = useState(false)
   const [showWahooCreator, setShowWahooCreator] = useState(false)
   const [wahooCreatorText, setWahooCreatorText] = useState('')
@@ -71,6 +72,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         text: taskInput.trim(),
         is_courage_challenge: false,
         sort_order: totalCount,
+        timeframe: taskTimeframe,
       }).select('id').single()
 
       if (error) console.error('Add task error:', error)
@@ -230,16 +232,39 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               {(() => {
                 const incomplete = tasks.filter(t => !t.done)
                 const completed = tasks.filter(t => t.done)
+                const TIMEFRAME_ORDER = { week: 0, month: 1, quarter: 2 }
+                const TIMEFRAME_LABELS = { week: 'This week', month: 'This month', quarter: 'This quarter' }
+                const grouped = { week: [], month: [], quarter: [] }
+                incomplete.forEach(t => {
+                  const tf = t.timeframe || 'week'
+                  if (grouped[tf]) grouped[tf].push(t)
+                  else grouped.week.push(t)
+                })
+                const hasMultipleTimeframes = Object.values(grouped).filter(g => g.length > 0).length > 1
+
+                const renderTask = (task) => (
+                  <div key={task.id} className="qbc-task">
+                    <button className="qbc-check" onClick={() => toggleTask(task)} />
+                    <span className="qbc-task-text">{task.text}</span>
+                    {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                    {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                  </div>
+                )
+
                 return (
                   <>
-                    {incomplete.map(task => (
-                      <div key={task.id} className="qbc-task">
-                        <button className="qbc-check" onClick={() => toggleTask(task)} />
-                        <span className="qbc-task-text">{task.text}</span>
-                        {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
-                        {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
-                      </div>
-                    ))}
+                    {hasMultipleTimeframes
+                      ? Object.entries(grouped)
+                          .sort(([a], [b]) => TIMEFRAME_ORDER[a] - TIMEFRAME_ORDER[b])
+                          .filter(([, items]) => items.length > 0)
+                          .map(([tf, items]) => (
+                            <div key={tf} className="qbc-timeframe-group">
+                              <div className="qbc-timeframe-label">{TIMEFRAME_LABELS[tf]}</div>
+                              {items.map(renderTask)}
+                            </div>
+                          ))
+                      : incomplete.map(renderTask)
+                    }
                     {completed.length > 0 && (
                       <button className="qbc-show-more" onClick={(e) => { e.stopPropagation(); setShowAllTasks(!showAllTasks) }}>
                         {showAllTasks ? 'Hide completed' : `Show ${completed.length} completed`}
@@ -288,10 +313,24 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               Add
             </button>
           </div>
-          <label className="qbc-courage-toggle">
-            <input type="checkbox" checked={isCourage} onChange={e => setIsCourage(e.target.checked)} />
-            <span>⚡ Tag as courage challenge</span>
-          </label>
+          <div className="qbc-task-options">
+            <label className="qbc-courage-toggle">
+              <input type="checkbox" checked={isCourage} onChange={e => setIsCourage(e.target.checked)} />
+              <span>⚡ Courage challenge</span>
+            </label>
+            <div className="qbc-timeframe-picker">
+              {['week', 'month', 'quarter'].map(tf => (
+                <button
+                  key={tf}
+                  className={`qbc-tf-btn ${taskTimeframe === tf ? 'active' : ''}`}
+                  onClick={() => setTaskTimeframe(tf)}
+                  type="button"
+                >
+                  {tf === 'week' ? 'This week' : tf === 'month' ? 'This month' : 'This quarter'}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Close quest */}
           {!showClose ? (
