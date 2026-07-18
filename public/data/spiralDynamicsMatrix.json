@@ -1,0 +1,547 @@
+{
+  "sdLevels": [
+    {
+      "id": "purple",
+      "label": "Purple",
+      "sub": "Tribal",
+      "color": "#7c3aed"
+    },
+    {
+      "id": "red",
+      "label": "Red",
+      "sub": "Power",
+      "color": "#ef4444"
+    },
+    {
+      "id": "blue",
+      "label": "Blue",
+      "sub": "Order",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "orange",
+      "label": "Orange",
+      "sub": "Achievement",
+      "color": "#f97316"
+    },
+    {
+      "id": "green",
+      "label": "Green",
+      "sub": "Community",
+      "color": "#22c55e"
+    },
+    {
+      "id": "yellow",
+      "label": "Yellow",
+      "sub": "Integrative",
+      "color": "#eab308"
+    }
+  ],
+  "branches": [
+    {
+      "id": "movement",
+      "label": "Movement",
+      "color": "#7c3aed",
+      "industry": "Transport"
+    },
+    {
+      "id": "nourishment",
+      "label": "Nourishment",
+      "color": "#22c55e",
+      "industry": "Food"
+    },
+    {
+      "id": "tools",
+      "label": "Tools",
+      "color": "#0ea5e9",
+      "industry": "Technology"
+    },
+    {
+      "id": "status",
+      "label": "Status",
+      "color": "#e879f9",
+      "industry": "Fashion & Identity"
+    },
+    {
+      "id": "bonds",
+      "label": "Bonds",
+      "color": "#f472b6",
+      "industry": "Communication"
+    },
+    {
+      "id": "shelter",
+      "label": "Shelter",
+      "color": "#38bdf8",
+      "industry": "Property"
+    },
+    {
+      "id": "story",
+      "label": "Story",
+      "color": "#fb923c",
+      "industry": "Media"
+    },
+    {
+      "id": "fire",
+      "label": "Fire",
+      "color": "#f59e0b",
+      "industry": "Energy"
+    },
+    {
+      "id": "healing",
+      "label": "Healing",
+      "color": "#a78bfa",
+      "industry": "Medicine & Wellness"
+    },
+    {
+      "id": "threat",
+      "label": "Threat",
+      "color": "#ef4444",
+      "industry": "Security"
+    }
+  ],
+  "cells": {
+    "movement-purple": {
+      "status": "broken",
+      "assumption": "Travel is sacred journey; animals carry the tribe",
+      "phase3": "Pilgrimage walks, Camino revival, barefoot movement"
+    },
+    "movement-red": {
+      "status": "broken",
+      "assumption": "Speed = conquest; the fastest warrior controls territory"
+    },
+    "movement-blue": {
+      "status": "broken",
+      "assumption": "Transport is institutional: rail networks, public transit, regulation"
+    },
+    "movement-orange": {
+      "status": "broken",
+      "assumption": "Cars must be big, powerful, personally owned. Bigger = better."
+    },
+    "movement-green": {
+      "status": "frontier",
+      "assumption": "[FITNESS] Competitive functional fitness (HYROX 1.5M/$140M, CrossFit -34%), boutique studios ($48B), social run clubs (tripled on Strava), wearable optimization, walking trends (+3000% Japanese walking). [TRANSPORT] EVs (20.7M units), e-bikes ($70B), micromobility ($75-98B), walkable urbanism.",
+      "problem": "[FITNESS] Run clubs exploding but unstructured. HYROX has progression but episodic community. Strava has social metrics but no belonging. CrossFit had both but imploded. Nobody bridges: community formation + NS-aware movement sequencing + identity transformation + affordable access. [TRANSPORT] MaaS apps exist (Moovit 1.5B users, Citymapper 50M) but works only in dense urban cores.",
+      "prediction": "[FITNESS] The real gap is structured community movement creating genuine belonging with progression and identity transformation, informed by NS state, at a consumer price point. [TRANSPORT] Car-free lifestyle infrastructure for non-urban contexts. Nobody has cracked suburbs.",
+      "simple": {
+        "crowded": "CrossFit proved community + progression + identity through movement works. HYROX is exploding (1.5M participants, $140M revenue). parkrun hit 530K for free. Rucking, barefoot shoes, walking trends all growing fast.",
+        "stuck": "CrossFit declined 34% through leadership failure, not model failure. Nobody rebuilt it with nervous system awareness. parkrun has community but no progression. HYROX has progression but community is episodic. Nobody tracks who you're becoming.",
+        "gap": "Movement x Healing: fitness that adapts to your nervous system state. Movement x Bonds: community that creates genuine belonging, not just workout partners. The intersection is where the next breakout lives.",
+        "prediction": "The next CrossFit won't be a gym. It will be a movement community that heals."
+      },
+      "phase": "phase3"
+    },
+    "movement-yellow": {
+      "status": "emerging",
+      "assumption": "[FITNESS] Structured community movement with belonging, progression, identity transformation, and NS awareness at mass-market price. [TRANSPORT] Car-free lifestyle infrastructure and cultural identity shift for non-urban contexts.",
+      "prediction": "parkrun (530K, 10M+ registered, free) proves demand. CrossFit proved the model works (community + progression + identity). WHO Commission on Social Connection creates urgency. Loneliness epidemic: 56% higher retention in group vs solo fitness.",
+      "phase3": "Rucking ($0.3-1.2B, 14.9% CAGR), barefoot shoes ($576M, Vivobarefoot 49% growth), parkrun (530K, 10M+ registered), Camino (530K pilgrims, record year), walking trends (+3000% Japanese walking), cold water swimming (7.5M UK, +340% groups), yoga ($127B), dance fitness (Zumba 200K locations). Every growth trend is ancestral movement in modern packaging.",
+      "simple": {
+        "crowded": "Strava tracks your runs (195M users). Oura and Whoop track your recovery. Apple Watch tells you to close your rings. All individual metrics, no community.",
+        "stuck": "Every wearable measures what your body did. Nobody measures what your body needs right now, or connects it to other people on the same journey.",
+        "gap": "Movement x Healing: your nervous system state determines the movement prescription. Movement x Story: your progression becomes a narrative you can share. Movement x Bonds: small groups matched by growth edge, not just fitness level.",
+        "prediction": "Within five years, the fastest-growing fitness brands won't sell workouts. They'll sell belonging through movement."
+      },
+      "phase": "phase3"
+    },
+    "nourishment-purple": {
+      "status": "returning",
+      "assumption": "Food from land spirits; seasonal, ritual, communal eating",
+      "phase3": "Cacao ceremonies, ritual meals, foraging courses, ancestral diet movement"
+    },
+    "nourishment-red": {
+      "status": "broken",
+      "assumption": "Control the land = control the food = control the people"
+    },
+    "nourishment-blue": {
+      "status": "active",
+      "assumption": "Food safety requires government standards, regulation, and the food pyramid",
+      "problem": "FDA, USDA standards still dominant but increasingly questioned."
+    },
+    "nourishment-orange": {
+      "status": "broken",
+      "assumption": "Industrial scale + chemicals + GMO = feed the world efficiently. Optimise yield above all."
+    },
+    "nourishment-green": {
+      "status": "frontier",
+      "assumption": "Organic ($282B, but 59% price premium and WIDENING), plant-based (declining, US sales -10%), farm-to-table (marketing buzzword), meal kits (74% HelloFresh, 11.5% monthly churn), vertical farming (14 bankruptcies in 2025), food tech investment at multi-year lows.",
+      "problem": "Six subgroups all claiming 'sustainable' with diminishing differentiation. Organic price premium widened to 59%. Plant-based in active decline. 14 vertical farms went bankrupt in 2025. Counter-movement costs more than conventional.",
+      "prediction": "Not 'integrate all approaches' (too broad, market fragmenting toward this). The real gap is the SOIL-TO-GUT CLOSED LOOP: connecting regenerative farm data to individual biological response at population scale.",
+      "simple": {
+        "crowded": "Fermentation is an $828B market. Sourdough ($3.2B), bone broth ($2B), beef tallow (+275% in 3 years), functional mushrooms ($12B). Ancestral food is booming. Organic ($282B) is mainstream.",
+        "stuck": "The loop-back is happening but fragmented. Fermentation people don't talk to regenerative farmers. Gut health apps don't connect to soil data. Nobody links what's in the ground to what your body actually needs.",
+        "gap": "Nourishment x Healing: food matched to your body's state, from farms that heal the soil. Nourishment x Bonds: community kitchens and shared meals as the delivery mechanism. The soil-to-gut pipeline, made affordable.",
+        "prediction": "The first platform that links soil health data to personalised nutrition at a consumer price will make 'organic' look as outdated as 'low-fat.'"
+      },
+      "phase": "phase3"
+    },
+    "nourishment-yellow": {
+      "status": "emerging",
+      "assumption": "The soil-to-gut closed loop: connecting what's happening in the soil where your food grows to what's happening in your gut when you eat it. Operationalising the soil-plant-human microbiome axis commercially at population scale.",
+      "prediction": "The science exists (soil-plant-human microbiome axis, 2025-2026 papers). ZOE tells you what to eat but doesn't care where it was grown. SAI Platform improves how food is grown but doesn't care who eats it. Zero players connect soil health to gut health to adaptive dietary guidance affordably.",
+      "phase3": "Fermented foods ($828B), sourdough ($3.2B, +10% CAGR), beef tallow (+275% in 3 years, Whole Foods #1 2026 trend), functional mushrooms ($12B), bone broth ($2B), ancestral diets ($11.3B paleo), cacao ceremonies, fasting apps ($168M). Every ancestral food practice is returning as a premium modern product.",
+      "simple": {
+        "crowded": "Gut health apps exist. Regenerative farms exist. But they don't talk to each other.",
+        "stuck": "Humans fermented, foraged, and ate locally for 200,000 years. The body expects food from living soil. Modern food is dead before it reaches you, and no app fixes that.",
+        "gap": "The closed loop: soil health data feeding personalised gut guidance, with ancestral foods (fermentation, bone broth, seasonal eating) made accessible and affordable. Nourishment x Healing: food as medicine matched to your body's state.",
+        "prediction": "The soil-to-gut pipeline will become the next trillion-dollar health category once the science catches up to the consumer product."
+      },
+      "phase": "phase3"
+    },
+    "tools-purple": {
+      "status": "broken",
+      "assumption": "Tools are sacred; the craftsman's hands channel spirit into material",
+      "phase3": "Maker movement, artisanal craft, hand tools revival"
+    },
+    "tools-red": {
+      "status": "active",
+      "assumption": "Whoever controls the tools controls everything. Technology is power.",
+      "problem": "Big Tech concentration. 5 companies control most of global computing."
+    },
+    "tools-blue": {
+      "status": "broken",
+      "assumption": "Technology serves institutional order: military, government, corporations"
+    },
+    "tools-orange": {
+      "status": "active",
+      "assumption": "Technology = competitive advantage, growth metrics, disruption, move fast and break things",
+      "problem": "VC-funded growth-at-all-costs. SaaS metrics obsession."
+    },
+    "tools-green": {
+      "status": "active",
+      "assumption": "Technology should be open, accessible, equitable. Digital rights matter.",
+      "problem": "Open-source AI (Hugging Face, Mistral, Llama) democratizes access but not the paradigm. AI safety (CHT, Credo AI) adds guardrails but doesn't question the direction. AI coding tools ($12.8B, 85% adoption) amplify speed. No-code ($65B, 42 vendors) removes skill barriers. AI wrapper saturation: 80% projected to fail."
+    },
+    "tools-yellow": {
+      "status": "frontier",
+      "assumption": "Not human-AI collaboration (the 'centaur' model is gaining traction). The real frontier is technology that tracks and optimizes for the human's growing capacity and comprehension, building agency rather than dependency, at an individual scale.",
+      "prediction": "No product combines: AI that adapts to the individual's growth edge + comprehension-building (user understands WHY) + agency-building (user becomes more capable, not more dependent) + appropriate scale. Every SaaS business model incentivizes dependency. Ivan Illich's 'convivial tools' has zero consumer products.",
+      "phase3": "Vinyl ($1.04B, 19th year of growth), mechanical keyboards ($2.7B), hand tools/woodworking ($32.8B), maker movement (3D printing $34B), right-to-repair (Colorado broadest law Jan 2026), Framework/RISC-V. Every growth signal = ancestral craftsmanship in modern packaging. Users choosing comprehension over capability.",
+      "simple": {
+        "crowded": "AI coding tools everywhere. Cursor, Copilot, Claude Code. Most developers already use AI.",
+        "stuck": "Humans built tools to extend their own capability for 200,000 years. Every modern tool does the opposite: it makes you faster but less capable without it. The business model rewards your dependency.",
+        "gap": "Technology that teaches you as it helps you, like an apprenticeship at scale. You get more skilled over time, not less. The maker movement and vinyl revival prove people crave understanding.",
+        "prediction": "The next wave of tools will compete on how capable they make the user, not how much they replace them. The winner will be the first AI that makes itself less necessary."
+      },
+      "phase": "phase2"
+    },
+    "status-purple": {
+      "status": "returning",
+      "assumption": "Status = closeness to ancestors, ritual role, lineage",
+      "phase3": "Heritage brands, ancestral identity, traditional tattoos"
+    },
+    "status-red": {
+      "status": "active",
+      "assumption": "Status = dominance displays, visible wealth, flexing",
+      "problem": "Luxury goods market growing. Flex culture on social media."
+    },
+    "status-blue": {
+      "status": "active",
+      "assumption": "Status = rank, title, institutional position, moral correctness",
+      "problem": "Institutional credentials declining but not gone."
+    },
+    "status-orange": {
+      "status": "active",
+      "assumption": "Status = wealth, metrics, follower count, achievements. You are what you've accomplished.",
+      "problem": "Hustle culture. Follower count as currency. Still dominant."
+    },
+    "status-green": {
+      "status": "frontier",
+      "assumption": "The 'anti-status' reaction has become its own status game. Five subgroups: de-influencing (12B TikTok views), quiet luxury (Hermes, Cucinelli; 614% search growth), 'authentic' branding (86% demand it, 38% burned out performing it), nano-creators (75.9% of Instagram's influencer base, $18.20 ROI per $1), secondhand fashion ($257B, 4x retail growth).",
+      "problem": "All five claim to reject status display. All five ARE status displays with different production values. Class ceiling: free personality tests give labels, not clarity; genuine identity work costs $150+/session therapy or $10K+ agency fees. Nothing under $50/mo does the real work.",
+      "prediction": "The real gap is a status-game diagnostic and redirection tool: map which games you're playing, connect them to identity wounds, provide game-exit protocols, and redirect status energy toward competence-based games aligned with genuine identity.",
+      "simple": {
+        "crowded": "De-influencing has billions of TikTok views. But 'not caring about status' became its own status game.",
+        "stuck": "Humans earned status through skill, contribution, and earned respect for 200,000 years. Social media turned it into a performance. Your brain still craves status, but the games you're playing don't actually satisfy the need.",
+        "gap": "A tool that shows you which status games you're unconsciously playing, connects them to what you actually want, and redirects that energy toward skill and craft. The way status worked before social media.",
+        "prediction": "The first platform that helps people consciously choose their status games will unlock a market bigger than personality tests."
+      },
+      "phase": "phase2"
+    },
+    "status-yellow": {
+      "status": "emerging",
+      "assumption": "A status-game diagnostic and redirection tool at a consumer price point. Books diagnose (Storr's The Status Game). Personality apps label. Coaching transforms. Nobody integrates all three into a status-specific intervention.",
+      "prediction": "No platform maps which specific status games someone is playing (dominance, virtue, or competence by life domain), connects to wound roots, provides exit protocols, and redirects toward competence. Gen Z self-discovery demand, 78% creator burnout, personality test market growing to $37.7B.",
+      "phase3": "Heritage craftsmanship ($906B handmade market, LARGER than luxury), traditional tattooing ($2.4B, 10.6% CAGR), vintage/secondhand ($257B, 4x retail growth), bespoke/custom goods, craft apprenticeship revival, skill-content creators. The handmade market is already LARGER than the luxury market.",
+      "simple": {
+        "crowded": "Personality tests everywhere. They label you but don't change anything.",
+        "stuck": "Humans earned respect through mastery and contribution for 200,000 years. A personality label doesn't give you that. It just gives you a new identity to perform online.",
+        "gap": "Status through real skill, real craft, and things you actually made. The handmade market ($906B) is already larger than the luxury market. Skill over stuff is winning.",
+        "prediction": "The status economy will split: people chasing followers versus people building craft. The craft side will win because it satisfies the deeper human need."
+      },
+      "phase": "phase2"
+    },
+    "bonds-purple": {
+      "status": "returning",
+      "assumption": "Bonds = tribe, physical proximity, shared ritual, belonging",
+      "phase3": "CrossFit boxes, men's circles, women's retreats, co-living"
+    },
+    "bonds-red": {
+      "status": "active",
+      "assumption": "Bonds = loyalty to the strong leader, followers, in-group/out-group",
+      "problem": "Influencer-follower dynamics. Political tribalism."
+    },
+    "bonds-blue": {
+      "status": "broken",
+      "assumption": "Bonds = institutional membership: church, nation, employer, alumni"
+    },
+    "bonds-orange": {
+      "status": "active",
+      "assumption": "Bonds = strategic networking, contacts, LinkedIn connections. Relationships as ROI.",
+      "problem": "Your network is your net worth. Transactional relationships."
+    },
+    "bonds-green": {
+      "status": "frontier",
+      "assumption": "'Community' has become meaningless. $1.8-6.5B platform market (Skool 170K+ communities, Circle 18K, Mighty Networks). Five subgroups: creator platforms (infrastructure, not facilitation), facilitated experiences (Peoplehood, premium/local), executive peer groups (proven model, $2,500-22,000/yr), friendship apps (Bumble BFF, algorithmic matching \u2260 bond formation), IRL gatherings (no infrastructure).",
+      "problem": "5-10% monthly paid community churn. 63% of community creators burned out. Skool/Circle provide space but not facilitation. Bumble BFF matches but doesn't facilitate bond formation. The facilitation model that works (Vistage/YPO/EO) costs $2,500-22,000/year. 99.999% priced out.",
+      "prediction": "The real gap is the facilitated peer-group model, democratized at a consumer price point with belonging measurement, NS-aware facilitation, identity progression tracking, and creator sustainability infrastructure.",
+      "simple": {
+        "crowded": "Skool, Circle, Discord, Slack. Everyone offers 'community.' Most are just group chats.",
+        "stuck": "Humans formed bonds through shared vulnerability and ritual for 200,000 years. Typing in a Slack channel doesn't create belonging. Most paid communities lose members every month because access isn't the same as connection.",
+        "gap": "The facilitated peer-group model (YPO, Vistage) creates real belonging but costs $22,000/year. Make it affordable at $20-50/month. The model is proven. The price is the barrier.",
+        "prediction": "The first platform that makes facilitated belonging affordable at scale will be the next CrossFit-sized breakout."
+      },
+      "phase": "phase2"
+    },
+    "bonds-yellow": {
+      "status": "emerging",
+      "assumption": "The facilitated peer-group model democratized: belonging measurement + NS-aware facilitation protocols + identity progression tracking + creator sustainability, at a consumer price point.",
+      "prediction": "Vistage/YPO prove structure + facilitation + vulnerability + accountability = extraordinary belonging. Nobody has attempted to democratize it. ManKind Project has the model but not the digital infrastructure. WHO Commission on Social Connection creates urgency ($154B/yr US loneliness cost).",
+      "phase3": "Men's circles (ManKind Project 10,000 weekly in 1,000+ groups, 8% YoY), women's circles (global movement emerging), co-living ($13.5B, 32% YoY, 350K+ beds), dinner party revival, ecstatic dance (700+ communities, 6 continents), talking circles. Every growth trend is ancestral gathering structure in modern packaging.",
+      "simple": {
+        "crowded": "Apps match you to people but can't make you actually bond with them.",
+        "stuck": "Humans bonded through shared struggle, ritual, and showing up for each other for 200,000 years. An algorithm can't replicate that. Matching people is not the same as helping them trust each other.",
+        "gap": "Facilitated small groups with structure (like men's circles, co-living, ecstatic dance) but at a price anyone can afford. The model exists. The affordability doesn't.",
+        "prediction": "Co-living, men's circles, and dinner party movements are early signals. The first to package facilitated belonging as a subscription will own the loneliness economy."
+      },
+      "phase": "phase2"
+    },
+    "shelter-purple": {
+      "status": "broken",
+      "assumption": "Home is sacred ground, ancestral land, cannot be bought or sold",
+      "phase3": "Land stewardship, indigenous land return, sacred architecture"
+    },
+    "shelter-red": {
+      "status": "active",
+      "assumption": "Territory = power. Real estate = wealth accumulation and dominance.",
+      "problem": "Property speculation, housing as investment vehicle."
+    },
+    "shelter-blue": {
+      "status": "active",
+      "assumption": "Housing regulated by zoning, building codes, institutional planning",
+      "problem": "Zoning laws from the 1950s still shape cities."
+    },
+    "shelter-orange": {
+      "status": "active",
+      "assumption": "Property is an investment asset. Maximise ROI. Housing is a financial product.",
+      "problem": "Housing unaffordable for young generations globally."
+    },
+    "shelter-green": {
+      "status": "frontier",
+      "assumption": "Green building ($618B+, LEED/Passive House), co-housing (2,000+ communities but premium-priced), modular/prefab (285 startups, $450M+ to ICON alone, repeated scaling failures), adaptive reuse (25K+ apartments/year). Sustainability is now a checkbox, not a philosophy.",
+      "problem": "Counter-movement costs more than conventional. Cohousing costs same or more per unit. 285 modular startups but only 58 have meaningful funding. Katerra raised $2B and went bankrupt. 'Sustainable' has followed the same trajectory as 'holistic' in healing: everywhere, meaning nothing specific.",
+      "prediction": "Nobody combines adaptive/responsive buildings with affordability. Ori Living makes $300K studios transform; Boxabl makes $50K boxes. The real gap: buildings as living systems within community-owned land models, below median market price, accessible to the 65% priced out.",
+      "simple": {
+        "crowded": "Green buildings, co-housing, tiny homes. All cost the same or more than regular housing.",
+        "stuck": "Humans built shelter from local materials, shared land, and knew their neighbours for 200,000 years. Modern housing is an investment product that most people can't afford. 'Sustainable' just means expensive with a green label.",
+        "gap": "Community land ownership, adaptive buildings, and natural materials combined to make homes that cost less than market rate, not more. The pieces exist separately. Nobody's combined them.",
+        "prediction": "The housing crisis will force a return to community-owned land and local building. The first to make it feel modern instead of hippie will unlock the biggest market on earth."
+      },
+      "phase": "phase2"
+    },
+    "shelter-yellow": {
+      "status": "emerging",
+      "assumption": "Dwellings that learn and respond to inhabitants AND their local environment, delivered through community-owned land models at a price point below median market rate. Technology + economics + governance solved together.",
+      "prediction": "Camp A (adaptive/responsive) is all premium ($300K-2M+). Camp B (affordable modular) is all standardized, not adaptive. No player integrates adaptive technology with affordability with community land ownership. Community land trusts (200+ in US) growing but serve only ~1,500 households total.",
+      "phase3": "Tiny homes ($13-17B), van life ($8-12B), biophilic design ($3.1B), hempcrete (now in US building code), earthships, community land trusts (200+), feng shui/vastu shastra, baugruppen (25-35% cost savings). The most innovative housing returns to what was default before industrialization.",
+      "simple": {
+        "crowded": "Smart home gadgets, robotic furniture. All luxury-priced.",
+        "stuck": "Humans built their own homes from the land around them for 200,000 years. Modern housing requires a 30-year mortgage for a box you can't modify. Smart homes add technology to the problem instead of solving it.",
+        "gap": "Tiny homes, earthships, and natural building made mainstream: adaptive, self-sufficient homes on community-owned land at a fraction of market price. The movements exist. The product doesn't.",
+        "prediction": "Tiny home, van life, and natural building movements will converge into a new housing category that makes homeownership possible for the generation locked out."
+      },
+      "phase": "phase2"
+    },
+    "story-purple": {
+      "status": "returning",
+      "assumption": "Story is oral, ritual, around the fire. The storyteller holds sacred role.",
+      "phase3": "Podcasts = campfire + smartphone. Live storytelling events."
+    },
+    "story-red": {
+      "status": "active",
+      "assumption": "Story belongs to the powerful. Propaganda, controlled narrative.",
+      "problem": "State media, platform manipulation, algorithmic amplification."
+    },
+    "story-blue": {
+      "status": "broken",
+      "assumption": "Story is published by institutions, curated by editors, filtered by gatekeepers"
+    },
+    "story-orange": {
+      "status": "active",
+      "assumption": "Story is content. Optimise for engagement, clicks, watch time.",
+      "problem": "TikTok algorithm. Content mills. Creator burnout."
+    },
+    "story-green": {
+      "status": "active",
+      "assumption": "Everyone's story matters equally. Democratised storytelling.",
+      "problem": "5 crowded subgroups: indie publishing (Substack 8.4M paid subs), 'authenticity' performers (codified rawness), AI content tools (17:1 AI-to-human ratio), course/community platforms, niche audio/long-form. 63% creator burnout. Per-post engagement down 32% YoY. 'Authentic' is now a performance."
+    },
+    "story-yellow": {
+      "status": "frontier",
+      "assumption": "NOT AI interactive narrative (12+ players, $3.8B market, already filling). The REAL frontier is Story as Nervous System Regulation: narrative containers that transform the storyteller, not just entertain the audience.",
+      "prediction": "Story structures for processing experience, shifting state, and building identity. 0-2 players. Adjacent signals: memoir tools (StoryWorth 35M stories), narrative therapy ($120-250/session), but nothing combines scalable story structure with NS awareness.",
+      "phase3": "Podcasts as campfire ($28-48B). Live storytelling revival (The Moth, 28 cities). Video podcast as fireside chat (YouTube now #1 podcast platform at 37.7%). Memoir platforms as oral history. The format is modern; the human need is 200,000 years old.",
+      "simple": {
+        "crowded": "Podcasts are a $28-48B market. Live storytelling (The Moth, 28 cities) is growing. Memoir platforms (StoryWorth, 35M stories) prove people want to tell their stories. Video podcasts now dominate.",
+        "stuck": "Podcasts recreated the campfire but for audiences, not storytellers. Most content helps the listener, not the person telling. Nobody uses story as a tool for the creator's own transformation.",
+        "gap": "Story x Healing: narrative containers that transform the teller, not just entertain the audience. Story x Bonds: live storytelling that creates community through shared vulnerability. The format exists. The integration doesn't.",
+        "prediction": "The next breakout story platform won't help you create content faster. It will help you process your life through story, and that will be the content people actually want to hear."
+      },
+      "phase": "phase3"
+    },
+    "fire-purple": {
+      "status": "returning",
+      "assumption": "Fire is sacred, to be tended and honored. The hearth is the centre of community.",
+      "phase3": "$12B global candle market. Campfire retreats. Circadian lighting."
+    },
+    "fire-red": {
+      "status": "active",
+      "assumption": "Energy = conquest and control. Oil wars. Resource geopolitics.",
+      "problem": "Energy weaponisation. Control of energy = control of nations."
+    },
+    "fire-blue": {
+      "status": "active",
+      "assumption": "Energy is a public utility. Regulated, standardised, institutional.",
+      "problem": "Grid infrastructure aging. Nuclear regulation heavy."
+    },
+    "fire-orange": {
+      "status": "active",
+      "assumption": "Maximise extraction, minimise cost. Shale, fracking, fossil fuel economics.",
+      "problem": "Climate crisis. Fossil fuels still 80%+ of global energy."
+    },
+    "fire-green": {
+      "status": "frontier",
+      "assumption": "Renewables growing fast ($3.17T transition market) but fragmenting: solar installers contracting 18%, battery storage booming (CATL/BYD/Tesla), wind stressed (GE Vernova paused offshore), hydrogen hyped ($12B but unproven), nuclear renaissance (66 SMR companies).",
+      "problem": "Grid bottleneck is real: 1,650 GW queued, 35% infrastructure incompatible. Solar installer bankruptcy wave. Customer acquisition costs spiked 40%. 42% of renewable projects report efficiency losses during peak demand.",
+      "prediction": "Not distributed intelligent energy (15+ players exist: Lunar Energy, Span, Octopus, Sonnen). The real gap is the consumer energy operating system: a single product that makes home energy feel like your phone battery, works for renters AND owners, learns autonomously.",
+      "simple": {
+        "crowded": "Candle market is $14.8B. Fire pits $8.4B. Circadian lighting $4.1B. Saunas $6B+. People spend more on ancestral fire than on smart energy products. The loop-back is massive and invisible.",
+        "stuck": "The fire loop-back is happening but nobody connects it to energy. People buy candles for warmth and ritual while their electricity bill confuses them. The ancestral need (visible, communal fire) and the modern need (clean, affordable energy) are treated as separate industries.",
+        "gap": "Fire x Bonds: communal energy and visible warmth. Fire x Shelter: homes that generate, store, and share energy while honouring the need for fire you can see. The consumer energy OS that makes it feel like your phone battery, not a bill.",
+        "prediction": "The candle and fire pit markets are already larger than smart energy. The winner combines both: energy you understand AND warmth you can feel."
+      },
+      "phase": "phase3"
+    },
+    "fire-yellow": {
+      "status": "emerging",
+      "assumption": "The consumer energy operating system: makes home energy feel like a phone battery indicator, works for renters AND owners, learns autonomously, turns energy from invisible bill to lifestyle metric.",
+      "prediction": "Every gap player solves one slice. Lunar Energy does hardware. Span does the panel. Octopus does the tariff. Sonnen does community sharing. Nobody stitches the full stack into a single consumer experience. 85% cannot afford full home energy independence.",
+      "phase3": "Fire-as-ritual is a $30B+ invisible market. Candles ($14.8B), fire pits ($8.4B), circadian lighting ($4.1B), saunas/infrared ($6B+), live-fire cooking (Michelin revival), fire ceremony retreats, off-grid/solarpunk. The ancestral fire market is larger than the smart energy market. Nobody knows they're in it.",
+      "simple": {
+        "crowded": "Smart meters, home batteries, solar panels. All exist separately.",
+        "stuck": "Humans gathered around fire they could see and tend for 200,000 years. Modern energy is invisible and incomprehensible. People still spend billions on candles and fire pits because the need for visible warmth never went away.",
+        "gap": "The full stack stitched together: generation, storage, tariff, sharing in one simple consumer experience. Fire x Shelter: homes that generate and share energy. Fire x Bonds: communal energy you can see and tend together.",
+        "prediction": "The candle, fire pit, and circadian lighting markets are already worth more than smart energy. The winner combines both: energy you understand AND warmth you can feel."
+      },
+      "phase": "phase3"
+    },
+    "healing-purple": {
+      "status": "returning",
+      "assumption": "Healing is shamanic, spiritual, plant-based. The healer channels through ceremony.",
+      "phase3": "Plant medicine retreats, ayahuasca, psilocybin therapy, cacao ceremony"
+    },
+    "healing-red": {
+      "status": "broken",
+      "assumption": "The powerful healer commands the body. Healing requires submission to authority."
+    },
+    "healing-blue": {
+      "status": "active",
+      "assumption": "Healing requires institutional authority: medical licence, FDA approval, hospital system",
+      "problem": "Pharma gatekeeping. Alternative practitioners criminalised."
+    },
+    "healing-orange": {
+      "status": "active",
+      "assumption": "Healing = data, drugs, measurable outcomes. One pill fits the diagnosis.",
+      "problem": "Chronic disease epidemic. Mental health crisis. 93% of healthcare is reactive."
+    },
+    "healing-green": {
+      "status": "frontier",
+      "assumption": "Holistic/integrative. $222B CAM market, 140K+ coaches, 220+ modalities on marketplaces. Everyone claims to heal the whole person.",
+      "problem": "Five crowded subgroups: digital NS tools (NEUROFIT, Othership), practitioner marketplaces (Heallist, Spine, Heal.me), certification-industrial complex (109K+ certified coaches), enterprise stepped-care (Spring Health, Modern Health), retreat economy ($248B). Severe differentiation collapse. Class ceiling: the good stuff costs $120-250/session or $3K-15K per retreat. Nothing under $50/mo routes you to the right modality.",
+      "prediction": "The real gap is nervous-system-state-informed modality sequencing at a consumer price point. No platform says: given where your NS is right now, here is the ORDER of modalities that will work, affordably.",
+      "simple": {
+        "crowded": "Two camps, same problem. Therapy apps put you alone with a protocol. Wellness offers breathwork, sound healing, plant medicine, but 'holistic' now means everything and nothing. 140,000 coaches, nobody can tell you which approach is right for YOU.",
+        "stuck": "Humans healed in community, through ceremony and touch, for 200,000 years. Both camps ignore this. Therapy is alone in a room. Wellness is alone on a mat. The body heals faster in groups, but nothing combines real community with real healing at a price people can afford.",
+        "gap": "Healing in community, guided by where your body actually is. Breathwork when you're shut down. Courage challenges when you're safe enough. The right practice, with the right people, in the right order. Not $200/session alone. $20-50/month together.",
+        "prediction": "The first brand that combines body-aware healing with genuine community at a consumer price will make both therapy apps and solo wellness look outdated."
+      },
+      "phase": "phase3"
+    },
+    "healing-yellow": {
+      "status": "emerging",
+      "assumption": "Nervous-system-state-informed modality sequencing at a consumer price point. The routing engine that says: given where your NS is RIGHT NOW, here is the modality order that will actually work.",
+      "prediction": "Spring Health routes clinically but excludes body-based work. NEUROFIT measures NS state but only delivers its own exercises. Spine matches to practitioners but doesn't assess state. Nobody bridges state assessment + full modality spectrum + sequencing + affordable access.",
+      "phase3": "Psilocybin therapy ($141M, 35% CAGR), psychedelic therapeutics ($3.3B), breathwork (clinically validated d=1.44), cold plunge ($870M), sound healing ($2.7B). Every growth segment is ancestral practice in modern packaging.",
+      "simple": {
+        "crowded": "Some apps measure your stress but only offer their own exercises.",
+        "stuck": "Humans knew which healer to go to because they lived in the same village. Your body knows what it needs, but modern healing forces you to guess from hundreds of options with no guidance.",
+        "gap": "Ancestral healing wisdom (breathwork, cold exposure, sound, plant medicine) with modern routing: your body's state tells the system what to recommend, in what order, affordably. Healing x Bonds: the group IS the medicine.",
+        "prediction": "The first platform that bridges body-state measurement with the full spectrum of healing approaches, not just its own, will become the front door to the entire wellness industry."
+      },
+      "phase": "phase3"
+    },
+    "threat-purple": {
+      "status": "returning",
+      "assumption": "Threats are spiritual. Ward off with ritual, amulets, sacred protection.",
+      "phase3": "Energetic protection, boundary rituals, sage cleansing, evil eye jewellery"
+    },
+    "threat-red": {
+      "status": "active",
+      "assumption": "Security = overwhelming force. Domination deters.",
+      "problem": "Nuclear deterrence. Police militarisation."
+    },
+    "threat-blue": {
+      "status": "active",
+      "assumption": "Security requires institutional order: standing armies, police, courts",
+      "problem": "Institutional trust declining. But no replacement exists."
+    },
+    "threat-orange": {
+      "status": "frontier",
+      "assumption": "Security = technology. $272B cybersecurity (Palo Alto, CrowdStrike), $262B private security (Allied Universal), $2.75T defence (Lockheed Martin), $42-88B smart home security (Ring, ADT). Combined $10T+ industry.",
+      "problem": "Technology creates as many threats as it solves. Combined $10T+ spent annually on the assumption threats are external and solutions are technological. Zero of this spend goes toward community capacity or social cohesion as security.",
+      "prediction": "The gap is total. ZERO consumer-facing products for community adaptive resilience. The concept exists in Royal Society papers (March 2026) and Taleb's books, but nobody has built a product that helps communities become anti-fragile.",
+      "simple": {
+        "crowded": "Cybersecurity, Ring doorbells, ADT. Trillions spent on watching and guarding.",
+        "stuck": "Humans kept each other safe through tight-knit community for 200,000 years. Modern security replaces trust with surveillance. More cameras don't make you safer, they make you more afraid.",
+        "gap": "Communities that get stronger when bad things happen, built on the same trust and mutual aid that kept humans safe before locks existed. Nobody is building this as a product.",
+        "prediction": "The gap here is total. Whoever figures out community resilience as a product first will define an entirely new category."
+      },
+      "phase": "phase2"
+    },
+    "threat-green": {
+      "status": "emerging",
+      "assumption": "Thinnest reaction layer on the entire matrix. Restorative justice (under $50M total annual funding). Violence interruption (Cure Violence, evidence-based but pilot-scale). Community safety apps (Citizen, Nextdoor: digitised surveillance, not resilience). Women's safety wearables ($2.65B but individual-protection-as-product).",
+      "prediction": "Defund-to-invest movement peaked 2020, reversed by 2022. Active federal legislation penalizing cities that reduce police budgets. No consumer-facing Phase 3 products exist at any price point. The counter-movement is entirely grant-funded.",
+      "phase3": "Martial arts as community practice ($21.2B US, 72K studios), evil eye/protection amulets ($14.8B spiritual jewellery), energetic boundary workshops, CERT volunteer teams, protection candles ($5.5B spiritual products). The ancestral protection impulse generates billions but has been re-categorised into wellness, fashion, and fitness.",
+      "simple": {
+        "crowded": "Restorative justice exists but has almost no funding.",
+        "stuck": "Humans resolved conflict face-to-face within their community for 200,000 years. Modern justice outsources it to institutions. The ancestral protection impulse is alive (martial arts, protection rituals) but nobody calls it 'security.'",
+        "gap": "Security through strong community bonds: martial arts as belonging, protection as practice, conflict resolution as skill. Billions already flow here under different labels.",
+        "prediction": "Progress will come disguised as fitness, community, or wellness, not as 'security reform.' The most politically charged frontier on the matrix."
+      },
+      "phase": "phase2"
+    },
+    "threat-yellow": {
+      "status": "emerging",
+      "assumption": "Security as complex adaptive resilience. Systems that absorb shocks rather than prevent them. Anti-fragile communities. The most underserved frontier on the entire matrix.",
+      "prediction": "Zero consumer-facing products found. The Royal Society's Adaptive Security paper (March 2026) proposes the theoretical framework: entropy management, evolutionary dynamics, resource expansion, transformation capabilities, self-governance, inter-systemic integration. Zero implementation exists.",
+      "phase3": "Martial arts as community practice ($21.2B US, 72K studios), evil eye/protection amulets ($14.8B spiritual jewellery), energetic boundary workshops, CERT volunteer teams. The ancestral protection impulse is alive but re-categorised: nobody calls it 'security.'",
+      "simple": {
+        "crowded": "The concept exists in academic papers. Zero consumer products.",
+        "stuck": "Humans survived every threat through collective adaptation, not individual defence. Modern security sells you personal protection while the thing that actually keeps you safe, strong community, has no product category at all.",
+        "gap": "Communities designed to absorb shocks and come back stronger, borrowing from how humans survived for millennia: shared vigilance, mutual aid, collective response. Nothing like this exists yet.",
+        "prediction": "The emptiest frontier on the entire matrix. The first builder here has no competition. The challenge isn't the market, it's making 'community resilience' feel like a product people want."
+      },
+      "phase": "phase2"
+    }
+  }
+}
