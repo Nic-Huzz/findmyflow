@@ -1,80 +1,94 @@
 # Bug: Life Map nikigai screen shows 0 skills for huzz@nichuzz.com
 
-*Created: July 18 2026. Priority: HIGH — blocks Sprint 2 (cluster resonance rating).*
+*Created: July 18 2026. Updated: July 18 (investigation complete). Priority: HIGH — blocks Sprint 7 (NS state swap on rate_mirror).*
 
 ## What's happening
 
-At `/life-map`, the nikigai screen ("Skills, Problems, Personas") shows:
-- Skills: 0 clusters
-- Problems: 1 cluster ("Transforming Fear into Freedom & Aliveness")
-- Personas: likely 1 cluster
+At `/life-map`, the nikigai screen ("Skills, Problems, Personas") may show 0 clusters despite having 22 clusters in the database across 2 sessions.
 
-Screenshot confirmed on localhost:5180 for huzz@nichuzz.com.
-
-## What the DB actually has
+## Investigation results (July 18)
 
 User ID: `ebe69854-2ebd-4236-a437-3a362f5e1af4`
 
-From Supabase queries, `nikigai_clusters` contains (step_id IS NULL, cluster_stage = 'final'):
-- 8 skills clusters (Movement & Presence Leader, Experience Architect & Joy Catalyst, Transformation Guide, etc.)
-- 6 problems clusters (Shame & Judgment, Lost in Someone Else's Vision, Transforming Fear, etc.)
-- 8 personas clusters (Seekers in Limbo, Wounded Corporate Soul, Healers & Creators, etc.)
+### Two completed Life Map sessions
+| Session | Date | Skills | Problems | Personas | Stage |
+|---------|------|--------|----------|----------|-------|
+| `7f137fb4` (most recent) | Jun 15 | 4 | 3 | 5 | **final** |
+| `d1209615` (older) | Apr 19 | 4 | 3 | 3 | **final** |
 
-The data EXISTS. The screen isn't showing it.
+**Problem**: BOTH sessions have `cluster_stage = 'final'`. The archiving code (LifeMapFlow.jsx:511-517) should have set the older session's clusters to `'archived'` when the Jun 15 run completed. It didn't.
 
-## Likely cause
+### Session data is complete
+The most recent session (7f137fb4) has `response_data` with narrative, chamber, and responses. No data corruption.
 
-`LifeMapFlow.jsx` line 592 filters clusters by session_id:
+### Return flow code path
+`handleReturnView()` (line 589) queries clusters WHERE `session_id = savedSession.id`. `savedSession` is set to the most recent completed session (7f137fb4). That session has 12 clusters, all `final`. So the return flow SHOULD show them.
+
+### Possible causes (updated)
+
+**1. Session created but not used for clusters (HIGH)**
+If the user started a fresh run (handleReturnFresh or handleReturnAdd), a new session was created via `createSession()`. If processing completed but the new session's ID was used for the insert (not the old one), and `checkPreviousCompletion` picks up the new session as `savedSession`, but the clusters were saved under a different session ID, the query returns empty.
+
+**2. Archiving ran but was undone (MEDIUM)**
+Both sessions having `final` clusters suggests archiving either (a) never ran, or (b) ran but was reverted. Could happen if the processing function hit an error AFTER archiving but BEFORE inserting, and the user retried — the retry archives nothing (already archived), inserts clusters under a new session, but the old archived ones stay archived. Then on a third attempt or manual fix, the old ones got un-archived.
+
+**3. The bug only manifests on fresh runs (MEDIUM)**
+On fresh runs, nikigai reads from STATE (set during processing). If the AI returned empty skills, state would be empty. But DB shows 4 skills for the most recent session, so either the AI returned them correctly and the state was set, or someone manually inserted them.
+
+## Fix
+
+### Immediate: archive old session clusters
+```sql
+UPDATE nikigai_clusters
+SET cluster_stage = 'archived'
+WHERE session_id = 'd1209615-185a-4e7a-a710-f36d6f781ee2'
+AND cluster_stage = 'final';
+```
+
+### Code: resilient fallback in handleReturnView
+If the session-scoped query returns 0 clusters, fall back to loading ALL final clusters (most recent first):
 
 ```javascript
-const { data: clusters } = await supabase
-  .from('nikigai_clusters')
-  .select('*')
-  .eq('user_id', user.id)
-  .eq('cluster_stage', 'final')
-  .eq('session_id', savedSession.id)  // ← THIS FILTER
-  .in('cluster_type', ['skills', 'problems', 'persona'])
+// In handleReturnView(), after the session-scoped query:
+if (!clusters?.length) {
+  // Fallback: load all final Life Map clusters regardless of session
+  const { data: fallback } = await supabase
+    .from('nikigai_clusters')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('cluster_stage', 'final')
+    .in('cluster_type', ['skills', 'problems', 'persona'])
+    .is('step_id', null)
+    .order('created_at', { ascending: false })
+  clusters = fallback
+}
 ```
 
-The user completed Life Map TWICE (2 flow_sessions rows). The most recent session likely produced only partial clusters (1 problem, 1 persona, 0 skills), while the full cluster set belongs to the earlier session.
+This ensures clusters always show even if session IDs get mismatched.
 
-## How to investigate
-
-```sql
--- 1. Check flow_sessions for life_map
-SELECT id, status, completed_at, created_at
-FROM flow_sessions
-WHERE user_id = 'ebe69854-2ebd-4236-a437-3a362f5e1af4'
-  AND flow_type = 'life_map'
-ORDER BY created_at DESC;
-
--- 2. Check which session_ids the clusters belong to
-SELECT session_id, cluster_type, COUNT(*) as cluster_count
-FROM nikigai_clusters
-WHERE user_id = 'ebe69854-2ebd-4236-a437-3a362f5e1af4'
-  AND cluster_stage = 'final'
-  AND step_id IS NULL
-GROUP BY session_id, cluster_type
-ORDER BY session_id;
-
--- 3. Compare: does the latest flow_session.id match the session with full clusters?
+### Code: deduplicate on load
+When multiple sessions have `final` clusters, only use the most recent:
+```javascript
+if (clusters?.length) {
+  const sessions = [...new Set(clusters.map(c => c.session_id))]
+  if (sessions.length > 1) {
+    // Keep only most recent session's clusters
+    const mostRecent = clusters.sort((a, b) =>
+      new Date(b.created_at) - new Date(a.created_at)
+    )[0].session_id
+    clusters = clusters.filter(c => c.session_id === mostRecent)
+  }
+}
 ```
-
-## Fix options
-
-1. **If latest session has partial clusters**: delete the partial flow_session + its clusters. The earlier complete session becomes the latest, and the screen will load full clusters.
-
-2. **If session_id mismatch**: update the full clusters to point to the latest session_id.
-
-3. **If the screen is loading wrong session**: fix the query in `LifeMapFlow.jsx` `handleReturnView()` (line 575) — it loads `savedSession` which may be the wrong one.
-
-4. **Longer-term**: the nikigai screen should handle multiple runs gracefully — either show the BEST run (most clusters) or merge results across runs.
 
 ## Key files
 
-- `src/flows/LifeMapFlow.jsx` — line 587-606 (handleReturnView cluster loading), line 1030+ (nikigai screen render)
-- `nikigai_clusters` table — session_id, cluster_type, cluster_stage, step_id columns
+- `src/flows/LifeMapFlow.jsx` — line 589-610 (handleReturnView), line 511-517 (archiving), line 1043+ (nikigai render)
+- `nikigai_clusters` table — session_id, cluster_type, cluster_stage, step_id
 
-## Why this blocks Sprint 2
-
-Sprint 2 adds a `rate_mirror` screen AFTER the nikigai screen where users rate each cluster 1-5. If the nikigai screen shows 0 skills clusters, the rating screen has nothing to rate. Fix this first.
+## Reproduction
+1. Log in as huzz@nichuzz.com
+2. Navigate to /life-map
+3. Tap "View my results"
+4. Navigate to nikigai screen
+5. Check console for errors, check network tab for nikigai_clusters response
