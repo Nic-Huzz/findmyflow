@@ -53,15 +53,127 @@
 ### Sprint 2: Cluster resonance rating + Clarity score
 **Status**: Scoped. LifeMapFlow.jsx read and understood. The resonance rating screen should be a new screen `rate_mirror` inserted after the `nikigai` screen (which shows clusters) in the SCREENS array at line 57-60.
 
-**Exact next step**: 
-1. Add `rate_mirror` to SCREENS array
-2. Add state: `const [clusterRatings, setClusterRatings] = useState({})`
-3. New screen renders clusters as title-only cards (no description) with 1-5 dot rating + remove button
-4. On "Continue", save `resonance_rating` to each `nikigai_clusters` row
-5. Calculate Clarity % = average of kept ratings
-6. Display Clarity % on Journey tab (JourneyTab.jsx, above "Your Skills" section)
+**Exact code changes needed:**
 
-**Open question from user**: The resonance rating + curiosity additions + life path updates should converge on a "Mirror page" — a living page users can return to. This may be a new route (/mirror) or an expansion of the /me page. Decide during Sprint 2.
+### 1. SCREENS array (line 55-61 of LifeMapFlow.jsx)
+```diff
+  'nikigai', 'chamber_intro', 'chamber_reveal', 'gap_insight',
++ Insert 'rate_mirror' AFTER 'nikigai':
+  'nikigai', 'rate_mirror', 'chamber_intro', 'chamber_reveal', 'gap_insight',
+```
+
+### 2. State to add (near line 59 of GroanCompletionModal pattern, around line 175 area)
+```javascript
+const [clusterRatings, setClusterRatings] = useState({}) // { clusterId: 1-5 }
+const [removedClusters, setRemovedClusters] = useState(new Set())
+```
+
+### 3. Nikigai screen exit paths — BOTH need to route through rate_mirror
+Line 1117: `goToScreen('chamber_intro')` → change to `goToScreen('rate_mirror')`
+Line 1128: `goToScreen(essenceChamber ? 'chamber_intro' : 'complete')` → change to `goToScreen('rate_mirror')`
+
+### 4. New rate_mirror screen block (insert between nikigai and chamber_intro renders, around line 1134)
+```jsx
+if (currentScreen === 'rate_mirror') {
+  const allClusters = [
+    ...skillsClusters.map(c => ({ ...c, type: 'skills' })),
+    ...problemsClusters.map(c => ({ ...c, type: 'problems' })),
+    ...personasClusters.map(c => ({ ...c, type: 'persona' })),
+  ].filter(c => !removedClusters.has(c.id))
+
+  const keptRatings = allClusters
+    .map(c => clusterRatings[c.id])
+    .filter(r => r != null)
+  const clarityPct = keptRatings.length > 0
+    ? Math.round((keptRatings.reduce((a, b) => a + b, 0) / keptRatings.length) * 20)
+    : null
+
+  const handleSaveRatings = async () => {
+    // Save each rating to nikigai_clusters
+    const updates = Object.entries(clusterRatings).map(([id, rating]) =>
+      supabase.from('nikigai_clusters').update({
+        resonance_rating: rating,
+        resonance_updated_at: new Date().toISOString(),
+      }).eq('id', id)
+    )
+    // Mark removed clusters
+    const removes = [...removedClusters].map(id =>
+      supabase.from('nikigai_clusters').update({
+        is_removed: true,
+        resonance_updated_at: new Date().toISOString(),
+      }).eq('id', id)
+    )
+    await Promise.all([...updates, ...removes])
+    goToScreen(essenceChamber ? 'chamber_intro' : 'complete')
+  }
+
+  return (
+    <div className="life-map-app">
+      <div className="lm-container">
+        <div className="lm-reveal">
+          <h2 className="lm-reveal-title lm-gold-text">Does this feel right?</h2>
+          <p className="lm-reveal-subtitle">Rate how well each one describes you</p>
+          {clarityPct != null && (
+            <div className="lm-clarity-score">Clarity: {clarityPct}%</div>
+          )}
+
+          {/* Render each cluster with 1-5 dots + remove */}
+          {allClusters.map(cluster => (
+            <div key={cluster.id} className="lm-rate-card">
+              <div className="lm-rate-label">{cluster.label}</div>
+              <div className="lm-rate-dots">
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button key={n}
+                    className={`lm-rate-dot ${(clusterRatings[cluster.id] || 0) >= n ? 'active' : ''}`}
+                    onClick={() => setClusterRatings(prev => ({ ...prev, [cluster.id]: n }))}
+                  />
+                ))}
+              </div>
+              <button className="lm-rate-remove"
+                onClick={() => setRemovedClusters(prev => new Set([...prev, cluster.id]))}
+              >Remove</button>
+            </div>
+          ))}
+
+          <button className="lm-cta-gold" onClick={handleSaveRatings}
+            disabled={Object.keys(clusterRatings).length === 0}>
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+### 5. CSS needed (add to LifeMapFlow.css)
+```css
+.lm-clarity-score { text-align: center; font-size: 24px; font-weight: 800; color: #5e17eb; margin: 16px 0; }
+.lm-rate-card { padding: 14px 0; border-bottom: 1px solid #f2f3f5; display: flex; align-items: center; gap: 12px; }
+.lm-rate-label { flex: 1; font-size: 14px; font-weight: 600; color: #1a1a2e; }
+.lm-rate-dots { display: flex; gap: 6px; }
+.lm-rate-dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #e9ecef; background: #fff; cursor: pointer; padding: 0; }
+.lm-rate-dot.active { background: #5e17eb; border-color: #5e17eb; }
+.lm-rate-remove { background: none; border: none; color: #adb5bd; font-size: 12px; cursor: pointer; font-family: inherit; }
+```
+
+### 6. Journey tab — display Clarity % (JourneyTab.jsx)
+Query nikigai_clusters for user, filter `is_removed = false` and `resonance_rating IS NOT NULL`, average ratings × 20 = Clarity %. Display above "Your Skills" section.
+
+### 7. Migration (apply before building)
+```sql
+ALTER TABLE nikigai_clusters ADD COLUMN IF NOT EXISTS resonance_rating integer;
+ALTER TABLE nikigai_clusters ADD COLUMN IF NOT EXISTS resonance_updated_at timestamptz;
+ALTER TABLE nikigai_clusters ADD COLUMN IF NOT EXISTS behavioral_evidence integer DEFAULT 0;
+ALTER TABLE nikigai_clusters ADD COLUMN IF NOT EXISTS is_removed boolean DEFAULT false;
+```
+
+### Edge cases to handle
+- **Duplicate clusters from multiple Life Map runs**: Filter by most recent `session_id` or by `step_id IS NULL` to avoid showing overlapping clusters
+- **Return flow** (user already completed Life Map, comes back): `handleReturnView()` at line 575 goes to `life_map` screen. If they tap through to nikigai again, they'll hit rate_mirror. Their previous ratings should pre-populate from DB.
+- **No clusters** (Life Map not completed): rate_mirror should auto-skip to next screen if allClusters is empty
+
+**Open question from user**: The resonance rating + curiosity additions + life path updates should converge on a "Mirror page" — a living page users can return to. This may be a new route (/mirror) or an expansion of the /me page. Decide during Sprint 2 or defer to Sprint 4.
 
 ### Remaining sprints (all scoped in `docs/features/interior-scoreboard-implementation-plan.md`)
 - Sprint 3: Quest skill tagging (2 days)
