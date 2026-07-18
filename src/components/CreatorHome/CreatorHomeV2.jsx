@@ -31,7 +31,8 @@ import RootReachCard from '../pipeline/RootReachCard'
 import CreatorRadarChart from './CreatorRadarChart'
 import CreatorCelebrations from './CreatorCelebrations'
 import SectionLaunchPad from './SectionLaunchPad'
-import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown } from '../../lib/creatorGamification'
+import QuarterlyPlanner from './QuarterlyPlanner'
+import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown, getUnlockedAchievements, updateBuildingStreak, HIDDEN_ACHIEVEMENTS } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -171,6 +172,10 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [maxTicketPrice, setMaxTicketPrice] = useState(null)
   const [isFoundingMember, setIsFoundingMember] = useState(false)
   const [instagramConnected, setInstagramConnected] = useState(false)
+  const [repeatAttendeeCount, setRepeatAttendeeCount] = useState(0)
+  const [buildingStreak, setBuildingStreak] = useState({ current: 0, best: 0 })
+  const [streakMilestone, setStreakMilestone] = useState(null)
+  const [achievementCount, setAchievementCount] = useState(0)
 
   // Inner Game data
   const [nervousSystemData, setNervousSystemData] = useState(null)
@@ -354,6 +359,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         const repeats = Object.values(counts).filter(c => c >= 2).length
         const repeatRate = totalAttendees > 0 ? Math.round((repeats / totalAttendees) * 100) : 0
         setDashboardKPIs({ totalAttendees, repeatRate })
+        setRepeatAttendeeCount(repeats)
 
         const repeatIds = Object.entries(counts).filter(([, c]) => c >= 2).sort(([, a], [, b]) => b - a).slice(0, 5).map(([id, count]) => ({ id, count }))
         if (repeatIds.length) {
@@ -364,6 +370,18 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           }).filter(f => f.name !== 'Unknown'))
         }
       }
+
+      // Building streak — check if creator had activity this week
+      const hasActivityThisWeek = (
+        experiences.length > 0 || !!remarkData?.id || !!reachData?.id ||
+        !!growthData?.id || !!scaleScoreData?.id || threePercentNotes > 0
+      )
+      const streakResult = updateBuildingStreak(hasActivityThisWeek)
+      setBuildingStreak({ current: streakResult.current, best: streakResult.best })
+      if (streakResult.milestone) setStreakMilestone(streakResult.milestone)
+
+      // Achievement count for trophy display
+      setAchievementCount(getUnlockedAchievements().length)
     } catch (err) {
       console.error('CreatorHomeV2 load error:', err)
     } finally {
@@ -479,6 +497,21 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 {getNextLevel(creatorXP) ? `${creatorXP} / ${getNextLevel(creatorXP).threshold} XP` : `${creatorXP} XP`}
               </span>
             </div>
+            {/* Streak + Trophies row */}
+            {(buildingStreak.current > 0 || achievementCount > 0) && (
+              <div className="ch2-streak-row">
+                {buildingStreak.current > 0 && (
+                  <span className="ch2-streak-pill">
+                    🔥 {buildingStreak.current}w streak
+                  </span>
+                )}
+                {achievementCount > 0 && (
+                  <span className="ch2-trophy-pill">
+                    🏆 {achievementCount} / {HIDDEN_ACHIEVEMENTS.length}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -850,6 +883,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               { label: 'Set up your first pipeline', done: Object.keys(checklistCounts).length > 0, action: () => experiences[0] && setSelectedExperienceId(experiences[0].id) },
               { label: 'Run your first event', done: past.length > 0, action: () => upcoming[0] && setSelectedExperienceId(upcoming[0].id) },
             ]} />
+          )}
+
+          {/* Quarterly Planner — visible when no experience selected */}
+          {!selectedExperienceId && (
+            <QuarterlyPlanner experiences={experiences} pastExperiences={past} />
           )}
 
           {/* ── Growth Line Pipeline or Past Stats (when experience selected) ── */}
@@ -1269,21 +1307,34 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         />
       )}
 
-      {/* Milestone celebrations */}
-      <CreatorCelebrations data={{
-        hasRemarkableResults: !!remarkableAngle,
-        hasReach,
-        hasGrowth,
-        hasScaleScore,
-        hasPositioning: false, // CreatorPositionCard manages its own state
-        experienceCount: experiences.length,
-        pastEventCount: past.length,
-        hasSoldOut: false, // TODO: compute from capacity vs attendees
-        totalAttendees: dashboardKPIs.totalAttendees || 0,
-        repeatRate: dashboardKPIs.repeatRate || 0,
-        threePercentCount: threePercentChain.length,
-        instagramConnected,
-      }} />
+      {/* Milestone + achievement + spider celebrations */}
+      <CreatorCelebrations
+        data={{
+          hasRemarkableResults: !!remarkableAngle,
+          hasReach,
+          hasGrowth,
+          hasScaleScore,
+          hasPositioning: false, // CreatorPositionCard manages its own state
+          experienceCount: experiences.length,
+          pastEventCount: past.length,
+          hasSoldOut: false, // TODO: compute from capacity vs attendees
+          totalAttendees: dashboardKPIs.totalAttendees || 0,
+          repeatRate: dashboardKPIs.repeatRate || 0,
+          repeatAttendeeCount,
+          threePercentCount: threePercentChain.length,
+          instagramConnected,
+          hasWoundMap: !!woundMapData,
+          streakMilestone,
+        }}
+        spiderData={{
+          impact: dashboardKPIs.totalAttendees || 0,
+          consistency: past.length,
+          retention: dashboardKPIs.repeatRate || 0,
+          brand: scaleScoreValue,
+          price: maxTicketPrice,
+          reach: null, // TODO: wire Instagram views
+        }}
+      />
 
       {/* Origin story overlay — first visit only, skip if payment redirect */}
       {!loading && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (

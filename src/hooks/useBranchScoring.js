@@ -109,9 +109,9 @@ export function useBranchScoring() {
             .not('branch', 'is', null)
             .neq('branch', 'default'),
           supabase.from('quests')
-            .select('label, predicted_state, depth_level, status')
+            .select('id, label, predicted_state, depth_level, status, skill_tags, branch')
             .eq('user_id', user.id)
-            .eq('status', 'active'),
+            .in('status', ['active', 'completed']),
           supabase.from('nikigai_clusters')
             .select('cluster_type, cluster_label, is_favourite, items')
             .eq('user_id', user.id),
@@ -160,8 +160,10 @@ export function useBranchScoring() {
         })
 
         // 3. Active quests (×3 vibe, ×2 other — what you're building is strongest action signal)
+        // Use quest.branch field (AI-classified) when available, fall back to label keyword matching
         quests.forEach(q => {
-          const branches = matchCareerToBranches(q.label)
+          if (q.status !== 'active') return // only score active quests for base signal
+          const branches = q.branch ? [q.branch] : matchCareerToBranches(q.label)
           const weight = q.predicted_state === 'vibe' ? 3 : 2
           branches.forEach(b => addScore(b, weight))
         })

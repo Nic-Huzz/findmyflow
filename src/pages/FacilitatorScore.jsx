@@ -13,6 +13,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { useBranchScoring } from '../hooks/useBranchScoring'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import '../flows/ScaleDiagnosticFlow.css'
 
@@ -213,7 +214,8 @@ export default function FacilitatorScore() {
   // Identity text input
   const [identityStatement, setIdentityStatement] = useState('')
 
-  // Branch
+  // Branch (pre-fill from useBranchScoring if no remarkable_angles or previous diag)
+  const { primary: scoredPrimary } = useBranchScoring()
   const [selectedBranch, setSelectedBranch] = useState(null)
 
   // Auth + context
@@ -331,6 +333,13 @@ export default function FacilitatorScore() {
       setHasReportData(!!angle?.score_ancestral || !!angle?.score_body)
     })
   }, [])
+
+  // Fallback: pre-fill branch from useBranchScoring if nothing else set it
+  useEffect(() => {
+    if (!selectedBranch && scoredPrimary?.branch) {
+      setSelectedBranch(scoredPrimary.branch)
+    }
+  }, [scoredPrimary, selectedBranch])
 
   const isLoggedIn = !!user
 
@@ -577,17 +586,21 @@ export default function FacilitatorScore() {
           <p className="sdf-prompt">Every experience maps to one of 10 primal human needs. This shapes the competition context on your results.</p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
-            {BRANCHES.map(b => (
+            {BRANCHES.map(b => {
+              const isRecommended = scoredPrimary?.branch === b.key
+              return (
               <button key={b.key} className={`sdf-option-btn ${selectedBranch === b.key ? 'sdf-option-selected' : ''}`}
                 onClick={() => { hapticLight(); setSelectedBranch(b.key) }}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <span style={{ fontSize: '1.3rem', flexShrink: 0 }}>{b.icon}</span>
                 <span>
                   <strong>{b.label}</strong>
+                  {isRecommended && <span style={{ marginLeft: 8, fontSize: '0.65rem', fontWeight: 700, color: '#E9A23B', background: 'rgba(233,162,59,0.15)', padding: '2px 6px', borderRadius: 4, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Recommended</span>}
                   <span style={{ display: 'block', fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>{b.desc}</span>
                 </span>
               </button>
-            ))}
+              )
+            })}
           </div>
 
           <div className="sdf-nav">

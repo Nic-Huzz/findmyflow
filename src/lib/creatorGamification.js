@@ -145,6 +145,233 @@ export function markStaleNudgeShown(experienceId) {
   })
 }
 
+// ── Hidden Achievements ────────────────────────────────────────────────────
+
+/**
+ * 8 secret milestones. Nobody knows they exist until they pop.
+ * Different from regular celebrations: trophy icon, "Achievement Unlocked" header.
+ */
+export const HIDDEN_ACHIEVEMENTS = [
+  {
+    key: 'polymath',
+    name: 'Polymath',
+    icon: '🧠',
+    toast: 'All 4 playbook stages complete. You see the whole picture now.',
+    check: d => d.hasRemarkableResults && d.hasReach && d.hasGrowth && d.hasScaleScore,
+  },
+  {
+    key: 'cult_leader',
+    name: 'Cult Leader',
+    icon: '🔥',
+    toast: '3 people came back for more. That is not luck. That is a pull.',
+    check: d => d.repeatAttendeeCount >= 3,
+  },
+  {
+    key: 'ach_sold_out',
+    name: 'Sold Out',
+    icon: '🎟️',
+    toast: 'No seats left. You filled the room.',
+    check: d => d.hasSoldOut,
+  },
+  {
+    key: 'chain_reactor',
+    name: 'Chain Reactor',
+    icon: '⛓️',
+    toast: '3 improvements in a row. Compounding has started.',
+    check: d => d.threePercentCount >= 3,
+  },
+  {
+    key: 'origin_story',
+    name: 'Origin Story',
+    icon: '📖',
+    toast: 'You mapped your origin. The wound became the work.',
+    check: d => d.hasWoundMap,
+  },
+  {
+    key: 'night_owl',
+    name: 'Night Owl',
+    icon: '🦉',
+    toast: "Building after midnight. That's not hustle. That's obsession.",
+    check: () => { const h = new Date().getHours(); return h >= 23 || h < 5 },
+  },
+  {
+    key: 'full_stack',
+    name: 'Full Stack',
+    icon: '🏗️',
+    toast: 'Identity found. Experience created. Growth tracked. The full loop.',
+    check: d => d.hasRemarkableResults && d.experienceCount > 0 && d.threePercentCount > 0,
+  },
+  {
+    key: 'century',
+    name: 'Century',
+    icon: '💯',
+    toast: '100 people. You are building a movement.',
+    check: d => d.totalAttendees >= 100,
+  },
+]
+
+/**
+ * Get all unlocked achievements.
+ */
+export function getUnlockedAchievements() {
+  const state = getGamificationState()
+  return Object.keys(state.achievements || {})
+}
+
+/**
+ * Check if an achievement has been unlocked.
+ */
+export function isAchievementUnlocked(achievementKey) {
+  const state = getGamificationState()
+  return state.achievements?.[achievementKey] === true
+}
+
+/**
+ * Mark an achievement as unlocked.
+ */
+export function markAchievementUnlocked(achievementKey) {
+  const state = getGamificationState()
+  updateGamificationState({
+    achievements: { ...(state.achievements || {}), [achievementKey]: true }
+  })
+}
+
+// ── Building Streak ────────────────────────────────────────────────────────
+
+/**
+ * Weekly building streak. Forgiving: 1 miss allowed before streak breaks.
+ *
+ * A "building week" = any week where the creator did at least one growth action:
+ * created experience, ran pipeline task, logged 3% note, or completed playbook stage.
+ *
+ * Streak state: { current, best, lastActiveWeek, missUsed }
+ */
+
+function getWeekNumber(date = new Date()) {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7))
+  const yearStart = new Date(d.getFullYear(), 0, 4)
+  return `${d.getFullYear()}-W${String(Math.ceil(((d - yearStart) / 86400000 + yearStart.getDay() + 1) / 7)).padStart(2, '0')}`
+}
+
+function weekToDate(weekStr) {
+  // Convert "2026-W29" to the Monday of that ISO week
+  const [year, week] = weekStr.split('-W').map(Number)
+  const jan4 = new Date(year, 0, 4) // Jan 4 is always in ISO week 1
+  const dayOfWeek = jan4.getDay() || 7 // Convert Sunday=0 to 7
+  const monday = new Date(jan4)
+  monday.setDate(jan4.getDate() - dayOfWeek + 1 + (week - 1) * 7)
+  return monday
+}
+
+function weekDiff(weekA, weekB) {
+  const dateA = weekToDate(weekA)
+  const dateB = weekToDate(weekB)
+  return Math.round((dateA - dateB) / (7 * 24 * 60 * 60 * 1000))
+}
+
+/**
+ * Compute the building streak from gamification state.
+ * Call updateBuildingStreak() first to ensure state is current.
+ */
+export function getBuildingStreak() {
+  const state = getGamificationState()
+  return {
+    current: state.streak?.current || 0,
+    best: state.streak?.best || 0,
+    lastActiveWeek: state.streak?.lastActiveWeek || null,
+    missUsed: state.streak?.missUsed || false,
+  }
+}
+
+/**
+ * Record activity for the current week and update the streak.
+ * Called when the portal detects creator activity this week.
+ *
+ * @param {boolean} hasActivityThisWeek - Whether any growth action happened this week
+ * @returns {{ current, best, justBroke, milestone }} Streak result
+ */
+export function updateBuildingStreak(hasActivityThisWeek) {
+  const state = getGamificationState()
+  const streak = state.streak || { current: 0, best: 0, lastActiveWeek: null, missUsed: false }
+  const currentWeek = getWeekNumber()
+
+  // Already recorded this week — no-op
+  if (streak.lastActiveWeek === currentWeek) {
+    return { current: streak.current, best: streak.best, justBroke: false, milestone: null }
+  }
+
+  if (!hasActivityThisWeek) {
+    return { current: streak.current, best: streak.best, justBroke: false, milestone: null }
+  }
+
+  const gap = streak.lastActiveWeek ? weekDiff(currentWeek, streak.lastActiveWeek) : null
+
+  let newStreak = { ...streak }
+  let justBroke = false
+
+  if (gap === null || gap === 1) {
+    // First week or consecutive — extend streak
+    newStreak.current = (newStreak.current || 0) + 1
+    newStreak.missUsed = false
+  } else if (gap === 2 && !streak.missUsed) {
+    // Missed 1 week, forgiveness applies — extend streak
+    newStreak.current = (newStreak.current || 0) + 1
+    newStreak.missUsed = true
+  } else {
+    // Gap too large or forgiveness already used — streak breaks
+    justBroke = newStreak.current >= 3
+    newStreak.current = 1
+    newStreak.missUsed = false
+  }
+
+  newStreak.lastActiveWeek = currentWeek
+  newStreak.best = Math.max(newStreak.best, newStreak.current)
+
+  updateGamificationState({ streak: newStreak })
+
+  // Check milestones
+  const milestones = [4, 8, 12, 20, 52]
+  const milestone = milestones.find(m => newStreak.current === m) || null
+
+  return { current: newStreak.current, best: newStreak.best, justBroke, milestone }
+}
+
+// ── Spider Graph Tier Tracking ─────────────────────────────────────────────
+
+/**
+ * Compare current spider tiers to previously stored tiers.
+ * Returns array of { axisKey, axisLabel, oldTier, newTier } for any upgrades.
+ */
+export function checkSpiderTierUpgrades(currentTiers) {
+  const state = getGamificationState()
+  const stored = state.spiderTiers || {}
+  const upgrades = []
+
+  for (const [key, newTier] of Object.entries(currentTiers)) {
+    const oldTier = stored[key] || 0
+    if (newTier > oldTier) {
+      const axis = SPIDER_AXES[key]
+      upgrades.push({
+        axisKey: key,
+        axisLabel: axis?.label || key,
+        oldTier,
+        newTier,
+      })
+    }
+  }
+
+  return upgrades
+}
+
+/**
+ * Store current spider tiers so future visits can detect upgrades.
+ */
+export function storeSpiderTiers(currentTiers) {
+  updateGamificationState({ spiderTiers: currentTiers })
+}
+
 // ── Spider graph tier calculations ──────────────────────────────────────────
 
 export const SPIDER_AXES = {

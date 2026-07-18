@@ -1,15 +1,22 @@
 /**
- * CreatorCelebrations — milestone celebration system for Scale portal.
+ * CreatorCelebrations — milestone + achievement + spider celebration system.
  *
- * Checks milestones on mount/update. Fires confetti + toast via queue
- * (3-second cooldown). Each milestone fires once per device (localStorage).
+ * Three celebration types:
+ * 1. Regular milestones (confetti + toast, 14 defined)
+ * 2. Hidden achievements (gold trophy confetti + "Achievement Unlocked" toast, 8 defined)
+ * 3. Spider tier upgrades (confetti + axis-specific toast)
  *
- * Mount this inside CreatorHomeV2. Pass all completion data as props.
+ * All use the same celebration queue (3-second cooldown).
+ * Mount inside CreatorHomeV2. Pass all completion data as props.
  */
 import { useEffect, useRef, useState } from 'react'
 import confetti from 'canvas-confetti'
 import { hapticSuccess } from '../../lib/haptics'
-import { isCelebrated, markCelebrated, queueCelebration } from '../../lib/creatorGamification'
+import {
+  isCelebrated, markCelebrated, queueCelebration,
+  HIDDEN_ACHIEVEMENTS, isAchievementUnlocked, markAchievementUnlocked,
+  checkSpiderTierUpgrades, storeSpiderTiers, getAxisTier,
+} from '../../lib/creatorGamification'
 import './CreatorCelebrations.css'
 
 const MILESTONES = [
@@ -27,6 +34,10 @@ const MILESTONES = [
   { key: 'first_repeat', check: d => d.repeatRate > 0, toast: "Someone came back. That's the strongest signal there is." },
   { key: 'first_3pct', check: d => d.threePercentCount > 0, toast: "First 3% logged. Small improvements compound into mastery." },
   { key: 'instagram', check: d => d.instagramConnected, toast: "Connected. Now we can see what's working." },
+  // Streak milestones — wired by G8
+  { key: 'streak_4', check: d => d.streakMilestone === 4, toast: "4 weeks straight. You're in a rhythm now." },
+  { key: 'streak_8', check: d => d.streakMilestone === 8, toast: "8 weeks. Consistency is your superpower." },
+  { key: 'streak_12', check: d => d.streakMilestone === 12, toast: "12 weeks. A full quarter of building. That changes you." },
 ]
 
 function fireConfetti() {
@@ -38,28 +49,82 @@ function fireConfetti() {
   })
 }
 
-export default function CreatorCelebrations({ data = {} }) {
+function fireAchievementConfetti() {
+  // Gold-heavy confetti burst for achievements
+  confetti({
+    particleCount: 120,
+    spread: 90,
+    origin: { y: 0.5 },
+    colors: ['#E9A23B', '#f5c55a', '#d4a017', '#ffd700', '#5e17eb'],
+  })
+}
+
+export default function CreatorCelebrations({ data = {}, spiderData = {} }) {
   const [activeToast, setActiveToast] = useState(null)
+  const [toastType, setToastType] = useState('milestone') // 'milestone' | 'achievement' | 'spider'
   const checkedRef = useRef(false)
 
   useEffect(() => {
-    // Only check once per mount (not on every re-render)
     if (checkedRef.current) return
     checkedRef.current = true
 
-    // Small delay to let the portal render first
     const timer = setTimeout(() => {
+      // 1. Regular milestones
       MILESTONES.forEach(m => {
         if (m.check(data) && !isCelebrated(m.key)) {
           queueCelebration(() => {
             markCelebrated(m.key)
             fireConfetti()
             hapticSuccess()
+            setToastType('milestone')
             setActiveToast(m.toast)
             setTimeout(() => setActiveToast(null), 4000)
           })
         }
       })
+
+      // 2. Hidden achievements
+      HIDDEN_ACHIEVEMENTS.forEach(a => {
+        if (a.check(data) && !isAchievementUnlocked(a.key)) {
+          queueCelebration(() => {
+            markAchievementUnlocked(a.key)
+            fireAchievementConfetti()
+            hapticSuccess()
+            setToastType('achievement')
+            setActiveToast({ name: a.name, icon: a.icon, text: a.toast })
+            setTimeout(() => setActiveToast(null), 5000)
+          })
+        }
+      })
+
+      // 3. Spider tier upgrades
+      const axisKeys = ['impact', 'consistency', 'retention', 'brand', 'price', 'reach']
+      const currentTiers = {}
+      let hasAnySpiderData = false
+      axisKeys.forEach(key => {
+        if (spiderData[key] != null) {
+          currentTiers[key] = getAxisTier(key, spiderData[key])
+          if (currentTiers[key] > 0) hasAnySpiderData = true
+        }
+      })
+
+      if (hasAnySpiderData) {
+        const upgrades = checkSpiderTierUpgrades(currentTiers)
+        upgrades.forEach(u => {
+          const celebKey = `spider_${u.axisKey}_t${u.newTier}`
+          if (!isCelebrated(celebKey)) {
+            queueCelebration(() => {
+              markCelebrated(celebKey)
+              fireConfetti()
+              hapticSuccess()
+              setToastType('spider')
+              setActiveToast(`${u.axisLabel} upgraded to tier ${u.newTier}. Your shape is growing.`)
+              setTimeout(() => setActiveToast(null), 4000)
+            })
+          }
+        })
+        storeSpiderTiers(currentTiers)
+      }
     }, 1500)
 
     return () => clearTimeout(timer)
@@ -67,10 +132,26 @@ export default function CreatorCelebrations({ data = {} }) {
 
   if (!activeToast) return null
 
+  // Achievement toasts have a different layout
+  if (toastType === 'achievement' && typeof activeToast === 'object') {
+    return (
+      <div className="cc-toast cc-toast-achievement" onClick={() => setActiveToast(null)}>
+        <div className="cc-toast-inner cc-toast-achievement-inner">
+          <div className="cc-achievement-header">
+            <span className="cc-achievement-icon">{activeToast.icon}</span>
+            <span className="cc-achievement-label">Achievement Unlocked</span>
+          </div>
+          <div className="cc-achievement-name">{activeToast.name}</div>
+          <div className="cc-toast-text">{activeToast.text}</div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="cc-toast" onClick={() => setActiveToast(null)}>
       <div className="cc-toast-inner">
-        <span className="cc-toast-icon">🎉</span>
+        <span className="cc-toast-icon">{toastType === 'spider' ? '📊' : '🎉'}</span>
         <span className="cc-toast-text">{activeToast}</span>
       </div>
     </div>

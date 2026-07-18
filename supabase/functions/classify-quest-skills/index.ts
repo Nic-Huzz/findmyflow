@@ -19,6 +19,23 @@ const SKILL_DEFINITIONS = `The 10 skills (use these exact IDs):
 - connecting: bringing people together, networking, community building, matchmaking
 - speaking_up: advocating, being vulnerable publicly, challenging norms, using your voice`
 
+const BRANCH_DEFINITIONS = `The 10 industry branches (use these exact IDs).
+Pick the ONE branch this quest/life path primarily SERVES, not the skills used to do it.
+A software developer building a meditation app is in "healing", not "tools".
+A designer creating fitness experiences is in "movement", not "status".
+The branch is the TERRITORY (what industry the work serves), not the VEHICLE (what skills are used).
+
+- healing: medicine, wellness, therapy, transformation, mental health, breathwork, coaching for personal growth
+- movement: fitness, sport, dance, physical activity, yoga, martial arts, walking, running
+- bonds: community, relationships, retreats, circles, facilitation, gatherings, events, hosting
+- story: media, content, publishing, podcasting, speaking, teaching, narrative, entertainment
+- tools: technology, software, AI, coding, building products, hardware, engineering
+- status: fashion, branding, personal identity, luxury, self-image, design aesthetic
+- nourishment: food, nutrition, cooking, farming, agriculture, diet, restaurants
+- shelter: housing, property, architecture, interior design, construction
+- fire: energy, power, sustainability, lighting, warmth
+- threat: security, safety, defence, resilience, protection`
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -47,28 +64,36 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 150,
-        system: `You classify quest/life path labels into skills. Return ONLY a JSON array of matching skill IDs. Pick 1-3 skills that best match. No explanation.
+        max_tokens: 200,
+        system: `You classify quest/life path labels into skills AND a primary industry branch. Return ONLY a JSON object with "skills" (array of 1-3 skill IDs) and "branch" (one branch ID). No explanation.
 
-${SKILL_DEFINITIONS}`,
+These are life paths that experience creators (facilitators, coaches, healers, event hosts) pursue. Most work in transformation, wellness, community, or experiences. The branch is about WHAT INDUSTRY the work serves, not what skills are used. A software developer building a meditation app is in "healing", not "tools".
+
+${SKILL_DEFINITIONS}
+
+${BRANCH_DEFINITIONS}`,
         messages: [
-          { role: 'user', content: `Quest label: "${label}"\n\nReturn JSON array of skill IDs:` },
+          { role: 'user', content: `Quest label: "${label}"\n\nReturn JSON: {"skills": [...], "branch": "..."}` },
         ],
       }),
     })
 
     const result = await response.json()
-    const text = result.content?.[0]?.text || '[]'
+    const text = result.content?.[0]?.text || '{}'
 
-    // Extract JSON array from response
-    const match = text.match(/\[.*\]/s)
-    const skills = match ? JSON.parse(match[0]) : []
+    // Extract JSON object from response
+    const match = text.match(/\{.*\}/s)
+    const parsed = match ? JSON.parse(match[0]) : {}
+    const skills = Array.isArray(parsed.skills) ? parsed.skills : []
+    const branch = typeof parsed.branch === 'string' ? parsed.branch : null
 
-    // Validate against known skill IDs
+    // Validate against known IDs
     const validSkills = ['storytelling', 'teaching', 'coaching', 'performing', 'creating', 'building', 'designing', 'leading', 'connecting', 'speaking_up']
-    const filtered = skills.filter((s: string) => validSkills.includes(s))
+    const validBranches = ['movement', 'nourishment', 'tools', 'status', 'bonds', 'shelter', 'story', 'fire', 'healing', 'threat']
+    const filteredSkills = skills.filter((s: string) => validSkills.includes(s))
+    const validBranch = branch && validBranches.includes(branch) ? branch : null
 
-    return new Response(JSON.stringify({ skill_tags: filtered }), {
+    return new Response(JSON.stringify({ skill_tags: filteredSkills, branch: validBranch }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {

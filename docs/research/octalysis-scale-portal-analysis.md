@@ -27,7 +27,7 @@
 
 Features shipped on `feature/interior-scoreboard-sprint2` (not yet merged to main):
 
-**Gamification (this session):** Spider graph (CreatorRadarChart, Growth tab, 5-6 axes), CreatorXP + 5 levels (hero section), 14-milestone celebrations (confetti + Huzz-voiced toasts, 3s queue cooldown), origin story overlay (first visit, skipped on payment redirect), Movement Maker identity (login, portal, email), per-section launch pads (SectionLaunchPad, 3 tabs), founding member badge (first 50, gold pill), event countdown urgency (amber 14d, red 7d, pulse 3d), pipeline staleness nudge (daily, 7+ days out with zero items done), value-framed locked playbook copy, days-since-last-event mirror (Growth tab).
+**Gamification (Week 1+2):** Spider graph (CreatorRadarChart, Growth tab, 5-6 axes), CreatorXP + 5 levels (hero section), 14-milestone celebrations (confetti + Huzz-voiced toasts, 3s queue cooldown), origin story overlay (first visit, skipped on payment redirect), Movement Maker identity (login, portal, email), per-section launch pads (SectionLaunchPad, 3 tabs), founding member badge (first 50, gold pill), event countdown urgency (amber 14d, red 7d, pulse 3d), pipeline staleness nudge (daily, 7+ days out with zero items done), value-framed locked playbook copy, days-since-last-event mirror (Growth tab).
 
 **Monopoly Finder (prior session):** CreatorPositionCard mounted on Identity tab. Includes BranchInsightCard (branch chart + gap insight + frontier card) + useBranchScoring (weighted scoring from curiosity/quests/healing). Shows branch position, rarity vs 299 profiles, frontier card ("Is this the assumption you're breaking?"). CTA to curiosity map if no data exists.
 
@@ -44,36 +44,73 @@ Features shipped on `feature/interior-scoreboard-sprint2` (not yet merged to mai
 
 **Post-Week 1+2 + Monopoly Score: 64 + 49 + 25 + 64 + 4 + 25 + 25 + 4 = 260** (Moderate)
 
-**Gain: +120 points (140 → 260)**
+---
+
+## Post-Week 4 Score (July 18, Sprint 4 features)
+
+Additional features shipped on `feature/interior-scoreboard-sprint2`:
+
+**G11 Hidden Achievements:** 8 secret milestones (Polymath, Cult Leader, Sold Out, Chain Reactor, Origin Story, Night Owl, Full Stack, Century). Gold trophy confetti + "Achievement Unlocked" toast. Trophy counter in hero section (`🏆 3/8`). Nobody knows they exist until they pop.
+
+**G8 Building Streak:** Weekly cadence tracker. Forgiving (1 miss allowed). Streak pill in hero section (`🔥 4w streak`). Milestone celebrations at 4/8/12 weeks.
+
+**G19 Spider Celebrations:** Tier upgrades on any spider axis fire confetti + axis-specific toast. Stores previous tiers in localStorage, detects upgrades on each portal visit.
+
+**G12 Quarterly Planning:** "What experiences are you running this quarter?" card on Experiences tab. Add plans, set dates, mark complete. Quarter-end review (planned vs actual). Stored in localStorage.
+
+**G9 Alt Positionings:** Positioning generator now returns 3 different framings. User picks the one that feels right. "Show me 3 more" replaces "Regenerate". Edge function modified to request multiple options via `|||` separator.
+
+| Core Drive | Week 2 | Week 4 | Change | What shipped |
+|------------|--------|--------|--------|---|
+| **CD1** Epic Meaning | 8 | **8** | 0 | No changes |
+| **CD2** Accomplishment | 7 | **8** | +1 | Spider tier celebrations, building streak milestones, hidden achievement trophies with visible counter |
+| **CD3** Creativity | 5 | **6** | +1 | Alt positionings (3 options = creative choice). Quarterly planning (user designs their own quarter) |
+| **CD4** Ownership | 8 | **9** | +1 | Hidden achievements as trophy collection. Streak as personal record. Quarterly plan as personal commitment. |
+| **CD5** Social | 2 | **2** | 0 | Still no social features. Gated on user count. |
+| **CD6** Scarcity | 5 | **6** | +1 | Building streak (forgiving but breakable). Quarterly planning adds time pressure ("quarter ending soon"). |
+| **CD7** Curiosity | 5 | **7** | +2 | Hidden achievements (nobody knows they exist until they pop). Night Owl (time-based surprise). Spider tier upgrades are unpredictable. Alt positionings show AI variation. |
+| **CD8** Loss | 2 | **3** | +1 | Building streak can break (forgiving, but still a loss signal). Quarterly review shows planned vs actual gap. |
+
+**Post-Week 4 Score: 64 + 64 + 36 + 81 + 4 + 36 + 49 + 9 = 343** (Strong)
+
+**Gain this session: +83 points (260 → 343)**
+**Total gain from baseline: +203 points (140 → 343)**
 
 For comparison: Consumer app (Vibe Rise) scored 498 after recent sprints.
 
 ---
 
 ### What's still weak (next priorities)
-- **CD5 (2)** — biggest gap. No social features. Need: community feed (gate at 5+ users), accountability pairs (manual), monthly call.
-- **CD3 (5)** — no changes. Need: alternative positionings (3 options).
-- **CD8 (2)** — gentle but thin. Building streak + more nudges would help.
+- **CD5 (2)** — biggest remaining gap. No social features. Need: community feed (gate at 5+ users), accountability pairs (manual), monthly Scale call.
+- **CD3 (6)** — improved with alt positionings but still mostly linear flows. Need: experience design sandbox, "what if" scenarios.
+- **CD8 (3)** — gentle. Building streak helps but no competitive pressure. Need: Sequential Score Reveal (G7) to create "wow, look at my numbers" moments that make inaction feel like missing out.
+
+---
 
 ### Remaining features (specced, not built)
 
 | Feature | Days | CD impact | Spec location |
 |---|---|---|---|
 | M1 Sequential score reveal | 2 | CD2+1, CD7+1 | Implementation plan, Sprint G7 |
-| M3 Building streak | 2 | CD6+1 | Implementation plan, Sprint G8 |
-| M8 Alternative positionings | 2 | CD3+1 | Implementation plan, Sprint G9 |
-| M10 Hidden achievements (8) | 1 | CD7+1 | Implementation plan, Sprint G11 |
-| M11 Quarterly planning | 2 | CD6+1 | Implementation plan, Sprint G12 |
 | M5 Dynamic share card | 2 | CD4+1 | Implementation plan, Sprint G10 |
 | M6 Portfolio on Growth | 2 | CD2+1 | Implementation plan, Sprint G13 |
 | M14 Community feed triggers | 2 | (background, no score until UI) | Implementation plan, Sprint G14 |
-| H2 Zarlo for creators | 7 | CD5+1, CD7+1 | Implementation plan, Sprint G15 |
+| H2 Zarlo for creators | 7 | CD5+2, CD7+1 | Implementation plan, Sprint G15 |
 | H1 AI Insight Drops | 5 | CD7+2 | Implementation plan, Sprint G16 |
 | H3 Creator profile page | 3 | CD4+1 | Implementation plan, Sprint G17 |
-| G19 Spider celebrations | 2 | CD2+1 | Implementation plan, Sprint G19 |
 | Community ops (manual) | 0 | CD5+2 | Recommendations doc, "Breaking 400" section |
 
 **If all remaining features ship: ~450-475**
+
+### Already built (this session)
+
+| Feature | CD impact | Status |
+|---|---|---|
+| ~~M3 Building streak~~ | CD6+1 | ✅ Week 4 |
+| ~~M8 Alternative positionings~~ | CD3+1 | ✅ Week 4 |
+| ~~M10 Hidden achievements (8)~~ | CD7+1 | ✅ Week 4 |
+| ~~M11 Quarterly planning~~ | CD6+1 | ✅ Week 4 |
+| ~~G19 Spider celebrations~~ | CD2+1 | ✅ Week 4 |
 
 All specs at:
 - `docs/superpowers/plans/2026-07-18-scale-gamification-implementation-plan.md`

@@ -13,6 +13,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useBranchScoring } from '../hooks/useBranchScoring'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
@@ -33,6 +34,7 @@ const BRANCH_META = {
 }
 
 export default function CreatorPositionCard({ userId, essenceName, skills, problems, remarkableAngle, onCreatorTap }) {
+  const navigate = useNavigate()
   // Branch scoring
   const { loading: branchLoading, primary, secondary, scores, gap, rarity, confidence } = useBranchScoring()
 
@@ -65,6 +67,10 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
   const [posLoaded, setPosLoaded] = useState(false)
   const saveTimerRef = useRef(null)
   const profileIdRef = useRef(null)
+
+  // Alt positionings (G9) — 3 options to pick from
+  const [posOptions, setPosOptions] = useState([])
+  const [showingOptions, setShowingOptions] = useState(false)
 
   // AI monopoly statement (Sprint 3)
   const [monopolyStatement, setMonopolyStatement] = useState('')
@@ -125,23 +131,36 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
     }, 800)
   }, [userId])
 
-  // Generate positioning statement
+  // Generate positioning statement — requests 3 options
   const generateStatement = async () => {
     if (!lifeQuake.trim() || !transformation.trim()) return
     hapticLight()
     setGenerating(true)
+    setPosOptions([])
+    setShowingOptions(false)
     try {
       const prompt = buildPrompt({ essenceName, skills, problems, remarkableAngle, lifeQuake: lifeQuake.trim(), transformation: transformation.trim(), gap, primary })
-      const { data, error } = await supabase.functions.invoke('generate-positioning', { body: { prompt, user_id: userId } })
+      const { data, error } = await supabase.functions.invoke('generate-positioning', { body: { prompt, user_id: userId, count: 3 } })
       if (error) throw error
-      const result = data?.statement || ''
-      setStatement(result)
-      setEditingStatement(false)
-      setPosExpanded(true)
-      if (profileIdRef.current) {
-        await supabase.from('lead_flow_profiles').update({ positioning_statement: result }).eq('id', profileIdRef.current)
+      const options = data?.options || []
+      if (options.length >= 2) {
+        // Show options for user to pick
+        setPosOptions(options.slice(0, 3))
+        setShowingOptions(true)
+        setPosExpanded(true)
+        hapticSuccess()
+      } else {
+        // Fallback: single statement (edge function didn't parse correctly)
+        const result = data?.statement || ''
+        if (!result) throw new Error('Empty response from AI')
+        setStatement(result)
+        setEditingStatement(false)
+        setPosExpanded(true)
+        if (profileIdRef.current && profileIdRef.current !== 'pending') {
+          await supabase.from('lead_flow_profiles').update({ positioning_statement: result }).eq('id', profileIdRef.current)
+        }
+        hapticSuccess()
       }
-      hapticSuccess()
     } catch (err) {
       console.error('Positioning generation failed:', err)
       const fallback = buildFallbackStatement({ essenceName, lifeQuake: lifeQuake.trim(), transformation: transformation.trim(), skills, remarkableAngle })
@@ -152,6 +171,26 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
       }
     } finally {
       setGenerating(false)
+    }
+  }
+
+  // Pick one of the 3 positioning options
+  const pickOption = async (option) => {
+    hapticSuccess()
+    setStatement(option)
+    setShowingOptions(false)
+    setPosOptions([])
+    // Ensure profile row exists before saving
+    if (profileIdRef.current && profileIdRef.current !== 'pending') {
+      await supabase.from('lead_flow_profiles').update({ positioning_statement: option }).eq('id', profileIdRef.current)
+    } else if (!profileIdRef.current) {
+      profileIdRef.current = 'pending'
+      const { data } = await supabase
+        .from('lead_flow_profiles')
+        .insert({ user_id: userId, positioning_statement: option })
+        .select('id')
+        .single()
+      if (data) profileIdRef.current = data.id
     }
   }
 
@@ -442,6 +481,17 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
           })()}
         </button>
 
+        {/* Design experience CTA — outside <button> to avoid nesting */}
+        {frontierExpanded && hasRemarkable && (
+          <button
+            type="button"
+            className="cpc-design-cta"
+            onClick={() => { hapticLight(); navigate('/create/experience/new') }}
+          >
+            Design an experience for this gap →
+          </button>
+        )}
+
         {/* Generate / Regenerate monopoly — outside <button> to avoid nested buttons */}
         {frontierExpanded && rarity?.topSkill && rarity?.topProblem && (
           <div className="cpc-monopoly-action">
@@ -597,11 +647,24 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
 
               {canGenerate && (
                 <button className="cpc-generate" onClick={generateStatement} disabled={generating}>
-                  {generating ? 'Writing...' : hasStatement ? 'Regenerate' : 'Generate My Positioning'}
+                  {generating ? 'Writing...' : hasStatement ? 'Show me 3 more' : 'Generate My Positioning'}
                 </button>
               )}
 
-              {hasStatement && (
+              {/* Option picker — 3 cards to choose from */}
+              {showingOptions && posOptions.length > 0 && (
+                <div className="cpc-pos-options">
+                  <div className="cpc-pos-options-label">Pick the one that feels most like you:</div>
+                  {posOptions.map((opt, i) => (
+                    <button key={i} className="cpc-pos-option" onClick={() => pickOption(opt)}>
+                      <span className="cpc-pos-option-num">{i + 1}</span>
+                      <span className="cpc-pos-option-text">{opt}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {hasStatement && !showingOptions && (
                 <div className="cpc-pos-output">
                   {editingStatement ? (
                     <>

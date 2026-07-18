@@ -246,7 +246,9 @@
       },
       "blowUpMetaPattern": "bridge",
       "blowUpSubPattern": "content_vehicle",
-      "blowUpPatternNote": "Jordan's stardom was the bridge. Championships were the content vehicle."
+      "blowUpPatternNote": "Jordan's stardom was the bridge. Championships were the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "bonds"
     },
     {
       "name": "Tenzin Palmo",
@@ -360,7 +362,9 @@
       },
       "blowUpMetaPattern": "bridge",
       "blowUpSubPattern": "portable",
-      "blowUpPatternNote": "Vicki Mackenzie's biography was the bridge. Cave in the Snow made her portable."
+      "blowUpPatternNote": "Vicki Mackenzie's biography was the bridge. Cave in the Snow made her portable.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Gabor Mate",
@@ -474,7 +478,9 @@
       },
       "blowUpMetaPattern": "bridge",
       "blowUpSubPattern": "content_vehicle",
-      "blowUpPatternNote": "Documentary platform was the bridge. Film was the content vehicle."
+      "blowUpPatternNote": "Documentary platform was the bridge. Film was the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Tony Robbins",
@@ -593,7 +599,9 @@
         "bridge": "Infomercial TV format"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "Infomercials were the content vehicle. No single bridge person."
+      "blowUpPatternNote": "Infomercials were the content vehicle. No single bridge person.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "bonds"
     },
     {
       "name": "Wim Hof",
@@ -705,7 +713,9 @@
         "bridge": "2014 PNAS publication"
       },
       "blowUpMetaPattern": "portable",
-      "blowUpPatternNote": "PNAS study made the method scientifically portable."
+      "blowUpPatternNote": "PNAS study made the method scientifically portable.",
+      "primaryBranch": "movement",
+      "secondaryBranch": "healing"
     },
     {
       "name": "Esther Perel",
@@ -817,7 +827,9 @@
         "bridge": "Podcast platform"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "Podcast was the new content vehicle after 25 years of practice."
+      "blowUpPatternNote": "Podcast was the new content vehicle after 25 years of practice.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Priya Parker",
@@ -929,7 +941,9 @@
         "bridge": "2018 book publication"
       },
       "blowUpMetaPattern": "portable",
-      "blowUpPatternNote": "The Art of Gathering codified her facilitation method into a portable book."
+      "blowUpPatternNote": "The Art of Gathering codified her facilitation method into a portable book.",
+      "primaryBranch": "bonds",
+      "secondaryBranch": "healing"
     },
     {
       "name": "Jay Shetty",
@@ -1042,7 +1056,9 @@
         "bridge": "2016 Facebook video algorithm"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "Facebook video algorithm was the content vehicle."
+      "blowUpPatternNote": "Facebook video algorithm was the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Gabby Bernstein",
@@ -1154,7 +1170,9 @@
         "bridge": "Oprah SuperSoul 100"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "Oprah SuperSoul 100 was the bridge."
+      "blowUpPatternNote": "Oprah SuperSoul 100 was the bridge.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Eckhart Tolle",
@@ -1267,7 +1285,9 @@
       },
       "blowUpMetaPattern": "bridge",
       "blowUpSubPattern": "portable",
-      "blowUpPatternNote": "Oprah was the bridge. The Power of Now was already portable."
+      "blowUpPatternNote": "Oprah was the bridge. The Power of Now was already portable.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Deepak Chopra",
@@ -1380,7 +1400,9 @@
         "bridge": "1993 Oprah appearance"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "Oprah 1993 appearance was the bridge."
+      "blowUpPatternNote": "Oprah 1993 appearance was the bridge.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Jack Kornfield",
@@ -1492,7 +1514,9 @@
         "bridge": null
       },
       "blowUpMetaPattern": "category",
-      "blowUpPatternNote": "Created the American meditation center category (IMS, Spirit Rock)."
+      "blowUpPatternNote": "Created the American meditation center category (IMS, Spirit Rock).",
+      "primaryBranch": "healing",
+      "secondaryBranch": "bonds"
     },
     {
       "name": "Sam Harris",
@@ -1605,7 +1629,9 @@
         "bridge": "Book award and PEN recognition"
       },
       "blowUpMetaPattern": "portable",
-      "blowUpPatternNote": "Waking Up app made secular meditation portable."
+      "blowUpPatternNote": "Waking Up app made secular meditation portable.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Thich Nhat Hanh",
@@ -1717,7 +1743,9 @@
         "bridge": "MLK's 1967 Nobel Prize nomination"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "MLK's Nobel nomination was the bridge."
+      "blowUpPatternNote": "MLK's Nobel nomination was the bridge.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "bonds"
     },
     {
       "name": "Seane Corn",
@@ -1829,7 +1857,9 @@
         "bridge": "Yoga Journal cover"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "Yoga Journal cover was the bridge."
+      "blowUpPatternNote": "Yoga Journal cover was the bridge.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "movement"
     },
     {
       "name": "Joe Dispenza",
@@ -1941,7 +1971,9 @@
         "bridge": "2004 What the Bleep film"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "What the Bleep documentary was the content vehicle."
+      "blowUpPatternNote": "What the Bleep documentary was the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "tools"
     },
     {
       "name": "Aubrey Marcus",
@@ -2054,7 +2086,9 @@
         "bridge": "Joe Rogan friendship and podcast"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "Joe Rogan was the bridge."
+      "blowUpPatternNote": "Joe Rogan was the bridge.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "tools"
     },
     {
       "name": "Ram Dass",
@@ -2166,7 +2200,9 @@
         "bridge": "Harvard credentials + Timothy Leary association"
       },
       "blowUpMetaPattern": "portable",
-      "blowUpPatternNote": "Be Here Now made Eastern spirituality portable for the West."
+      "blowUpPatternNote": "Be Here Now made Eastern spirituality portable for the West.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Sadhguru",
@@ -2278,7 +2314,9 @@
         "bridge": "YouTube algorithm and Rally for Rivers campaigns"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "YouTube + Rally for Rivers campaign was the content vehicle."
+      "blowUpPatternNote": "YouTube + Rally for Rivers campaign was the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Marianne Williamson",
@@ -2391,7 +2429,9 @@
         "bridge": "Oprah dedicated full show to A Return to Love"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "Oprah dedicated full show to A Return to Love."
+      "blowUpPatternNote": "Oprah dedicated full show to A Return to Love.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Mooji",
@@ -2503,7 +2543,9 @@
         "bridge": null
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "YouTube satsang videos were the content vehicle."
+      "blowUpPatternNote": "YouTube satsang videos were the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Yung Pueblo",
@@ -2616,7 +2658,9 @@
         "bridge": "Instagram algorithm"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "Instagram algorithm was the content vehicle."
+      "blowUpPatternNote": "Instagram algorithm was the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Sahara Rose",
@@ -2729,7 +2773,9 @@
         "bridge": "Deepak Chopra endorsement"
       },
       "blowUpMetaPattern": "bridge",
-      "blowUpPatternNote": "Deepak Chopra endorsement was the bridge."
+      "blowUpPatternNote": "Deepak Chopra endorsement was the bridge.",
+      "primaryBranch": "nourishment",
+      "secondaryBranch": "healing"
     },
     {
       "name": "Sri Sri Ravi Shankar",
@@ -2841,7 +2887,9 @@
         "bridge": "Scientific research collaboration"
       },
       "blowUpMetaPattern": "category",
-      "blowUpPatternNote": "Created the volunteer-run breathing course category globally."
+      "blowUpPatternNote": "Created the volunteer-run breathing course category globally.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "movement"
     },
     {
       "name": "Vishen Lakhiani",
@@ -2953,7 +3001,9 @@
         "bridge": "NYT bestseller status"
       },
       "blowUpMetaPattern": "portable",
-      "blowUpPatternNote": "Mindvalley made curated personal growth portable as a platform."
+      "blowUpPatternNote": "Mindvalley made curated personal growth portable as a platform.",
+      "primaryBranch": "tools",
+      "secondaryBranch": "story"
     },
     {
       "name": "Michael Singer",
@@ -3067,7 +3117,9 @@
       },
       "blowUpMetaPattern": "bridge",
       "blowUpSubPattern": "portable",
-      "blowUpPatternNote": "Oprah was the bridge. The Untethered Soul was already portable."
+      "blowUpPatternNote": "Oprah was the bridge. The Untethered Soul was already portable.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "tools"
     },
     {
       "name": "Michael Beckwith",
@@ -3179,7 +3231,9 @@
         "bridge": "The Secret documentary"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "The Secret documentary was the content vehicle."
+      "blowUpPatternNote": "The Secret documentary was the content vehicle.",
+      "primaryBranch": "healing",
+      "secondaryBranch": "story"
     },
     {
       "name": "Radha Agrawal",
@@ -3292,7 +3346,9 @@
         "bridge": null
       },
       "blowUpMetaPattern": "category",
-      "blowUpPatternNote": "Created sober morning dance party category."
+      "blowUpPatternNote": "Created sober morning dance party category.",
+      "primaryBranch": "bonds",
+      "secondaryBranch": "movement"
     },
     {
       "name": "Meghan Pappenheim",
@@ -3405,7 +3461,9 @@
         "bridge": "Bali as spiritual destination + luxury traveler networks"
       },
       "blowUpMetaPattern": "category",
-      "blowUpPatternNote": "Created the Bali wellness destination category."
+      "blowUpPatternNote": "Created the Bali wellness destination category.",
+      "primaryBranch": "bonds",
+      "secondaryBranch": "healing"
     },
     {
       "name": "Jeff Krasno",
@@ -3518,7 +3576,9 @@
         "bridge": "Music industry background + festival culture"
       },
       "blowUpMetaPattern": "category",
-      "blowUpPatternNote": "Created yoga + music festival category."
+      "blowUpPatternNote": "Created yoga + music festival category.",
+      "primaryBranch": "bonds",
+      "secondaryBranch": "movement"
     },
     {
       "name": "Gabrielle Roth",
@@ -3630,7 +3690,9 @@
         "bridge": "Esalen Institute mentorship"
       },
       "blowUpMetaPattern": "portable",
-      "blowUpPatternNote": "5Rhythms method codified into a certifiable, portable practice."
+      "blowUpPatternNote": "5Rhythms method codified into a certifiable, portable practice.",
+      "primaryBranch": "movement",
+      "secondaryBranch": "healing"
     },
     {
       "name": "Larry Harvey",
@@ -3742,7 +3804,9 @@
         "bridge": null
       },
       "blowUpMetaPattern": "category",
-      "blowUpPatternNote": "Created the participatory burn/gifting festival category."
+      "blowUpPatternNote": "Created the participatory burn/gifting festival category.",
+      "primaryBranch": "bonds",
+      "secondaryBranch": "status"
     },
     {
       "name": "Brené Brown",
@@ -3845,7 +3909,9 @@
         "bridge": "TEDx platform and viral distribution"
       },
       "blowUpMetaPattern": "content_vehicle",
-      "blowUpPatternNote": "TEDx talk was the content vehicle."
+      "blowUpPatternNote": "TEDx talk was the content vehicle.",
+      "primaryBranch": "story",
+      "secondaryBranch": "healing"
     }
   ]
 }

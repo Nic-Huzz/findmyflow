@@ -828,6 +828,25 @@ button.ch2-see-more:hover {
   white-space: nowrap;
 }
 
+/* Streak + Trophy row */
+.ch2-streak-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 6px; padding: 0 4px;
+}
+.ch2-streak-pill, .ch2-trophy-pill {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 8px;
+  white-space: nowrap;
+}
+.ch2-streak-pill {
+  color: #ff6b35;
+  background: rgba(255, 107, 53, 0.12);
+}
+.ch2-trophy-pill {
+  color: var(--gold);
+  background: rgba(233, 162, 59, 0.12);
+}
+
 /* ═══ PHASE 2: CARD HEADERS + BADGES ═══ */
 .ch2-card-header {
   display: flex; align-items: center; justify-content: space-between;

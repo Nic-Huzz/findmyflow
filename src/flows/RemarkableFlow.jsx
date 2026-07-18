@@ -158,7 +158,7 @@ export default function RemarkableFlow() {
   const [savedAngleId, setSavedAngleId] = useState(null)
 
   // Branch scoring (for recommended tag + frontier hint)
-  const { primary: scoredPrimary } = useBranchScoring()
+  const { primary: scoredPrimary, rarity: scoredRarity } = useBranchScoring()
   const [matrixData, setMatrixData] = useState(null)
   const [hintOpen, setHintOpen] = useState(false)
 
@@ -813,6 +813,20 @@ export default function RemarkableFlow() {
           <div className="rmk-context-card">{assumption}</div>
           <h2 className="rmk-heading">Remove that assumption. How does {projectName ? <span className="rmk-gold">{projectName}</span> : 'your approach'} <span className="rmk-gold">solve it differently</span>?</h2>
           <p className="rmk-prompt">Given what you lived through, what does your approach look like?</p>
+
+          {scoredRarity && scoredRarity.matchCount <= 5 && scoredRarity.topSkill && scoredRarity.topProblem && (
+            <div className="rmk-hint-box" style={{ marginBottom: '0.8rem' }}>
+              <div className="rmk-hint-content" style={{ padding: '0.8rem' }}>
+                <div className="rmk-hint-label">What makes you rare</div>
+                <p className="rmk-hint-text">
+                  {scoredRarity.matchCount === 0
+                    ? `Nobody in ${scoredRarity.totalProfiles} profiles combines ${scoredRarity.topSkill.replace(/_/g, ' ')} + ${scoredRarity.topProblem.replace(/_/g, ' ')}${scoredRarity.topPersona ? ` + ${scoredRarity.topPersona}` : ''}. Lean into that.`
+                    : `Only ${scoredRarity.matchCount} of ${scoredRarity.totalProfiles} combine ${scoredRarity.topSkill.replace(/_/g, ' ')} + ${scoredRarity.topProblem.replace(/_/g, ' ')}${scoredRarity.topPersona ? ` + ${scoredRarity.topPersona}` : ''}. That combination is your edge.`
+                  }
+                </p>
+              </div>
+            </div>
+          )}
 
           <textarea
             className="rmk-textarea"

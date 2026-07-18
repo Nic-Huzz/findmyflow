@@ -488,6 +488,77 @@
   padding: 0.3rem 0;
 }
 
+/* Alt positionings — option picker (G9) */
+.cpc-pos-options {
+  margin-top: 0.6rem;
+}
+.cpc-pos-options-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+.cpc-pos-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+.cpc-pos-option:hover {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.03);
+}
+.cpc-pos-option-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.cpc-pos-option-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* Design experience CTA */
+.cpc-design-cta {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--gold, #E9A23B);
+  border-radius: 10px;
+  color: var(--gold-text, #c88520);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 0.8rem;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.cpc-design-cta:hover {
+  background: rgba(233,162,59,0.06);
+}
+
 /* Pre-Remarkable prompt */
 .cpc-prompt {
   text-align: center;
