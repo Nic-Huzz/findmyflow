@@ -438,35 +438,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       {/* ══════ QUEST BOARD ══════ */}
 
-      {/* Zone Matrix — Action × Clarity */}
-      {matrixData && (matrixData.actionScore != null || matrixData.clarityPct != null) && (
-        <div className="lt-matrix-card">
-          <div className="lt-matrix-title">Last 7 days</div>
-          <div className="lt-matrix-grid">
-            <div className="lt-matrix-label lt-matrix-y-high">Aligned action</div>
-            <div className="lt-matrix-label lt-matrix-y-low">Low action</div>
-            <div className="lt-matrix-label lt-matrix-x-low">Low clarity</div>
-            <div className="lt-matrix-label lt-matrix-x-high">High clarity</div>
-            <div className="lt-matrix-quadrant lt-q-tl">Doing without knowing</div>
-            <div className="lt-matrix-quadrant lt-q-tr">On the diagonal</div>
-            <div className="lt-matrix-quadrant lt-q-bl">Neither yet</div>
-            <div className="lt-matrix-quadrant lt-q-br">Knowing without doing</div>
-            {matrixData.actionScore != null && matrixData.clarityPct != null && (
-              <div className="lt-matrix-dot" style={{
-                left: `${Math.max(5, Math.min(95, matrixData.clarityPct))}%`,
-                bottom: `${Math.max(5, Math.min(95, matrixData.actionScore))}%`,
-              }} />
-            )}
-          </div>
-          <div className="lt-matrix-zone">
-            {matrixData.total < 5
-              ? `Keep going (${matrixData.total}/5 actions)`
-              : matrixData.zone || 'Rate your clusters for Clarity'
-            }
-          </div>
-        </div>
-      )}
-
       {/* Active Quests */}
       {/* Life Path Progress button — above quests */}
       {hasLifePaths && quests.filter(q => q.status === 'active').length > 0 && (
@@ -572,6 +543,34 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           />
         )}
         <div className="quest-recommend">We recommend focusing on 1-3 quests at a time</div>
+
+        {/* Zone Matrix — Action × Clarity */}
+        {matrixData && (matrixData.actionScore != null || matrixData.clarityPct != null) && (
+          <div className="lt-matrix-card">
+            <div className="lt-matrix-title">Last 7 days</div>
+            <div className="lt-matrix-grid">
+              <div className="lt-matrix-label lt-matrix-y-high">Aligned action</div>
+              <div className="lt-matrix-label lt-matrix-y-low">Low action</div>
+              <div className="lt-matrix-label lt-matrix-x-high">High clarity</div>
+              <div className="lt-matrix-quadrant lt-q-tl">Misguided Zone</div>
+              <div className="lt-matrix-quadrant lt-q-tr">Self-Actualisation</div>
+              <div className="lt-matrix-quadrant lt-q-bl">Unfulfilment</div>
+              <div className="lt-matrix-quadrant lt-q-br">Head Full of Dreams</div>
+              {matrixData.actionScore != null && matrixData.clarityPct != null && (
+                <div className="lt-matrix-dot" style={{
+                  left: `${Math.max(10, Math.min(90, matrixData.clarityPct))}%`,
+                  bottom: `${Math.max(10, Math.min(90, matrixData.actionScore))}%`,
+                }} />
+              )}
+            </div>
+            <div className="lt-matrix-zone">
+              {matrixData.total < 5
+                ? `Keep going (${matrixData.total}/5 actions)`
+                : matrixData.zone || 'Rate your clusters for Clarity'
+              }
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Struggle Pills */}

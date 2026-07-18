@@ -1351,9 +1351,9 @@
   text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
 }
 .lt-matrix-grid {
-  position: relative; width: 100%; aspect-ratio: 1;
+  position: relative; width: 100%; aspect-ratio: 4/3;
   background: linear-gradient(135deg, rgba(94,23,235,0.03), rgba(233,162,59,0.03));
-  border-radius: 12px; border: 1px solid #f2f3f5; overflow: hidden;
+  border-radius: 12px; border: 1px solid #f2f3f5; overflow: visible;
 }
 .lt-matrix-quadrant {
   position: absolute; width: 50%; height: 50%;
@@ -1376,8 +1376,7 @@
 }
 .lt-matrix-y-high { top: 4px; left: 4px; }
 .lt-matrix-y-low { bottom: 4px; left: 4px; }
-.lt-matrix-x-low { bottom: 4px; left: 4px; display: none; }
-.lt-matrix-x-high { bottom: 4px; right: 4px; }
+.lt-matrix-x-high { bottom: -18px; right: 4px; }
 .lt-matrix-zone {
   text-align: center; margin-top: 10px; font-size: 13px;
   font-weight: 700; color: #5e17eb;
