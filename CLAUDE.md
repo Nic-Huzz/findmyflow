@@ -117,7 +117,7 @@ src/
 │   │   ├── EcosystemStatusWidget   # Business flywheel progress
 │   │   └── *Widget.jsx, *Modal.jsx # Intelligence, Activity, etc.
 │   │
-│   ├── CreatorHome/                # Creator portal home
+│   ├── CreatorHome/                # Creator portal home (CreatorHomeV2, CreatorRadarChart, CreatorCelebrations, SectionLaunchPad, BlowUpBrandCard, CreatorShareCard)
 │   ├── onboarding/QuickCapture/    # 5-step business capture
 │   ├── Zarlo/                      # AI Co-Founder widget
 │   ├── Celebrations/               # Confetti, FloatingPoints, etc.
@@ -372,7 +372,9 @@ Key docs: `docs/features/interior-scoreboard-spec.md`, `docs/features/interior-s
 - **Money Model Flows**: 6 flows in `MoneyModelFlowBase.jsx` + `moneyModelConfigs.js`. Each wrapper ~35 lines.
 - **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Phase 1: AI personality + free-text input (5 msgs/session) + streaming greeting. Phase 2: Voiced achievement toasts (MicroToast). Phase 3: Proactive observations after wahoo/checkin/healing (2/day max, ZarloProactiveBubble above FAB). Phase 4: Open loop hooks + weekly countdown. Confidence floor: no Brief + no actions = scripted fallback. Edge function: `agent-chat` (Haiku). Engine: `zarloEngine.js`, `zarloPageContent.js`. Subtitle: "Your game guide".
 - **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor speaking from the book's worldview (nervous system as bottleneck, curiosities as essence signalling, protective voices as software). 3 conversations/day, 10 messages each. Confidence floor: no Brief + phase < 2 = refuses to improvise. Confidence % on every response. Proactive: FigurineOverlay for stage graduations + monthly cryptic hooks. Edge function: `agent-chat` (Haiku). Key file: `useFigurine.js`.
-- **Stripe Payment Gating**: Stages 1-7 locked. Free: Flow Finder, Play-List, Healing, Setup, explainers, Stage 4 Attraction Offer, CRM. Key: `useSubscription.js`, `UpgradePrompt.jsx`.
+- **Stripe Payment Gating**: Consumer: Stages 1-7 locked. Creator Portal: gated by `CreateGate.jsx` checking `plan_type = 'creator'` or `'pro'` via `subscriptionService.js`. Handles multiple plan rows per user (composite unique on `user_id, plan_type`). Payment link creates subscription via webhook → `user_subscriptions` upsert. Pay-before-signup users stored in `pending_subscriptions`, claimed on login via `claim-subscription` edge function. Webhook deployed with `--no-verify-jwt` (Stripe doesn't send JWT). Key: `subscriptionService.js`, `CreateGate.jsx`, `stripe-webhook/index.ts`, `claim-subscription/index.ts`.
+- **Scale Landing Page** (`/movement-makers`): Public sales page for Scale ($499 setup + $99/mo). Embeds ExperienceCreatorFlow inline. Screenshots in `public/images/landing/`. Payment link: Stripe hosted. Promo code: `FOUNDING` (100% off, 10 uses). Product names in Stripe: "Scale Setup" (one-time) + "Scale Portal" (monthly). Route: `/movement-makers` (future: `/scale` with redirect).
+- **Creator Gamification**: Spider graph (CreatorRadarChart on Growth tab, 5-6 axes), CreatorXP + levels (Dreamer→Movement Maker, hero section), celebrations (14 milestones, confetti + toasts via CreatorCelebrations), origin story overlay (first visit), per-section launch pads (SectionLaunchPad on each tab), founding member badge, event countdown urgency (amber/red/pulse), pipeline staleness nudge, value-framed locked playbook copy. Foundation: `src/lib/creatorGamification.js` (single localStorage JSON, celebration queue with 3s cooldown). Full spec: `docs/superpowers/plans/2026-07-18-scale-gamification-implementation-plan.md`. Octalysis analysis: `docs/research/octalysis-scale-gamification-recommendations.md`.
 - **Flow Compass** (`/flow-compass`): Energy tracking (N=Flow, E=Redirect, S=Rest, W=Honour). Purple gradient design.
 - **Funnel Calculator** (`/funnel-calculator`): Actual + Planner modes. 8-stage pipeline tracking.
 - **Library of Answers** (`/library`): Three GradientWheel visualizations from Flow Finder completions.
@@ -482,8 +484,13 @@ RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidenc
 ### Blow Up Brand Pipeline
 `remarkable_angles` | `narrative_builders` (vehicle_type, vehicle_desc) | `access_architectures` | `scale_diagnostics` (score_body, score_culture, score_identity, score_ancestral, score_format, score_irreplaceable, score_rulebreak, branch, total_score, phase_classification) | `lead_captures` (email, source, scores)
 
+### Stripe & Subscriptions
+`user_subscriptions` (user_id, stripe_customer_id, stripe_subscription_id, status, plan_type, current_period_start/end, UNIQUE user_id+plan_type) | `pending_subscriptions` (email UNIQUE, stripe_customer_id, plan_type, status, claimed_by, claimed_at) | `user_integrations` (user_id, platform, status, access_token)
+
+RPCs: `get_user_id_by_email(lookup_email)` (SECURITY DEFINER, used by webhook for email-based user matching)
+
 ### Other
-`user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
+`push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
 
 ENUMs: `groan_visibility_layer` (screen/live/money/vulnerable/authority), `groan_source_type` (skill/problem/persona), `groan_challenge_status` (active/completed/skipped), `groan_outcome_type`
 
