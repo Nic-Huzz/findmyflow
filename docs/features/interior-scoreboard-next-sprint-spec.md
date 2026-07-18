@@ -158,8 +158,15 @@ Rules:
    │  [Accept]        [Keep original] │
    └──────────────────────────────────┘
    ```
-6. If accepted: update `cluster_label`, reset `behavioral_evidence` to 0, prompt re-rate
-7. If kept: reset `behavioral_evidence` to 0 (don't re-prompt)
+6. If accepted: update `cluster_label` + `insight`, reset `behavioral_evidence` to 0, set `regen_attempted_at` to now, prompt re-rate
+7. If kept: reset `behavioral_evidence` to 0, set `regen_attempted_at` to now
+8. If AI returns confidence < 0.6: show "No significant evolution detected" message, set `regen_attempted_at` to now, suppress banner for 30 days
+9. Banner logic: show "Review" button only when `behavioral_evidence >= 5 AND (regen_attempted_at IS NULL OR regen_attempted_at < 30 days ago)`
+
+### DB changes
+```sql
+ALTER TABLE nikigai_clusters ADD COLUMN IF NOT EXISTS regen_attempted_at timestamptz;
+```
 
 ### Files to change
 | File | Change |
@@ -212,21 +219,21 @@ INTERIOR SCOREBOARD RULES:
 ```
 
 ### Data strategy: cache in Zarlo brief, NOT live queries
-The Zarlo brief (`zarlo_briefs` table) is already computed daily. Add scoreboard fields to the brief computation rather than querying live on every chat message. This avoids 3 extra DB queries per interaction.
+The Zarlo brief (`zarlo_briefs` table) is computed by the `generate-zarlo-brief` edge function. Add scoreboard fields to the brief payload rather than querying live on every chat message. Zero new queries at chat time.
 
-Add to the brief generation (edge function or cron that builds briefs):
-- `clarityPct`: query `nikigai_clusters` resonance states, compute %
+Add to `supabase/functions/generate-zarlo-brief/index.ts`:
+- `clarityPct`: use shared `calculateClarityScore` logic (query nikigai_clusters, compute %)
 - `topIdentity`: parse `quest_completions` reflection_text, find most frequent identity statement
 - `zoneOfExcellenceQuests`: find quests where last 3 wahoo classifications are all "anxious"
-- `actionScore`: compute from Sprint 11 formula
+- `actionScore`: use shared `calculateActionScore` logic (7-day rolling window)
 
-The `buildZarloPrompt` function reads these from `userContext.zarloBrief` which is already loaded. Zero new queries at chat time.
+The `buildZarloPrompt` function reads these from `userContext.zarloBrief` which is already loaded at chat init.
 
 ### Files to change
 | File | Change |
 |------|--------|
+| `supabase/functions/generate-zarlo-brief/index.ts` | Add clarityPct, topIdentity, zoneOfExcellenceQuests, actionScore to brief payload |
 | `src/lib/zarlo/zarloEngine.js` | Add scoreboard section to `buildZarloPrompt` (~line 917), reading from `zarloBrief`. Add scoreboard rules to system prompt (~line 931). |
-| Brief generation (edge function or cron) | Add clarityPct, topIdentity, zoneOfExcellenceQuests, actionScore to brief payload |
 | `src/hooks/useFigurine.js` | Same pattern: read scoreboard from brief, add to figurine prompt context |
 
 ---
@@ -291,64 +298,67 @@ None. Existing columns reused, unused ones get null. No migration needed.
 ## Sprint 11: Action Score
 
 ### What
-Weekly action alignment score. Shows on the Quests tab as "This week" with a matrix graph plotting Action × Clarity. This is the Y-axis for Zone Calibration.
+Rolling 7-day action alignment score. Shows on the Quests tab with a matrix graph plotting Action × Clarity. This is the Y-axis for Zone Calibration.
 
 ### Scope
-**This week only** (Mon-Sun), not rolling 30 days. Resets each week. Shows the average alignment of everything you did this week.
+**Rolling 7 days** (trailing window, not Mon-Sun). Always has recent data, no Monday morning reset to zero.
+
+**Minimum volume**: Matrix graph only shows a zone label after 5+ actions in the window. Below 5, shows "Keep going" instead of a quadrant name. Prevents 1/1 aligned = "Self-Actualisation" from a single action.
 
 ### Formula
 ```
 Action Score = aligned_actions / total_actions × 100
+(only meaningful when total_actions >= 5)
 
-aligned_actions (count of positive outcomes THIS WEEK):
+aligned_actions (Vibe Rise/Fun outcomes in last 7 days):
   courage_challenges with vibe/peace classification
   + tasks with task_signal = 'lit_me_up'
   + daily check-ins with vibe_rise/ventral state
 
-total_actions (count of ALL outcomes THIS WEEK):
+total_actions (ALL outcomes in last 7 days):
   all courage_challenges (any classification)
   + all tasks with any task_signal
   + all daily check-ins
 
 Stressed/Bored are NOT penalized — they just don't count as aligned.
-More actions = more data points, not higher score.
-3/3 aligned = 100%. 20/30 aligned = 67%. Both valid.
 ```
 
 ### Implementation
-New utility: `src/lib/actionScore.js`
+Shared utility: `src/lib/scoreUtilities.js` (contains BOTH Action Score and Clarity Score)
+
 ```javascript
+import { supabase } from './supabaseClient'
+
+const MINIMUM_ACTIONS = 5
+
+/**
+ * Calculate Action Score (rolling 7-day alignment rate).
+ * Returns { score: 0-100 | null, total: number, aligned: number }
+ * score is null when total < MINIMUM_ACTIONS
+ */
 export async function calculateActionScore(userId) {
-  // Week scope: Monday to Sunday
-  const now = new Date()
-  const dayOfWeek = now.getDay() // 0=Sun, 1=Mon
-  const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1
-  const weekStart = new Date(now)
-  weekStart.setDate(now.getDate() - mondayOffset)
-  weekStart.setHours(0, 0, 0, 0)
-  const weekStartISO = weekStart.toISOString()
+  const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString()
 
   const [courageRes, taskRes, checkinRes] = await Promise.all([
     supabase.from('quest_completions')
       .select('reflection_text')
       .eq('user_id', userId).eq('quest_category', 'Groans')
-      .gte('created_at', weekStartISO)
+      .gte('created_at', sevenDaysAgo)
       .not('reflection_text', 'is', null),
     supabase.from('quest_tasks')
       .select('task_signal')
       .eq('user_id', userId)
       .not('task_signal', 'is', null)
-      .gte('completed_at', weekStartISO),
+      .gte('completed_at', sevenDaysAgo),
     supabase.from('nervous_system_checkins')
       .select('after_state')
       .eq('user_id', userId).eq('checkin_type', 'daily')
-      .gte('created_at', weekStartISO),
+      .gte('created_at', sevenDaysAgo),
   ])
 
   let aligned = 0
   let total = 0
 
-  // Courage outcomes
   ;(courageRes.data || []).forEach(row => {
     try {
       const { wahoo_classification } = JSON.parse(row.reflection_text)
@@ -359,23 +369,63 @@ export async function calculateActionScore(userId) {
     } catch {}
   })
 
-  // Task signals
   ;(taskRes.data || []).forEach(t => {
     total++
     if (t.task_signal === 'lit_me_up') aligned++
   })
 
-  // Daily check-ins
   ;(checkinRes.data || []).forEach(c => {
     total++
     if (['vibe_rise', 'ventral'].includes(c.after_state)) aligned++
   })
-  return Math.round((aligned / total) * 100)
+
+  return {
+    score: total >= MINIMUM_ACTIONS ? Math.round((aligned / total) * 100) : null,
+    total,
+    aligned,
+  }
+}
+
+/**
+ * Calculate Clarity Score from cluster resonance states.
+ * Single source of truth — used by JourneyTab, MirrorPage, LevelTab matrix.
+ * Returns number (0-100) or null if no rated clusters.
+ *
+ * After Sprint 7 (NS state swap), this changes to count
+ * vibe_rise + fun clusters vs total. For now uses resonance_rating × 25.
+ */
+export async function calculateClarityScore(userId) {
+  const { data } = await supabase
+    .from('nikigai_clusters')
+    .select('resonance_rating')
+    .eq('user_id', userId)
+    .in('cluster_type', ['skills', 'problems', 'persona'])
+    .is('step_id', null)
+    .eq('cluster_stage', 'final')
+    .eq('is_removed', false)
+    .not('resonance_rating', 'is', null)
+
+  const rated = data || []
+  if (rated.length === 0) return null
+  const avg = rated.reduce((sum, c) => sum + c.resonance_rating, 0) / rated.length
+  return Math.round(avg * 25)
+}
+
+/**
+ * Determine zone from Action Score + Clarity.
+ * Returns zone name or null if insufficient data.
+ */
+export function getZone(actionScore, clarityPct) {
+  if (actionScore == null || clarityPct == null) return null
+  if (actionScore > 60 && clarityPct > 60) return 'Self-Actualisation'
+  if (actionScore <= 60 && clarityPct > 60) return 'Head Full of Dreams'
+  if (actionScore > 60 && clarityPct <= 60) return 'Misguided Zone'
+  return 'Unfulfilment'
 }
 ```
 
 ### Display: Matrix graph on Quests tab
-Shows at the top of the Quests tab (LevelTab.jsx), above the quest board. Compact 2x2 matrix with a dot showing where you are this week.
+Shows at the top of the Quests tab (LevelTab.jsx), above the quest board. Compact 2x2 matrix with a dot showing where you are.
 
 ```
                     HIGH ACTION
@@ -394,37 +444,41 @@ Shows at the top of the Quests tab (LevelTab.jsx), above the quest board. Compac
    LOW CLARITY ─────────────── HIGH CLARITY
 ```
 
-The dot position: `x = clarityPct / 100`, `y = actionScore / 100`. Label shows zone name + "This week" subtitle.
+The dot position: `x = clarityPct / 100`, `y = actionScore / 100`.
 
-Zone thresholds:
-- Self-Actualisation: Action > 60 AND Clarity > 60
-- Head Full of Dreams: Action <= 60 AND Clarity > 60
-- Misguided: Action > 60 AND Clarity <= 60
-- Unfulfilment: Action <= 60 AND Clarity <= 60
+**Below 5 actions**: dot shows but zone label says "Keep going" with `{total}/5 actions` counter. No quadrant name. Motivates completing more actions without false labelling.
+
+**5+ actions**: zone name shows. Quadrant label highlights.
 
 ```jsx
 <div className="lt-matrix">
-  <div className="lt-matrix-title">This week</div>
+  <div className="lt-matrix-title">Last 7 days</div>
   <div className="lt-matrix-grid">
-    <div className="lt-matrix-quadrant misguided">Doing without knowing</div>
-    <div className="lt-matrix-quadrant self-act">On the diagonal</div>
-    <div className="lt-matrix-quadrant unfulfil">Neither yet</div>
-    <div className="lt-matrix-quadrant dreams">Knowing without doing</div>
-    <div className="lt-matrix-dot" style={{
-      left: `${clarityPct}%`,
-      bottom: `${actionScore}%`
-    }} />
+    {/* 4 quadrant labels */}
+    {actionResult.score != null && clarityPct != null && (
+      <div className="lt-matrix-dot" style={{
+        left: `${clarityPct}%`,
+        bottom: `${actionResult.score}%`
+      }} />
+    )}
   </div>
-  <div className="lt-matrix-zone">{zoneName}</div>
+  <div className="lt-matrix-zone">
+    {actionResult.total < 5
+      ? `Keep going (${actionResult.total}/5 actions)`
+      : getZone(actionResult.score, clarityPct)
+    }
+  </div>
 </div>
 ```
 
 ### Files to change
 | File | Change |
 |------|--------|
-| `src/lib/actionScore.js` | NEW utility (weekly scope, not 30-day) |
-| `src/components/level/LevelTab.jsx` | Add matrix graph at top of Quests tab, fetch Action Score + Clarity |
+| `src/lib/scoreUtilities.js` | NEW shared utility (Action Score + Clarity Score + Zone detection) |
+| `src/components/level/LevelTab.jsx` | Add matrix graph, import from scoreUtilities |
 | `src/components/level/LevelTab.css` | Matrix graph styles |
+| `src/components/JourneyTab.jsx` | Replace inline Clarity calc with `import { calculateClarityScore } from '../lib/scoreUtilities'` |
+| `src/pages/MirrorPage.jsx` | Replace inline Clarity calc with shared utility |
 
 ### DB changes
 None. All data already exists.
@@ -519,15 +573,16 @@ In `GroanCompletionModal.jsx`, after incrementing behavioral_evidence, check if 
 
 ```javascript
 // After increment_behavioral_evidence RPC
-const { data: justHit5 } = await supabase
+const { data: justReady } = await supabase
   .from('nikigai_clusters')
   .select('id')
   .eq('user_id', userId)
-  .eq('behavioral_evidence', 5)
+  .gte('behavioral_evidence', 5)
   .eq('is_removed', false)
+  .eq('regen_notified', false)  // only notify once per cycle
   .limit(1)
 
-if (justHit5?.length > 0) {
+if (justReady?.length > 0) {
   // Use existing push infrastructure (send-push-notification edge function)
   supabase.functions.invoke('send-push-notification', {
     body: {
@@ -536,18 +591,34 @@ if (justHit5?.length > 0) {
       body: "Your challenges are showing who you're becoming. Check in.",
       url: '/mirror',
     }
-  }).catch(() => {}) // best effort
+  }).catch(() => {})
+
+  // Mark as notified (reset when user acts on re-gen in Sprint 8)
+  await supabase.from('nikigai_clusters')
+    .update({ regen_notified: true })
+    .eq('id', justReady[0].id)
 }
 ```
 
 ### Files to change
 | File | Change |
 |------|--------|
-| `src/components/GroanCompletionModal.jsx` | After behavioral_evidence increment (~line 315), check for threshold hit, call `send-push-notification` edge function |
-| `supabase/functions/send-push-notification/index.ts` | Verify it accepts `url` param for click action (may already support it) |
+| `src/components/GroanCompletionModal.jsx` | After behavioral_evidence increment (~line 315), check threshold + notified flag, call `send-push-notification` |
+| `supabase/functions/send-push-notification/index.ts` | Verify it accepts `url` param for click action |
 
 ### DB changes
-None.
+```sql
+ALTER TABLE nikigai_clusters ADD COLUMN IF NOT EXISTS regen_notified boolean DEFAULT false;
+```
+Reset to `false` when user completes a re-gen cycle (Sprint 8 accept/keep).
+
+---
+
+## Known bug: fix BEFORE starting Sprint 7
+
+**Life Map shows 0 skill clusters on nikigai screen** despite having 8 in the database. Likely cause: session_id mismatch between `flow_sessions` and `nikigai_clusters` from multiple Life Map runs. The processing code archives old clusters by `cluster_stage = 'archived'` but the nikigai screen loads clusters scoped to the current `session_id`. If the session ID doesn't match, zero clusters show.
+
+See `docs/bugs/life-map-missing-clusters.md` for investigation guide with SQL queries and fix options. Fix this before any Sprint 7 work since Sprint 7 changes the rating system on the rate_mirror screen which comes right after nikigai.
 
 ---
 
