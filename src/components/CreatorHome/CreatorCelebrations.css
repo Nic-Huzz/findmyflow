@@ -1,0 +1,50 @@
+/* CreatorCelebrations — toast notification for milestone celebrations */
+
+.cc-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  max-width: 400px;
+  width: calc(100% - 2rem);
+  animation: ccSlideUp 0.4s ease;
+  cursor: pointer;
+}
+
+.cc-toast-inner {
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+}
+
+.cc-toast-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cc-toast-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes ccSlideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Mobile — closer to bottom */
+@media (max-width: 768px) {
+  .cc-toast {
+    bottom: 80px;
+  }
+}

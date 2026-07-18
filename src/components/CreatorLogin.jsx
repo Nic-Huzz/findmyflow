@@ -114,7 +114,7 @@ export default function CreatorLogin() {
             Scale
           </div>
           <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
-            Your Impact + Income
+            Welcome, Movement Maker
           </div>
         </div>
 

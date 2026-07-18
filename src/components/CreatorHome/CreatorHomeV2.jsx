@@ -29,7 +29,8 @@ import BrandPulseCard from '../pipeline/BrandPulseCard'
 import ContentIntel from '../pipeline/ContentIntel'
 import RootReachCard from '../pipeline/RootReachCard'
 import CreatorRadarChart from './CreatorRadarChart'
-import { computeCreatorXP, getCreatorLevel, getNextLevel } from '../../lib/creatorGamification'
+import CreatorCelebrations from './CreatorCelebrations'
+import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -84,9 +85,9 @@ function parseRuleBreak(ruleIdentified) {
 function countdownLabel(dateStr) {
   const d = daysUntil(dateStr)
   if (d === null || d < 0) return null
-  if (d === 0) return 'Today'
-  if (d === 1) return 'Tomorrow'
-  return `${d} days`
+  const text = d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : `${d} days`
+  const urgency = d <= 2 ? 'pulse' : d <= 6 ? 'red' : d <= 13 ? 'amber' : ''
+  return { text, urgency }
 }
 
 function getInitials(name) {
@@ -863,7 +864,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                         <div className="ch2-exp-meta">
                           {exp.experience_type?.replace(/_/g, ' ') || 'Experience'}
                           {exp.experience_date && ` · ${new Date(exp.experience_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`}
-                          {cd && <span className="ch2-exp-countdown">{cd}</span>}
+                          {cd && <span className={`ch2-exp-countdown ${cd.urgency ? `ch2-countdown-${cd.urgency}` : ''}`}>{cd.text}</span>}
                         </div>
                       </div>
                       <div style={{ fontSize: 10, fontWeight: 700, color: '#5e17eb' }}>Open →</div>
@@ -1180,6 +1181,35 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           avatarUrl={essenceAvatar || null}
           onClose={() => setShowShareCard(false)}
         />
+      )}
+
+      {/* Milestone celebrations */}
+      <CreatorCelebrations data={{
+        hasRemarkableResults: !!remarkableAngle,
+        hasReach,
+        hasGrowth,
+        hasScaleScore,
+        hasPositioning: false, // CreatorPositionCard manages its own state
+        experienceCount: experiences.length,
+        pastEventCount: past.length,
+        hasSoldOut: false, // TODO: compute from capacity vs attendees
+        totalAttendees: dashboardKPIs.totalAttendees || 0,
+        repeatRate: dashboardKPIs.repeatRate || 0,
+        threePercentCount: threePercentChain.length,
+        instagramConnected: false, // TODO: lift from InstagramConnect
+      }} />
+
+      {/* Origin story overlay — first visit only, skip if payment redirect */}
+      {!loading && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (
+        <div className="ch2-origin-overlay" onClick={() => updateGamificationState({ origin_seen: true })}>
+          <div className="ch2-origin-card">
+            <h2 className="ch2-origin-title">The world is going to be a better place thanks to you and your work.</h2>
+            <p className="ch2-origin-sub">We're here to help you create that change.</p>
+            <button className="ch2-origin-cta" onClick={() => updateGamificationState({ origin_seen: true })}>
+              Let's go &rarr;
+            </button>
+          </div>
+        </div>
       )}
     </div>
   )

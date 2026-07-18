@@ -273,6 +273,16 @@
   display: inline-block; padding: 2px 8px; border-radius: 8px; margin-left: 4px;
   font-size: 11px; font-weight: 800; background: rgba(233,162,59,0.12); color: var(--gold-text);
 }
+.ch2-countdown-amber { background: rgba(245, 158, 11, 0.15); color: #b45309; }
+.ch2-countdown-red { background: rgba(220, 38, 38, 0.12); color: #dc2626; }
+.ch2-countdown-pulse {
+  background: rgba(220, 38, 38, 0.15); color: #dc2626;
+  animation: ch2CountdownPulse 1.5s ease infinite;
+}
+@keyframes ch2CountdownPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
 .ch2-exp-progress {
   display: flex; align-items: center; gap: 10px; padding: 8px 0;
@@ -724,6 +734,39 @@ button.ch2-see-more:hover {
   text-transform: uppercase; letter-spacing: 0.5px;
   color: rgba(255,255,255,0.75);
   white-space: nowrap;
+}
+
+/* ═══ ORIGIN STORY OVERLAY ═══ */
+.ch2-origin-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(160deg, #2a0a6e 0%, #5e17eb 50%, #2a0a6e 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+  animation: ch2OriginFade 0.6s ease;
+}
+.ch2-origin-card {
+  max-width: 380px; text-align: center;
+}
+.ch2-origin-title {
+  font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 800;
+  color: #fff; line-height: 1.25; margin: 0 0 1rem;
+}
+.ch2-origin-sub {
+  font-size: 1rem; color: rgba(255,255,255,0.55);
+  margin: 0 0 2rem; line-height: 1.5;
+}
+.ch2-origin-cta {
+  background: linear-gradient(135deg, #E9A23B, #f5c842);
+  color: #1a0440; border: none; border-radius: 14px;
+  padding: 16px 48px; font-size: 1.05rem; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 4px 20px rgba(233, 162, 59, 0.4);
+  transition: transform 0.2s;
+}
+.ch2-origin-cta:active { transform: scale(0.97); }
+@keyframes ch2OriginFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ═══ CREATOR XP ═══ */
