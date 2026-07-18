@@ -447,9 +447,9 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, l
           return (
             <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
               {/* Flow line */}
-              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
+              <line x1={x} y1={firstY + 4} x2={x} y2={OV_BOTTOM}
                 stroke={colour} strokeWidth="2.5" strokeLinecap="round" opacity="0.4" />
-              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
+              <line x1={x} y1={firstY + 4} x2={x} y2={OV_BOTTOM}
                 stroke={colour} strokeWidth="8" strokeLinecap="round" opacity="0.04" />
 
               {/* Courage dots along the line */}
