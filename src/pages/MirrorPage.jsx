@@ -205,15 +205,6 @@ export default function MirrorPage() {
         </div>
       )}
 
-      {/* Rating index */}
-      <div className="mp-rating-index">
-        <div className="mp-index-title">How to rate</div>
-        <div className="mp-index-row"><span className="mp-index-dots">●●●●</span><span className="mp-index-label">This IS me</span><span className="mp-index-desc">Goosebumps. You'd screenshot it.</span></div>
-        <div className="mp-index-row"><span className="mp-index-dots">●●●○</span><span className="mp-index-label">Yeah, that's right</span><span className="mp-index-desc">Accurate, no resistance</span></div>
-        <div className="mp-index-row"><span className="mp-index-dots">●●○○</span><span className="mp-index-label">Not quite</span><span className="mp-index-desc">See why AI said it but doesn't land</span></div>
-        <div className="mp-index-row"><span className="mp-index-dots">●○○○</span><span className="mp-index-label">That's not me</span><span className="mp-index-desc">Feels off, needs re-clustering</span></div>
-      </div>
-
       {/* Re-generation banner */}
       {regenClusters.length > 0 && (
         <div className="mp-regen-banner">
@@ -229,6 +220,15 @@ export default function MirrorPage() {
       {courageCount > 0 && (
         <IdentitySection count={courageCount} statements={identityStatements} />
       )}
+
+      {/* Rating index */}
+      <div className="mp-rating-index">
+        <div className="mp-index-title">How to rate</div>
+        <div className="mp-index-row"><span className="mp-index-dots">●●●●</span><span className="mp-index-label">This IS me</span><span className="mp-index-desc">Goosebumps. You'd screenshot it.</span></div>
+        <div className="mp-index-row"><span className="mp-index-dots">●●●○</span><span className="mp-index-label">Yeah, that's right</span><span className="mp-index-desc">Accurate, no resistance</span></div>
+        <div className="mp-index-row"><span className="mp-index-dots">●●○○</span><span className="mp-index-label">Not quite</span><span className="mp-index-desc">See why AI said it but doesn't land</span></div>
+        <div className="mp-index-row"><span className="mp-index-dots">●○○○</span><span className="mp-index-label">That's not me</span><span className="mp-index-desc">Feels off, needs re-clustering</span></div>
+      </div>
 
       {/* Cluster cards grouped by type */}
       {['skills', 'problems', 'persona'].map(type => {
