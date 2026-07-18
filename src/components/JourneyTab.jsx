@@ -450,14 +450,13 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       {/* Onboarding — only if items incomplete */}
       <JourneyOnboarding userId={userId} onUnlockTab={onUnlockTab} />
 
-      {/* Clarity Score — tappable, links to Mirror */}
+      {/* Clarity Score */}
       {clarityPct != null && (
-        <div className="jt-section jt-clarity-section" onClick={() => navigate('/mirror')} style={{ cursor: 'pointer' }}>
+        <div className="jt-section jt-clarity-section">
           <div className="jt-clarity-card">
             <div className="jt-clarity-number">{clarityPct}%</div>
             <div className="jt-clarity-label">Clarity</div>
             <div className="jt-clarity-desc">How well you know who you are</div>
-            <div className="jt-clarity-link">View your mirror →</div>
           </div>
         </div>
       )}
@@ -530,16 +529,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
         />
       )}
 
-      {/* Mirror link — always visible above skills */}
-      {clarityPct == null && (
-        <div className="jt-section" onClick={() => navigate('/mirror')} style={{ cursor: 'pointer' }}>
-          <div className="jt-clarity-card">
-            <div className="jt-clarity-label" style={{ fontSize: 15 }}>Your Mirror</div>
-            <div className="jt-clarity-desc">See who you're becoming</div>
-            <div className="jt-clarity-link">Open mirror →</div>
-          </div>
-        </div>
-      )}
+      {/* Mirror link — hidden until /mirror page is finalized */}
 
       {/* Self-Knowledge Skills */}
       <SkillsDisplay userId={userId} />
