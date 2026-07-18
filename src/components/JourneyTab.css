@@ -446,3 +446,22 @@
   text-decoration: none; margin-top: 12px;
   border: none; cursor: pointer; font-family: inherit;
 }
+
+/* ── Clarity Score Card ── */
+.jt-clarity-section { margin-bottom: 0; }
+.jt-clarity-card {
+  text-align: center; padding: 20px 16px;
+  background: linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06));
+  border-radius: 16px; border: 1px solid rgba(94,23,235,0.1);
+}
+.jt-clarity-number { font-size: 36px; font-weight: 800; color: #5e17eb; line-height: 1; }
+.jt-clarity-label { font-size: 14px; font-weight: 700; color: #5e17eb; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.jt-clarity-desc { font-size: 12px; color: #6b7280; margin-top: 4px; }
+.jt-clarity-link { font-size: 12px; color: #5e17eb; font-weight: 600; margin-top: 8px; }
+
+/* Guidance nudge */
+.jt-nudge {
+  margin: 0 16px 16px; padding: 12px 14px; border-radius: 10px;
+  background: rgba(94,23,235,0.04); border: 1px solid rgba(94,23,235,0.1);
+  font-size: 13px; color: #4b5563; line-height: 1.4;
+}

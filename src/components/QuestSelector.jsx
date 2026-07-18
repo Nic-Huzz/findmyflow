@@ -44,6 +44,8 @@ export default function QuestSelector({ userId, value, onChange }) {
         setShowNew(false)
         setNewLabel('')
         setNewState(null)
+        // Auto-tag skills (non-blocking)
+        import('../lib/questSkillTagger').then(m => m.tagQuestSkills(data.id, data.label))
       }
     } catch (e) { console.error('Create quest error:', e) }
     setSaving(false)

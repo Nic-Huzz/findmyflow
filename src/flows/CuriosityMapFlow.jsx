@@ -258,6 +258,8 @@ export default function CuriosityMapFlow() {
             capacity_level: 0,
             why: c.why || null,
             titles: c.titles || null,
+            skills: c.skills || null,
+            problems: c.problems || null,
           }))
           await supabase.from('curiosity_clusters').insert(clusterRows)
         }

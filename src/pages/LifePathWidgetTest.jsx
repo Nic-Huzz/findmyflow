@@ -886,6 +886,8 @@ export default function LifePathFlow() {
                         predicted_state: career.predictedState, status: 'active',
                       }).select('id').single()
                       questId = newQuest?.id
+                      // Auto-tag skills (non-blocking)
+                      if (questId) import('../lib/questSkillTagger').then(m => m.tagQuestSkills(questId, career.label))
                     }
 
                     // Create courage challenges from stuck points

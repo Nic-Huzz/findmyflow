@@ -101,8 +101,34 @@ CLUSTERING GUIDELINES:
 - Each input can feed multiple clusters.
 - Prefer fewer, richer clusters (3-4 is often better than 5).
 
+SKILL DEFINITIONS (tag each cluster with 1-3 matching skills):
+- storytelling: turning lived experience into compelling narratives
+- teaching: simplifying complex ideas, creating frameworks
+- coaching: holding space, asking powerful questions, guiding transformation
+- performing: live presence, stage energy, movement, dance, facilitation
+- creating: making original things (art, music, content, writing)
+- building: constructing systems, products, businesses, technology
+- designing: shaping experiences, spaces, interfaces, journeys
+- leading: rallying people, setting direction, managing teams
+- connecting: bringing people together, community building
+- speaking_up: advocating, being vulnerable publicly, challenging norms
+
+PROBLEM DEFINITIONS (tag each cluster with 1-2 matching problems):
+- kids_deserved_better: childhood education failures
+- voice_taken: expression suppressed
+- pain_not_believed: suffering dismissed
+- world_losing: environmental/societal loss
+- life_not_yours: living someone else's script
+- feeling_stupid: intellectual shame
+- locked_out: exclusion, gatekeeping
+- work_treated_nothing: labour undervalued
+- left_behind: abandonment, disconnection
+- forgot_what_for: lost purpose
+- stopped_wondering: curiosity killed
+- work_hollows: burnout, meaninglessness
+
 Respond ONLY as JSON:
-{"clusters": [{"name": "...", "description": "...", "why": "...", "branch": "...", "input_count": 0, "titles": ["title1", "title2"]}]}`
+{"clusters": [{"name": "...", "description": "...", "why": "...", "branch": "...", "skills": ["skill_id"], "problems": ["problem_id"], "input_count": 0, "titles": ["title1", "title2"]}]}`
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -113,7 +139,7 @@ Respond ONLY as JSON:
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2500,
+        max_tokens: 3500,
         messages: [{ role: 'user', content: prompt }],
       }),
     })

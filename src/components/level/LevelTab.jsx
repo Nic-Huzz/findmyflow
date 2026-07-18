@@ -63,6 +63,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [addQuestLabel, setAddQuestLabel] = useState('')
   const [addQuestState, setAddQuestState] = useState(null)
   const [addQuestSaving, setAddQuestSaving] = useState(false)
+  const [skillLevelPicker, setSkillLevelPicker] = useState(null) // { questId, skills: ['performing', ...] }
   const [addQuestCareerId, setAddQuestCareerId] = useState(null) // career_id from life paths dropdown
   const [addQuestCustom, setAddQuestCustom] = useState(false) // true = typing new path, false = picked from dropdown
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
@@ -120,16 +121,23 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     if (quests.some(q => q.label.toLowerCase() === addQuestLabel.trim().toLowerCase() && q.status === 'active')) return
     setAddQuestSaving(true)
     try {
-      const { error } = await supabase.from('quests').insert({
+      const { data: newQuest, error } = await supabase.from('quests').insert({
         user_id: userId,
         label: addQuestLabel.trim(),
         career_id: addQuestCareerId || null,
         predicted_state: addQuestState,
         status: 'active',
         sort_order: quests.length,
-      })
+      }).select('id, label').single()
       if (error) console.error('Add quest error:', error)
       else {
+        // Auto-tag skills then show level picker
+        if (newQuest) {
+          import('../../lib/questSkillTagger').then(async (m) => {
+            const tags = await m.tagQuestSkills(newQuest.id, newQuest.label)
+            if (tags?.length) setSkillLevelPicker({ questId: newQuest.id, skills: tags })
+          })
+        }
         // Award 2 RP for adding a quest
         await supabase.from('quest_completions').insert({
           user_id: userId,
@@ -512,6 +520,14 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             </div>
           </div>
         )}
+        {/* Skill starting level picker — appears after quest creation */}
+        {skillLevelPicker && (
+          <SkillLevelPicker
+            skills={skillLevelPicker.skills}
+            userId={userId}
+            onDone={() => setSkillLevelPicker(null)}
+          />
+        )}
         <div className="quest-recommend">We recommend focusing on 1-3 quests at a time</div>
       </div>
 
@@ -833,6 +849,62 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       )}
       </div>{/* end hidden wrapper */}
 
+    </div>
+  )
+}
+
+// ── Skill Level Picker (inline, post-quest-creation) ──
+const SKILL_LABELS = {
+  storytelling: 'Storytelling', teaching: 'Teaching', coaching: 'Coaching',
+  performing: 'Performing', creating: 'Creating', building: 'Building',
+  designing: 'Designing', leading: 'Leading', connecting: 'Connecting',
+  speaking_up: 'Speaking Up',
+}
+const LEVELS = [
+  { id: 'education', label: 'L0 Learning', short: 'L0' },
+  { id: 'testing', label: 'L1 Testing', short: 'L1' },
+  { id: 'practising', label: 'L2 Practising', short: 'L2' },
+  { id: 'charging', label: 'L3 Charging', short: 'L3' },
+  { id: 'teaching', label: 'L4 Teaching', short: 'L4' },
+]
+
+function SkillLevelPicker({ skills, userId, onDone }) {
+  const [levels, setLevels] = useState({})
+  const [saving, setSaving] = useState(false)
+
+  const handleSave = async () => {
+    setSaving(true)
+    const { setSkillStartingLevel } = await import('../../lib/skillProgress')
+    for (const [skillId, level] of Object.entries(levels)) {
+      await setSkillStartingLevel(userId, skillId, level)
+    }
+    setSaving(false)
+    onDone()
+  }
+
+  return (
+    <div className="skill-level-picker">
+      <div className="skill-level-title">What level are you at with these skills?</div>
+      {skills.map(skillId => (
+        <div key={skillId} className="skill-level-row">
+          <span className="skill-level-name">{SKILL_LABELS[skillId] || skillId}</span>
+          <div className="skill-level-btns">
+            {LEVELS.map(l => (
+              <button key={l.id}
+                className={`skill-level-btn ${levels[skillId] === l.id ? 'active' : ''}`}
+                onClick={() => setLevels(prev => ({ ...prev, [skillId]: l.id }))}
+              >{l.short}</button>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div className="skill-level-actions">
+        <button className="skill-level-save" onClick={handleSave}
+          disabled={saving || Object.keys(levels).length === 0}>
+          {saving ? 'Saving...' : 'Set levels'}
+        </button>
+        <button className="skill-level-skip" onClick={onDone}>Skip</button>
+      </div>
     </div>
   )
 }

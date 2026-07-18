@@ -293,6 +293,38 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('Error updating level courage progress:', e)
       }
 
+      // 7. Increment behavioral_evidence on matching clusters + award skill XP
+      if (sourceQuestId) {
+        try {
+          const { data: quest } = await supabase.from('quests').select('skill_tags').eq('id', sourceQuestId).maybeSingle()
+          if (quest?.skill_tags?.length) {
+            // 7a. Behavioral evidence
+            const { data: matchingClusters } = await supabase
+              .from('nikigai_clusters')
+              .select('id, skill_tags, behavioral_evidence')
+              .eq('user_id', userId)
+              .eq('cluster_stage', 'final')
+              .is('step_id', null)
+              .eq('is_removed', false)
+              .in('cluster_type', ['skills', 'problems', 'persona'])
+              .not('skill_tags', 'is', null)
+            if (matchingClusters) {
+              const toUpdate = matchingClusters.filter(c =>
+                c.skill_tags?.some(tag => quest.skill_tags.includes(tag))
+              )
+              for (const c of toUpdate) {
+                const { error: evErr } = await supabase.rpc('increment_behavioral_evidence', {
+                  p_cluster_id: c.id,
+                })
+                if (evErr) console.warn('Behavioral evidence increment failed:', evErr)
+              }
+            }
+            // 7b. Skill XP (non-blocking)
+            import('../lib/skillProgress').then(m => m.awardSkillXP(userId, quest.skill_tags))
+          }
+        } catch (e) { console.warn('Behavioral evidence / skill XP error:', e) }
+      }
+
       // Celebration based on classification (Hades model: every state gets appropriate response)
       if (wahooClassification === 'vibe' || wahooClassification === 'wahoo') {
         // Gold confetti — peak experience

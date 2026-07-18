@@ -56,7 +56,7 @@ const SCREEN_ORDER = [
   'time_check', 'welcome',
   'period_childhood', 'period_teens', 'period_young_adult', 'period_career', 'period_now',
   'processing', 'connecting_dots', 'life_map',
-  'nikigai', 'chamber_intro', 'chamber_reveal', 'gap_insight',
+  'nikigai', 'rate_mirror', 'chamber_intro', 'chamber_reveal', 'gap_insight',
   'complete',
 ]
 
@@ -104,6 +104,11 @@ export default function LifeMapFlow() {
   // Favourites curation
   const [favouriteSkillIds, setFavouriteSkillIds] = useState(new Set())
   const [favouriteProblemIds, setFavouriteProblemIds] = useState(new Set())
+
+  // Cluster resonance rating (rate_mirror screen)
+  const [clusterRatings, setClusterRatings] = useState({}) // { clusterId: 1-5 }
+  const [removedClusters, setRemovedClusters] = useState(new Set())
+  const [removedClusterData, setRemovedClusterData] = useState([]) // full cluster objects for restore UI
 
   // Essence Chamber (pillars)
   const [essenceChamber, setEssenceChamber] = useState(null)
@@ -161,6 +166,15 @@ export default function LifeMapFlow() {
       }
     })()
   }, [currentScreen])
+
+  // Rate mirror: auto-skip if no clusters (must be before any early returns for Rules of Hooks)
+  useEffect(() => {
+    if (currentScreen !== 'rate_mirror') return
+    const hasClusters = [...skillsClusters, ...problemsClusters, ...personasClusters].some(c => c.id)
+    if (!hasClusters) {
+      goToScreen(essenceChamber ? 'chamber_intro' : 'complete')
+    }
+  }, [currentScreen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Stable sticky note rotations (seeded once, not on every render)
   const stickyRotations = useMemo(() => {
@@ -595,14 +609,29 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
     if (clusters) {
       const mapCluster = c => ({ id: c.id, label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })
-      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills').map(mapCluster))
-      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems').map(mapCluster))
-      setPersonasClusters(clusters.filter(c => c.cluster_type === 'persona').map(mapCluster))
+      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills' && !c.is_removed).map(mapCluster))
+      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems' && !c.is_removed).map(mapCluster))
+      setPersonasClusters(clusters.filter(c => c.cluster_type === 'persona' && !c.is_removed).map(mapCluster))
       // Restore favourite selections
       const favSkills = new Set(clusters.filter(c => c.cluster_type === 'skills' && c.is_favourite).map(c => c.id))
       const favProblems = new Set(clusters.filter(c => c.cluster_type === 'problems' && c.is_favourite).map(c => c.id))
       setFavouriteSkillIds(favSkills)
       setFavouriteProblemIds(favProblems)
+      // Restore resonance ratings + removed cluster data for restore UI
+      const ratings = {}
+      const removed = new Set()
+      const removedData = []
+      const mapClusterFull = c => ({ id: c.id, label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i), type: c.cluster_type })
+      clusters.forEach(c => {
+        if (c.resonance_rating) ratings[c.id] = c.resonance_rating
+        if (c.is_removed) {
+          removed.add(c.id)
+          removedData.push(mapClusterFull(c))
+        }
+      })
+      setClusterRatings(ratings)
+      setRemovedClusters(removed)
+      setRemovedClusterData(removedData)
     }
     goToScreen('life_map')
   }
@@ -1114,19 +1143,134 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                       }
                     }
                     setIsProcessing(false)
-                    goToScreen('chamber_intro')
+                    goToScreen('rate_mirror')
                   } catch (err) {
                     console.error('Chamber derivation failed:', err)
                     setIsProcessing(false)
-                    goToScreen('complete')
+                    goToScreen('rate_mirror')
                   }
                 }}
               >
                 {isProcessing ? 'Building your chamber...' : 'Discover your Essence Chamber'}
               </button>
             )}
-            <button className="lm-cta-gold" onClick={() => goToScreen(essenceChamber ? 'chamber_intro' : 'complete')}>
+            <button className="lm-cta-gold" onClick={() => goToScreen('rate_mirror')}>
               {essenceChamber ? 'Go deeper →' : 'See your results →'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (currentScreen === 'rate_mirror') {
+    const allClusters = [
+      ...skillsClusters.map(c => ({ ...c, type: 'skills' })),
+      ...problemsClusters.map(c => ({ ...c, type: 'problems' })),
+      ...personasClusters.map(c => ({ ...c, type: 'persona' })),
+    ].filter(c => c.id && !removedClusters.has(c.id))
+
+    const keptRatings = allClusters
+      .map(c => clusterRatings[c.id])
+      .filter(r => r != null)
+    const clarityPct = keptRatings.length > 0
+      ? Math.round((keptRatings.reduce((a, b) => a + b, 0) / keptRatings.length) * 20)
+      : null
+
+    const handleSaveRatings = async () => {
+      const updates = Object.entries(clusterRatings)
+        .filter(([id]) => !removedClusters.has(id))
+        .map(([id, rating]) =>
+          supabase.from('nikigai_clusters').update({
+            resonance_rating: rating,
+            resonance_updated_at: new Date().toISOString(),
+          }).eq('id', id)
+        )
+      const removes = [...removedClusters].map(id =>
+        supabase.from('nikigai_clusters').update({
+          is_removed: true,
+          resonance_updated_at: new Date().toISOString(),
+        }).eq('id', id)
+      )
+      // Restore previously-removed clusters that user restored this session
+      const restores = removedClusterData
+        .filter(c => !removedClusters.has(c.id))
+        .map(c => supabase.from('nikigai_clusters').update({
+          is_removed: false,
+          resonance_updated_at: new Date().toISOString(),
+        }).eq('id', c.id))
+      await Promise.all([...updates, ...removes, ...restores])
+      goToScreen(essenceChamber ? 'chamber_intro' : 'complete')
+    }
+
+    const handleRemoveCluster = (clusterId) => {
+      // Move cluster from active to removed
+      const cluster = allClusters.find(c => c.id === clusterId)
+      if (cluster) setRemovedClusterData(prev => [...prev, cluster])
+      setRemovedClusters(prev => new Set([...prev, clusterId]))
+      setClusterRatings(prev => {
+        const next = { ...prev }
+        delete next[clusterId]
+        return next
+      })
+    }
+
+    const handleRestoreCluster = (clusterId) => {
+      setRemovedClusterData(prev => prev.filter(c => c.id !== clusterId))
+      setRemovedClusters(prev => {
+        const next = new Set(prev)
+        next.delete(clusterId)
+        return next
+      })
+    }
+
+    // Removed clusters for restore UI (includes both session-removed and DB-loaded removed)
+    const removedClustersList = removedClusterData.filter(c => removedClusters.has(c.id))
+
+    return (
+      <div className="life-map-app">
+        <div className="lm-container">
+          <div className="lm-reveal">
+            <h2 className="lm-reveal-title lm-gold-text">Does this feel right?</h2>
+            <p className="lm-reveal-subtitle">Rate how well each one describes you</p>
+            {clarityPct != null && (
+              <div className="lm-clarity-score">Clarity: {clarityPct}%</div>
+            )}
+
+            {allClusters.map(cluster => (
+              <div key={cluster.id} className="lm-rate-card">
+                <div className="lm-rate-label">{cluster.label}</div>
+                <div className="lm-rate-dots">
+                  {[1, 2, 3, 4, 5].map(n => (
+                    <button key={n}
+                      className={`lm-rate-dot ${(clusterRatings[cluster.id] || 0) >= n ? 'active' : ''}`}
+                      onClick={() => setClusterRatings(prev => ({ ...prev, [cluster.id]: n }))}
+                    />
+                  ))}
+                </div>
+                <button className="lm-rate-remove" onClick={() => handleRemoveCluster(cluster.id)}>
+                  Remove
+                </button>
+              </div>
+            ))}
+
+            {removedClustersList.length > 0 && (
+              <div className="lm-removed-section">
+                <p className="lm-removed-label">Removed</p>
+                {removedClustersList.map(cluster => (
+                  <div key={cluster.id} className="lm-rate-card lm-rate-card-removed">
+                    <div className="lm-rate-label">{cluster.label}</div>
+                    <button className="lm-rate-restore" onClick={() => handleRestoreCluster(cluster.id)}>
+                      Restore
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button className="lm-cta-gold" onClick={handleSaveRatings}
+              disabled={Object.keys(clusterRatings).length === 0 && removedClusters.size === 0}>
+              Continue
             </button>
           </div>
         </div>

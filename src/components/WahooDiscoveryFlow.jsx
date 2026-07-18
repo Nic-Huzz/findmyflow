@@ -124,6 +124,8 @@ export default function WahooDiscoveryFlow({
         setShowNewQuest(false)
         setNewQuestLabel('')
         setNewQuestState(null)
+        // Auto-tag skills (non-blocking)
+        import('../lib/questSkillTagger').then(m => m.tagQuestSkills(data.id, data.label))
       }
     } catch (e) { console.error('Create quest error:', e) }
     setNewQuestSaving(false)

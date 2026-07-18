@@ -28,15 +28,54 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [healingIntentions, setHealingIntentions] = useState({}) // { taskId: healingIntention }
   const [outcomeTaskId, setOutcomeTaskId] = useState(null) // show outcome prompt after completion
   const [groanModalChallenge, setGroanModalChallenge] = useState(null) // courage completion modal
+  const [signalTaskId, setSignalTaskId] = useState(null) // which task is showing "lit me up" prompt
+  const [courageTrend, setCourageTrend] = useState([]) // last N wahoo classifications
+  const [topIdentity, setTopIdentity] = useState(null) // { text, count }
   const inputRef = useRef(null)
 
   const stateMeta = STATE_META[quest.predicted_state]
   const completedCount = tasks.filter(t => t.done).length
   const totalCount = tasks.length
+  const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
+  const taskIdKey = tasks.map(t => t.id).join(',')
+
+  // Load courage trend + top identity when expanded
+  useEffect(() => {
+    if (!expanded || !quest.id) return
+    // Courage trend: last 8 wahoo classifications for this quest's challenges
+    const groanIds = tasks.filter(t => t.groan_challenge_id).map(t => t.groan_challenge_id)
+    if (groanIds.length > 0) {
+      supabase.from('quest_completions')
+        .select('reflection_text')
+        .eq('user_id', userId)
+        .eq('quest_category', 'Groans')
+        .not('reflection_text', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(200)
+        .then(({ data }) => {
+          if (!data) return
+          const trend = []
+          const stmtCounts = {}
+          data.forEach(row => {
+            try {
+              const parsed = JSON.parse(row.reflection_text)
+              if (parsed.challenge_id && groanIds.includes(parsed.challenge_id)) {
+                if (parsed.wahoo_classification) trend.push(parsed.wahoo_classification)
+                if (parsed.identity_statement) {
+                  const s = parsed.identity_statement.trim().toLowerCase()
+                  if (s) stmtCounts[s] = (stmtCounts[s] || 0) + 1
+                }
+              }
+            } catch {}
+          })
+          setCourageTrend(trend.slice(0, 8).reverse())
+          const top = Object.entries(stmtCounts).sort((a, b) => b[1] - a[1])[0]
+          if (top) setTopIdentity({ text: top[0], count: top[1] })
+        })
+    }
+  }, [expanded, quest.id, taskIdKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load healing intentions for all tasks
-  // Stable dependency: join task IDs into a string so it only re-fetches when tasks actually change
-  const taskIdKey = tasks.map(t => t.id).join(',')
   useEffect(() => {
     if (!tasks.length) return
     const taskIds = tasks.map(t => t.id)
@@ -156,6 +195,11 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       setOutcomeTaskId(task.id)
     }
 
+    // Show "lit me up" signal for non-courage tasks (only if not already signalled)
+    if (newDone && !task.is_courage_challenge && !task.task_signal) {
+      setSignalTaskId(task.id)
+    }
+
     onUpdate?.()
   }
 
@@ -175,6 +219,11 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     }).catch(() => {})
     setOutcomeTaskId(null)
     onUpdate?.()
+  }
+
+  const handleTaskSignal = async (taskId, signal) => {
+    setSignalTaskId(null)
+    await supabase.from('quest_tasks').update({ task_signal: signal }).eq('id', taskId)
   }
 
   const closeQuest = async (reason) => {
@@ -219,6 +268,11 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
             <span className="qbc-state-name" style={{ color: stateMeta?.color }}>{stateMeta?.label || 'Unknown'}</span>
             {totalCount > 0 && <span className="qbc-progress"> · {completedCount}/{totalCount} tasks</span>}
           </div>
+          {totalCount > 0 && (
+            <div className="qbc-progress-bar">
+              <div className="qbc-progress-fill" style={{ width: `${progressPct}%` }} />
+            </div>
+          )}
         </div>
         <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
       </div>
@@ -226,6 +280,29 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       {/* Expanded content */}
       {expanded && (
         <div className="qbc-body">
+          {/* Courage trend + identity + zone warning */}
+          {courageTrend.length > 0 && (
+            <div className="qbc-insights">
+              <div className="qbc-trend">
+                {courageTrend.map((c, i) => (
+                  <span key={i} className="qbc-trend-dot" title={c}>
+                    {c === 'vibe' || c === 'wahoo' ? '🔥' : c === 'peace' ? '😌' : c === 'anxious' ? '😰' : '😶'}
+                  </span>
+                ))}
+              </div>
+              {topIdentity && (
+                <div className="qbc-top-identity">
+                  "I am someone who {topIdentity.text}" <span className="qbc-identity-count">{'\u00D7'}{topIdentity.count}</span>
+                </div>
+              )}
+              {courageTrend.length >= 3 && courageTrend.slice(-3).every(c => c === 'anxious') && (
+                <div className="qbc-zone-warning">
+                  You're skilled here but it doesn't light you up. This might be your Zone of Excellence.
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Task list */}
           {tasks.length > 0 && (
             <div className="qbc-tasks">
@@ -243,11 +320,20 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
                 const hasMultipleTimeframes = Object.values(grouped).filter(g => g.length > 0).length > 1
 
                 const renderTask = (task) => (
-                  <div key={task.id} className="qbc-task">
-                    <button className="qbc-check" onClick={() => toggleTask(task)} />
-                    <span className="qbc-task-text">{task.text}</span>
-                    {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
-                    {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                  <div key={task.id}>
+                    <div className="qbc-task">
+                      <button className="qbc-check" onClick={() => toggleTask(task)} />
+                      <span className="qbc-task-text">{task.text}</span>
+                      {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                      {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                    </div>
+                    {signalTaskId === task.id && (
+                      <div className="qbc-signal-row">
+                        <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}>🔥 Lit me up</button>
+                        <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'was_okay')}>😐 Was okay</button>
+                        <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'bored')}>😴 Bored</button>
+                      </div>
+                    )}
                   </div>
                 )
 
