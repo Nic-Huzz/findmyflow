@@ -85,6 +85,60 @@ When a courage challenge on that quest is completed, the wahoo classification be
 
 ---
 
+## Per-Completion Experience
+
+Every completion should produce a visible progress signal. No action goes into the void.
+
+### Courage challenge completion
+
+The challenge's own `depth_level` (on `groan_challenges`) determines if there's one extra question beyond the standard flow.
+
+```
+Standard flow (all courage challenges):
+  1. "How did that feel?"                    (4 states — exists)
+  2. "I am someone who..."                   (identity statement dropdown — new)
+  3. "Better, worse, or as expected?"        (3% check — exists)
+
+Extra by depth:
+  L0 (education):  "Lit me up / Was okay / Bored"     → feeds Clarity convergence
+  L1 (testing):    nothing extra
+  L2 (practising): nothing extra (Vibe Rise state IS the identity fit signal)
+  L3 (charging):   "What did you earn from this?"      → feeds Scale Alignment
+  L4 (teaching):   "How many people did this reach?"   → feeds Scale Alignment
+```
+
+**Visible progress shown after completion:**
+- Quest progress bar (tasks done / total)
+- Per-quest wahoo trend (e.g., "4 Vibe Rise, 1 Fun out of 5 challenges")
+- Identity statement collection growing
+- Which taxonomy cluster just got reinforced (skill resonance bump)
+
+### To-do completion
+
+```
+  1. ✓ checkmark
+  2. "Lit me up / Was okay / Bored"          (one optional tap — ALL to-dos)
+  3. Quest progress bar updates
+```
+
+No need to detect "learning task" vs other. The "lit me up" signal is valuable for ANY task:
+- "Research breathwork certification" → Lit me up = curiosity alive
+- "Email 3 venues" → Bored = this task drains you
+- Consistent "bored" on marketing tasks + "lit me up" on facilitation tasks = Clarity signal about what parts of this quest light you up vs don't.
+
+### What each completion feeds
+
+| Completion type | Immediate visible feedback | Feeds (background) |
+|---|---|---|
+| Courage challenge | Wahoo trend + identity collection + cluster bump | Capacity (any challenge) + Clarity (via taxonomy tags) |
+| Courage L0 | + "lit me up" signal | Clarity convergence |
+| Courage L3 (Scale) | + income captured | Scale Alignment |
+| Courage L4 (Scale) | + reach captured | Scale Alignment |
+| To-do | Progress bar + "lit me up" signal | Clarity (convergence on quest tasks) |
+| Tune practice | Capacity Score number moves | Capacity |
+
+---
+
 ## Capacity Score (existing — no changes needed)
 
 Already built in `useCapacityScore.js`. Rolling 7-day window.
@@ -280,8 +334,9 @@ Branches (from Curiosity Map) are a SEPARATE taxonomy for market landscape, NOT 
 - `resonance_updated_at` timestamp
 - `behavioral_evidence` integer — count of supporting challenge completions
 
-**On `quest_tasks` table** (new field):
+**On `quest_tasks` table** (new fields):
 - `timeframe` text — week / month / quarter (default: week)
+- `task_signal` text — lit_me_up / was_okay / bored (captured on to-do completion)
 
 **On `curiosity_inputs` table** (new field):
 - `curiosity_signal` text — lit_me_up / was_okay / bored
@@ -318,8 +373,11 @@ Key insight: the exploration was valuable for understanding how all the data con
 - Each dimension 0-100% behavioral score. Top scores = monopoly fingerprint. Compared against 299 careerModels.json profiles.
 - Huzz's actual: performing (80%) + building (60%) + voice_taken (90%) = 0/299 matches.
 
-### Per-task L0-L4 prompts (designed but deferred)
-Depth-specific prompts per courage challenge completion based on the challenge's own depth_level. L0: "lit me up" signal. L1-L2: 4-state + 3% check. L2 adds skill/identity sliders. L3: income + time-on-path %. L4: impact + testimonial. Full design preserved in git history. May revisit when Scale app alignment metric is built.
+### Belief sliders (designed then dropped)
+Two per-challenge sliders: "I'm getting good at this" (1-5) and "This feels like me" (1-5). Designed to detect Zone of Excellence (high skill, low identity fit). Dropped because: (a) "Vibe Rise" wahoo classification already captures identity fit — if it felt like Vibe Rise, it felt like you, (b) "getting good at this" is less meaningful than the identity statement which captures the belief in the user's own words, (c) some courage challenges are marketing/admin tasks where "feels like me" doesn't apply — the identity statement handles this more naturally.
+
+### Per-task L0-L4 prompts (simplified)
+Originally designed per-depth prompt matrices with 2-4 questions each. Simplified to: standard courage flow (4-state + identity statement + 3% check) + ONE extra question by depth level (L0: lit me up, L3: income, L4: reach). L1-L2 get nothing extra — the standard flow is enough. To-dos get "lit me up / was okay / bored" universally (not just learning tasks). Full original design preserved in git history.
 
 ---
 
