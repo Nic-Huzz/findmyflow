@@ -30,7 +30,7 @@ import ContentIntel from '../pipeline/ContentIntel'
 import RootReachCard from '../pipeline/RootReachCard'
 import CreatorRadarChart from './CreatorRadarChart'
 import CreatorCelebrations from './CreatorCelebrations'
-import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState } from '../../lib/creatorGamification'
+import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -168,6 +168,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [creatorXP, setCreatorXP] = useState(0)
   const [scaleScoreValue, setScaleScoreValue] = useState(null)
   const [maxTicketPrice, setMaxTicketPrice] = useState(null)
+  const [isFoundingMember, setIsFoundingMember] = useState(false)
 
   // Inner Game data
   const [nervousSystemData, setNervousSystemData] = useState(null)
@@ -325,6 +326,20 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
       setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
 
+      // Founding member check (first 50 by created_at, with stripe_customer_id or manual whitelist)
+      const FOUNDING_WHITELIST = ['ebe69854-2ebd-4236-a437-3a362f5e1af4', 'c649fc45-f040-4e48-8f8e-48f4a1285f58', 'cc03bd6e-c40f-4941-8d1a-bc8c502d22d4']
+      if (FOUNDING_WHITELIST.includes(userId)) {
+        setIsFoundingMember(true)
+      } else {
+        const { count } = await supabase.from('user_subscriptions')
+          .select('*', { count: 'exact', head: true })
+          .eq('plan_type', 'creator')
+          .eq('status', 'active')
+          .not('stripe_customer_id', 'is', null)
+          .lte('created_at', (await supabase.from('user_subscriptions').select('created_at').eq('user_id', userId).eq('plan_type', 'creator').maybeSingle()).data?.created_at || '1970-01-01')
+        setIsFoundingMember((count ?? 999) < 50)
+      }
+
       // KPIs + Top fans from the same attendeeRows fetch
       if (attendeeRows?.length) {
         const counts = {}
@@ -447,6 +462,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             {/* Creator XP + Level */}
             <div className="ch2-xp-row">
               <span className="ch2-xp-level">⚡ {getCreatorLevel(creatorXP).name}</span>
+              {isFoundingMember && <span className="ch2-founding-badge">FOUNDING</span>}
               <span className="ch2-xp-bar-wrap">
                 <span
                   className="ch2-xp-bar-fill"
@@ -838,6 +854,24 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             />
           )}
 
+          {/* Pipeline staleness nudge */}
+          {upcoming.map(exp => {
+            const d = daysUntil(exp.experience_date)
+            const cl = checklistCounts[exp.id] || {}
+            const totalDone = Object.values(cl).reduce((sum, s) => sum + (s.done || 0), 0)
+            if (d >= 7 && totalDone === 0 && !hasShownStaleNudgeToday(exp.id)) {
+              return (
+                <div key={`stale-${exp.id}`} className="ch2-stale-nudge" onClick={() => { markStaleNudgeShown(exp.id); setSelectedExperienceId(exp.id) }}>
+                  <div className="ch2-stale-text">
+                    Your <strong>{exp.name}</strong> is in {d} days and your audience doesn't know about it yet.
+                  </div>
+                  <div className="ch2-stale-cta">Start marketing &rarr;</div>
+                </div>
+              )
+            }
+            return null
+          })}
+
           {/* Upcoming */}
           {upcoming.length > 0 && (
             <>
@@ -990,6 +1024,31 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               <div className="ch2-kpi-label">Upcoming</div>
             </div>
           </div>
+
+          {/* Days since last event — gentle mirror */}
+          {past.length > 0 && upcoming.length === 0 && (() => {
+            const lastDate = new Date(past[0].experience_date)
+            const daysSince = Math.floor((Date.now() - lastDate.getTime()) / (1000 * 60 * 60 * 24))
+            if (daysSince < 7) return null
+            return (
+              <div className="ch2-days-since">
+                It's been {daysSince} days since your last experience. Your top fans are waiting.
+              </div>
+            )
+          })()}
+
+          {/* Low attendance reframe — NOTE: attendee_count is not a column on experiences table.
+              This will not render until attendee_count is computed and attached to past events
+              (e.g., from experience_attendees COUNT). Harmlessly dormant until then. */}
+          {past.length > 0 && past[0].attendee_count != null && past[0].capacity > 0 && past[0].attendee_count < past[0].capacity * 0.5 && (
+            <div className="ch2-low-attendance">
+              {past[0].attendee_count <= 5
+                ? "Every movement starts with a handful. Wim Hof's first ice bath had 3 people."
+                : past[0].attendee_count <= 15
+                ? "That's a room full of people who chose to be there. That matters."
+                : "More than most creators get in their first year. Keep running events."}
+            </div>
+          )}
 
           {/* 3% Chain */}
           {threePercentChain.length > 0 && (
