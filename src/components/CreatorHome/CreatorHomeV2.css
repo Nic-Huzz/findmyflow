@@ -726,6 +726,30 @@ button.ch2-see-more:hover {
   white-space: nowrap;
 }
 
+/* ═══ CREATOR XP ═══ */
+.ch2-xp-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 8px; padding: 0 4px;
+}
+.ch2-xp-level {
+  font-size: 11px; font-weight: 800; color: var(--gold);
+  white-space: nowrap; letter-spacing: 0.3px;
+}
+.ch2-xp-bar-wrap {
+  flex: 1; height: 4px; background: rgba(255,255,255,0.15);
+  border-radius: 4px; overflow: hidden;
+}
+.ch2-xp-bar-fill {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+.ch2-xp-text {
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+}
+
 /* ═══ PHASE 2: CARD HEADERS + BADGES ═══ */
 .ch2-card-header {
   display: flex; align-items: center; justify-content: space-between;

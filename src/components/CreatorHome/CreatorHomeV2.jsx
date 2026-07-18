@@ -28,6 +28,8 @@ import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
 import ContentIntel from '../pipeline/ContentIntel'
 import RootReachCard from '../pipeline/RootReachCard'
+import CreatorRadarChart from './CreatorRadarChart'
+import { computeCreatorXP, getCreatorLevel, getNextLevel } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -162,6 +164,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [userProblems, setUserProblems] = useState([])
   const [topFans, setTopFans] = useState([])
   const [movementXP, setMovementXP] = useState(0)
+  const [creatorXP, setCreatorXP] = useState(0)
+  const [scaleScoreValue, setScaleScoreValue] = useState(null)
+  const [maxTicketPrice, setMaxTicketPrice] = useState(null)
 
   // Inner Game data
   const [nervousSystemData, setNervousSystemData] = useState(null)
@@ -299,6 +304,26 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         }
       }
 
+      // Scale Score value (not just boolean)
+      setScaleScoreValue(scaleScoreData?.total_score ?? null)
+
+      // Compute creatorXP
+      const threePercentNotes = past.filter(e => e.three_percent_note).length
+      setCreatorXP(computeCreatorXP({
+        hasRemarkableResults: !!remarkData?.id,
+        hasReach: !!reachData?.id,
+        hasGrowth: !!growthData?.id,
+        hasScaleScore: !!scaleScoreData?.id,
+        experienceCount: experiences.length,
+        pastEventCount: past.length,
+        threePercentCount: threePercentNotes,
+        filledEventCount: 0, // TODO: compute from capacity vs attendees when data is available
+      }))
+
+      // Max ticket price across all experiences
+      const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
+      setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
+
       // KPIs + Top fans from the same attendeeRows fetch
       if (attendeeRows?.length) {
         const counts = {}
@@ -417,6 +442,19 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               <div className="ch2-hero-bar-label">
                 Playbook {[!!remarkableAngle, hasReach, hasGrowth, hasScaleScore].filter(Boolean).length} of 4
               </div>
+            </div>
+            {/* Creator XP + Level */}
+            <div className="ch2-xp-row">
+              <span className="ch2-xp-level">⚡ {getCreatorLevel(creatorXP).name}</span>
+              <span className="ch2-xp-bar-wrap">
+                <span
+                  className="ch2-xp-bar-fill"
+                  style={{ width: `${getNextLevel(creatorXP) ? Math.min(100, (creatorXP / getNextLevel(creatorXP).threshold) * 100) : 100}%` }}
+                />
+              </span>
+              <span className="ch2-xp-text">
+                {getNextLevel(creatorXP) ? `${creatorXP} / ${getNextLevel(creatorXP).threshold} XP` : `${creatorXP} XP`}
+              </span>
             </div>
           </div>
         </div>
@@ -913,6 +951,16 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
 
         {/* ═══ GROWTH TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'growth' ? ' active' : ''}`}>
+
+          {/* Spider Graph — Your Shape */}
+          <CreatorRadarChart data={{
+            impact: dashboardKPIs.totalAttendees || 0,
+            consistency: past.length,
+            retention: dashboardKPIs.repeatRate || 0,
+            brand: scaleScoreValue,
+            price: maxTicketPrice,
+            reach: null, // TODO: wire Instagram views when BrandPulse data is lifted
+          }} />
 
           {/* Creator Momentum */}
           <RootReachCard />
