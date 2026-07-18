@@ -54,26 +54,19 @@ END WHERE resonance_rating IS NOT NULL;
 | `src/components/JourneyTab.jsx` | Clarity calc at line ~175: change from `avg * 25` to new formula using `resonance_state` |
 
 ### UI sketch (MirrorPage cluster card)
+Horizontal pill row (compact, not stacked buttons). Same pattern as state pills in Challenge.css.
 ```jsx
 <div className="mp-cluster-card">
   <div className="mp-cluster-label">{cluster.cluster_label}</div>
-  <div className="mp-state-btns">
-    <button className={`mp-state-btn vibe ${state === 'vibe_rise' ? 'active' : ''}`}
-      onClick={() => handleRate(cluster.id, 'vibe_rise')}>
-      🔥 I would absolutely love this
-    </button>
-    <button className={`mp-state-btn fun ${state === 'fun' ? 'active' : ''}`}
-      onClick={() => handleRate(cluster.id, 'fun')}>
-      😌 Yeah, sounds fun
-    </button>
-    <button className={`mp-state-btn stressed ${state === 'stressed' ? 'active' : ''}`}
-      onClick={() => handleRate(cluster.id, 'stressed')}>
-      😰 I could do it but feels stressful
-    </button>
-    <button className={`mp-state-btn bored ${state === 'bored' ? 'active' : ''}`}
-      onClick={() => handleRate(cluster.id, 'bored')}>
-      😶 I could but it doesn't excite me
-    </button>
+  <div className="mp-state-pills">
+    <button className={`mp-state-pill vibe ${state === 'vibe_rise' ? 'active' : ''}`}
+      onClick={() => handleRate(cluster.id, 'vibe_rise')}>🔥</button>
+    <button className={`mp-state-pill fun ${state === 'fun' ? 'active' : ''}`}
+      onClick={() => handleRate(cluster.id, 'fun')}>😌</button>
+    <button className={`mp-state-pill stressed ${state === 'stressed' ? 'active' : ''}`}
+      onClick={() => handleRate(cluster.id, 'stressed')}>😰</button>
+    <button className={`mp-state-pill bored ${state === 'bored' ? 'active' : ''}`}
+      onClick={() => handleRate(cluster.id, 'bored')}>😶</button>
   </div>
 </div>
 ```
@@ -121,31 +114,50 @@ Based on this evidence, the cluster may need refining.
 Return JSON:
 {
   "evolved_label": "Updated cluster name that reflects who they're BECOMING, not just who they were",
+  "evolved_insight": "Updated insight paragraph reflecting the growth evidence",
   "evolution_reason": "One sentence explaining what the challenges revealed",
   "confidence": 0.0-1.0
 }
 
 Rules:
 - Only change the label if the evidence genuinely shifts the meaning
-- If confidence < 0.6, return the original label unchanged
+- If confidence < 0.6, return the original label and insight unchanged
 - The new label should feel like growth, not correction
+- The insight should reference specific challenge evidence
 ```
 
 **Output:**
 ```json
 {
   "evolved_label": "Experience Architect & Community Catalyst",
+  "evolved_insight": "You started designing solo experiences but your challenges reveal a pattern: the ones that lit you up most involved bringing people together. Retreat Disco, published apps, breathwork sessions. The common thread isn't the modality, it's the gathering.",
   "evolution_reason": "Your recent challenges show you're moving from solo creation to building shared experiences",
   "confidence": 0.85
 }
 ```
 
 ### Client-side flow
-1. User opens `/mirror` or rate_mirror screen
+1. User opens `/mirror`
 2. Banner shows: "X clusters have new evidence"
-3. User taps a cluster with `behavioral_evidence >= 5`
-4. Show loading state, call `regenerate-cluster`
-5. If `confidence >= 0.6`: show old vs new label with "Accept" / "Keep original"
+3. Cluster card shows a "Review" button (gold accent) when `behavioral_evidence >= 5`
+4. Tap Review → loading state → call `regenerate-cluster`
+5. If `confidence >= 0.6`: show comparison card:
+   ```
+   ┌──────────────────────────────────┐
+   │ Was: Experience Architect &      │
+   │      Joy Catalyst                │
+   │                                  │
+   │ Now: Experience Architect &      │
+   │      Community Catalyst          │
+   │                                  │
+   │ "Your recent challenges show     │
+   │  you're moving from solo         │
+   │  creation to building shared     │
+   │  experiences"                    │
+   │                                  │
+   │  [Accept]        [Keep original] │
+   └──────────────────────────────────┘
+   ```
 6. If accepted: update `cluster_label`, reset `behavioral_evidence` to 0, prompt re-rate
 7. If kept: reset `behavioral_evidence` to 0 (don't re-prompt)
 
@@ -199,18 +211,23 @@ INTERIOR SCOREBOARD RULES:
 - Never lecture about scores. Mention them naturally, like a friend who noticed something.
 ```
 
-### Data to pass into userContext
-Need to fetch and pass to `buildZarloPrompt`:
-- `clarityPct`: query `nikigai_clusters` (same as JourneyTab)
-- `topIdentity`: query `quest_completions` reflection_text, parse identity statements, find most frequent
-- `zoneOfExcellenceQuests`: query quest cards with 3+ consecutive "anxious" wahoo classifications
+### Data strategy: cache in Zarlo brief, NOT live queries
+The Zarlo brief (`zarlo_briefs` table) is already computed daily. Add scoreboard fields to the brief computation rather than querying live on every chat message. This avoids 3 extra DB queries per interaction.
+
+Add to the brief generation (edge function or cron that builds briefs):
+- `clarityPct`: query `nikigai_clusters` resonance states, compute %
+- `topIdentity`: parse `quest_completions` reflection_text, find most frequent identity statement
+- `zoneOfExcellenceQuests`: find quests where last 3 wahoo classifications are all "anxious"
+- `actionScore`: compute from Sprint 11 formula
+
+The `buildZarloPrompt` function reads these from `userContext.zarloBrief` which is already loaded. Zero new queries at chat time.
 
 ### Files to change
 | File | Change |
 |------|--------|
-| `src/lib/zarlo/zarloEngine.js` | Add scoreboard section to `buildZarloPrompt` (~line 917). Add scoreboard rules to system prompt (~line 931). |
-| `src/lib/zarlo/zarloEngine.js` | In `loadUserContext` (~line 400): add queries for clarityPct, topIdentity, zoneOfExcellenceQuests |
-| `src/hooks/useFigurine.js` | Same pattern: add scoreboard data to figurine prompt context |
+| `src/lib/zarlo/zarloEngine.js` | Add scoreboard section to `buildZarloPrompt` (~line 917), reading from `zarloBrief`. Add scoreboard rules to system prompt (~line 931). |
+| Brief generation (edge function or cron) | Add clarityPct, topIdentity, zoneOfExcellenceQuests, actionScore to brief payload |
+| `src/hooks/useFigurine.js` | Same pattern: read scoreboard from brief, add to figurine prompt context |
 
 ---
 
@@ -278,18 +295,21 @@ Aggregate existing action data into a rolling 30-day score. This is the Y-axis f
 
 ### Formula
 ```
-Action Score = positive_actions - negative_actions
+Action Score = aligned_actions / total_actions × 100
 
-positive_actions =
-  courage_challenges with vibe/peace classification (×2)
-  + tasks with task_signal = 'lit_me_up' (×1)
-  + daily_checkins with vibe_rise/ventral state (×0.5)
+aligned_actions (count of positive outcomes):
+  courage_challenges with vibe/peace classification
+  + tasks with task_signal = 'lit_me_up'
+  + daily check-ins with vibe_rise/ventral state
 
-negative_actions =
-  courage_challenges with anxious/shutdown classification (×1)
-  + tasks with task_signal = 'bored' (×0.5)
+total_actions (count of ALL outcomes):
+  all courage_challenges (any classification)
+  + all tasks with any task_signal
+  + all daily check-ins
 
-Normalize to 0-100 scale: min(max(score, 0), 100)
+Stressed/Bored are NOT penalized — they just don't count as aligned.
+More actions = more data points, not higher score.
+3/3 aligned = 100%. 20/30 aligned = 67%. Both valid.
 ```
 
 ### Implementation
@@ -315,30 +335,32 @@ export async function calculateActionScore(userId) {
       .gte('created_at', thirtyDaysAgo),
   ])
 
-  let score = 0
+  let aligned = 0
+  let total = 0
 
   // Courage outcomes
   ;(courageRes.data || []).forEach(row => {
     try {
       const { wahoo_classification } = JSON.parse(row.reflection_text)
-      if (['vibe', 'wahoo', 'peace'].includes(wahoo_classification)) score += 2
-      else if (['anxious', 'shutdown'].includes(wahoo_classification)) score -= 1
+      if (wahoo_classification) {
+        total++
+        if (['vibe', 'wahoo', 'peace'].includes(wahoo_classification)) aligned++
+      }
     } catch {}
   })
 
   // Task signals
   ;(taskRes.data || []).forEach(t => {
-    if (t.task_signal === 'lit_me_up') score += 1
-    else if (t.task_signal === 'bored') score -= 0.5
+    total++
+    if (t.task_signal === 'lit_me_up') aligned++
   })
 
   // Daily check-ins
   ;(checkinRes.data || []).forEach(c => {
-    if (['vibe_rise', 'ventral'].includes(c.after_state)) score += 0.5
+    total++
+    if (['vibe_rise', 'ventral'].includes(c.after_state)) aligned++
   })
-
-  // Normalize 0-100 (cap at 50 raw points = 100%)
-  return Math.min(Math.max(Math.round((score / 50) * 100), 0), 100)
+  return Math.round((aligned / total) * 100)
 }
 ```
 
@@ -379,8 +401,8 @@ convergence_bonus = unique_cross_pollination_pairs / total_active_quests
 // 3 pairs across 3 quests = 1.0
 // 1 pair across 5 quests = 0.2
 
-Clarity (adjusted) = base_clarity × (1 + convergence_bonus × 0.1)
-// Max 10% boost from convergence
+Clarity (adjusted) = base_clarity × (1 + convergence_bonus × 0.25)
+// Max 25% boost from convergence (meaningful, not invisible)
 ```
 
 ### Implementation
@@ -397,7 +419,7 @@ const uniquePairs = new Set(
 const convergenceBonus = activeQuestCount > 0
   ? Math.min(uniquePairs.size / activeQuestCount, 1)
   : 0
-const adjustedClarity = Math.min(Math.round(baseClarity * (1 + convergenceBonus * 0.1)), 100)
+const adjustedClarity = Math.min(Math.round(baseClarity * (1 + convergenceBonus * 0.25)), 100)
 ```
 
 ### Files to change
@@ -417,23 +439,50 @@ None.
 Visual display of skill progress (L0-L4) on the Mirror page. Data already collecting via `user_skill_progress` table.
 
 ### UI design
-Below clusters, above Clarity hero:
+Below clusters, above Clarity hero. Shows progress WITHIN current level (not total XP to max).
+
+XP thresholds: L0→L1 at 3, L1→L2 at 8, L2→L3 at 15, L3→L4 at 25.
+Per-level XP needed: L0→L1 = 3, L1→L2 = 5, L2→L3 = 7, L3→L4 = 10.
+
+```javascript
+const THRESHOLDS = [0, 3, 8, 15, 25]
+const LEVEL_NAMES = ['L0 Learning', 'L1 Testing', 'L2 Practising', 'L3 Charging', 'L4 Teaching']
+
+function getProgress(xp) {
+  let levelIdx = 0
+  for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
+    if (xp >= THRESHOLDS[i]) { levelIdx = i; break }
+  }
+  if (levelIdx >= THRESHOLDS.length - 1) return { level: LEVEL_NAMES[levelIdx], pct: 100, label: 'Max' }
+  const currentMin = THRESHOLDS[levelIdx]
+  const nextMin = THRESHOLDS[levelIdx + 1]
+  const pct = Math.round(((xp - currentMin) / (nextMin - currentMin)) * 100)
+  return { level: LEVEL_NAMES[levelIdx], pct, label: `${xp - currentMin}/${nextMin - currentMin} to ${LEVEL_NAMES[levelIdx + 1]}` }
+}
+```
+
 ```jsx
 <div className="mp-section">
   <h3 className="mp-section-title" style={{ color: '#5e17eb' }}>Your Skills</h3>
-  {skillProgress.map(skill => (
-    <div className="mp-skill-row">
-      <span className="mp-skill-name">{SKILL_LABELS[skill.skill_id]}</span>
-      <div className="mp-skill-track">
-        <div className="mp-skill-fill" style={{ width: `${(skill.xp / 25) * 100}%` }} />
+  {skillProgress.map(skill => {
+    const prog = getProgress(skill.xp)
+    return (
+      <div className="mp-skill-row" key={skill.skill_id}>
+        <div className="mp-skill-top">
+          <span className="mp-skill-name">{SKILL_LABELS[skill.skill_id]}</span>
+          <span className="mp-skill-level">{prog.level}</span>
+        </div>
+        <div className="mp-skill-track">
+          <div className="mp-skill-fill" style={{ width: `${prog.pct}%` }} />
+        </div>
+        <span className="mp-skill-next">{prog.label}</span>
       </div>
-      <span className="mp-skill-level">{skill.level}</span>
-    </div>
-  ))}
+    )
+  })}
 </div>
 ```
 
-XP thresholds displayed as markers on the progress bar: L1 at 3, L2 at 8, L3 at 15, L4 at 25.
+Bar fills within current level. User at L1 with 5 XP sees "2/5 to L2 Practising" with a 40% filled bar. Feels like progress, not a long empty road to L4.
 
 ### Data fetch
 ```javascript
@@ -474,21 +523,23 @@ const { data: justHit5 } = await supabase
   .limit(1)
 
 if (justHit5?.length > 0) {
-  // Send push notification
-  import('../lib/pushNotifications').then(m =>
-    m.sendLocalNotification(userId, {
+  // Use existing push infrastructure (send-push-notification edge function)
+  supabase.functions.invoke('send-push-notification', {
+    body: {
+      user_id: userId,
       title: 'Your mirror has new evidence',
-      body: 'Your challenges are showing who you're becoming. Check in.',
+      body: "Your challenges are showing who you're becoming. Check in.",
       url: '/mirror',
-    })
-  )
+    }
+  }).catch(() => {}) // best effort
 }
 ```
 
 ### Files to change
 | File | Change |
 |------|--------|
-| `src/components/GroanCompletionModal.jsx` | After behavioral_evidence increment (~line 315), check for threshold hit, send notification |
+| `src/components/GroanCompletionModal.jsx` | After behavioral_evidence increment (~line 315), check for threshold hit, call `send-push-notification` edge function |
+| `supabase/functions/send-push-notification/index.ts` | Verify it accepts `url` param for click action (may already support it) |
 
 ### DB changes
 None.
