@@ -39,7 +39,7 @@ export default function MirrorPage() {
     Promise.all([
       // Life Map clusters (final, non-archived)
       supabase.from('nikigai_clusters')
-        .select('id, cluster_type, cluster_label, insight, items, resonance_rating, resonance_updated_at, behavioral_evidence, is_removed, is_favourite')
+        .select('id, cluster_type, cluster_label, insight, items, resonance_rating, resonance_state, resonance_updated_at, behavioral_evidence, is_removed, is_favourite')
         .eq('user_id', userId)
         .in('cluster_type', ['skills', 'problems', 'persona'])
         .is('step_id', null)
@@ -70,7 +70,8 @@ export default function MirrorPage() {
       const r = {}
       const removed = new Set()
       allClusters.forEach(c => {
-        if (c.resonance_rating) r[c.id] = c.resonance_rating
+        if (c.resonance_state) r[c.id] = c.resonance_state
+        else if (c.resonance_rating) r[c.id] = c.resonance_rating >= 4 ? 'vibe_rise' : c.resonance_rating >= 3 ? 'fun' : 'bored'
         if (c.is_removed) removed.add(c.id)
       })
       setRatings(r)
@@ -105,24 +106,24 @@ export default function MirrorPage() {
     return () => { active = false }
   }, [userId])
 
-  // Clarity calculation (4-point scale: avg × 25 = 0-100%)
+  // Clarity calculation: % of clusters rated vibe_rise or fun (aligned)
   const keptClusters = clusters.filter(c => !removedIds.has(c.id) && !c.is_removed)
-  const ratedKept = keptClusters.filter(c => ratings[c.id] != null)
-  const clarityPct = ratedKept.length > 0
-    ? Math.round((ratedKept.reduce((sum, c) => sum + ratings[c.id], 0) / ratedKept.length) * 25)
+  const ratedKept = keptClusters.filter(c => ratings[c.id] && ['vibe_rise', 'fun'].includes(ratings[c.id]))
+  const clarityPct = keptClusters.length > 0
+    ? Math.round((ratedKept.length / keptClusters.length) * 100)
     : null
 
-  const handleRate = (clusterId, value) => {
+  const handleRate = (clusterId, state) => {
     hapticLight()
-    if (value <= 2) {
-      // Low rating = auto-remove (doesn't describe you)
+    if (state === 'bored') {
       handleRemove(clusterId)
       return
     }
-    setRatings(prev => ({ ...prev, [clusterId]: value }))
-    // Auto-save rating immediately
+    setRatings(prev => ({ ...prev, [clusterId]: state }))
+    // Auto-save state immediately
     supabase.from('nikigai_clusters').update({
-      resonance_rating: value,
+      resonance_state: state,
+      resonance_rating: state === 'vibe_rise' ? 4 : state === 'fun' ? 3 : state === 'stressed' ? 2 : 1,
       resonance_updated_at: new Date().toISOString(),
     }).eq('id', clusterId).then(({ error }) => {
       if (error) console.warn('Rating save failed:', error)
@@ -216,9 +217,10 @@ export default function MirrorPage() {
       <div className="mp-rating-index">
         <div className="mp-index-title">How to rate</div>
         <div className="mp-index-row"><span className="mp-index-dots">●●●●</span><span className="mp-index-label">This IS me</span><span className="mp-index-desc">Goosebumps. You'd screenshot it.</span></div>
-        <div className="mp-index-row"><span className="mp-index-dots">●●●○</span><span className="mp-index-label">Yeah, that's right</span><span className="mp-index-desc">Accurate, no resistance</span></div>
-        <div className="mp-index-row mp-index-row-remove"><span className="mp-index-dots">●●○○</span><span className="mp-index-label">Not quite</span><span className="mp-index-desc">Auto-removed</span></div>
-        <div className="mp-index-row mp-index-row-remove"><span className="mp-index-dots">●○○○</span><span className="mp-index-label">That's not me</span><span className="mp-index-desc">Auto-removed</span></div>
+        <div className="mp-index-row"><span className="mp-index-emoji">🔥</span><span className="mp-index-label">I would absolutely love this</span></div>
+        <div className="mp-index-row"><span className="mp-index-emoji">😌</span><span className="mp-index-label">Yeah, sounds fun</span></div>
+        <div className="mp-index-row"><span className="mp-index-emoji">😰</span><span className="mp-index-label">I could do it but feels stressful</span></div>
+        <div className="mp-index-row mp-index-row-remove"><span className="mp-index-emoji">😶</span><span className="mp-index-label">I could but it doesn't excite me</span><span className="mp-index-desc">Auto-removed</span></div>
       </div>
 
       {/* Cluster cards grouped by type */}
@@ -245,12 +247,17 @@ export default function MirrorPage() {
                       {cluster.behavioral_evidence} challenges shaping this
                     </div>
                   )}
-                  <div className="mp-rate-dots">
-                    {[1, 2, 3, 4].map(n => (
-                      <button key={n}
-                        className={`mp-rate-dot ${(ratings[cluster.id] || 0) >= n ? 'active' : ''}`}
-                        onClick={() => handleRate(cluster.id, n)}
-                      />
+                  <div className="mp-state-pills">
+                    {[
+                      { id: 'vibe_rise', emoji: '🔥', label: 'Love this' },
+                      { id: 'fun', emoji: '😌', label: 'Sounds fun' },
+                      { id: 'stressed', emoji: '😰', label: 'Stressful' },
+                      { id: 'bored', emoji: '😶', label: 'Not excited' },
+                    ].map(s => (
+                      <button key={s.id}
+                        className={`mp-state-pill ${ratings[cluster.id] === s.id ? 'active' : ''} mp-state-${s.id}`}
+                        onClick={() => handleRate(cluster.id, s.id)}
+                      >{s.emoji} {s.label}</button>
                     ))}
                   </div>
                 </div>

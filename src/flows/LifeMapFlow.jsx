@@ -106,7 +106,7 @@ export default function LifeMapFlow() {
   const [favouriteProblemIds, setFavouriteProblemIds] = useState(new Set())
 
   // Cluster resonance rating (rate_mirror screen)
-  const [clusterRatings, setClusterRatings] = useState({}) // { clusterId: 1-5 }
+  const [clusterRatings, setClusterRatings] = useState({}) // { clusterId: 'vibe_rise'|'fun'|'stressed'|'bored' }
   const [removedClusters, setRemovedClusters] = useState(new Set())
   const [removedClusterData, setRemovedClusterData] = useState([]) // full cluster objects for restore UI
 
@@ -598,7 +598,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       setEssenceChamber(savedSession.response_data.essence_chamber)
     }
     // Load clusters from DB (scoped to this Life Map session)
-    const { data: clusters } = await supabase
+    let { data: clusters } = await supabase
       .from('nikigai_clusters')
       .select('*')
       .eq('user_id', user.id)
@@ -606,6 +606,19 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       .eq('session_id', savedSession.id)
       .in('cluster_type', ['skills', 'problems', 'persona'])
       .order('created_at', { ascending: false })
+
+    // Fallback: if session-scoped query returns nothing, load all final clusters
+    if (!clusters?.length) {
+      const { data: fallback } = await supabase
+        .from('nikigai_clusters')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('cluster_stage', 'final')
+        .in('cluster_type', ['skills', 'problems', 'persona'])
+        .is('step_id', null)
+        .order('created_at', { ascending: false })
+      clusters = fallback
+    }
 
     if (clusters) {
       const mapCluster = c => ({ id: c.id, label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i) })
@@ -617,13 +630,14 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       const favProblems = new Set(clusters.filter(c => c.cluster_type === 'problems' && c.is_favourite).map(c => c.id))
       setFavouriteSkillIds(favSkills)
       setFavouriteProblemIds(favProblems)
-      // Restore resonance ratings + removed cluster data for restore UI
+      // Restore resonance states + removed cluster data for restore UI
       const ratings = {}
       const removed = new Set()
       const removedData = []
       const mapClusterFull = c => ({ id: c.id, label: c.cluster_label, insight: c.insight, items: (c.items || []).map(i => i.text || i), type: c.cluster_type })
       clusters.forEach(c => {
-        if (c.resonance_rating) ratings[c.id] = c.resonance_rating
+        if (c.resonance_state) ratings[c.id] = c.resonance_state
+        else if (c.resonance_rating) ratings[c.id] = c.resonance_rating >= 4 ? 'vibe_rise' : c.resonance_rating >= 3 ? 'fun' : 'bored'
         if (c.is_removed) {
           removed.add(c.id)
           removedData.push(mapClusterFull(c))
@@ -1170,19 +1184,25 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
       ...personasClusters.map(c => ({ ...c, type: 'persona' })),
     ].filter(c => c.id && !removedClusters.has(c.id))
 
-    const keptRatings = allClusters
+    const keptStates = allClusters
       .map(c => clusterRatings[c.id])
-      .filter(r => r != null)
-    const clarityPct = keptRatings.length > 0
-      ? Math.round((keptRatings.reduce((a, b) => a + b, 0) / keptRatings.length) * 25)
+      .filter(s => s && s !== 'bored')
+    const clarityPct = allClusters.length > 0
+      ? Math.round((keptStates.length / allClusters.length) * 100)
       : null
+
+    const handleRateState = (clusterId, state) => {
+      if (state === 'bored') { handleRemoveCluster(clusterId); return }
+      setClusterRatings(prev => ({ ...prev, [clusterId]: state }))
+    }
 
     const handleSaveRatings = async () => {
       const updates = Object.entries(clusterRatings)
         .filter(([id]) => !removedClusters.has(id))
-        .map(([id, rating]) =>
+        .map(([id, state]) =>
           supabase.from('nikigai_clusters').update({
-            resonance_rating: rating,
+            resonance_state: state,
+            resonance_rating: state === 'vibe_rise' ? 4 : state === 'fun' ? 3 : state === 'stressed' ? 2 : 1,
             resonance_updated_at: new Date().toISOString(),
           }).eq('id', id)
         )
@@ -1232,7 +1252,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
         <div className="lm-container">
           <div className="lm-reveal">
             <h2 className="lm-reveal-title lm-gold-text">Does this feel right?</h2>
-            <p className="lm-reveal-subtitle">Rate how well each one describes you</p>
+            <p className="lm-reveal-subtitle">How does each one feel?</p>
             {clarityPct != null && (
               <div className="lm-clarity-score">Clarity: {clarityPct}%</div>
             )}
@@ -1240,20 +1260,19 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
             {allClusters.map(cluster => (
               <div key={cluster.id} className="lm-rate-card">
                 <div className="lm-rate-label">{cluster.label}</div>
-                <div className="lm-rate-dots">
-                  {[1, 2, 3, 4].map(n => (
-                    <button key={n}
-                      className={`lm-rate-dot ${(clusterRatings[cluster.id] || 0) >= n ? 'active' : ''}`}
-                      onClick={() => {
-                        if (n <= 2) { handleRemoveCluster(cluster.id); return }
-                        setClusterRatings(prev => ({ ...prev, [cluster.id]: n }))
-                      }}
-                    />
+                <div className="lm-state-pills">
+                  {[
+                    { id: 'vibe_rise', emoji: '🔥', label: 'Love this' },
+                    { id: 'fun', emoji: '😌', label: 'Sounds fun' },
+                    { id: 'stressed', emoji: '😰', label: 'Stressful' },
+                    { id: 'bored', emoji: '😶', label: 'Not excited' },
+                  ].map(s => (
+                    <button key={s.id}
+                      className={`lm-state-pill ${clusterRatings[cluster.id] === s.id ? 'active' : ''} lm-state-${s.id}`}
+                      onClick={() => handleRateState(cluster.id, s.id)}
+                    >{s.emoji} {s.label}</button>
                   ))}
                 </div>
-                <button className="lm-rate-remove" onClick={() => handleRemoveCluster(cluster.id)}>
-                  Remove
-                </button>
               </div>
             ))}
 

@@ -1862,17 +1862,23 @@
   }
 }
 
-/* ── Rate Mirror (cluster resonance rating) ── */
+/* ── Rate Mirror (NS state rating) ── */
 .lm-clarity-score { text-align: center; font-size: 24px; font-weight: 800; color: #E9A23B; margin: 16px 0; }
-.lm-rate-card { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; gap: 12px; }
+.lm-rate-card { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.12); }
 .lm-rate-card-removed { opacity: 0.4; }
-.lm-rate-label { flex: 1; font-size: 14px; font-weight: 600; color: #fff; }
-.lm-rate-dots { display: flex; gap: 6px; }
-.lm-rate-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: transparent; cursor: pointer; padding: 0; transition: all 0.15s ease; }
-.lm-rate-dot.active { background: #E9A23B; border-color: #E9A23B; }
-.lm-rate-dot:hover { border-color: #E9A23B; }
-.lm-rate-remove { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 12px; cursor: pointer; font-family: inherit; padding: 4px 8px; }
-.lm-rate-remove:hover { color: #ef4444; }
+.lm-rate-label { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.lm-state-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.lm-state-pill {
+  padding: 6px 12px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7);
+  font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+  transition: all 0.15s ease;
+}
+.lm-state-pill:hover { border-color: rgba(255,255,255,0.4); }
+.lm-state-pill.active.lm-state-vibe_rise { background: rgba(233,162,59,0.25); border-color: #E9A23B; color: #E9A23B; }
+.lm-state-pill.active.lm-state-fun { background: rgba(16,185,129,0.2); border-color: #10b981; color: #10b981; }
+.lm-state-pill.active.lm-state-stressed { background: rgba(239,68,68,0.2); border-color: #ef4444; color: #ef4444; }
+.lm-state-pill.active.lm-state-bored { background: rgba(107,114,128,0.2); border-color: #6b7280; color: #9ca3af; }
 .lm-rate-restore { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 12px; cursor: pointer; font-family: inherit; padding: 4px 8px; text-decoration: underline; }
 .lm-rate-restore:hover { color: #E9A23B; }
 .lm-removed-section { margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); }

@@ -139,13 +139,12 @@ export default function JourneyTab({ userId, onUnlockTab }) {
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId).eq('quest_category', 'Groans'),
       supabase.from('nikigai_clusters')
-        .select('resonance_rating')
+        .select('resonance_state, resonance_rating')
         .eq('user_id', userId)
         .in('cluster_type', ['skills', 'problems', 'persona'])
         .is('step_id', null)
         .eq('cluster_stage', 'final')
-        .eq('is_removed', false)
-        .not('resonance_rating', 'is', null),
+        .eq('is_removed', false),
     ]).then(([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes, authRes, completedRes, linkedRes, profileRes, checkinCountRes, wahooCountRes, clarityRes]) => {
       if (!active) return
 
@@ -169,10 +168,14 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       }
 
       // Clarity score from cluster resonance ratings
-      const ratedClusters = clarityRes.data || []
-      if (ratedClusters.length > 0) {
-        const avg = ratedClusters.reduce((sum, c) => sum + c.resonance_rating, 0) / ratedClusters.length
-        setClarityPct(Math.round(avg * 25))
+      // Clarity: % of clusters rated vibe_rise or fun
+      const allClusters = clarityRes.data || []
+      const ratedClusters = allClusters.filter(c => {
+        const state = c.resonance_state || (c.resonance_rating >= 4 ? 'vibe_rise' : c.resonance_rating >= 3 ? 'fun' : null)
+        return state === 'vibe_rise' || state === 'fun'
+      })
+      if (allClusters.length > 0) {
+        setClarityPct(Math.round((ratedClusters.length / allClusters.length) * 100))
       }
 
       const email = authRes.data?.user?.email

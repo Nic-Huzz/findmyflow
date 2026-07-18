@@ -69,11 +69,9 @@
   display: flex; align-items: center; gap: 10px;
   padding: 6px 0; font-size: 12px;
 }
-.mp-index-dots {
-  font-size: 9px; color: #5e17eb; min-width: 36px; letter-spacing: 2px;
-}
-.mp-index-label { font-weight: 600; color: #1a1a2e; min-width: 115px; }
-.mp-index-desc { color: #9ca3af; font-size: 11px; }
+.mp-index-emoji { font-size: 16px; min-width: 28px; }
+.mp-index-label { font-weight: 600; color: #1a1a2e; font-size: 13px; }
+.mp-index-desc { color: #9ca3af; font-size: 11px; margin-left: 4px; }
 .mp-index-row-remove { opacity: 0.45; }
 
 /* ── Re-generation Banner ── */
@@ -176,25 +174,20 @@
   border-radius: 50%; background: #E9A23B;
 }
 
-/* ── Rating Dots (4-point) ── */
-.mp-rate-dots {
-  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+/* ── State Pills (NS states) ── */
+.mp-state-pills {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
 }
-.mp-rate-dot {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 2px solid #e9ecef; background: #fff;
-  cursor: pointer; padding: 0;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.mp-state-pill {
+  padding: 6px 12px; border-radius: 20px; border: 1.5px solid #e9ecef;
+  background: #fff; color: #6b7280; font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: all 0.15s ease;
 }
-.mp-rate-dot:hover {
-  border-color: #c4b5fd;
-  transform: scale(1.08);
-}
-.mp-rate-dot.active {
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  border-color: #5e17eb;
-  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.25);
-}
+.mp-state-pill:hover { border-color: #c4b5fd; }
+.mp-state-pill.active.mp-state-vibe_rise { background: rgba(233,162,59,0.1); border-color: #E9A23B; color: #b47d1e; }
+.mp-state-pill.active.mp-state-fun { background: rgba(16,185,129,0.08); border-color: #10b981; color: #059669; }
+.mp-state-pill.active.mp-state-stressed { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #dc2626; }
+.mp-state-pill.active.mp-state-bored { background: rgba(107,114,128,0.08); border-color: #6b7280; color: #6b7280; }
 
 /* ── Add Cluster ── */
 .mp-add-cluster {
