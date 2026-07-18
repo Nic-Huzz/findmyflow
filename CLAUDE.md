@@ -85,101 +85,31 @@ React 18 + Vite + React Router v7 | Supabase (PostgreSQL, Auth, Edge Functions) 
 
 ```
 src/
-├── flows/                    # Flow components
-│   ├── MoneyModelFlowBase.jsx      # Shared base (6 flows use this)
-│   ├── moneyModelConfigs.js        # Money Model configurations
-│   ├── ScopeMapFlow.jsx            # Vibe Rise river diagnostic
-│   ├── EssenceMirrorFlow.jsx       # Essence archetype discovery
-│   ├── ExperienceCreatorFlow.jsx   # Experience creator matching
-│   ├── ZoneDiagnosisFlow.jsx       # Level zone diagnosis
-│   ├── *OfferFlow.jsx              # Attraction, Upsell, Downsell, GrandSlam
-│   ├── FunnelCalculator.jsx        # Stage 8 metrics tracker
-│   └── NervousSystemFlow.jsx, HealingCompass.jsx, etc.
-│
-├── hooks/
-│   ├── useChallengeData.js   # Challenge state management
-│   ├── useCapacityScore.js   # Weekly Capacity Score (0-100, state-based)
-│   ├── useLeagueData.js      # Fantasy league state management
-│   ├── useMatchupData.js     # Live matchup scoring + opponent fetch
-│   ├── useNewsfeed.js        # League activity feed + reactions
-│   ├── useCelebrations.js    # Confetti, toasts, level-up animations
-│   ├── useExecute.js         # Execute page operations
-│   └── useAutoSave.js, useSteppedForm.js
-│
-├── components/
-│   ├── crm/                  # CRM components
-│   │   ├── CRMLayout.jsx           # Wrapper with nudge engine
-│   │   ├── Content*.jsx            # Generator, Planning, Checklist, etc.
-│   │   ├── Weekly*.jsx             # Planning, Reflection, etc.
-│   │   ├── Lead*.jsx               # Capture, Score, Sliders
-│   │   ├── Story*.jsx              # Miner, Bank
-│   │   ├── CSVImport/              # 6-step import wizard
-│   │   ├── EcosystemStatusWidget   # Business flywheel progress
-│   │   └── *Widget.jsx, *Modal.jsx # Intelligence, Activity, etc.
-│   │
-│   ├── CreatorHome/                # Creator portal home (CreatorHomeV2, CreatorRadarChart, CreatorCelebrations, SectionLaunchPad, BlowUpBrandCard, CreatorShareCard)
-│   ├── onboarding/QuickCapture/    # 5-step business capture
-│   ├── Zarlo/                      # AI Co-Founder widget
-│   ├── Celebrations/               # Confetti, FloatingPoints, etc.
-│   ├── level/                      # LevelConfig, LevelTab, SweetSpotGraph, CapacityCard
-│   │
-│   ├── league/               # LeagueLeaderboard.jsx
-│   ├── PlayProfile/          # Quiz, Dashboard, DNA, AI Diagnostic, Challenge
-│   ├── BusinessSetup.jsx     # Stage 0.9 setup wizard
-│   ├── Challenge*.jsx        # Header, Filters, etc.
-│   ├── *QuestInput.jsx       # Groan, Recognise, Rewire, Release, etc.
-│   ├── GroanMatrix.jsx       # Wahoo Map (2D courage challenge matrix)
-│   ├── WahooCreator.jsx      # Wahoo creation (free text + bucket list)
-│   ├── WahooDiscoveryFlow.jsx # First-visit Wahoo tab flow (3 category pages)
-│   ├── WahooInspiration.jsx  # "Need inspiration?" (play-skills + Ikigai Mix)
-│   ├── PlaySkillPicker.jsx   # Play-skill category picker (inspiration engine)
-│   ├── TuneTab.jsx           # Tune tab (daily practices + drains)
-│   ├── DailyCheckin.jsx      # Daily 4-state check-in overlay
-│   ├── WeeklyReview.jsx      # Weekly multiplier review wizard
-│   ├── WeeklyReviewCard.jsx  # Shareable weekly review card
-│   ├── QuestBoardCard.jsx    # Collapsible quest card (life path + tasks + healing prompt)
-│   ├── QuestSelector.jsx     # Reusable quest picker dropdown (used by Healing + Courage)
-│   ├── HealingFlowModal.jsx  # 7-step per-task healing flow
-│   ├── HealingIntentionsList.jsx # Healing tab content (intentions + standalone input)
-│   ├── QuestCard.jsx         # Unified quest rendering
-│   ├── FlowMapRiver.jsx      # River visualization
-│   └── SeeYourFlow.jsx       # Journey mapping
-│
-├── pages/crm/                # CRM pages
-│   ├── Dashboard.jsx         # Command center with DailyActions, EcosystemWidget
-│   ├── Attract.jsx, Nurture.jsx, Tools.jsx  # Tower hubs
-│   ├── Content*.jsx          # Create, Queue, History
-│   ├── Sales*.jsx, Contacts.jsx, EmailSequences.jsx, WarmOutreach.jsx
-│   ├── DataImport.jsx        # CSV import wizard
-│   ├── BusinessSystems.jsx   # Flywheel checklist (4 phases)
-│   └── *Calculator.jsx, Analytics.jsx, etc.
-│
-├── lib/
-│   ├── supabaseClient.js     # Database connection
-│   ├── stageConfig.js        # 10-stage system with ombre colors
-│   ├── graduationChecker.js  # Project graduation logic
-│   ├── haptics.js            # Mobile vibration feedback
-│   ├── aiHelper.js           # Claude AI integration
-│   ├── league/               # leagueConfig.js, leagueService.js, leagueScoring.js
-│   ├── founderDnaAI.js       # Play Profile AI challenge generation
-│   ├── dnaMatching.js        # Founder DNA matching algorithm
-│   ├── zarlo/                # zarloEngine.js, zarloPageContent.js
-│   ├── crm/                  # 20+ services (contentContext, promptTemplates, towerStats, csvImportService, ecosystemService)
-│   └── templates/            # AI prompt templates
-│
-├── data/                     # Static config (personas, archetypes, beliefs, essenceArchetypes, founderDnaGames, founderDnaStuckPoints)
-├── pages/league/             # LeagueOverview, WeekMatchups, MatchupDetails, ContentSubmit, NewsfeedPage, LeagueAdmin
-├── styles/flow-base.css      # Shared flow styles
-├── App.jsx, AppRouter.jsx, Challenge.jsx, Profile.jsx
-└── AuthGate.jsx              # Protected route wrapper
+├── flows/          # Multi-step flow components (LifeMapFlow, EssenceMirrorFlow, MoneyModelFlowBase, etc.)
+├── hooks/          # State hooks (useChallengeData, useCapacityScore, useLeagueData, useCelebrations, etc.)
+├── components/     # UI components
+│   ├── crm/        # CRM (Content*, Lead*, Story*, CSVImport/, EcosystemStatusWidget)
+│   ├── CreatorHome/ # Creator portal (CreatorHomeV2, BlowUpBrandCard, CreatorPositionCard)
+│   ├── level/      # Quest system (LevelTab, LevelConfig, SweetSpotGraph, QuestPathMap)
+│   ├── Zarlo/      # AI companion widget
+│   ├── PlayProfile/ # Founder DNA quiz + dashboard
+│   └── [key files] # QuestBoardCard, GroanCompletionModal, WahooCreator, TuneTab, PlayListTab,
+│                     HealingFlowModal, WeeklyReview, DailyCheckin, QuestSelector
+├── pages/          # Route pages (MirrorPage, CommunityFeed, FacilitatorScore, crm/*)
+├── lib/            # Utilities
+│   ├── scoreUtilities.js    # Shared Clarity + Action Score + Zone detection
+│   ├── skillProgress.js     # Skill XP (atomic RPC)
+│   ├── questSkillTagger.js  # Quest → skill_tags (edge function)
+│   ├── clusterQuestLinker.js # Cluster ↔ quest linking (Sprint 15, not yet built)
+│   ├── zarlo/               # zarloEngine.js, zarloPageContent.js
+│   ├── crm/                 # 20+ CRM services
+│   └── wheelTaxonomy.js     # Skill/problem/persona taxonomy lookups
+├── data/           # Static config (archetypes, taxonomy JSON, founderDna)
+└── styles/         # flow-base.css (shared flow styles)
 
-supabase/
-├── functions/                # Edge Functions (classify-scope-map, essence-mirror-blend, generate-avatar-gemini, score-league-matchups, etc.)
-└── migrations/               # Database migrations
-
-public/                       # Static assets, flow JSON definitions, data JSON files
-scripts/                      # db-query.sh, deploy-functions.sh
-docs/                         # Documentation files
+supabase/functions/ # Edge functions (classify-quest-skills, regenerate-cluster, suggest-life-paths, etc.)
+supabase/migrations/ # DB migrations
+docs/               # Specs, handoffs, research
 ```
 
 ## Routes
@@ -327,25 +257,14 @@ Key services: `src/lib/crm/` (contentContext, promptTemplates, towerStats, csvIm
 
 ### 12. Creator Playbook Pipeline (Creator Portal)
 
-Sequential flow: each unlocks after the previous is completed. Three card states in `CreatorHomeV2.jsx`: completed (compact row with tick), unlocked (gold CTA card), locked (dimmed with lock icon).
+Sequential flow (each unlocks after previous): Remarkable Results → Remarkable Reach → Remarkable Growth → Scale Score. Three card states: completed/unlocked/locked.
 
-1. **Remarkable Results** (`/create/remarkable`, `RemarkableFlow.jsx`): Find your rule break. Problem → Assumption → Two Worlds → Different → Experience → Compression. Saves to `remarkable_angles`. Produces: rule break statement, remarkability score (U×S×S). Readiness card embeds as collapsible row inside this section.
+1. **Remarkable Results** (`/create/remarkable`): Rule break discovery. Saves to `remarkable_angles`.
+2. **Remarkable Reach** (`/create/narrative-builder`): Vehicle deep-dive + tribal language. Saves to `narrative_builders`.
+3. **Remarkable Growth** (`/create/access-architecture`): 5-barrier audit. Saves to `access_architectures`.
+4. **Scale Score** (`/create/scale-diagnostic`): Phase 3 diagnostic, 10 branches. Saves to `scale_diagnostics`. Public lead magnet at `/try/facilitator-score`.
 
-2. **Remarkable Reach** (`/create/narrative-builder`, `NarrativeBuilderFlow.jsx`): How does your story spread? 8 screens: Intro → Vehicle Deep-Dive (3 screens: Results/New Medium/New Action, each with education, reference creators, anchored diagnostic 1-5, durability badge) → Vehicle Summary ("what would make this a 5?" for each type, pick primary) → Tribal Language (5 questions extracting language from behavior) → Cosign (venue/person/co-facilitator) → Output. All fields mandatory. Saves to `narrative_builders` (includes `vehicle_type`, `vehicle_desc`).
-
-3. **Remarkable Growth** (`/create/access-architecture`, `AccessArchitectureFlow.jsx`): Remove barriers. 5-barrier audit (Price, Time, Friction, Decisions, Identity) with inline recommendations under each score bar → On-Ramp Design with 5-point criteria checklist from audit scores (pass/fail per barrier). Saves to `access_architectures`.
-
-4. **Scale Score** (`/create/scale-diagnostic` + `/try/facilitator-score`, `FacilitatorScore.jsx`): 3-pillar Phase 3 diagnostic (RETURN · BREAK · TRIBAL). Branch selection (10 branches) → 6 questions with branch-specific examples (Ancestral, Body, Identity, Shareability, Format, Rule Break result). Pulls rule break data for logged-in users. Score /15, Phase classification (12+ Phase 3, 9-11 Strong, 6-8 Phase 2.5, <6 Phase 2). Public mode works as standalone lead magnet with email capture. Old `/scale-diagnostic` redirects. Saves to `scale_diagnostics`.
-
-**Creator Position Card** (`CreatorPositionCard.jsx`): Replaces PositioningSummary. Unified card on Playbook tab showing: personal monopoly (skills × problems × personas vs 299 profiles), branch intersection (primary × secondary), Phase 2/3 adaptive frontier cards with verified market research, AI-generated "Your opportunity" positioning insight (via `generate-positioning` edge function, saved to `lead_flow_profiles.ai_monopoly_statement`), competitive density (nearby creators from 33 branch-tagged experienceCreatorDNA profiles with tappable chips), and positioning statement (life quake + transformation + AI generate). Uses `useBranchScoring` hook for branch data + `spiralDynamicsMatrix.json` for frontier text + imports `experienceCreatorDNA.json` directly for competitive map.
-
-**Branch Scoring** (`useBranchScoring.js`): Weighted algorithm computing primary/secondary branches from curiosity clusters (×2), active quests with AI-classified `branch` field (×3 vibe, ×2 other), favourited problems (×3), favourited skills (×2). Principle: action + wounds > curiosity > skills. Also computes monopoly rarity (exact match of top skill + problem + persona vs 299 careerModels profiles), gap insight (vehicle vs territory), and data completeness confidence %.
-
-**Frontier Research**: 10 branches researched with verified market data at `docs/research/frontier-*.md`. Each has 4 layers: dominant players, crowded subgroups, verified gap, loop-back. Phase 2 branches (Bonds, Tools, Status, Shelter, Threat) show "What everyone does / Why it no longer works / What would actually work / Your opportunity." Phase 3 branches (Healing, Movement, Story, Nourishment, Fire) show "What's already working / What's still missing / Your opportunity." Simplified text in `public/data/spiralDynamicsMatrix.json` (`simple` object on frontier/emerging cells). Spec: `docs/features/personal-monopoly-finder.md`.
-
-**RemarkableFlow enhancements**: "Recommended" tag on user's primary branch in branch selector. Collapsible "Stuck? Read this" hint box on assumption step showing frontier insight for selected branch.
-
-Sequential locking: Reach locked until `remarkable_angles` exists, Growth locked until `narrative_builders` exists, Scale Score locked until `access_architectures` exists.
+**Creator Position Card** (`CreatorPositionCard.jsx`): Personal monopoly (skills x problems x personas vs 299 profiles), branch intersection, frontier research cards, AI positioning statement, competitive density map. Uses `useBranchScoring` hook + `spiralDynamicsMatrix.json`. Spec: `docs/features/personal-monopoly-finder.md`.
 
 ### 13. Interior Scoreboard (Clarity + Action Score)
 
@@ -369,11 +288,10 @@ Key docs: `docs/features/interior-scoreboard-spec.md`, `docs/features/interior-s
 
 ### 14. Other Features
 
-- **Money Model Flows**: 6 flows in `MoneyModelFlowBase.jsx` + `moneyModelConfigs.js`. Each wrapper ~35 lines.
-- **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Phase 1: AI personality + free-text input (5 msgs/session) + streaming greeting. Phase 2: Voiced achievement toasts (MicroToast). Phase 3: Proactive observations after wahoo/checkin/healing (2/day max, ZarloProactiveBubble above FAB). Phase 4: Open loop hooks + weekly countdown. Confidence floor: no Brief + no actions = scripted fallback. Edge function: `agent-chat` (Haiku). Engine: `zarloEngine.js`, `zarloPageContent.js`. Subtitle: "Your game guide".
-- **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor speaking from the book's worldview (nervous system as bottleneck, curiosities as essence signalling, protective voices as software). 3 conversations/day, 10 messages each. Confidence floor: no Brief + phase < 2 = refuses to improvise. Confidence % on every response. Proactive: FigurineOverlay for stage graduations + monthly cryptic hooks. Edge function: `agent-chat` (Haiku). Key file: `useFigurine.js`.
-- **Stripe Payment Gating**: Consumer: Stages 1-7 locked. Creator Portal: gated by `CreateGate.jsx` checking `plan_type = 'creator'` or `'pro'` via `subscriptionService.js`. Handles multiple plan rows per user (composite unique on `user_id, plan_type`). Payment link creates subscription via webhook → `user_subscriptions` upsert. Pay-before-signup users stored in `pending_subscriptions`, claimed on login via `claim-subscription` edge function. Webhook deployed with `--no-verify-jwt` (Stripe doesn't send JWT). Key: `subscriptionService.js`, `CreateGate.jsx`, `stripe-webhook/index.ts`, `claim-subscription/index.ts`.
-- **Scale Landing Page** (`/movement-makers`): Public sales page for Scale ($499 setup + $99/mo). Embeds ExperienceCreatorFlow inline. Screenshots in `public/images/landing/`. Payment link: Stripe hosted. Promo code: `FOUNDING` (100% off, 10 uses). Product names in Stripe: "Scale Setup" (one-time) + "Scale Portal" (monthly). Route: `/movement-makers` (future: `/scale` with redirect).
+- **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Streaming chat via `agent-chat` (Haiku). Interior scoreboard rules injected into prompt (Clarity, Action Score, identity repeats, zone warnings). Engine: `zarloEngine.js`.
+- **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor, 3 convos/day. Edge function: `agent-chat`. Key: `useFigurine.js`.
+- **Stripe Payment Gating**: Consumer stages 1-7 locked. Creator Portal: `CreateGate.jsx` + `subscriptionService.js`. Webhook: `stripe-webhook/index.ts` (deployed with `--no-verify-jwt`). Pre-signup payments: `pending_subscriptions` → `claim-subscription` edge function.
+- **Scale Landing Page** (`/movement-makers`): $499 setup + $99/mo. Promo: `FOUNDING`.
 - **Creator Gamification**: Spider graph (CreatorRadarChart on Growth tab, 5-6 axes), CreatorXP + levels (Dreamer→Movement Maker, hero section), celebrations (14 milestones, confetti + toasts via CreatorCelebrations), origin story overlay (first visit), per-section launch pads (SectionLaunchPad on each tab), founding member badge, event countdown urgency (amber/red/pulse), pipeline staleness nudge, value-framed locked playbook copy. Foundation: `src/lib/creatorGamification.js` (single localStorage JSON, celebration queue with 3s cooldown). Full spec: `docs/superpowers/plans/2026-07-18-scale-gamification-implementation-plan.md`. Octalysis analysis: `docs/research/octalysis-scale-gamification-recommendations.md`.
 - **Flow Compass** (`/flow-compass`): Energy tracking (N=Flow, E=Redirect, S=Rest, W=Honour). Purple gradient design.
 - **Funnel Calculator** (`/funnel-calculator`): Actual + Planner modes. 8-stage pipeline tracking.
