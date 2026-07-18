@@ -614,7 +614,47 @@ Reset to `false` when user completes a re-gen cycle (Sprint 8 accept/keep).
 
 ---
 
-## Known bug: fix BEFORE starting Sprint 7
+## Sprint 15: Cluster → Quest Linking + Filtered Life Path Recommendations
+
+### What
+Close the loop between self-knowledge (clusters) and action (quests). Two parts:
+
+### Part A: Filter life path recommendations by NS state
+In `/life-paths`, the AI recommends careers based on Life Map data. Currently uses ALL clusters. Change to only feed clusters rated Vibe Rise or Fun into the recommendation prompt. Stressed/Bored clusters shouldn't generate career suggestions.
+
+**File**: `src/pages/LifePathWidgetTest.jsx` (or wherever the life paths AI prompt is built)
+**Change**: Before sending clusters to the AI, filter: `clusters.filter(c => ['vibe_rise', 'fun'].includes(c.resonance_state))`
+**Fallback**: If no clusters are rated yet, use all clusters (backwards compat for users who haven't visited Mirror).
+
+### Part B: Auto-link clusters to quests on Mirror page
+After rating a cluster, AI auto-links it to matching quests (via skill_tags overlap). Displayed as read-only tags under each cluster card ("Maps to: Travel Experience Host, Vibe Rise"). Tappable to override.
+
+**DB change**: `ALTER TABLE nikigai_clusters ADD COLUMN quest_ids uuid[]`
+
+**Implementation**:
+1. When user rates a cluster on Mirror, auto-compute matching quests:
+   ```javascript
+   const matchingQuests = allQuests.filter(q =>
+     q.skill_tags?.some(tag => cluster.skill_tags?.includes(tag))
+   )
+   ```
+2. Save `quest_ids` array on the cluster
+3. Display as small pills under the cluster card: "Travel Experience Host" "Vibe Rise"
+4. Tap a pill to remove. Tap "+" to add a quest manually.
+
+**Value**: Users can see which clusters feed which quests. Enables future features:
+- Quest cards showing "powered by" clusters
+- Zone matrix granularity per-quest (which quests are in your 🔥 zone vs 😰 zone)
+- Life path opportunity suggestions ("Your 🔥 clusters suggest exploring...")
+
+---
+
+## Known bug: FIXED (July 18)
+~~Life Map shows 0 skill clusters~~ — Fixed: `cluster_stage` constraint now allows 'archived', fallback query added to `handleReturnView`, archiving preserves rated clusters.
+
+---
+
+## Previously known bug: fix BEFORE starting Sprint 7
 
 **Life Map shows 0 skill clusters on nikigai screen** despite having 8 in the database. Likely cause: session_id mismatch between `flow_sessions` and `nikigai_clusters` from multiple Life Map runs. The processing code archives old clusters by `cluster_stage = 'archived'` but the nikigai screen loads clusters scoped to the current `session_id`. If the session ID doesn't match, zero clusters show.
 
@@ -625,13 +665,18 @@ See `docs/bugs/life-map-missing-clusters.md` for investigation guide with SQL qu
 ## Build order
 
 ```
-Sprint 7  (NS state swap)       — do FIRST, everything downstream uses this
-Sprint 10 (Weekly review)       — independent, quick win
-Sprint 11 (Action Score + matrix) — independent, adds matrix graph to Quests tab
-Sprint 8  (Re-gen edge func)    — needs Sprint 7 for re-rate UI
-Sprint 9  (Zarlo/Figurine)      — needs Sprint 7 for Clarity data
-Sprint 13 (Skill tree UI)       — independent, goes on /mirror
-Sprint 14 (Push notification)   — needs Sprint 8
+Sprint 7  ✅ DONE (NS state swap)
+Sprint 10 ✅ DONE (Weekly review redesign)
+Sprint 11 ✅ DONE (Action Score + matrix on Quests tab)
+Sprint 8  ✅ DONE (Re-gen edge function + Mirror UI)
+Sprint 9  ✅ DONE (Zarlo guidance — prompt rules, needs brief data)
+Sprint 13 ✅ DONE (Skill tree UI on /mirror)
+Sprint 14 ✅ DONE (Push notification for re-gen)
+~Sprint 12~ CUT (cross-pollination to Clarity)
+
+Sprint 15 (Cluster → Quest linking) — next session
+  Part A: filter life path recommendations by NS state
+  Part B: auto-link clusters to quests on Mirror page
 ~Sprint 12~ CUT                 — revisit after Sprint 7
 ```
 
