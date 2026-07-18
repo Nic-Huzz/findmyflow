@@ -171,8 +171,8 @@ export default function LifePathFlow() {
         // Fetch curiosity clusters + life map skills/problems
         const [{ data: clusters }, { data: skillsData }, { data: problemsData }] = await Promise.all([
           supabase.from('curiosity_clusters').select('cluster_name, branch, why').eq('user_id', user.id),
-          supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', user.id).eq('cluster_type', 'skills').eq('cluster_stage', 'final'),
-          supabase.from('nikigai_clusters').select('cluster_label').eq('user_id', user.id).eq('cluster_type', 'problems').eq('cluster_stage', 'final'),
+          supabase.from('nikigai_clusters').select('cluster_label, resonance_state').eq('user_id', user.id).eq('cluster_type', 'skills').eq('cluster_stage', 'final').eq('is_removed', false),
+          supabase.from('nikigai_clusters').select('cluster_label, resonance_state').eq('user_id', user.id).eq('cluster_type', 'problems').eq('cluster_stage', 'final').eq('is_removed', false),
         ])
 
         const hasData = clusters?.length || skillsData?.length || problemsData?.length
@@ -183,11 +183,19 @@ export default function LifePathFlow() {
           return
         }
 
+        // Only send clusters the user is excited about (fallback to all if none rated)
+        const filterByState = (data) => {
+          const rated = (data || []).filter(c => ['vibe_rise', 'fun'].includes(c.resonance_state))
+          return rated.length > 0 ? rated : data || []
+        }
+
         const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
           body: {
             curiosityClusters: clusters || [],
-            skills: (skillsData || []).map(s => s.cluster_label),
-            problems: (problemsData || []).map(p => p.cluster_label),
+            skills: filterByState(skillsData).map(s => s.cluster_label),
+            problems: filterByState(problemsData).map(p => p.cluster_label),
+            isFiltered: filterByState(skillsData).length < (skillsData || []).length
+              || filterByState(problemsData).length < (problemsData || []).length,
           },
         })
 
@@ -887,7 +895,14 @@ export default function LifePathFlow() {
                       }).select('id').single()
                       questId = newQuest?.id
                       // Auto-tag skills (non-blocking)
-                      if (questId) import('../lib/questSkillTagger').then(m => m.tagQuestSkills(questId, career.label))
+                      if (questId) import('../lib/questSkillTagger').then(async (m) => {
+                        const tags = await m.tagQuestSkills(questId, career.label)
+                        if (tags?.skill_tags?.length) {
+                          import('../lib/clusterQuestLinker').then(linker =>
+                            linker.linkNewQuestToClusters(user.id, questId, tags.skill_tags)
+                          )
+                        }
+                      })
                     }
 
                     // Create courage challenges from stuck points

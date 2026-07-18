@@ -149,7 +149,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         if (newQuest) {
           import('../../lib/questSkillTagger').then(async (m) => {
             const tags = await m.tagQuestSkills(newQuest.id, newQuest.label)
-            if (tags?.length) setSkillLevelPicker({ questId: newQuest.id, skills: tags })
+            if (tags?.skill_tags?.length) {
+              setSkillLevelPicker({ questId: newQuest.id, skills: tags.skill_tags })
+              // Reverse link: update matching clusters
+              import('../../lib/clusterQuestLinker').then(linker =>
+                linker.linkNewQuestToClusters(userId, newQuest.id, tags.skill_tags)
+              )
+            }
           })
         }
         // Award 2 RP for adding a quest

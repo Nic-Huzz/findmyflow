@@ -541,6 +541,19 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
           setSkillsClusters(prev => attachId(prev, 'skills'))
           setProblemsClusters(prev => attachId(prev, 'problems'))
           setPersonasClusters(prev => attachId(prev, 'persona'))
+
+          // Auto-tag each cluster with skill_tags (non-blocking)
+          for (const row of inserted) {
+            supabase.functions.invoke('classify-quest-skills', {
+              body: { label: row.cluster_label },
+            }).then(({ data: tagData }) => {
+              if (tagData?.skill_tags?.length) {
+                supabase.from('nikigai_clusters')
+                  .update({ skill_tags: tagData.skill_tags })
+                  .eq('id', row.id).then(() => {})
+              }
+            }).catch(() => {}) // non-critical
+          }
         }
       }
 

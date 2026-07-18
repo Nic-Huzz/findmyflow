@@ -918,19 +918,19 @@ export function buildZarloPrompt(userContext, skills, recentActions, pageContext
 
   // Interior scoreboard context (from Zarlo brief)
   let scoreboardSection = ''
-  const brief = userContext?.zarloBrief
-  if (brief?.clarityPct != null) {
-    scoreboardSection += `\nCLARITY SCORE: ${brief.clarityPct}%`
-    if (brief.clarityPct < 60) scoreboardSection += ` (LOW)`
+  const scoreboard = userContext?.zarloBrief?.scoreboard
+  if (scoreboard?.clarityPct != null) {
+    scoreboardSection += `\nCLARITY SCORE: ${scoreboard.clarityPct}%`
+    if (scoreboard.clarityPct < 60) scoreboardSection += ` (LOW)`
   }
-  if (brief?.topIdentity) {
-    scoreboardSection += `\nTOP IDENTITY: "I am someone who ${brief.topIdentity.text}" (reinforced ${brief.topIdentity.count} times)`
+  if (scoreboard?.topIdentity) {
+    scoreboardSection += `\nTOP IDENTITY: "I am someone who ${scoreboard.topIdentity.text}" (reinforced ${scoreboard.topIdentity.count} times)`
   }
-  if (brief?.zoneOfExcellenceQuests?.length > 0) {
-    scoreboardSection += `\nZONE OF EXCELLENCE WARNING: ${brief.zoneOfExcellenceQuests.join(', ')}`
+  if (scoreboard?.zoneOfExcellenceQuests?.length > 0) {
+    scoreboardSection += `\nZONE OF EXCELLENCE WARNING: ${scoreboard.zoneOfExcellenceQuests.join(', ')}`
   }
-  if (brief?.actionScore != null) {
-    scoreboardSection += `\nACTION SCORE: ${brief.actionScore}% (7-day alignment)`
+  if (scoreboard?.actionScore != null) {
+    scoreboardSection += `\nACTION SCORE: ${scoreboard.actionScore}% (7-day alignment)`
   }
 
   // Essence archetype

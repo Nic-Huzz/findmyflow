@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { curiosityClusters, skills, problems } = await req.json()
+    const { curiosityClusters, skills, problems, isFiltered } = await req.json()
 
     if (!curiosityClusters?.length && !skills?.length && !problems?.length) {
       throw new Error('Need at least curiosity clusters, skills, or problems to suggest paths')
@@ -31,6 +31,10 @@ serve(async (req) => {
       ? `LIFE MAP PROBLEMS (what they want to change):\n${problems.map((p: any) => `- ${p}`).join('\n')}`
       : 'No problems data available.'
 
+    const filterNote = isFiltered
+      ? `\nIMPORTANT: These skills and problems have been filtered to only include ones this person is genuinely excited about. Stressed or boring clusters were excluded. Lean into what lights them up.\n`
+      : ''
+
     const prompt = `A person has mapped their curiosities, skills, and the problems they care about. Based on their data, suggest 5-7 life paths they could pursue.
 
 ${curiositySection}
@@ -38,7 +42,7 @@ ${curiositySection}
 ${skillsSection}
 
 ${problemsSection}
-
+${filterNote}
 GUIDELINES:
 - Each path should be a specific career direction that clearly says what the person DOES. Not a poetic title.
 - Name them in plain language a 12-year-old would understand. Say what the job is, not what it sounds like.

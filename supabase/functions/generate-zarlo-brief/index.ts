@@ -242,6 +242,8 @@ async function generateBriefForUser(supabase: any, userId: string): Promise<any>
     experienceRes,
     crossPollinationRes,
     streakRes,
+    clustersRes,
+    taskSignalsRes,
   ] = await Promise.all([
     // 1. nervous_system_checkins — ALL
     supabase
@@ -309,6 +311,24 @@ async function generateBriefForUser(supabase: any, userId: string): Promise<any>
       .select('current_streak, longest_streak, last_activity_date')
       .eq('user_id', userId)
       .maybeSingle(),
+
+    // 11. nikigai_clusters — for Clarity score
+    supabase
+      .from('nikigai_clusters')
+      .select('resonance_state, resonance_rating')
+      .eq('user_id', userId)
+      .in('cluster_type', ['skills', 'problems', 'persona'])
+      .is('step_id', null)
+      .eq('cluster_stage', 'final')
+      .eq('is_removed', false),
+
+    // 12. quest_tasks — for Action Score (task signals in last 7 days)
+    supabase
+      .from('quest_tasks')
+      .select('task_signal, completed_at')
+      .eq('user_id', userId)
+      .not('task_signal', 'is', null)
+      .gte('completed_at', new Date(Date.now() - 7 * 86400000).toISOString()),
   ])
 
   // Extract data with safe defaults for new users
@@ -373,6 +393,86 @@ async function generateBriefForUser(supabase: any, userId: string): Promise<any>
     crossPollinationPairs.push([source, target])
   }
 
+  // ─── Interior Scoreboard ───
+
+  // Clarity: % of clusters rated vibe_rise or fun
+  const allClusters = clustersRes.data || []
+  let clarityPct: number | null = null
+  if (allClusters.length > 0) {
+    const aligned = allClusters.filter((c: any) => {
+      const state = c.resonance_state || (c.resonance_rating >= 4 ? 'vibe_rise' : c.resonance_rating >= 3 ? 'fun' : null)
+      return state === 'vibe_rise' || state === 'fun'
+    })
+    clarityPct = Math.round((aligned.length / allClusters.length) * 100)
+  }
+
+  // Action Score: aligned / total over last 7 days
+  const sevenDaysAgo = Date.now() - 7 * 86400000
+  let actionAligned = 0, actionTotal = 0
+
+  // Courage outcomes (from completions already fetched)
+  completions.filter((c: any) => {
+    const d = new Date(c.created_at || c.completed_at)
+    return d.getTime() >= sevenDaysAgo && c.quest_category === 'Groans'
+  }).forEach((row: any) => {
+    try {
+      const parsed = JSON.parse(row.reflection_text)
+      if (parsed.wahoo_classification) {
+        actionTotal++
+        if (['vibe', 'wahoo', 'peace'].includes(parsed.wahoo_classification)) actionAligned++
+      }
+    } catch {}
+  })
+
+  // Task signals
+  ;(taskSignalsRes.data || []).forEach((t: any) => {
+    actionTotal++
+    if (t.task_signal === 'lit_me_up') actionAligned++
+  })
+
+  // Daily checkins
+  checkins.filter((c: any) => {
+    const d = new Date(c.created_at)
+    return d.getTime() >= sevenDaysAgo && c.checkin_type === 'daily'
+  }).forEach((c: any) => {
+    actionTotal++
+    if (['vibe_rise', 'ventral'].includes(c.before_state)) actionAligned++
+  })
+
+  const actionScore = actionTotal >= 5 ? Math.round((actionAligned / actionTotal) * 100) : null
+
+  // Top identity statement
+  const identityCounts: Record<string, number> = {}
+  completions.filter((c: any) => c.quest_category === 'Groans').forEach((row: any) => {
+    try {
+      const parsed = JSON.parse(row.reflection_text)
+      if (parsed.identity_statement) {
+        const s = parsed.identity_statement.trim().toLowerCase()
+        if (s) identityCounts[s] = (identityCounts[s] || 0) + 1
+      }
+    } catch {}
+  })
+  const topIdentityEntries = Object.entries(identityCounts).sort((a, b) => b[1] - a[1])
+  const topIdentity = topIdentityEntries.length > 0
+    ? { text: topIdentityEntries[0][0], count: topIdentityEntries[0][1] }
+    : null
+
+  // Zone of excellence: quests with 3+ consecutive pressure outcomes
+  const zoneOfExcellenceQuests: string[] = []
+  for (const quest of quests) {
+    const questCompletions = completions
+      .filter((c: any) => {
+        try { return JSON.parse(c.reflection_text).source_label === quest.label } catch { return false }
+      })
+      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 3)
+    if (questCompletions.length >= 3 && questCompletions.every((c: any) => {
+      try { return JSON.parse(c.reflection_text).wahoo_classification === 'anxious' } catch { return false }
+    })) {
+      zoneOfExcellenceQuests.push(quest.label)
+    }
+  }
+
   // ─── Last progress date (for stuck detection) ───
   let lastProgressDate: Date | null = null
 
@@ -412,6 +512,12 @@ async function generateBriefForUser(supabase: any, userId: string): Promise<any>
       essence_archetype: stageData?.essence_archetype || null,
       essence_name: stageData?.hero_name || null,
       last_checkin_state: lastCheckinState,
+    },
+    scoreboard: {
+      clarityPct,
+      actionScore,
+      topIdentity,
+      zoneOfExcellenceQuests: zoneOfExcellenceQuests.length > 0 ? zoneOfExcellenceQuests : null,
     },
     patterns: {
       day_of_week: dayOfWeekPatterns,

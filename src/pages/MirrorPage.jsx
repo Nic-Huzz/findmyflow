@@ -34,6 +34,9 @@ export default function MirrorPage() {
   const [addingSaving, setAddingSaving] = useState(false)
   const [regenLoading, setRegenLoading] = useState(null) // cluster id being regenerated
   const [regenResult, setRegenResult] = useState(null) // { clusterId, oldLabel, newLabel, reason }
+  const [userQuests, setUserQuests] = useState([])
+  const [clusterQuests, setClusterQuests] = useState({}) // { clusterId: [questId, ...] }
+  const [linkingClusterId, setLinkingClusterId] = useState(null)
 
   useEffect(() => {
     if (!userId) return
@@ -42,7 +45,7 @@ export default function MirrorPage() {
     Promise.all([
       // Life Map clusters (final, non-archived)
       supabase.from('nikigai_clusters')
-        .select('id, cluster_type, cluster_label, insight, items, resonance_rating, resonance_state, resonance_updated_at, behavioral_evidence, is_removed, is_favourite')
+        .select('id, cluster_type, cluster_label, insight, items, resonance_rating, resonance_state, resonance_updated_at, behavioral_evidence, is_removed, is_favourite, skill_tags, quest_ids')
         .eq('user_id', userId)
         .in('cluster_type', ['skills', 'problems', 'persona'])
         .is('step_id', null)
@@ -69,7 +72,13 @@ export default function MirrorPage() {
         .eq('user_id', userId)
         .gt('xp', 0)
         .order('xp', { ascending: false }),
-    ]).then(([clusterRes, reflectionRes, countRes, skillRes]) => {
+
+      // Active quests (for cluster↔quest linking)
+      supabase.from('quests')
+        .select('id, label, skill_tags, status')
+        .eq('user_id', userId)
+        .eq('status', 'active'),
+    ]).then(([clusterRes, reflectionRes, countRes, skillRes, questRes]) => {
       if (!active) return
 
       // Process clusters
@@ -108,6 +117,24 @@ export default function MirrorPage() {
 
       setCourageCount(countRes.count || 0)
       setSkillProgress(skillRes.data || [])
+
+      // Populate quests + cluster↔quest map
+      const quests = questRes.data || []
+      setUserQuests(quests)
+      const questMap = {}
+      const activeQuestIds = new Set(quests.map(q => q.id))
+      allClusters.forEach(c => {
+        if (c.quest_ids?.length) {
+          const cleaned = c.quest_ids.filter(id => activeQuestIds.has(id))
+          questMap[c.id] = cleaned
+          // Clean stale quest_ids (non-blocking)
+          if (cleaned.length !== c.quest_ids.length) {
+            supabase.from('nikigai_clusters').update({ quest_ids: cleaned }).eq('id', c.id).then(() => {})
+          }
+        }
+      })
+      setClusterQuests(questMap)
+
       setLoading(false)
     }).catch(err => {
       console.error('MirrorPage load error:', err)
@@ -130,6 +157,7 @@ export default function MirrorPage() {
       handleRemove(clusterId)
       return
     }
+    const hadPreviousRating = !!ratings[clusterId]
     setRatings(prev => ({ ...prev, [clusterId]: state }))
     // Auto-save state immediately
     supabase.from('nikigai_clusters').update({
@@ -139,6 +167,23 @@ export default function MirrorPage() {
     }).eq('id', clusterId).then(({ error }) => {
       if (error) console.warn('Rating save failed:', error)
     })
+
+    // Auto-link quests on FIRST rating only
+    if (!hadPreviousRating && userQuests.length > 0) {
+      const cluster = clusters.find(c => c.id === clusterId)
+      if (cluster?.skill_tags?.length) {
+        import('../lib/clusterQuestLinker').then(m => {
+          const matchingIds = m.findMatchingQuests(cluster, userQuests)
+          if (matchingIds.length) {
+            // Merge with any existing links (from manual linking or reverse link)
+            const existing = clusterQuests[clusterId] || []
+            const merged = [...new Set([...existing, ...matchingIds])]
+            m.autoLinkClusterQuests(clusterId, merged)
+            setClusterQuests(prev => ({ ...prev, [clusterId]: merged }))
+          }
+        })
+      }
+    }
   }
 
   const handleRemove = (clusterId) => {
@@ -251,6 +296,20 @@ export default function MirrorPage() {
     }).eq('id', regenResult.clusterId)
     setRegenClusters(prev => prev.filter(c => c.id !== regenResult.clusterId))
     setRegenResult(null)
+  }
+
+  const handleUnlinkQuest = (clusterId, questId) => {
+    const updated = (clusterQuests[clusterId] || []).filter(id => id !== questId)
+    setClusterQuests(prev => ({ ...prev, [clusterId]: updated }))
+    supabase.from('nikigai_clusters').update({ quest_ids: updated }).eq('id', clusterId).then(() => {})
+  }
+
+  const handleLinkQuest = (clusterId, questId) => {
+    const existing = clusterQuests[clusterId] || []
+    const updated = [...existing, questId]
+    setClusterQuests(prev => ({ ...prev, [clusterId]: updated }))
+    supabase.from('nikigai_clusters').update({ quest_ids: updated }).eq('id', clusterId).then(() => {})
+    setLinkingClusterId(null)
   }
 
   const handleAddCluster = async () => {
@@ -368,6 +427,23 @@ export default function MirrorPage() {
                       >{s.emoji} {s.label}</button>
                     ))}
                   </div>
+                  {((clusterQuests[cluster.id] || []).length > 0 || userQuests.length > 0) && (
+                    <div className="mp-quest-pills">
+                      {(clusterQuests[cluster.id] || []).map(qId => {
+                        const quest = userQuests.find(q => q.id === qId)
+                        if (!quest) return null
+                        return (
+                          <span key={qId} className="mp-quest-pill">
+                            {quest.label}
+                            <button className="mp-quest-pill-x"
+                              onClick={(e) => { e.stopPropagation(); handleUnlinkQuest(cluster.id, qId) }}>x</button>
+                          </span>
+                        )
+                      })}
+                      <button className="mp-quest-pill-add"
+                        onClick={() => setLinkingClusterId(cluster.id)}>+</button>
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -468,6 +544,26 @@ export default function MirrorPage() {
       {clusters.length > 0 && activeClusters.length === 0 && removedClusters.length > 0 && (
         <div className="mp-empty">
           <p className="mp-empty-text">You've removed all your clusters. Restore some below, or re-run your Life Map.</p>
+        </div>
+      )}
+
+      {/* Quest link picker overlay */}
+      {linkingClusterId && (
+        <div className="mp-link-overlay" onClick={() => setLinkingClusterId(null)}>
+          <div className="mp-link-sheet" onClick={e => e.stopPropagation()}>
+            <div className="mp-link-title">Link to a life path</div>
+            {userQuests
+              .filter(q => !(clusterQuests[linkingClusterId] || []).includes(q.id))
+              .map(q => (
+                <button key={q.id} className="mp-link-option"
+                  onClick={() => handleLinkQuest(linkingClusterId, q.id)}>
+                  {q.label}
+                </button>
+              ))}
+            {userQuests.filter(q => !(clusterQuests[linkingClusterId] || []).includes(q.id)).length === 0 && (
+              <p className="mp-link-empty">All life paths already linked</p>
+            )}
+          </div>
         </div>
       )}
 

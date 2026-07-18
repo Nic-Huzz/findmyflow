@@ -124,8 +124,15 @@ export default function WahooDiscoveryFlow({
         setShowNewQuest(false)
         setNewQuestLabel('')
         setNewQuestState(null)
-        // Auto-tag skills (non-blocking)
-        import('../lib/questSkillTagger').then(m => m.tagQuestSkills(data.id, data.label))
+        // Auto-tag skills + reverse link to clusters (non-blocking)
+        import('../lib/questSkillTagger').then(async (m) => {
+          const tags = await m.tagQuestSkills(data.id, data.label)
+          if (tags?.skill_tags?.length) {
+            import('../lib/clusterQuestLinker').then(linker =>
+              linker.linkNewQuestToClusters(userId, data.id, tags.skill_tags)
+            )
+          }
+        })
       }
     } catch (e) { console.error('Create quest error:', e) }
     setNewQuestSaving(false)
