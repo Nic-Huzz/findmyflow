@@ -167,7 +167,7 @@
       "problem": "Six subgroups all claiming 'sustainable' with diminishing differentiation. Organic price premium widened to 59%. Plant-based in active decline. 14 vertical farms went bankrupt in 2025. Counter-movement costs more than conventional.",
       "prediction": "Not 'integrate all approaches' (too broad, market fragmenting toward this). The real gap is the SOIL-TO-GUT CLOSED LOOP: connecting regenerative farm data to individual biological response at population scale.",
       "simple": {
-        "crowded": "Fermentation is an $828B market. Sourdough ($3.2B), bone broth ($2B), beef tallow (+275% in 3 years), functional mushrooms ($12B). Ancestral food is booming. Organic ($282B) is mainstream.",
+        "crowded": "Fermentation is an $828B market. Sourdough, bone broth, beef tallow (+275% in 3 years), functional mushrooms ($12B). Fasting is back: intermittent fasting practiced by ~30% of US adults. Ancestral food isn't just about WHAT you eat, it's about WHEN and WHETHER you eat. Organic ($282B) is mainstream.",
         "stuck": "The loop-back is happening but fragmented. Fermentation people don't talk to regenerative farmers. Gut health apps don't connect to soil data. Nobody links what's in the ground to what your body actually needs.",
         "gap": "Nourishment x Healing: food matched to your body's state, from farms that heal the soil. Nourishment x Bonds: community kitchens and shared meals as the delivery mechanism. The soil-to-gut pipeline, made affordable.",
         "prediction": "The first platform that links soil health data to personalised nutrition at a consumer price will make 'organic' look as outdated as 'low-fat.'"
@@ -250,9 +250,9 @@
       "problem": "All five claim to reject status display. All five ARE status displays with different production values. Class ceiling: free personality tests give labels, not clarity; genuine identity work costs $150+/session therapy or $10K+ agency fees. Nothing under $50/mo does the real work.",
       "prediction": "The real gap is a status-game diagnostic and redirection tool: map which games you're playing, connect them to identity wounds, provide game-exit protocols, and redirect status energy toward competence-based games aligned with genuine identity.",
       "simple": {
-        "crowded": "De-influencing has billions of TikTok views. But 'not caring about status' became its own status game.",
-        "stuck": "Humans earned status through skill, contribution, and earned respect for 200,000 years. Social media turned it into a performance. Your brain still craves status, but the games you're playing don't actually satisfy the need.",
-        "gap": "A tool that shows you which status games you're unconsciously playing, connects them to what you actually want, and redirects that energy toward skill and craft. The way status worked before social media.",
+        "crowded": "Status through exterior symbols: logos, cars, salary, follower count, job title. You signal worth by what you own, wear, and display.",
+        "stuck": "It doesn't make you happy. Humans earned status through skill, contribution, and respect for 200,000 years. Exterior status gives you the dopamine hit but not the fulfilment. The person with the Rolex and the person scrolling TikTok at 2am have the same empty feeling.",
+        "gap": "Status built on who you're becoming: what you've overcome, what you've built with your hands, what you practice daily, what you stand for. Transformation stories outperform luxury content because they satisfy the deeper status need: earned respect, not purchased display.",
         "prediction": "The first platform that helps people consciously choose their status games will unlock a market bigger than personality tests."
       },
       "phase": "phase2"
@@ -297,8 +297,8 @@
       "simple": {
         "crowded": "Skool, Circle, Discord, Slack. Everyone offers 'community.' Most are just group chats.",
         "stuck": "Humans formed bonds through shared vulnerability and ritual for 200,000 years. Typing in a Slack channel doesn't create belonging. Most paid communities lose members every month because access isn't the same as connection.",
-        "gap": "The facilitated peer-group model (YPO, Vistage) creates real belonging but costs $22,000/year. Make it affordable at $20-50/month. The model is proven. The price is the barrier.",
-        "prediction": "The first platform that makes facilitated belonging affordable at scale will be the next CrossFit-sized breakout."
+        "gap": "Sport clubs proved affordable belonging works: regular cadence, shared struggle, progression, identity. But that model only exists for movement. For career support, healing, or creative growth, real belonging still costs thousands per year or doesn't exist. The gap: bring the sport club model to the categories that don't have it yet.",
+        "prediction": "You [skill] people who experience [problem]. Here, that looks like: the sport club equivalent for your branch. Regular group, facilitated container, shared growth, affordable price."
       },
       "phase": "phase2"
     },
@@ -341,8 +341,8 @@
       "problem": "Counter-movement costs more than conventional. Cohousing costs same or more per unit. 285 modular startups but only 58 have meaningful funding. Katerra raised $2B and went bankrupt. 'Sustainable' has followed the same trajectory as 'holistic' in healing: everywhere, meaning nothing specific.",
       "prediction": "Nobody combines adaptive/responsive buildings with affordability. Ori Living makes $300K studios transform; Boxabl makes $50K boxes. The real gap: buildings as living systems within community-owned land models, below median market price, accessible to the 65% priced out.",
       "simple": {
-        "crowded": "Green buildings, co-housing, tiny homes. All cost the same or more than regular housing.",
-        "stuck": "Humans built shelter from local materials, shared land, and knew their neighbours for 200,000 years. Modern housing is an investment product that most people can't afford. 'Sustainable' just means expensive with a green label.",
+        "crowded": "Housing is a financial product. You take a 30-year mortgage for a box you can't modify, in a neighbourhood where you don't know anyone. 65% of households can't afford a median-priced home.",
+        "stuck": "Humans built shelter from local materials, shared land, and knew their neighbours for 200,000 years. Modern housing is designed for investors, not inhabitants. The 'sustainable' alternatives (co-housing, tiny homes, green buildings) all cost the same or more.",
         "gap": "Community land ownership, adaptive buildings, and natural materials combined to make homes that cost less than market rate, not more. The pieces exist separately. Nobody's combined them.",
         "prediction": "The housing crisis will force a return to community-owned land and local building. The first to make it feel modern instead of hippie will unlock the biggest market on earth."
       },
@@ -424,10 +424,10 @@
       "problem": "Grid bottleneck is real: 1,650 GW queued, 35% infrastructure incompatible. Solar installer bankruptcy wave. Customer acquisition costs spiked 40%. 42% of renewable projects report efficiency losses during peak demand.",
       "prediction": "Not distributed intelligent energy (15+ players exist: Lunar Energy, Span, Octopus, Sonnen). The real gap is the consumer energy operating system: a single product that makes home energy feel like your phone battery, works for renters AND owners, learns autonomously.",
       "simple": {
-        "crowded": "Candle market is $14.8B. Fire pits $8.4B. Circadian lighting $4.1B. Saunas $6B+. People spend more on ancestral fire than on smart energy products. The loop-back is massive and invisible.",
-        "stuck": "The fire loop-back is happening but nobody connects it to energy. People buy candles for warmth and ritual while their electricity bill confuses them. The ancestral need (visible, communal fire) and the modern need (clean, affordable energy) are treated as separate industries.",
-        "gap": "Fire x Bonds: communal energy and visible warmth. Fire x Shelter: homes that generate, store, and share energy while honouring the need for fire you can see. The consumer energy OS that makes it feel like your phone battery, not a bill.",
-        "prediction": "The candle and fire pit markets are already larger than smart energy. The winner combines both: energy you understand AND warmth you can feel."
+        "crowded": "Fire served five purposes for 200,000 years: warmth, cooking, light, gathering, and ritual. Modern life split these into separate industries and made them all invisible. Your heating is a thermostat. Your cooking is a microwave. Your light is a screen. The gathering fire disappeared entirely.",
+        "stuck": "People are buying the pieces back without realising it. Candles ($14.8B), fire pits ($8.4B), saunas ($6B), circadian lighting ($4.1B), live-fire cooking revival. That's $30B+ spent on ancestral fire. Meanwhile, the actual energy system (solar, grid, batteries) is a confusing bill nobody understands.",
+        "gap": "Nobody connects the two sides. The ancestral need (visible warmth, gathering, ritual) and the modern need (clean, affordable energy) are treated as separate industries. The opportunity: experiences and products that reunite fire's original purposes. Communal warmth. Visible energy. Gathering around something real.",
+        "prediction": "Fire x Bonds: the campfire as social infrastructure. Fire x Healing: heat as transformation (saunas, sweat lodges). Fire x Shelter: homes where energy is visible, communal, and understood."
       },
       "phase": "phase3"
     },
