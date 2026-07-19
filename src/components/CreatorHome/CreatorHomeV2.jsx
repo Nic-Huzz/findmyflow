@@ -23,6 +23,7 @@ import { fetchTicketsSold } from '../../hooks/useExperiencePipeline'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
+import { PlayProfileEventRec, PlayProfileContentRec } from './PlayProfileRecs'
 import PastExperienceStats from '../pipeline/PastExperienceStats'
 import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
@@ -925,6 +926,16 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             ]} />
           )}
 
+          {/* Play Profile Event Recommendations — visible when DNA result exists and no experience selected */}
+          {!selectedExperienceId && dnaResult?.dna_code && (
+            <PlayProfileEventRec
+              dnaResult={dnaResult}
+              experiences={experiences}
+              onCreateExperience={() => navigate('/create/experience/new')}
+              onNavigate={navigate}
+            />
+          )}
+
           {/* Quarterly Planner — visible when no experience selected */}
           {!selectedExperienceId && (
             <QuarterlyPlanner experiences={experiences} pastExperiences={past} />
@@ -1109,6 +1120,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           <InstagramConnect onRefresh={() => setIgRefreshKey(k => k + 1)} />
           <BrandPulseCard />
           <ContentIntel refreshKey={igRefreshKey} />
+
+          {/* Play Profile Content Recommendations */}
+          {dnaResult?.dna_code && (
+            <PlayProfileContentRec dnaResult={dnaResult} onNavigate={navigate} />
+          )}
 
           {/* KPIs */}
           <div className="ch2-kpi-grid">
