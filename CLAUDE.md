@@ -204,7 +204,7 @@ docs/                         # Documentation files
 
 **Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/essence-mirror`, `/try/career-clarity`, `/try/experience-creators`, `/try/ai-diagnostic`, `/try/life-paths`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
 
@@ -351,7 +351,7 @@ Sequential locking: Reach locked until `remarkable_angles` exists, Growth locked
 
 - **Money Model Flows**: 6 flows in `MoneyModelFlowBase.jsx` + `moneyModelConfigs.js`. Each wrapper ~35 lines.
 - **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Phase 1: AI personality + free-text input (5 msgs/session) + streaming greeting. Phase 2: Voiced achievement toasts (MicroToast). Phase 3: Proactive observations after wahoo/checkin/healing (2/day max, ZarloProactiveBubble above FAB). Phase 4: Open loop hooks + weekly countdown. Confidence floor: no Brief + no actions = scripted fallback. Edge function: `agent-chat` (Haiku). Engine: `zarloEngine.js`, `zarloPageContent.js`. Subtitle: "Your game guide".
-- **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor speaking from the book's worldview (nervous system as bottleneck, curiosities as essence signalling, protective voices as software). 3 conversations/day, 10 messages each. Confidence floor: no Brief + phase < 2 = refuses to improvise. Confidence % on every response. Proactive: FigurineOverlay for stage graduations + monthly cryptic hooks. Edge function: `agent-chat` (Haiku). Key file: `useFigurine.js`.
+- **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor speaking from the book's worldview (nervous system as bottleneck, curiosities as essence signalling, protective voices as software). 3 conversations/day, 10 messages each. Confidence floor: no Brief + phase < 2 = refuses to improvise. Confidence % on every response. Proactive: FigurineOverlay for stage graduations + monthly cryptic hooks. Persistent memory stored in `essence_avatar_memory` table. Edge function: `agent-chat` (Haiku). Key file: `useFigurine.js`.
 - **Stripe Payment Gating**: Stages 1-7 locked. Free: Flow Finder, Play-List, Healing, Setup, explainers, Stage 4 Attraction Offer, CRM. Key: `useSubscription.js`, `UpgradePrompt.jsx`.
 - **Flow Compass** (`/flow-compass`): Energy tracking (N=Flow, E=Redirect, S=Rest, W=Honour). Purple gradient design.
 - **Funnel Calculator** (`/funnel-calculator`): Actual + Planner modes. 8-stage pipeline tracking.
@@ -431,7 +431,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `user_stage_progress` (persona, onboarding, current_journey_level) | `user_projects` (stage, points) | `flow_sessions` | `flow_entries` (compass) | `milestone_completions` | `quest_completions` | `challenge_instances` | `groan_reflections` | `user_level_progress` | `boss_fight_sessions`
 
 ### Flow & Assessment Data
-`nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles` | `scope_map_results` | `quiz_results` | `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
+`nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles` (includes `custom_essence_figurine` column) | `scope_map_results` | `quiz_results` | `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
 
 ### CRM Tables
 `crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
@@ -451,8 +451,11 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ### Blow Up Brand Pipeline
 `remarkable_angles` | `narrative_builders` (vehicle_type, vehicle_desc) | `access_architectures` | `scale_diagnostics` (score_body, score_culture, score_identity, score_ancestral, score_format, score_irreplaceable, score_rulebreak, branch, total_score, phase_classification) | `lead_captures` (email, source, scores)
 
+### Social and Engagement
+`community_feed` (user_id, event_type, title, subtitle, image_url, metadata; auto events: stage_graduation, streak_milestone, level_up, first_wahoo, league_win; opt-in: shared_wahoo, shared_healing, shared_weekly_review) | `mystery_boxes` (user_id, box_tier: bronze/silver/gold/legendary, trigger_type, content_type, content, earned_at, opened_at, metadata) | `essence_avatar_memory` (user_id, memory_type: pattern/correction/insight/milestone/fear/breakthrough/conversation, content, source, confidence, superseded_by)
+
 ### Other
-`user_subscriptions` (Stripe) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
+`user_subscriptions` (Stripe) | `pending_subscriptions` (email, stripe_customer_id, stripe_subscription_id, plan_type, status, claimed_by, claimed_at; pre-signup Stripe payments) | `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
 
 ENUMs: `groan_visibility_layer` (screen/live/money/vulnerable/authority), `groan_source_type` (skill/problem/persona), `groan_challenge_status` (active/completed/skipped), `groan_outcome_type`
 
