@@ -127,9 +127,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     )
   }
 
+  // Derive NS after_state from wahoo classification
+  const WAHOO_TO_NS = { vibe: 'vibe_rise', peace: 'ventral', anxious: 'sympathetic', shutdown: 'dorsal' }
+
   const handleCompleteReflection = async () => {
     setSaving(true)
     setError(null)
+    const derivedAfterState = WAHOO_TO_NS[wahooClassification] || afterState
     try {
       // 1. Mark groan challenge as completed
       const reflectionText = reflection
@@ -158,7 +162,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           source_label: challenge.source_label,
           visibility_layer: challenge.visibility_layer,
           before_state: beforeState,
-          after_state: afterState,
+          after_state: derivedAfterState,
           wahoo_classification: wahooClassification,
           identity_statement: wahooClassification === 'anxious' ? null : (identityStatement || null),
           voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
@@ -173,7 +177,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         await supabase.from('nervous_system_checkins').insert({
           user_id: userId,
           before_state: beforeState,
-          after_state: afterState,
+          after_state: derivedAfterState,
           checkin_type: 'playlist',
           source_quest_id: questId,
           source_challenge_id: challenge.id,
@@ -319,8 +323,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 if (evErr) console.warn('Behavioral evidence increment failed:', evErr)
               }
             }
-            // 7b. Skill XP (non-blocking)
-            import('../lib/skillProgress').then(m => m.awardSkillXP(userId, quest.skill_tags))
+            // 7b. Skill XP — use task-level tags if available, fall back to quest tags
+            supabase.from('quest_tasks').select('skill_tags').eq('groan_challenge_id', challenge.id).eq('user_id', userId).maybeSingle()
+              .then(({ data: taskRow }) => {
+                const skills = taskRow?.skill_tags?.length > 0 ? taskRow.skill_tags : quest.skill_tags
+                import('../lib/skillProgress').then(m => m.awardSkillXP(userId, skills))
+              }).catch(() => { /* non-blocking */ })
 
             // 7c. Push notification if cluster just hit re-gen threshold
             try {
@@ -393,11 +401,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <p className="gcm-subtitle">{challenge.title || challenge.source_label}</p>
 
             <NervousSystemCheckin
-              mode="both"
+              mode="before"
               beforeState={beforeState}
-              afterState={afterState}
               onBeforeChange={setBeforeState}
-              onAfterChange={setAfterState}
               skipArchetype
               onComplete={() => setStep('wahoo_check')}
             />
@@ -406,7 +412,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
         {step === 'wahoo_check' && (
           <>
-            <h2 className="gcm-title">How did that feel?</h2>
+            <h2 className="gcm-title">How did you feel during?</h2>
             <div className="gcm-wahoo-options">
               <button
                 className={`gcm-wahoo-btn gcm-wahoo-hell-yes ${wahooClassification === 'vibe' ? 'selected' : ''}`}
@@ -629,7 +635,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             userId={userId}
             challenge={challenge}
             beforeState={beforeState}
-            afterState={afterState}
+            afterState={WAHOO_TO_NS[wahooClassification] || null}
             onDone={handleShareDone}
           />
         )}

@@ -140,6 +140,16 @@ export default function WahooCreator({
 
       if (linkedQuestId) {
         try {
+          // Tag courage challenge with skills
+          const { classifyTaskSkills } = await import('../lib/questSkillTagger')
+          const taskSkills = classifyTaskSkills(freeText.trim())
+          // Courage challenges use quest fallback if keyword classifier misses
+          let linkedQuestSkills = null
+          if (!taskSkills) {
+            const { data: q } = await supabase.from('quests').select('skill_tags').eq('id', linkedQuestId).maybeSingle()
+            linkedQuestSkills = q?.skill_tags || null
+          }
+
           await supabase.from('quest_tasks').insert({
             quest_id: linkedQuestId,
             user_id: userId,
@@ -147,6 +157,7 @@ export default function WahooCreator({
             is_courage_challenge: true,
             groan_challenge_id: dbRecord.id,
             sort_order: 0,
+            skill_tags: taskSkills || linkedQuestSkills,
           })
 
           // Auto-bump quest depth (high watermark — only goes up, never down)
@@ -304,6 +315,7 @@ export default function WahooCreator({
           onChange={e => setFreeText(e.target.value)}
           rows={2}
         />
+        <p className="wc-hint">e.g. &quot;Host a breathwork session at a retreat&quot; or &quot;Cold call 10 venue owners&quot;</p>
 
         <QuestSelector userId={userId} value={linkedQuestId}
           onChange={(id) => setLinkedQuestId(id)} />

@@ -190,25 +190,80 @@
 .mp-state-pill.active.mp-state-bored { background: rgba(107,114,128,0.08); border-color: #6b7280; color: #6b7280; }
 
 /* ── Skill Progress ── */
-.mp-skill-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 0;
+.mp-section-sub {
+  font-size: 12px; color: #9ca3af; margin: -4px 0 8px; padding: 0 16px;
+}
+.mp-skill-card {
+  background: #fff; border-radius: 10px; padding: 12px 14px;
+  margin: 0 16px 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.mp-skill-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
 }
 .mp-skill-name {
-  font-size: 13px; font-weight: 600; color: #1a1a2e;
-  min-width: 90px;
-}
-.mp-skill-segments { display: flex; gap: 3px; flex: 1; }
-.mp-skill-seg {
-  height: 8px; flex: 1; border-radius: 4px;
-  background: #f2f3f5; transition: background 0.2s;
-}
-.mp-skill-seg.lit {
-  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  font-size: 14px; font-weight: 700; color: #1a1a2e;
 }
 .mp-skill-level {
   font-size: 11px; font-weight: 700; color: #5e17eb;
-  min-width: 24px; text-align: right;
+  background: rgba(94,23,235,0.06); padding: 2px 8px; border-radius: 8px;
+}
+.mp-skill-bar-track {
+  height: 6px; background: #f2f3f5; border-radius: 3px;
+  overflow: hidden; margin-bottom: 6px;
+}
+.mp-skill-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  transition: width 0.3s ease;
+}
+.mp-skill-meta {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: #9ca3af;
+}
+.mp-skill-xp { font-weight: 500; }
+.mp-skill-count { font-weight: 500; }
+
+/* ── Alignment ── */
+.mp-alignment-card {
+  background: #fff; border-radius: 10px; padding: 14px;
+  margin: 0 16px 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.mp-alignment-bar-track {
+  height: 8px; background: #f2f3f5; border-radius: 4px;
+  overflow: hidden; margin-bottom: 6px;
+}
+.mp-alignment-bar-fill {
+  height: 100%; border-radius: 4px; transition: width 0.3s ease;
+}
+.mp-alignment-labels {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: #9ca3af; margin-bottom: 10px;
+}
+.mp-alignment-insight {
+  font-size: 13px; color: #4b5563; line-height: 1.5; margin: 0 0 12px;
+}
+.mp-alignment-detail {
+  margin-bottom: 8px;
+}
+.mp-alignment-detail-label {
+  font-size: 11px; font-weight: 600; color: #6b7280; display: block; margin-bottom: 4px;
+}
+.mp-alignment-pills {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.mp-alignment-pill {
+  font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 6px; text-transform: capitalize;
+}
+.mp-alignment-nikigai {
+  color: #5e17eb; background: rgba(94,23,235,0.06);
+}
+.mp-alignment-match {
+  color: #10b981; background: rgba(16,185,129,0.08);
+}
+.mp-alignment-drift {
+  color: #f59e0b; background: rgba(245,158,11,0.08);
 }
 
 /* ── Add Cluster ── */

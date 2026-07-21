@@ -489,7 +489,7 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
           const lastX = lastPoint.x
 
           // Build SVG polyline path through 2D points
-          const hasDynamicX = pathPoints.some(p => p.x !== x)
+          const hasDynamicX = pathPoints.some(p => p.state != null)
           const pathD = pathPoints.length > 1
             ? `M ${pathPoints[0].x} ${pathPoints[0].y} ` + pathPoints.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
             : null

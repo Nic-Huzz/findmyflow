@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight } from '../lib/haptics'
+import { useAlignment } from '../hooks/useAlignment'
 import './MirrorPage.css'
 
 export default function MirrorPage() {
@@ -37,6 +38,7 @@ export default function MirrorPage() {
   const [userQuests, setUserQuests] = useState([])
   const [clusterQuests, setClusterQuests] = useState({}) // { clusterId: [questId, ...] }
   const [linkingClusterId, setLinkingClusterId] = useState(null)
+  const alignment = useAlignment(userId)
 
   useEffect(() => {
     if (!userId) return
@@ -472,13 +474,19 @@ export default function MirrorPage() {
       {skillProgress.length > 0 && (
         <div className="mp-section">
           <h3 className="mp-section-title" style={{ color: '#5e17eb' }}>Your Skills</h3>
+          <p className="mp-section-sub">XP earned from completed courage challenges and tasks</p>
           {skillProgress.map(skill => {
             const THRESHOLDS = [0, 3, 8, 15, 25]
-            const LABELS = ['L0', 'L1', 'L2', 'L3', 'L4']
+            const LEVEL_NAMES = ['Learning', 'Testing', 'Practising', 'Charging', 'Teaching']
             let levelIdx = 0
             for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
               if (skill.xp >= THRESHOLDS[i]) { levelIdx = i; break }
             }
+            const nextThreshold = levelIdx < 4 ? THRESHOLDS[levelIdx + 1] : THRESHOLDS[4]
+            const currentThreshold = THRESHOLDS[levelIdx]
+            const progressInLevel = skill.xp - currentThreshold
+            const levelRange = nextThreshold - currentThreshold
+            const progressPct = levelIdx >= 4 ? 100 : Math.round((progressInLevel / levelRange) * 100)
             const SKILL_NAMES = {
               storytelling: 'Storytelling', teaching: 'Teaching', coaching: 'Coaching',
               performing: 'Performing', creating: 'Creating', building: 'Building',
@@ -486,17 +494,68 @@ export default function MirrorPage() {
               speaking_up: 'Speaking Up',
             }
             return (
-              <div key={skill.skill_id} className="mp-skill-row">
-                <span className="mp-skill-name">{SKILL_NAMES[skill.skill_id] || skill.skill_id}</span>
-                <div className="mp-skill-segments">
-                  {[0, 1, 2, 3, 4].map(i => (
-                    <div key={i} className={`mp-skill-seg ${i <= levelIdx ? 'lit' : ''}`} />
-                  ))}
+              <div key={skill.skill_id} className="mp-skill-card">
+                <div className="mp-skill-top">
+                  <span className="mp-skill-name">{SKILL_NAMES[skill.skill_id] || skill.skill_id}</span>
+                  <span className="mp-skill-level">{LEVEL_NAMES[levelIdx]}</span>
                 </div>
-                <span className="mp-skill-level">{LABELS[levelIdx]}</span>
+                <div className="mp-skill-bar-track">
+                  <div className="mp-skill-bar-fill" style={{ width: `${progressPct}%` }} />
+                </div>
+                <div className="mp-skill-meta">
+                  <span className="mp-skill-xp">{skill.xp} XP{levelIdx < 4 ? ` / ${nextThreshold} to next` : ' (max)'}</span>
+                  <span className="mp-skill-count">{skill.xp} task{skill.xp !== 1 ? 's' : ''}</span>
+                </div>
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* Alignment detection */}
+      {alignment.score !== null && (
+        <div className="mp-section">
+          <h3 className="mp-section-title" style={{ color: alignment.score >= 70 ? '#10b981' : alignment.score >= 40 ? '#f59e0b' : '#ef4444' }}>
+            Alignment: {alignment.score}%
+          </h3>
+          <div className="mp-alignment-card">
+            <div className="mp-alignment-bar-track">
+              <div className="mp-alignment-bar-fill" style={{
+                width: `${alignment.score}%`,
+                background: alignment.score >= 70 ? '#10b981' : alignment.score >= 40 ? '#f59e0b' : '#ef4444',
+              }} />
+            </div>
+            <div className="mp-alignment-labels">
+              <span>Drifting</span>
+              <span>Mixed</span>
+              <span>Aligned</span>
+            </div>
+            {alignment.insight && (
+              <p className="mp-alignment-insight">{alignment.insight}</p>
+            )}
+            <div className="mp-alignment-detail">
+              <span className="mp-alignment-detail-label">Your nikigai skills:</span>
+              <div className="mp-alignment-pills">
+                {alignment.nikigaiSkills.map(s => (
+                  <span key={s} className="mp-alignment-pill mp-alignment-nikigai">{s.replace(/_/g, ' ')}</span>
+                ))}
+              </div>
+            </div>
+            {Object.keys(alignment.taskSkillCounts).length > 0 && (
+              <div className="mp-alignment-detail">
+                <span className="mp-alignment-detail-label">Your last 30 days:</span>
+                <div className="mp-alignment-pills">
+                  {Object.entries(alignment.taskSkillCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([skill, count]) => (
+                      <span key={skill} className={`mp-alignment-pill ${alignment.nikigaiSkills.includes(skill) ? 'mp-alignment-match' : 'mp-alignment-drift'}`}>
+                        {skill.replace(/_/g, ' ')} ({count})
+                      </span>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

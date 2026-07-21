@@ -33,6 +33,13 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [topIdentity, setTopIdentity] = useState(null) // { text, count }
   const inputRef = useRef(null)
 
+  // Orphan challenge handling on quest close
+  const [orphanChallenges, setOrphanChallenges] = useState([]) // incomplete courage challenges
+  const [orphanActions, setOrphanActions] = useState({}) // { challengeId: { action: 'move'|'delete', questId, questLabel } }
+  const [pendingCloseReason, setPendingCloseReason] = useState(null)
+  const [otherQuests, setOtherQuests] = useState([])
+  const [processingOrphans, setProcessingOrphans] = useState(false)
+
   const stateMeta = STATE_META[quest.predicted_state]
   const completedCount = tasks.filter(t => t.done).length
   const totalCount = tasks.length
@@ -102,9 +109,11 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       return
     }
 
-    // Regular task → save inline
+    // Regular task → save inline with skill tags
     setSaving(true)
     try {
+      const { classifyTaskSkills } = await import('../lib/questSkillTagger')
+      const taskSkills = classifyTaskSkills(taskInput.trim())
       const { error } = await supabase.from('quest_tasks').insert({
         quest_id: quest.id,
         user_id: userId,
@@ -112,6 +121,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         is_courage_challenge: false,
         sort_order: totalCount,
         timeframe: taskTimeframe,
+        skill_tags: taskSkills || null, // no quest fallback for regular tasks — prevents XP inflation
       }).select('id').single()
 
       if (error) console.error('Add task error:', error)
@@ -200,6 +210,11 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       setSignalTaskId(task.id)
     }
 
+    // Award skill XP for regular tasks (only if task has keyword-matched skill_tags)
+    if (newDone && !task.is_courage_challenge && task.skill_tags?.length > 0) {
+      import('../lib/skillProgress').then(m => m.awardSkillXP(userId, task.skill_tags))
+    }
+
     onUpdate?.()
   }
 
@@ -226,14 +241,127 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     await supabase.from('quest_tasks').update({ task_signal: signal }).eq('id', taskId)
   }
 
-  const closeQuest = async (reason) => {
-    const status = reason === 'achieved' ? 'completed' : 'closed'
+  // Phase 1: Check for orphan courage challenges before closing
+  const initiateClose = async (reason) => {
+    // Find incomplete courage challenges linked to this quest
+    const { data: incompleteTasks } = await supabase
+      .from('quest_tasks')
+      .select('id, text, groan_challenge_id')
+      .eq('quest_id', quest.id)
+      .eq('is_courage_challenge', true)
+      .eq('done', false)
+      .not('groan_challenge_id', 'is', null)
+
+    // Also find groan_challenges with source_label matching this quest (no quest_task link)
+    const { data: orphanedByLabel } = await supabase
+      .from('groan_challenges')
+      .select('id, title, status')
+      .eq('user_id', userId)
+      .eq('source_label', quest.label)
+      .in('status', ['active', 'accepted', 'generated'])
+
+    // Merge both sources, dedupe by groan_challenge_id
+    const seen = new Set()
+    const allOrphans = []
+    ;(incompleteTasks || []).forEach(t => {
+      if (t.groan_challenge_id && !seen.has(t.groan_challenge_id)) {
+        seen.add(t.groan_challenge_id)
+        allOrphans.push({ id: t.groan_challenge_id, title: t.text })
+      }
+    })
+    ;(orphanedByLabel || []).forEach(gc => {
+      if (!seen.has(gc.id)) {
+        seen.add(gc.id)
+        allOrphans.push({ id: gc.id, title: gc.title })
+      }
+    })
+
+    if (allOrphans.length === 0) {
+      // No orphans — close immediately
+      executeClose(reason)
+      return
+    }
+
+    // Fetch other active quests for the move dropdown
+    const { data: quests } = await supabase
+      .from('quests')
+      .select('id, label')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .neq('id', quest.id)
+      .neq('label', 'Healing Work')
+      .order('sort_order', { ascending: true })
+
+    setOrphanChallenges(allOrphans)
+    setOrphanActions({})
+    setOtherQuests(quests || [])
+    setPendingCloseReason(reason)
+  }
+
+  // Phase 2: Process orphan actions then close
+  const executeClose = async (reason) => {
+    const closeReason = reason || pendingCloseReason
+    setProcessingOrphans(true)
+    try {
+
+    // Process each orphan action
+    for (const challenge of orphanChallenges) {
+      const action = orphanActions[challenge.id]
+      if (!action || action.action === 'delete') {
+        // Delete: mark challenge as skipped + remove from picks
+        await supabase.from('groan_challenges')
+          .update({ status: 'skipped' })
+          .eq('id', challenge.id)
+        await supabase.from('priority_weekly_picks')
+          .delete()
+          .eq('user_id', userId)
+          .eq('reference_id', challenge.id)
+        // Mark linked quest_task as done (cleanup)
+        await supabase.from('quest_tasks')
+          .update({ done: true, completed_at: new Date().toISOString() })
+          .eq('groan_challenge_id', challenge.id)
+          .eq('quest_id', quest.id)
+      } else if (action.action === 'move' && action.questId) {
+        // Move: update source_label + reassign quest_task
+        await supabase.from('groan_challenges')
+          .update({ source_label: action.questLabel })
+          .eq('id', challenge.id)
+
+        // Check if quest_task exists for this challenge
+        const { data: existingTask } = await supabase
+          .from('quest_tasks')
+          .select('id')
+          .eq('groan_challenge_id', challenge.id)
+          .eq('quest_id', quest.id)
+          .maybeSingle()
+
+        if (existingTask) {
+          // Move existing task to new quest
+          await supabase.from('quest_tasks')
+            .update({ quest_id: action.questId })
+            .eq('id', existingTask.id)
+        } else {
+          // Create new quest_task in destination quest
+          await supabase.from('quest_tasks').insert({
+            quest_id: action.questId,
+            user_id: userId,
+            text: challenge.title,
+            is_courage_challenge: true,
+            groan_challenge_id: challenge.id,
+            sort_order: 999,
+          })
+        }
+      }
+    }
+
+    // Now close the quest
+    const status = closeReason === 'achieved' ? 'completed' : 'closed'
     const { error } = await supabase.from('quests')
-      .update({ status, close_reason: reason, updated_at: new Date().toISOString() })
+      .update({ status, close_reason: closeReason, updated_at: new Date().toISOString() })
       .eq('id', quest.id)
     if (error) console.error('Close quest error:', error)
     else {
-      if (reason === 'achieved') {
+      if (closeReason === 'achieved') {
         supabase.from('quest_completions').insert({
           user_id: userId,
           quest_id: `quest_achieved_${quest.id}`,
@@ -253,7 +381,17 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
             if (count === 1) import('../lib/mysteryBoxes').then(m => m.earnMysteryBox(userId, 'first_quest_achieved', 'silver'))
           }).then(() => {}).catch(() => {})
       }
-      setShowClose(false); onUpdate?.()
+      setShowClose(false)
+      setOrphanChallenges([])
+      setOrphanActions({})
+      setPendingCloseReason(null)
+      onUpdate?.()
+    }
+
+    } catch (e) {
+      console.error('Close quest error:', e)
+    } finally {
+      setProcessingOrphans(false)
     }
   }
 
@@ -271,6 +409,13 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           {totalCount > 0 && (
             <div className="qbc-progress-bar">
               <div className="qbc-progress-fill" style={{ width: `${progressPct}%` }} />
+            </div>
+          )}
+          {quest.skill_tags?.length > 0 && (
+            <div className="qbc-skill-pills">
+              {quest.skill_tags.map(s => (
+                <span key={s} className="qbc-skill-pill">{s.replace(/_/g, ' ')}</span>
+              ))}
             </div>
           )}
         </div>
@@ -423,12 +568,62 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
             <button className="qbc-close-trigger" onClick={() => setShowClose(true)}>
               Close quest ›
             </button>
+          ) : orphanChallenges.length > 0 ? (
+            <div className="qbc-close-options">
+              <div className="qbc-close-title">
+                {orphanChallenges.length} courage challenge{orphanChallenges.length > 1 ? 's' : ''} still active
+              </div>
+              <div className="qbc-orphan-list">
+                {orphanChallenges.map(ch => {
+                  const action = orphanActions[ch.id]
+                  return (
+                    <div key={ch.id} className="qbc-orphan-item">
+                      <div className="qbc-orphan-name">{ch.title}</div>
+                      <div className="qbc-orphan-actions">
+                        <select
+                          className="qbc-orphan-select"
+                          value={action?.action === 'move' ? action.questId : action?.action === 'delete' ? '__delete__' : ''}
+                          onChange={e => {
+                            const val = e.target.value
+                            if (val === '__delete__') {
+                              setOrphanActions(prev => ({ ...prev, [ch.id]: { action: 'delete' } }))
+                            } else if (val) {
+                              const matched = otherQuests.find(oq => oq.id === val)
+                              setOrphanActions(prev => ({ ...prev, [ch.id]: { action: 'move', questId: val, questLabel: matched?.label } }))
+                            } else {
+                              setOrphanActions(prev => { const n = { ...prev }; delete n[ch.id]; return n })
+                            }
+                          }}
+                        >
+                          <option value="">Choose...</option>
+                          {otherQuests.map(q => (
+                            <option key={q.id} value={q.id}>Move to {q.label}</option>
+                          ))}
+                          <option value="__delete__">Delete</option>
+                        </select>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <button
+                className="qbc-close-btn"
+                disabled={Object.keys(orphanActions).length < orphanChallenges.length || processingOrphans}
+                onClick={() => executeClose()}
+                style={{ borderColor: '#5e17eb', color: '#5e17eb' }}
+              >
+                {processingOrphans ? 'Processing...' : 'Close Quest'}
+              </button>
+              <button className="qbc-close-cancel" onClick={() => {
+                setShowClose(false); setOrphanChallenges([]); setOrphanActions({}); setPendingCloseReason(null)
+              }}>Cancel</button>
+            </div>
           ) : (
             <div className="qbc-close-options">
               <div className="qbc-close-title">Close "{quest.label}"?</div>
-              <button className="qbc-close-btn achieved" onClick={() => closeQuest('achieved')}>🎉 I achieved it!</button>
-              <button className="qbc-close-btn lost" onClick={() => closeQuest('lost_interest')}>🤔 Lost interest</button>
-              <button className="qbc-close-btn paused" onClick={() => closeQuest('not_right_time')}>⏳ Not the right time</button>
+              <button className="qbc-close-btn achieved" onClick={() => initiateClose('achieved')}>🎉 I achieved it!</button>
+              <button className="qbc-close-btn lost" onClick={() => initiateClose('lost_interest')}>🤔 Lost interest</button>
+              <button className="qbc-close-btn paused" onClick={() => initiateClose('not_right_time')}>⏳ Not the right time</button>
               <button className="qbc-close-cancel" onClick={() => setShowClose(false)}>Cancel</button>
             </div>
           )}

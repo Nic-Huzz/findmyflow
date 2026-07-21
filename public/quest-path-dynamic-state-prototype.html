@@ -490,21 +490,287 @@
   </div>
 </div>
 
+<!-- ─── MERGE LINES (REAL COORDINATES) ─── -->
+<h2>With Merge Lines (exact QuestPathMap coordinates)</h2>
+<p class="subtitle">ViewBox 420x900. State X: shutdown=65, anxious=160, peace=255, vibe=355. Depth Y: L0=800, L1=615, L2=430, L3=245, L4=60. BandH=148, padding=12.</p>
+
+<div class="card" style="max-width: 480px;">
+  <div class="card-title">Overview: 3 quests, rolling avg (window=5), merges</div>
+  <svg viewBox="0 0 420 900" width="100%" preserveAspectRatio="xMidYMid meet">
+    <rect width="420" height="900" fill="#f5f5f0" rx="16"/>
+
+    <!-- State zone columns (exact from component) -->
+    <rect x="25" y="50" width="80" height="760" rx="6" fill="#ef4444" opacity="0.04"/>
+    <rect x="115" y="50" width="90" height="760" rx="6" fill="#f59e0b" opacity="0.04"/>
+    <rect x="215" y="50" width="90" height="760" rx="6" fill="#10b981" opacity="0.04"/>
+    <rect x="315" y="50" width="90" height="760" rx="6" fill="#c084fc" opacity="0.04"/>
+    <!-- Column headers -->
+    <text x="65" y="38" fill="#ef4444" opacity="0.6" font-size="9" font-weight="800" text-anchor="middle" letter-spacing="1">UNINTERESTED</text>
+    <text x="160" y="38" fill="#f59e0b" opacity="0.6" font-size="9" font-weight="800" text-anchor="middle" letter-spacing="1">PRESSURE</text>
+    <text x="255" y="38" fill="#10b981" opacity="0.6" font-size="9" font-weight="800" text-anchor="middle" letter-spacing="1">FUN</text>
+    <text x="355" y="38" fill="#c084fc" opacity="0.6" font-size="9" font-weight="800" text-anchor="middle" letter-spacing="1">VIBE RISE</text>
+    <!-- Column dividers -->
+    <line x1="110" y1="50" x2="110" y2="810" stroke="rgba(0,0,0,0.03)"/>
+    <line x1="210" y1="50" x2="210" y2="810" stroke="rgba(0,0,0,0.03)"/>
+    <line x1="310" y1="50" x2="310" y2="810" stroke="rgba(0,0,0,0.03)"/>
+
+    <!-- Depth level rows (exact depthY values) -->
+    <!-- L0=800, L1=615, L2=430, L3=245, L4=60 -->
+    <line x1="25" y1="800" x2="405" y2="800" stroke="rgba(0,0,0,0.04)" stroke-dasharray="4 4"/>
+    <text x="18" y="804" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="700" text-anchor="end">L0</text>
+    <line x1="25" y1="615" x2="405" y2="615" stroke="rgba(0,0,0,0.04)" stroke-dasharray="4 4"/>
+    <text x="18" y="619" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="700" text-anchor="end">L1</text>
+    <line x1="25" y1="430" x2="405" y2="430" stroke="rgba(0,0,0,0.04)" stroke-dasharray="4 4"/>
+    <text x="18" y="434" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="700" text-anchor="end">L2</text>
+    <line x1="25" y1="245" x2="405" y2="245" stroke="rgba(0,0,0,0.04)" stroke-dasharray="4 4"/>
+    <text x="18" y="249" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="700" text-anchor="end">L3</text>
+    <line x1="25" y1="60" x2="405" y2="60" stroke="rgba(0,0,0,0.04)" stroke-dasharray="4 4"/>
+    <text x="18" y="64" fill="rgba(0,0,0,0.2)" font-size="8" font-weight="700" text-anchor="end">L4</text>
+
+    <!--
+      ═══ DANCE / VIBE RISE (purple, 20 dots) ═══
+
+      Band dot positions (bandH=148, padding=12, usable=124):
+      L1 (8 dots): bandBottom=652, Y = 640 - i*17.7
+        i0:640, i1:622, i2:604, i3:587, i4:569, i5:551, i6:533, i7:516
+      L2 (5 dots): bandBottom=504, Y = 492 - i*31
+        i0:492, i1:461, i2:430, i3:399, i4:368
+      L3 (5 dots): bandBottom=356, Y = 344 - i*31
+        i0:344, i1:313, i2:282, i3:251, i4:220
+      L4 (2 dots): bandBottom=208, Y = 196, 72
+
+      States (Y-sorted): 4,2,4,4,4,4,3,3, 4,2,2,4,3, 4,3,4,4,4, 4,4
+
+      Rolling avg (window=5) → X:
+       1: 4.0→355   2: 3.0→255   3: 3.33→288  4: 3.5→305
+       5: 3.6→315   6: 3.6→315   7: 3.8→335   8: 3.6→315
+       9: 3.6→315  10: 3.2→275  11: 2.8→236  12: 3.0→255
+      13: 3.0→255  14: 3.0→255  15: 3.2→275  16: 3.6→315
+      17: 3.6→315  18: 3.8→335  19: 3.8→335  20: 4.0→355
+    -->
+
+    <!--
+      ═══ DANCE / VIBE RISE — REAL DATA (27 dots) ═══
+
+      L1 band (10 dots, Y=640→516, spacing=13.78):
+       1. Koh Phangan→vibe(4)  2. Guerilla→fun(3)  3. Film Randoms→vibe(4)
+       4. Pop-up Indo→vibe(4)  5. Bondi→vibe(4)  6. DJ'd Seminyak→fun(3)
+       7. Shared Sprouter→stress(2)  8. First Celebrate→fun(3)
+       9. SD Opera House→vibe(4)  10. Dance w/ Local→vibe(4)
+
+      L2 band (7 dots, Y=492→368, spacing=20.67):
+       11. Opera House→vibe(4)  12. Sales Calls→stress(2)  13. 100 Reach Outs→stress(2)
+       14. KL Airport→vibe(4)  15. Building Nikigai→fun(3)
+       16. New Coaching→fun(3)  17. Two New Programs→fun(3)
+
+      L3 band (8 dots, Y=344→220, spacing=17.71):
+       18. Film hostel→fun(3)  19. First Paid→vibe(4)  20. Share Socials→fun(3)
+       21. Host VR Fest→vibe(4)  22. Retreat Disco→vibe(4)
+       23. First Pump-Up→vibe(4)  24. Time Warp→fun(3)  25. Masterclass→fun(3)
+
+      L4 band (2 dots, Y=196, 72):
+       26. Published app→fun(3)  27. Scale Portal→fun(3)
+
+      Rolling avg (window=5) X mapping:
+       1:355 2:305 3:322 4:330 5:335 6:315 7:295 8:275 9:275 10:275
+       11:295 12:295 13:275 14:275 15:255 16:236 17:255
+       18:275 19:275 20:275 21:295 22:315 23:335 24:315 25:315
+       26:295 27:275
+    -->
+
+    <!-- Rolling avg smooth line — REAL DATA -->
+    <path d="M 355 640 L 305 626 L 322 612 L 330 599 L 335 585 L 315 571 L 295 557 L 275 543 L 275 530 L 275 516
+             L 295 492 L 295 471 L 275 451 L 275 430 L 255 409 L 236 389 L 255 368
+             L 275 344 L 275 326 L 275 309 L 295 291 L 315 273 L 335 256 L 315 238 L 315 220
+             L 295 196 L 275 72"
+      fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+
+    <!-- Extend to L0 (dashed) -->
+    <line x1="355" y1="640" x2="355" y2="800" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" opacity="0.15" stroke-dasharray="4 4"/>
+
+    <!-- Ghost dots at actual state positions (REAL) -->
+    <!-- L1 band -->
+    <circle cx="355" cy="640" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Koh Phangan→vibe -->
+    <circle cx="255" cy="626" r="4" fill="#10b981" opacity="0.15"/>  <!-- Guerilla→fun -->
+    <circle cx="355" cy="612" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Film Randoms→vibe -->
+    <circle cx="355" cy="599" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Pop-up→vibe -->
+    <circle cx="355" cy="585" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Bondi→vibe -->
+    <circle cx="255" cy="571" r="4" fill="#10b981" opacity="0.15"/>  <!-- DJ'd Seminyak→fun -->
+    <circle cx="160" cy="557" r="4" fill="#f59e0b" opacity="0.15"/>  <!-- Shared Sprouter→stress -->
+    <circle cx="255" cy="543" r="4" fill="#10b981" opacity="0.15"/>  <!-- First Celebrate→fun -->
+    <circle cx="355" cy="530" r="4" fill="#c084fc" opacity="0.15"/>  <!-- SD Opera House→vibe -->
+    <circle cx="355" cy="516" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Dance w/ Local→vibe -->
+    <!-- L2 band -->
+    <circle cx="355" cy="492" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Opera House→vibe -->
+    <circle cx="160" cy="471" r="4" fill="#f59e0b" opacity="0.15"/>  <!-- Sales Calls→stress -->
+    <circle cx="160" cy="451" r="4" fill="#f59e0b" opacity="0.15"/>  <!-- 100 Reach Outs→stress -->
+    <circle cx="355" cy="430" r="4" fill="#c084fc" opacity="0.15"/>  <!-- KL Airport→vibe -->
+    <circle cx="255" cy="409" r="4" fill="#10b981" opacity="0.15"/>  <!-- Nikigai→fun -->
+    <circle cx="255" cy="389" r="4" fill="#10b981" opacity="0.15"/>  <!-- Coaching→fun -->
+    <circle cx="255" cy="368" r="4" fill="#10b981" opacity="0.15"/>  <!-- Two Programs→fun -->
+    <!-- L3 band -->
+    <circle cx="255" cy="344" r="4" fill="#10b981" opacity="0.15"/>  <!-- Film hostel→fun -->
+    <circle cx="355" cy="326" r="4" fill="#c084fc" opacity="0.15"/>  <!-- First Paid→vibe -->
+    <circle cx="255" cy="309" r="4" fill="#10b981" opacity="0.15"/>  <!-- Share Socials→fun -->
+    <circle cx="355" cy="291" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Host VR Fest→vibe -->
+    <circle cx="355" cy="273" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Retreat Disco→vibe -->
+    <circle cx="355" cy="256" r="4" fill="#c084fc" opacity="0.15"/>  <!-- First Pump-Up→vibe -->
+    <circle cx="255" cy="238" r="4" fill="#10b981" opacity="0.15"/>  <!-- Time Warp→fun -->
+    <circle cx="255" cy="220" r="4" fill="#10b981" opacity="0.15"/>  <!-- Masterclass→fun -->
+    <!-- L4 band -->
+    <circle cx="255" cy="196" r="4" fill="#10b981" opacity="0.15"/>  <!-- Published app→fun -->
+    <circle cx="255" cy="72" r="4" fill="#10b981" opacity="0.15"/>   <!-- Scale Portal→fun -->
+
+    <!-- Current position -->
+    <circle cx="275" cy="72" r="7" fill="#c084fc" opacity="0.9" stroke="white" stroke-width="2"/>
+
+    <!-- Annotations -->
+    <text x="230" y="387" fill="#f59e0b" font-size="8" font-weight="700" text-anchor="end" opacity="0.5">admin dip</text>
+    <text x="230" y="399" fill="#f59e0b" font-size="7" text-anchor="end" opacity="0.35">(sales + reachouts)</text>
+    <text x="340" y="260" fill="#c084fc" font-size="7" font-weight="600" text-anchor="end" opacity="0.4">peak: live events</text>
+    <text x="270" y="80" fill="#10b981" font-size="7" font-weight="600" text-anchor="end" opacity="0.4">building = fun, not vibe</text>
+
+    <!-- Label -->
+    <text x="355" y="828" fill="#c084fc" opacity="0.5" font-size="10" font-weight="700" text-anchor="end"
+      transform="rotate(-45, 355, 828)">Dance / Vibe Rise</text>
+
+    <!--
+      ═══ BREATHWORK (green, 7 dots) ═══
+
+      L0 (1 dot): Y = 800-12-0.5*124 = 726
+      L1 (1 dot): Y = 652-12-0.5*124 = 578
+      L2 (3 dots): Y = 492, 430, 368
+      L3 (2 dots): Y = 344, 220
+
+      States: peace(3), peace(3), vibe(4), vibe(4), vibe(4), vibe(4), vibe(4)
+
+      REAL DATA rolling avg (window=5):
+       1: [3]=3.0→255  2: [3,2]=2.5→208  3: [3,2,4]=3.0→255
+       4: [3,2,4,3]=3.0→255  5: [3,2,4,3,4]=3.2→275
+       6: [2,4,3,4,3]=3.2→275  7: [4,3,4,3,3]=3.4→295
+    -->
+
+    <!-- Rolling avg line — REAL DATA -->
+    <path d="M 255 726 L 208 578 L 255 492 L 255 430 L 275 368 L 275 344 L 295 220"
+      fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+
+    <!-- Extend to L0 (dashed) -->
+    <line x1="255" y1="726" x2="255" y2="800" stroke="#10b981" stroke-width="1.5" opacity="0.15" stroke-dasharray="4 4"/>
+
+    <!-- Ghost dots (REAL) -->
+    <circle cx="255" cy="726" r="4" fill="#10b981" opacity="0.15"/>  <!-- Training L0→fun -->
+    <circle cx="160" cy="578" r="4" fill="#f59e0b" opacity="0.15"/>  <!-- Videos L1→stress -->
+    <circle cx="355" cy="492" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Water L2→vibe -->
+    <circle cx="255" cy="430" r="4" fill="#10b981" opacity="0.15"/>  <!-- Strangers L2→fun -->
+    <circle cx="355" cy="368" r="4" fill="#c084fc" opacity="0.15"/>  <!-- 30-min L2→vibe -->
+    <circle cx="255" cy="344" r="4" fill="#10b981" opacity="0.15"/>  <!-- Bwork L3→fun -->
+    <circle cx="255" cy="220" r="4" fill="#10b981" opacity="0.15"/>  <!-- Krislin L3→fun -->
+
+    <!-- Current position -->
+    <circle cx="295" cy="220" r="7" fill="#10b981" opacity="0.9" stroke="white" stroke-width="2"/>
+
+    <!-- Annotation -->
+    <text x="200" y="575" fill="#f59e0b" font-size="7" font-weight="600" text-anchor="end" opacity="0.45">video stress dip</text>
+
+    <!-- Label -->
+    <text x="255" y="828" fill="#10b981" opacity="0.5" font-size="10" font-weight="700" text-anchor="end"
+      transform="rotate(-45, 255, 828)">Breathwork</text>
+
+    <!--
+      ═══ TRAVEL HOST (gold, 3 dots) ═══
+
+      L1 (1 dot): Y = 578  → vibe(4)
+      L2 (1 dot): Y = 430  → peace(3)
+      L3 (1 dot): Y = 282  → vibe(4)
+
+      Rolling avg:
+       1: 4.0→355  2: 3.5→305  3: 3.67→322
+    -->
+
+    <path d="M 355 578 L 305 430 L 322 282"
+      fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+
+    <!-- Extend to L0 -->
+    <line x1="355" y1="578" x2="355" y2="800" stroke="#f59e0b" stroke-width="1.5" opacity="0.1" stroke-dasharray="4 4"/>
+
+    <!-- Ghost dots -->
+    <circle cx="355" cy="578" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Tuk Tuk L1→vibe -->
+    <circle cx="255" cy="430" r="4" fill="#10b981" opacity="0.15"/>  <!-- Planning L2→peace -->
+    <circle cx="355" cy="282" r="4" fill="#c084fc" opacity="0.15"/>  <!-- Presentation L3→vibe -->
+
+    <!-- Current position -->
+    <circle cx="322" cy="282" r="6" fill="#f59e0b" opacity="0.9" stroke="white" stroke-width="2"/>
+
+    <!-- Label -->
+    <text x="380" y="828" fill="#f59e0b" opacity="0.5" font-size="10" font-weight="700" text-anchor="end"
+      transform="rotate(-45, 380, 828)">Travel Host</text>
+
+    <!--
+      ═══ MERGE CURVES (updated for real data positions) ═══
+
+      1. Breathwork → Dance at L3 ("Retreat Disco + Breathwork")
+         Source: Breathwork at Y=344 → X=275
+         Target: Dance at Y=273 → X=315 (Retreat Disco dot)
+    -->
+    <path d="M 275 344 C 295 310, 295 310, 315 273"
+      fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" opacity="0.35"
+      stroke-dasharray="6 4"/>
+    <circle cx="315" cy="273" r="5" fill="#10b981" opacity="0.25"/>
+    <text x="280" y="300" fill="#10b981" font-size="8" font-weight="600" text-anchor="end" opacity="0.45">Retreat Disco</text>
+    <text x="280" y="312" fill="#10b981" font-size="7" text-anchor="end" opacity="0.3">+ Breathwork</text>
+
+    <!--
+      2. Dance → Travel at L2
+         Source: Dance at Y=430 → X=275
+         Target: Travel at Y=430 → X=305
+    -->
+    <path d="M 275 430 C 290 420, 290 420, 305 430"
+      fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" opacity="0.3"
+      stroke-dasharray="6 4"/>
+    <circle cx="305" cy="430" r="5" fill="#c084fc" opacity="0.2"/>
+    <text x="290" y="418" fill="rgba(0,0,0,0.3)" font-size="7" font-weight="600" text-anchor="middle">Travel content</text>
+
+    <!--
+      3. Breathwork → Travel at L1
+         Source: Breathwork at Y=578 → X=208
+         Target: Travel at Y=578 → X=355
+    -->
+    <path d="M 208 578 C 280 565, 280 565, 355 578"
+      fill="none" stroke="#10b981" stroke-width="1.5" stroke-linecap="round" opacity="0.2"
+      stroke-dasharray="5 4"/>
+    <circle cx="355" cy="578" r="4" fill="#10b981" opacity="0.12"/>
+    <text x="280" y="560" fill="rgba(0,0,0,0.2)" font-size="7" text-anchor="middle">Breathwork at events</text>
+
+  </svg>
+</div>
+
+<div class="verdict" style="border-left-color: #10b981;">
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 8px;">
+    <strong>Real data, real coordinates.</strong> ViewBox 420x900, exact component layout. Every dot position computed from the same depthY/stateX/bandH/padding as the live app.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 8px;">
+    <strong>Dance line tells a story I didn't expect.</strong> Starts vibe at L1 (events), dips to X=236 at L2 (sales + reachouts cross into Pressure column), recovers to X=335 at L3 (live events again), then <em>drifts back to Fun at L4</em> (building apps isn't Vibe Rise). The building work is satisfying but doesn't hit the same way as performing.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 8px;">
+    <strong>Breathwork dips at L1 too.</strong> Daily Videos was stressful (X=208, into Pressure). Then it recovers into the Fun/Vibe border and stays there. Hosting breathwork is fun but not Vibe Rise, even at L3. The really intense personal practice (Water Rebirthing, 30-min CCB) is Vibe Rise, but the facilitation itself lands in Fun.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5;">
+    <strong>The insight:</strong> Vibe Rise comes from the ART (performing, edge-pushing practice), not from the CRAFT (building, facilitating, marketing). Both quests drift right toward Vibe Rise when the art is happening and left when the craft takes over.
+  </p>
+</div>
+
 <!-- ─── THE VERDICT ─── -->
-<h2>The Verdict</h2>
+<h2>Final Verdict</h2>
 
 <div class="verdict">
   <p style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
-    <strong>Option A wins for Dance Events.</strong> The zigzag from Guerilla Marketing (Pressure) is the exact signal: "this task type doesn't suit your nervous system." It's a single dot clearly in the wrong column. Option B smooths it into a vague leftward drift.
+    <strong>Rolling average (Option B) wins at scale.</strong> With 20+ dots per quest and merge lines between quests, Option A becomes visual noise. Option B tells the macro story: where are you trending, where did you dip, and how do your quests relate to each other.
   </p>
   <p style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
-    <strong>Breathwork is less dramatic</strong> because it's mostly a clean progression (learning → facilitating). But the two "peace" dots at the start still tell a useful story: you weren't in Vibe Rise when you were just training. The shift happened when you started facilitating for others.
-  </p>
-  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
-    <strong>The insight for both:</strong> When the line enters a quest's "predicted" column and STAYS there, that's Zone of Genius confirmation. When it keeps dipping into Pressure or Fun, those tasks might need delegating or restructuring.
+    <strong>Ghost dots still show individual data.</strong> The small faded dots at actual positions let you inspect specific challenges if you want, but the line itself is the smooth trend.
   </p>
   <p style="font-size: 13px; line-height: 1.5;">
-    <strong>Recommendation: Option A.</strong> Show every dot. The zigzag IS the diagnostic. For quests with 20+ challenges where it gets noisy, we could add a "trend mode" toggle later.
+    <strong>Window=5 feels right.</strong> Smooths out one-off outliers but still shows real trends. A single "anxious" dot doesn't move the line much, but three in a row (like the L2 admin cluster) creates a visible dip.
   </p>
 </div>
 

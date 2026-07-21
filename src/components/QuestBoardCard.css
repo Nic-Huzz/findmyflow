@@ -451,6 +451,16 @@
   border-radius: 2px; transition: width 0.3s ease;
 }
 
+/* ── Skill pills ── */
+.qbc-skill-pills {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;
+}
+.qbc-skill-pill {
+  font-size: 10px; font-weight: 600; color: #5e17eb;
+  background: rgba(94,23,235,0.06); padding: 1px 7px;
+  border-radius: 6px; text-transform: capitalize;
+}
+
 /* ── Insights (trend + identity + zone warning) ── */
 .qbc-insights {
   padding: 8px 0 10px; border-bottom: 1px solid #f2f3f5;
@@ -486,3 +496,34 @@
   font-family: inherit; transition: all 0.15s ease;
 }
 .qbc-signal-btn:hover { background: #e9ecef; }
+
+/* ── Orphan challenge handler ── */
+.qbc-orphan-list {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 12px;
+}
+.qbc-orphan-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+}
+.qbc-orphan-name {
+  font-size: 14px; font-weight: 600; color: #1a1a2e;
+  margin-bottom: 6px;
+}
+.qbc-orphan-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #e9ecef;
+  background: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  color: #495057;
+  cursor: pointer;
+}
+.qbc-orphan-select:focus {
+  border-color: #5e17eb;
+  outline: none;
+}
