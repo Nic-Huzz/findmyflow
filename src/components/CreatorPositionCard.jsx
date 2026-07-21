@@ -33,7 +33,7 @@ const BRANCH_META = {
   threat: { label: 'Threat', color: '#ef4444' },
 }
 
-export default function CreatorPositionCard({ userId, essenceName, skills, problems, remarkableAngle, onCreatorTap }) {
+export default function CreatorPositionCard({ userId, essenceName, skills, problems, remarkableAngle, onCreatorTap, inline = false }) {
   const navigate = useNavigate()
   // Branch scoring
   const { loading: branchLoading, primary, secondary, scores, gap, rarity, confidence } = useBranchScoring()
@@ -79,9 +79,9 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
 
   // UI
   const [frontierExpanded, setFrontierExpanded] = useState(false)
-  const [secondaryExpanded, setSecondaryExpanded] = useState(false)
   const [branchesExpanded, setBranchesExpanded] = useState(false)
   const [posExpanded, setPosExpanded] = useState(false)
+  const [expandedBranch, setExpandedBranch] = useState(null)
 
   // Load matrix data
   useEffect(() => {
@@ -276,10 +276,12 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
 
   if (branchLoading || !posLoaded) return null
 
+  const wrapperClass = inline ? 'cpc-card cpc-inline' : 'cpc-card'
+
   // No branch data at all
   if (!primary && !scores?.length) {
     return (
-      <div className="cpc-card">
+      <div className={wrapperClass}>
         <div className="cpc-header">
           <span className="cpc-icon">🗺️</span>
           <div className="cpc-header-text">
@@ -304,19 +306,23 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
   const maxScore = primary?.score || 1
   const hasMerge = primary && secondary && primary.branch !== secondary.branch
 
+  const primaryLabel = primaryMeta?.label || ''
+  const secondaryLabel = secondaryMeta?.label || ''
+
+  // Helper: get frontier cell for any branch
+  const getCellForBranch = (branchId) => matrixData ? findCell(matrixData, branchId, 'frontier') || findCell(matrixData, branchId, 'emerging') : null
+
+  const toggleBranch = (b) => setExpandedBranch(prev => prev === b ? null : b)
+
   return (
-    <div className="cpc-card">
+    <div className={wrapperClass}>
       {/* Header */}
       <div className="cpc-header">
-        <span className="cpc-icon">{hasRemarkable ? '🎯' : '🗺️'}</span>
+        <span className="cpc-icon">🎯</span>
         <div className="cpc-header-text">
-          <div className="cpc-title">{hasRemarkable ? 'Your Position' : 'Your Industry Frontier'}</div>
+          <div className="cpc-title">Your Position</div>
           {hasMerge && (
-            <div className="cpc-sub">
-              <span style={{ color: primaryMeta.color }}>{primaryMeta.label}</span>
-              {' × '}
-              <span style={{ color: secondaryMeta.color }}>{secondaryMeta.label}</span>
-            </div>
+            <div className="cpc-sub">{primaryLabel} x {secondaryLabel}</div>
           )}
         </div>
         {confidence > 0 && (
@@ -324,285 +330,122 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
         )}
       </div>
 
-      {/* Monopoly block: number + intersection + vehicle/territory */}
+      {/* Personal Monopoly — big highlight */}
       {rarity && (
-        <div className="cpc-monopoly-block">
+        <div className="cpc-monopoly-block" onClick={() => setFrontierExpanded(!frontierExpanded)} style={{ cursor: 'pointer' }}>
           <div className="cpc-rarity-number">
-            {rarity.matchCount === 0
-              ? `0 of ${rarity.totalProfiles}`
-              : `${rarity.matchCount} of ${rarity.totalProfiles}`
-            }
+            {rarity.matchCount === 0 ? `0 of ${rarity.totalProfiles}` : `${rarity.matchCount} of ${rarity.totalProfiles}`}
           </div>
           <div className="cpc-rarity-desc">
-            {rarity.matchCount === 0
-              ? 'Nobody shares your combination'
-              : 'share your combination'
-            }
+            {rarity.matchCount === 0 ? 'Nobody shares your combination' : 'share your combination'}
           </div>
-          {rarity.dimensions && (
-            <div className="cpc-rarity-dims">
-              {rarity.topSkill}{rarity.topProblem ? ` + ${rarity.topProblem.replace(/_/g, ' ')}` : ''}{rarity.topPersona ? ` + ${rarity.topPersona}` : ''}
-            </div>
-          )}
+          <div className="cpc-rarity-dims">
+            {rarity.topSkill?.replace(/_/g, ' ')}{rarity.topProblem ? ` + ${rarity.topProblem.replace(/_/g, ' ')}` : ''}{rarity.topPersona ? ` + ${rarity.topPersona}` : ''}
+          </div>
           {rarity.topMatches?.length > 0 && (
             <div className="cpc-rarity-matches">
-              {rarity.matchCount === 0
-                ? `Closest: ${rarity.topMatches.map(m => m.name).join(', ')}`
-                : `Similar: ${rarity.topMatches.map(m => m.name).join(', ')}`
-              }
+              {rarity.matchCount === 0 ? 'Closest' : 'Similar'}: {rarity.topMatches.map(m => m.name).join(', ')}
             </div>
           )}
-
-          {/* Competitive density (nearby experience creators) */}
-          {nearbyCreators.length > 0 ? (
-            <div className="cpc-competitive">
-              <div className="cpc-competitive-label">Nearby creators</div>
-              <div className="cpc-competitive-count">
-                {nearbyCreators.length} of {(dnaData.profiles || []).length} experience creators work near your intersection
-              </div>
-              <div className="cpc-competitive-chips">
-                {nearbyCreators.map(c => {
-                  const meta = BRANCH_META[c.primaryBranch]
-                  return (
-                    <span
-                      key={c.name}
-                      className="cpc-competitive-chip"
-                      style={{ borderColor: meta?.color || 'rgba(0,0,0,0.1)' }}
-                      onClick={onCreatorTap ? () => onCreatorTap(c.name) : undefined}
-                    >
-                      {c.name} <span className="cpc-competitive-branch">{meta?.label || c.primaryBranch}</span>
-                    </span>
-                  )
-                })}
-              </div>
-            </div>
-          ) : primary && (
-            <div className="cpc-competitive">
-              <div className="cpc-competitive-empty">No experience creators currently work at your intersection.</div>
-            </div>
-          )}
-
           {hasMerge && (
             <div className="cpc-merge-inline">
-              Where <span style={{ color: primaryMeta.color, fontWeight: 700 }}>{primaryMeta.label}</span> meets <span style={{ color: secondaryMeta.color, fontWeight: 700 }}>{secondaryMeta.label}</span>. That intersection is yours.
+              Where {primaryLabel} meets {secondaryLabel}. That intersection is yours.
             </div>
           )}
-
           {gap && (
-            <div className="cpc-gap-inline">
-              {gap.insight}
-            </div>
+            <div className="cpc-gap-inline">{gap.insight}</div>
           )}
         </div>
       )}
 
-      {/* Primary Frontier Card */}
-      {frontierCell && (<>
-        <button
-          type="button"
-          className="cpc-frontier"
-          onClick={() => setFrontierExpanded(!frontierExpanded)}
-          aria-expanded={frontierExpanded}
-        >
-          {primaryMeta && (
-            <div className="cpc-frontier-branch" style={{ color: primaryMeta.color }}>
-              {primaryMeta.label} {frontierCell.phase === 'phase3' ? 'landscape' : 'frontier'}
+      {/* Expanded monopoly: nearby creators + generate */}
+      {frontierExpanded && (
+        <div className="ch2-results-more">
+          {nearbyCreators.length > 0 && (
+            <div className="ch2-biz-row">
+              <div className="ch2-biz-icon">📍</div>
+              <div className="ch2-biz-info">
+                <div className="ch2-biz-label">Nearby creators</div>
+                <div className="ch2-biz-val">
+                  {nearbyCreators.map(c => c.name).join(', ')} ({nearbyCreators.length} of {(dnaData.profiles || []).length})
+                </div>
+              </div>
             </div>
           )}
-
-          {(() => {
-            // Use simplified text if available, fall back to raw research text
-            const s = frontierCell.simple
-            const eS = emergingCell?.simple
-
-            if (!frontierExpanded) {
-              return (
-                <>
-                  <p className="cpc-frontier-gap">
-                    {s?.gap || frontierCell.prediction || frontierCell.assumption}
-                  </p>
-                  <div className="cpc-frontier-tap">Tap to see full landscape</div>
-                </>
-              )
-            }
-
-            const isPhase3 = frontierCell.phase === 'phase3'
-            const skillLabel = rarity?.topSkill?.replace(/_/g, ' ')
-            const problemLabel = rarity?.topProblem?.replace(/_/g, ' ')
-            return (
-              <div className="cpc-frontier-expanded">
-                <div className="cpc-frontier-section">
-                  <div className="cpc-frontier-label">{isPhase3 ? "What's already working" : 'What everyone does'}</div>
-                  <p>{s?.crowded || frontierCell.assumption}</p>
-                </div>
-                <div className="cpc-frontier-section">
-                  <div className="cpc-frontier-label">{isPhase3 ? "What's still missing" : 'Why it no longer works'}</div>
-                  <p>{s?.stuck || frontierCell.problem}</p>
-                </div>
-                {isPhase3 ? (
-                  <div className="cpc-frontier-section">
-                    <div className="cpc-frontier-label cpc-gap-label">Your opportunity</div>
-                    {monopolyStatement ? (
-                      <p className="cpc-gap-text">{monopolyStatement}</p>
-                    ) : (
-                      <p className="cpc-gap-text">
-                        {skillLabel && problemLabel
-                          ? `You ${skillLabel} people who experience ${problemLabel}. At this intersection: `
-                          : ''
-                        }
-                        {s?.gap || eS?.gap || frontierCell.prediction}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <>
-                    <div className="cpc-frontier-section">
-                      <div className="cpc-frontier-label">What would actually work</div>
-                      <p>{s?.gap || eS?.gap || frontierCell.prediction}</p>
-                    </div>
-                    <div className="cpc-frontier-section">
-                      <div className="cpc-frontier-label cpc-gap-label">Your opportunity</div>
-                      {monopolyStatement ? (
-                        <p className="cpc-gap-text">{monopolyStatement}</p>
-                      ) : (
-                        <p className="cpc-gap-text">
-                          {skillLabel && problemLabel
-                            ? `You ${skillLabel} people who experience ${problemLabel}. Here, that looks like: ${s?.prediction || eS?.prediction || frontierCell.prediction || ''}`
-                            : s?.prediction || eS?.prediction || ''
-                          }
-                        </p>
-                      )}
-                    </div>
-                  </>
-                )}
-                <div className="cpc-frontier-tap">Collapse</div>
-              </div>
-            )
-          })()}
-        </button>
-
-        {/* Design experience CTA — outside <button> to avoid nesting */}
-        {frontierExpanded && hasRemarkable && (
-          <button
-            type="button"
-            className="cpc-design-cta"
-            onClick={() => { hapticLight(); navigate('/create/experience/new') }}
-          >
-            Design an experience for this gap →
-          </button>
-        )}
-
-        {/* Generate / Regenerate monopoly — outside <button> to avoid nested buttons */}
-        {frontierExpanded && rarity?.topSkill && rarity?.topProblem && (
-          <div className="cpc-monopoly-action">
-            {monopolyError && <div className="cpc-monopoly-error">{monopolyError}</div>}
-            <button
-              type="button"
-              className="cpc-generate-monopoly"
-              disabled={generatingMonopoly}
-              onClick={generateMonopoly}
-            >
+          {rarity?.topSkill && rarity?.topProblem && (
+            <button className="ch2-readiness-retake" onClick={(e) => { e.stopPropagation(); generateMonopoly() }} disabled={generatingMonopoly}>
               {generatingMonopoly ? 'Writing...' : monopolyStatement ? 'Regenerate my position' : 'Generate my position'}
             </button>
-          </div>
-        )}
-      </>
-      )}
-
-      {/* Secondary frontier (if merge exists) */}
-      {hasMerge && secondaryFrontier && (
-        <button
-          type="button"
-          className="cpc-frontier cpc-frontier-secondary"
-          onClick={() => setSecondaryExpanded(!secondaryExpanded)}
-          aria-expanded={secondaryExpanded}
-        >
-          {secondaryMeta && (
-            <div className="cpc-frontier-branch" style={{ color: secondaryMeta.color }}>
-              {secondaryMeta.label} {secondaryFrontier?.phase === 'phase3' ? 'landscape' : 'frontier'}
+          )}
+          {monopolyError && <div style={{ fontSize: '0.72rem', color: '#ef4444', marginTop: 4 }}>{monopolyError}</div>}
+          {monopolyStatement && (
+            <div className="ch2-biz-row">
+              <div className="ch2-biz-icon">✨</div>
+              <div className="ch2-biz-info">
+                <div className="ch2-biz-label">Your monopoly</div>
+                <div className="ch2-biz-val" style={{ fontWeight: 500 }}>{monopolyStatement}</div>
+              </div>
             </div>
           )}
-          {(() => {
-            const s2 = secondaryFrontier.simple
-            if (!secondaryExpanded) {
-              return (
-                <>
-                  <p className="cpc-frontier-gap">{s2?.gap || secondaryFrontier.prediction || secondaryFrontier.assumption}</p>
-                  <div className="cpc-frontier-tap">Tap to expand</div>
-                </>
-              )
-            }
-            const isP3 = secondaryFrontier.phase === 'phase3'
-            return (
-              <div className="cpc-frontier-expanded">
-                <div className="cpc-frontier-section">
-                  <div className="cpc-frontier-label">{isP3 ? "What's already working" : 'What everyone does'}</div>
-                  <p>{s2?.crowded || secondaryFrontier.assumption}</p>
-                </div>
-                <div className="cpc-frontier-section">
-                  <div className="cpc-frontier-label">{isP3 ? "What's still missing" : 'Why it no longer works'}</div>
-                  <p>{s2?.stuck || secondaryFrontier.problem}</p>
-                </div>
-                {isP3 ? (
-                  <div className="cpc-frontier-section">
-                    <div className="cpc-frontier-label cpc-gap-label">Your opportunity</div>
-                    <p className="cpc-gap-text">{s2?.gap || secondaryFrontier.prediction}</p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="cpc-frontier-section">
-                      <div className="cpc-frontier-label">What would actually work</div>
-                      <p>{s2?.gap || secondaryFrontier.prediction}</p>
-                    </div>
-                    <div className="cpc-frontier-section">
-                      <div className="cpc-frontier-label cpc-gap-label">Your opportunity</div>
-                      <p className="cpc-gap-text">{s2?.prediction || secondaryFrontier.prediction}</p>
-                    </div>
-                  </>
-                )}
-                <div className="cpc-frontier-tap">Collapse</div>
-              </div>
-            )
-          })()}
-        </button>
-      )}
-
-      {/* Branch chart (collapsible) */}
-      {visibleScores.length > 0 && (
-        <div className="cpc-branches-section">
-          <button
-            type="button"
-            className="cpc-branches-toggle"
-            onClick={() => setBranchesExpanded(!branchesExpanded)}
-            aria-expanded={branchesExpanded}
-          >
-            Your branches {branchesExpanded ? '▴' : '▾'}
-          </button>
-          {branchesExpanded && (
-            <div className="cpc-branches">
-              {visibleScores.map(({ branch, score }) => {
-                const meta = BRANCH_META[branch]
-                if (!meta) return null
-                const pct = Math.round((score / maxScore) * 100)
-                return (
-                  <div key={branch} className="cpc-branch-row">
-                    <div className="cpc-branch-label" style={{ color: meta.color }}>{meta.label}</div>
-                    <div className="cpc-branch-track">
-                      <div className="cpc-branch-fill" style={{ width: `${pct}%`, background: meta.color }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+          {hasRemarkable && (
+            <button className="ch2-readiness-retake" onClick={() => { hapticLight(); navigate('/create/experience/new') }}>
+              Design an experience for this gap →
+            </button>
           )}
         </div>
       )}
 
-      {/* Rule break (post-Remarkable) */}
-      {hasRemarkable && remarkableAngle.combination_insight && (
-        <div className="cpc-rulebreak">
-          <div className="cpc-rulebreak-label">Your rule break</div>
-          <p>{remarkableAngle.combination_insight}</p>
+      {/* Branch chart — always visible, each row tappable for landscape */}
+      {visibleScores.length > 0 && (
+        <div className="cpc-branches-section">
+          <div className="cpc-branches-label">Your branches</div>
+          <div className="cpc-branches">
+            {visibleScores.map(({ branch, score }) => {
+              const meta = BRANCH_META[branch]
+              if (!meta) return null
+              const pct = Math.round((score / maxScore) * 100)
+              const cell = getCellForBranch(branch)
+              const isOpen = expandedBranch === branch
+              return (
+                <div key={branch}>
+                  <div
+                    className={`cpc-branch-row${cell ? ' cpc-branch-tappable' : ''}`}
+                    onClick={cell ? () => toggleBranch(branch) : undefined}
+                  >
+                    <div className="cpc-branch-label">{meta.label}</div>
+                    <div className="cpc-branch-track">
+                      <div className="cpc-branch-fill" style={{ width: `${pct}%` }} />
+                    </div>
+                    {cell && <div className="cpc-branch-hint">{isOpen ? '˅' : 'See landscape ›'}</div>}
+                  </div>
+                  {isOpen && cell && (
+                    <div className="cpc-branch-landscape">
+                      {(() => {
+                        const s = cell.simple
+                        const isP3 = cell.phase === 'phase3'
+                        return (
+                          <>
+                            <div className="cpc-landscape-row">
+                              <div className="cpc-landscape-label">{isP3 ? "What's already working" : 'What everyone does'}</div>
+                              <p>{s?.crowded || cell.assumption}</p>
+                            </div>
+                            <div className="cpc-landscape-row">
+                              <div className="cpc-landscape-label">{isP3 ? "What's still missing" : 'Why it no longer works'}</div>
+                              <p>{s?.stuck || cell.problem}</p>
+                            </div>
+                            <div className="cpc-landscape-row">
+                              <div className="cpc-landscape-label cpc-landscape-gap">Your opportunity</div>
+                              <p>{s?.gap || s?.prediction || cell.prediction}</p>
+                            </div>
+                          </>
+                        )
+                      })()}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
 
@@ -610,10 +453,13 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
       {hasRemarkable && (
         <div className="cpc-positioning">
           {hasStatement && !posExpanded ? (
-            <div className="cpc-pos-collapsed" onClick={() => setPosExpanded(true)} style={{ cursor: 'pointer' }}>
-              <div className="cpc-pos-label">Your positioning</div>
-              <p className="cpc-pos-text">{statement}</p>
-              <span className="cpc-pos-edit">Edit ↓</span>
+            <div className="ch2-biz-row" onClick={() => setPosExpanded(true)} style={{ cursor: 'pointer' }}>
+              <div className="ch2-biz-icon">📝</div>
+              <div className="ch2-biz-info">
+                <div className="ch2-biz-label">Your positioning</div>
+                <div className="ch2-biz-val">{statement}</div>
+              </div>
+              <div className="ch2-row-chevron">›</div>
             </div>
           ) : (
             <>
@@ -651,7 +497,6 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
                 </button>
               )}
 
-              {/* Option picker — 3 cards to choose from */}
               {showingOptions && posOptions.length > 0 && (
                 <div className="cpc-pos-options">
                   <div className="cpc-pos-options-label">Pick the one that feels most like you:</div>
@@ -681,13 +526,6 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
               )}
             </>
           )}
-        </div>
-      )}
-
-      {/* Pre-Remarkable prompt */}
-      {!hasRemarkable && frontierCell && (
-        <div className="cpc-prompt">
-          Is this the assumption you're breaking?
         </div>
       )}
     </div>

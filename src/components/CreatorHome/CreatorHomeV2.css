@@ -699,7 +699,13 @@ button.ch2-see-more:hover {
 /* ═══ PHASE 2: HERO PROGRESS ═══ */
 .ch2-id-hero-main { display: flex; align-items: center; gap: 16px; }
 .ch2-hero-progress { margin-top: 18px; position: relative; z-index: 1; }
-.ch2-hero-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.ch2-hero-pills { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.ch2-hero-pills-label {
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.7);
+  margin-right: 2px;
+}
 .ch2-hero-pill {
   display: flex; align-items: center; gap: 5px;
   background: rgba(255,255,255,0.15);
@@ -712,30 +718,6 @@ button.ch2-see-more:hover {
 .ch2-hero-pill .tick { color: var(--green-light); font-size: 11px; }
 .ch2-hero-pill.dim { opacity: 0.45; }
 
-.ch2-hero-bar-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
-.ch2-hero-bar {
-  flex: 1; height: 8px;
-  background: rgba(255,255,255,0.18);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.ch2-hero-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(233,162,59,0.5);
-  animation: ch2BarGrow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 0.4s;
-  transform-origin: left;
-}
-@keyframes ch2BarGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.ch2-hero-bar-label {
-  font-size: 10px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.5px;
-  color: rgba(255,255,255,0.75);
-  white-space: nowrap;
-}
-
 /* ═══ STALENESS NUDGE ═══ */
 .ch2-stale-nudge {
   background: #fff; border: 1px solid var(--gold);
@@ -745,8 +727,8 @@ button.ch2-see-more:hover {
   transition: transform 0.2s;
 }
 .ch2-stale-nudge:active { transform: scale(0.98); }
-.ch2-stale-text { font-size: 0.82rem; color: var(--text-2); line-height: 1.5; }
-.ch2-stale-text strong { color: var(--text); }
+.ch2-stale-text { font-size: 0.82rem; color: var(--text-secondary, #6c757d); line-height: 1.5; }
+.ch2-stale-text strong { color: var(--text-primary, #1a1a2e); }
 .ch2-stale-cta {
   font-size: 0.78rem; font-weight: 700; color: var(--gold-text);
   margin-top: 8px;
@@ -754,12 +736,12 @@ button.ch2-see-more:hover {
 
 /* ═══ DAYS SINCE + LOW ATTENDANCE ═══ */
 .ch2-days-since {
-  font-size: 0.82rem; color: var(--text-3); font-style: italic;
+  font-size: 0.82rem; color: var(--text-muted, rgba(0,0,0,0.35)); font-style: italic;
   text-align: center; padding: 12px 16px; margin-bottom: 12px;
   line-height: 1.5;
 }
 .ch2-low-attendance {
-  font-size: 0.82rem; color: var(--text-3); font-style: italic;
+  font-size: 0.82rem; color: var(--text-muted, rgba(0,0,0,0.35)); font-style: italic;
   text-align: center; padding: 8px 16px; margin-bottom: 12px;
   line-height: 1.5;
 }
@@ -991,6 +973,16 @@ button.ch2-see-more:hover {
   gap: 8px;
 }
 .ch2-fill-next-event { font-size: 15px; font-weight: 800; color: var(--ink); }
+.ch2-fill-next-stale {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b8860b;
+  background: rgba(233, 162, 59, 0.08);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  line-height: 1.45;
+}
 .ch2-fill-next-action { font-size: 13px; color: var(--grey); line-height: 1.5; }
 .ch2-fill-next-action strong { color: var(--ink); }
 
@@ -1163,8 +1155,9 @@ button.ch2-see-more:hover {
 /* ─── Play Profile Recommendations Card ─────────────────────── */
 
 .ch2 .ppr-card {
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.06) 100%);
-  border: 1px solid rgba(94, 23, 235, 0.15);
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #e9ecef);
+  box-shadow: var(--card-shadow, 0 2px 12px rgba(0, 0, 0, 0.04));
   border-radius: 16px;
   padding: 18px;
   margin: 0 4px 16px;

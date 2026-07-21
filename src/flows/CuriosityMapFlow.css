@@ -269,6 +269,26 @@
   color: #1a1a2e;
 }
 
+.cmf-spotify-hint {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 16px;
+}
+.cmf-spotify-hint-icon { flex-shrink: 0; font-size: 16px; }
+.cmf-spotify-link {
+  color: #1DB954;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 /* ── Episode drill-down ── */
 .cmf-episode-group {
   margin-bottom: 20px;

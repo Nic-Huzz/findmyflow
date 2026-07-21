@@ -1,17 +1,29 @@
 /**
- * QuarterlyPlanner.jsx — "What experiences are you running this quarter?"
+ * QuarterlyPlanner.jsx — One-time quarterly planning prompt
  *
- * Compact planning card for Experiences tab. Users pick from their library
- * or add new experience types, optionally set dates.
- * Stored in localStorage gamification state (no DB needed for v1).
- * At quarter end, shows planned vs actual review.
+ * Modal that shows once per quarter on the Experiences tab.
+ * User picks from their experience library or creates new.
+ * Selecting navigates to create experience flow.
+ * Dismisses permanently for the quarter after any interaction.
  *
  * CSS prefix: qp-
  */
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthProvider'
+import { fetchTemplates } from '../../lib/experienceTemplateService'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import { getGamificationState, updateGamificationState } from '../../lib/creatorGamification'
 import './QuarterlyPlanner.css'
+
+const TYPE_EMOJI = {
+  workshop: '🎓',
+  performance: '🎭',
+  cohort: '👥',
+  books_media: '📚',
+  facilitation: '🤝',
+  retreats: '🏔️',
+}
 
 function getCurrentQuarter() {
   const now = new Date()
@@ -25,156 +37,115 @@ function getQuarterLabel(quarterKey) {
   return `${months[q]} ${year}`
 }
 
-function getQuarterEndDate(quarterKey) {
-  const [year, q] = quarterKey.split('-Q').map(Number)
-  const endMonth = q * 3 // 3, 6, 9, 12
-  return new Date(year, endMonth, 0) // last day of end month
-}
-
 export default function QuarterlyPlanner({ experiences = [], pastExperiences = [] }) {
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const quarter = getCurrentQuarter()
-  const [plans, setPlans] = useState([])
-  const [showAdd, setShowAdd] = useState(false)
-  const [newName, setNewName] = useState('')
-  const [newDate, setNewDate] = useState('')
-  const [dismissed, setDismissed] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [templates, setTemplates] = useState([])
+  const [showLibrary, setShowLibrary] = useState(false)
 
   useEffect(() => {
     const state = getGamificationState()
-    const quarterPlans = state.quarterlyPlans?.[quarter] || []
-    setPlans(quarterPlans)
-    setDismissed(state.quarterlyPlannerDismissed === quarter)
+    const alreadySeen = state.quarterlyPlannerDismissed === quarter
+    setVisible(!alreadySeen)
   }, [quarter])
 
-  function savePlans(newPlans) {
-    setPlans(newPlans)
-    const state = getGamificationState()
-    updateGamificationState({
-      quarterlyPlans: { ...(state.quarterlyPlans || {}), [quarter]: newPlans }
-    })
-  }
-
-  function addPlan() {
-    if (!newName.trim()) return
-    const plan = { id: crypto.randomUUID(), name: newName.trim(), date: newDate || null, completed: false }
-    savePlans([...plans, plan])
-    setNewName('')
-    setNewDate('')
-    setShowAdd(false)
-    hapticSuccess()
-  }
-
-  function removePlan(id) {
-    hapticLight()
-    savePlans(plans.filter(p => p.id !== id))
-  }
-
-  function toggleComplete(id) {
-    hapticLight()
-    savePlans(plans.map(p => p.id === id ? { ...p, completed: !p.completed } : p))
-  }
+  useEffect(() => {
+    if (!user?.id) return
+    fetchTemplates(user.id).then(data => setTemplates(data || [])).catch(() => {})
+  }, [user?.id])
 
   function dismiss() {
-    setDismissed(true)
+    setVisible(false)
     updateGamificationState({ quarterlyPlannerDismissed: quarter })
+    hapticLight()
   }
 
-  // Match plans against actual experiences this quarter
+  function selectTemplate(t) {
+    dismiss()
+    hapticSuccess()
+    navigate(`/create/experience/new?templateId=${t.id}&type=${t.experience_type}`)
+  }
+
+  function createNew() {
+    dismiss()
+    hapticSuccess()
+    navigate('/create/experience/new')
+  }
+
+  if (!visible) return null
+
+  // Count this quarter's actual experiences
   const quarterStart = new Date()
   quarterStart.setMonth(Math.floor(quarterStart.getMonth() / 3) * 3, 1)
   quarterStart.setHours(0, 0, 0, 0)
-  const actualThisQuarter = [...experiences, ...pastExperiences].filter(e => {
+  const thisQuarterCount = [...experiences, ...pastExperiences].filter(e => {
     const d = new Date(e.experience_date || e.created_at)
     return d >= quarterStart
-  })
-
-  // Don't show if dismissed and no plans set
-  if (dismissed && plans.length === 0) return null
-
-  // Compact mode when plans exist
-  const completedCount = plans.filter(p => p.completed).length
-  const isQuarterEnding = getQuarterEndDate(quarter) - new Date() < 14 * 24 * 60 * 60 * 1000
+  }).length
 
   return (
-    <div className="qp-card">
-      <div className="qp-header">
-        <div className="qp-header-left">
-          <span className="qp-icon">📅</span>
-          <span className="qp-title">This Quarter</span>
-          <span className="qp-quarter-label">{getQuarterLabel(quarter)}</span>
-        </div>
-        {plans.length === 0 && (
-          <button className="qp-dismiss" onClick={dismiss}>Later</button>
-        )}
-      </div>
+    <div className="qp-overlay" onClick={dismiss}>
+      <div className="qp-modal" onClick={e => e.stopPropagation()}>
+        <button className="qp-close" onClick={dismiss}>&times;</button>
 
-      {plans.length === 0 ? (
-        <div className="qp-empty">
-          <p className="qp-prompt">What experiences are you running this quarter?</p>
-          <p className="qp-sub">Even a rough plan makes it 3x more likely to happen.</p>
-          <button className="qp-add-btn" onClick={() => { hapticLight(); setShowAdd(true) }}>
-            + Plan an experience
-          </button>
+        <div className="qp-modal-header">
+          <span className="qp-icon">📅</span>
+          <div>
+            <div className="qp-title">Plan Your Quarter</div>
+            <div className="qp-quarter-label">{getQuarterLabel(quarter)}</div>
+          </div>
         </div>
-      ) : (
-        <>
-          <div className="qp-progress">
-            {completedCount} of {plans.length} planned
-            {actualThisQuarter.length > 0 && (
-              <span className="qp-actual"> · {actualThisQuarter.length} actually run</span>
+
+        <p className="qp-prompt">What experiences are you running this quarter?</p>
+        <p className="qp-sub">Pick from your library or start fresh.</p>
+
+        {thisQuarterCount > 0 && (
+          <div className="qp-existing">
+            You already have {thisQuarterCount} experience{thisQuarterCount !== 1 ? 's' : ''} this quarter.
+          </div>
+        )}
+
+        {/* Library picker */}
+        {templates.length > 0 && (
+          <div className="qp-library">
+            <button
+              className={`qp-library-toggle${showLibrary ? ' open' : ''}`}
+              onClick={() => { hapticLight(); setShowLibrary(!showLibrary) }}
+            >
+              <span>Your library</span>
+              <span className="qp-library-count">{templates.length}</span>
+              <span className="qp-chevron">{showLibrary ? '▴' : '▾'}</span>
+            </button>
+
+            {showLibrary && (
+              <div className="qp-library-list">
+                {templates.map(t => (
+                  <button key={t.id} className="qp-library-item" onClick={() => selectTemplate(t)}>
+                    <span className="qp-library-emoji">{TYPE_EMOJI[t.experience_type] || '✨'}</span>
+                    <div className="qp-library-info">
+                      <span className="qp-library-name">{t.name}</span>
+                      {t.times_delivered > 0 && (
+                        <span className="qp-library-meta">{t.times_delivered}&times; delivered</span>
+                      )}
+                    </div>
+                    <span className="qp-library-arrow">&rsaquo;</span>
+                  </button>
+                ))}
+              </div>
             )}
           </div>
+        )}
 
-          <div className="qp-list">
-            {plans.map(plan => (
-              <div key={plan.id} className={`qp-item${plan.completed ? ' done' : ''}`}>
-                <button className="qp-check" onClick={() => toggleComplete(plan.id)}>
-                  {plan.completed ? '✓' : '○'}
-                </button>
-                <div className="qp-item-info">
-                  <span className="qp-item-name">{plan.name}</span>
-                  {plan.date && <span className="qp-item-date">{new Date(plan.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>}
-                </div>
-                <button className="qp-remove" onClick={() => removePlan(plan.id)}>×</button>
-              </div>
-            ))}
-          </div>
+        <button className="qp-create-btn" onClick={createNew}>
+          + Create new experience
+        </button>
 
-          <button className="qp-add-btn qp-add-more" onClick={() => { hapticLight(); setShowAdd(true) }}>
-            + Add another
-          </button>
-
-          {isQuarterEnding && (
-            <div className="qp-review">
-              Quarter ending soon. Planned {plans.length}, ran {actualThisQuarter.length}.
-              {actualThisQuarter.length >= plans.length ? ' You delivered.' : ' Still time.'}
-            </div>
-          )}
-        </>
-      )}
-
-      {showAdd && (
-        <div className="qp-add-form">
-          <input
-            className="qp-input"
-            placeholder="Experience name"
-            value={newName}
-            onChange={e => setNewName(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && addPlan()}
-            autoFocus
-          />
-          <input
-            className="qp-input qp-input-date"
-            type="date"
-            value={newDate}
-            onChange={e => setNewDate(e.target.value)}
-          />
-          <div className="qp-add-actions">
-            <button className="qp-save-btn" onClick={addPlan} disabled={!newName.trim()}>Add</button>
-            <button className="qp-cancel-btn" onClick={() => setShowAdd(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
+        <button className="qp-later" onClick={dismiss}>
+          Not right now
+        </button>
+      </div>
     </div>
   )
 }

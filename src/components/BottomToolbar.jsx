@@ -70,12 +70,7 @@ const CREATE_NAV_ITEMS = [
     icon: '⚡',
     path: '/create/terminal'
   }] : []),
-  {
-    id: 'creator-profile',
-    label: 'Profile',
-    icon: '👤',
-    path: '/create/profile'
-  },
+  // Profile tab archived — needs creator-specific version, not consumer /profile-hub
   {
     id: 'get-app',
     label: 'Get App',

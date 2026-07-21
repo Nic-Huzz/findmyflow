@@ -452,6 +452,16 @@ When working on features, strategy, or content, read the relevant section of the
 - `docs/architecture/PUSH_NOTIFICATIONS.md` - Push notification setup
 - `docs/strategy/2026-01-29-priority-hierarchy.md` - Priority hierarchy and test milestones
 
+## Archived Features (Paused, Not Deleted)
+
+These components are built and working but temporarily removed from the UI. Code is intact, ready to re-enable.
+
+| Feature | Component | Location | Why archived | Resume notes |
+|---------|-----------|----------|-------------|-------------|
+| Play Profile Event Recs | `PlayProfileEventRec` | `src/components/CreatorHome/PlayProfileRecs.jsx` | Needs design alignment with portal brand before shipping | Shows DNA-matched event format + size + cadence rec on Experiences tab. Re-add to Experiences tab when card design is finalised. |
+| Play Profile Content Recs | `PlayProfileContentRec` | `src/components/CreatorHome/PlayProfileRecs.jsx` | Active on Growth tab, event rec archived separately | Currently live on Growth tab. |
+| Quarterly Planner | `QuarterlyPlanner` | `src/components/CreatorHome/QuarterlyPlanner.jsx` | Entry flow felt clunky, needs UX rethink | Was a one-time-per-quarter modal with experience library dropdown. Intent: nudge users to plan quarterly experiences. Revisit as a lighter prompt or integrate into Upcoming section header. |
+
 ## Links
 
 - **Vibe Rise (Consumer)**: https://viberise.nichuzz.com

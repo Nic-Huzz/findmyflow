@@ -55,8 +55,12 @@ const STAGES = [
   },
 ]
 
-export default function BlowUpBrandCard({ remarkableAngle, hasReach, hasGrowth, hasScaleScore, blowUpReadiness, navigate }) {
-  const [showResultsMore, setShowResultsMore] = useState(false)
+const BARRIER_LABELS = { price_score: 'Price', time_score: 'Time', friction_score: 'Friction', cognitive_score: 'Decisions', identity_score: 'Identity' }
+const VEHICLE_LABELS = { results: 'Results Vehicle', new_medium: 'New Medium', new_action: 'New Action' }
+
+export default function BlowUpBrandCard({ remarkableAngle, hasReach, hasGrowth, hasScaleScore, reachDetail, growthDetail, scaleDetail, blowUpReadiness, navigate, children }) {
+  const [expandedStage, setExpandedStage] = useState(null)
+  const toggleStage = (key) => setExpandedStage(prev => prev === key ? null : key)
 
   const doneFlags = [!!remarkableAngle, hasReach, hasGrowth, hasScaleScore]
   const currentIndex = doneFlags.indexOf(false) // -1 when all done
@@ -100,21 +104,32 @@ export default function BlowUpBrandCard({ remarkableAngle, hasReach, hasGrowth, 
         ))}
       </div>
 
-      {/* Rule break tagline */}
-      {remarkableAngle?.ai_rule_statement && (
-        <div className="ch2-tagline">{remarkableAngle.ai_rule_statement}</div>
-      )}
-
       {/* Done rows */}
       {STAGES.map((s, i) => {
         if (!doneFlags[i]) return null
         const isResults = s.key === 'results'
+        const isExpanded = expandedStage === s.key
         return (
           <div key={s.key}>
+            {/* Rule break row — shown above the Results done row */}
+            {isResults && remarkableAngle?.ai_rule_statement && (
+              <div
+                className="ch2-biz-row"
+                style={{ cursor: 'pointer' }}
+                onClick={() => toggleStage('results')}
+              >
+                <div className="ch2-biz-icon">⚡</div>
+                <div className="ch2-biz-info">
+                  <div className="ch2-biz-label">Your Rule Break</div>
+                  <div className="ch2-biz-val">{remarkableAngle.ai_rule_statement}</div>
+                </div>
+                <div className="ch2-row-chevron">{isExpanded ? '˅' : '›'}</div>
+              </div>
+            )}
             <div
               className="ch2-biz-row"
               style={{ cursor: 'pointer' }}
-              onClick={() => isResults ? setShowResultsMore(v => !v) : navigate(s.route)}
+              onClick={() => toggleStage(s.key)}
             >
               <div className="ch2-check done">✓</div>
               <div className="ch2-biz-info">
@@ -123,11 +138,11 @@ export default function BlowUpBrandCard({ remarkableAngle, hasReach, hasGrowth, 
                   {isResults ? (remarkableAngle.extreme_action_plan || s.doneVal) : s.doneVal}
                 </div>
               </div>
-              <div className="ch2-row-chevron">{isResults ? (showResultsMore ? '˅' : '›') : '›'}</div>
+              <div className="ch2-row-chevron">{isExpanded ? '˅' : '›'}</div>
             </div>
 
             {/* Expandable Results details + readiness */}
-            {isResults && showResultsMore && (
+            {isResults && isExpanded && (
               <div className="ch2-results-more">
                 {remarkableAngle.experience && (
                   <DetailRow icon="🎪" label="The Experience" val={remarkableAngle.experience} />
@@ -183,6 +198,80 @@ export default function BlowUpBrandCard({ remarkableAngle, hasReach, hasGrowth, 
                 )}
                 <button className="ch2-readiness-retake" onClick={() => navigate('/create/remarkable')}>
                   Open Remarkable Results →
+                </button>
+              </div>
+            )}
+
+            {/* Expandable Reach details */}
+            {s.key === 'reach' && isExpanded && reachDetail && (
+              <div className="ch2-results-more">
+                {reachDetail.vehicle_type && (
+                  <DetailRow icon="🚗" label="Vehicle" val={VEHICLE_LABELS[reachDetail.vehicle_type] || reachDetail.vehicle_type} />
+                )}
+                {reachDetail.vehicle_desc && (
+                  <DetailRow icon="📝" label="Vehicle Description" val={reachDetail.vehicle_desc} />
+                )}
+                {reachDetail.identity_label && (
+                  <DetailRow icon="🏷️" label="Your People Call Themselves" val={reachDetail.identity_label} />
+                )}
+                {reachDetail.tribal_language && (
+                  <DetailRow icon="🗣️" label="Tribal Language" val={reachDetail.tribal_language} />
+                )}
+                {reachDetail.cosign_targets?.length > 0 && (
+                  <DetailRow icon="🤝" label="Cosign Targets" val={Array.isArray(reachDetail.cosign_targets) ? reachDetail.cosign_targets.join(', ') : reachDetail.cosign_targets} />
+                )}
+                <button className="ch2-readiness-retake" onClick={() => navigate('/create/narrative-builder')}>
+                  Open Remarkable Reach →
+                </button>
+              </div>
+            )}
+
+            {/* Expandable Growth details */}
+            {s.key === 'growth' && isExpanded && growthDetail && (
+              <div className="ch2-results-more">
+                {['price_score', 'time_score', 'friction_score', 'cognitive_score', 'identity_score'].map(k => (
+                  growthDetail[k] != null && (
+                    <DetailRow key={k} icon={growthDetail[k] >= 4 ? '🟢' : growthDetail[k] >= 3 ? '🟡' : '🔴'} label={BARRIER_LABELS[k]} val={`${growthDetail[k]} / 5`} />
+                  )
+                ))}
+                {growthDetail.weakest_barrier && (
+                  <DetailRow icon="⚠️" label="Weakest Barrier" val={BARRIER_LABELS[growthDetail.weakest_barrier] || growthDetail.weakest_barrier} />
+                )}
+                {growthDetail.designed_first_step && (
+                  <DetailRow icon="🚪" label="Designed First Step" val={growthDetail.designed_first_step} />
+                )}
+                <button className="ch2-readiness-retake" onClick={() => navigate('/create/access-architecture')}>
+                  Open Remarkable Growth →
+                </button>
+              </div>
+            )}
+
+            {/* Expandable Scale Score details */}
+            {s.key === 'score' && isExpanded && scaleDetail && (
+              <div className="ch2-results-more">
+                {scaleDetail.total_score != null && (
+                  <DetailRow icon="📊" label="Total Score" val={`${scaleDetail.total_score} / 20`} />
+                )}
+                {scaleDetail.phase_classification && (
+                  <DetailRow icon="🎯" label="Phase" val={scaleDetail.phase_classification} />
+                )}
+                {scaleDetail.score_body != null && (
+                  <DetailRow icon={scaleDetail.score_body >= 4 ? '🟢' : '🟡'} label="Body Change" val={`${scaleDetail.score_body} / 5`} />
+                )}
+                {scaleDetail.score_culture != null && (
+                  <DetailRow icon={scaleDetail.score_culture >= 4 ? '🟢' : '🟡'} label="Culture (Word of Mouth)" val={`${scaleDetail.score_culture} / 5`} />
+                )}
+                {scaleDetail.score_identity != null && (
+                  <DetailRow icon={scaleDetail.score_identity >= 4 ? '🟢' : '🟡'} label="Identity Shift" val={`${scaleDetail.score_identity} / 5`} />
+                )}
+                {scaleDetail.score_access != null && (
+                  <DetailRow icon={scaleDetail.score_access >= 4 ? '🟢' : '🟡'} label="Access" val={`${scaleDetail.score_access} / 5`} />
+                )}
+                {scaleDetail.gate_passed != null && (
+                  <DetailRow icon={scaleDetail.gate_passed ? '✅' : '🚫'} label="Scale Gate" val={scaleDetail.gate_passed ? 'Passed' : 'Not yet'} />
+                )}
+                <button className="ch2-readiness-retake" onClick={() => navigate('/create/scale-diagnostic')}>
+                  Open Scale Score →
                 </button>
               </div>
             )}

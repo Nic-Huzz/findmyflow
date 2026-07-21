@@ -397,6 +397,14 @@ export default function CuriosityMapFlow() {
             ))}
           </div>
 
+          {/* Spotify hint when struggling to reach 10 */}
+          {items.length >= 3 && items.length < 10 && (
+            <div className="cmf-spotify-hint">
+              <span className="cmf-spotify-hint-icon">💡</span>
+              <span>Struggling to get to 10? Scroll through <a href="https://open.spotify.com/show/0XrOqvxlqQI6bmdYHuIVnr?si=071ec749a14e4933" target="_blank" rel="noopener noreferrer" className="cmf-spotify-link">Modern Wisdom podcast</a> and screenshot any episode topics that spark your interest, then upload it above.</span>
+            </div>
+          )}
+
           {/* Items list */}
           {items.length > 0 && (
             <div className="cmf-items">
