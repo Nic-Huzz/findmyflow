@@ -28,8 +28,10 @@ const BRANCH_META = {
   bonds: { label: 'Bonds', color: '#f472b6' },
   shelter: { label: 'Shelter', color: '#38bdf8' },
   story: { label: 'Story', color: '#fb923c' },
-  fire: { label: 'Fire', color: '#f59e0b' },
+  play: { label: 'Play', color: '#06b6d4' },
+  fire: { label: 'Energy', color: '#f59e0b' },
   healing: { label: 'Healing', color: '#a78bfa' },
+  sleep: { label: 'Sleep', color: '#6366f1' },
   threat: { label: 'Threat', color: '#ef4444' },
 }
 
@@ -109,9 +111,16 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
           if (data.positioning_statement) setStatement(data.positioning_statement)
           if (data.ai_monopoly_statement) setMonopolyStatement(data.ai_monopoly_statement)
         }
+        // Pre-fill from user data if fields are still empty
+        if (!data?.life_quake && problems?.length > 0) {
+          setLifeQuake(`People experiencing ${problems[0].toLowerCase()}`)
+        }
+        if (!data?.transformation && essenceName) {
+          setTransformation(`${essenceName} — safe, seen, and clear on what's next`)
+        }
         setPosLoaded(true)
       })
-  }, [userId])
+  }, [userId, problems, essenceName])
 
   // Auto-save with debounce
   const saveField = useCallback((field, value) => {
@@ -316,89 +325,88 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
 
   return (
     <div className={wrapperClass}>
-      {/* Header */}
-      <div className="cpc-header">
-        <span className="cpc-icon">🎯</span>
-        <div className="cpc-header-text">
-          <div className="cpc-title">Your Position</div>
-          {hasMerge && (
-            <div className="cpc-sub">{primaryLabel} x {secondaryLabel}</div>
-          )}
-        </div>
-        {confidence > 0 && (
-          <div className="cpc-confidence">{confidence}%</div>
-        )}
-      </div>
-
-      {/* Personal Monopoly — big highlight */}
-      {rarity && (
-        <div className="cpc-monopoly-block" onClick={() => setFrontierExpanded(!frontierExpanded)} style={{ cursor: 'pointer' }}>
-          <div className="cpc-rarity-number">
-            {rarity.matchCount === 0 ? `0 of ${rarity.totalProfiles}` : `${rarity.matchCount} of ${rarity.totalProfiles}`}
+      {/* ═══ TOPOGRAPHIC HERO — dark gradient header ═══ */}
+      {rarity ? (
+        <div className="cpc-topo-hero" onClick={() => setFrontierExpanded(!frontierExpanded)} style={{ cursor: 'pointer' }}>
+          <div className="cpc-topo-top">
+            <div>
+              <div className="cpc-topo-stat">
+                {rarity.matchCount === 0 ? '0' : rarity.matchCount} <small>of {rarity.totalProfiles}</small>
+              </div>
+              <div className="cpc-topo-sub">
+                {rarity.matchCount === 0 ? 'Nobody shares your combination' : 'share your combination'}
+              </div>
+            </div>
+            {confidence > 0 && <div className="cpc-topo-conf">{confidence}%</div>}
           </div>
-          <div className="cpc-rarity-desc">
-            {rarity.matchCount === 0 ? 'Nobody shares your combination' : 'share your combination'}
-          </div>
-          <div className="cpc-rarity-dims">
+          <div className="cpc-topo-dims">
             {rarity.topSkill?.replace(/_/g, ' ')}{rarity.topProblem ? ` + ${rarity.topProblem.replace(/_/g, ' ')}` : ''}{rarity.topPersona ? ` + ${rarity.topPersona}` : ''}
           </div>
           {rarity.topMatches?.length > 0 && (
-            <div className="cpc-rarity-matches">
+            <div className="cpc-topo-similar">
               {rarity.matchCount === 0 ? 'Closest' : 'Similar'}: {rarity.topMatches.map(m => m.name).join(', ')}
             </div>
           )}
-          {hasMerge && (
-            <div className="cpc-merge-inline">
-              Where {primaryLabel} meets {secondaryLabel}. That intersection is yours.
-            </div>
-          )}
-          {gap && (
-            <div className="cpc-gap-inline">{gap.insight}</div>
-          )}
+        </div>
+      ) : (
+        <div className="cpc-header">
+          <span className="cpc-icon">🎯</span>
+          <div className="cpc-header-text">
+            <div className="cpc-title">Your Position</div>
+          </div>
         </div>
       )}
 
-      {/* Expanded monopoly: nearby creators + generate */}
-      {frontierExpanded && (
-        <div className="ch2-results-more">
-          {nearbyCreators.length > 0 && (
-            <div className="ch2-biz-row">
-              <div className="ch2-biz-icon">📍</div>
-              <div className="ch2-biz-info">
-                <div className="ch2-biz-label">Nearby creators</div>
-                <div className="ch2-biz-val">
-                  {nearbyCreators.map(c => c.name).join(', ')} ({nearbyCreators.length} of {(dnaData.profiles || []).length})
+      {/* ═══ BODY — intersection, gap, expanded details ═══ */}
+      <div className="cpc-topo-body">
+        {hasMerge && (
+          <div className="cpc-topo-intersection">
+            Where {primaryLabel} meets {secondaryLabel}. That intersection is yours.
+          </div>
+        )}
+        {gap && (
+          <div className="cpc-topo-gap">{gap.insight}</div>
+        )}
+
+        {/* Expanded: nearby creators + generate */}
+        {frontierExpanded && (
+          <div className="cpc-topo-expanded">
+            {nearbyCreators.length > 0 && (
+              <div className="ch2-biz-row">
+                <div className="ch2-biz-icon">📍</div>
+                <div className="ch2-biz-info">
+                  <div className="ch2-biz-label">Nearby creators</div>
+                  <div className="ch2-biz-val">
+                    {nearbyCreators.map(c => c.name).join(', ')} ({nearbyCreators.length} of {(dnaData.profiles || []).length})
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {rarity?.topSkill && rarity?.topProblem && (
-            <button className="ch2-readiness-retake" onClick={(e) => { e.stopPropagation(); generateMonopoly() }} disabled={generatingMonopoly}>
-              {generatingMonopoly ? 'Writing...' : monopolyStatement ? 'Regenerate my position' : 'Generate my position'}
-            </button>
-          )}
-          {monopolyError && <div style={{ fontSize: '0.72rem', color: '#ef4444', marginTop: 4 }}>{monopolyError}</div>}
-          {monopolyStatement && (
-            <div className="ch2-biz-row">
-              <div className="ch2-biz-icon">✨</div>
-              <div className="ch2-biz-info">
-                <div className="ch2-biz-label">Your monopoly</div>
-                <div className="ch2-biz-val" style={{ fontWeight: 500 }}>{monopolyStatement}</div>
+            )}
+            {monopolyStatement && (
+              <div className="ch2-biz-row">
+                <div className="ch2-biz-icon">✨</div>
+                <div className="ch2-biz-info">
+                  <div className="ch2-biz-label">Your monopoly</div>
+                  <div className="ch2-biz-val" style={{ fontWeight: 500 }}>{monopolyStatement}</div>
+                </div>
               </div>
-            </div>
-          )}
-          {hasRemarkable && (
-            <button className="ch2-readiness-retake" onClick={() => { hapticLight(); navigate('/create/experience/new') }}>
-              Design an experience for this gap →
-            </button>
-          )}
-        </div>
-      )}
+            )}
+            {rarity?.topSkill && rarity?.topProblem && (
+              <button className="ch2-readiness-retake" onClick={(e) => { e.stopPropagation(); generateMonopoly() }} disabled={generatingMonopoly}>
+                {generatingMonopoly ? 'Writing...' : monopolyStatement ? 'Regenerate my position' : 'Generate my position'}
+              </button>
+            )}
+            {monopolyError && <div style={{ fontSize: '0.72rem', color: '#ef4444', marginTop: 4 }}>{monopolyError}</div>}
+            {hasRemarkable && (
+              <button className="ch2-readiness-retake" onClick={() => { hapticLight(); navigate('/create/experience/new') }}>
+                Design an experience for this gap →
+              </button>
+            )}
+          </div>
+        )}
 
-      {/* Branch chart — always visible, each row tappable for landscape */}
-      {visibleScores.length > 0 && (
-        <div className="cpc-branches-section">
-          <div className="cpc-branches-label">Your branches</div>
+        {/* ═══ BRANCHES — always visible, tappable for landscape ═══ */}
+        {visibleScores.length > 0 && (
           <div className="cpc-branches">
             {visibleScores.map(({ branch, score }) => {
               const meta = BRANCH_META[branch]
@@ -446,8 +454,8 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
               )
             })}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Positioning statement (post-Remarkable) */}
       {hasRemarkable && (
