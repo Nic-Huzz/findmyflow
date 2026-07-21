@@ -3418,6 +3418,36 @@
   flex-shrink: 0;
 }
 
+/* ── Courage Counter + Identity Statements ── */
+.playlist-tab .plt-counter-card {
+  background: white; border-radius: 16px; margin-bottom: 16px;
+  border: 1px solid #f2f3f5; overflow: hidden;
+}
+.playlist-tab .plt-counter-header {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 14px 16px; background: none; border: none;
+  cursor: pointer; font-family: inherit; text-align: left;
+}
+.playlist-tab .plt-counter-number {
+  font-size: 28px; font-weight: 800; color: #E9A23B;
+  min-width: 44px; text-align: center;
+}
+.playlist-tab .plt-counter-info { flex: 1; }
+.playlist-tab .plt-counter-title { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+.playlist-tab .plt-counter-top { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.playlist-tab .plt-counter-chevron { color: #adb5bd; font-size: 10px; }
+.playlist-tab .plt-identity-list { padding: 0 16px 12px; }
+.playlist-tab .plt-identity-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-top: 1px solid #f2f3f5;
+}
+.playlist-tab .plt-identity-text { font-size: 13px; color: #1a1a2e; flex: 1; }
+.playlist-tab .plt-identity-badge {
+  font-size: 12px; font-weight: 700; color: #E9A23B;
+  background: rgba(233,162,59,0.1); padding: 2px 8px;
+  border-radius: 10px; margin-left: 8px; flex-shrink: 0;
+}
+
 /* ── Active Challenges Section Card (mirrors PriorityTab design) ── */
 .playlist-tab .plt-section-card {
   background: white;

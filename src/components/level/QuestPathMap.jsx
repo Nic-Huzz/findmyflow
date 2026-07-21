@@ -93,6 +93,7 @@ export default function QuestPathMap({
   const [heroAvatarUrl, setHeroAvatarUrl] = useState(null)
   const [sheetTask, setSheetTask] = useState(null)
   const [sheetData, setSheetData] = useState(null)
+  const [wahooStates, setWahooStates] = useState({}) // groan_challenge_id → mapped state
   const lightMode = true
 
   const activeQuests = useMemo(() =>
@@ -121,6 +122,42 @@ export default function QuestPathMap({
         }
       })
   }, [allTaskIdKey])
+
+  // Load wahoo classifications for courage challenge dots (dynamic state lines)
+  const allChallengeIdKey = useMemo(() =>
+    activeQuests.flatMap(q => (questTasks[q.id] || [])
+      .filter(t => t.is_courage_challenge && t.groan_challenge_id)
+      .map(t => t.groan_challenge_id)
+    ).join(','),
+    [activeQuests, questTasks]
+  )
+  useEffect(() => {
+    const ids = allChallengeIdKey.split(',').filter(Boolean)
+    if (!ids.length) return
+    // Fetch quest_completions with reflection_text for all courage challenges
+    const questIds = ids.map(id => `play_list_challenge_${id}`)
+    supabase
+      .from('quest_completions')
+      .select('quest_id, reflection_text')
+      .in('quest_id', questIds)
+      .not('reflection_text', 'is', null)
+      .then(({ data }) => {
+        if (!data) return
+        const states = {}
+        data.forEach(row => {
+          // Extract groan_challenge_id from quest_id format
+          const gcId = row.quest_id.replace('play_list_challenge_', '')
+          try {
+            const rt = JSON.parse(row.reflection_text)
+            // Prefer wahoo_classification, fall back to after_state mapping
+            const mapped = rt.wahoo_classification
+              || ({ vibe_rise: 'vibe', ventral: 'peace', sympathetic: 'anxious', dorsal: 'shutdown' }[rt.after_state])
+            if (mapped) states[gcId] = mapped
+          } catch (e) { /* non-JSON reflection_text, skip */ }
+        })
+        setWahooStates(states)
+      })
+  }, [allChallengeIdKey])
 
   // Load cross-pollination signals
   useEffect(() => {
@@ -217,6 +254,7 @@ export default function QuestPathMap({
             quests={activeQuests}
             questTasks={questTasks}
             healingIntentions={healingIntentions}
+            wahooStates={wahooStates}
             trunkState={trunkS}
             light={lightMode}
             crossPollination={crossPollination}
@@ -305,7 +343,7 @@ export default function QuestPathMap({
 
 // ─── Overview SVG (vertical: Y=time, X=state) ────────────────────────────────
 
-function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, light, crossPollination, heroAvatarUrl, onDotTap }) {
+function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, trunkState, light, crossPollination, heroAvatarUrl, onDotTap }) {
   // Compute lane offsets: quests sharing a predicted_state get spread horizontally
   const laneOffsets = useMemo(() => {
     const groups = {}
@@ -439,50 +477,77 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, trunkState, l
           // Sort all positioned dots by Y (bottom to top) for the line path
           positioned.sort((a, b) => b.y - a.y)
 
-          // Build smooth path through all dots
-          const pathPoints = positioned.map(p => ({ x, y: p.y }))
+          // Build path through all dots — each dot gets its own X from wahoo classification
+          const pathPoints = positioned.map(p => {
+            const dotState = wahooStates?.[p.task.groan_challenge_id]
+            const dotX = dotState ? stateX(dotState) : x
+            return { x: dotX, y: p.y, state: dotState, task: p.task }
+          })
           const firstY = pathPoints.length > 0 ? pathPoints[0].y : OV_BOTTOM
-          const lastY = pathPoints.length > 0 ? pathPoints[pathPoints.length - 1].y : OV_TOP
+          const lastPoint = pathPoints.length > 0 ? pathPoints[pathPoints.length - 1] : { x, y: OV_TOP }
+          const lastY = lastPoint.y
+          const lastX = lastPoint.x
+
+          // Build SVG polyline path through 2D points
+          const hasDynamicX = pathPoints.some(p => p.x !== x)
+          const pathD = pathPoints.length > 1
+            ? `M ${pathPoints[0].x} ${pathPoints[0].y} ` + pathPoints.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
+            : null
 
           return (
             <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
-              {/* Flow line */}
-              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
-                stroke={colour} strokeWidth="2.5" strokeLinecap="round" opacity="0.4" />
-              <line x1={x} y1={firstY + 4} x2={x} y2={lastY - 4}
-                stroke={colour} strokeWidth="8" strokeLinecap="round" opacity="0.04" />
+              {/* Flow line — dynamic path if wahoo data exists, vertical line otherwise */}
+              {hasDynamicX && pathD ? (
+                <>
+                  <path d={pathD} fill="none"
+                    stroke={colour} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.4" />
+                  {/* Extend to bottom from first dot */}
+                  <line x1={pathPoints[0].x} y1={pathPoints[0].y} x2={x} y2={OV_BOTTOM}
+                    stroke={colour} strokeWidth="1.5" strokeLinecap="round" opacity="0.15" strokeDasharray="4 4" />
+                </>
+              ) : (
+                <>
+                  <line x1={x} y1={firstY + 4} x2={x} y2={OV_BOTTOM}
+                    stroke={colour} strokeWidth="2.5" strokeLinecap="round" opacity="0.4" />
+                  <line x1={x} y1={firstY + 4} x2={x} y2={OV_BOTTOM}
+                    stroke={colour} strokeWidth="8" strokeLinecap="round" opacity="0.04" />
+                </>
+              )}
 
-              {/* Courage dots along the line */}
-              {positioned.map(({ task, y }) => (
-                <g key={task.id}>
-                  <circle cx={x} cy={y} r="4.5"
-                    fill={task.done ? colour : 'none'}
-                    stroke={task.done ? 'none' : colour}
-                    strokeWidth={task.done ? 0 : 1}
-                    opacity={task.done ? 0.75 : 0.3} />
-                </g>
-              ))}
+              {/* Courage dots — positioned at their wahoo X */}
+              {pathPoints.map(({ task, x: dotX, y: dotY, state: dotState }) => {
+                const dotColour = dotState ? (SAFE_COLOURS[dotState] || colour) : colour
+                return (
+                  <g key={task.id}>
+                    <circle cx={dotX} cy={dotY} r="4.5"
+                      fill={task.done ? dotColour : 'none'}
+                      stroke={task.done ? 'none' : dotColour}
+                      strokeWidth={task.done ? 0 : 1}
+                      opacity={task.done ? 0.75 : 0.3} />
+                  </g>
+                )
+              })}
 
               {/* Current position — avatar on most advanced, dot on others */}
               {quest.id === mostAdvancedId && heroAvatarUrl ? (
                 <g>
-                  <circle cx={x} cy={lastY} r="12" fill={colour} opacity="0.15" />
-                  <circle cx={x} cy={lastY} r="10" fill="#f5f5f0" />
+                  <circle cx={lastX} cy={lastY} r="12" fill={colour} opacity="0.15" />
+                  <circle cx={lastX} cy={lastY} r="10" fill="#f5f5f0" />
                   <defs>
                     <clipPath id={`${uid}av-${quest.id}`}>
-                      <circle cx={x} cy={lastY} r="9" />
+                      <circle cx={lastX} cy={lastY} r="9" />
                     </clipPath>
                   </defs>
-                  <image href={heroAvatarUrl} x={x - 9} y={lastY - 9} width="18" height="18"
+                  <image href={heroAvatarUrl} x={lastX - 9} y={lastY - 9} width="18" height="18"
                     clipPath={`url(#${uid}av-${quest.id})`} preserveAspectRatio="xMidYMid slice" />
-                  <circle cx={x} cy={lastY} r="10" fill="none" stroke={colour} strokeWidth="1.5" opacity="0.6" />
-                  <circle cx={x} cy={lastY} r="13" fill="none" stroke={colour} strokeWidth="1" opacity="0.1">
+                  <circle cx={lastX} cy={lastY} r="10" fill="none" stroke={colour} strokeWidth="1.5" opacity="0.6" />
+                  <circle cx={lastX} cy={lastY} r="13" fill="none" stroke={colour} strokeWidth="1" opacity="0.1">
                     <animate attributeName="r" values="13;20;13" dur="2.5s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite" />
                   </circle>
                 </g>
               ) : (
-                <circle cx={x} cy={lastY} r="7"
+                <circle cx={lastX} cy={lastY} r="7"
                   fill={colour} opacity="0.9" stroke="white" strokeWidth="2" />
               )}
 

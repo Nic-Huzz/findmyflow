@@ -168,6 +168,7 @@ const ZoneDiagnosisFlow = lazyRetry(() => import('./flows/ZoneDiagnosisFlow'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const LifeMapFlow = lazyRetry(() => import('./flows/LifeMapFlow'))
+const MirrorPage = lazyRetry(() => import('./pages/MirrorPage'))
 const PlayListUpdateFlow = lazyRetry(() => import('./flows/PlayListUpdateFlow'))
 const EssenceMirrorFlow = lazyRetry(() => import('./flows/EssenceMirrorFlow'))
 const WoundMapFlow = lazyRetry(() => import('./flows/WoundMapFlow'))
@@ -807,6 +808,11 @@ function AppRouter() {
             <Route path="/life-map" element={
               <AuthGate>
                 <LifeMapFlow />
+              </AuthGate>
+            } />
+            <Route path="/mirror" element={
+              <AuthGate>
+                <MirrorPage />
               </AuthGate>
             } />
             <Route path="/playlist-update" element={

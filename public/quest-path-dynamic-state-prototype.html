@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Path Dynamic State Lines — Prototype</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: #f5f5f0;
+    color: #1a1a1a;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  h2 { font-size: 14px; font-weight: 700; margin: 28px 0 8px; color: #5e17eb; }
+  h3 { font-size: 12px; font-weight: 600; margin: 16px 0 6px; color: rgba(0,0,0,0.5); }
+  .subtitle { font-size: 12px; color: rgba(0,0,0,0.4); margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    color: rgba(0,0,0,0.4);
+  }
+  .verdict {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    border-left: 4px solid #5e17eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .verdict strong { color: #5e17eb; }
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 8px 0 16px;
+    font-size: 11px;
+    color: rgba(0,0,0,0.5);
+  }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .legend .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+  }
+  .data-table {
+    font-size: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 4px 6px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    color: rgba(0,0,0,0.4);
+    font-weight: 600;
+  }
+  .data-table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .state-pill {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .state-vibe { background: #c084fc20; color: #c084fc; }
+  .state-peace { background: #10b98120; color: #10b981; }
+  .state-anxious { background: #f59e0b20; color: #f59e0b; }
+  .state-shutdown { background: #ef444420; color: #ef4444; }
+  .hypothetical { opacity: 0.6; font-style: italic; }
+  .real { font-weight: 700; }
+  svg text { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; }
+</style>
+</head>
+<body>
+
+<h1>Quest Path Dynamic State Lines</h1>
+<p class="subtitle">Prototype using Breathwork + Dance Events. Hypothetical classifications marked in italics (to be backfilled).</p>
+
+<div class="legend">
+  <span><span class="dot" style="background:#ef4444"></span> Uninterested</span>
+  <span><span class="dot" style="background:#f59e0b"></span> Pressure</span>
+  <span><span class="dot" style="background:#10b981"></span> Fun</span>
+  <span><span class="dot" style="background:#c084fc"></span> Vibe Rise</span>
+</div>
+
+<!-- ─── BREATHWORK QUEST ─── -->
+<h2>Breathwork (predicted: Vibe Rise)</h2>
+<p class="subtitle">7 real challenges across L0-L3. Art (facilitating) vs admin (content, training) split.</p>
+
+<div class="grid">
+  <!-- Current (static) -->
+  <div class="card">
+    <div class="card-title">Current (Static)</div>
+    <svg viewBox="0 0 200 300" width="100%">
+      <rect width="200" height="300" fill="#f5f5f0" rx="8"/>
+      <!-- Column headers -->
+      <text x="25" y="16" fill="#ef4444" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">UNINT</text>
+      <text x="75" y="16" fill="#f59e0b" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">PRESS</text>
+      <text x="125" y="16" fill="#10b981" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">FUN</text>
+      <text x="175" y="16" fill="#c084fc" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">VIBE</text>
+      <!-- Column zones -->
+      <rect x="5" y="22" width="40" height="240" rx="4" fill="#ef4444" opacity="0.04"/>
+      <rect x="55" y="22" width="40" height="240" rx="4" fill="#f59e0b" opacity="0.04"/>
+      <rect x="105" y="22" width="40" height="240" rx="4" fill="#10b981" opacity="0.04"/>
+      <rect x="155" y="22" width="40" height="240" rx="4" fill="#c084fc" opacity="0.04"/>
+      <!-- Depth labels -->
+      <text x="3" y="47" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L4</text>
+      <text x="3" y="99" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L3</text>
+      <text x="3" y="151" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L2</text>
+      <text x="3" y="203" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L1</text>
+      <text x="3" y="255" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L0</text>
+      <!-- Depth lines -->
+      <line x1="15" y1="44" x2="195" y2="44" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="96" x2="195" y2="96" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="148" x2="195" y2="148" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="200" x2="195" y2="200" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="252" x2="195" y2="252" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <!-- Static vertical line at vibe column -->
+      <line x1="175" y1="96" x2="175" y2="252" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+      <!-- All dots at same X (vibe column) -->
+      <!-- L0: Training -->
+      <circle cx="175" cy="252" r="4" fill="#c084fc" opacity="0.7"/>
+      <!-- L1: Daily Videos -->
+      <circle cx="175" cy="200" r="4" fill="#c084fc" opacity="0.7"/>
+      <!-- L2: Water Rebirthing, Strangers, 30-min CCB -->
+      <circle cx="175" cy="158" r="4" fill="#c084fc" opacity="0.7"/>
+      <circle cx="175" cy="148" r="4" fill="#c084fc" opacity="0.7"/>
+      <circle cx="175" cy="138" r="4" fill="#c084fc" opacity="0.7"/>
+      <!-- L3: Host at Bwork, Krislin -->
+      <circle cx="175" cy="100" r="4" fill="#c084fc" opacity="0.7"/>
+      <circle cx="175" cy="90" r="4" fill="#c084fc" opacity="0.7"/>
+      <!-- Current position -->
+      <circle cx="175" cy="90" r="7" fill="#c084fc" opacity="0.9" stroke="white" stroke-width="2"/>
+      <!-- Label -->
+      <text x="175" y="272" fill="#c084fc" opacity="0.5" font-size="9" font-weight="700" text-anchor="middle">Breathwork</text>
+      <text x="100" y="292" fill="rgba(0,0,0,0.2)" font-size="8" text-anchor="middle">All stuck in vibe column</text>
+    </svg>
+  </div>
+
+  <!-- Option A: Every dot at its classification -->
+  <div class="card">
+    <div class="card-title">Option A: Every Dot</div>
+    <svg viewBox="0 0 200 300" width="100%">
+      <rect width="200" height="300" fill="#f5f5f0" rx="8"/>
+      <!-- Column headers -->
+      <text x="25" y="16" fill="#ef4444" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">UNINT</text>
+      <text x="75" y="16" fill="#f59e0b" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">PRESS</text>
+      <text x="125" y="16" fill="#10b981" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">FUN</text>
+      <text x="175" y="16" fill="#c084fc" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">VIBE</text>
+      <!-- Column zones -->
+      <rect x="5" y="22" width="40" height="240" rx="4" fill="#ef4444" opacity="0.04"/>
+      <rect x="55" y="22" width="40" height="240" rx="4" fill="#f59e0b" opacity="0.04"/>
+      <rect x="105" y="22" width="40" height="240" rx="4" fill="#10b981" opacity="0.04"/>
+      <rect x="155" y="22" width="40" height="240" rx="4" fill="#c084fc" opacity="0.04"/>
+      <!-- Depth labels -->
+      <text x="3" y="47" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L4</text>
+      <text x="3" y="99" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L3</text>
+      <text x="3" y="151" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L2</text>
+      <text x="3" y="203" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L1</text>
+      <text x="3" y="255" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L0</text>
+      <!-- Depth lines -->
+      <line x1="15" y1="44" x2="195" y2="44" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="96" x2="195" y2="96" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="148" x2="195" y2="148" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="200" x2="195" y2="200" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="252" x2="195" y2="252" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+
+      <!--
+        Breathwork journey (chronological):
+        1. Training (L0) → peace (learning phase, safe not thrilling)
+        2. Daily Videos (L1) → peace (content admin)
+        3. Water Rebirthing (L2) → vibe (intense, personal edge)
+        4. Strangers (L2) → vibe (scary + live facilitation)
+        5. 30-min CCB While Shaking (L2) → vibe (deep practice, edge)
+        6. Host at Bwork (L3) → vibe (paid audience)
+        7. Krislin (L3) → vibe (authority, retreat)
+      -->
+
+      <!-- Path connecting chronologically -->
+      <path d="M 125 252 L 125 200 L 175 158 L 175 148 L 175 138 L 175 100 L 175 90"
+        fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+      <!-- Ghost predicted line -->
+      <line x1="175" y1="90" x2="175" y2="252" stroke="#c084fc" stroke-width="1" stroke-dasharray="3 3" opacity="0.08"/>
+
+      <!-- Dots at their state positions -->
+      <circle cx="125" cy="252" r="4" fill="#10b981" opacity="0.7"/>  <!-- L0: Training → peace -->
+      <circle cx="125" cy="200" r="4" fill="#10b981" opacity="0.7"/>  <!-- L1: Videos → peace -->
+      <circle cx="175" cy="158" r="4" fill="#c084fc" opacity="0.7"/>  <!-- L2: Water → vibe -->
+      <circle cx="175" cy="148" r="4" fill="#c084fc" opacity="0.7"/>  <!-- L2: Strangers → vibe -->
+      <circle cx="175" cy="138" r="4" fill="#c084fc" opacity="0.7"/>  <!-- L2: 30-min → vibe -->
+      <circle cx="175" cy="100" r="4" fill="#c084fc" opacity="0.7"/>  <!-- L3: Bwork → vibe -->
+      <circle cx="175" cy="90" r="4" fill="#c084fc" opacity="0.7"/>   <!-- L3: Krislin → vibe -->
+
+      <!-- Labels for the peace dots -->
+      <text x="118" y="245" fill="#10b981" font-size="6" font-weight="600" text-anchor="end" opacity="0.7">Training</text>
+      <text x="118" y="194" fill="#10b981" font-size="6" font-weight="600" text-anchor="end" opacity="0.7">Videos</text>
+      <!-- Labels for key vibe dots -->
+      <text x="182" y="145" fill="#c084fc" font-size="6" font-weight="600" text-anchor="start" opacity="0.5">Strangers</text>
+      <text x="182" y="97" fill="#c084fc" font-size="6" font-weight="600" text-anchor="start" opacity="0.5">Bwork</text>
+
+      <!-- Current position -->
+      <circle cx="175" cy="90" r="7" fill="#c084fc" opacity="0.9" stroke="white" stroke-width="2"/>
+
+      <text x="100" y="278" fill="rgba(0,0,0,0.3)" font-size="7" text-anchor="middle">Starts in Fun (learning), moves to</text>
+      <text x="100" y="289" fill="rgba(0,0,0,0.3)" font-size="7" text-anchor="middle">Vibe Rise once facilitating for others</text>
+    </svg>
+  </div>
+
+  <!-- Option B: Rolling average -->
+  <div class="card">
+    <div class="card-title">Option B: Rolling Avg (3)</div>
+    <svg viewBox="0 0 200 300" width="100%">
+      <rect width="200" height="300" fill="#f5f5f0" rx="8"/>
+      <!-- Column headers -->
+      <text x="25" y="16" fill="#ef4444" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">UNINT</text>
+      <text x="75" y="16" fill="#f59e0b" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">PRESS</text>
+      <text x="125" y="16" fill="#10b981" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">FUN</text>
+      <text x="175" y="16" fill="#c084fc" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">VIBE</text>
+      <!-- Column zones -->
+      <rect x="5" y="22" width="40" height="240" rx="4" fill="#ef4444" opacity="0.04"/>
+      <rect x="55" y="22" width="40" height="240" rx="4" fill="#f59e0b" opacity="0.04"/>
+      <rect x="105" y="22" width="40" height="240" rx="4" fill="#10b981" opacity="0.04"/>
+      <rect x="155" y="22" width="40" height="240" rx="4" fill="#c084fc" opacity="0.04"/>
+      <!-- Depth labels + lines -->
+      <text x="3" y="47" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L4</text>
+      <text x="3" y="99" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L3</text>
+      <text x="3" y="151" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L2</text>
+      <text x="3" y="203" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L1</text>
+      <text x="3" y="255" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L0</text>
+      <line x1="15" y1="44" x2="195" y2="44" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="96" x2="195" y2="96" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="148" x2="195" y2="148" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="200" x2="195" y2="200" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="15" y1="252" x2="195" y2="252" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+
+      <!--
+        Rolling avg (window=3), states: peace(3), peace(3), vibe(4), vibe(4), vibe(4), vibe(4), vibe(4)
+        1: [peace] → 3.0 → X=125
+        2: [peace, peace] → 3.0 → X=125
+        3: [peace, peace, vibe] → 3.33 → X=142
+        4: [peace, vibe, vibe] → 3.67 → X=158
+        5: [vibe, vibe, vibe] → 4.0 → X=175
+        6: [vibe, vibe, vibe] → 4.0 → X=175
+        7: [vibe, vibe, vibe] → 4.0 → X=175
+      -->
+      <path d="M 125 252 L 125 200 L 142 158 L 158 148 L 175 138 L 175 100 L 175 90"
+        fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+
+      <!-- Ghost dots at actual positions -->
+      <circle cx="125" cy="252" r="3" fill="#10b981" opacity="0.3"/>
+      <circle cx="125" cy="200" r="3" fill="#10b981" opacity="0.3"/>
+      <circle cx="175" cy="158" r="3" fill="#c084fc" opacity="0.3"/>
+      <circle cx="175" cy="148" r="3" fill="#c084fc" opacity="0.3"/>
+      <circle cx="175" cy="138" r="3" fill="#c084fc" opacity="0.3"/>
+      <circle cx="175" cy="100" r="3" fill="#c084fc" opacity="0.3"/>
+      <circle cx="175" cy="90" r="3" fill="#c084fc" opacity="0.3"/>
+
+      <!-- Current position -->
+      <circle cx="175" cy="90" r="7" fill="#c084fc" opacity="0.9" stroke="white" stroke-width="2"/>
+
+      <text x="100" y="278" fill="rgba(0,0,0,0.3)" font-size="7" text-anchor="middle">Smooth drift from Fun → Vibe Rise</text>
+      <text x="100" y="289" fill="rgba(0,0,0,0.3)" font-size="7" text-anchor="middle">Similar to A because it's a clean progression</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ─── DANCE / VIBE RISE — 20 DATA POINTS ─── -->
+<h2>Dance / Vibe Rise (20 challenges, all 4 depth levels)</h2>
+<p class="subtitle">Real + hypothetical states from Vibe Rise quest. 14 vibe, 4 peace, 2 anxious. Rolling avg window=5.</p>
+
+<div class="grid-2">
+  <!-- Option A: Every dot (20 points) -->
+  <div class="card">
+    <div class="card-title">Option A: Every Dot (20 pts)</div>
+    <svg viewBox="0 0 220 340" width="100%">
+      <rect width="220" height="340" fill="#f5f5f0" rx="8"/>
+      <text x="30" y="16" fill="#ef4444" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">UNINT</text>
+      <text x="80" y="16" fill="#f59e0b" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">PRESS</text>
+      <text x="130" y="16" fill="#10b981" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">FUN</text>
+      <text x="185" y="16" fill="#c084fc" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">VIBE</text>
+      <rect x="10" y="22" width="40" height="282" rx="4" fill="#ef4444" opacity="0.04"/>
+      <rect x="60" y="22" width="40" height="282" rx="4" fill="#f59e0b" opacity="0.04"/>
+      <rect x="110" y="22" width="40" height="282" rx="4" fill="#10b981" opacity="0.04"/>
+      <rect x="165" y="22" width="40" height="282" rx="4" fill="#c084fc" opacity="0.04"/>
+      <!-- Depth labels -->
+      <text x="5" y="48" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L4</text>
+      <text x="5" y="107" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L3</text>
+      <text x="5" y="170" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L2</text>
+      <text x="5" y="240" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L1</text>
+      <text x="5" y="302" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L0</text>
+      <line x1="18" y1="45" x2="210" y2="45" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="104" x2="210" y2="104" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="167" x2="210" y2="167" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="237" x2="210" y2="237" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="300" x2="210" y2="300" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+
+      <!--
+        20 dots sorted by Y (depth band), chronological within each band.
+        X: unint=30, anxious=80, peace=130, vibe=185
+
+        L1 band (Y 280→248, 8 dots, ~4.6px spacing):
+         1. Koh Phangan → vibe       (185, 280)
+         2. Guerilla Mktg → anxious   (80, 275)
+         3. Film w/ Randoms → vibe    (185, 270)
+         4. Pop-up Indo → vibe        (185, 265)
+         5. Bondi → vibe              (185, 260)
+         6. Seminyak → vibe           (185, 255)
+         7. Shared Sprouter → peace   (130, 250)
+         8. Trial reel → peace        (130, 245)
+
+        L2 band (Y 200→180, 5 dots, 5px spacing):
+         9. Opera House → vibe        (185, 200)
+        10. Sales Calls → anxious      (80, 195)
+        11. 100 Reach Outs → anxious   (80, 190)
+        12. KL Airport → vibe         (185, 185)
+        13. Building Nikigai → peace   (130, 180)
+
+        L3 band (Y 135→119, 5 dots, 4px spacing):
+        14. First Paid → vibe          (185, 135)
+        15. Share Socials → peace      (130, 131)
+        16. Host VR Fest → vibe        (185, 127)
+        17. Retreat Disco → vibe       (185, 123)
+        18. 100 Headsets → vibe        (185, 119)
+
+        L4 band (Y 65→55, 2 dots):
+        19. Community Masterclass → vibe (185, 65)
+        20. Published app → vibe        (185, 55)
+      -->
+
+      <!-- Ghost predicted line -->
+      <line x1="185" y1="55" x2="185" y2="300" stroke="#c084fc" stroke-width="1" stroke-dasharray="3 3" opacity="0.08"/>
+
+      <!-- Dynamic path — upward, zigzag within bands -->
+      <path d="M 185 280 L 80 275 L 185 270 L 185 265 L 185 260 L 185 255 L 130 250 L 130 245 L 185 200 L 80 195 L 80 190 L 185 185 L 130 180 L 185 135 L 130 131 L 185 127 L 185 123 L 185 119 L 185 65 L 185 55"
+        fill="none" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+
+      <!-- L1 dots -->
+      <circle cx="185" cy="280" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="80" cy="275" r="3.5" fill="#f59e0b" opacity="0.8"/>
+      <circle cx="185" cy="270" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="185" cy="265" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="185" cy="260" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="185" cy="255" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="130" cy="250" r="3.5" fill="#10b981" opacity="0.7"/>
+      <circle cx="130" cy="245" r="3.5" fill="#10b981" opacity="0.7"/>
+
+      <!-- L2 dots -->
+      <circle cx="185" cy="200" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="80" cy="195" r="3.5" fill="#f59e0b" opacity="0.8"/>
+      <circle cx="80" cy="190" r="3.5" fill="#f59e0b" opacity="0.8"/>
+      <circle cx="185" cy="185" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="130" cy="180" r="3.5" fill="#10b981" opacity="0.7"/>
+
+      <!-- L3 dots -->
+      <circle cx="185" cy="135" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="130" cy="131" r="3.5" fill="#10b981" opacity="0.7"/>
+      <circle cx="185" cy="127" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="185" cy="123" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="185" cy="119" r="3.5" fill="#c084fc" opacity="0.7"/>
+
+      <!-- L4 dots -->
+      <circle cx="185" cy="65" r="3.5" fill="#c084fc" opacity="0.7"/>
+      <circle cx="185" cy="55" r="3.5" fill="#c084fc" opacity="0.7"/>
+
+      <!-- Current position -->
+      <circle cx="185" cy="55" r="6" fill="#c084fc" opacity="0.9" stroke="white" stroke-width="2"/>
+
+      <!-- Labels for outliers -->
+      <text x="74" y="269" fill="#f59e0b" font-size="5.5" font-weight="700" text-anchor="end" opacity="0.7">Guerilla</text>
+      <text x="124" y="244" fill="#10b981" font-size="5.5" font-weight="600" text-anchor="end" opacity="0.6">Trial reel</text>
+      <text x="74" y="189" fill="#f59e0b" font-size="5.5" font-weight="700" text-anchor="end" opacity="0.7">Sales calls</text>
+      <text x="74" y="196" fill="#f59e0b" font-size="5.5" font-weight="700" text-anchor="end" opacity="0.7">100 reachouts</text>
+      <text x="124" y="175" fill="#10b981" font-size="5.5" font-weight="600" text-anchor="end" opacity="0.6">Building app</text>
+
+      <text x="110" y="322" fill="rgba(0,0,0,0.25)" font-size="7" text-anchor="middle">Chaotic at 20 dots. Hard to read the trend.</text>
+    </svg>
+  </div>
+
+  <!-- Option B: Rolling average (window=5, 20 points) -->
+  <div class="card">
+    <div class="card-title">Option B: Rolling Avg (window=5, 20 pts)</div>
+    <svg viewBox="0 0 220 340" width="100%">
+      <rect width="220" height="340" fill="#f5f5f0" rx="8"/>
+      <text x="30" y="16" fill="#ef4444" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">UNINT</text>
+      <text x="80" y="16" fill="#f59e0b" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">PRESS</text>
+      <text x="130" y="16" fill="#10b981" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">FUN</text>
+      <text x="185" y="16" fill="#c084fc" opacity="0.5" font-size="7" font-weight="700" text-anchor="middle">VIBE</text>
+      <rect x="10" y="22" width="40" height="282" rx="4" fill="#ef4444" opacity="0.04"/>
+      <rect x="60" y="22" width="40" height="282" rx="4" fill="#f59e0b" opacity="0.04"/>
+      <rect x="110" y="22" width="40" height="282" rx="4" fill="#10b981" opacity="0.04"/>
+      <rect x="165" y="22" width="40" height="282" rx="4" fill="#c084fc" opacity="0.04"/>
+      <text x="5" y="48" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L4</text>
+      <text x="5" y="107" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L3</text>
+      <text x="5" y="170" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L2</text>
+      <text x="5" y="240" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L1</text>
+      <text x="5" y="302" fill="rgba(0,0,0,0.15)" font-size="7" font-weight="600">L0</text>
+      <line x1="18" y1="45" x2="210" y2="45" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="104" x2="210" y2="104" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="167" x2="210" y2="167" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="237" x2="210" y2="237" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+      <line x1="18" y1="300" x2="210" y2="300" stroke="rgba(0,0,0,0.04)" stroke-dasharray="3 3"/>
+
+      <!--
+        Rolling avg (window=5), mapped: vibe=4→185, peace=3→130, anxious=2→80
+
+        States in Y order: 4,2,4,4,4,4,3,3, 4,2,2,4,3, 4,3,4,4,4, 4,4
+
+        Rolling averages:
+         1: [4]             → 4.0  → 185
+         2: [4,2]           → 3.0  → 130
+         3: [4,2,4]         → 3.33 → 143
+         4: [4,2,4,4]       → 3.5  → 152
+         5: [4,2,4,4,4]     → 3.6  → 156
+         6: [2,4,4,4,4]     → 3.6  → 156
+         7: [4,4,4,4,3]     → 3.8  → 166
+         8: [4,4,4,3,3]     → 3.6  → 156
+         9: [4,4,3,3,4]     → 3.6  → 156
+        10: [4,3,3,4,2]     → 3.2  → 140
+        11: [3,3,4,2,2]     → 2.8  → 119
+        12: [3,4,2,2,4]     → 3.0  → 130
+        13: [4,2,2,4,3]     → 3.0  → 130
+        14: [2,2,4,3,4]     → 3.0  → 130
+        15: [2,4,3,4,3]     → 3.2  → 140
+        16: [4,3,4,3,4]     → 3.6  → 156
+        17: [3,4,3,4,4]     → 3.6  → 156
+        18: [4,3,4,4,4]     → 3.8  → 166
+        19: [3,4,4,4,4]     → 3.8  → 166
+        20: [4,4,4,4,4]     → 4.0  → 185
+      -->
+
+      <!-- Ghost predicted line -->
+      <line x1="185" y1="55" x2="185" y2="300" stroke="#c084fc" stroke-width="1" stroke-dasharray="3 3" opacity="0.08"/>
+
+      <!-- Rolling average smooth line -->
+      <path d="M 185 280 L 130 275 L 143 270 L 152 265 L 156 260 L 156 255 L 166 250 L 156 245 L 156 200 L 140 195 L 119 190 L 130 185 L 130 180 L 130 135 L 140 131 L 156 127 L 156 123 L 166 119 L 166 65 L 185 55"
+        fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+
+      <!-- Ghost dots at actual positions (small, faded) -->
+      <circle cx="185" cy="280" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="80" cy="275" r="2.5" fill="#f59e0b" opacity="0.2"/>
+      <circle cx="185" cy="270" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="265" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="260" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="255" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="130" cy="250" r="2.5" fill="#10b981" opacity="0.2"/>
+      <circle cx="130" cy="245" r="2.5" fill="#10b981" opacity="0.2"/>
+      <circle cx="185" cy="200" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="80" cy="195" r="2.5" fill="#f59e0b" opacity="0.2"/>
+      <circle cx="80" cy="190" r="2.5" fill="#f59e0b" opacity="0.2"/>
+      <circle cx="185" cy="185" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="130" cy="180" r="2.5" fill="#10b981" opacity="0.2"/>
+      <circle cx="185" cy="135" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="130" cy="131" r="2.5" fill="#10b981" opacity="0.2"/>
+      <circle cx="185" cy="127" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="123" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="119" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="65" r="2.5" fill="#c084fc" opacity="0.2"/>
+      <circle cx="185" cy="55" r="2.5" fill="#c084fc" opacity="0.2"/>
+
+      <!-- Current position -->
+      <circle cx="185" cy="55" r="6" fill="#c084fc" opacity="0.9" stroke="white" stroke-width="2"/>
+
+      <!-- Annotations for the story -->
+      <text x="150" y="260" fill="rgba(0,0,0,0.2)" font-size="5.5" text-anchor="start">← starts strong</text>
+      <text x="113" y="192" fill="rgba(0,0,0,0.3)" font-size="5.5" text-anchor="end" font-weight="600">admin dip →</text>
+      <text x="160" y="118" fill="rgba(0,0,0,0.2)" font-size="5.5" text-anchor="start">← recovers</text>
+      <text x="180" y="52" fill="rgba(0,0,0,0.2)" font-size="5.5" text-anchor="end">fully vibe →</text>
+
+      <text x="110" y="318" fill="rgba(0,0,0,0.3)" font-size="7" text-anchor="middle" font-weight="600">Clear story: strong start, L2 admin dip,</text>
+      <text x="110" y="330" fill="rgba(0,0,0,0.3)" font-size="7" text-anchor="middle" font-weight="600">full recovery by L3-L4</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ─── THE VERDICT ─── -->
+<h2>The Verdict</h2>
+
+<div class="verdict">
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+    <strong>Option A wins for Dance Events.</strong> The zigzag from Guerilla Marketing (Pressure) is the exact signal: "this task type doesn't suit your nervous system." It's a single dot clearly in the wrong column. Option B smooths it into a vague leftward drift.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+    <strong>Breathwork is less dramatic</strong> because it's mostly a clean progression (learning → facilitating). But the two "peace" dots at the start still tell a useful story: you weren't in Vibe Rise when you were just training. The shift happened when you started facilitating for others.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+    <strong>The insight for both:</strong> When the line enters a quest's "predicted" column and STAYS there, that's Zone of Genius confirmation. When it keeps dipping into Pressure or Fun, those tasks might need delegating or restructuring.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5;">
+    <strong>Recommendation: Option A.</strong> Show every dot. The zigzag IS the diagnostic. For quests with 20+ challenges where it gets noisy, we could add a "trend mode" toggle later.
+  </p>
+</div>
+
+<!-- ─── DATA TABLES ─── -->
+<h2>Challenge Data (hypothetical states to backfill)</h2>
+
+<h3>Breathwork (7 challenges, all completed)</h3>
+<table class="data-table">
+  <tr><th>Challenge</th><th>Depth</th><th>Hypothetical State</th><th>Rationale</th></tr>
+  <tr><td>Breathwork Training</td><td>L0</td><td><span class="state-pill state-peace">peace</span></td><td>Learning, safe, not edge-pushing</td></tr>
+  <tr><td>Daily Breathwork Videos</td><td>L1</td><td><span class="state-pill state-peace">peace</span></td><td>Content creation, admin work</td></tr>
+  <tr><td>Water Rebirthing Release</td><td>L2</td><td><span class="state-pill state-vibe">vibe</span></td><td>Intense personal practice, edgy</td></tr>
+  <tr><td>First Breathwork for Strangers</td><td>L2</td><td><span class="state-pill state-vibe">vibe</span></td><td>Scary + live facilitation = Vibe Rise</td></tr>
+  <tr><td>30-min CCB While Shaking</td><td>L2</td><td><span class="state-pill state-vibe">vibe</span></td><td>Deep edge practice</td></tr>
+  <tr><td>Host at Bwork</td><td>L3</td><td><span class="state-pill state-vibe">vibe</span></td><td>Performing for paid audience</td></tr>
+  <tr><td>Delivered for Krislin</td><td>L3</td><td><span class="state-pill state-vibe">vibe</span></td><td>Authority-level retreat facilitation</td></tr>
+</table>
+
+<h3>Dance Event Hosts (9 challenges from Vibe Rise quest, dance-sourced)</h3>
+<table class="data-table">
+  <tr><th>Challenge</th><th>Depth</th><th>State</th><th>Source</th></tr>
+  <tr><td>Silent Disco Koh Phangan</td><td>L1</td><td><span class="state-pill state-vibe">vibe</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>Guerilla Marketing</td><td>L1</td><td><span class="state-pill state-anxious">anxious</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>Film Dance Videos w/ Randoms</td><td>L1</td><td><span class="state-pill state-vibe">vibe</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>Pop-up with Local Indonesians</td><td>L1</td><td><span class="state-pill state-vibe">vibe</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>Silent Disco at Bondi</td><td>L1</td><td><span class="state-pill state-vibe">vibe</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>First Paid Silent Disco</td><td>L3</td><td><span class="state-pill state-vibe">vibe</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>Share Paid Workshop on Socials</td><td>L3</td><td><span class="state-pill state-peace">peace</span></td><td class="hypothetical">hypothetical</td></tr>
+  <tr><td>Experiment with trial reel</td><td>L1</td><td><span class="state-pill state-peace">peace</span></td><td class="real">REAL DATA</td></tr>
+  <tr><td>Buy 100 headsets for Europe</td><td>L3</td><td><span class="state-pill state-vibe">vibe</span></td><td class="real">REAL DATA</td></tr>
+</table>
+
+<div class="verdict" style="margin-top: 24px; border-left-color: #10b981;">
+  <p style="font-size: 13px; line-height: 1.5; margin-bottom: 8px;">
+    <strong>Next step:</strong> Backfill wahoo_classification on these challenges in the DB. Once the data is populated, the code change (already started in QuestPathMap.jsx) will render these dynamic lines in the real app.
+  </p>
+  <p style="font-size: 13px; line-height: 1.5;">
+    The L0 fix (lines always extend to bottom) is already applied in the current code at line 450.
+  </p>
+</div>
+
+</body>
+</html>

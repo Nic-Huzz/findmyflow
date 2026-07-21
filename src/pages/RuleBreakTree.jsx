@@ -6,7 +6,7 @@ import './RuleBreakTree.css'
 
 const PRIMAL_R = 70
 const BRIDGE_R = 120
-const MIN_YEAR = 1400
+const MIN_YEAR = 1100
 const MAX_YEAR = 2025
 const DECADE_YEARS = [1500, 1800, 1880, 1920, 1960, 2000]
 const STAR_COUNT = 120

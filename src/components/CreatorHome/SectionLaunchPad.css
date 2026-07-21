@@ -1,0 +1,87 @@
+/* SectionLaunchPad — contextual guidance per tab */
+
+.slp-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.slp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.slp-title {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #5e17eb;
+  text-transform: uppercase;
+}
+
+.slp-progress {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #999;
+}
+
+.slp-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.slp-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.slp-item:hover {
+  background: rgba(94, 23, 235, 0.04);
+}
+
+.slp-item-done {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.slp-item-done:hover {
+  background: transparent;
+}
+
+.slp-check {
+  font-size: 0.85rem;
+  font-weight: 800;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.slp-item:not(.slp-item-done) .slp-check {
+  color: #E9A23B;
+}
+
+.slp-item-done .slp-check {
+  color: #10b981;
+}
+
+.slp-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.slp-item-done .slp-label {
+  text-decoration: line-through;
+  color: #999;
+}

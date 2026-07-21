@@ -916,6 +916,23 @@ export function buildZarloPrompt(userContext, skills, recentActions, pageContext
     actionsSection = `\nLAST ${recentActions.length} ACTIONS:\n${lines.join('\n')}`
   }
 
+  // Interior scoreboard context (from Zarlo brief)
+  let scoreboardSection = ''
+  const scoreboard = userContext?.zarloBrief?.scoreboard
+  if (scoreboard?.clarityPct != null) {
+    scoreboardSection += `\nCLARITY SCORE: ${scoreboard.clarityPct}%`
+    if (scoreboard.clarityPct < 60) scoreboardSection += ` (LOW)`
+  }
+  if (scoreboard?.topIdentity) {
+    scoreboardSection += `\nTOP IDENTITY: "I am someone who ${scoreboard.topIdentity.text}" (reinforced ${scoreboard.topIdentity.count} times)`
+  }
+  if (scoreboard?.zoneOfExcellenceQuests?.length > 0) {
+    scoreboardSection += `\nZONE OF EXCELLENCE WARNING: ${scoreboard.zoneOfExcellenceQuests.join(', ')}`
+  }
+  if (scoreboard?.actionScore != null) {
+    scoreboardSection += `\nACTION SCORE: ${scoreboard.actionScore}% (7-day alignment)`
+  }
+
   // Essence archetype
   const essenceName = userContext?.essenceName || ''
   const essenceNote = essenceName
@@ -949,6 +966,13 @@ TONE RULES:
 - No clinical language ("cognitive pattern", "regulation", "polyvagal").
 - If you have nothing data-specific to say, keep it to one sentence.
 ${essenceNote}
+
+INTERIOR SCOREBOARD RULES:
+- If Clarity is low, gently suggest "Have you tried the curiosity map?" or "Your Life Map might need updating"
+- If an identity statement has been reinforced 5+ times, acknowledge it naturally
+- If zone of excellence warning exists, name it: "You're good at [quest] but your body keeps telling you it's not the thing"
+- Never lecture about scores. Mention them like a friend who noticed something.
+${scoreboardSection}
 
 WHAT YOU KNOW:
 ${briefSection}

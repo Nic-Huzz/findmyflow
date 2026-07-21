@@ -1,0 +1,104 @@
+/* ExperienceResultsReveal — scoped to .err- prefix */
+
+.err-container {
+  padding: 24px 16px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.err-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.err-event-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.err-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.err-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.err-metric {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 14px;
+  border: 1px solid #e9ecef;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.err-metric-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.err-metric-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.err-metric-data {
+  flex: 1;
+}
+
+.err-metric-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.1;
+}
+
+.err-metric-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+.err-metric-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-top: 2px;
+}
+
+.err-continue {
+  margin-top: 28px;
+  padding: 12px 24px;
+  background: #5e17eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  animation: errFadeIn 0.4s ease;
+}
+
+@keyframes errFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -15,7 +15,7 @@ import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { hapticLight } from '../../lib/haptics'
-import PositioningSummary from '../PositioningSummary'
+import CreatorPositionCard from '../CreatorPositionCard'
 import BlowUpBrandCard from './BlowUpBrandCard'
 import FillNextEvent from './FillNextEvent'
 import CreatorShareCard from './CreatorShareCard'
@@ -23,11 +23,22 @@ import { fetchTicketsSold } from '../../hooks/useExperiencePipeline'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
+import { PlayProfileEventRec, PlayProfileContentRec } from './PlayProfileRecs'
 import PastExperienceStats from '../pipeline/PastExperienceStats'
 import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
 import ContentIntel from '../pipeline/ContentIntel'
 import RootReachCard from '../pipeline/RootReachCard'
+import CreatorRadarChart from './CreatorRadarChart'
+import CreatorCelebrations from './CreatorCelebrations'
+import SectionLaunchPad from './SectionLaunchPad'
+import QuarterlyPlanner from './QuarterlyPlanner'
+import InsightDrop from '../InsightDrop'
+import { useCreatorInsightDrops } from '../../hooks/useCreatorInsightDrops'
+import ZarloWidget from '../Zarlo/ZarloWidget'
+import ZarloProactiveBubble from '../Zarlo/ZarloProactiveBubble'
+import { useCreatorZarloTriggers } from '../../hooks/useCreatorZarloTriggers'
+import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown, getUnlockedAchievements, updateBuildingStreak, HIDDEN_ACHIEVEMENTS } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -82,9 +93,9 @@ function parseRuleBreak(ruleIdentified) {
 function countdownLabel(dateStr) {
   const d = daysUntil(dateStr)
   if (d === null || d < 0) return null
-  if (d === 0) return 'Today'
-  if (d === 1) return 'Tomorrow'
-  return `${d} days`
+  const text = d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : `${d} days`
+  const urgency = d <= 2 ? 'pulse' : d <= 6 ? 'red' : d <= 13 ? 'amber' : ''
+  return { text, urgency }
 }
 
 function getInitials(name) {
@@ -155,13 +166,22 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [hasReach, setHasReach] = useState(false)
   const [hasGrowth, setHasGrowth] = useState(false)
   const [hasScaleScore, setHasScaleScore] = useState(false)
-  const [hasPositioningStatement, setHasPositioningStatement] = useState(false)
+  // hasPositioningStatement removed — CreatorPositionCard handles its own state
   const [essenceAvatar, setEssenceAvatar] = useState(null)
   const [essenceName, setEssenceName] = useState(null)
   const [userSkills, setUserSkills] = useState([])
   const [userProblems, setUserProblems] = useState([])
   const [topFans, setTopFans] = useState([])
   const [movementXP, setMovementXP] = useState(0)
+  const [creatorXP, setCreatorXP] = useState(0)
+  const [scaleScoreValue, setScaleScoreValue] = useState(null)
+  const [maxTicketPrice, setMaxTicketPrice] = useState(null)
+  const [isFoundingMember, setIsFoundingMember] = useState(false)
+  const [instagramConnected, setInstagramConnected] = useState(false)
+  const [repeatAttendeeCount, setRepeatAttendeeCount] = useState(0)
+  const [buildingStreak, setBuildingStreak] = useState({ current: 0, best: 0 })
+  const [streakMilestone, setStreakMilestone] = useState(null)
+  const [achievementCount, setAchievementCount] = useState(0)
 
   // Inner Game data
   const [nervousSystemData, setNervousSystemData] = useState(null)
@@ -288,7 +308,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       setUserSkills(hasFavSkills ? allSkills.filter(s => s.fav).map(s => s.label) : allSkills.map(s => s.label))
       setUserProblems(hasFavProblems ? allProblems.filter(p => p.fav).map(p => p.label) : allProblems.map(p => p.label))
 
-      setHasPositioningStatement(!!essenceProfile?.positioning_statement)
+      // positioning_statement check removed — CreatorPositionCard handles its own state
 
       // Essence avatar + name
       if (essenceProfile?.essence_archetype) {
@@ -299,6 +319,46 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         }
       }
 
+      // Scale Score value (not just boolean)
+      setScaleScoreValue(scaleScoreData?.total_score ?? null)
+
+      // Compute creatorXP
+      const threePercentNotes = past.filter(e => e.three_percent_note).length
+      setCreatorXP(computeCreatorXP({
+        hasRemarkableResults: !!remarkData?.id,
+        hasReach: !!reachData?.id,
+        hasGrowth: !!growthData?.id,
+        hasScaleScore: !!scaleScoreData?.id,
+        hasPositioning: !!essenceProfile?.positioning_statement,
+        pastEventCount: past.length,
+        threePercentCount: threePercentNotes,
+        filledEventCount: 0, // TODO: compute from capacity vs attendees when data is available
+        repeatRate: dashboardKPIs?.repeatRate || 0,
+        totalAttendees: dashboardKPIs?.totalAttendees || 0,
+      }))
+
+      // Max ticket price across all experiences
+      const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
+      setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
+
+      // Instagram connection check
+      const { data: igIntegration } = await supabase.from('user_integrations').select('id').eq('user_id', userId).eq('platform', 'instagram').eq('status', 'connected').maybeSingle()
+      setInstagramConnected(!!igIntegration)
+
+      // Founding member check (first 50 by created_at, with stripe_customer_id or manual whitelist)
+      const FOUNDING_WHITELIST = ['ebe69854-2ebd-4236-a437-3a362f5e1af4', 'c649fc45-f040-4e48-8f8e-48f4a1285f58', 'cc03bd6e-c40f-4941-8d1a-bc8c502d22d4']
+      if (FOUNDING_WHITELIST.includes(userId)) {
+        setIsFoundingMember(true)
+      } else {
+        const { count } = await supabase.from('user_subscriptions')
+          .select('*', { count: 'exact', head: true })
+          .eq('plan_type', 'creator')
+          .eq('status', 'active')
+          .not('stripe_customer_id', 'is', null)
+          .lte('created_at', (await supabase.from('user_subscriptions').select('created_at').eq('user_id', userId).eq('plan_type', 'creator').maybeSingle()).data?.created_at || '1970-01-01')
+        setIsFoundingMember((count ?? 999) < 50)
+      }
+
       // KPIs + Top fans from the same attendeeRows fetch
       if (attendeeRows?.length) {
         const counts = {}
@@ -307,6 +367,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         const repeats = Object.values(counts).filter(c => c >= 2).length
         const repeatRate = totalAttendees > 0 ? Math.round((repeats / totalAttendees) * 100) : 0
         setDashboardKPIs({ totalAttendees, repeatRate })
+        setRepeatAttendeeCount(repeats)
 
         const repeatIds = Object.entries(counts).filter(([, c]) => c >= 2).sort(([, a], [, b]) => b - a).slice(0, 5).map(([id, count]) => ({ id, count }))
         if (repeatIds.length) {
@@ -317,6 +378,18 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           }).filter(f => f.name !== 'Unknown'))
         }
       }
+
+      // Building streak — check if creator had activity this week
+      const hasActivityThisWeek = (
+        experiences.length > 0 || !!remarkData?.id || !!reachData?.id ||
+        !!growthData?.id || !!scaleScoreData?.id || threePercentNotes > 0
+      )
+      const streakResult = updateBuildingStreak(hasActivityThisWeek)
+      setBuildingStreak({ current: streakResult.current, best: streakResult.best })
+      if (streakResult.milestone) setStreakMilestone(streakResult.milestone)
+
+      // Achievement count for trophy display
+      setAchievementCount(getUnlockedAchievements().length)
     } catch (err) {
       console.error('CreatorHomeV2 load error:', err)
     } finally {
@@ -336,6 +409,39 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const threePercentChain = past
     .filter(e => e.three_percent_note)
     .map((e, i) => ({ num: past.filter(x => x.three_percent_note).length - i, note: e.three_percent_note, name: e.name, date: e.experience_date, attendees: e.attendee_count }))
+
+  // Creator Insight Drops (G16) — template-based, 1 per session
+  const { insight: creatorInsight, dismissInsight: dismissCreatorInsight } = useCreatorInsightDrops({
+    hasRemarkableResults: !!remarkableAngle,
+    hasReach,
+    hasGrowth,
+    hasScaleScore,
+    scaleScoreValue,
+    remarkableAngle,
+    threePercentNotes: threePercentChain,
+    branchScoring: null, // Not available at this level — type 1 insight skipped
+    dnaProfiles: [], // Loaded lazily in CreatorPositionCard, pass empty for now
+  })
+
+  // Zarlo for Creators (G15) — proactive triggers
+  const nearestUpcoming = upcoming[0] || null
+  const nearestAttractDone = nearestUpcoming ? (checklistCounts[nearestUpcoming.id]?.marketing?.done || 0) : 0
+  const daysSinceLastActivity = past.length > 0
+    ? Math.floor((Date.now() - new Date(past[0].experience_date || past[0].updated_at).getTime()) / (1000 * 60 * 60 * 24))
+    : 0
+
+  const { message: zarloMessage, dismiss: dismissZarlo } = useCreatorZarloTriggers({
+    nearestEvent: nearestUpcoming ? { name: nearestUpcoming.name, daysUntil: daysUntil(nearestUpcoming.experience_date) || 99, attractItemsDone: nearestAttractDone } : null,
+    pipelineReadiness: nearestUpcoming ? (nearestAttractDone > 0 ? Math.min(100, nearestAttractDone * 20) : 0) : 0,
+    daysSinceActivity: daysSinceLastActivity,
+    threePercentCount: threePercentChain.length,
+    hasSoldOut: false, // TODO: compute from capacity vs attendees
+    hasScaleScore,
+    quarterlyPlansEmpty: !getGamificationState().quarterlyPlans?.[`${new Date().getFullYear()}-Q${Math.floor(new Date().getMonth() / 3) + 1}`]?.length,
+    hasRemarkableResults: !!remarkableAngle,
+    nextLaunchPadItem: !remarkableAngle ? 'finding your rule break' : !hasReach ? 'Remarkable Reach' : !hasGrowth ? 'Remarkable Growth' : 'your next experience',
+  })
+  const [zarloChat, setZarloChat] = useState(null)
 
   // ── Gate ────────────────────────────────────────────────────────────────
   // Only redirect if data has fully loaded AND no selection exists.
@@ -418,6 +524,35 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 Playbook {[!!remarkableAngle, hasReach, hasGrowth, hasScaleScore].filter(Boolean).length} of 4
               </div>
             </div>
+            {/* Creator XP + Level */}
+            <div className="ch2-xp-row">
+              <span className="ch2-xp-level">⚡ {getCreatorLevel(creatorXP).name}</span>
+              {isFoundingMember && <span className="ch2-founding-badge">FOUNDING</span>}
+              <span className="ch2-xp-bar-wrap">
+                <span
+                  className="ch2-xp-bar-fill"
+                  style={{ width: `${getNextLevel(creatorXP) ? Math.min(100, (creatorXP / getNextLevel(creatorXP).threshold) * 100) : 100}%` }}
+                />
+              </span>
+              <span className="ch2-xp-text">
+                {getNextLevel(creatorXP) ? `${creatorXP} / ${getNextLevel(creatorXP).threshold} XP` : `${creatorXP} XP`}
+              </span>
+            </div>
+            {/* Streak + Trophies row */}
+            {(buildingStreak.current > 0 || achievementCount > 0) && (
+              <div className="ch2-streak-row">
+                {buildingStreak.current > 0 && (
+                  <span className="ch2-streak-pill">
+                    🔥 {buildingStreak.current}w streak
+                  </span>
+                )}
+                {achievementCount > 0 && (
+                  <span className="ch2-trophy-pill">
+                    🏆 {achievementCount} / {HIDDEN_ACHIEVEMENTS.length}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -425,6 +560,13 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       <div className="ch2-content">
         {/* ═══ IDENTITY TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'identity' ? ' active' : ''}`}>
+
+          <SectionLaunchPad title="Your launch pad" items={[
+            { label: 'Discover your essence', done: !!essenceAvatar, route: '/essence-mirror' },
+            { label: 'Find your North Stars', done: !!creatorSelection, route: '/experience-creators' },
+            { label: 'Find your rule break', done: !!remarkableAngle, route: '/create/remarkable' },
+          ]} />
+
           <div className="ch2-id-card">
             <div className="ch2-id-inner">
 
@@ -475,12 +617,20 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                   </>
                 ) : (
                   <>
-                    <p className="ch2-card-sub">Two quick flows fill this in. Most people finish both in one sitting.</p>
+                    <p className="ch2-card-sub">Three quick flows fill this in. Most people finish in one sitting.</p>
                     <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/life-map?returnTo=/create') }}>
                       <div className="ch2-biz-icon">🗺️</div>
                       <div className="ch2-biz-info">
                         <div className="ch2-biz-label">Your Skills + Problems</div>
                         <div className="ch2-biz-val">Complete your Life Map to discover these</div>
+                      </div>
+                      <div className="ch2-row-chevron">›</div>
+                    </div>
+                    <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/curiosity-map') }}>
+                      <div className="ch2-biz-icon">🔍</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">Your Industry Branches</div>
+                        <div className="ch2-biz-val">Map your curiosities to see your frontier</div>
                       </div>
                       <div className="ch2-row-chevron">›</div>
                     </div>
@@ -622,24 +772,15 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               )}
 
-              {/* Positioning Summary — unlocks after Remarkable Results (or if a statement already exists) */}
-              {(remarkableAngle || hasPositioningStatement) ? (
-                <PositioningSummary
-                  userId={userId}
-                  essenceName={essenceName}
-                  skills={userSkills}
-                  problems={userProblems}
-                  remarkableAngle={remarkableAngle}
-                />
-              ) : (
-                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-locked" onClick={() => navigate('/create/remarkable')}>
-                    <div className="ch2-locked-title">Your Positioning 🔒</div>
-                    <div className="ch2-locked-sub">Unlocks after Remarkable Results. We use your rule break to write this.</div>
-                    <div className="ch2-locked-cta">Find Your Rule Break →</div>
-                  </div>
-                </div>
-              )}
+              {/* Creator Position Card — industry frontier + rarity + positioning (merges old PositioningSummary) */}
+              <CreatorPositionCard
+                userId={userId}
+                essenceName={essenceName}
+                skills={userSkills}
+                problems={userProblems}
+                remarkableAngle={remarkableAngle}
+                onCreatorTap={handleCreatorTap}
+              />
 
               </>}
 
@@ -777,6 +918,29 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         {/* ═══ EXPERIENCES TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'experiences' ? ' active' : ''}`}>
 
+          {!selectedExperienceId && (
+            <SectionLaunchPad title="Your next steps" items={[
+              { label: 'Create your first experience', done: experiences.length > 0, route: '/create/experience/new' },
+              { label: 'Set up your first pipeline', done: Object.keys(checklistCounts).length > 0, action: () => experiences[0] && setSelectedExperienceId(experiences[0].id) },
+              { label: 'Run your first event', done: past.length > 0, action: () => upcoming[0] && setSelectedExperienceId(upcoming[0].id) },
+            ]} />
+          )}
+
+          {/* Play Profile Event Recommendations — visible when DNA result exists and no experience selected */}
+          {!selectedExperienceId && dnaResult?.dna_code && (
+            <PlayProfileEventRec
+              dnaResult={dnaResult}
+              experiences={experiences}
+              onCreateExperience={() => navigate('/create/experience/new')}
+              onNavigate={navigate}
+            />
+          )}
+
+          {/* Quarterly Planner — visible when no experience selected */}
+          {!selectedExperienceId && (
+            <QuarterlyPlanner experiences={experiences} pastExperiences={past} />
+          )}
+
           {/* ── Growth Line Pipeline or Past Stats (when experience selected) ── */}
           {selectedExperienceId ? (
             past.some(e => e.id === selectedExperienceId) ? (
@@ -799,6 +963,24 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               onOpen={(id) => setSelectedExperienceId(id)}
             />
           )}
+
+          {/* Pipeline staleness nudge */}
+          {upcoming.map(exp => {
+            const d = daysUntil(exp.experience_date)
+            const cl = checklistCounts[exp.id] || {}
+            const totalDone = Object.values(cl).reduce((sum, s) => sum + (s.done || 0), 0)
+            if (d >= 7 && totalDone === 0 && !hasShownStaleNudgeToday(exp.id)) {
+              return (
+                <div key={`stale-${exp.id}`} className="ch2-stale-nudge" onClick={() => { markStaleNudgeShown(exp.id); setSelectedExperienceId(exp.id) }}>
+                  <div className="ch2-stale-text">
+                    Your <strong>{exp.name}</strong> is in {d} days and your audience doesn't know about it yet.
+                  </div>
+                  <div className="ch2-stale-cta">Start marketing &rarr;</div>
+                </div>
+              )
+            }
+            return null
+          })}
 
           {/* Upcoming */}
           {upcoming.length > 0 && (
@@ -826,7 +1008,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                         <div className="ch2-exp-meta">
                           {exp.experience_type?.replace(/_/g, ' ') || 'Experience'}
                           {exp.experience_date && ` · ${new Date(exp.experience_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`}
-                          {cd && <span className="ch2-exp-countdown">{cd}</span>}
+                          {cd && <span className={`ch2-exp-countdown ${cd.urgency ? `ch2-countdown-${cd.urgency}` : ''}`}>{cd.text}</span>}
                         </div>
                       </div>
                       <div style={{ fontSize: 10, fontWeight: 700, color: '#5e17eb' }}>Open →</div>
@@ -915,6 +1097,22 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         {/* ═══ GROWTH TAB ═══ */}
         <div className={`ch2-tab-panel${activeTab === 'growth' ? ' active' : ''}`}>
 
+          <SectionLaunchPad title="Start tracking" items={[
+            { label: 'Connect Instagram', done: instagramConnected, action: () => document.querySelector('.ig-connect-btn')?.click() },
+            { label: 'Run your first experience', done: past.length > 0, route: '/create/experience/new' },
+            { label: 'Log your first 3% improvement', done: threePercentChain.length > 0, action: () => past[0] && setSelectedExperienceId(past[0].id) },
+          ]} />
+
+          {/* Spider Graph — Your Shape */}
+          <CreatorRadarChart data={{
+            impact: dashboardKPIs.totalAttendees || 0,
+            consistency: past.length,
+            retention: dashboardKPIs.repeatRate || 0,
+            brand: scaleScoreValue,
+            price: maxTicketPrice,
+            reach: null, // TODO: wire Instagram views when BrandPulse data is lifted
+          }} />
+
           {/* Creator Momentum */}
           <RootReachCard />
 
@@ -922,6 +1120,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           <InstagramConnect onRefresh={() => setIgRefreshKey(k => k + 1)} />
           <BrandPulseCard />
           <ContentIntel refreshKey={igRefreshKey} />
+
+          {/* Play Profile Content Recommendations */}
+          {dnaResult?.dna_code && (
+            <PlayProfileContentRec dnaResult={dnaResult} onNavigate={navigate} />
+          )}
 
           {/* KPIs */}
           <div className="ch2-kpi-grid">
@@ -942,6 +1145,31 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               <div className="ch2-kpi-label">Upcoming</div>
             </div>
           </div>
+
+          {/* Days since last event — gentle mirror */}
+          {past.length > 0 && upcoming.length === 0 && (() => {
+            const lastDate = new Date(past[0].experience_date)
+            const daysSince = Math.floor((Date.now() - lastDate.getTime()) / (1000 * 60 * 60 * 24))
+            if (daysSince < 7) return null
+            return (
+              <div className="ch2-days-since">
+                It's been {daysSince} days since your last experience. Your top fans are waiting.
+              </div>
+            )
+          })()}
+
+          {/* Low attendance reframe — NOTE: attendee_count is not a column on experiences table.
+              This will not render until attendee_count is computed and attached to past events
+              (e.g., from experience_attendees COUNT). Harmlessly dormant until then. */}
+          {past.length > 0 && past[0].attendee_count != null && past[0].capacity > 0 && past[0].attendee_count < past[0].capacity * 0.5 && (
+            <div className="ch2-low-attendance">
+              {past[0].attendee_count <= 5
+                ? "Every movement starts with a handful. Wim Hof's first ice bath had 3 people."
+                : past[0].attendee_count <= 15
+                ? "That's a room full of people who chose to be there. That matters."
+                : "More than most creators get in their first year. Keep running events."}
+            </div>
+          )}
 
           {/* 3% Chain */}
           {threePercentChain.length > 0 && (
@@ -1133,6 +1361,65 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           avatarUrl={essenceAvatar || null}
           onClose={() => setShowShareCard(false)}
         />
+      )}
+
+      {/* Creator Insight Drop (max 1 per session) */}
+      {creatorInsight && <InsightDrop insight={creatorInsight} onDismiss={dismissCreatorInsight} />}
+
+      {/* Milestone + achievement + spider celebrations */}
+      <CreatorCelebrations
+        data={{
+          hasRemarkableResults: !!remarkableAngle,
+          hasReach,
+          hasGrowth,
+          hasScaleScore,
+          hasPositioning: false, // CreatorPositionCard manages its own state
+          experienceCount: experiences.length,
+          pastEventCount: past.length,
+          hasSoldOut: false, // TODO: compute from capacity vs attendees
+          totalAttendees: dashboardKPIs.totalAttendees || 0,
+          repeatRate: dashboardKPIs.repeatRate || 0,
+          repeatAttendeeCount,
+          threePercentCount: threePercentChain.length,
+          instagramConnected,
+          hasWoundMap: !!woundMapData,
+          streakMilestone,
+        }}
+        spiderData={{
+          impact: dashboardKPIs.totalAttendees || 0,
+          consistency: past.length,
+          retention: dashboardKPIs.repeatRate || 0,
+          brand: scaleScoreValue,
+          price: maxTicketPrice,
+          reach: null, // TODO: wire Instagram views
+        }}
+      />
+
+      {/* Zarlo for Creators (G15) — gated on Remarkable Results */}
+      {!!remarkableAngle && (
+        <>
+          {zarloMessage && zarloChat !== 'zarlo' && (
+            <ZarloProactiveBubble
+              message={zarloMessage}
+              onTap={() => setZarloChat('zarlo')}
+              onDismiss={dismissZarlo}
+            />
+          )}
+          <ZarloWidget activeChat={zarloChat} setActiveChat={setZarloChat} />
+        </>
+      )}
+
+      {/* Origin story overlay — first visit only, skip if payment redirect */}
+      {!loading && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (
+        <div className="ch2-origin-overlay">
+          <div className="ch2-origin-card">
+            <h2 className="ch2-origin-title">The world is going to be a better place thanks to you and your work.</h2>
+            <p className="ch2-origin-sub">We're here to help you create that change.</p>
+            <button className="ch2-origin-cta" onClick={() => updateGamificationState({ origin_seen: true })}>
+              Let's go &rarr;
+            </button>
+          </div>
+        </div>
       )}
     </div>
   )

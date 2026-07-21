@@ -18,29 +18,15 @@ import confetti from 'canvas-confetti'
 import WeeklyReviewCard from './WeeklyReviewCard'
 import './WeeklyReview.css'
 
-const ENV_OPTIONS = [
-  { id: 'yes', label: 'Yes' },
-  { id: 'mostly', label: 'Mostly' },
-  { id: 'no', label: 'No' },
-]
-
 export default function WeeklyReview({ userId, weekStart, onComplete, onClose }) {
-  const [environment, setEnvironment] = useState(null)
-  const [networkText, setNetworkText] = useState('')
-  const [betSizingText, setBetSizingText] = useState('')
+  const [narrativeRevision, setNarrativeRevision] = useState('')
   const [identityDid, setIdentityDid] = useState(null)
   const [identityText, setIdentityText] = useState('')
-  const [compoundingDid, setCompoundingDid] = useState(null)
   const [compoundingText, setCompoundingText] = useState('')
-  const [learningText, setLearningText] = useState('')
-  const [attentionHours, setAttentionHours] = useState('')
-  const [narrativeRevision, setNarrativeRevision] = useState('')
   const [saving, setSaving] = useState(false)
   const [savedReview, setSavedReview] = useState(null)
 
-  const filledTextFields = [networkText, betSizingText, identityText, compoundingText, learningText]
-    .filter(t => t.trim()).length
-  const isValid = environment && filledTextFields >= 2
+  const isValid = narrativeRevision.trim().length > 0 && compoundingText.trim().length > 0
 
   async function handleSubmit() {
     if (!isValid || saving) return
@@ -51,16 +37,10 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
         .insert({
           user_id: userId,
           week_start: weekStart,
-          environment,
-          network_text: networkText.trim() || null,
-          bet_sizing_text: betSizingText.trim() || null,
+          narrative_revision: narrativeRevision.trim() || null,
           identity_did: identityDid,
           identity_text: identityText.trim() || null,
-          compounding_did: compoundingDid,
           compounding_text: compoundingText.trim() || null,
-          learning_text: learningText.trim() || null,
-          attention_hours: attentionHours ? Number(attentionHours) : null,
-          narrative_revision: narrativeRevision.trim() || null,
         })
         .select()
         .single()
@@ -150,70 +130,33 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
         </div>
 
         <div className="wr-progress">
-          <div className="wr-progress-fill" style={{ width: `${Math.round(([environment, networkText, betSizingText, identityDid !== null, compoundingDid !== null, learningText, attentionHours].filter(Boolean).length / 7) * 100)}%` }} />
+          <div className="wr-progress-fill" style={{ width: `${Math.round(([narrativeRevision, identityDid !== null, compoundingText].filter(Boolean).length / 3) * 100)}%` }} />
         </div>
 
         <div className="wr-form">
-          {/* Q1: Environment */}
-          <div className="wr-question">
-            <div className="wr-question-top">
-              <span className="wr-question-icon">🏠</span>
-              <span className="wr-question-label">Environment</span>
-            </div>
-            <p className="wr-question-text">Was the right move the easy move this week?</p>
-            <div className="wr-option-row">
-              {ENV_OPTIONS.map(o => (
-                <button
-                  key={o.id}
-                  type="button"
-                  className={`wr-option-btn ${environment === o.id ? 'selected' : ''}`}
-                  onClick={() => { hapticLight(); setEnvironment(o.id) }}
-                >
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Q2: Network */}
-          <div className="wr-question">
-            <div className="wr-question-top">
-              <span className="wr-question-icon">🤝</span>
-              <span className="wr-question-label">Network</span>
-            </div>
-            <p className="wr-question-text">Who opened a door for you, or whose door did you open?</p>
-            <textarea
-              className="wr-textarea"
-              value={networkText}
-              onChange={e => setNetworkText(e.target.value)}
-              placeholder="A name or a moment..."
-              maxLength={200}
-            />
-          </div>
-
-          {/* Q3: Bet-Sizing */}
-          <div className="wr-question">
-            <div className="wr-question-top">
-              <span className="wr-question-icon">🚀</span>
-              <span className="wr-question-label">Bet-Sizing</span>
-            </div>
-            <p className="wr-question-text">What did you ship or experiment with?</p>
-            <textarea
-              className="wr-textarea"
-              value={betSizingText}
-              onChange={e => setBetSizingText(e.target.value)}
-              placeholder="Launched, tested, published..."
-              maxLength={200}
-            />
-          </div>
-
-          {/* Q4: Identity */}
+          {/* Q1: Narrative Revision */}
           <div className="wr-question">
             <div className="wr-question-top">
               <span className="wr-question-icon">🪞</span>
-              <span className="wr-question-label">Identity</span>
+              <span className="wr-question-label">Identity Shift</span>
             </div>
-            <p className="wr-question-text">Did you behave out of alignment because of fear?</p>
+            <p className="wr-question-text">Old me would have ___. Instead I ___.</p>
+            <textarea
+              className="wr-textarea"
+              value={narrativeRevision}
+              onChange={e => setNarrativeRevision(e.target.value)}
+              placeholder="Old me would have stayed quiet. Instead I spoke up."
+              maxLength={300}
+            />
+          </div>
+
+          {/* Q2: Procrastination */}
+          <div className="wr-question">
+            <div className="wr-question-top">
+              <span className="wr-question-icon">⏳</span>
+              <span className="wr-question-label">Procrastination</span>
+            </div>
+            <p className="wr-question-text">Did procrastination stop you from doing something this week?</p>
             <div className="wr-option-row">
               <button
                 type="button"
@@ -235,98 +178,28 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
                 className="wr-textarea wr-textarea-conditional"
                 value={identityText}
                 onChange={e => setIdentityText(e.target.value)}
-                placeholder="What happened?"
+                placeholder="What did you put off?"
                 maxLength={200}
               />
             )}
           </div>
 
-          {/* Q5: Compounding */}
+          {/* Q3: Proudest brave thing */}
           <div className="wr-question">
             <div className="wr-question-top">
-              <span className="wr-question-icon">📈</span>
-              <span className="wr-question-label">Compounding</span>
+              <span className="wr-question-icon">🔥</span>
+              <span className="wr-question-label">Courage</span>
             </div>
-            <p className="wr-question-text">Did you stay consistent on the boring thing?</p>
-            <div className="wr-option-row">
-              <button
-                type="button"
-                className={`wr-option-btn ${compoundingDid === true ? 'selected' : ''}`}
-                onClick={() => { hapticLight(); setCompoundingDid(true) }}
-              >
-                Yes
-              </button>
-              <button
-                type="button"
-                className={`wr-option-btn ${compoundingDid === false ? 'selected wr-option-negative' : ''}`}
-                onClick={() => { hapticLight(); setCompoundingDid(false) }}
-              >
-                No
-              </button>
-            </div>
+            <p className="wr-question-text">What's the one brave thing you're most proud of?</p>
             <textarea
-              className="wr-textarea wr-textarea-conditional"
+              className="wr-textarea"
               value={compoundingText}
               onChange={e => setCompoundingText(e.target.value)}
-              placeholder="Which one?"
+              placeholder="I finally..."
               maxLength={200}
             />
           </div>
 
-          {/* Q6: Learning */}
-          <div className="wr-question">
-            <div className="wr-question-top">
-              <span className="wr-question-icon">🧠</span>
-              <span className="wr-question-label">Learning</span>
-            </div>
-            <p className="wr-question-text">What can you do now that you couldn&apos;t last Monday?</p>
-            <textarea
-              className="wr-textarea"
-              value={learningText}
-              onChange={e => setLearningText(e.target.value)}
-              placeholder="A new skill, insight, or ability..."
-              maxLength={200}
-            />
-          </div>
-
-          {/* Q7: Attention */}
-          <div className="wr-question">
-            <div className="wr-question-top">
-              <span className="wr-question-icon">⏱</span>
-              <span className="wr-question-label">Attention</span>
-            </div>
-            <p className="wr-question-text">Longest deep work block this week?</p>
-            <div className="wr-number-row">
-              <input
-                type="number"
-                className="wr-number-input"
-                value={attentionHours}
-                onChange={e => setAttentionHours(e.target.value)}
-                min="0"
-                max="24"
-                step="0.5"
-                placeholder="0"
-              />
-              <span className="wr-number-suffix">hours</span>
-            </div>
-          </div>
-
-          {/* Q8: Your Story This Week (Identity Narrative Revision) */}
-          <div className="wr-question wr-question-narrative">
-            <div className="wr-question-top">
-              <span className="wr-question-icon">📖</span>
-              <span className="wr-question-label">Your Story This Week</span>
-            </div>
-            <p className="wr-question-text">Complete this sentence:</p>
-            <p className="wr-narrative-prompt">This week, the old me would have ___. Instead, I ___.</p>
-            <textarea
-              className="wr-textarea"
-              value={narrativeRevision}
-              onChange={e => setNarrativeRevision(e.target.value)}
-              placeholder="e.g. ...hidden from the hard conversation. Instead, I said what I actually felt."
-              rows={3}
-            />
-          </div>
         </div>
 
         <div className="wr-footer">

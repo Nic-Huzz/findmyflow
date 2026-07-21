@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import UnstickFlow from './UnstickFlow'
 import QuestPathMap from './level/QuestPathMap'
@@ -70,6 +71,7 @@ const HERO_STAGES = [
 ]
 
 export default function JourneyTab({ userId, onUnlockTab }) {
+  const navigate = useNavigate()
   const [heroStage, setHeroStage] = useState(0)
   const [voiceCounts, setVoiceCounts] = useState({})
   const [brief, setBrief] = useState(null)
@@ -90,6 +92,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
 
   // Lightweight figurine display data (replaces heavy useFigurine hook)
   const [figurineDisplay, setFigurineDisplay] = useState(null)
+  const [clarityPct, setClarityPct] = useState(null)
 
   useEffect(() => {
     if (!userId) return
@@ -135,7 +138,14 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       supabase.from('quest_completions')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId).eq('quest_category', 'Groans'),
-    ]).then(([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes, authRes, completedRes, linkedRes, profileRes, checkinCountRes, wahooCountRes]) => {
+      supabase.from('nikigai_clusters')
+        .select('resonance_state, resonance_rating')
+        .eq('user_id', userId)
+        .in('cluster_type', ['skills', 'problems', 'persona'])
+        .is('step_id', null)
+        .eq('cluster_stage', 'final')
+        .eq('is_removed', false),
+    ]).then(([stageRes, hiVoiceRes, nsVoiceRes, briefRes, questsRes, authRes, completedRes, linkedRes, profileRes, checkinCountRes, wahooCountRes, clarityRes]) => {
       if (!active) return
 
       const stage = stageRes.data?.current_journey_level || 0
@@ -155,6 +165,17 @@ export default function JourneyTab({ userId, onUnlockTab }) {
           isMirrorMode,
           canChat: !isMirrorMode,
         })
+      }
+
+      // Clarity score from cluster resonance ratings
+      // Clarity: % of clusters rated vibe_rise or fun
+      const allClusters = clarityRes.data || []
+      const ratedClusters = allClusters.filter(c => {
+        const state = c.resonance_state || (c.resonance_rating >= 4 ? 'vibe_rise' : c.resonance_rating >= 3 ? 'fun' : null)
+        return state === 'vibe_rise' || state === 'fun'
+      })
+      if (allClusters.length > 0) {
+        setClarityPct(Math.round((ratedClusters.length / allClusters.length) * 100))
       }
 
       const email = authRes.data?.user?.email
@@ -432,6 +453,15 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       {/* Onboarding — only if items incomplete */}
       <JourneyOnboarding userId={userId} onUnlockTab={onUnlockTab} />
 
+      {/* Clarity number removed — zone matrix on Quests tab is the visualization */}
+
+      {/* Guidance nudge — clarity-based */}
+      {clarityPct != null && clarityPct < 60 && (
+        <div className="jt-nudge">
+          💡 Your Clarity is still building. Try exploring a new curiosity or completing your Life Map to sharpen it.
+        </div>
+      )}
+
       {/* Life Paths Summary */}
       {lifePaths.length > 0 && (
         <div className="jt-section">
@@ -492,6 +522,8 @@ export default function JourneyTab({ userId, onUnlockTab }) {
           onClose={() => setShowFlowMap(false)}
         />
       )}
+
+      {/* Mirror link — hidden until /mirror page is finalized */}
 
       {/* Self-Knowledge Skills */}
       <SkillsDisplay userId={userId} />

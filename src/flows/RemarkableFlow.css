@@ -759,6 +759,79 @@
   color: #fff;
 }
 
+/* ── Recommended tag (branch selector) ── */
+.rmk-recommended-tag {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: rgba(233,162,59,0.15);
+  border: 1px solid rgba(233,162,59,0.3);
+  border-radius: 100px;
+  color: #E9A23B;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+/* ── Frontier hint box (assumption step) ── */
+.rmk-hint-box {
+  margin-bottom: 1rem;
+}
+
+.rmk-hint-toggle {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: rgba(233,162,59,0.06);
+  border: 1px solid rgba(233,162,59,0.15);
+  border-radius: 12px;
+  color: rgba(233,162,59,0.7);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.rmk-hint-toggle:hover {
+  background: rgba(233,162,59,0.1);
+}
+
+.rmk-hint-content {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: rgba(233,162,59,0.04);
+  border: 1px solid rgba(233,162,59,0.1);
+  border-radius: 12px;
+  animation: rmkFadeIn 0.3s ease;
+}
+
+.rmk-hint-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(233,162,59,0.6);
+  margin-bottom: 0.25rem;
+}
+
+.rmk-hint-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+.rmk-hint-nudge {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.3);
+  font-style: italic;
+  margin: 0.6rem 0 0;
+}
+
 /* === MOBILE === */
 @media (max-width: 480px) {
   .rmk-container { padding: 1.5rem 1.25rem; }

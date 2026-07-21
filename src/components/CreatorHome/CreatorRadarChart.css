@@ -1,0 +1,101 @@
+/* CreatorRadarChart — Spider graph for creator business metrics */
+
+.cr-radar {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.cr-radar-header {
+  margin-bottom: 0.75rem;
+}
+
+.cr-radar-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #5e17eb;
+  text-transform: uppercase;
+}
+
+.cr-radar-svg {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Concentric rings */
+.cr-ring {
+  fill: none;
+  stroke: #e5e5e5;
+  stroke-width: 0.5;
+}
+.cr-ring-outer {
+  stroke: #d0d0d0;
+  stroke-width: 1;
+}
+
+/* Axis lines from center */
+.cr-axis-line {
+  stroke: #e5e5e5;
+  stroke-width: 0.5;
+}
+
+/* Data polygon fill */
+.cr-data-fill {
+  fill: rgba(94, 23, 235, 0.12);
+  stroke: #E9A23B;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: all 0.6s ease;
+}
+
+/* Data points on vertices */
+.cr-data-dot {
+  fill: #E9A23B;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+/* Axis labels */
+.cr-label-name {
+  font-family: 'Inconsolata', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  fill: #888;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cr-label-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  fill: #bbb;
+}
+.cr-label-active {
+  fill: #5e17eb;
+}
+
+/* Empty state */
+.cr-radar-empty {
+  font-size: 0.82rem;
+  color: #999;
+  margin-top: -0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .cr-radar {
+    padding: 1rem;
+  }
+  .cr-radar-svg {
+    max-width: 260px;
+  }
+}

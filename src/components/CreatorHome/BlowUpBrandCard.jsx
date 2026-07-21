@@ -29,6 +29,7 @@ const STAGES = [
     desc: 'How do people hear about you? Find your strongest vehicle, your language, and who gives your audience permission.',
     cta: 'Build your reach →',
     doneVal: 'Vehicle, language, and cosign mapped',
+    lockedDesc: 'This is where you learn how your story spreads. Complete Results first.',
   },
   {
     key: 'growth',
@@ -39,6 +40,7 @@ const STAGES = [
     desc: 'Audit the 5 barriers between someone and your experience. Design a zero-friction on-ramp.',
     cta: 'Audit my barriers →',
     doneVal: '5 barriers audited, on-ramp designed',
+    lockedDesc: 'This is where you remove what stops people saying yes. Complete Reach first.',
   },
   {
     key: 'score',
@@ -49,6 +51,7 @@ const STAGES = [
     desc: 'Will your experience scale? 3-pillar diagnostic that pulls from your previous work.',
     cta: 'Score my experience →',
     doneVal: '3-pillar diagnostic complete',
+    lockedDesc: 'This is where you see exactly how ready your experience is to blow up. Complete Growth first.',
   },
 ]
 
@@ -211,7 +214,7 @@ export default function BlowUpBrandCard({ remarkableAngle, hasReach, hasGrowth, 
           <div className="ch2-biz-info">
             <div className="ch2-biz-label">{s.title}</div>
             <div className="ch2-biz-val" style={{ fontWeight: 500, color: 'var(--grey)' }}>
-              Unlocks after {i === 0 ? currentStage.label : lockedStages[i - 1].label}
+              {s.lockedDesc || `Unlocks after ${i === 0 ? currentStage?.label : lockedStages[i - 1].label}`}
             </div>
           </div>
           <div style={{ fontSize: 13 }}>🔒</div>

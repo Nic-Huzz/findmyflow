@@ -1,10 +1,12 @@
 /**
  * PastExperienceStats — Post-event stats dashboard for completed experiences.
  * Shows Service model metrics + pipeline node summaries with what was done.
+ * On FIRST view of a past event, shows sequential score reveal (G7).
  */
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
+import ExperienceResultsReveal, { hasBeenRevealed, markRevealed } from '../CreatorHome/ExperienceResultsReveal'
 import './PastExperienceStats.css'
 
 export default function PastExperienceStats({ experienceId, onBack }) {
@@ -12,6 +14,7 @@ export default function PastExperienceStats({ experienceId, onBack }) {
   const [loading, setLoading] = useState(true)
   const [exp, setExp] = useState(null)
   const [stats, setStats] = useState({})
+  const [showingReveal, setShowingReveal] = useState(() => !hasBeenRevealed(experienceId))
 
   useEffect(() => {
     if (!user?.id || !experienceId) return
@@ -118,6 +121,23 @@ export default function PastExperienceStats({ experienceId, onBack }) {
 
   if (loading) return <div className="pes-loading">Loading stats...</div>
   if (!exp) return <div className="pes-loading">Experience not found</div>
+
+  // Sequential score reveal — first view only
+  if (showingReveal && stats.attendeeCount > 0) {
+    return (
+      <div className="pes-container">
+        <div className="pes-topbar">
+          <button className="pes-back" onClick={onBack}>←</button>
+          <div className="pes-title">{exp.name}</div>
+        </div>
+        <ExperienceResultsReveal
+          stats={stats}
+          experience={exp}
+          onComplete={() => { markRevealed(experienceId); setShowingReveal(false) }}
+        />
+      </div>
+    )
+  }
 
   const revenue = exp.total_revenue ? parseFloat(exp.total_revenue) : null
   const fillRate = exp.capacity && stats.attendeeCount

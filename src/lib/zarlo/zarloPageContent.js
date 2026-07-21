@@ -670,6 +670,27 @@ export const PAGE_CONTENT = {
   },
 
   // ============================================
+  // CREATOR PORTAL
+  // ============================================
+
+  '/create': {
+    pageId: 'creator_portal',
+    pageName: 'Scale Portal',
+    whatIsThis: `Your Scale portal. Where you turn your rule break into packed experiences that change people's lives and pay your bills.`,
+    whyMatters: `Most creators stall after finding their thing. They know what they're good at but can't fill a room. This portal gives you the pipeline: find your rule break, design the experience, fill the seats, track what works, improve 3% each time.`,
+    contextualPrompts: [
+      { id: 'next_step', label: "What should I do next?" },
+      { id: 'fill_room', label: "How do I fill my next event?" },
+      { id: 'positioning', label: "Help me explain what I do" }
+    ],
+    faq: {
+      next_step: `Look at your launch pad (top of each tab). The first incomplete item is your next step. If everything's done, your next move is to create your next experience and run it.`,
+      fill_room: `Three things fill rooms: (1) a clear rule break people can repeat to friends, (2) at least 5 pieces of content about it in the 2 weeks before, (3) personal invites to people who already trust you. Your pipeline walks you through all three.`,
+      positioning: `Your positioning lives on the Identity tab. Fill in "what moment brings someone to your door" and "what do they want to feel after" then hit Generate. Pick the one that feels most like you. That's your sentence.`
+    }
+  },
+
+  // ============================================
   // DEFAULT / FALLBACK
   // ============================================
 

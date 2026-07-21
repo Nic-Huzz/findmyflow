@@ -244,12 +244,46 @@ DB fields needed (migration): `resonance_rating integer`, `resonance_updated_at 
 
 5. **classify-curiosities edge function currently only outputs branch** — not skills or problems. Extension designed but not implemented. The prompt change is clear (add skill + problem definitions). Output schema adds `skills[]` and `problems[]` per cluster.
 
+## Bug to investigate BEFORE Sprint 2
+
+### huzz@nichuzz.com Life Map shows 0 skills, 1 problem on nikigai screen
+
+**What's happening:** At `/life-map`, the nikigai screen ("Skills, Problems, Personas") shows "Skills 0 clusters", "Problems 1 cluster" (Transforming Fear into Freedom & Aliveness). Screenshot confirmed on localhost:5180.
+
+**What the DB has:** huzz@nichuzz.com (user_id: `ebe69854-2ebd-4236-a437-3a362f5e1af4`) has 8 skills clusters, 6 problems clusters, 8 personas clusters in `nikigai_clusters` (step_id IS NULL, cluster_stage = 'final'). The data EXISTS.
+
+**Likely cause:** LifeMapFlow.jsx nikigai screen filters clusters by `session_id` (line 592: `.eq('session_id', savedSession.id)`). If the most recent `flow_sessions` row has a different `id` than the clusters, or if the latest run produced partial results, the screen shows incomplete data.
+
+**How to investigate:**
+```sql
+-- 1. Check flow_sessions for life_map
+SELECT id, status, completed_at
+FROM flow_sessions
+WHERE user_id = 'ebe69854-2ebd-4236-a437-3a362f5e1af4'
+  AND flow_type = 'life_map'
+ORDER BY created_at DESC;
+
+-- 2. Check which session_ids the clusters belong to
+SELECT session_id, cluster_type, COUNT(*)
+FROM nikigai_clusters
+WHERE user_id = 'ebe69854-2ebd-4236-a437-3a362f5e1af4'
+  AND cluster_stage = 'final' AND step_id IS NULL
+GROUP BY session_id, cluster_type
+ORDER BY session_id;
+```
+
+**Priority:** HIGH. Blocks Sprint 2 — cluster resonance rating has nothing to rate if clusters don't show.
+
 ## Recommendations
 
-1. **Merge Sprint 1 to main** — it's built, tested, build passes. Timeframe tags + identity library are user-facing improvements that don't depend on anything else.
+1. **Fix the Life Map cluster bug first** — Sprint 2 depends on clusters being visible.
 
-2. **Start Sprint 2 with the `rate_mirror` screen** — cleanest next step. Read LifeMapFlow.jsx lines 1030-1120 (the nikigai screen) to understand the cluster card rendering, then add the rating screen after it.
+2. **Merge Sprint 1 to main** — it's built, tested, build passes. Timeframe tags + identity library are user-facing improvements that don't depend on anything else.
 
-3. **Test AI quest tagging before Sprint 3** — run the 7 Huzz quests through an AI prompt to validate accuracy. The simulated output is in the session conversation. User needs to confirm tags before we build the auto-tagger.
+3. **Start Sprint 2 with the `rate_mirror` screen** — after fixing the cluster bug. The code skeleton is above with exact line numbers.
 
-4. **The "Mirror page" concept needs design** — Sprint 4 introduces a page where cluster re-generation, curiosity updates, and life path changes all converge. This could be a new route or an expansion of /me. Design this before building Sprint 4.
+4. **Test AI quest tagging before Sprint 3** — run the 7 Huzz quests through an AI prompt to validate accuracy. User needs to confirm tags before building the auto-tagger.
+
+5. **Note: Sprint 5 is partially built by another agent** — QuestBoardCard.jsx and GroanCompletionModal.jsx have been modified by another agent with progress bar, courage trend, "lit me up" signal, and Zone of Excellence warning. Check `git diff main` on those files before rebuilding Sprint 5 features.
+
+6. **Zone detection (not yet in any sprint)** — detecting which zone the user is in based on Capacity × Clarity (Head Full of Dreams, Misguided, Diagonal, etc.) is the most impactful missing piece. See `docs/features/interior-scoreboard-data-gaps.md`.
