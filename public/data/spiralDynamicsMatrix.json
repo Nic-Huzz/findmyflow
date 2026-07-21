@@ -81,16 +81,28 @@
       "industry": "Media"
     },
     {
+      "id": "play",
+      "label": "Play",
+      "color": "#06b6d4",
+      "industry": "Games & Recreation"
+    },
+    {
       "id": "fire",
-      "label": "Fire",
+      "label": "Energy",
       "color": "#f59e0b",
-      "industry": "Energy"
+      "industry": "Energy & Power"
     },
     {
       "id": "healing",
       "label": "Healing",
       "color": "#a78bfa",
       "industry": "Medicine & Wellness"
+    },
+    {
+      "id": "sleep",
+      "label": "Sleep",
+      "color": "#6366f1",
+      "industry": "Rest & Consciousness"
     },
     {
       "id": "threat",
@@ -424,10 +436,10 @@
       "problem": "Grid bottleneck is real: 1,650 GW queued, 35% infrastructure incompatible. Solar installer bankruptcy wave. Customer acquisition costs spiked 40%. 42% of renewable projects report efficiency losses during peak demand.",
       "prediction": "Not distributed intelligent energy (15+ players exist: Lunar Energy, Span, Octopus, Sonnen). The real gap is the consumer energy operating system: a single product that makes home energy feel like your phone battery, works for renters AND owners, learns autonomously.",
       "simple": {
-        "crowded": "Fire served five purposes for 200,000 years: warmth, cooking, light, gathering, and ritual. Modern life split these into separate industries and made them all invisible. Your heating is a thermostat. Your cooking is a microwave. Your light is a screen. The gathering fire disappeared entirely.",
-        "stuck": "People are buying the pieces back without realising it. Candles ($14.8B), fire pits ($8.4B), saunas ($6B), circadian lighting ($4.1B), live-fire cooking revival. That's $30B+ spent on ancestral fire. Meanwhile, the actual energy system (solar, grid, batteries) is a confusing bill nobody understands.",
-        "gap": "Nobody connects the two sides. The ancestral need (visible warmth, gathering, ritual) and the modern need (clean, affordable energy) are treated as separate industries. The opportunity: experiences and products that reunite fire's original purposes. Communal warmth. Visible energy. Gathering around something real.",
-        "prediction": "Fire x Bonds: the campfire as social infrastructure. Fire x Healing: heat as transformation (saunas, sweat lodges). Fire x Shelter: homes where energy is visible, communal, and understood."
+        "crowded": "Solar and wind are booming. Battery storage is the fastest-growing energy segment. People are generating their own power for the first time in a century. The shift from centralised to distributed energy has started.",
+        "stuck": "Humans tended their own energy source for 200,000 years. They could see it, understand it, and share it with neighbours. Modern energy is invisible, confusing, and controlled by someone else. Renewables exist but the delivery system was built a century ago for one-way flow.",
+        "gap": "Energy x Bonds: community energy sharing (your solar powers your neighbour). Energy x Shelter: homes that generate, store, and manage their own power. The gap is the consumer experience: nobody makes home energy feel as simple as your phone battery.",
+        "prediction": "The first company that makes home energy visible, understandable, and shareable will own the consumer energy market."
       },
       "phase": "phase3"
     },
@@ -542,6 +554,86 @@
         "prediction": "The emptiest frontier on the entire matrix. The first builder here has no competition. The challenge isn't the market, it's making 'community resilience' feel like a product people want."
       },
       "phase": "phase2"
+    },
+    "play-purple": {
+      "status": "returning",
+      "assumption": "Play is the default state of being. Children play constantly. Adults play through games, ritual, and sport.",
+      "phase3": "Board game cafes, adult play movements, improv workshops, ecstatic dance"
+    },
+    "play-red": {
+      "status": "active",
+      "assumption": "Play = competition. Winning is the point. Sport, gambling, esports."
+    },
+    "play-blue": {
+      "status": "active",
+      "assumption": "Play is structured. Rules, leagues, seasons, rankings. Organised sport."
+    },
+    "play-orange": {
+      "status": "active",
+      "assumption": "Play is entertainment consumed on a screen. Gaming, streaming, spectator sport. Passive, individual, optimised for engagement.",
+      "problem": "TikTok, Netflix, gaming. Dopamine without participation."
+    },
+    "play-green": {
+      "status": "frontier",
+      "assumption": "Play should be inclusive, collaborative, and meaningful. Cooperative games, team-building, gamified wellness.",
+      "phase": "phase3",
+      "simple": {
+        "crowded": "Social sports leagues, escape rooms, board game cafes, improv classes, gamified apps. Everyone adds 'play' to their product. But most adult play is still episodic events or screen-based.",
+        "stuck": "Humans played actively, socially, and daily for 200,000 years. Adults now average 7 hours of screen time daily. The play we consume (gaming, streaming, spectating) gives the dopamine without the connection. Nothing offers regular community play as a daily practice.",
+        "gap": "Daily participatory play for adults, in community, that builds connection and regulates the nervous system. Not gamification (points on an app). Not episodic (escape rooms once a month). Actual play, regularly, with the same people. The sport club model applied to non-sport play.",
+        "prediction": "The first brand that makes daily adult play as normal as going to the gym will create a category that doesn't exist yet. parkrun proved free community movement works at 18M annual finishes. The play equivalent hasn't been built."
+      }
+    },
+    "play-yellow": {
+      "status": "emerging",
+      "assumption": "Play as the integration layer across all branches. Play x Healing, Play x Movement, Play x Bonds.",
+      "phase": "phase3",
+      "simple": {
+        "crowded": "Vibe Rise, ecstatic dance, and silent discos are early examples. Play that heals. Play that bonds. Play that moves.",
+        "stuck": "Nobody frames play as the mechanism that makes Phase 3 products work. CrossFit is play. Wim Hof is play. parkrun is play. But none of them SAY they're play.",
+        "gap": "Play as the conscious design principle for transformation experiences. Not added as a feature, but understood as the reason the experience works.",
+        "prediction": "The experience creators who understand play as their mechanism, not their marketing, will outperform those who don't."
+      }
+    },
+    "sleep-purple": {
+      "status": "returning",
+      "assumption": "Sleep is sacred. Dreams are messages. Rest is ritual.",
+      "phase3": "Yoga nidra, dream circles, sleep retreats"
+    },
+    "sleep-red": {
+      "status": "broken",
+      "assumption": "Sleep is weakness. Hustle while they sleep. 'I'll sleep when I'm dead.'"
+    },
+    "sleep-blue": {
+      "status": "active",
+      "assumption": "Sleep is regulated. 8 hours, consistent schedule, sleep hygiene rules."
+    },
+    "sleep-orange": {
+      "status": "active",
+      "assumption": "Sleep is optimised. Track it, hack it, compress it. Oura, WHOOP, Eight Sleep, melatonin.",
+      "problem": "Sleep became another metric to optimise, adding anxiety to rest."
+    },
+    "sleep-green": {
+      "status": "frontier",
+      "assumption": "Rest is resistance. Nap Ministry. Slowing down as a radical act against hustle culture.",
+      "phase": "phase2",
+      "simple": {
+        "crowded": "Sleep trackers (Oura, WHOOP), smart mattresses (Eight Sleep), sleep apps (Calm, Headspace), supplements ($7.5B melatonin market), sleepmaxxing culture (500M+ TikTok views). Everyone optimises sleep.",
+        "stuck": "Humans slept biphasically, napped freely, and dreamed communally for 200,000 years. Modern sleep is compressed, tracked, and stressed about. Orthosomnia (tracker-induced anxiety) now affects up to 14% of users. Optimising rest defeats the purpose of rest.",
+        "gap": "Rest without measurement. A sleep culture based on ancestral rhythms, nervous system safety, and permission to stop. Not another tracker. The Nap Ministry has the philosophy but no tech. Sleep apps have the tech but no philosophy. Nobody bridges both.",
+        "prediction": "The first brand that makes rest feel like a practice, not a metric, will serve the burnout generation better than any sleep tracker. The anti-sleepmaxxing backlash has started. Nobody has caught the wave with a product."
+      }
+    },
+    "sleep-yellow": {
+      "status": "emerging",
+      "assumption": "Consciousness states as a practice. Yoga nidra, NSDR, lucid dreaming, sensory deprivation.",
+      "phase": "phase2",
+      "simple": {
+        "crowded": "Yoga nidra apps, float tanks, NSDR protocols (Huberman). Early but growing.",
+        "stuck": "Humans accessed altered states through sleep, dreaming, and trance for 200,000 years. Modern culture only values waking consciousness. Everything else is 'unproductive.'",
+        "gap": "Sleep x Healing: using consciousness states (nidra, lucid dreaming, NSDR) as deliberate healing tools, not just relaxation. The science exists. The consumer product doesn't.",
+        "prediction": "Consciousness state practices will become as mainstream as meditation did in the 2010s. The market is pre-product."
+      }
     }
   }
 }

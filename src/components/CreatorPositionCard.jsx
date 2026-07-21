@@ -48,12 +48,8 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
     const profiles = dnaData.profiles || []
     return profiles.filter(p => {
       if (!p.primaryBranch) return false
-      return (
-        p.primaryBranch === pb ||
-        p.secondaryBranch === pb ||
-        (sb && p.primaryBranch === sb) ||
-        (sb && p.secondaryBranch === sb)
-      )
+      const pBranches = [p.primaryBranch, p.secondaryBranch, p.tertiaryBranch].filter(Boolean)
+      return pBranches.includes(pb) || (sb && pBranches.includes(sb))
     }).slice(0, 5)
   }, [primary?.branch, secondary?.branch])
 

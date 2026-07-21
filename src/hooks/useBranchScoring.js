@@ -28,12 +28,12 @@ const PROBLEM_BRANCH_MAP = {
   voice_taken: ['healing', 'bonds'],
   pain_not_believed: ['healing'],
   kids_deserved_better: ['healing', 'bonds'],
-  work_hollows: ['healing', 'movement'],
-  forgot_what_for: ['healing', 'story'],
+  work_hollows: ['healing', 'movement', 'sleep'],
+  forgot_what_for: ['healing', 'story', 'play'],
   life_not_yours: ['healing', 'status'],
   feeling_stupid: ['tools', 'status'],
   locked_out: ['bonds', 'shelter'],
-  stopped_wondering: ['healing', 'tools', 'story'],
+  stopped_wondering: ['healing', 'tools', 'story', 'play'],
   work_treated_nothing: ['status'],
   left_behind: ['bonds'],
   world_losing: ['fire', 'threat'],
@@ -49,7 +49,9 @@ const CAREER_BRANCH_KEYWORDS = {
   status: ['designer', 'brand', 'stylist', 'creative', 'fashion', 'luxury', 'image'],
   nourishment: ['chef', 'nutrition', 'farm', 'food', 'cook', 'diet', 'restaurant'],
   shelter: ['architect', 'property', 'interior', 'real estate', 'housing', 'building'],
+  play: ['play', 'game', 'fun', 'improv', 'comedy', 'entertainment', 'recreation', 'adventure'],
   fire: ['energy', 'sustainability', 'climate', 'solar', 'power'],
+  sleep: ['sleep', 'rest', 'dream', 'nap', 'recovery', 'circadian', 'yoga nidra', 'nsdr'],
   threat: ['security', 'police', 'military', 'safety', 'defense'],
 }
 
@@ -65,6 +67,8 @@ const SKILL_BRANCH_KEYWORDS = {
   shelter: ['architect', 'space', 'interior'],
   fire: ['energy', 'sustainability'],
   threat: ['security', 'resilience', 'protect'],
+  play: ['play', 'game', 'fun', 'recreation', 'improv', 'adventure', 'comedy'],
+  sleep: ['sleep', 'rest', 'dream', 'consciousness', 'recovery', 'nidra'],
 }
 
 function matchCareerToBranches(label) {
@@ -131,7 +135,7 @@ export function useBranchScoring() {
 
         // ── Score accumulation ──
         const scores = {}
-        const ALL_BRANCHES = ['movement', 'nourishment', 'tools', 'status', 'bonds', 'shelter', 'story', 'fire', 'healing', 'threat']
+        const ALL_BRANCHES = ['movement', 'nourishment', 'tools', 'status', 'bonds', 'shelter', 'story', 'play', 'fire', 'healing', 'sleep', 'threat']
         ALL_BRANCHES.forEach(b => { scores[b] = 0 })
 
         const addScore = (branch, weight) => {
