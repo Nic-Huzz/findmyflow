@@ -1222,17 +1222,17 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           ))}
           <div className="ch2-label" style={{ marginBottom: 4, marginTop: 14, color: 'var(--purple)' }}>Inner Game</div>
           {[
-            { label: 'Play Profile', sub: 'Retake the DNA quiz', path: '/play-profile?mode=retake' },
-            { label: 'Know Your Ceiling', sub: 'Map visibility + income limits', path: '/nervous-system' },
-            { label: 'Wound Map', sub: 'The story behind the work', path: '/wound-map' },
-            { label: 'Limiting Beliefs', sub: 'Rewire what blocks you', path: '/limiting-belief-rewire' },
+            { label: 'Play Profile', sub: 'Retake the DNA quiz' },
+            { label: 'Know Your Ceiling', sub: 'Map visibility + income limits' },
+            { label: 'Wound Map', sub: 'The story behind the work' },
+            { label: 'Limiting Beliefs', sub: 'Rewire what blocks you' },
           ].map(item => (
-            <div key={item.path} className="ch2-biz-row" style={{ cursor: 'pointer', marginBottom: 6 }} onClick={() => navigate(item.path)}>
+            <div key={item.label} className="ch2-biz-row" style={{ opacity: 0.4, cursor: 'not-allowed', marginBottom: 6 }}>
               <div className="ch2-biz-info">
                 <div className="ch2-biz-val">{item.label}</div>
                 <div className="ch2-biz-label">{item.sub}</div>
               </div>
-              <div style={{ fontSize: 11, color: '#adb5bd', fontWeight: 600 }}>→</div>
+              <div style={{ fontSize: 11, color: '#adb5bd', fontWeight: 600 }}>🔒</div>
             </div>
           ))}
           <button className="ch2-btn-outline" onClick={() => setActiveTab('identity')} style={{ marginTop: 8 }}>
