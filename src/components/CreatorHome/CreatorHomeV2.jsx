@@ -15,6 +15,7 @@ import { useExperienceList, daysUntil } from '../../hooks/useExperienceData'
 import { fetchCreatorChallenges } from '../../lib/checklistChallengeService'
 import { ESSENCE_ARCHETYPES } from '../../data/essenceArchetypes'
 import { hapticLight } from '../../lib/haptics'
+import useReachScore from '../../hooks/useReachScore'
 import CreatorPositionCard from '../CreatorPositionCard'
 import BlowUpBrandCard from './BlowUpBrandCard'
 import FillNextEvent from './FillNextEvent'
@@ -23,7 +24,7 @@ import { fetchTicketsSold } from '../../hooks/useExperiencePipeline'
 import { lazy, Suspense } from 'react'
 import ExperienceLibrary from './ExperienceLibrary'
 import ExperiencePipeline from '../pipeline/ExperiencePipeline'
-import { PlayProfileEventRec, PlayProfileContentRec } from './PlayProfileRecs'
+import { PlayProfileContentRec } from './PlayProfileRecs'
 import PastExperienceStats from '../pipeline/PastExperienceStats'
 import InstagramConnect from '../pipeline/InstagramConnect'
 import BrandPulseCard from '../pipeline/BrandPulseCard'
@@ -32,13 +33,12 @@ import RootReachCard from '../pipeline/RootReachCard'
 import CreatorRadarChart from './CreatorRadarChart'
 import CreatorCelebrations from './CreatorCelebrations'
 import SectionLaunchPad from './SectionLaunchPad'
-import QuarterlyPlanner from './QuarterlyPlanner'
 import InsightDrop from '../InsightDrop'
 import { useCreatorInsightDrops } from '../../hooks/useCreatorInsightDrops'
 import ZarloWidget from '../Zarlo/ZarloWidget'
 import ZarloProactiveBubble from '../Zarlo/ZarloProactiveBubble'
 import { useCreatorZarloTriggers } from '../../hooks/useCreatorZarloTriggers'
-import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, hasShownStaleNudgeToday, markStaleNudgeShown, getUnlockedAchievements, updateBuildingStreak, HIDDEN_ACHIEVEMENTS } from '../../lib/creatorGamification'
+import { computeCreatorXP, getCreatorLevel, getNextLevel, getGamificationState, updateGamificationState, getUnlockedAchievements, updateBuildingStreak, HIDDEN_ACHIEVEMENTS } from '../../lib/creatorGamification'
 const AIPortal = lazy(() => import('../portal/AIPortal'))
 import './CreatorHomeV2.css'
 
@@ -166,6 +166,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [hasReach, setHasReach] = useState(false)
   const [hasGrowth, setHasGrowth] = useState(false)
   const [hasScaleScore, setHasScaleScore] = useState(false)
+  const [reachDetail, setReachDetail] = useState(null)
+  const [growthDetail, setGrowthDetail] = useState(null)
+  const [scaleDetail, setScaleDetail] = useState(null)
   // hasPositioningStatement removed — CreatorPositionCard handles its own state
   const [essenceAvatar, setEssenceAvatar] = useState(null)
   const [essenceName, setEssenceName] = useState(null)
@@ -189,6 +192,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [limitingBeliefData, setLimitingBeliefData] = useState(null)
 
   const { experiences, loading: expLoading } = useExperienceList()
+  const { reach: reachScore } = useReachScore(userId)
 
   const upcoming = experiences.filter(e => e.status === 'upcoming')
   const past = experiences
@@ -282,9 +286,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         supabase.from('journey_onboarding_selections').select('id').eq('user_id', userId).then(({ data, error }) => ({ data: data?.length >= 4 ? { id: 'complete' } : null, error })),
         supabase.from('healing_compass_responses').select('id, created_at').eq('user_id', userId).eq('flow_version', 2).order('created_at', { ascending: false }).limit(1).maybeSingle(),
         supabase.from('blow_up_readiness').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
-        supabase.from('narrative_builders').select('id').eq('user_id', userId).limit(1).maybeSingle(),
-        supabase.from('access_architectures').select('id').eq('user_id', userId).limit(1).maybeSingle(),
-        supabase.from('scale_diagnostics').select('id, branch').eq('user_id', userId).limit(1).maybeSingle(),
+        supabase.from('narrative_builders').select('id, vehicle_type, vehicle_desc, identity_label, cosign_targets, tribal_language').eq('user_id', userId).limit(1).maybeSingle(),
+        supabase.from('access_architectures').select('id, price_score, time_score, friction_score, cognitive_score, identity_score, weakest_barrier, designed_first_step').eq('user_id', userId).limit(1).maybeSingle(),
+        supabase.from('scale_diagnostics').select('id, branch, total_score, phase_classification, score_body, score_culture, score_identity, score_access, gate_passed').eq('user_id', userId).limit(1).maybeSingle(),
       ])
 
       setScopeResult(scope || null)
@@ -301,6 +305,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       setHasReach(!!reachData?.id)
       setHasGrowth(!!growthData?.id)
       setHasScaleScore(!!scaleScoreData?.id)
+      setReachDetail(reachData || null)
+      setGrowthDetail(growthData || null)
+      setScaleDetail(scaleScoreData || null)
       const allSkills = (skillsData || []).map(s => ({ label: s.cluster_label, fav: s.is_favourite }))
       const allProblems = (problemsData || []).map(p => ({ label: p.cluster_label, fav: p.is_favourite }))
       const hasFavSkills = allSkills.some(s => s.fav)
@@ -322,27 +329,33 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       // Scale Score value (not just boolean)
       setScaleScoreValue(scaleScoreData?.total_score ?? null)
 
-      // Compute creatorXP
-      const threePercentNotes = past.filter(e => e.three_percent_note).length
-      setCreatorXP(computeCreatorXP({
-        hasRemarkableResults: !!remarkData?.id,
-        hasReach: !!reachData?.id,
-        hasGrowth: !!growthData?.id,
-        hasScaleScore: !!scaleScoreData?.id,
-        hasPositioning: !!essenceProfile?.positioning_statement,
-        pastEventCount: past.length,
-        threePercentCount: threePercentNotes,
-        filledEventCount: 0, // TODO: compute from capacity vs attendees when data is available
-        repeatRate: dashboardKPIs?.repeatRate || 0,
-        totalAttendees: dashboardKPIs?.totalAttendees || 0,
-      }))
+      // KPIs + Top fans — compute FIRST so creatorXP uses fresh values
+      let localTotalAttendees = 0
+      let localRepeatRate = 0
+      let localRepeats = 0
+      if (attendeeRows?.length) {
+        const counts = {}
+        attendeeRows.forEach(a => { if (a.contact_id) counts[a.contact_id] = (counts[a.contact_id] || 0) + 1 })
+        localTotalAttendees = Object.keys(counts).length
+        localRepeats = Object.values(counts).filter(c => c >= 2).length
+        localRepeatRate = localTotalAttendees > 0 ? Math.round((localRepeats / localTotalAttendees) * 100) : 0
 
-      // Max ticket price across all experiences
-      const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
-      setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
+        const repeatIds = Object.entries(counts).filter(([, c]) => c >= 2).sort(([, a], [, b]) => b - a).slice(0, 5).map(([id, count]) => ({ id, count }))
+        if (repeatIds.length) {
+          const { data: contacts } = await supabase.from('crm_contacts').select('id, name, email').in('id', repeatIds.map(r => r.id))
+          setTopFans(repeatIds.map(r => {
+            const c = contacts?.find(x => x.id === r.id)
+            return { id: r.id, name: c?.name || c?.email || 'Unknown', count: r.count }
+          }).filter(f => f.name !== 'Unknown'))
+        }
+      }
+      setDashboardKPIs({ totalAttendees: localTotalAttendees, repeatRate: localRepeatRate })
+      setRepeatAttendeeCount(localRepeats)
+
+      // creatorXP and maxTicketPrice moved to useEffect — see below
 
       // Instagram connection check
-      const { data: igIntegration } = await supabase.from('user_integrations').select('id').eq('user_id', userId).eq('platform', 'instagram').eq('status', 'connected').maybeSingle()
+      const { data: igIntegration } = await supabase.from('user_integrations').select('id').eq('user_id', userId).eq('platform', 'instagram').eq('status', 'active').maybeSingle()
       setInstagramConnected(!!igIntegration)
 
       // Founding member check (first 50 by created_at, with stripe_customer_id or manual whitelist)
@@ -359,27 +372,8 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
         setIsFoundingMember((count ?? 999) < 50)
       }
 
-      // KPIs + Top fans from the same attendeeRows fetch
-      if (attendeeRows?.length) {
-        const counts = {}
-        attendeeRows.forEach(a => { if (a.contact_id) counts[a.contact_id] = (counts[a.contact_id] || 0) + 1 })
-        const totalAttendees = Object.keys(counts).length
-        const repeats = Object.values(counts).filter(c => c >= 2).length
-        const repeatRate = totalAttendees > 0 ? Math.round((repeats / totalAttendees) * 100) : 0
-        setDashboardKPIs({ totalAttendees, repeatRate })
-        setRepeatAttendeeCount(repeats)
-
-        const repeatIds = Object.entries(counts).filter(([, c]) => c >= 2).sort(([, a], [, b]) => b - a).slice(0, 5).map(([id, count]) => ({ id, count }))
-        if (repeatIds.length) {
-          const { data: contacts } = await supabase.from('crm_contacts').select('id, name, email').in('id', repeatIds.map(r => r.id))
-          setTopFans(repeatIds.map(r => {
-            const c = contacts?.find(x => x.id === r.id)
-            return { id: r.id, name: c?.name || c?.email || 'Unknown', count: r.count }
-          }).filter(f => f.name !== 'Unknown'))
-        }
-      }
-
       // Building streak — check if creator had activity this week
+      const threePercentNotes = past.filter(e => e.three_percent_note).length
       const hasActivityThisWeek = (
         experiences.length > 0 || !!remarkData?.id || !!reachData?.id ||
         !!growthData?.id || !!scaleScoreData?.id || threePercentNotes > 0
@@ -397,6 +391,26 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
     }
   }
 
+
+  // ── Creator XP + Max Ticket Price (depends on experiences loading) ────
+  useEffect(() => {
+    if (loading || expLoading) return
+    const threePercentNotes = past.filter(e => e.three_percent_note).length
+    setCreatorXP(computeCreatorXP({
+      hasRemarkableResults: !!remarkableAngle,
+      hasReach,
+      hasGrowth,
+      hasScaleScore,
+      hasPositioning: false, // CreatorPositionCard manages its own state
+      pastEventCount: past.length,
+      threePercentCount: threePercentNotes,
+      filledEventCount: 0,
+      repeatRate: dashboardKPIs.repeatRate,
+      totalAttendees: dashboardKPIs.totalAttendees,
+    }))
+    const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
+    setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
+  }, [loading, expLoading, past, experiences, remarkableAngle, hasReach, hasGrowth, hasScaleScore, dashboardKPIs])
 
   // ── Derived ────────────────────────────────────────────────────────────
   const archetype = creatorSelection?.dominant_archetype || null
@@ -437,11 +451,12 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
     threePercentCount: threePercentChain.length,
     hasSoldOut: false, // TODO: compute from capacity vs attendees
     hasScaleScore,
-    quarterlyPlansEmpty: !getGamificationState().quarterlyPlans?.[`${new Date().getFullYear()}-Q${Math.floor(new Date().getMonth() / 3) + 1}`]?.length,
+    quarterlyPlansEmpty: getGamificationState().quarterlyPlannerDismissed !== `${new Date().getFullYear()}-Q${Math.floor(new Date().getMonth() / 3) + 1}`,
     hasRemarkableResults: !!remarkableAngle,
     nextLaunchPadItem: !remarkableAngle ? 'finding your rule break' : !hasReach ? 'Remarkable Reach' : !hasGrowth ? 'Remarkable Growth' : 'your next experience',
   })
   const [zarloChat, setZarloChat] = useState(null)
+  const [originDismissed, setOriginDismissed] = useState(false)
 
   // ── Gate ────────────────────────────────────────────────────────────────
   // Only redirect if data has fully loaded AND no selection exists.
@@ -497,37 +512,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             </div>
           </div>
           <div className="ch2-hero-progress">
-            <div className="ch2-hero-pills">
-              {[
-                { icon: '💎', label: 'Results', done: !!remarkableAngle },
-                { icon: '📡', label: 'Reach', done: hasReach },
-                { icon: '🚀', label: 'Growth', done: hasGrowth },
-                { icon: '📊', label: 'Score', done: hasScaleScore },
-              ].map(p => (
-                <button
-                  key={p.label}
-                  className={`ch2-hero-pill${p.done ? '' : ' dim'}`}
-                  onClick={() => { hapticLight(); document.getElementById('ch2-playbook-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}
-                >
-                  {p.icon} {p.label} {p.done && <span className="tick">✓</span>}
-                </button>
-              ))}
-            </div>
-            <div className="ch2-hero-bar-row">
-              <div className="ch2-hero-bar">
-                <div
-                  className="ch2-hero-bar-fill"
-                  style={{ width: `${Math.max(3, [!!remarkableAngle, hasReach, hasGrowth, hasScaleScore].filter(Boolean).length * 25)}%` }}
-                />
-              </div>
-              <div className="ch2-hero-bar-label">
-                Playbook {[!!remarkableAngle, hasReach, hasGrowth, hasScaleScore].filter(Boolean).length} of 4
-              </div>
-            </div>
             {/* Creator XP + Level */}
             <div className="ch2-xp-row">
               <span className="ch2-xp-level">⚡ {getCreatorLevel(creatorXP).name}</span>
-              {isFoundingMember && <span className="ch2-founding-badge">FOUNDING</span>}
               <span className="ch2-xp-bar-wrap">
                 <span
                   className="ch2-xp-bar-fill"
@@ -538,9 +525,10 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 {getNextLevel(creatorXP) ? `${creatorXP} / ${getNextLevel(creatorXP).threshold} XP` : `${creatorXP} XP`}
               </span>
             </div>
-            {/* Streak + Trophies row */}
-            {(buildingStreak.current > 0 || achievementCount > 0) && (
+            {/* Streak + Founding + Trophies row */}
+            {(buildingStreak.current > 0 || achievementCount > 0 || isFoundingMember) && (
               <div className="ch2-streak-row">
+                {isFoundingMember && <span className="ch2-founding-badge">FOUNDING</span>}
                 {buildingStreak.current > 0 && (
                   <span className="ch2-streak-pill">
                     🔥 {buildingStreak.current}w streak
@@ -675,16 +663,71 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               {/* ═══ PLAYBOOK SUB-TAB ═══ */}
               {identitySubTab === 'playbook' && <>
 
+              {/* Position card — data from /curiosity-map, /life-map, /life-paths, active quests */}
+              <CreatorPositionCard
+                userId={userId}
+                essenceName={essenceName}
+                skills={userSkills}
+                problems={userProblems}
+                remarkableAngle={remarkableAngle}
+                onCreatorTap={handleCreatorTap}
+              />
+
               <BlowUpBrandCard
                 remarkableAngle={remarkableAngle}
                 hasReach={hasReach}
                 hasGrowth={hasGrowth}
                 hasScaleScore={hasScaleScore}
+                reachDetail={reachDetail}
+                growthDetail={growthDetail}
+                scaleDetail={scaleDetail}
                 blowUpReadiness={blowUpReadiness}
                 navigate={navigate}
               />
 
               <div className="ch2-id-divider" />
+
+              {/* Your Model */}
+              {(payRentModel || assessment) ? (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-label">Your Model</div>
+                  {payRentModel && (
+                    <div className="ch2-biz-row">
+                      <div className="ch2-biz-icon">💼</div>
+                      <div className="ch2-biz-info">
+                        <div className="ch2-biz-label">Pay Rent</div>
+                        <div className="ch2-biz-val">{PAY_RENT_LABELS[payRentModel] || payRentModel}</div>
+                      </div>
+                      <div className="ch2-biz-status ch2-st-done">✓</div>
+                    </div>
+                  )}
+                  {assessment && ['attraction', 'core', 'continuity'].map(layer => {
+                    const detail = assessment[`${layer}_detail`]
+                    const status = assessment[`${layer}_status`]
+                    const colors = { attraction: '#8b5cf6', core: '#E9A23B', continuity: '#3b82f6' }
+                    return (
+                      <div key={layer} className="ch2-biz-row">
+                        <div className="ch2-biz-dot" style={{ background: colors[layer] }} />
+                        <div className="ch2-biz-info">
+                          <div className="ch2-biz-label">{layer}</div>
+                          <div className="ch2-biz-val">{detail || 'Not set yet'}</div>
+                        </div>
+                        <div className={`ch2-biz-status ${status === 'have' ? 'ch2-st-done' : status === 'inconsistent' ? 'ch2-st-wip' : 'ch2-st-todo'}`}>
+                          {status === 'have' ? '✓' : status === 'inconsistent' ? '~' : '—'}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
+                  <div className="ch2-locked" onClick={() => navigate('/create/pay-rent')}>
+                    <div className="ch2-locked-title">Your Model</div>
+                    <div className="ch2-locked-sub">How do you pay rent? What's your attraction / core / continuity?</div>
+                    <div className="ch2-locked-cta">Build Your Model →</div>
+                  </div>
+                </div>
+              )}
 
               {/* ═══ ACTIONS ═══ */}
               <div className="ch2-id-section" style={{ paddingTop: 14 }}>
@@ -729,58 +772,6 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                   )}
                 </div>
               </div>
-
-              {/* Your Model */}
-              {(payRentModel || assessment) ? (
-                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-label">Your Model</div>
-                  {payRentModel && (
-                    <div className="ch2-biz-row">
-                      <div className="ch2-biz-icon">💼</div>
-                      <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">Pay Rent</div>
-                        <div className="ch2-biz-val">{PAY_RENT_LABELS[payRentModel] || payRentModel}</div>
-                      </div>
-                      <div className="ch2-biz-status ch2-st-done">✓</div>
-                    </div>
-                  )}
-                  {assessment && ['attraction', 'core', 'continuity'].map(layer => {
-                    const detail = assessment[`${layer}_detail`]
-                    const status = assessment[`${layer}_status`]
-                    const colors = { attraction: '#8b5cf6', core: '#E9A23B', continuity: '#3b82f6' }
-                    return (
-                      <div key={layer} className="ch2-biz-row">
-                        <div className="ch2-biz-dot" style={{ background: colors[layer] }} />
-                        <div className="ch2-biz-info">
-                          <div className="ch2-biz-label">{layer}</div>
-                          <div className="ch2-biz-val">{detail || 'Not set yet'}</div>
-                        </div>
-                        <div className={`ch2-biz-status ${status === 'have' ? 'ch2-st-done' : status === 'inconsistent' ? 'ch2-st-wip' : 'ch2-st-todo'}`}>
-                          {status === 'have' ? '✓' : status === 'inconsistent' ? '~' : '—'}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="ch2-id-section" style={{ paddingTop: 14 }}>
-                  <div className="ch2-locked" onClick={() => navigate('/create/pay-rent')}>
-                    <div className="ch2-locked-title">Your Model</div>
-                    <div className="ch2-locked-sub">How do you pay rent? What's your attraction / core / continuity?</div>
-                    <div className="ch2-locked-cta">Build Your Model →</div>
-                  </div>
-                </div>
-              )}
-
-              {/* Creator Position Card — industry frontier + rarity + positioning (merges old PositioningSummary) */}
-              <CreatorPositionCard
-                userId={userId}
-                essenceName={essenceName}
-                skills={userSkills}
-                problems={userProblems}
-                remarkableAngle={remarkableAngle}
-                onCreatorTap={handleCreatorTap}
-              />
 
               </>}
 
@@ -926,20 +917,8 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             ]} />
           )}
 
-          {/* Play Profile Event Recommendations — visible when DNA result exists and no experience selected */}
-          {!selectedExperienceId && dnaResult?.dna_code && (
-            <PlayProfileEventRec
-              dnaResult={dnaResult}
-              experiences={experiences}
-              onCreateExperience={() => navigate('/create/experience/new')}
-              onNavigate={navigate}
-            />
-          )}
-
-          {/* Quarterly Planner — visible when no experience selected */}
-          {!selectedExperienceId && (
-            <QuarterlyPlanner experiences={experiences} pastExperiences={past} />
-          )}
+          {/* PlayProfileEventRec archived — see CLAUDE.md Archived Features */}
+          {/* QuarterlyPlanner archived — see CLAUDE.md Archived Features */}
 
           {/* ── Growth Line Pipeline or Past Stats (when experience selected) ── */}
           {selectedExperienceId ? (
@@ -956,31 +935,21 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             )
           ) : (
           <>
-          {/* Fill this event — nearest upcoming */}
-          {upcoming.length > 0 && (
-            <FillNextEvent
-              experience={upcoming[0]}
-              onOpen={(id) => setSelectedExperienceId(id)}
-            />
-          )}
-
-          {/* Pipeline staleness nudge */}
-          {upcoming.map(exp => {
+          {/* Fill this event — nearest upcoming (staleness nudge integrated) */}
+          {upcoming.length > 0 && (() => {
+            const exp = upcoming[0]
             const d = daysUntil(exp.experience_date)
             const cl = checklistCounts[exp.id] || {}
             const totalDone = Object.values(cl).reduce((sum, s) => sum + (s.done || 0), 0)
-            if (d >= 7 && totalDone === 0 && !hasShownStaleNudgeToday(exp.id)) {
-              return (
-                <div key={`stale-${exp.id}`} className="ch2-stale-nudge" onClick={() => { markStaleNudgeShown(exp.id); setSelectedExperienceId(exp.id) }}>
-                  <div className="ch2-stale-text">
-                    Your <strong>{exp.name}</strong> is in {d} days and your audience doesn't know about it yet.
-                  </div>
-                  <div className="ch2-stale-cta">Start marketing &rarr;</div>
-                </div>
-              )
-            }
-            return null
-          })}
+            const stale = d >= 7 && totalDone === 0
+            return (
+              <FillNextEvent
+                experience={exp}
+                onOpen={(id) => setSelectedExperienceId(id)}
+                isStale={stale}
+              />
+            )
+          })()}
 
           {/* Upcoming */}
           {upcoming.length > 0 && (
@@ -1011,7 +980,13 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                           {cd && <span className={`ch2-exp-countdown ${cd.urgency ? `ch2-countdown-${cd.urgency}` : ''}`}>{cd.text}</span>}
                         </div>
                       </div>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#5e17eb' }}>Open →</div>
+                      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                        <div
+                          style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', cursor: 'pointer' }}
+                          onClick={(e) => { e.stopPropagation(); hapticLight(); navigate(`/create/experience/${exp.id}`) }}
+                        >Edit</div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: '#5e17eb' }}>Open →</div>
+                      </div>
                     </div>
                     {/* Spots bar */}
                     {hasCapacity && (
@@ -1100,18 +1075,8 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           <SectionLaunchPad title="Start tracking" items={[
             { label: 'Connect Instagram', done: instagramConnected, action: () => document.querySelector('.ig-connect-btn')?.click() },
             { label: 'Run your first experience', done: past.length > 0, route: '/create/experience/new' },
-            { label: 'Log your first 3% improvement', done: threePercentChain.length > 0, action: () => past[0] && setSelectedExperienceId(past[0].id) },
+            { label: 'Complete a Reach · This Week task', done: reachScore >= 1 },
           ]} />
-
-          {/* Spider Graph — Your Shape */}
-          <CreatorRadarChart data={{
-            impact: dashboardKPIs.totalAttendees || 0,
-            consistency: past.length,
-            retention: dashboardKPIs.repeatRate || 0,
-            brand: scaleScoreValue,
-            price: maxTicketPrice,
-            reach: null, // TODO: wire Instagram views when BrandPulse data is lifted
-          }} />
 
           {/* Creator Momentum */}
           <RootReachCard />
@@ -1120,11 +1085,6 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           <InstagramConnect onRefresh={() => setIgRefreshKey(k => k + 1)} />
           <BrandPulseCard />
           <ContentIntel refreshKey={igRefreshKey} />
-
-          {/* Play Profile Content Recommendations */}
-          {dnaResult?.dna_code && (
-            <PlayProfileContentRec dnaResult={dnaResult} onNavigate={navigate} />
-          )}
 
           {/* KPIs */}
           <div className="ch2-kpi-grid">
@@ -1201,6 +1161,21 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                 </div>
               ))}
             </div>
+          )}
+
+          {/* Spider Graph — Your Shape */}
+          <CreatorRadarChart data={{
+            impact: dashboardKPIs.totalAttendees || 0,
+            consistency: past.length,
+            retention: dashboardKPIs.repeatRate || 0,
+            brand: scaleScoreValue,
+            price: maxTicketPrice,
+            reach: null, // TODO: wire Instagram views when BrandPulse data is lifted
+          }} />
+
+          {/* Play Profile Content Recommendations */}
+          {dnaResult?.dna_code && (
+            <PlayProfileContentRec dnaResult={dnaResult} onNavigate={navigate} />
           )}
 
           {/* Trajectory */}
@@ -1410,12 +1385,12 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       )}
 
       {/* Origin story overlay — first visit only, skip if payment redirect */}
-      {!loading && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (
+      {!loading && !originDismissed && !getGamificationState().origin_seen && !new URLSearchParams(window.location.search).has('welcome') && (
         <div className="ch2-origin-overlay">
           <div className="ch2-origin-card">
             <h2 className="ch2-origin-title">The world is going to be a better place thanks to you and your work.</h2>
             <p className="ch2-origin-sub">We're here to help you create that change.</p>
-            <button className="ch2-origin-cta" onClick={() => updateGamificationState({ origin_seen: true })}>
+            <button className="ch2-origin-cta" onClick={() => { updateGamificationState({ origin_seen: true }); setOriginDismissed(true) }}>
               Let's go &rarr;
             </button>
           </div>

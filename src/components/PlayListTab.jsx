@@ -148,20 +148,31 @@ export default function PlayListTab({
         seen.add(pick.reference_id)
         return true
       })
-      // Enrich with source label + quest name
-      const enriched = await Promise.all(unique.map(async pick => {
-        const [{ data: challenge }, { data: questTask }] = await Promise.all([
-          supabase.from('groan_challenges').select('source_label, status').eq('id', pick.reference_id).single(),
-          supabase.from('quest_tasks').select('quest_id').eq('groan_challenge_id', pick.reference_id).limit(1).maybeSingle(),
-        ])
-        let questName = null
-        if (questTask?.quest_id) {
-          const { data: quest } = await supabase.from('quests').select('label').eq('id', questTask.quest_id).single()
-          questName = quest?.label
-        }
-        return { ...pick, _source_label: questName || challenge?.source_label, _status: challenge?.status }
-      }))
-      setActiveChallenges(enriched.filter(e => e._status !== 'completed'))
+      // Batch-enrich with source label + quest name, filter out challenges from closed quests
+      const refIds = unique.map(p => p.reference_id).filter(Boolean)
+      const [{ data: challenges }, { data: questTasks }] = await Promise.all([
+        supabase.from('groan_challenges').select('id, source_label, status').in('id', refIds),
+        supabase.from('quest_tasks').select('quest_id, groan_challenge_id').in('groan_challenge_id', refIds),
+      ])
+      const challengeMap = Object.fromEntries((challenges || []).map(c => [c.id, c]))
+      const taskMap = Object.fromEntries((questTasks || []).map(t => [t.groan_challenge_id, t.quest_id]))
+
+      // Batch-fetch quests for all linked quest_ids
+      const questIds = [...new Set(Object.values(taskMap).filter(Boolean))]
+      let questMap = {}
+      if (questIds.length > 0) {
+        const { data: quests } = await supabase.from('quests').select('id, label, status').in('id', questIds)
+        questMap = Object.fromEntries((quests || []).map(q => [q.id, q]))
+      }
+
+      const enriched = unique.map(pick => {
+        const challenge = challengeMap[pick.reference_id]
+        const questId = taskMap[pick.reference_id]
+        const quest = questId ? questMap[questId] : null
+        const questClosed = quest?.status === 'closed' || quest?.status === 'completed'
+        return { ...pick, _source_label: quest?.label || challenge?.source_label, _status: challenge?.status, _questClosed: questClosed }
+      })
+      setActiveChallenges(enriched.filter(e => e._status !== 'completed' && !e._questClosed))
     }
   }
 

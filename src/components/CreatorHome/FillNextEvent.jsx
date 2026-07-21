@@ -5,8 +5,10 @@
  * Tickets sold + step readiness come from useExperiencePipeline (canonical source).
  */
 
+import { useNavigate } from 'react-router-dom'
 import useExperiencePipeline from '../../hooks/useExperiencePipeline'
 import { daysUntil } from '../../hooks/useExperienceData'
+import { hapticLight } from '../../lib/haptics'
 
 const NEXT_STEP_COPY = {
   attract: { strong: 'post your attract content', rest: 'Get the word out so people know it is happening.' },
@@ -16,7 +18,8 @@ const NEXT_STEP_COPY = {
   grow: { strong: 'plan your grow step', rest: 'Set up how people bring their friends next time.' },
 }
 
-export default function FillNextEvent({ experience, onOpen }) {
+export default function FillNextEvent({ experience, onOpen, isStale }) {
+  const navigate = useNavigate()
   const { nodes, loading } = useExperiencePipeline(experience?.id)
 
   if (!experience || loading) return null
@@ -45,7 +48,13 @@ export default function FillNextEvent({ experience, onOpen }) {
     <div className="ch2-fill-next">
       <div className="ch2-fill-next-top">
         <div className="ch2-fill-next-event">{experience.name}</div>
-        {daysBadge && <span className="ch2-card-badge ch2-badge-next">{daysBadge}</span>}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <span
+            style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', cursor: 'pointer' }}
+            onClick={(e) => { e.stopPropagation(); hapticLight(); navigate(`/create/experience/${experience.id}`) }}
+          >Edit</span>
+          {daysBadge && <span className="ch2-card-badge ch2-badge-next">{daysBadge}</span>}
+        </div>
       </div>
 
       {hasCapacity && (
@@ -54,6 +63,13 @@ export default function FillNextEvent({ experience, onOpen }) {
             <div className={`ch2-exp-spots-fill${isLow ? ' low' : ''}`} style={{ width: `${fillPct}%` }} />
           </div>
           <span className={`ch2-exp-spots-label${isLow ? ' low' : ''}`}>{tickets} / {capacity} spots</span>
+        </div>
+      )}
+
+      {/* Staleness nudge — inline when no marketing started */}
+      {isStale && days > 1 && (
+        <div className="ch2-fill-next-stale">
+          This event is in {days} days and your audience doesn't know about it yet.
         </div>
       )}
 
