@@ -31,7 +31,7 @@ const BRANCH_META = {
   play: { label: 'Play', color: '#06b6d4' },
   fire: { label: 'Energy', color: '#f59e0b' },
   healing: { label: 'Healing', color: '#a78bfa' },
-  sleep: { label: 'Sleep', color: '#6366f1' },
+  rest: { label: 'Rest', color: '#6366f1' },
   threat: { label: 'Threat', color: '#ef4444' },
 }
 

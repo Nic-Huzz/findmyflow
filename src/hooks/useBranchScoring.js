@@ -28,7 +28,7 @@ const PROBLEM_BRANCH_MAP = {
   voice_taken: ['healing', 'bonds'],
   pain_not_believed: ['healing'],
   kids_deserved_better: ['healing', 'bonds'],
-  work_hollows: ['healing', 'movement', 'sleep'],
+  work_hollows: ['healing', 'movement', 'rest'],
   forgot_what_for: ['healing', 'story', 'play'],
   life_not_yours: ['healing', 'status'],
   feeling_stupid: ['tools', 'status'],
@@ -51,7 +51,7 @@ const CAREER_BRANCH_KEYWORDS = {
   shelter: ['architect', 'property', 'interior', 'real estate', 'housing', 'building'],
   play: ['play', 'game', 'fun', 'improv', 'comedy', 'entertainment', 'recreation', 'adventure'],
   fire: ['energy', 'sustainability', 'climate', 'solar', 'power'],
-  sleep: ['sleep', 'rest', 'dream', 'nap', 'recovery', 'circadian', 'yoga nidra', 'nsdr'],
+  rest: ['sleep', 'rest', 'dream', 'nap', 'recovery', 'circadian', 'yoga nidra', 'nsdr'],
   threat: ['security', 'police', 'military', 'safety', 'defense'],
 }
 
@@ -68,7 +68,7 @@ const SKILL_BRANCH_KEYWORDS = {
   fire: ['energy', 'sustainability'],
   threat: ['security', 'resilience', 'protect'],
   play: ['play', 'game', 'fun', 'recreation', 'improv', 'adventure', 'comedy'],
-  sleep: ['sleep', 'rest', 'dream', 'consciousness', 'recovery', 'nidra'],
+  rest: ['sleep', 'rest', 'dream', 'consciousness', 'recovery', 'nidra'],
 }
 
 function matchCareerToBranches(label) {
@@ -135,7 +135,7 @@ export function useBranchScoring() {
 
         // ── Score accumulation ──
         const scores = {}
-        const ALL_BRANCHES = ['movement', 'nourishment', 'tools', 'status', 'bonds', 'shelter', 'story', 'play', 'fire', 'healing', 'sleep', 'threat']
+        const ALL_BRANCHES = ['movement', 'nourishment', 'tools', 'status', 'bonds', 'shelter', 'story', 'play', 'fire', 'healing', 'rest', 'threat']
         ALL_BRANCHES.forEach(b => { scores[b] = 0 })
 
         const addScore = (branch, weight) => {
@@ -167,7 +167,7 @@ export function useBranchScoring() {
         // Use quest.branch field (AI-classified) when available, fall back to label keyword matching
         quests.forEach(q => {
           if (q.status !== 'active') return // only score active quests for base signal
-          const branches = q.branch ? [q.branch] : matchCareerToBranches(q.label)
+          const branches = Array.isArray(q.branch) ? q.branch : q.branch ? [q.branch] : matchCareerToBranches(q.label)
           const weight = q.predicted_state === 'vibe' ? 3 : 2
           branches.forEach(b => addScore(b, weight))
         })

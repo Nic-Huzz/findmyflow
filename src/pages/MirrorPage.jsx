@@ -476,17 +476,14 @@ export default function MirrorPage() {
           <h3 className="mp-section-title" style={{ color: '#5e17eb' }}>Your Skills</h3>
           <p className="mp-section-sub">XP earned from completed courage challenges and tasks</p>
           {skillProgress.map(skill => {
+            const MAX_XP = 100
             const THRESHOLDS = [0, 3, 8, 15, 25]
             const LEVEL_NAMES = ['Learning', 'Testing', 'Practising', 'Charging', 'Teaching']
             let levelIdx = 0
             for (let i = THRESHOLDS.length - 1; i >= 0; i--) {
               if (skill.xp >= THRESHOLDS[i]) { levelIdx = i; break }
             }
-            const nextThreshold = levelIdx < 4 ? THRESHOLDS[levelIdx + 1] : THRESHOLDS[4]
-            const currentThreshold = THRESHOLDS[levelIdx]
-            const progressInLevel = skill.xp - currentThreshold
-            const levelRange = nextThreshold - currentThreshold
-            const progressPct = levelIdx >= 4 ? 100 : Math.round((progressInLevel / levelRange) * 100)
+            const barPct = Math.min(100, Math.round((skill.xp / MAX_XP) * 100))
             const SKILL_NAMES = {
               storytelling: 'Storytelling', teaching: 'Teaching', coaching: 'Coaching',
               performing: 'Performing', creating: 'Creating', building: 'Building',
@@ -500,10 +497,10 @@ export default function MirrorPage() {
                   <span className="mp-skill-level">{LEVEL_NAMES[levelIdx]}</span>
                 </div>
                 <div className="mp-skill-bar-track">
-                  <div className="mp-skill-bar-fill" style={{ width: `${progressPct}%` }} />
+                  <div className="mp-skill-bar-fill" style={{ width: `${barPct}%` }} />
                 </div>
                 <div className="mp-skill-meta">
-                  <span className="mp-skill-xp">{skill.xp} XP{levelIdx < 4 ? ` / ${nextThreshold} to next` : ' (max)'}</span>
+                  <span className="mp-skill-xp">{skill.xp} / {MAX_XP} XP</span>
                   <span className="mp-skill-count">{skill.xp} task{skill.xp !== 1 ? 's' : ''}</span>
                 </div>
               </div>

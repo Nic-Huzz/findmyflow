@@ -24,16 +24,20 @@ const BRANCHES = [
   { key: 'bonds',       label: 'Bonds',       icon: '\u{1F91D}', desc: 'Relationships, community, gathering, friendship' },
   { key: 'shelter',     label: 'Shelter',     icon: '\u{1F3E0}', desc: 'Space design, environments, co-living' },
   { key: 'story',       label: 'Story',       icon: '\u{1F4D6}', desc: 'Narrative, storytelling, live content, media' },
+  { key: 'play',        label: 'Play',        icon: '🎲', desc: 'Games, recreation, improv, adventure, fun' },
   { key: 'fire',        label: 'Fire/Energy', icon: '\u{1F525}', desc: 'Ceremony, lighting, ritual, frequency' },
   { key: 'healing',     label: 'Healing',     icon: '\u{1F49C}', desc: 'Therapy, breathwork, somatic, plant medicine' },
+  { key: 'rest',        label: 'Rest',        icon: '😴', desc: 'Rest, dreams, stillness, recovery' },
   { key: 'threat',      label: 'Threat',      icon: '\u2694\uFE0F', desc: 'Courage, fear-facing, resilience, safety' },
 ]
 
 const ANCESTRAL_EXAMPLES = {
   movement:    ['fitness apps, online PT', 'gym classes with some bodyweight', 'running, swimming, martial arts', 'CrossFit, obstacle races, cold plunge', 'barefoot running, wrestling, group hunts'],
   healing:     ['therapy apps, online counseling', 'guided meditation apps, journaling prompts', 'breathwork, sound healing, group circles', 'sweat lodges, plant medicine ceremony, fasting retreats', 'sitting in silence, grief rituals, laying on of hands'],
+  rest: ['sleep tracking apps, white noise', 'consistent sleep schedule, dark room', 'guided relaxation, gentle breathing', 'yoga nidra sessions, float tanks, dream journaling', 'polyphasic sleep, lucid dreaming, sleep as spiritual practice'],
   bonds:       ['networking apps, LinkedIn events', 'team-building workshops', 'group dinners, community circles', 'men\'s/women\'s circles, fireside gatherings', 'tribal councils, communal feasts, rites of passage'],
   story:       ['content creation courses, blogging tools', 'storytelling workshops', 'live spoken word, open mic nights', 'campfire storytelling, oral history circles', 'myths told around fire, passing down lineage stories'],
+  play: ['mobile games, casual apps', 'board games, card games with friends', 'improv classes, escape rooms, active play', 'daily play groups, flow arts circles, adventure challenges', 'play as ceremony, unstructured free play in nature'],
   nourishment: ['meal kit delivery, nutrition apps', 'cooking classes with some tradition', 'communal cooking, fermentation, foraging', 'fasting retreats, ancestral diet programs, fire-cooked feasts', 'hunting and preparing your own food, eating only what grows near you'],
   fire:        ['LED mood lighting, sound machines', 'candle-lit yoga, ambient playlists', 'fire circles, drumming sessions', 'sweat lodge ceremonies, fire walking, cacao ceremony', 'tending a fire all night, sunrise rituals, solstice gatherings'],
   tools:       ['SaaS products, online courses', 'mentorship programs, skill workshops', 'apprenticeships, hands-on building', 'craft guilds, tool-making, building with your hands', 'flintknapping, weaving, shelter-building from raw materials'],
@@ -45,8 +49,10 @@ const ANCESTRAL_EXAMPLES = {
 const BODY_EXAMPLES = {
   movement:    ['exercise theory videos', 'light stretching, warm-up drills', 'a tough workout, HIIT class', 'cold plunge, intense bootcamp, altitude training', 'multi-day endurance challenge, extreme cold exposure'],
   healing:     ['talk therapy, a lecture', 'guided visualization, gentle meditation', 'sound bath, yin yoga, reiki', 'intense breathwork, cold exposure, somatic release', 'multi-day silent retreat, ayahuasca, extended fasting'],
+  rest: ['hearing about sleep science', 'trying a relaxation routine', 'guided meditation, gentle body scan', 'deep yoga nidra, full body surrender', 'extended rest retreat, multi-day sleep reset'],
   bonds:       ['a networking event', 'a workshop with some movement', 'group activities, partner exercises', 'deep sharing circles, trust falls, vulnerability challenges', 'multi-day immersion, sleeping rough together, physical ordeals'],
   story:       ['watching a presentation', 'feeling moved by a talk', 'goosebumps during a live performance', 'full-body response to a story, crying, shaking', 'cathartic release, feeling physically different after sharing your story'],
+  play: ['watching a game or comedy', 'playing a casual game, light activity', 'active games, laughing with others, improv', 'full body play, flow state, feeling fully alive', 'ecstatic play, multi-hour movement, embodied joy'],
   nourishment: ['learning about nutrition', 'trying a new recipe', 'a cooking class where you eat what you make', 'a fast that resets your digestion, a feast that changes your palette', 'multi-day fast, a diet shift that changes your bloodwork'],
   fire:        ['a relaxing ambiance', 'mild warmth, gentle sensory shift', 'heat exposure, drumming vibrations through the body', 'fire walking, sweat lodge, intense heat ceremony', 'altered states from sustained fire-gazing, overnight vigils'],
   tools:       ['watching a tutorial', 'light hands-on practice', 'building something physical, getting your hands dirty', 'exhausting physical build, hours of focused craft', 'building something from raw materials over days'],

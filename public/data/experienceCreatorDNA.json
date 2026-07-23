@@ -247,8 +247,9 @@
       "blowUpMetaPattern": "bridge",
       "blowUpSubPattern": "content_vehicle",
       "blowUpPatternNote": "Jordan's stardom was the bridge. Championships were the content vehicle.",
-      "primaryBranch": "healing",
-      "secondaryBranch": "bonds"
+      "primaryBranch": "play",
+      "secondaryBranch": "bonds",
+      "tertiaryBranch": "healing"
     },
     {
       "name": "Tenzin Palmo",
@@ -2088,7 +2089,8 @@
       "blowUpMetaPattern": "bridge",
       "blowUpPatternNote": "Joe Rogan was the bridge.",
       "primaryBranch": "healing",
-      "secondaryBranch": "tools"
+      "secondaryBranch": "tools",
+      "tertiaryBranch": "rest"
     },
     {
       "name": "Ram Dass",
@@ -3347,8 +3349,9 @@
       },
       "blowUpMetaPattern": "category",
       "blowUpPatternNote": "Created sober morning dance party category.",
-      "primaryBranch": "bonds",
-      "secondaryBranch": "movement"
+      "primaryBranch": "play",
+      "secondaryBranch": "bonds",
+      "tertiaryBranch": "movement"
     },
     {
       "name": "Meghan Pappenheim",
@@ -3578,7 +3581,8 @@
       "blowUpMetaPattern": "category",
       "blowUpPatternNote": "Created yoga + music festival category.",
       "primaryBranch": "bonds",
-      "secondaryBranch": "movement"
+      "secondaryBranch": "play",
+      "tertiaryBranch": "movement"
     },
     {
       "name": "Gabrielle Roth",
@@ -3692,7 +3696,8 @@
       "blowUpMetaPattern": "portable",
       "blowUpPatternNote": "5Rhythms method codified into a certifiable, portable practice.",
       "primaryBranch": "movement",
-      "secondaryBranch": "healing"
+      "secondaryBranch": "play",
+      "tertiaryBranch": "healing"
     },
     {
       "name": "Larry Harvey",
@@ -3806,7 +3811,8 @@
       "blowUpMetaPattern": "category",
       "blowUpPatternNote": "Created the participatory burn/gifting festival category.",
       "primaryBranch": "bonds",
-      "secondaryBranch": "status"
+      "secondaryBranch": "play",
+      "tertiaryBranch": "status"
     },
     {
       "name": "Brené Brown",

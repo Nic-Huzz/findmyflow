@@ -105,7 +105,7 @@ function checkCreatorInsights(data) {
   // 4. DNA comparison — rule break branch matches a known creator
   if (data.remarkableAngle?.branch && data.dnaProfiles?.length > 0) {
     const branch = data.remarkableAngle.branch
-    const match = data.dnaProfiles.find(p => p.primaryBranch === branch && p.blowUpMoment)
+    const match = data.dnaProfiles.find(p => [p.primaryBranch, p.secondaryBranch, p.tertiaryBranch].includes(branch) && p.blowUpMoment)
     if (match) {
       const key = `dna_match_${match.name.replace(/\s/g, '_').toLowerCase()}`
       if (!hasSeen(key)) {

@@ -32,6 +32,10 @@ import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreAction
 import { useChallengeData } from './hooks/useChallengeData'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
+import { useGhostMatchup } from './hooks/useGhostMatchup'
+
+// Ghost Self League: set to true to use ghost mode, false for PvP league
+const USE_GHOST = true
 import { getScoringCategory } from './lib/scoringCategories'
 // ContentChallenges archived — moves to Fantasy League when reactivated
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
@@ -328,20 +332,27 @@ function Challenge() {
   // Insight Drops (self-knowledge cards, max 1 per session)
   const { insight, dismissInsight } = useInsightDrops(user?.id)
 
-  // League data for nudge banner + content challenges
+  // League data for nudge banner + content challenges (PvP mode)
   const {
     leagueExists, isOnTeam, league, userTeam, teams, standings,
     getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
     reloadContent, contentSubmissions
   } = useLeagueData()
 
-  // Fantasy category scores + opponent matchup data for header
-  const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } = useMatchupData({
+  // PvP matchup data (only used when ghost mode is off)
+  const pvpMatchup = useMatchupData({
     completions,
     contentSubmissions,
     userTeam, league, teams,
     getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
   })
+
+  // Ghost Self League (replaces PvP when USE_GHOST is true)
+  const ghostMatchup = useGhostMatchup({ completions, userId: user?.id })
+
+  // Unified interface — ghost or PvP
+  const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } =
+    USE_GHOST ? ghostMatchup : pvpMatchup
 
   // State for tracking recently completed quest for animation
   const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
@@ -1479,7 +1490,9 @@ function Challenge() {
       {/* W/L flip toast */}
       {flipEvent?.type === 'win' && (
         <MicroToast
-          message={`You overtook them in ${flipEvent.categories.join(' & ')}!`}
+          message={USE_GHOST
+            ? `You passed your Ghost in ${flipEvent.categories.join(' & ')}!`
+            : `You overtook them in ${flipEvent.categories.join(' & ')}!`}
           duration={3000}
           onComplete={clearFlipEvent}
         />

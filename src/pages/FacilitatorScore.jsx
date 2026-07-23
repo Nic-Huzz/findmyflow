@@ -37,8 +37,10 @@ const BRANCHES = [
   { key: 'bonds',       label: 'Bonds',       icon: '\u{1F91D}', desc: 'Relationships, community, gathering, friendship', creators: 10 },
   { key: 'shelter',     label: 'Shelter',     icon: '\u{1F3E0}', desc: 'Space design, environments, co-living', creators: 1 },
   { key: 'story',       label: 'Story',       icon: '\u{1F4D6}', desc: 'Narrative, storytelling, live content, media', creators: 8 },
+  { key: 'play',        label: 'Play',        icon: '🎲', desc: 'Games, recreation, improv, adventure, fun', creators: 0 },
   { key: 'fire',        label: 'Fire/Energy', icon: '\u{1F525}', desc: 'Ceremony, lighting, ritual, frequency', creators: 1 },
   { key: 'healing',     label: 'Healing',     icon: '\u{1F49C}', desc: 'Therapy, breathwork, somatic, plant medicine', creators: 30 },
+  { key: 'rest',        label: 'Rest',        icon: '😴', desc: 'Rest, dreams, stillness, recovery', creators: 0 },
   { key: 'threat',      label: 'Threat',      icon: '\u2694\uFE0F', desc: 'Courage, fear-facing, resilience, safety', creators: 0 },
 ]
 
@@ -58,6 +60,13 @@ const BRANCH_EXAMPLES = {
     format: ['therapy room, Zoom session', 'outdoor sessions, walking therapy', 'breathwork + live music, therapy + nature', 'headset breathwork journeys, therapy via podcast', 'ceremony in a museum, healing at a music festival'],
     rulebreak: ['expected healing outcomes', 'faster recovery than usual', 'emotional breakthroughs people talk about', '"wait, one session did THAT?"', 'results that challenge what medicine says is possible'],
   },
+  rest: {
+    ancestral: ['sleep apps, white noise machines', 'consistent bedtime, dark room', 'guided relaxation, breathing', 'yoga nidra, float tanks, dream work', 'polyphasic sleep, lucid dreaming, sleep ceremony'],
+    body: ['learning about sleep', 'trying a new routine', 'guided meditation, body scan', 'deep yoga nidra, full surrender', 'extended rest retreat, multi-day reset'],
+    identity: ['improving their sleep', 'a restful night they remember', '"I do yoga nidra," "I track my sleep"', '"rest is my practice," "I honour my sleep"', '"I\'m a rest practitioner," "I teach conscious rest"'],
+    format: ['sleep app, podcast', 'group meditation, sleep workshop', 'yoga nidra class, rest circle', 'sleep retreat, dream sharing circle', 'multi-day rest immersion, sleep as ceremony'],
+    rulebreak: ['better sleep than before', 'noticeable energy shift', 'dreams they work with, nervous system calmer', '"my whole system shifted from honouring rest"', 'measurable health changes from rest practice alone'],
+  },
   bonds: {
     ancestral: ['networking apps, LinkedIn events', 'team-building workshops', 'group dinners, community circles', 'men\'s/women\'s circles, fireside gatherings', 'tribal councils, communal feasts, rites of passage'],
     body: ['a networking event', 'a workshop with some movement', 'group activities, partner exercises', 'deep sharing circles, trust falls, vulnerability challenges', 'multi-day immersion, sleeping rough together, physical ordeals'],
@@ -71,6 +80,13 @@ const BRANCH_EXAMPLES = {
     identity: ['attending a show', 'a talk they quote later', '"I told my story on stage once"', '"I\'m a storyteller," "I\'m a spoken word artist"', '"my story IS my work"'],
     format: ['blog post, YouTube video', 'live stream instead of edited', 'documentary + live Q&A, story + music', 'immersive theater, story walks through a city', 'audience becomes the story, no stage at all'],
     rulebreak: ['a good story well told', 'a story that sticks with people', 'people share it with friends unprompted', '"that story changed how I see my own life"', 'people say the story healed something in them'],
+  },
+  play: {
+    ancestral: ['mobile games, casual apps', 'board games with friends', 'improv, escape rooms, active play', 'daily play communities, flow arts', 'play as ceremony, unstructured free play'],
+    body: ['watching a game', 'casual gaming, light activity', 'active games, laughing hard', 'full body play, flow state', 'ecstatic play, multi-hour embodied joy'],
+    identity: ['playing a game sometimes', 'a game night they remember', '"I do improv," "I play weekly"', '"play is my practice," "I facilitate play"', '"I\'m a play practitioner," "I design playful experiences"'],
+    format: ['online game, solo play', 'group game night, board games', 'outdoor games, physical play', 'structured play workshops, flow arts circles', 'multi-day play immersion, play as transformation'],
+    rulebreak: ['a fun distraction', 'more fun than expected', 'surprising connection or insight through play', '"I felt more alive playing than I have in years"', 'measurable shifts in wellbeing through regular play'],
   },
   nourishment: {
     ancestral: ['meal kit delivery, nutrition apps', 'cooking classes with some tradition', 'communal cooking, fermentation, foraging', 'fasting retreats, ancestral diet programs, fire-cooked feasts', 'hunting and preparing your own food, eating only what grows near you'],

@@ -315,7 +315,7 @@ export default function WahooCreator({
           onChange={e => setFreeText(e.target.value)}
           rows={2}
         />
-        <p className="wc-hint">e.g. &quot;Host a breathwork session at a retreat&quot; or &quot;Cold call 10 venue owners&quot;</p>
+        <p className="wc-hint">Start with a verb: &quot;Host a breathwork session at a retreat&quot;, &quot;Teach a workshop on storytelling&quot;, &quot;Cold call 10 venue owners&quot;</p>
 
         <QuestSelector userId={userId} value={linkedQuestId}
           onChange={(id) => setLinkedQuestId(id)} />

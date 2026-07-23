@@ -99,8 +99,8 @@
       "industry": "Medicine & Wellness"
     },
     {
-      "id": "sleep",
-      "label": "Sleep",
+      "id": "rest",
+      "label": "Rest",
       "color": "#6366f1",
       "industry": "Rest & Consciousness"
     },
@@ -595,25 +595,25 @@
         "prediction": "The experience creators who understand play as their mechanism, not their marketing, will outperform those who don't."
       }
     },
-    "sleep-purple": {
+    "rest-purple": {
       "status": "returning",
       "assumption": "Sleep is sacred. Dreams are messages. Rest is ritual.",
       "phase3": "Yoga nidra, dream circles, sleep retreats"
     },
-    "sleep-red": {
+    "rest-red": {
       "status": "broken",
       "assumption": "Sleep is weakness. Hustle while they sleep. 'I'll sleep when I'm dead.'"
     },
-    "sleep-blue": {
+    "rest-blue": {
       "status": "active",
       "assumption": "Sleep is regulated. 8 hours, consistent schedule, sleep hygiene rules."
     },
-    "sleep-orange": {
+    "rest-orange": {
       "status": "active",
       "assumption": "Sleep is optimised. Track it, hack it, compress it. Oura, WHOOP, Eight Sleep, melatonin.",
       "problem": "Sleep became another metric to optimise, adding anxiety to rest."
     },
-    "sleep-green": {
+    "rest-green": {
       "status": "frontier",
       "assumption": "Rest is resistance. Nap Ministry. Slowing down as a radical act against hustle culture.",
       "phase": "phase2",
@@ -624,7 +624,7 @@
         "prediction": "The first brand that makes rest feel like a practice, not a metric, will serve the burnout generation better than any sleep tracker. The anti-sleepmaxxing backlash has started. Nobody has caught the wave with a product."
       }
     },
-    "sleep-yellow": {
+    "rest-yellow": {
       "status": "emerging",
       "assumption": "Consciousness states as a practice. Yoga nidra, NSDR, lucid dreaming, sensory deprivation.",
       "phase": "phase2",

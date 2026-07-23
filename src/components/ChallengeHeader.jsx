@@ -121,18 +121,42 @@ function ChallengeHeader({
           onClick={() => navigate('/league/matchup')}
           style={{ cursor: 'pointer' }}
         >
-          <span className="challenge-matchup-team-name">Your Team</span>
-          <span className="challenge-matchup-pill">
-            <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
-              {matchupData.myWins}
-            </span>
-            -
-            <span className={matchupData.oppWins > matchupData.myWins ? 'winning' : matchupData.oppWins < matchupData.myWins ? 'losing' : ''}>
-              {matchupData.oppWins}
-            </span>
-          </span>
-          <span className="challenge-matchup-vs">vs</span>
-          <span>{matchupData.opponentName}</span>
+          {matchupData.opponentName === 'Ghost' ? (
+            <>
+              <span className="challenge-matchup-team-name">You</span>
+              <span className="challenge-matchup-pill">
+                <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
+                  {matchupData.myWins}
+                </span>
+                -
+                <span className={matchupData.oppWins > matchupData.myWins ? 'winning' : matchupData.oppWins < matchupData.myWins ? 'losing' : ''}>
+                  {matchupData.oppWins}
+                </span>
+              </span>
+              <span className="challenge-matchup-vs">vs</span>
+              <span>Ghost</span>
+              {matchupData.delta != null && (
+                <span className={`challenge-matchup-delta ${matchupData.delta >= 0 ? 'ahead' : 'behind'}`}>
+                  {matchupData.delta >= 0 ? `+${matchupData.delta}` : matchupData.delta}
+                </span>
+              )}
+            </>
+          ) : (
+            <>
+              <span className="challenge-matchup-team-name">Your Team</span>
+              <span className="challenge-matchup-pill">
+                <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
+                  {matchupData.myWins}
+                </span>
+                -
+                <span className={matchupData.oppWins > matchupData.myWins ? 'winning' : matchupData.oppWins < matchupData.myWins ? 'losing' : ''}>
+                  {matchupData.oppWins}
+                </span>
+              </span>
+              <span className="challenge-matchup-vs">vs</span>
+              <span>{matchupData.opponentName}</span>
+            </>
+          )}
         </div>
       )}
 

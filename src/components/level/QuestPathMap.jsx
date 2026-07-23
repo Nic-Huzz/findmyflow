@@ -67,6 +67,35 @@ const STATE_ZONES = {
 
 function stateX(s) { return STATE_ZONES[s]?.center ?? 255 }
 
+// Numeric state values for rolling average interpolation
+const STATE_VALUES = { shutdown: 1, anxious: 2, peace: 3, vibe: 4 }
+
+// Compute rolling average X positions from raw state data (window=5)
+// Returns smoothed X positions via linear interpolation between state zone centers
+function computeRollingAverage(pathPoints, windowSize = 5) {
+  if (pathPoints.length === 0) return pathPoints
+  const stateOrder = ['shutdown', 'anxious', 'peace', 'vibe']
+  const centers = stateOrder.map(s => STATE_ZONES[s].center)
+
+  return pathPoints.map((p, i) => {
+    // Collect values in the rolling window (up to current point)
+    const start = Math.max(0, i - windowSize + 1)
+    const windowSlice = pathPoints.slice(start, i + 1)
+    const values = windowSlice.map(wp => STATE_VALUES[wp.state]).filter(v => v != null)
+
+    if (values.length === 0) return p // no wahoo data, keep original X
+
+    const avg = values.reduce((sum, v) => sum + v, 0) / values.length
+    // Interpolate between zone centers: avg 1→centers[0], 2→centers[1], 3→centers[2], 4→centers[3]
+    const idx = Math.max(0, Math.min(3, avg - 1)) // map 1-4 → 0-3
+    const floor = Math.min(2, Math.floor(idx))     // cap at 2 for interpolation (floor+1 max = 3)
+    const frac = idx - floor
+    const smoothedX = centers[floor] + frac * (centers[floor + 1] - centers[floor])
+
+    return { ...p, x: Math.round(smoothedX) }
+  })
+}
+
 // State gradient colours (for the safe portion of the line)
 const SAFE_COLOURS = {
   shutdown: '#ef4444',    // red
@@ -478,18 +507,22 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
           positioned.sort((a, b) => b.y - a.y)
 
           // Build path through all dots — each dot gets its own X from wahoo classification
-          const pathPoints = positioned.map(p => {
+          const rawPathPoints = positioned.map(p => {
             const dotState = wahooStates?.[p.task.groan_challenge_id]
             const dotX = dotState ? stateX(dotState) : x
             return { x: dotX, y: p.y, state: dotState, task: p.task }
           })
+
+          // Apply rolling average smoothing (window=5) for the line path
+          const hasDynamicX = rawPathPoints.some(p => p.state != null)
+          const pathPoints = hasDynamicX ? computeRollingAverage(rawPathPoints, 5) : rawPathPoints
+
           const firstY = pathPoints.length > 0 ? pathPoints[0].y : OV_BOTTOM
           const lastPoint = pathPoints.length > 0 ? pathPoints[pathPoints.length - 1] : { x, y: OV_TOP }
           const lastY = lastPoint.y
           const lastX = lastPoint.x
 
-          // Build SVG polyline path through 2D points
-          const hasDynamicX = pathPoints.some(p => p.state != null)
+          // Build SVG polyline path through smoothed points
           const pathD = pathPoints.length > 1
             ? `M ${pathPoints[0].x} ${pathPoints[0].y} ` + pathPoints.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
             : null
@@ -514,7 +547,17 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
                 </>
               )}
 
-              {/* Courage dots — positioned at their wahoo X */}
+              {/* Ghost dots — show raw state positions when smoothing is active */}
+              {hasDynamicX && rawPathPoints.map(({ task, x: rawX, y: rawY, state: rawState }) => {
+                if (!rawState || !task.done) return null
+                const ghostColour = SAFE_COLOURS[rawState] || colour
+                return (
+                  <circle key={`ghost-${task.id}`} cx={rawX} cy={rawY} r="3"
+                    fill={ghostColour} opacity="0.15" />
+                )
+              })}
+
+              {/* Courage dots — positioned at smoothed X (or raw if no smoothing) */}
               {pathPoints.map(({ task, x: dotX, y: dotY, state: dotState }) => {
                 const dotColour = dotState ? (SAFE_COLOURS[dotState] || colour) : colour
                 return (

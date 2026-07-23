@@ -22,8 +22,10 @@ const BRANCH_META = {
   bonds: { label: 'Bonds', color: '#f472b6', industry: 'Communication' },
   shelter: { label: 'Shelter', color: '#38bdf8', industry: 'Property' },
   story: { label: 'Story', color: '#fb923c', industry: 'Media' },
+  play: { label: 'Play', color: '#06b6d4', industry: 'Games & Recreation' },
   fire: { label: 'Fire', color: '#f59e0b', industry: 'Energy' },
   healing: { label: 'Healing', color: '#a78bfa', industry: 'Medicine & Wellness' },
+  rest: { label: 'Rest', color: '#6366f1', industry: 'Rest & Consciousness' },
   threat: { label: 'Threat', color: '#ef4444', industry: 'Security' },
 }
 

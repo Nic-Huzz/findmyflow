@@ -162,6 +162,12 @@
   opacity: 0.5;
   font-size: 0.7rem;
 }
+.challenge-matchup-delta {
+  font-size: 0.7rem; font-weight: 700; margin-left: 6px;
+  padding: 1px 6px; border-radius: 8px;
+}
+.challenge-matchup-delta.ahead { color: #10b981; background: rgba(16,185,129,0.1); }
+.challenge-matchup-delta.behind { color: #ef4444; background: rgba(239,68,68,0.1); }
 
 /* ─── Score Block (total + category pills) ─── */
 .challenge-score-block {
