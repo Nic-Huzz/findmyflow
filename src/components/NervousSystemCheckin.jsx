@@ -85,7 +85,7 @@ export default function NervousSystemCheckin({
           onBeforeChange
         )}
         {mode !== 'before' && renderStateColumn(
-          mode === 'both' ? 'After' : 'How are you feeling now?',
+          mode === 'both' ? 'During' : 'How are you feeling now?',
           afterState,
           onAfterChange
         )}
