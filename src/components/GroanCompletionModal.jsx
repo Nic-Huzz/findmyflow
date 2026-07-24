@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
 import { postFeedEvent } from '../lib/communityFeed'
 import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
+import { detectShift } from '../lib/shiftDetection'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -112,6 +113,11 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
   // 3% reflection
   const [reflection, setReflection] = useState('')
+
+  // Shift detection (Dispenza loop — New Behaviours → visible New Emotions)
+  // Ref mirrors state to avoid stale closure in handleShareDone
+  const [shiftData, setShiftData] = useState(null)
+  const shiftDataRef = useRef(null)
 
   // Guard: if challenge is already completed, show message
   if (challenge?.status === 'completed') {
@@ -358,6 +364,14 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         } catch (e) { console.warn('Behavioral evidence / skill XP error:', e) }
       }
 
+      // 7c. Detect emotional shift on this quest (Dispenza loop)
+      if (sourceQuestId) {
+        const questLabel = crossQuests.find(q => q.id === sourceQuestId)?.label || null
+        detectShift(userId, sourceQuestId, questLabel)
+          .then(shift => { if (shift) { setShiftData(shift); shiftDataRef.current = shift } })
+          .catch(() => {})
+      }
+
       // Celebration based on classification (Hades model: every state gets appropriate response)
       if (wahooClassification === 'vibe' || wahooClassification === 'wahoo') {
         // Gold confetti — peak experience
@@ -382,8 +396,16 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } })
     }
     // Notify Zarlo of wahoo completion (proactive bubble)
+    const questLabel = crossQuests.find(q => q.id === sourceQuestId)?.label || null
     window.dispatchEvent(new CustomEvent('zarlo:reaction', {
-      detail: { actionType: 'wahoo_completed', actionData: { category: challenge?.wahoo_category || 'unknown', classification: wahooClassification || 'unknown' } }
+      detail: {
+        actionType: 'wahoo_completed',
+        actionData: {
+          questLabel: questLabel || 'unknown',
+          classification: wahooClassification || 'unknown',
+          shift: shiftDataRef.current || null,
+        }
+      }
     }))
     onComplete?.()
     onClose()

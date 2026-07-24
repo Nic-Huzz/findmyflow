@@ -295,11 +295,11 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
           {step === 7 && (
             <div className="hfm-step">
               <div className="hfm-step-num">Step 7 of 7</div>
-              <h3 className="hfm-question">Now expect the best outcome</h3>
-              <p className="hfm-sub">You faced the worst case. Now flip it. If "{taskText}" goes perfectly, what does that look like?</p>
+              <h3 className="hfm-question">Expect the best</h3>
+              <p className="hfm-sub">If you expect the best, how will you show up?</p>
               <textarea className="hfm-textarea" value={expectationText}
                 onChange={e => setExpectationText(e.target.value)}
-                placeholder="e.g. They say yes, we shake hands, and I feel proud of myself..."
+                placeholder="e.g. I'll walk in confident, make eye contact, and ask directly..."
                 rows={3} />
               <p className="hfm-trick">Secret trick: Now tell yourself this before you do it and watch anxiety turn into excitement</p>
             </div>

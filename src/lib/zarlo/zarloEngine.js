@@ -1097,8 +1097,13 @@ export async function generateZarloReaction(userId, actionType, actionData = {})
   if (!checkReactionCooldown()) return null
 
   // Build a mini action-context string
+  let wahooDesc = `User just completed a courage challenge on quest "${actionData.questLabel || 'unknown'}". Felt: ${actionData.classification || 'unknown'}.`
+  if (actionData.shift) {
+    const s = actionData.shift
+    wahooDesc += ` SHIFT DETECTED: Their first 3 challenges on "${s.questLabel}" were classified as "${s.from}". Their last 3 are "${s.to}". This is their ${s.challengeCount}th courage challenge on this quest. This means their nervous system has genuinely shifted how it responds to this area.`
+  }
   const actionDescriptions = {
-    wahoo_completed: `User just completed a courage challenge. Category: ${actionData.category || 'unknown'}. Felt: ${actionData.classification || 'unknown'}.`,
+    wahoo_completed: wahooDesc,
     daily_checkin: `User just did a daily check-in. State: ${actionData.state || 'unknown'}.`,
     healing_completed: `User just completed a healing flow. Stage: ${actionData.stage || 'recognised'}. Pattern: ${actionData.pattern || 'unnamed'}.`,
     streak_milestone: `User just hit a ${actionData.streakDays}-day streak.`,
