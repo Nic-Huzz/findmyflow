@@ -9,6 +9,7 @@ import LevelUpModal from './components/Celebrations/LevelUpModal'
 import { useCelebrations } from './hooks/useCelebrations'
 import { getLevel, getLevelNumber } from './lib/crm/statsService'
 import WeeklyRecapCard from './components/WeeklyRecapCard'
+import GhostRecapCard from './components/GhostRecapCard'
 import GraduationModal from './components/GraduationModal'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
@@ -336,12 +337,25 @@ function Challenge() {
   } = useLeagueData()
 
   // Fantasy category scores + opponent matchup data for header
-  const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } = useMatchupData({
+  // PvP matchup data (only used when ghost mode is off)
+  const pvpMatchup = useMatchupData({
     completions,
     contentSubmissions,
     userTeam, league, teams,
     getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
   })
+
+  // Ghost Self League (replaces PvP when USE_GHOST is true)
+  const ghostMatchup = useGhostMatchup({ completions, userId: user?.id })
+
+  // Unified interface — ghost or PvP
+  const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } =
+    USE_GHOST ? ghostMatchup : pvpMatchup
+
+  // Ghost intro banner dismiss state
+  const [ghostIntroDismissed, setGhostIntroDismissed] = useState(() =>
+    localStorage.getItem('ghost_intro_dismissed') === 'true'
+  )
 
   // State for tracking recently completed quest for animation
   const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
@@ -1485,8 +1499,11 @@ function Challenge() {
         />
       )}
 
-      {/* Weekly recap card */}
-      {recapData && isOnTeam && (
+      {/* Weekly recap card — ghost or PvP */}
+      {USE_GHOST && recapData && (
+        <GhostRecapCard recapData={recapData} />
+      )}
+      {!USE_GHOST && recapData && isOnTeam && (
         <WeeklyRecapCard
           lastWeekMatchup={recapData.matchup}
           userTeamId={recapData.userTeamId}
@@ -1505,20 +1522,31 @@ function Challenge() {
         />
       )}
 
-      {/* ARCHIVED: Fantasy League nudge — re-enable when league is active
-      {leagueExists && !isOnTeam && (
-        <Link to="/league" className="league-nudge-banner" style={{
-          display: 'flex', alignItems: 'center', gap: '10px',
-          background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
-          border: '1px solid rgba(94,23,235,0.12)',
-          borderRadius: '14px', padding: '12px 16px',
-          marginBottom: '12px', textDecoration: 'none', color: '#5e17eb',
-          fontSize: '14px', fontWeight: 700, transition: 'all 0.2s',
-        }}>
-          🏆 Fantasy League is live! Join now →
-        </Link>
+      {/* Ghost intro banner — first-visit explainer, dismissible */}
+      {USE_GHOST && matchupData && !ghostIntroDismissed && (
+        <div
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
+            border: '1px solid rgba(94,23,235,0.12)',
+            borderRadius: '14px', padding: '12px 16px',
+            margin: '12px 0', fontSize: '13px', color: '#1a1a2e', lineHeight: 1.4,
+          }}
+        >
+          <span>
+            You're now racing your <strong>Ghost</strong> — last week's you.
+            Beat it in 2 of 3 categories to win.{' '}
+            <span
+              onClick={() => navigate('/league/guide')}
+              style={{ color: '#5e17eb', fontWeight: 700, cursor: 'pointer' }}
+            >How it works</span>
+          </span>
+          <button
+            onClick={() => { localStorage.setItem('ghost_intro_dismissed', 'true'); setGhostIntroDismissed(true) }}
+            style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '16px', cursor: 'pointer', padding: '0 0 0 12px' }}
+          >×</button>
+        </div>
       )}
-      */}
 
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {

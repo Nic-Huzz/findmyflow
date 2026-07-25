@@ -118,7 +118,7 @@ function ChallengeHeader({
       {matchupData && (
         <div
           className="challenge-matchup-banner"
-          onClick={() => navigate('/league/matchup')}
+          onClick={() => navigate(matchupData.opponentName === 'Ghost' ? '/league' : '/league/matchup')}
           style={{ cursor: 'pointer' }}
         >
           <span className="challenge-matchup-team-name">Your Team</span>

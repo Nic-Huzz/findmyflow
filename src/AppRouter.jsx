@@ -267,14 +267,16 @@ const MatrixCodeDeepDive = lazyRetry(() => import('./flows/MatrixCodeDeepDive'))
 const AdminDashboard = lazyRetry(() => import('./pages/AdminDashboard'))
 const ContentReview = lazyRetry(() => import('./pages/ContentReview'))
 
-// Lazy-loaded pages - Fantasy League
+// Lazy-loaded pages - Fantasy League (Ghost Mode)
+const GhostDashboard = lazyRetry(() => import('./pages/league/GhostDashboard'))
+const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
+// PvP league pages (kept for reference, routes redirected to ghost)
 const LeagueOverview = lazyRetry(() => import('./pages/league/LeagueOverview'))
 const WeekMatchups = lazyRetry(() => import('./pages/league/WeekMatchups'))
 const MatchupDetails = lazyRetry(() => import('./pages/league/MatchupDetails'))
 const ContentSubmit = lazyRetry(() => import('./pages/league/ContentSubmit'))
 const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
-const LeagueGuide = lazyRetry(() => import('./flows/LeagueGuide'))
 
 // Lazy-loaded - People Matching + Experience Creator + Movement Makers
 const PeopleMatching = lazyRetry(() => import('./pages/PeopleMatching'))
@@ -372,6 +374,7 @@ import './pages/crm/Expenses.css'
 import './pages/AgentAccess.css'
 import './pages/AdminDashboard.css'
 import './pages/ContentReview.css'
+import './pages/league/GhostDashboard.css'
 import './pages/league/LeagueOverview.css'
 import './pages/league/WeekMatchups.css'
 import './pages/league/MatchupDetails.css'
@@ -410,7 +413,8 @@ function ConditionalZarlo() {
   const isCreateFlow = location.pathname.startsWith('/create/') && location.pathname !== '/create'
   const isFacilitate = location.pathname.startsWith('/facilitate/')
   const isLifePaths = location.pathname === '/life-paths'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths) return null
+  const isRuleBreakTree = location.pathname === '/rule-break-tree'
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths || isRuleBreakTree) return null
   return <ZarloWidget />
 }
 
@@ -1469,14 +1473,10 @@ function AppRouter() {
                 <WeekMatchups />
               </AuthGate>
             } />
-            <Route path="/league/matchup" element={
-              <AuthGate>
-                <MatchupDetails />
-              </AuthGate>
-            } />
+            <Route path="/league/matchup" element={<Navigate to="/league" replace />} />
             <Route path="/league" element={
               <AuthGate>
-                <LeagueOverview />
+                <GhostDashboard />
               </AuthGate>
             } />
             <Route path="/league/submit" element={

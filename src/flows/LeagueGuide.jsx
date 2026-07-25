@@ -1,21 +1,13 @@
 /**
  * LeagueGuide.jsx — /league/guide
  *
- * 5-slide explainer for users brand new to Fantasy League.
+ * 5-slide explainer for Ghost Self League.
  * Follows the stage explainer pattern (ValidationExplainer, etc.)
- * Purely informational — no quest completion sync.
  */
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/league/leagueConfig'
 import { hapticLight } from '../lib/haptics'
 import './FlowFinderExplainer.css'
-
-const CATEGORY_DESCRIPTIONS = {
-  tune: 'Balance. Daily practices that keep your nervous system regulated.',
-  courage: 'Expression. Do the things that scare you and make you feel alive.',
-  reach: 'Connection. Share your journey and lift up the people around you.',
-}
 
 export default function LeagueGuide() {
   const navigate = useNavigate()
@@ -23,53 +15,50 @@ export default function LeagueGuide() {
 
   const slides = [
     {
-      title: "Welcome to Fantasy League",
-      icon: "🏆",
+      title: "Welcome to Ghost Mode",
+      icon: "👻",
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Fantasy League is a competition that makes training your nervous system fun.
+            Every week, you race your Ghost — last week's version of you.
           </p>
           <p>
-            Play solo or form a team. Each week, you go head-to-head in matchups.
+            We don't do leaderboards here. Everyone's walking their own path at their own pace. The only person worth growing past is who you were yesterday.
           </p>
           <p className="highlight-box">
-            The more you show up for yourself, <strong>the more you win</strong>.
+            Your Ghost is <strong>last week's you</strong>. Beat it to compound your growth and watch your world transform one week at a time.
           </p>
         </div>
       )
     },
     {
-      title: "How You Score Points",
+      title: "How You Score",
       icon: "⚡",
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Every week, you'll get quests in the 7-Day Challenge.
-          </p>
-          <p>
-            These quests train your nervous system to hold more expression while staying safe. Completing them earns points.
+            Complete quests in the 7-Day Challenge to earn points across 3 categories.
           </p>
           <div className="validation-steps">
             <div className="validation-step">
               <div className="step-icon">☀️</div>
               <div className="step-info">
                 <h4>Tune</h4>
-                <p>Daily practices that keep your nervous system regulated and balanced.</p>
+                <p>Daily practices that keep you balanced and regulated.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon">🔥</div>
               <div className="step-info">
-                <h4>Wahoos</h4>
-                <p>Courage challenges that expand your capacity for expression and aliveness.</p>
+                <h4>Courage</h4>
+                <p>Challenges, healing work, and weekly commitments that stretch you.</p>
               </div>
             </div>
             <div className="validation-step">
-              <div className="step-icon">💚</div>
+              <div className="step-icon">📣</div>
               <div className="step-info">
-                <h4>Healing</h4>
-                <p>Recognise, release, and rewire the patterns that keep you stuck.</p>
+                <h4>Community</h4>
+                <p>Sharing your journey and connecting with others.</p>
               </div>
             </div>
           </div>
@@ -77,106 +66,89 @@ export default function LeagueGuide() {
       )
     },
     {
-      title: "The 3 Categories",
+      title: "Your Ghost",
       icon: "📊",
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Your points are split across 3 scoring categories.
+            Your Ghost replays what you scored last week, day by day.
           </p>
-          <div className="validation-steps">
-            {CATEGORY_KEYS.map(key => {
-              const cat = FANTASY_CATEGORIES[key]
-              return (
-                <div key={key} className="validation-step">
-                  <div className="step-icon">{cat.icon}</div>
-                  <div className="step-info">
-                    <h4 style={{ color: cat.color }}>{cat.label}</h4>
-                    <p>{CATEGORY_DESCRIPTIONS[key]}</p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <p>
+            On Monday, the Ghost's score is what you had by Monday last week. On Tuesday, what you had by Tuesday. Each day reveals a new target to beat.
+          </p>
           <p className="highlight-box">
-            Your scores compete in each category head-to-head.
+            First week? Your Ghost starts at <strong>zero</strong>. Easy first win to get you going.
           </p>
         </div>
       )
     },
     {
-      title: "How Matchups Work",
-      icon: "⚔️",
+      title: "How to Win",
+      icon: "🏆",
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Each week, you face an opponent in a matchup.
-          </p>
-          <p>
-            Your points are compared in each of the 3 categories. Whoever scores higher in a category wins it.
+            Beat your Ghost in 2 of 3 categories to win the week.
           </p>
           <div className="validation-steps">
             <div className="validation-step">
               <div className="step-icon" style={{ fontSize: '18px' }}>✅</div>
               <div className="step-info">
-                <h4 style={{ color: '#10b981' }}>Win 2+ categories = Win (3 pts)</h4>
-                <p>Win the majority to claim the win.</p>
+                <h4 style={{ color: '#10b981' }}>Win 2+ categories = You win</h4>
+                <p>Your streak continues. Next week's Ghost gets harder.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon" style={{ fontSize: '18px' }}>🤝</div>
               <div className="step-info">
-                <h4 style={{ color: '#E9A23B' }}>Tie 1-1 = Draw (1 pt each)</h4>
-                <p>Evenly matched — both earn a point.</p>
+                <h4 style={{ color: '#E9A23B' }}>1-1 with a tie = Draw</h4>
+                <p>Close match. Ghost stays the same difficulty.</p>
               </div>
             </div>
             <div className="validation-step">
-              <div className="step-icon" style={{ fontSize: '18px' }}>❌</div>
+              <div className="step-icon" style={{ fontSize: '18px' }}>👻</div>
               <div className="step-info">
-                <h4 style={{ color: '#ef4444' }}>Win 0 = Loss (0 pts)</h4>
-                <p>Time to rally for next week.</p>
+                <h4 style={{ color: '#ef4444' }}>Ghost wins 2+ = Ghost wins</h4>
+                <p>Next week's Ghost gets 25% easier. It adapts to you.</p>
               </div>
             </div>
           </div>
-          <p className="highlight-box">
-            Match points decide the <strong>league standings</strong>. Most points at season end wins!
-          </p>
         </div>
       )
     },
     {
-      title: "Ready to Play",
+      title: "You're Already Playing",
       icon: "🚀",
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            That's all you need to know. Here's the game plan:
+            Your Ghost is live right now. Here's how to win:
           </p>
           <div className="validation-steps">
             <div className="validation-step">
               <div className="step-icon">1️⃣</div>
               <div className="step-info">
-                <h4>Join a Squad</h4>
-                <p>Create a team or join one with an invite code.</p>
+                <h4>Do your daily practices</h4>
+                <p>Tune points add up fast. Consistency beats intensity.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon">2️⃣</div>
               <div className="step-info">
-                <h4>Do Your Quests</h4>
-                <p>Complete quests in the 7-Day Challenge to earn points.</p>
+                <h4>Take on courage challenges</h4>
+                <p>Each one earns Courage points and builds your streak.</p>
               </div>
             </div>
             <div className="validation-step">
               <div className="step-icon">3️⃣</div>
               <div className="step-info">
-                <h4>Check the Scoreboard</h4>
-                <p>Watch your team climb the standings each week.</p>
+                <h4>Check your progress</h4>
+                <p>The header shows your live score vs Ghost. Stay ahead.</p>
               </div>
             </div>
           </div>
           <p className="highlight-box">
-            You don't need to be perfect. <strong>Just show up and do the work</strong> — every quest counts.
+            You don't need to be perfect. <strong>Just do more than last week</strong>.
           </p>
         </div>
       )
@@ -225,20 +197,13 @@ export default function LeagueGuide() {
 
         <div className="explainer-nav">
           {isLastSlide ? (
-            <>
-              <button
-                className="nav-btn secondary"
-                onClick={() => navigate('/7-day-challenge')}
-              >
-                Back to Challenge
-              </button>
-              <button
-                className="nav-btn primary"
-                onClick={() => navigate('/league')}
-              >
-                Join the League →
-              </button>
-            </>
+            <button
+              className="nav-btn primary"
+              onClick={() => navigate('/7-day-challenge')}
+              style={{ width: '100%' }}
+            >
+              Back to Challenge
+            </button>
           ) : (
             <>
               <button className="nav-btn secondary" onClick={handlePrev}>

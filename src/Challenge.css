@@ -3170,6 +3170,28 @@
   border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%;
 }
 
+/* ── Ghost Recap Card ── */
+.ghost-recap-card {
+  background: white; border-radius: 14px; padding: 1rem; margin-bottom: 12px;
+  border: 1px solid rgba(94, 23, 235, 0.1); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.ghost-recap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.ghost-recap-title { font-size: 0.85rem; font-weight: 700; color: #374151; }
+.ghost-recap-dismiss { background: none; border: none; font-size: 1.2rem; color: #9ca3af; cursor: pointer; padding: 0 4px; line-height: 1; }
+.ghost-recap-result { font-size: 0.9rem; font-weight: 700; color: #1f2937; margin-bottom: 0.4rem; }
+.ghost-recap-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.4rem; }
+.ghost-recap-pill { font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #f3f4f6; }
+.ghost-recap-pill.won { color: #10b981; }
+.ghost-recap-pill.lost { color: #ef4444; }
+.ghost-recap-pill.tied { color: #6b7280; }
+.ghost-recap-first-week { font-size: 0.8rem; color: #6b7280; margin: 0.4rem 0; line-height: 1.4; }
+.ghost-recap-streak { font-size: 0.8rem; font-weight: 700; color: #E9A23B; margin-bottom: 0.4rem; }
+.ghost-recap-cta {
+  background: linear-gradient(135deg, #5e17eb, #8b5cf6);
+  color: white; border: none; padding: 0.5rem 1rem;
+  border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%;
+}
+
 /* ── Wahoo Tab ── */
 .playlist-tab {
   display: flex;
