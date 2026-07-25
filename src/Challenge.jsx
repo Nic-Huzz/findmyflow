@@ -33,7 +33,11 @@ import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreAction
 import { useChallengeData } from './hooks/useChallengeData'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useMatchupData } from './hooks/useMatchupData'
+import { useGhostMatchup } from './hooks/useGhostMatchup'
 import { getScoringCategory } from './lib/scoringCategories'
+
+// Ghost Self League: set to true to use ghost mode, false for PvP league
+const USE_GHOST = true
 // ContentChallenges archived — moves to Fantasy League when reactivated
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
@@ -1493,7 +1497,9 @@ function Challenge() {
       {/* W/L flip toast */}
       {flipEvent?.type === 'win' && (
         <MicroToast
-          message={`You overtook them in ${flipEvent.categories.join(' & ')}!`}
+          message={USE_GHOST
+            ? `You passed your Ghost in ${flipEvent.categories.join(' & ')}!`
+            : `You overtook them in ${flipEvent.categories.join(' & ')}!`}
           duration={3000}
           onComplete={clearFlipEvent}
         />
