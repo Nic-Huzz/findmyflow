@@ -25,6 +25,7 @@ export function useGhostMatchup({ completions, userId }) {
   const [loading, setLoading] = useState(true)
   const [flipEvent, setFlipEvent] = useState(null)
   const prevWinningRef = useRef(null)
+  const hasSetInitialRef = useRef(false)  // skip flip detection on first data load
   const initRef = useRef(false)
   const lastUserIdRef = useRef(null)
 
@@ -193,36 +194,42 @@ export function useGhostMatchup({ completions, userId }) {
   }, [ghostRow, loading, comparison, currentTotals, ghostTotals])
 
   // ─── W/L flip detection (side cannons when overtaking ghost) ───
+  // Only fires on real mid-session flips, not on initial page load
   useEffect(() => {
-    if (!matchupData || !prevWinningRef.current) {
-      if (matchupData) {
-        prevWinningRef.current = Object.fromEntries(
-          matchupData.categories.map(c => [c.key, c.winning])
-        )
-      }
+    if (!matchupData) return
+
+    const currentWinning = Object.fromEntries(
+      matchupData.categories.map(c => [c.key, c.winning])
+    )
+
+    // First time we have data — record baseline, don't trigger flip
+    if (!hasSetInitialRef.current) {
+      prevWinningRef.current = currentWinning
+      hasSetInitialRef.current = true
       return
     }
 
-    const flippedWin = []
-    for (const cat of matchupData.categories) {
-      const wasWinning = prevWinningRef.current[cat.key]
-      if (wasWinning === false && cat.winning) flippedWin.push(cat)
+    // Compare against previous render
+    if (prevWinningRef.current) {
+      const flippedWin = []
+      for (const cat of matchupData.categories) {
+        const wasWinning = prevWinningRef.current[cat.key]
+        if (wasWinning === false && cat.winning) flippedWin.push(cat)
+      }
+
+      if (flippedWin.length > 0) {
+        triggerSideCannons()
+        hapticSuccess()
+        setFlipEvent({
+          type: 'win',
+          categories: flippedWin.map(c => c.label),
+          myWins: matchupData.myWins,
+          oppWins: matchupData.oppWins,
+        })
+      }
     }
 
-    if (flippedWin.length > 0) {
-      triggerSideCannons()
-      hapticSuccess()
-      setFlipEvent({
-        type: 'win',
-        categories: flippedWin.map(c => c.label),
-        myWins: matchupData.myWins,
-        oppWins: matchupData.oppWins,
-      })
-    }
-
-    prevWinningRef.current = Object.fromEntries(
-      matchupData.categories.map(c => [c.key, c.winning])
-    )
+    prevWinningRef.current = currentWinning
   }, [matchupData])
 
   // ─── Recap data (last week's result for GhostRecapCard) ───
