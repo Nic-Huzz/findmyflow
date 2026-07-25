@@ -68,6 +68,44 @@
   color: #1a1a2e;
 }
 
+.exp-detail .exp-detail-name-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: -4px -8px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.exp-detail .exp-detail-name-input:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+.exp-detail .exp-detail-name-input:focus {
+  border-color: #5e17eb;
+  background: #fff;
+}
+
+.exp-detail .exp-detail-date-input {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #6c757d;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 2px 6px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.exp-detail .exp-detail-date-input:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+.exp-detail .exp-detail-date-input:focus {
+  border-color: #5e17eb;
+  background: #fff;
+}
+
 .exp-detail-meta {
   display: flex;
   flex-wrap: wrap;

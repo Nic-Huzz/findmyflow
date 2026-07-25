@@ -77,6 +77,25 @@ export default function ExperienceDetail() {
   const [showDeadlinePicker, setShowDeadlinePicker] = useState(null)
   const [deadlineDate, setDeadlineDate] = useState('')
 
+  // Editable header state
+  const [headerName, setHeaderName] = useState('')
+
+  useEffect(() => {
+    if (experience?.name) setHeaderName(experience.name)
+  }, [experience?.name])
+
+  const saveHeaderName = () => {
+    if (!experience) return
+    const trimmed = headerName.trim()
+    if (!trimmed) { setHeaderName(experience.name); return }
+    if (trimmed !== experience.name) updateExperience({ name: trimmed })
+  }
+
+  const saveHeaderDate = (value) => {
+    if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) return
+    updateExperience({ experience_date: value || null })
+  }
+
   // Details tab state
   const [detailsDraft, setDetailsDraft] = useState(null)
   const [savingDetails, setSavingDetails] = useState(false)
@@ -90,6 +109,7 @@ export default function ExperienceDetail() {
   useEffect(() => {
     if (!experience) return
     setDetailsDraft({
+      experience_type: experience.experience_type || 'workshop',
       one_line_promise: experience.one_line_promise || '',
       booking_url: experience.booking_url || '',
       venue: experience.venue || '',
@@ -153,6 +173,7 @@ export default function ExperienceDetail() {
     setDetailsError(null)
     try {
       const updates = {
+        experience_type: detailsDraft.experience_type || 'workshop',
         one_line_promise: detailsDraft.one_line_promise || null,
         booking_url: detailsDraft.booking_url || null,
         venue: detailsDraft.venue || null,
@@ -308,11 +329,25 @@ export default function ExperienceDetail() {
       <div className="exp-detail-container">
         <button className="exp-back" onClick={() => navigate('/create')}>← All Experiences</button>
 
-        {/* Header */}
+        {/* Header (editable) */}
         <header className="exp-detail-header">
-          <h1 className="exp-detail-name">{experience.name}</h1>
+          <input
+            type="text"
+            className="exp-detail-name exp-detail-name-input"
+            value={headerName}
+            onChange={(e) => setHeaderName(e.target.value)}
+            onBlur={saveHeaderName}
+            onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur() }}
+            placeholder="Experience name"
+            maxLength={80}
+          />
           <div className="exp-detail-meta">
-            <span className="exp-detail-date">{formatDate(experience.experience_date)}</span>
+            <input
+              type="date"
+              className="exp-detail-date-input"
+              value={experience.experience_date || ''}
+              onChange={(e) => saveHeaderDate(e.target.value)}
+            />
             {countdown && (
               <span className="exp-detail-countdown">{countdown}</span>
             )}
@@ -365,6 +400,26 @@ export default function ExperienceDetail() {
         )}
         {activePhase === 'details' && detailsDraft && (
           <div className="exp-details-tab">
+            {/* Experience type */}
+            <div className="exp-det-section">
+              <label className="exp-det-label">Experience type</label>
+              <select
+                className="exp-det-select"
+                value={detailsDraft.experience_type}
+                onChange={e => setDetailsDraft(d => ({ ...d, experience_type: e.target.value }))}
+              >
+                <option value="workshop">Workshop</option>
+                <option value="retreat">Retreat</option>
+                <option value="circle">Circle / Gathering</option>
+                <option value="cohort">Cohort / Course</option>
+                <option value="performance">Live Event / Performance</option>
+                <option value="content">Content Launch</option>
+                <option value="online">Online Session</option>
+                <option value="one_on_one">1:1 Session</option>
+                <option value="popup">Pop-up Event</option>
+              </select>
+            </div>
+
             {/* One-line promise */}
             <div className="exp-det-section">
               <label className="exp-det-label">One-line promise</label>
