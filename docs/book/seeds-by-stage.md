@@ -136,7 +136,7 @@
 | 75 | Essence Louder | "That's the whole game." | ✅ screenshotable |
 | 76 | Not Hustle | "Watching my old self at Investible. Twelve-hour days. Speed felt like progress." | ✅ |
 | 77 | Silent Discos | "Doors opened that I didn't know existed." | ✅ |
-| 78 | The Path Reveals | "The tools are ready. The only bottleneck left is you." | ✅ |
+| 78 | The Path Reveals | "The universe speaks the language of ease and resistance. EAR. Are you listening?" | ✅ EAR Framework: follow ease = WHERE, do the groan = GET THERE |
 | 79 | One Sentence Revisited | "Protection is still here. But I can hear my own voice now." | ✅ |
 | 80 | You're Somewhere | "It's not about rebellion. It's about remembrance." | ✅ from carousel |
 

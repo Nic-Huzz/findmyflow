@@ -44,7 +44,9 @@ const SLIDES = [
       { date: '2022-11-01', text: 'I realise now my crisis was triggered by recognising this is what capitalism built to. My struggle since has been trying to rationalise and fit in to make it work.' },
       { date: '2026-02-12', text: 'All we are is a human having an experience, it\'s no surprise things like a job title don\'t make us happy. Focus on things that improve the lived experiences we\'re having.' },
       { date: '2026-06-23', text: 'Everything that makes you fulfilled in life is free: relationships, creation, sex are experiences you can create with no money. Money allows you to remove discomfort or create more pleasure. Dopamine diet: money allows more fast food dopamine.' },
-      { date: '2026-07-12', text: 'Hero Stage 1: The Matrix. The Misguided Zone — high action, low self-knowledge. Building the wrong life faster. The promise isn\'t just wrong. It\'s the misguided zone. You\'re sprinting, in the wrong direction, and the speed feels like progress.' }
+      { date: '2026-07-12', text: 'Hero Stage 1: The Matrix. The Misguided Zone — high action, low self-knowledge. Building the wrong life faster. The promise isn\'t just wrong. It\'s the misguided zone. You\'re sprinting, in the wrong direction, and the speed feels like progress.' },
+      { date: '2026-07-25', text: 'Five Expressions of a Misaligned Lifestyle: 1) Achievement (life is what you accomplish), 2) Materialist (life is what you acquire), 3) Destination (life is about getting somewhere), 4) Productivity (worth = output per hour), 5) External Scoreboard (status markers as proof of worth). All five are the same root: sympathetic/dorsal as baseline. All five collapse when you redesign around Vibe Rise.' },
+      { date: '2026-07-25', text: 'The Crack = when 2+ life domains (Earn, Learn, Belong, Health) are chronically draining. The lifestyle produces sympathetic/dorsal as baseline. Something breaks. Not because of one event. Because the accumulation of misalignment reaches a threshold the nervous system can\'t hold.' }
     ],
     connects: [
       { ch: 'Ch 2', num: '02', text: 'The promise breaks in The Earthquake' },
@@ -3248,20 +3250,23 @@ const SLIDES = [
       { date: '2025-03-25', text: 'What I\'m beginning to see is my understanding of spectrum of possibilities, combining with probabilities, combining with systems that lead to certain outcomes.' },
       { date: '2026-07-10', text: 'The curiosities you pursue now may merge later in ways you can\'t predict. Dance events + travel games + experience design looked like three separate interests. They converged into something nobody else could create. The convergence IS finding your flow. You can\'t see the merge point until both branches are inside your cone of safety.' },
       { date: '2026-07-10', text: 'Purpose emerges FROM experiences, not before them. You don\'t find purpose and then act. You act and purpose reveals itself through the experiences that light you up most. The path doesn\'t reveal a destination. It reveals a direction. And the direction keeps adjusting as you move.' },
-      { date: '2026-07-13', text: 'We\'re living in the first era where the path is actually possible for everyone. Kevin Kelly\'s 1000 true fans used to require a team, a publisher, a distribution network. Now: the internet gives you the audience (infinite reach, no gatekeepers). AI gives you the capability (one person can do what used to take ten). What was previously limited supply, limited time, limited reach is now near-infinite. The only bottleneck left is you. Your cone of safety. Your willingness to pursue the curiosity. The tools are ready. The question is: are you?' }
+      { date: '2026-07-13', text: 'We\'re living in the first era where the path is actually possible for everyone. Kevin Kelly\'s 1000 true fans used to require a team, a publisher, a distribution network. Now: the internet gives you the audience (infinite reach, no gatekeepers). AI gives you the capability (one person can do what used to take ten). What was previously limited supply, limited time, limited reach is now near-infinite. The only bottleneck left is you. Your cone of safety. Your willingness to pursue the curiosity. The tools are ready. The question is: are you?' },
+      { date: '2026-07-25', text: 'The EAR Framework: Ease And Resistance. The universe speaks to us every day about what our flow is. But it speaks the language of ease and resistance. Ease = coincidences, serendipities, doors opening without force. Resistance = nothing goes to plan no matter how hard you try. To find your flow: follow the ease to know WHERE. Do the groan to GET THERE. The flow isn\'t something you manufacture through strategy. It\'s something you uncover by paying attention.', protoIp: 'EAR Framework' },
+      { date: '2026-07-25', text: 'The critical distinction: internal resistance (the groan: scary AND exciting) means right direction, scared body. PUSH. External resistance (nothing works despite effort) means wrong direction, universe signalling. REDIRECT. Learning to tell them apart is the skill of the diagonal.' }
     ],
     connects: [
-      { ch: 'Ch 77', num: '77', text: 'Silent discos: proof the path reveals itself' },
+      { ch: 'Ch 77', num: '77', text: 'Silent discos: proof the path reveals itself (following ease)' },
       { ch: 'Ch 25', num: '25', text: 'Head Full of Dreams: the trap of needing the whole map' },
       { ch: 'Ch 37', num: '37', text: 'The Intersection: where curiosities converge' },
-      { ch: 'Ch 55', num: '55', text: 'Essence Zone: the compass for each step' },
+      { ch: 'Ch 55', num: '55', text: 'Essence Zone: the groan = internal resistance = MOVE' },
+      { ch: 'Ch 64', num: '64', text: 'The Groan: internal resistance that means push' },
       { ch: 'Ch 7', num: '07', text: 'Direction: purpose from experiences, not before them' }
     ],
     beats: {
-      scene: 'A path in fog. Three steps visible. Lit. The rest: invisible. And the realisation that every step I\'ve taken so far was taken with the same visibility. Three steps. Never more.',
-      tension: 'Head Full of Dreams tells you that you need the whole map. You don\'t. You\'ve never had it. And you\'ve still arrived here.',
-      turn: 'You need the next step. The next step is always: the thing that scares and excites you most right now. That\'s the only compass you need.',
-      land: 'The next step is always: the thing that scares and excites you most right now.',
+      scene: 'Looking back at every major decision. Bali. Silent discos. Spiff. None of them were planned. Every one arrived through ease. A conversation. A coincidence. A door that opened without me pushing. And every step toward them required a groan. The universe showed me WHERE. The courage challenges got me THERE.',
+      tension: 'Head Full of Dreams tells you that you need the whole map. You don\'t. You\'ve never had it. The path speaks two languages: ease and resistance. EAR. Are you listening?',
+      turn: 'Follow the ease to know WHERE your flow lives. Do the groan to GET THERE. Internal resistance means right direction, scared body: push. External resistance means wrong direction: redirect. That\'s the whole navigation system.',
+      land: 'The flow isn\'t something you manufacture. It\'s something you uncover by paying attention. EAR. Are you listening?',
       fiveC: {
         context: 'You\'ll never see the whole path.',
         catalyst: 'You think you need the complete plan. You don\'t.',
