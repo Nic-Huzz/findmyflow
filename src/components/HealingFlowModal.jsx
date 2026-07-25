@@ -98,6 +98,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
       rewire_text: rewireText.trim() || null,
       expectation_text: expectationText.trim() || null,
       healing_stage: isFinal ? 'recognised' : 'in_progress',
+      outcome: isFinal ? 'completed' : null,
       updated_at: new Date().toISOString(),
     }
 
