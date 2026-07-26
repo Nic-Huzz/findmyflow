@@ -1825,12 +1825,14 @@ const SLIDES = [
       { date: '2025-06-01', text: 'Point of healing is to feel safe to respond from higher levels.' },
       { date: '2025-05-23', text: 'If healing is about the response to situations, meditation is so effective because it helps create space between stimulus and response.' },
       { date: '2023-08-14', text: 'I\'ve observed that I\'ve left one matrix for another and that once I climb to the top of this mountain I\'ll once again feel the same.' },
-      { date: '2026-06-28', text: 'The snapback: someone does the new behaviour for weeks or months, then reverts completely. Why? They\'re doing Phase 3 actions from a Phase 2 story. "I\'m TRYING to be healthy" keeps the old identity as primary. The trying IS the tell. As long as the new behaviour is framed as effort rather than expression, the snapback is inevitable.' }
+      { date: '2026-06-28', text: 'The snapback: someone does the new behaviour for weeks or months, then reverts completely. Why? They\'re doing Phase 3 actions from a Phase 2 story. "I\'m TRYING to be healthy" keeps the old identity as primary. The trying IS the tell. As long as the new behaviour is framed as effort rather than expression, the snapback is inevitable.' },
+      { date: '2026-07-25', text: 'The Healing Trap IS Enemy 2 in action. Enemy 1 (self-help) says "you need clarity." You defeat it by gaining clarity. Then Enemy 2 arrives disguised as the solution: "now heal." But healing without action is the same trap wearing different clothes. You cannot meditate your way out of a life that\'s incompatible with aliveness.' }
     ],
     connects: [
       { ch: 'Ch 41', num: '41', text: 'The Controller performing healing' },
       { ch: 'Ch 44', num: '44', text: 'Recognise: the first real healing step' },
-      { ch: 'Ch 48', num: '48', text: 'The River: where healing gets blocked' }
+      { ch: 'Ch 48', num: '48', text: 'The River: where healing gets blocked' },
+      { ch: 'Ch 24', num: '24', text: 'The Knowledge Trap: Enemy 1 in action' }
     ],
     beats: {
       scene: 'Spiff said something that stopped me. "Healing is the most amazing thing, it turns us into these beautiful butterflies. But the process can be such a fucking drag. If we\'re turning into these beautiful things, shouldn\'t we enjoy the process?" I looked at my life: therapy weekly, breathwork Tuesdays, journaling daily, plant medicine twice a year. My inner world was pristine. My outer world hadn\'t moved an inch. I was performing healing.icine ceremonies in the jungle. My inner world was pristine. My outer world hadn\'t moved an inch.',

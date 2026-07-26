@@ -3909,6 +3909,17 @@
   margin-top: 4px;
 }
 
+.playlist-tab .plt-healing-done {
+  background: rgba(94, 23, 235, 0.03);
+  border-color: rgba(94, 23, 235, 0.08);
+}
+.playlist-tab .plt-healing-done .plt-healing-voice {
+  color: rgba(94, 23, 235, 0.5);
+}
+.playlist-tab .plt-healing-done .plt-healing-cta {
+  color: #6b7280;
+}
+
 /* ── Standalone "What's blocking you?" ── */
 .playlist-tab .plt-blocking-input {
   margin: 12px 0;

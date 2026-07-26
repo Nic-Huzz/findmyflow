@@ -50,6 +50,7 @@ export default function PlayListTab({
   const [showBlockingQuestPicker, setShowBlockingQuestPicker] = useState(false)
   const [blockingQuestId, setBlockingQuestId] = useState(null)
   const [blockingTaskId, setBlockingTaskId] = useState(null)
+  const [blockingHealingData, setBlockingHealingData] = useState(null)
   const [showBlockingHealingModal, setShowBlockingHealingModal] = useState(false)
 
   useEffect(() => {
@@ -192,7 +193,7 @@ export default function PlayListTab({
 
     supabase
       .from('quest_tasks')
-      .select('groan_challenge_id, id, healing_intentions!quest_task_id(id, pattern, fear_text, origin_text, healing_stage, outcome, protective_voice, quest_task_id)')
+      .select('groan_challenge_id, id, healing_intentions!quest_task_id(id, pattern, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome, protective_voice, quest_task_id)')
       .in('groan_challenge_id', challengeIds)
       .not('groan_challenge_id', 'is', null)
       .then(({ data }) => {
@@ -200,9 +201,12 @@ export default function PlayListTab({
         const map = {}
         data.forEach(qt => {
           const intentions = qt.healing_intentions || []
+          // Prefer active (in-progress) healing, fall back to completed for review
           const active = intentions.find(h => !h.outcome)
-          if (active && qt.groan_challenge_id) {
-            map[qt.groan_challenge_id] = { ...active, questTaskId: qt.id }
+          const completed = !active ? intentions.find(h => h.outcome === 'completed') : null
+          const best = active || completed
+          if (best && qt.groan_challenge_id) {
+            map[qt.groan_challenge_id] = { ...best, questTaskId: qt.id }
           }
         })
         setHealingByChallenge(map)
@@ -250,6 +254,7 @@ export default function PlayListTab({
                   const isLoading = loadingChallengeId === pick.reference_id
                   const healing = healingByChallenge[pick.reference_id]
                   const hasActiveHealing = healing && !healing.outcome && healing.healing_stage
+                  const hasCompletedHealing = healing && healing.outcome === 'completed' && healing.protective_voice
 
                   return (
                     <div key={pick.id || pick.reference_id} className="plt-item-row">
@@ -257,12 +262,36 @@ export default function PlayListTab({
                       <div className="plt-item-body">
                         <div className="plt-item-name">{pick.display_name}</div>
 
+                        {/* Completed healing — tap to review */}
+                        {hasCompletedHealing && (
+                          <div
+                            className="plt-healing-inline plt-healing-done"
+                            onClick={() => {
+                              setBlockingTaskId(healing.questTaskId)
+                              setBlockingText(pick.display_name)
+                              setBlockingHealingData(healing)
+                              setShowBlockingHealingModal(true)
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <span className="plt-healing-icon">✅</span>
+                            <div className="plt-healing-body">
+                              <div className="plt-healing-voice">
+                                {healing.protective_voice.charAt(0).toUpperCase() + healing.protective_voice.slice(1).replace(/_/g, ' ')}
+                              </div>
+                              <div className="plt-healing-cta">Review healing flow →</div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Active healing — tap to continue */}
                         {hasActiveHealing && healing.protective_voice && (
                           <div
                             className="plt-healing-inline"
                             onClick={() => {
                               setBlockingTaskId(healing.questTaskId)
                               setBlockingText(pick.display_name)
+                              setBlockingHealingData(healing)
                               setShowBlockingHealingModal(true)
                             }}
                             style={{ cursor: 'pointer' }}
@@ -448,11 +477,13 @@ export default function PlayListTab({
           taskText={blockingText}
           userId={userId}
           questTaskId={blockingTaskId}
+          existingData={blockingHealingData}
           onComplete={() => {
             setShowBlockingHealingModal(false)
             setBlockingText('')
             setBlockingTaskId(null)
             setBlockingQuestId(null)
+            setBlockingHealingData(null)
             fetchActiveChallenges()
             onRefreshPoints?.()
           }}
@@ -460,6 +491,7 @@ export default function PlayListTab({
             setShowBlockingHealingModal(false)
             setBlockingText('')
             setBlockingTaskId(null)
+            setBlockingHealingData(null)
           }}
         />
       )}

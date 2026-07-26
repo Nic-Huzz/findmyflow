@@ -24,8 +24,6 @@ export function useGhostMatchup({ completions, userId }) {
   const [lastWeekRow, setLastWeekRow] = useState(null)
   const [loading, setLoading] = useState(true)
   const [flipEvent, setFlipEvent] = useState(null)
-  const prevWinningRef = useRef(null)
-  const hasSetInitialRef = useRef(false)  // skip flip detection on first data load
   const initRef = useRef(false)
   const lastUserIdRef = useRef(null)
 
@@ -196,42 +194,49 @@ export function useGhostMatchup({ completions, userId }) {
   }, [ghostRow, loading, comparison, currentTotals, ghostTotals])
 
   // ─── W/L flip detection (side cannons when overtaking ghost) ───
-  // Only fires on real mid-session flips, not on initial page load
+  // Only fires when a category flips from losing→winning mid-session.
+  // Uses sessionStorage so navigating away and back doesn't re-trigger.
   useEffect(() => {
     if (!matchupData) return
 
     const currentWinning = Object.fromEntries(
       matchupData.categories.map(c => [c.key, c.winning])
     )
+    const currentKey = JSON.stringify(currentWinning)
 
-    // First time we have data — record baseline, don't trigger flip
-    if (!hasSetInitialRef.current) {
-      prevWinningRef.current = currentWinning
-      hasSetInitialRef.current = true
+    // Load previous state from sessionStorage (survives page navigation)
+    const storedPrev = sessionStorage.getItem('ghost_prev_winning')
+
+    if (!storedPrev) {
+      // First load this session — record baseline, no flip
+      sessionStorage.setItem('ghost_prev_winning', currentKey)
       return
     }
 
-    // Compare against previous render
-    if (prevWinningRef.current) {
-      const flippedWin = []
-      for (const cat of matchupData.categories) {
-        const wasWinning = prevWinningRef.current[cat.key]
-        if (wasWinning === false && cat.winning) flippedWin.push(cat)
-      }
+    // Same state as last time — no change, no flip
+    if (storedPrev === currentKey) return
 
-      if (flippedWin.length > 0) {
-        triggerSideCannons()
-        hapticSuccess()
-        setFlipEvent({
-          type: 'win',
-          categories: flippedWin.map(c => c.label),
-          myWins: matchupData.myWins,
-          oppWins: matchupData.oppWins,
-        })
-      }
+    // Compare against previous state
+    const prevWinning = JSON.parse(storedPrev)
+    const flippedWin = []
+    for (const cat of matchupData.categories) {
+      const wasWinning = prevWinning[cat.key]
+      if (wasWinning === false && cat.winning) flippedWin.push(cat)
     }
 
-    prevWinningRef.current = currentWinning
+    if (flippedWin.length > 0) {
+      triggerSideCannons()
+      hapticSuccess()
+      setFlipEvent({
+        type: 'win',
+        categories: flippedWin.map(c => c.label),
+        myWins: matchupData.myWins,
+        oppWins: matchupData.oppWins,
+      })
+    }
+
+    // Update stored state
+    sessionStorage.setItem('ghost_prev_winning', currentKey)
   }, [matchupData])
 
   // ─── Recap data (last week's result for GhostRecapCard) ───

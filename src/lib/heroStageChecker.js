@@ -71,7 +71,7 @@ export async function checkHeroGraduation(userId) {
     if (count > 0) newStage = 6
   }
 
-  // 6→7: Protective voice identified 5+ times (combined from both sources)
+  // 6→7: 5+ healing flow protective voice identifications (any voice, total count)
   if (currentStage === 6) {
     const [{ data: nsVoices }, { data: hiVoices }] = await Promise.all([
       supabase
@@ -87,13 +87,8 @@ export async function checkHeroGraduation(userId) {
     ])
 
     voiceData = [...(nsVoices || []), ...(hiVoices || [])]
-    const counts = {}
-    voiceData.forEach(row => {
-      if (row.protective_voice)
-        counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
-    })
-    const maxCount = Math.max(0, ...Object.values(counts))
-    if (maxCount >= 5) newStage = 7
+    const totalVoiceCount = voiceData.filter(row => row.protective_voice).length
+    if (totalVoiceCount >= 5) newStage = 7
   }
 
   // If graduated, update the stage
