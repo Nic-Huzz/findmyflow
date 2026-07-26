@@ -1536,7 +1536,7 @@ function Challenge() {
             background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
             border: '1px solid rgba(94,23,235,0.12)',
             borderRadius: '14px', padding: '12px 16px',
-            margin: '0 0 12px', fontSize: '13px', color: '#1a1a2e', lineHeight: 1.4,
+            margin: '12px 1.5rem', fontSize: '13px', color: '#1a1a2e', lineHeight: 1.4,
           }}
         >
           <span>
