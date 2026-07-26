@@ -196,8 +196,11 @@ export function useGhostMatchup({ completions, userId }) {
   // ─── W/L flip detection (side cannons when overtaking ghost) ───
   // Only fires when a category flips from losing→winning mid-session.
   // Uses sessionStorage so navigating away and back doesn't re-trigger.
+  // Waits for completions to load before recording baseline (prevents
+  // false flip from 0-0 tied → real scores on initial load).
+  const hasCompletionsLoaded = completions && completions.length > 0
   useEffect(() => {
-    if (!matchupData) return
+    if (!matchupData || !hasCompletionsLoaded) return
 
     const currentWinning = Object.fromEntries(
       matchupData.categories.map(c => [c.key, c.winning])
@@ -237,7 +240,7 @@ export function useGhostMatchup({ completions, userId }) {
 
     // Update stored state
     sessionStorage.setItem('ghost_prev_winning', currentKey)
-  }, [matchupData])
+  }, [matchupData, hasCompletionsLoaded])
 
   // ─── Recap data (last week's result for GhostRecapCard) ───
   const recapData = useMemo(() => {
