@@ -77,7 +77,9 @@ export default function GhostDashboard() {
         // Save (non-blocking, with error logging)
         saveGhostScores(row.id, translated)
 
-        row.ghost_daily_scores = translated
+        setGhostRow({ ...row, ghost_daily_scores: translated })
+        setLoading(false)
+        return
       }
 
       setGhostRow(row)

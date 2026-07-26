@@ -1540,7 +1540,7 @@ function Challenge() {
           }}
         >
           <span>
-            You're now racing your <strong>Ghost</strong> — last week's you.
+            You're now racing your <strong>Ghost</strong>, last week's you.
             Beat it in 2 of 3 categories to win.{' '}
             <span
               onClick={() => navigate('/league/guide')}

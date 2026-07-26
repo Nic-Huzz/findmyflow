@@ -123,7 +123,9 @@ export function useGhostMatchup({ completions, userId }) {
 
         // Save to DB
         await saveGhostScores(row.id, translatedGhost)
-        row.ghost_daily_scores = translatedGhost
+        setGhostRow({ ...row, ghost_daily_scores: translatedGhost })
+        setLoading(false)
+        return
       }
 
       setGhostRow(row)
@@ -236,7 +238,10 @@ export function useGhostMatchup({ completions, userId }) {
   const recapData = useMemo(() => {
     if (!ghostRow) return null
     if (!streak || !streak.last_result || !streak.last_result_at) return null
-    if (streak.last_result_at !== lastWeekStart) return null
+    const lastResultDate = typeof streak.last_result_at === 'string'
+      ? streak.last_result_at.slice(0, 10)
+      : streak.last_result_at
+    if (lastResultDate !== lastWeekStart) return null
 
     return {
       result: streak.last_result,
