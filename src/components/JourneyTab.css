@@ -143,6 +143,41 @@
   color: #5e17eb;
 }
 
+.jt-voice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.jt-voice-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(94, 23, 235, 0.08);
+}
+
+.jt-voice-row-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.jt-voice-row-name {
+  flex: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.jt-voice-row-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
 .jt-voice-bar {
   height: 6px;
   background: rgba(94, 23, 235, 0.12);

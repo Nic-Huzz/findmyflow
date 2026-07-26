@@ -5,64 +5,42 @@
 
 ---
 
-## 1. "Story Requires Failure" — Protective Voice Counting
+## 1. "Story Requires Failure" — Protective Voice Counting ✅ IMPLEMENTED (Jul 2026)
 
-### Data Changes Needed
+### Implementation Status
 
-**No new tables required.** The data already exists in `healing_intentions`.
+**DONE.** Voice counting is live. Gate changed from "5 of same voice" to "5 total identifications (any voice)".
 
-**Option A: Query on the fly (simpler)**
-```sql
--- Count protective voice occurrences per user
-SELECT 
-  protective_voice,
-  COUNT(*) as times_identified,
-  MIN(created_at) as first_seen,
-  MAX(created_at) as last_seen
-FROM healing_intentions
-WHERE user_id = $1 
-  AND protective_voice IS NOT NULL
-  AND healing_stage IN ('recognised', 'released')
-GROUP BY protective_voice
-ORDER BY times_identified DESC;
-```
-No schema change. Run this when checking graduation eligibility or generating Zarlo context.
+**Data sources (both counted):**
+- `healing_intentions.protective_voice` — from healing flows on courage challenges
+- `nervous_system_checkins.protective_voice` — from NS check-ins
 
-**Option B: Materialised count (if performance matters later)**
-Add columns to `user_stage_progress` or create a simple view:
-```sql
--- Lightweight: add to existing table
-ALTER TABLE user_stage_progress 
-  ADD COLUMN IF NOT EXISTS dominant_protective_voice TEXT,
-  ADD COLUMN IF NOT EXISTS dominant_voice_count INTEGER DEFAULT 0;
-```
-Update via trigger or cron after each healing flow completion.
+**Stage 6→7 gate:** `heroStageChecker.js` counts total voices across both tables. `totalVoiceCount >= 5` triggers graduation. No longer requires a single dominant voice.
 
-**Recommendation:** Start with Option A. Move to B only if the query becomes a bottleneck.
+**UI (JourneyTab.jsx, stage 6 "Next Step" card):** Shows ALL identified voices as rows (icon + name + count) with a total progress bar toward 5. Copy: "Your protective voices — X/5". Each voice gets its own row: 👻 Ghost ×6, 🎯 Perfectionist ×3, 🧱 Controller ×2.
 
-**Additional data to capture (currently missing):**
-- `healing_intentions.protective_voice` may not always be populated. Check: does the HealingFlowModal ALWAYS tag a protective voice, or only sometimes? If only sometimes, the count will be unreliable. Ensure the healing flow captures this consistently.
-- Consider also counting protective voices from `nervous_system_checkins.protective_voice` and `boss_fight_sessions` (zone diagnosis protective voice picks). Cross-referencing multiple sources strengthens the signal.
+**Solidarity query:** Checks all identified voices via `.in()` instead of just the dominant one.
+
+**HealingFlowModal now sets `outcome: 'completed'`** when the flow finishes, so the healing badge in the Courage tab transitions from "Continue healing flow →" (green) to "Review healing flow →" (purple). Tapping the review badge reopens the modal with all answers pre-filled via `existingData` prop.
 
 ### How AI Surfaces It + Creates Commentary
 
-**Three tiers of Zarlo engagement based on count:**
+**Three tiers of Zarlo engagement based on TOTAL voice count (any voice):**
 
-**Tier 1: First recognition (count = 1-2)**
-No special commentary. The pattern is too new to call. Zarlo stays observational:
-- "You named the Perfectionist in that healing flow. Worth noticing."
+**Tier 1: First recognition (total = 1-2)**
+No special commentary. Zarlo stays observational:
+- "You named the Ghost in that healing flow. Worth noticing."
 
-**Tier 2: Pattern emerging (count = 3-4)**
+**Tier 2: Pattern emerging (total = 3-4)**
 Zarlo shifts from observational to curious. Opens a loop:
-- Count 3: "The Perfectionist again. That's three times now. This one has your attention."
-- Count 4: "Four times the Perfectionist has shown up. There's something underneath it. The pattern is almost clear."
+- Total 3: "Three protective voices identified now. You're starting to see the patterns."
+- Total 4: "Four voices named. One more and the picture becomes clear."
 
-**Tier 3: Graduation trigger (count = 5)**
-Stage 6→7 fires. This is a DCC "boss reveal" moment:
-- Screen treatment: dims to the protective voice's associated colour
-- Zarlo's tone shifts to serious/direct (not playful, not cautious)
-- Copy: "The [Perfectionist]. Five times. It's been in every healing flow, every wahoo you avoided, every time you held back. There's a root belief underneath this one. You're ready to see it."
+**Tier 3: Graduation trigger (total = 5)**
+Stage 6→7 fires. This is a DCC "boss reveal" moment. The JourneyTab shows all identified voices with a full progress bar.
 - CTA: "This is the work that needs a human, not an app." → Calendly booking for Stage 8.
+
+**Note (Jul 2026 change):** Gate is total count, not single-voice dominant. A user who identifies Ghost ×2, Perfectionist ×2, Controller ×1 = 5 total = graduates. This better reflects real human patterns where multiple voices operate.
 
 **What the AI needs in its context window:**
 ```
@@ -479,17 +457,17 @@ All states equal. Showing up IS the work. The data IS the value. No state is "be
 
 Note: "3 wahoos, no Vibe Rise yet" is stated NEUTRALLY (Celeste model), not as failure.
 
-#### Stage 6→7 (Training → Pattern Revealed)
+#### Stage 6→7 (Training → Pattern Revealed) — UPDATED Jul 2026
 
-This is the richest interim stage. 5 data points = 4 possible interim observations.
+Gate is now **total voice count** (any voice, not single dominant). UI shows all voices as rows.
 
 | Milestone | Trigger | Zarlo | Journey Tab |
 |---|---|---|---|
-| First protective voice identified | voice count = 1 (any voice) | "You named the [voice]. Worth noticing." | ●○○○○ |
-| Same voice appears twice | dominant voice count = 2 | No proactive message (too early to call) | ●●○○○ |
-| Dominant voice at 3 | dominant count = 3 | "The [voice] keeps showing up. That's three times now. This one has your attention." | ●●●○○ |
-| Dominant voice at 4 | dominant count = 4 | "Four times the [voice] has blocked you. There's something underneath it." | ●●●●○ |
-| Graduation (count = 5) | dominant count = 5 | Full graduation celebration (see Gap 1 spec) | ●●●●● |
+| First voice identified | total = 1 | "You named the [voice]. Worth noticing." | 👻 Ghost ×1 — bar at 20% |
+| Two voices | total = 2 | No proactive message (too early) | 👻 Ghost ×1 · 🧱 Controller ×1 — bar at 40% |
+| Three voices | total = 3 | "Three voices identified. The patterns are forming." | All voices listed — bar at 60% |
+| Four voices | total = 4 | "Four voices named. One more and something becomes clear." | All voices listed — bar at 80% |
+| Graduation (total = 5) | total = 5 | Full graduation celebration (see Gap 1 spec) | All voices listed — bar at 100% |
 
 #### Stage 7→8 (Pattern Revealed → Ordeal)
 
@@ -518,14 +496,17 @@ This is the richest interim stage. 5 data points = 4 possible interim observatio
 
 ---
 
-## 8. Zero Punishment — Post-Wahoo Response Spec
+## 8. Zero Punishment — Post-Wahoo Response Spec ✅ IMPLEMENTED (Jul 2026)
 
 **Source:** Celeste (no punishment on death) + Hades (death gives richer content than winning)
-**File to modify:** `src/components/GroanCompletionModal.jsx`
+**File:** `src/components/GroanCompletionModal.jsx`
 
-### Current State
+### Status: DONE
 
-The 4-state classification exists (Vibe Rise / Fun / Pressure / Uninterested). Vibe Rise gets gold confetti + essence archetype callout. The other 3 states get NO specific response copy. Pressure and Uninterested currently feel like the "wrong" answer.
+All 4 states have per-state copy, RP differentiation, and celebrations. Additional changes since spec:
+- **NS question reduced to "Before" only** (mode="before"). The wahoo classification ("How did you feel during?") serves as the during-state. `afterState` derived via WAHOO_TO_NS mapping. No double question.
+- **Pressure voice objection** stored in `reflection_text` JSON as `voice_objection` field.
+- **Skill XP** uses task-level skill_tags when available, falls back to quest tags for courage challenges only.
 
 ### Spec Per State
 
@@ -616,7 +597,7 @@ Each stage graduation is a FIGURINE moment (rare, weighted). Not Zarlo.
 |---|---|---|---|
 | **3→4** | Archetype colour wash → avatar reveal | "You've been called this your whole life without knowing it. [Archetype]." | Hero Profile unlocks. Essence name appears across app. Zarlo references archetype. |
 | **4→5** | Gold pulse, brief confetti | "There it is. You felt it. Remember this next time the voice gets loud." | Vibe Rise state tracked (already exists). Capacity Score gets first data point. |
-| **5→6** | Fantasy League card slides in | "You're ready for the arena. Time to train with others." | Fantasy League access granted (was expression of interest only before). |
+| **5→6** | Ghost League card slides in | "You're ready for the arena. Time to race yourself." | Ghost League activates (solo: beat last week's you in 2/3 categories). |
 | **6→7** | Screen dims to voice colour, silhouette pulses | "The [voice]. Five times. It's been running your show since [origin]. You're ready to face the root." | Healing surfaces root-specific content. Figurine shifts to mentor mode. Calendly CTA appears. |
 | **7→8** | Warm, minimal. Gentle glow. No fanfare. | "This one needs a human. Not an app." | Session booked. Figurine sends 1-2 prep messages before session date. |
 | **8→9** | Life path lines merge on Quest Path Map, glow at merge | "Your curiosities share something. There it is." | **Double-dash:** App orientation shifts from Repair to Build. Quest recommendations change. Zarlo tone becomes more direct. New Build section unlocks. Visual marker on profile. |
@@ -656,7 +637,7 @@ Stages 2→3 and 3→4 are too quick for stuck mechanics.
 | **One-tap Kudos on shared wahoos** | Newsfeed + shared completion cards | PARTIAL — reactions exist on league content. Extend to wahoo shares. | Low |
 | **Cumulative monthly counter** | Challenge page header or Journey tab | NO | Low (one query) |
 | **Anonymous solidarity at Stage 7** | Journey tab, Stage 7 milestone | NO | Low (aggregate query) |
-| **Fantasy League** | `/league` routes | YES — fully built | Already exists |
+| **Ghost League** | `/league` routes | YES — replaces PvP Fantasy League | Solo: race last week's you. `useGhostMatchup` hook, `ghost_weekly_results` + `ghost_streaks` tables, `finalize-ghost-week` edge function. W/L flip celebrations, recap cards, streak tracking. |
 | **Session milestones** | In-person facilitation (host announces) | NO tech needed | Zero (facilitation protocol) |
 
 **V2 features (need 100+ users):** "Here Now" counter (needs Supabase Realtime), community activity feed (extend existing Newsfeed), Kudos on daily check-ins.
@@ -774,7 +755,7 @@ The north star is NOT "more engagement" or "more check-ins." It's: **are users t
 
 **The ultimate metric across all features:** % of life paths in Vibe Rise or Fun predicted state, trending up over user lifetime.
 
-### Sprint 1A: Post-Wahoo Responses (1 day)
+### Sprint 1A: Post-Wahoo Responses ✅ DONE
 
 **File:** `src/components/GroanCompletionModal.jsx`
 
@@ -917,9 +898,10 @@ try {
 
 **Note:** Using date-stamped `quest_id` prevents double-awarding if user somehow triggers check-in twice in a day. The existing `quest_completions` delete-then-insert pattern in `GroanCompletionModal` handles this for wahoos; daily check-ins use the date as natural deduplication.
 
-### Sprint 1C: Protective Voice Counting (1-2 days)
+### Sprint 1C: Protective Voice Counting ✅ DONE (Jul 2026)
 
-**No file changes needed for counting.** The data already exists in `healing_intentions`. The implementation is:
+**Implemented in:** `heroStageChecker.js` (gate), `JourneyTab.jsx` (UI), `JourneyTab.css` (styles).
+Gate: `totalVoiceCount >= 5` (any voice, not single dominant). UI: voice collection with rows + total progress bar. Original spec below for reference:
 
 1. **Query (run in Zarlo context generation or a new utility):**
 ```javascript

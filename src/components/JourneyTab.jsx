@@ -10,6 +10,8 @@ import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import SkillsDisplay from './journey/SkillsDisplay'
 import './JourneyTab.css'
 
+const VOICE_ICONS = { ghost: '👻', controller: '🧱', auto_pilot: '🤖', perfectionist: '🎯', people_pleaser: '🪞' }
+
 // Hero stage names (Campbell) + movie references
 const HERO_STAGES = [
   // Stages 0-1 are pre-app. New users start seeing Stage 2 (signing up = answering the call)
@@ -204,14 +206,14 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       // ─── Batch 2: queries that depend on batch 1 results, all parallel ───
       const batch2 = []
 
-      // Solidarity count (needs dominant voice)
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-      if (sorted.length > 0) {
+      // Solidarity count (check all identified voices, not just dominant)
+      const voiceNames = Object.keys(counts)
+      if (voiceNames.length > 0) {
         batch2.push(
           supabase
             .from('nervous_system_checkins')
             .select('user_id', { count: 'exact', head: true })
-            .eq('protective_voice', sorted[0][0])
+            .in('protective_voice', voiceNames)
             .neq('user_id', userId)
             .gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString())
             .then(({ count }) => { if (active) setSolidarityCount(count || 0) })
@@ -285,7 +287,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
   const sorted = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
-  const dominant = sorted[0] // [name, count] or undefined
+  const totalVoiceCount = sorted.reduce((sum, [, ct]) => sum + ct, 0)
 
   return (
     <div className="jt-container">
@@ -336,18 +338,27 @@ export default function JourneyTab({ userId, onUnlockTab }) {
               <span className="jt-next-text">
                 After a courage challenge, tap "Explore what makes this scary?" to start a healing flow.
               </span>
-              {dominant && (
+              {sorted.length > 0 && (
                 <div className="jt-voice-progress">
                   <div className="jt-voice-progress-header">
-                    <span className="jt-voice-progress-name">{formatVoice(dominant[0])}</span>
-                    <span className="jt-voice-progress-count">{dominant[1]}/5</span>
+                    <span className="jt-voice-progress-name">Your protective voices</span>
+                    <span className="jt-voice-progress-count">{totalVoiceCount}/5</span>
+                  </div>
+                  <div className="jt-voice-list">
+                    {sorted.map(([name, count]) => (
+                      <div key={name} className="jt-voice-row">
+                        <span className="jt-voice-row-icon">{VOICE_ICONS[name] || '🔮'}</span>
+                        <span className="jt-voice-row-name">{formatVoice(name)}</span>
+                        <span className="jt-voice-row-count">{'\u00D7'}{count}</span>
+                      </div>
+                    ))}
                   </div>
                   <div className="jt-voice-bar">
-                    <div className="jt-voice-bar-fill" style={{ width: `${(dominant[1] / 5) * 100}%` }} />
+                    <div className="jt-voice-bar-fill" style={{ width: `${Math.min(100, (totalVoiceCount / 5) * 100)}%` }} />
                   </div>
                   <span className="jt-voice-progress-hint">
-                    {dominant[1] < 5
-                      ? 'Your most common protective voice. Keep exploring it.'
+                    {totalVoiceCount < 5
+                      ? 'Keep exploring what makes your challenges scary.'
                       : 'Pattern clear. You\'re ready for the next stage.'}
                   </span>
                 </div>

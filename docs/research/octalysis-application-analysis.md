@@ -143,6 +143,50 @@ CD8 Loss            █████░░░░░ (5)   █████░░�
 
 ---
 
+## Post-Ghost League + Voice Collection Score (July 2026)
+
+After Ghost League (solo race-your-past-self, W/L streaks, day-by-day reveal, decay on consecutive losses), voice collection UI (multi-voice rows + total progress bar), healing review badges, quest close orphan handler:
+
+| Core Drive | Before | After | Change | What Changed |
+|---|---|---|---|---|
+| **CD6** Scarcity | 6 | **7** | +1 | Ghost League adds real weekly scarcity: 7 days to beat your ghost, daily scores reveal progressively, W/L flip celebrations mid-week. "Beat yourself" creates natural time pressure without artificial gates. |
+| **CD8** Loss | 5 | **6** | +1 | Losing to your ghost = meaningful loss with recovery. Decay mechanic (ghost gets easier after consecutive losses, Hades model). W/L streak tracking. Recap card shows last week's result. Loss feeds the next week's motivation. |
+
+All other drives unchanged.
+
+**Current Score: 64 + 81 + 64 + 64 + 64 + 49 + 100 + 36 = 522** (Exceptional)
+
+**Full journey: 217 → 337 → 361 → 404 → 436 → 487 → 498 → 522 (+305 points, +141%)**
+
+```
+                    Start (217)      Now (522)        Target (479)
+CD1 Epic Meaning    ███████░░░ (7)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD2 Accomplishment  ██████░░░░ (6)   █████████░ (9)   █████████░ (9) ✅ Hit
+CD3 Creativity      █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD4 Ownership       █████░░░░░ (5)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD5 Social          ████░░░░░░ (4)   ████████░░ (8)   ████████░░ (8) ✅ Hit
+CD6 Scarcity        ████░░░░░░ (4)   ███████░░░ (7)   ██████░░░░ (6) ✅ Exceeded
+CD7 Curiosity       █████░░░░░ (5)   ██████████ (10)  █████████░ (9) ✅ Exceeded
+CD8 Loss            █████░░░░░ (5)   ██████░░░░ (6)   █████░░░░░ (5) ✅ Exceeded
+```
+
+**8 of 8 drives at or above target.** CD6, CD7, CD8 now exceed targets.
+
+*Scores updated July 2026 after Ghost League + voice collection build*
+
+### Scoring Confidence Note (Jul 2026)
+
+All scores from 337 onwards are **self-assessed by build agents**, not validated by users or Octalysis-certified reviewers. Known risks:
+
+- **Builder bias:** Agents scored features they built. An external reviewer may score lower.
+- **Built ≠ used:** Ghost League (CD6, CD8 increases) is coded but has near-zero real usage. The ghost matchup detail page isn't built yet. Scoring delivery before adoption is premature.
+- **Compounding uncertainty:** Each score increment builds on the previous one. If early scores were inflated by 1 point per drive, the 522 total could be closer to 450.
+- **No comparative benchmark:** These scores haven't been calibrated against formally-scored apps (Duolingo, Headspace, etc.).
+
+**To validate:** (1) Run a scoring session with the founder rating each drive against real user behaviour, (2) only score features after 5+ users have engaged with them, (3) consider an external Octalysis audit once the app has traction.
+
+---
+
 ## Opportunity Analysis by Core Drive
 
 ### CD1: Epic Meaning & Calling (Current: 7/10)
