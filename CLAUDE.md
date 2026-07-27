@@ -118,7 +118,7 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
 **Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
 
@@ -134,7 +134,7 @@ docs/               # Specs, handoffs, research
 
 **Play Profile**: `/play-profile` (quiz + dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`
 
-**Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
+**Fantasy League**: `/league`, `/league/week`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing). `/league/matchup` redirects to `/league`.
 
 **Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
 
@@ -142,7 +142,7 @@ docs/               # Specs, handoffs, research
 
 **Self-Knowledge Flows**: `/curiosity-map` (curiosity mapping → clusters), `/life-paths` (career tagging → quest + courage challenge creation), `/career-alignment` (career alignment check), `/life-map` (life story chapters)
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share), `/rule-break-tree` (Rule Break Tree 12-branch), `/voice-training` (voice collection, AuthGate)
 
 **CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
@@ -240,11 +240,11 @@ DB: `founder_dna_results`, `founder_dna_sessions`. Scoring: +10 RP to Play-List 
 
 Legacy compat: `resolveSkillId`, `findSkillSegment`, `resolveProblemId`, `findProblemSegment`. Key files: `src/lib/wheelTaxonomy.js`, `public/data/playSkillTaxonomyV2.json`, `public/data/problemTaxonomyV2.json`.
 
-### 10. Fantasy League
+### 10. Fantasy League (Ghost Self League)
 
-Solo-player competitive league with 4-week seasons. 3 scoring categories: Play-List (Wahoos/Courage), Healing (Healing/Daily/Weekly), Tune (daily practices). WIN = 3pts, DRAW = 1pt, LOSS = 0pts. Bonus tab archived, exercises move to Fantasy League when reactivated.
+Solo-player league: race last week's own scores instead of other players. 3 scoring categories: Tune, Courage, Community. WIN = beat your ghost on 2+ categories. Bonus tab archived.
 
-Content Submissions: 10 types (2-10pts each), admin-approved. Edge function `score-league-matchups` auto-scores every 15 min.
+Content submissions stored in `ghost_content_submissions` (decoupled from old `league_content_submissions` which had NOT NULL FKs to PvP tables). Ghost state: `ghost_weekly_results` (one row per user per week), `ghost_streaks` (streak + personal bests). Key files: `useGhostMatchup.js`, `ghostService.js`, `GhostDashboard.jsx`.
 
 ### 11. CRM Command Center
 
@@ -385,6 +385,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
 
+### Ghost Self League
+`ghost_weekly_results` (user_id, week_start, ghost/user daily scores JSONB, category scores, result: pending/win/loss/draw, UNIQUE user_id+week_start) | `ghost_streaks` (user_id, current_streak, longest_streak, consecutive_losses, total_wins/losses/draws, personal bests: pb_tune/pb_courage/pb_community) | `ghost_content_submissions` (user_id, week_start, content_type, points_value, link_url)
+
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
 
@@ -406,6 +409,12 @@ RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidenc
 `user_subscriptions` (user_id, stripe_customer_id, stripe_subscription_id, status, plan_type, current_period_start/end, UNIQUE user_id+plan_type) | `pending_subscriptions` (email UNIQUE, stripe_customer_id, plan_type, status, claimed_by, claimed_at) | `user_integrations` (user_id, platform, status, access_token)
 
 RPCs: `get_user_id_by_email(lookup_email)` (SECURITY DEFINER, used by webhook for email-based user matching)
+
+### Community Feed
+`community_feed` (user_id, event_type: auto or opt-in share types, title, subtitle, image_url, metadata JSONB; unique index on auto events) | `community_feed_reactions` (feed_item_id, user_id, reaction_type: cheer/fire/clap/heart, UNIQUE per user+item+type)
+
+### Figurine Memory
+`essence_avatar_memory` (user_id, memory_type: pattern/correction/insight/milestone/fear/breakthrough/conversation, content, source, confidence float, superseded_by FK, deleted_at). Also adds `lead_flow_profiles.custom_essence_figurine` column.
 
 ### Other
 `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
