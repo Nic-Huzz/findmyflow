@@ -1,4 +1,4 @@
-# Reddit Comment Drafts — 2026-07-28 (scan 32)
+# Reddit Comment Drafts — 2026-07-28 (scan 33)
 
 *Review, edit in your voice, then approve for posting. Max 2 per day.*
 
@@ -12,7 +12,7 @@ All access methods remain blocked:
 - `curl` to `www.reddit.com` — no response (proxy blocks outbound connection)
 - `WebSearch` to reddit.com — error: "domain not accessible to our user agent"
 
-This has been the case across all scans (1 through 32), starting at least 2026-07-09.
+This has been the case across all scans (1 through 33), starting at least 2026-07-09.
 
 **To fix this:** Add `reddit.com` to the allowed domains in the Claude Code on the web environment settings: https://code.claude.com/docs/en/claude-code-on-the-web
 
