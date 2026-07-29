@@ -603,7 +603,7 @@ function IdentitySection({ count, statements }) {
       <button className="mp-identity-header" onClick={() => setExpanded(!expanded)}>
         <div className="mp-identity-count">{count}</div>
         <div className="mp-identity-info">
-          <div className="mp-identity-title">courage challenges completed</div>
+          <div className="mp-identity-title">Courage Challenges completed</div>
           {statements.length > 0 && (
             <div className="mp-identity-top">
               Top: "I am someone who {statements[0].text}" ({'\u00D7'}{statements[0].count})

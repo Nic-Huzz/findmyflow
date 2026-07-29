@@ -135,7 +135,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Journey', 'Quests', 'Tune', 'Courage']
+  const categories = ['Journey', 'Quests', 'Courage', 'Tune']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 

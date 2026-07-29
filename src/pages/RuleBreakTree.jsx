@@ -60,9 +60,10 @@ export default function RuleBreakTree() {
   const [animationYear, setAnimationYear] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [speedIdx, setSpeedIdx] = useState(0)
-  const [layer, setLayer] = useState('innovation') // 'innovation' | 'experience'
+  const [layer, setLayer] = useState('innovation') // 'innovation' | 'experience' | 'dome'
   const [filtersExpanded, setFiltersExpanded] = useState(false)
   const [domeDetail, setDomeDetail] = useState('core') // 'core' | 'expanded'
+  const [zoomScale, setZoomScale] = useState(1)
 
   // Demo NS states for experience layer
   const demoStates = useMemo(() => {
@@ -78,7 +79,7 @@ export default function RuleBreakTree() {
     const H = dimensions.h
     const cx = W / 2
     const cy = H / 2
-    const maxR = Math.min(W, H) * (layer === 'experience' ? 0.58 : 0.44)
+    const maxR = Math.min(W, H) * (layer === 'experience' ? 0.58 : 0.44) // dome uses 0.44 (same as innovation)
 
     const yearScale = d3.scaleLinear()
       .domain([1400, 1850, 2030])
@@ -124,9 +125,9 @@ export default function RuleBreakTree() {
     })
 
     // Force simulation: forceX/forceY toward ideal positions, forceCollide to prevent overlap
-    const isExp = layer === 'experience'
-    const collideR = isExp ? 30 : 22
-    const forceStrength = isExp ? 0.3 : 0.4
+    const isExpanded = layer === 'experience'
+    const collideR = isExpanded ? 30 : 22
+    const forceStrength = isExpanded ? 0.3 : 0.4
     if (simNodes.length > 0) {
       const simulation = d3.forceSimulation(simNodes)
         .force('collide', d3.forceCollide(collideR).strength(0.8).iterations(3))
@@ -181,6 +182,7 @@ export default function RuleBreakTree() {
       .scaleExtent([0.3, 10])
       .on('zoom', (e) => {
         d3.select(gRef.current).attr('transform', e.transform)
+        setZoomScale(e.transform.k)
       })
     svg.call(zoom)
     zoomRef.current = zoom
@@ -416,8 +418,10 @@ export default function RuleBreakTree() {
       {/* Header */}
       <div className="rbt-header">
         <button className="rbt-back-btn" onClick={() => navigate(-1)}>Back</button>
-        <h1>{layer === 'experience' ? 'Experience Dome' : 'Rule Break Tree'}</h1>
-        <p>{layer === 'experience'
+        <h1>{layer === 'dome' ? 'Experience Dome' : layer === 'experience' ? 'Experience Map' : 'Rule Break Tree'}</h1>
+        <p>{layer === 'dome'
+          ? 'Your snowflake. Bright = love it. Dim = tried it. Dark = unexplored. Zoom to reveal.'
+          : layer === 'experience'
           ? 'Your dome of safety. Bright = safe. Amber = growing. Dark = unexplored.'
           : 'From hunter-gatherer to AI. Each fork is a broken assumption. Where branches merge, new industries are born.'}</p>
         <div className="rbt-layer-toggle">
@@ -429,6 +433,10 @@ export default function RuleBreakTree() {
             className={`rbt-layer-btn ${layer === 'experience' ? 'active' : ''}`}
             onClick={() => setLayer('experience')}
           >Experience</button>
+          <button
+            className={`rbt-layer-btn ${layer === 'dome' ? 'active' : ''}`}
+            onClick={() => setLayer('dome')}
+          >Dome</button>
         </div>
         {layer === 'experience' && (
           <div className="rbt-dome-detail-toggle">
@@ -497,7 +505,7 @@ export default function RuleBreakTree() {
               return (
                 <g key={`decade-${yr}`}>
                   <circle className="decade-ring" cx={cx} cy={cy} r={r} />
-                  {layer !== 'experience' && (
+                  {layer === 'innovation' && (
                     <text className="decade-label" x={cx} y={cy - r + 12}>{yr}</text>
                   )}
                 </g>
@@ -511,7 +519,7 @@ export default function RuleBreakTree() {
               return (
                 <line key={`op-${p.id}`} className={`branch-line ${getHiddenClass(isPrimalVisible(p.id))}`}
                   x1={cx} y1={cy} x2={pn.x} y2={pn.y}
-                  stroke={p.color} opacity={0.25} />
+                  stroke={p.color} opacity={layer !== 'innovation' ? 0.1 : 0.25} />
               )
             })}
 
@@ -523,7 +531,7 @@ export default function RuleBreakTree() {
               return (
                 <line key={`pb-${b.id}`} className={`branch-line ${getHiddenClass(isPrimalVisible(b.primal))}`}
                   x1={pn.x} y1={pn.y} x2={bn.x} y2={bn.y}
-                  stroke={b.color} opacity={0.25} />
+                  stroke={b.color} opacity={layer !== 'innovation' ? 0.1 : 0.25} />
               )
             })}
 
@@ -532,32 +540,64 @@ export default function RuleBreakTree() {
               const s = nodeMap[sId]
               const t = nodeMap[tId]
               if (!s || !t) return null
-              // In experience mode, hide links where either endpoint is pruned or not in current detail level
+
+              // Dome: hide links to pruned nodes
+              if (layer === 'dome') {
+                if (!sId.startsWith('b-') && !isExperiential(sId)) return null
+                if (!tId.startsWith('b-') && !isExperiential(tId)) return null
+              }
+              // Experience mode: filter by visibility level
               if (layer === 'experience') {
-                const sVisible = sId.startsWith('b-') || (isExperiential(sId) && (domeDetail === 'expanded' || isCoreNode(sId)))
-                const tVisible = tId.startsWith('b-') || (isExperiential(tId) && (domeDetail === 'expanded' || isCoreNode(tId)))
+                if (domeDetail === 'core') {
+                  // Core mode uses spoke lines instead
+                  return null
+                }
+                const sVisible = sId.startsWith('b-') || isExperiential(sId)
+                const tVisible = tId.startsWith('b-') || isExperiential(tId)
                 if (!sVisible || !tVisible) return null
               }
+
               const branch = t.branch || t.industry
               const col = INDUSTRIES[branch]?.color || '#888'
+              const linkOpacity = layer === 'dome' ? 0.15 : layer === 'experience' ? 0.2 : 0.45
               return (
                 <path key={`bl-${i}`}
                   className={`branch-line ${getHiddenClass(isBranchVisible(branch))} ${getTimelineClass(isLinkInTimeline(sId, tId))}`}
                   d={branchLinkPath(s, t)}
-                  stroke={col} opacity={layer === 'experience' ? 0.2 : 0.45} />
+                  stroke={col} opacity={linkOpacity} />
               )
             })}
+
+            {/* Core dome spokes — direct bridge-to-node lines in experience/core mode */}
+            {layer === 'experience' && domeDetail === 'core' && industryNodes
+              .filter(n => isCoreNode(n.id))
+              .map(n => {
+                const nn = nodeMap[n.id]
+                const ind = INDUSTRIES[n.branch]
+                if (!nn || !ind) return null
+                const bridge = bridges.find(b => b.primal === ind.primal)
+                if (!bridge) return null
+                const bn = nodeMap[bridge.id]
+                if (!bn) return null
+                return (
+                  <path key={`spoke-${n.id}`}
+                    className={`branch-line ${getHiddenClass(isBranchVisible(n.branch))}`}
+                    d={branchLinkPath(bn, nn)}
+                    stroke={ind.color} opacity={0.25} />
+                )
+              })
+            }
 
             {/* Merge lines + labels */}
             {mergeLinks.map((ml, i) => {
               const s = nodeMap[ml.from]
               const t = nodeMap[ml.to]
               if (!s || !t) return null
-              // In experience mode, hide merge lines where either endpoint is not visible
-              if (layer === 'experience') {
-                const fromVis = isExperiential(ml.from) && (domeDetail === 'expanded' || isCoreNode(ml.from))
-                const toVis = isExperiential(ml.to) && (domeDetail === 'expanded' || isCoreNode(ml.to))
-                if (!fromVis || !toVis) return null
+              // Hide in experience/core mode
+              if (layer === 'experience' && domeDetail === 'core') return null
+              // In dome + experience modes, hide if either endpoint is pruned
+              if (layer === 'dome' || layer === 'experience') {
+                if (!isExperiential(ml.from) || !isExperiential(ml.to)) return null
               }
               const vis = isMergeVisible(ml) && isMergeInTimeline(ml)
               const path = mergeLinkPath(s, t)
@@ -581,7 +621,7 @@ export default function RuleBreakTree() {
             })}
 
             {/* Industry labels at outer edge */}
-            {Object.entries(INDUSTRIES).map(([key, ind]) => (
+            {layer === 'innovation' && Object.entries(INDUSTRIES).map(([key, ind]) => (
               <text key={`il-${key}`} className={`industry-label ${getHiddenClass(isBranchVisible(key))}`}
                 x={cx + Math.cos(ind.baseAngle) * (maxR + 28)}
                 y={cy + Math.sin(ind.baseAngle) * (maxR + 28)}
@@ -591,31 +631,38 @@ export default function RuleBreakTree() {
             ))}
 
             {/* Origin node */}
-            <g className="node-group" transform={`translate(${cx},${cy})`}
+            <g className={`node-group ${layer !== 'innovation' ? 'dome-structural' : ''}`}
+              transform={`translate(${cx},${cy})`}
               onClick={() => handleNodeClick(nodeMap['origin'])}>
               <circle className="origin-pulse" r={22} fill="rgba(255,255,255,0.08)" />
-              <circle r={16} fill="#0d0a1a" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
-              <circle r={5} fill="rgba(255,255,255,0.85)" />
+              {(() => { const dim = layer !== 'innovation'; return (<>
+              <circle r={dim ? 10 : 16} fill="#0d0a1a" stroke="rgba(255,255,255,0.5)"
+                strokeWidth={dim ? 1 : 2} opacity={dim ? 0.3 : 1} />
+              <circle r={dim ? 3 : 5} fill="rgba(255,255,255,0.85)" opacity={dim ? 0.3 : 1} />
               {['Human', 'Experience'].map((l, i) => (
-                <text key={i} className="node-label" y={28 + i * 12}>{l}</text>
+                <text key={i} className="node-label" y={(dim ? 18 : 28) + i * 12}
+                  opacity={dim ? 0.2 : undefined}>{l}</text>
               ))}
+              </>)})()}
             </g>
 
             {/* Primal nodes */}
             {PRIMALS.map(p => {
               const pn = nodeMap[p.id]
               if (!pn) return null
+              const dim = layer !== 'innovation'
               const lx = Math.cos(p.angle) * 22
               const ly = Math.sin(p.angle) * 22
               return (
                 <g key={p.id}
-                  className={`node-group ${getHiddenClass(isPrimalVisible(p.id))} ${selectedNode?.id === p.id ? 'selected' : ''}`}
+                  className={`node-group ${dim ? 'dome-structural' : ''} ${getHiddenClass(isPrimalVisible(p.id))} ${selectedNode?.id === p.id ? 'selected' : ''}`}
                   transform={`translate(${pn.x},${pn.y})`}
                   onClick={() => handleNodeClick(pn)}>
                   <circle className="node-glow" r={16} fill={p.color} />
-                  <circle className="node-circle" r={10} fill="#0d0a1a" stroke={p.color} strokeWidth={2} />
-                  <circle r={3.5} fill={p.color} opacity={0.6} />
-                  <text className="primal-label" x={lx} y={ly + 4} fill={p.color} opacity={0.8}>
+                  <circle className="node-circle" r={dim ? 6 : 10} fill="#0d0a1a" stroke={p.color}
+                    strokeWidth={dim ? 1 : 2} opacity={dim ? 0.3 : 1} />
+                  <circle r={dim ? 2 : 3.5} fill={p.color} opacity={dim ? 0.2 : 0.6} />
+                  <text className="primal-label" x={lx} y={ly + 4} fill={p.color} opacity={dim ? 0.25 : 0.8}>
                     {p.label}
                   </text>
                 </g>
@@ -626,15 +673,18 @@ export default function RuleBreakTree() {
             {bridges.map(b => {
               const bn = nodeMap[b.id]
               if (!bn) return null
+              const dim = layer !== 'innovation'
               return (
                 <g key={b.id}
-                  className={`node-group ${getHiddenClass(isPrimalVisible(b.primal))} ${selectedNode?.id === b.id ? 'selected' : ''}`}
+                  className={`node-group ${dim ? 'dome-structural' : ''} ${getHiddenClass(isPrimalVisible(b.primal))} ${selectedNode?.id === b.id ? 'selected' : ''}`}
                   transform={`translate(${bn.x},${bn.y})`}
                   onClick={() => handleNodeClick(bn)}>
                   <circle className="node-glow" r={14} fill={b.color} />
-                  <circle className="node-circle" r={7} fill="#0d0a1a" stroke={b.color} strokeWidth={1.5} opacity={0.6} />
+                  <circle className="node-circle" r={dim ? 4 : 7} fill="#0d0a1a" stroke={b.color}
+                    strokeWidth={dim ? 1 : 1.5} opacity={dim ? 0.25 : 0.6} />
                   {b.label.split('\n').map((l, i) => (
-                    <text key={i} className="bridge-label" y={16 + i * 11}>{l}</text>
+                    <text key={i} className="bridge-label" y={(dim ? 10 : 16) + i * 11}
+                      opacity={dim ? 0.15 : undefined}>{l}</text>
                   ))}
                 </g>
               )
@@ -649,64 +699,72 @@ export default function RuleBreakTree() {
               const isMerge = n.type === 'merge'
               const isPrediction = n.type === 'prediction'
               const isExp = layer === 'experience'
+              const isDome = layer === 'dome'
+              const isOverlay = isExp || isDome
               const nodeIsExp = isExperiential(n.id)
 
-              // In experience mode, hide non-experiential nodes
-              if (isExp && !nodeIsExp) return null
-              // In core mode, only show core representative nodes
+              // In experience/dome mode, hide non-experiential nodes
+              if (isOverlay && !nodeIsExp) return null
+              // In experience/core mode, only show core representative nodes
               if (isExp && domeDetail === 'core' && !isCoreNode(n.id)) return null
 
-              const nsState = isExp ? demoStates[n.id] : null
+              const nsState = isOverlay ? demoStates[n.id] : null
               const nsConf = nsState ? NS_COLORS[nsState] : null
 
-              // In experience mode with no NS data, show as dark/unexplored
-              const isDark = isExp && !nsState
+              // No NS data = dark/unexplored
+              const isDark = isOverlay && !nsState
 
-              const r = isExp ? 7 : (isMerge ? 8 : isPrediction ? 7 : 6)
-              const baseColor = isMerge && !isExp ? '#E9A23B' : ind.color
+              // Dome: tiny nodes. Experience: medium. Innovation: standard.
+              const r = isDome ? 4 : isExp ? 7 : (isMerge ? 8 : isPrediction ? 7 : 6)
+              const baseColor = isMerge && !isOverlay ? '#E9A23B' : ind.color
               const nodeColor = nsConf?.color || baseColor
 
               // Glow intensity based on NS state
-              const glowOpacity = isExp
-                ? (nsConf ? nsConf.glow * 0.5 : 0.03)
+              const glowR = isDome ? 10 : isExp ? 14 : 10
+              const glowOpacity = isOverlay
+                ? (nsConf ? nsConf.glow * (isDome ? 0.4 : 0.5) : (isDome ? 0.01 : 0.03))
                 : 0
 
-              const displayLabel = isExp
+              const displayLabel = isOverlay
                 ? getExperienceLabel(n.id, n.label)
                 : n.label
 
+              // Dome: hide labels unless zoomed in or selected
+              const showLabel = isDome ? (zoomScale > 2.5 || selectedNode?.id === n.id) : true
+
               return (
                 <g key={n.id}
-                  className={`node-group ${isPrediction && !isExp ? 'prediction-node' : ''} ${nsConf?.pulse ? 'dome-pulse' : ''} ${isDark ? 'dome-dark' : ''} ${getHiddenClass(isBranchVisible(n.branch))} ${getTimelineClass(isNodeInTimeline(nn))} ${selectedNode?.id === n.id ? 'selected' : ''}`}
+                  className={`node-group ${isPrediction && !isOverlay ? 'prediction-node' : ''} ${nsConf?.pulse ? 'dome-pulse' : ''} ${isDark ? 'dome-dark' : ''} ${isDome ? 'dome-node' : ''} ${getHiddenClass(isBranchVisible(n.branch))} ${getTimelineClass(isNodeInTimeline(nn))} ${selectedNode?.id === n.id ? 'selected' : ''}`}
                   transform={`translate(${nn.x},${nn.y})`}
                   onClick={() => handleNodeClick(nn)}>
-                  {/* Dome glow — always visible in experience mode for lit nodes */}
-                  <circle className={isExp && nsConf ? 'dome-glow' : 'node-glow'}
-                    r={r + (isExp ? 14 : 10)}
+                  {/* Glow */}
+                  <circle className={isOverlay && nsConf ? 'dome-glow' : 'node-glow'}
+                    r={r + glowR}
                     fill={nodeColor}
                     opacity={glowOpacity} />
-                  <circle className={`node-circle ${isPrediction && !isExp ? 'prediction-circle' : ''}`}
+                  <circle className={`node-circle ${isPrediction && !isOverlay ? 'prediction-circle' : ''}`}
                     r={r}
-                    fill={isDark ? '#0d0a1a' : (isExp && nsConf ? 'rgba(12,10,22,0.6)' : '#0d0a1a')}
+                    fill={isDark ? '#0d0a1a' : (isOverlay && nsConf ? 'rgba(12,10,22,0.6)' : '#0d0a1a')}
                     stroke={nodeColor}
-                    strokeWidth={isExp && nsConf ? 2.5 : 2}
-                    strokeDasharray={isPrediction && !isExp ? '3 2' : (isDark ? '2 3' : 'none')}
-                    opacity={isDark ? 0.2 : (isPrediction && !isExp ? 0.7 : 1)} />
-                  {/* Inner fill for lit experience nodes */}
-                  {isExp && nsConf && (
-                    <circle r={r * 0.5} fill={nodeColor} opacity={nsConf.glow * 0.7} />
+                    strokeWidth={isDome ? (nsConf ? 1.5 : 0.5) : (isExp && nsConf ? 2.5 : 2)}
+                    strokeDasharray={isPrediction && !isOverlay ? '3 2' : (isDark ? '2 3' : 'none')}
+                    opacity={isDark ? (isDome ? 0.08 : 0.2) : (isPrediction && !isOverlay ? 0.7 : 1)} />
+                  {/* Inner fill for lit nodes */}
+                  {isOverlay && nsConf && (
+                    <circle r={r * (isDome ? 0.6 : 0.5)} fill={nodeColor} opacity={nsConf.glow * (isDome ? 0.9 : 0.7)} />
                   )}
-                  {isMerge && !isExp && <circle r={3} fill="#E9A23B" />}
-                  {isPrediction && !isExp && <circle r={2.5} fill={ind.color} opacity={0.5} />}
-                  {!isExp && (
+                  {isMerge && !isOverlay && <circle r={3} fill="#E9A23B" />}
+                  {isPrediction && !isOverlay && <circle r={2.5} fill={ind.color} opacity={0.5} />}
+                  {!isOverlay && (
                     <text className="node-year" y={-(r + 4)}>
                       {isPrediction ? `${n.confidence === 'high' ? n.year - 1 : n.year - 2}–${n.confidence === 'high' ? n.year + 1 : n.year + 2}` : n.year}
                     </text>
                   )}
-                  {displayLabel.split('\n').map((l, i) => (
-                    <text key={i} className={`node-label ${isDark ? 'dome-dark-label' : ''}`}
-                      y={r + 13 + i * 11}
-                      opacity={isDark ? 0.15 : undefined}>
+                  {showLabel && displayLabel.split('\n').map((l, i) => (
+                    <text key={i} className={`node-label ${isDark ? 'dome-dark-label' : ''} ${isDome ? 'dome-zoom-label' : ''}`}
+                      y={r + (isDome ? 8 : 13) + i * (isDome ? 9 : 11)}
+                      fontSize={isDome ? 7 : undefined}
+                      opacity={isDark ? 0.15 : (isDome ? 0.7 : undefined)}>
                       {l}
                     </text>
                   ))}
@@ -725,19 +783,19 @@ export default function RuleBreakTree() {
 
         {/* Legend */}
         <div className="rbt-legend">
-          {layer === 'experience' ? (
+          {layer === 'experience' || layer === 'dome' ? (
             <>
               <div className="legend-item">
                 <div className="legend-dot dome-legend-vr" />
-                Vibe Rise
+                Love it
               </div>
               <div className="legend-item">
                 <div className="legend-dot dome-legend-fun" />
-                Fun
+                Enjoy it
               </div>
               <div className="legend-item">
                 <div className="legend-dot dome-legend-pressure" />
-                Growth edge
+                Tried it
               </div>
               <div className="legend-item">
                 <div className="legend-dot dome-legend-dark" />
@@ -773,10 +831,10 @@ export default function RuleBreakTree() {
           </div>
         )}
 
-        {/* Dome stats — experience only */}
-        {layer === 'experience' && (() => {
+        {/* Dome stats — experience + dome */}
+        {(layer === 'experience' || layer === 'dome') && (() => {
           const visibleIds = Object.keys(demoStates).filter(id =>
-            domeDetail === 'expanded' || isCoreNode(id)
+            layer === 'dome' || domeDetail === 'expanded' || isCoreNode(id)
           )
           const safe = visibleIds.filter(id => demoStates[id] === 'vibe_rise' || demoStates[id] === 'fun').length
           const growing = visibleIds.filter(id => demoStates[id] === 'pressure').length
@@ -843,7 +901,7 @@ export default function RuleBreakTree() {
                 &#10005;
               </button>
 
-              {layer === 'experience' ? (
+              {(layer === 'experience' || layer === 'dome') ? (
                 <>
                   <div className="rbt-detail-name">
                     {getExperienceLabel(selectedNode.id, selectedNode.label)}
@@ -928,16 +986,17 @@ export default function RuleBreakTree() {
                   <div className="rbt-detail-path">
                     {[...branchPath].reverse()
                       .filter(node => {
-                        if (layer !== 'experience') return true
+                        if (layer === 'innovation') return true
                         if (node.nodeType === 'bridge') return true
                         if (!isExperiential(node.id)) return false
-                        if (domeDetail === 'core' && !isCoreNode(node.id)) return false
+                        if (layer === 'experience' && domeDetail === 'core' && !isCoreNode(node.id)) return false
                         return true
                       })
                       .map((node, i) => {
                       const isCurrent = node.id === selectedNode.id
                       const col = node.type === 'merge' ? '#E9A23B' : (INDUSTRIES[node.branch]?.color || node.color || '#888')
-                      const label = layer === 'experience'
+                      const isOvr = layer !== 'innovation'
+                      const label = isOvr
                         ? getExperienceLabel(node.id, node.label)
                         : (node.label || '').replace(/\n/g, ' ')
                       return (
@@ -949,7 +1008,7 @@ export default function RuleBreakTree() {
                           >
                             <div className="rbt-path-dot" style={{ background: col }} />
                             <span>{label}</span>
-                            {node.year && layer !== 'experience' && <span className="rbt-path-year">{node.year}</span>}
+                            {node.year && layer === 'innovation' && <span className="rbt-path-year">{node.year}</span>}
                           </div>
                         </React.Fragment>
                       )

@@ -7,7 +7,7 @@
  *   1. No playskills and no active challenges → WahooDiscoveryFlow (first-visit)
  *   2. Otherwise → Active Wahoos + WahooCreator (free text + bucket list) + WahooInspiration
  *
- * Active Wahoos come from priority_weekly_picks.
+ * Active Wahoos come from quest_tasks (is_courage_challenge = true).
  * Bucket list wahoos come from groan_challenges with status='generated' and no accepted_at.
  */
 
@@ -41,6 +41,11 @@ export default function PlayListTab({
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
   const [showWahooModal, setShowWahooModal] = useState(false)
   const [bucketListWahoos, setBucketListWahoos] = useState([])
+
+  // Orphan challenges (groan_challenges without quest_tasks)
+  const [orphanChallenges, setOrphanChallenges] = useState([])
+  const [orphanQuestPicks, setOrphanQuestPicks] = useState({}) // { challengeId: questId }
+  const [assigningOrphan, setAssigningOrphan] = useState(null)
 
   // Healing data for inline display
   const [healingByChallenge, setHealingByChallenge] = useState({})
@@ -95,6 +100,7 @@ export default function PlayListTab({
     Promise.all([
       fetchPlayskills(),
       fetchActiveChallenges(),
+      fetchOrphans(),
       supabase
         .from('groan_challenges')
         .select('id', { count: 'exact', head: true })
@@ -107,7 +113,7 @@ export default function PlayListTab({
         .eq('user_id', userId)
         .eq('quest_category', 'Groans')
         .not('reflection_text', 'is', null),
-    ]).then(([, , { count }, , identityRes]) => {
+    ]).then(([, , , { count }, , identityRes]) => {
       setAllTimeWahoos(count || 0)
       // Parse identity statements from reflection_text JSON
       const stmtCounts = {}
@@ -133,48 +139,90 @@ export default function PlayListTab({
   }, [userId])
 
   const fetchActiveChallenges = async () => {
-    // Fetch all picks (not just current week) — wahoos persist until completed
-    const { data } = await supabase
-      .from('priority_weekly_picks')
-      .select('*')
+    // Source of truth: quest_tasks with is_courage_challenge = true
+    const { data: tasks } = await supabase
+      .from('quest_tasks')
+      .select('id, quest_id, text, groan_challenge_id, done, created_at')
       .eq('user_id', userId)
-      .eq('pick_type', 'groan')
-      .order('week_start_date', { ascending: false })
+      .eq('is_courage_challenge', true)
+      .eq('done', false)
+      .order('created_at', { ascending: false })
 
-    if (data) {
-      // Deduplicate by reference_id (keep most recent pick)
-      const seen = new Set()
-      const unique = data.filter(pick => {
-        if (seen.has(pick.reference_id)) return false
-        seen.add(pick.reference_id)
-        return true
-      })
-      // Batch-enrich with source label + quest name, filter out challenges from closed quests
-      const refIds = unique.map(p => p.reference_id).filter(Boolean)
-      const [{ data: challenges }, { data: questTasks }] = await Promise.all([
-        supabase.from('groan_challenges').select('id, source_label, status').in('id', refIds),
-        supabase.from('quest_tasks').select('quest_id, groan_challenge_id').in('groan_challenge_id', refIds),
-      ])
-      const challengeMap = Object.fromEntries((challenges || []).map(c => [c.id, c]))
-      const taskMap = Object.fromEntries((questTasks || []).map(t => [t.groan_challenge_id, t.quest_id]))
-
-      // Batch-fetch quests for all linked quest_ids
-      const questIds = [...new Set(Object.values(taskMap).filter(Boolean))]
-      let questMap = {}
-      if (questIds.length > 0) {
-        const { data: quests } = await supabase.from('quests').select('id, label, status').in('id', questIds)
-        questMap = Object.fromEntries((quests || []).map(q => [q.id, q]))
-      }
-
-      const enriched = unique.map(pick => {
-        const challenge = challengeMap[pick.reference_id]
-        const questId = taskMap[pick.reference_id]
-        const quest = questId ? questMap[questId] : null
-        const questClosed = quest?.status === 'closed' || quest?.status === 'completed'
-        return { ...pick, _source_label: quest?.label || challenge?.source_label, _status: challenge?.status, _questClosed: questClosed }
-      })
-      setActiveChallenges(enriched.filter(e => e._status !== 'completed' && !e._questClosed))
+    if (!tasks || tasks.length === 0) {
+      setActiveChallenges([])
+      return
     }
+
+    // Enrich with groan_challenge status + quest label
+    const groanIds = tasks.map(t => t.groan_challenge_id).filter(Boolean)
+    const questIds = [...new Set(tasks.map(t => t.quest_id).filter(Boolean))]
+
+    const [{ data: challenges }, { data: quests }] = await Promise.all([
+      groanIds.length > 0
+        ? supabase.from('groan_challenges').select('id, source_label, status').in('id', groanIds)
+        : { data: [] },
+      questIds.length > 0
+        ? supabase.from('quests').select('id, label, status').in('id', questIds)
+        : { data: [] },
+    ])
+
+    const challengeMap = Object.fromEntries((challenges || []).map(c => [c.id, c]))
+    const questMap = Object.fromEntries((quests || []).map(q => [q.id, q]))
+
+    const enriched = tasks.map(task => {
+      const challenge = challengeMap[task.groan_challenge_id]
+      const quest = questMap[task.quest_id]
+      const questClosed = quest?.status === 'closed' || quest?.status === 'completed'
+      return {
+        // Shape matches what rendering expects (reference_id, display_name, _source_label)
+        id: task.id,
+        reference_id: task.groan_challenge_id,
+        display_name: task.text,
+        _source_label: quest?.label || challenge?.source_label || 'Courage',
+        _status: challenge?.status,
+        _questClosed: questClosed,
+      }
+    })
+
+    setActiveChallenges(enriched.filter(e => e._status !== 'completed' && !e._questClosed))
+  }
+
+  // Detect orphan challenges (groan_challenges with no quest_task)
+  const fetchOrphans = async () => {
+    const { data: allActive } = await supabase
+      .from('groan_challenges')
+      .select('id, title, challenge_text, status')
+      .eq('user_id', userId)
+      .in('status', ['active', 'accepted'])
+
+    if (!allActive || allActive.length === 0) { setOrphanChallenges([]); return }
+
+    const ids = allActive.map(c => c.id)
+    const { data: linked } = await supabase
+      .from('quest_tasks')
+      .select('groan_challenge_id')
+      .in('groan_challenge_id', ids)
+
+    const linkedIds = new Set((linked || []).map(t => t.groan_challenge_id))
+    setOrphanChallenges(allActive.filter(c => !linkedIds.has(c.id)))
+  }
+
+  const handleAssignOrphan = async (challengeId, questId) => {
+    if (!questId) return
+    setAssigningOrphan(challengeId)
+    const challenge = orphanChallenges.find(c => c.id === challengeId)
+    await supabase.from('quest_tasks').insert({
+      quest_id: questId,
+      user_id: userId,
+      text: challenge?.title || challenge?.challenge_text || 'Courage challenge',
+      is_courage_challenge: true,
+      groan_challenge_id: challengeId,
+      sort_order: 0,
+    })
+    setAssigningOrphan(null)
+    setOrphanChallenges(prev => prev.filter(c => c.id !== challengeId))
+    setOrphanQuestPicks(prev => { const next = { ...prev }; delete next[challengeId]; return next })
+    fetchActiveChallenges()
   }
 
   // Stable key from challenge IDs — re-fetches when actual challenges change, not just count
@@ -377,7 +425,7 @@ export default function PlayListTab({
           <button className="plt-counter-header" onClick={() => setShowIdentity(!showIdentity)}>
             <div className="plt-counter-number">{allTimeWahoos}</div>
             <div className="plt-counter-info">
-              <div className="plt-counter-title">courage challenges completed</div>
+              <div className="plt-counter-title">Courage Challenges completed</div>
               {identityStatements.length > 0 && (
                 <div className="plt-counter-top">
                   Top: "I am someone who {identityStatements[0].text}" ({'\u00D7'}{identityStatements[0].count})
@@ -396,6 +444,35 @@ export default function PlayListTab({
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Orphan banner — old challenges without a quest */}
+      {orphanChallenges.length > 0 && (
+        <div className="plt-orphan-banner">
+          <div className="plt-orphan-header">
+            <span>📋</span>
+            <span className="plt-orphan-title">
+              {orphanChallenges.length} courage challenge{orphanChallenges.length > 1 ? 's need' : ' needs'} a life path
+            </span>
+          </div>
+          {orphanChallenges.map(challenge => (
+            <div key={challenge.id} className="plt-orphan-row">
+              <div className="plt-orphan-name">{challenge.title || challenge.challenge_text || 'Untitled challenge'}</div>
+              <QuestSelector
+                userId={userId}
+                value={orphanQuestPicks[challenge.id] || null}
+                onChange={(questId) => setOrphanQuestPicks(prev => ({ ...prev, [challenge.id]: questId }))}
+              />
+              <button
+                className="plt-orphan-assign"
+                disabled={!orphanQuestPicks[challenge.id] || assigningOrphan === challenge.id}
+                onClick={() => handleAssignOrphan(challenge.id, orphanQuestPicks[challenge.id])}
+              >
+                {assigningOrphan === challenge.id ? 'Assigning...' : 'Assign'}
+              </button>
+            </div>
+          ))}
         </div>
       )}
 

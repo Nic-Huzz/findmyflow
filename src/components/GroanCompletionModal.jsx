@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
 import { postFeedEvent } from '../lib/communityFeed'
 import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
+import { detectShift } from '../lib/shiftDetection'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -112,6 +113,11 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
   // 3% reflection
   const [reflection, setReflection] = useState('')
+
+  // Shift detection (Dispenza loop — New Behaviours → visible New Emotions)
+  // Ref mirrors state to avoid stale closure in handleShareDone
+  const [shiftData, setShiftData] = useState(null)
+  const shiftDataRef = useRef(null)
 
   // Guard: if challenge is already completed, show message
   if (challenge?.status === 'completed') {
@@ -219,19 +225,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         awardMovementXP(userId, 'strike_complete', challenge.title)
       }
 
-      // 5. Remove from priority_weekly_picks so it no longer shows as active
-      try {
-        await supabase
-          .from('priority_weekly_picks')
-          .delete()
-          .eq('user_id', userId)
-          .eq('pick_type', 'groan')
-          .eq('reference_id', challenge.id)
-      } catch (e) {
-        console.warn('Error removing weekly pick:', e)
-      }
-
-      // 5b. Sync linked quest_tasks — mark as done + set safety_status
+      // 5. Sync linked quest_tasks — mark as done + set safety_status
       const isSafe = ['vibe', 'peace'].includes(wahooClassification)
         && ['better', 'expected'].includes(expectationResult)
       try {
@@ -350,6 +344,14 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         } catch (e) { console.warn('Behavioral evidence / skill XP error:', e) }
       }
 
+      // 7d. Detect emotional shift on this quest (Dispenza loop)
+      if (sourceQuestId) {
+        const questLabel = crossQuests.find(q => q.id === sourceQuestId)?.label || null
+        detectShift(userId, sourceQuestId, questLabel)
+          .then(shift => { if (shift) { setShiftData(shift); shiftDataRef.current = shift } })
+          .catch(() => {})
+      }
+
       // Celebration based on classification (Hades model: every state gets appropriate response)
       if (wahooClassification === 'vibe' || wahooClassification === 'wahoo') {
         // Gold confetti — peak experience
@@ -374,8 +376,16 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 } })
     }
     // Notify Zarlo of wahoo completion (proactive bubble)
+    const questLabel = crossQuests.find(q => q.id === sourceQuestId)?.label || null
     window.dispatchEvent(new CustomEvent('zarlo:reaction', {
-      detail: { actionType: 'wahoo_completed', actionData: { category: challenge?.wahoo_category || 'unknown', classification: wahooClassification || 'unknown' } }
+      detail: {
+        actionType: 'wahoo_completed',
+        actionData: {
+          questLabel: questLabel || 'unknown',
+          classification: wahooClassification || 'unknown',
+          shift: shiftDataRef.current || null,
+        }
+      }
     }))
     onComplete?.()
     onClose()
@@ -393,11 +403,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <p className="gcm-subtitle">{challenge.title || challenge.source_label}</p>
 
             <NervousSystemCheckin
-              mode="both"
+              mode="before"
               beforeState={beforeState}
-              afterState={afterState}
               onBeforeChange={setBeforeState}
-              onAfterChange={setAfterState}
               skipArchetype
               onComplete={() => setStep('wahoo_check')}
             />
@@ -406,25 +414,25 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
         {step === 'wahoo_check' && (
           <>
-            <h2 className="gcm-title">How did that feel?</h2>
+            <h2 className="gcm-title">How were you feeling during?</h2>
             <div className="gcm-wahoo-options">
               <button
                 className={`gcm-wahoo-btn gcm-wahoo-hell-yes ${wahooClassification === 'vibe' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('vibe')}
+                onClick={() => { setWahooClassification('vibe'); setAfterState('vibe_rise') }}
               >
                 <span className="gcm-wahoo-emoji">🔥</span>
                 <span className="gcm-wahoo-label">Vibe Rise</span>
               </button>
               <button
                 className={`gcm-wahoo-btn gcm-wahoo-alive ${wahooClassification === 'peace' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('peace')}
+                onClick={() => { setWahooClassification('peace'); setAfterState('ventral') }}
               >
-                <span className="gcm-wahoo-emoji">😌</span>
+                <span className="gcm-wahoo-emoji">☺️</span>
                 <span className="gcm-wahoo-label">Fun</span>
               </button>
               <button
                 className={`gcm-wahoo-btn ${wahooClassification === 'anxious' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('anxious')}
+                onClick={() => { setWahooClassification('anxious'); setAfterState('sympathetic') }}
                 style={wahooClassification === 'anxious' ? { borderColor: '#ef4444', background: 'rgba(239,68,68,0.06)', color: '#ef4444' } : undefined}
               >
                 <span className="gcm-wahoo-emoji">😰</span>
@@ -432,7 +440,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               </button>
               <button
                 className={`gcm-wahoo-btn ${wahooClassification === 'shutdown' ? 'selected' : ''}`}
-                onClick={() => setWahooClassification('shutdown')}
+                onClick={() => { setWahooClassification('shutdown'); setAfterState('dorsal') }}
                 style={wahooClassification === 'shutdown' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
               >
                 <span className="gcm-wahoo-emoji">😶</span>

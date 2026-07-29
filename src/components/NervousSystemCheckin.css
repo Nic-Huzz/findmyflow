@@ -49,9 +49,12 @@
 
 .nsci-state-btn {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+  padding: 14px;
   border: 2px solid #eef0f3;
   border-radius: 14px;
   background: #f8f8fa;

@@ -130,14 +130,6 @@ export default function WahooCreator({
       const { error: acceptError } = await acceptGroanChallenge(dbRecord.id)
       if (acceptError) throw acceptError
 
-      await supabase.from('priority_weekly_picks').upsert({
-        user_id: userId,
-        week_start_date: getWeekStartLocal(),
-        pick_type: 'groan',
-        reference_id: dbRecord.id,
-        display_name: freeText.trim(),
-      }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
-
       if (linkedQuestId) {
         try {
           await supabase.from('quest_tasks').insert({
@@ -238,13 +230,6 @@ export default function WahooCreator({
                   setGenerating(true)
                   try {
                     await acceptGroanChallenge(w.id)
-                    await supabase.from('priority_weekly_picks').upsert({
-                      user_id: userId,
-                      week_start_date: getWeekStartLocal(),
-                      pick_type: 'groan',
-                      reference_id: w.id,
-                      display_name: w.title || w.challenge_text,
-                    }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
                     // Link to quest_task if groan has a quest_id or linkedQuestId exists
                     const questId = w.quest_id || linkedQuestId
                     if (questId) {
@@ -394,7 +379,7 @@ export default function WahooCreator({
           {generating ? 'Saving...' : 'Submit'}
         </button>
 
-        {bucketList.length > 0 && (
+        {bucketList.length > 0 && linkedQuestId && (
           <button
             className="wc-text-link"
             onClick={() => { hapticLight(); setError(null); setStep('fromlist') }}

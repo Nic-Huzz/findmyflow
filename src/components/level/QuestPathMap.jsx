@@ -889,13 +889,6 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
       })
       if (dbRecord) {
         await acceptGroanChallenge(dbRecord.id)
-        await supabase.from('priority_weekly_picks').upsert({
-          user_id: userId,
-          week_start_date: getWeekStartLocal(),
-          pick_type: 'groan',
-          reference_id: dbRecord.id,
-          display_name: taskInput.trim(),
-        }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
 
         const { data: insertedTask } = await supabase.from('quest_tasks').insert({
           quest_id: quest.id,

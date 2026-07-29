@@ -704,6 +704,9 @@
 
 .rule-break-tree .rbt-layer-btn:last-child {
   border-radius: 0 6px 6px 0;
+}
+
+.rule-break-tree .rbt-layer-btn + .rbt-layer-btn {
   border-left: none;
 }
 
@@ -713,7 +716,8 @@
   color: #fff;
 }
 
-.rule-break-tree .rbt-layer-btn:last-child.active {
+.rule-break-tree .rbt-layer-btn.active + .rbt-layer-btn,
+.rule-break-tree .rbt-layer-btn + .rbt-layer-btn.active {
   border-left: 1px solid rgba(94,23,235,0.5);
 }
 
@@ -754,6 +758,21 @@
 
 .rule-break-tree .rbt-dome-detail-btn:last-child.active {
   border-left: 1px solid rgba(233,162,59,0.3);
+}
+
+/* ── Dome Node (snowflake mode) ── */
+.rule-break-tree .dome-node .dome-zoom-label {
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.rule-break-tree .dome-node:hover .dome-zoom-label {
+  opacity: 0.85 !important;
+}
+
+.rule-break-tree .dome-node.selected .dome-zoom-label {
+  opacity: 0.85 !important;
 }
 
 /* ── Dome Glow (experience layer) ── */

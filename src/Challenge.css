@@ -3170,26 +3170,94 @@
   border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%;
 }
 
-/* ── Ghost Recap Card ── */
-.ghost-recap-card {
-  background: white; border-radius: 14px; padding: 1rem; margin-bottom: 12px;
-  border: 1px solid rgba(94, 23, 235, 0.1); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+/* ── Ghost Recap Card (scoreboard) ── */
+.grc-card {
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(94, 23, 235, 0.08);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.ghost-recap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-.ghost-recap-title { font-size: 0.85rem; font-weight: 700; color: #374151; }
-.ghost-recap-dismiss { background: none; border: none; font-size: 1.2rem; color: #9ca3af; cursor: pointer; padding: 0 4px; line-height: 1; }
-.ghost-recap-result { font-size: 0.9rem; font-weight: 700; color: #1f2937; margin-bottom: 0.4rem; }
-.ghost-recap-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.4rem; }
-.ghost-recap-pill { font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #f3f4f6; }
-.ghost-recap-pill.won { color: #10b981; }
-.ghost-recap-pill.lost { color: #ef4444; }
-.ghost-recap-pill.tied { color: #6b7280; }
-.ghost-recap-first-week { font-size: 0.8rem; color: #6b7280; margin: 0.4rem 0; line-height: 1.4; }
-.ghost-recap-streak { font-size: 0.8rem; font-weight: 700; color: #E9A23B; margin-bottom: 0.4rem; }
-.ghost-recap-cta {
+.grc-card:active { transform: scale(0.985); }
+
+/* Dismiss */
+.grc-dismiss {
+  position: absolute; top: 6px; right: 8px; z-index: 2;
+  background: none; border: none; font-size: 1.1rem;
+  color: rgba(255,255,255,0.6); cursor: pointer; padding: 2px 6px; line-height: 1;
+}
+
+/* Headline strip */
+.grc-headline {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 10px 14px 8px;
   background: linear-gradient(135deg, #5e17eb, #8b5cf6);
-  color: white; border: none; padding: 0.5rem 1rem;
-  border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%;
+  color: white;
+}
+.grc-headline.grc-win  { background: linear-gradient(135deg, #059669, #34d399); }
+.grc-headline.grc-loss { background: linear-gradient(135deg, #dc2626, #f87171); }
+.grc-result-label {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; opacity: 0.85;
+}
+.grc-score-big {
+  font-size: 1.3rem; font-weight: 800; letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scoreboard table */
+.grc-scoreboard { padding: 6px 14px 4px; }
+.grc-board-header {
+  display: grid; grid-template-columns: 1fr 44px 44px 24px; gap: 4px;
+  padding-bottom: 3px; border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 2px;
+}
+.grc-col-label {
+  font-size: 0.6rem; font-weight: 600; text-transform: uppercase;
+  color: #9ca3af; text-align: center; letter-spacing: 0.05em;
+}
+.grc-row {
+  display: grid; grid-template-columns: 1fr 44px 44px 24px; gap: 4px;
+  align-items: center; padding: 4px 0;
+}
+.grc-row + .grc-row { border-top: 1px solid #f3f4f6; }
+.grc-row-label { font-size: 0.78rem; font-weight: 600; color: #374151; }
+.grc-row-score {
+  font-size: 0.82rem; font-weight: 700; text-align: center;
+  color: #6b7280; font-variant-numeric: tabular-nums;
+}
+.grc-row-score.grc-win-text { color: #059669; }
+.grc-row-score.grc-loss-text { color: #dc2626; }
+.grc-row-marker {
+  font-size: 0.55rem; font-weight: 800; text-align: center;
+  width: 20px; height: 20px; line-height: 20px;
+  border-radius: 5px; margin: 0 auto;
+}
+.grc-marker-win  { background: #d1fae5; color: #059669; }
+.grc-marker-loss { background: #fee2e2; color: #dc2626; }
+.grc-marker-tied { background: #f3f4f6; color: #9ca3af; }
+
+/* First week message */
+.grc-first-week {
+  font-size: 0.78rem; color: #6b7280; margin: 0;
+  padding: 8px 14px 4px; line-height: 1.4;
+}
+
+/* Footer */
+.grc-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 14px 10px;
+}
+.grc-streak {
+  font-size: 0.72rem; font-weight: 700; color: #E9A23B;
+}
+.grc-details-link {
+  font-size: 0.72rem; font-weight: 600; color: #5e17eb;
+  margin-left: auto;
 }
 
 /* ── Wahoo Tab ── */
@@ -3918,6 +3986,35 @@
 }
 .playlist-tab .plt-healing-done .plt-healing-cta {
   color: #6b7280;
+}
+
+/* ── Orphan Banner ── */
+.playlist-tab .plt-orphan-banner {
+  background: rgba(233, 162, 59, 0.06);
+  border: 1px solid rgba(233, 162, 59, 0.15);
+  border-radius: 16px; padding: 16px; margin-bottom: 16px;
+}
+.playlist-tab .plt-orphan-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.playlist-tab .plt-orphan-title {
+  font-size: 14px; font-weight: 700; color: #1a1a2e;
+}
+.playlist-tab .plt-orphan-row {
+  padding: 10px 0; border-top: 1px solid rgba(233, 162, 59, 0.1);
+}
+.playlist-tab .plt-orphan-name {
+  font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;
+}
+.playlist-tab .plt-orphan-assign {
+  margin-top: 8px; width: 100%;
+  background: linear-gradient(135deg, #5e17eb, #8b5cf6);
+  color: white; border: none; padding: 8px 16px;
+  border-radius: 10px; font-weight: 700; font-size: 13px;
+  cursor: pointer; font-family: inherit;
+}
+.playlist-tab .plt-orphan-assign:disabled {
+  opacity: 0.4; cursor: not-allowed;
 }
 
 /* ── Standalone "What's blocking you?" ── */

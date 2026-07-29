@@ -1470,11 +1470,10 @@ function Challenge() {
   return (
     <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
-      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={(state) => {
+      {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => {
         setShowDailyCheckin(false)
         setCapacityRefresh(n => n + 1)
         recheckStage()
-        if (state) generateZarloReaction(user?.id, 'daily_checkin', { state }).then(r => { if (r) setZarloReaction(r) })
       }} />}
       <NotificationPrompt />
       <ChallengeHeader

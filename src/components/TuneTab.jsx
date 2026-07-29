@@ -25,6 +25,7 @@ import useCapacityScore from '../hooks/useCapacityScore'
 import RegulationCard from './RegulationCard'
 import { REGULATION_EXERCISES } from '../lib/nervousSystemConstants'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
+import QuestSelector from './QuestSelector'
 import './TuneTab.css'
 
 // Quest IDs that render inline (Practice + Rest checkboxes)
@@ -167,6 +168,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [savingExpOutcome, setSavingExpOutcome] = useState(false)
   const [showWahooPrompt, setShowWahooPrompt] = useState(null)
   const [wahooConvertCat, setWahooConvertCat] = useState(null)
+  const [wahooConvertQuestId, setWahooConvertQuestId] = useState(null)
 
   // Load quests from static JSON + completions from DB
   useEffect(() => {
@@ -196,22 +198,24 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         .eq('checkin_type', 'stall')
         .gte('created_at', getWeekStartLocal())
         .order('created_at', { ascending: false }),
-      // Load weekly focus intention — most recent setup from any week, plus this week's daily honours
+      // Load weekly focus intention — this week only (resets each Monday)
       supabase
         .from('quest_completions')
         .select('response_data, reflection_text, completed_at')
         .eq('user_id', userId)
         .eq('quest_id', 'rewire_weekly_focus')
+        .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: false })
         .limit(10)
         .then(res => res)
         .catch(() => ({ data: null })),
-      // Load peak state commitment — most recent setup from any week
+      // Load peak state commitment — this week only (resets each Monday)
       supabase
         .from('quest_completions')
         .select('response_data, reflection_text, completed_at')
         .eq('user_id', userId)
         .eq('quest_id', 'weekly_peak_state')
+        .gte('completed_at', getWeekStartLocal())
         .order('completed_at', { ascending: false })
         .limit(10)
         .then(res => res)
@@ -778,7 +782,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   }
 
   async function handleWahooConvert() {
-    if (!showWahooPrompt || !wahooConvertCat) return
+    if (!showWahooPrompt || !wahooConvertCat || !wahooConvertQuestId) return
     try {
       const { data: challenge, error: createErr } = await createGroanChallenge({
         userId,
@@ -796,23 +800,26 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       const { error: acceptErr } = await acceptGroanChallenge(challenge.id)
       if (acceptErr) throw acceptErr
 
-      await supabase.from('priority_weekly_picks').insert({
+      await supabase.from('quest_tasks').insert({
+        quest_id: wahooConvertQuestId,
         user_id: userId,
-        week_start_date: getWeekStartLocal(),
-        pick_type: 'groan',
-        reference_id: challenge.id,
-        display_name: showWahooPrompt.activity_description,
+        text: showWahooPrompt.activity_description,
+        is_courage_challenge: true,
+        groan_challenge_id: challenge.id,
+        sort_order: 0,
       })
 
       hapticSuccess()
       confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } })
       setShowWahooPrompt(null)
       setWahooConvertCat(null)
+      setWahooConvertQuestId(null)
       onRefreshPoints?.()
     } catch (err) {
       console.error('Wahoo convert error:', err)
       setShowWahooPrompt(null)
       setWahooConvertCat(null)
+      setWahooConvertQuestId(null)
     }
   }
 
@@ -1422,11 +1429,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                 </button>
               ))}
             </div>
+            <QuestSelector userId={userId} value={wahooConvertQuestId}
+              onChange={(id) => setWahooConvertQuestId(id)} />
             <div className="tt-drain-actions">
               <button
                 type="button"
                 className="tt-drain-save"
-                disabled={!wahooConvertCat}
+                disabled={!wahooConvertCat || !wahooConvertQuestId}
                 onClick={handleWahooConvert}
               >
                 Add Wahoo
@@ -1434,7 +1443,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
               <button
                 type="button"
                 className="tt-drain-cancel"
-                onClick={() => { setShowWahooPrompt(null); setWahooConvertCat(null) }}
+                onClick={() => { setShowWahooPrompt(null); setWahooConvertCat(null); setWahooConvertQuestId(null) }}
               >
                 Not now
               </button>

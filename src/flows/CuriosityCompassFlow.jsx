@@ -17,6 +17,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import QuestSelector from '../components/QuestSelector'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { SKILLS_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
@@ -108,6 +109,7 @@ export default function CuriosityCompassFlow() {
   const [skills, setSkills] = useState([])
   const [starred, setStarred] = useState(new Set())
   const [isProcessing, setIsProcessing] = useState(false)
+  const [linkedQuestId, setLinkedQuestId] = useState(null)
   const [error, setError] = useState(null)
   const textareaRef = useRef(null)
 
@@ -309,16 +311,18 @@ export default function CuriosityCompassFlow() {
           // 3. Accept it
           await acceptGroanChallenge(groanRecord.id)
 
-          // 4. Insert into priority_weekly_picks
-          const { error: pickError } = await supabase.from('priority_weekly_picks').insert({
+          // 4. Insert into quest_tasks (linked to selected quest)
+          if (!linkedQuestId) continue
+          const { error: taskError } = await supabase.from('quest_tasks').insert({
+            quest_id: linkedQuestId,
             user_id: user.id,
-            week_start_date: weekStart,
-            pick_type: 'groan',
-            reference_id: groanRecord.id,
-            display_name: skillText,
+            text: skillText,
+            is_courage_challenge: true,
+            groan_challenge_id: groanRecord.id,
+            sort_order: 0,
           })
-          if (pickError) {
-            console.warn('weekly pick insert error:', pickError)
+          if (taskError) {
+            console.warn('quest_task insert error:', taskError)
             continue
           }
 
@@ -677,11 +681,14 @@ export default function CuriosityCompassFlow() {
 
               {error && <p style={{ color: '#ff6b6b', fontSize: '0.8rem', marginTop: '0.5rem' }}>{error}</p>}
 
+              <QuestSelector userId={user?.id} value={linkedQuestId}
+                onChange={(id) => setLinkedQuestId(id)} />
+
               <div className="nav-buttons" style={{ flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
                 <button
                   className="primary-button"
                   onClick={handleWheelSave}
-                  disabled={totalWheelPicks === 0 || isProcessing}
+                  disabled={totalWheelPicks === 0 || isProcessing || !linkedQuestId}
                 >
                   {isProcessing ? 'Saving...' : `Add ${totalWheelPicks} to my Play-List →`}
                 </button>

@@ -139,7 +139,8 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     const newDone = !task.done
 
     // Intercept: courage challenge completion → open GroanCompletionModal
-    if (newDone && task.is_courage_challenge && task.groan_challenge_id) {
+    if (newDone && task.is_courage_challenge) {
+      if (!task.groan_challenge_id) return // cannot complete courage task without groan challenge link
       if (groanModalChallenge) return // already handling a completion
       try {
         const { data: gc } = await supabase
@@ -198,6 +199,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     // Show "lit me up" signal for non-courage tasks (only if not already signalled)
     if (newDone && !task.is_courage_challenge && !task.task_signal) {
       setSignalTaskId(task.id)
+      return // defer onUpdate until signal is answered
     }
 
     onUpdate?.()
@@ -224,6 +226,7 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const handleTaskSignal = async (taskId, signal) => {
     setSignalTaskId(null)
     await supabase.from('quest_tasks').update({ task_signal: signal }).eq('id', taskId)
+    onUpdate?.()
   }
 
   const closeQuest = async (reason) => {

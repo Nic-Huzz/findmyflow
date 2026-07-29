@@ -1,7 +1,6 @@
 /**
  * GhostRecapCard — Dismissible recap of last week's ghost matchup result.
- * Week 1: special message explaining the mechanic + early win celebration.
- * Week 2+: category breakdown, streak count.
+ * Sports-scoreboard style: result headline, 3-row category breakdown, inline CTA.
  */
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -16,8 +15,9 @@ export default function GhostRecapCard({ recapData }) {
   if (!recapData || dismissed) return null
 
   const { result, categoriesWon, categoriesLost, streak, isFirstWeek } = recapData
-  const resultEmoji = result === 'win' ? '🎉' : result === 'loss' ? '😤' : '🤝'
-  const resultLabel = result === 'win' ? 'You beat your Ghost' : result === 'loss' ? 'Ghost won' : 'Draw'
+
+  const resultLabel = result === 'win' ? 'You won' : result === 'loss' ? 'Ghost won' : 'Draw'
+  const resultClass = result === 'win' ? 'grc-win' : result === 'loss' ? 'grc-loss' : 'grc-draw'
 
   const categories = [
     { label: 'Tune', icon: '☀️', current: recapData.currentTune, ghost: recapData.ghostTune },
@@ -31,42 +31,51 @@ export default function GhostRecapCard({ recapData }) {
   }
 
   return (
-    <div className="ghost-recap-card">
-      <div className="ghost-recap-header">
-        <span className="ghost-recap-title">Last Week {resultEmoji}</span>
-        <button className="ghost-recap-dismiss" onClick={dismiss}>×</button>
+    <div className="grc-card" onClick={() => navigate('/league')}>
+      <button className="grc-dismiss" onClick={e => { e.stopPropagation(); dismiss() }} aria-label="Dismiss">×</button>
+
+      {/* Result headline */}
+      <div className={`grc-headline ${resultClass}`}>
+        <span className="grc-result-label">Last week · {resultLabel}</span>
+        <span className="grc-score-big">{categoriesWon} – {categoriesLost}</span>
       </div>
 
-      <div className="ghost-recap-result">
-        {resultLabel} {categoriesWon}-{categoriesLost}
-      </div>
-
+      {/* Category scoreboard rows */}
       {!isFirstWeek && (
-        <div className="ghost-recap-cats">
+        <div className="grc-scoreboard">
+          <div className="grc-board-header">
+            <span></span>
+            <span className="grc-col-label">You</span>
+            <span className="grc-col-label">Ghost</span>
+          </div>
           {categories.map(cat => {
             const won = cat.current > cat.ghost
+            const lost = cat.current < cat.ghost
             return (
-              <span key={cat.label} className={`ghost-recap-pill ${won ? 'won' : cat.current < cat.ghost ? 'lost' : 'tied'}`}>
-                {cat.icon} {cat.current}-{cat.ghost}
-              </span>
+              <div key={cat.label} className="grc-row">
+                <span className="grc-row-label">{cat.icon} {cat.label}</span>
+                <span className={`grc-row-score ${won ? 'grc-win-text' : ''}`}>{cat.current}</span>
+                <span className={`grc-row-score ${lost ? 'grc-loss-text' : ''}`}>{cat.ghost}</span>
+                <span className={`grc-row-marker ${won ? 'grc-marker-win' : lost ? 'grc-marker-loss' : 'grc-marker-tied'}`}>
+                  {won ? 'W' : lost ? 'L' : 'T'}
+                </span>
+              </div>
             )
           })}
         </div>
       )}
 
       {isFirstWeek && result === 'win' && (
-        <p className="ghost-recap-first-week">
+        <p className="grc-first-week">
           Nice work! Your scores this week become next week's ghost to beat.
         </p>
       )}
 
-      {streak > 1 && (
-        <div className="ghost-recap-streak">🔥 {streak} week streak</div>
-      )}
-
-      <button className="ghost-recap-cta" onClick={() => navigate('/league')}>
-        View Details
-      </button>
+      {/* Footer: streak + inline CTA */}
+      <div className="grc-footer">
+        {streak > 1 && <span className="grc-streak">🔥 {streak}w streak</span>}
+        <span className="grc-details-link">View Details →</span>
+      </div>
     </div>
   )
 }
