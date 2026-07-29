@@ -1,13 +1,13 @@
 {
-  "name": "findmyflow",
-  "description": "Run FindMyFlow business assessments via AI — discover your ideal offers, lead strategies, and revenue models",
-  "version": "1.0.0",
+  "name": "viberise",
+  "description": "Sync session progress to Vibe Rise — track skills, capture patterns, measure alignment, find your personal monopoly",
+  "version": "2.0.0",
   "author": {
     "name": "Nic Hurrell",
     "email": "huzz@nichuzz.com"
   },
-  "homepage": "https://findmyflow.nichuzz.com",
+  "homepage": "https://viberise.nichuzz.com",
   "repository": "https://github.com/Nic-Huzz/findmyflow",
   "license": "MIT",
-  "keywords": ["business", "assessment", "offers", "hormozi", "money-model", "mcp"]
+  "keywords": ["self-knowledge", "skills", "quests", "session-sync", "mcp", "personal-monopoly"]
 }

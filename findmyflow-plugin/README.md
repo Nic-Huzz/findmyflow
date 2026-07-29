@@ -1,6 +1,6 @@
-# FindMyFlow Plugin for Claude Code
+# Vibe Rise Plugin for Claude Code
 
-Run FindMyFlow's business strategy assessments directly from Claude Code. Your AI assistant guides you through a natural conversation and saves scored results to your FindMyFlow account.
+Run business assessments and sync session progress to your Vibe Rise self-knowledge graph. Every Claude session becomes a data collection point for your skills, patterns, and personal monopoly.
 
 ## Setup
 
@@ -31,25 +31,38 @@ Or add it manually to your Claude Code settings.
 
 ## Usage
 
-Once installed, just ask Claude Code to help with your business strategy:
+### Session Sync (new)
+
+At the end of any work session, type `/sync` or say "sync my progress." Claude will:
+
+1. Load your interior scoreboard (scores, skills, quests, patterns)
+2. Identify what you accomplished this session
+3. Match accomplishments to your quests (auto-detected from directory)
+4. Ask how each task felt while doing it (Vibe Rise / Fun / Stress / Boring)
+5. Commit everything: tasks created, RP awarded, skill XP tracked, patterns captured
+
+Your state response is the most important data point. It feeds your Action Score and helps detect your personal monopoly.
+
+### Business Assessments
+
+Ask Claude Code to help with your business strategy:
 
 - "Help me figure out my attraction offer"
 - "What lead generation strategy should I use?"
 - "Run the upsell assessment for my coaching business"
-- "I need help with my offer ecosystem"
 
-Claude will guide you through a conversational assessment and save the results to your FindMyFlow dashboard.
+## Available Tools
 
-## Available Assessments
-
-| Assessment | What It Determines |
-|------------|-------------------|
-| Leads Strategy | Best lead generation method for your resources |
-| Lead Magnet | What type of free value to offer prospects |
-| Attraction Offer | Your front-end customer acquisition offer |
-| Upsell | How to increase revenue per customer |
-| Downsell | How to capture otherwise-lost sales |
-| Continuity | Your recurring revenue model |
+| Tool | What It Does |
+|------|-------------|
+| `get_interior_scoreboard` | Load your full self-knowledge state (scores, skills, quests, patterns) |
+| `commit_progress` | Sync task progress from a session (RP, XP, identity statements, voice evidence) |
+| `list_flows` | List available business assessments |
+| `get_flow_questions` | Get questions for a specific assessment |
+| `submit_assessment` | Submit and score an assessment |
+| `get_user_context` | Get user project and completion data |
+| `list_quests` | List available business quests |
+| `complete_quest` | Complete a business quest |
 
 ## Troubleshooting
 

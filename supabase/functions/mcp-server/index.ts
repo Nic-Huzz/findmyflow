@@ -5,6 +5,12 @@
 import { FLOW_CONFIG, VALID_FLOW_IDS } from '../_shared/flowConfig.ts'
 import { calculateOfferScores } from '../_shared/scoring.ts'
 import { authenticateRequest, corsHeaders, type AuthResult } from '../_shared/auth.ts'
+import {
+  VALID_SKILL_IDS, SKILL_DISPLAY_NAMES, getSkillLevel, getRPLevel,
+  STATE_TO_WAHOO, STATE_TO_TASK_SIGNAL, COURAGE_STATES, VALID_STATES,
+  VALID_PROTECTIVE_VOICES,
+} from '../_shared/taxonomy.ts'
+import { getChainHealth, healMissingSkillTags, findMatchingClusters } from '../_shared/chainHealer.ts'
 
 // --- Constants ---
 const MCP_PROTOCOL_VERSION = '2025-03-26'
@@ -161,6 +167,72 @@ const TOOL_DEFINITIONS = [
         },
       },
       required: ['quest_id', 'response'],
+    },
+  },
+  {
+    name: 'get_interior_scoreboard',
+    description: 'Get the user\'s full self-knowledge state: Clarity/Action scores, zone, skills with XP/levels, active quests with progress, unstarted life paths, context mappings (directory/project → quest), identity statements, and pattern evidence. Call at session start to understand who the user is and guide them. Use mode="full" for deeper evidence data (protective voices, state streaks, drain patterns).',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        mode: {
+          type: 'string',
+          description: 'Light mode (default) returns scores, skills, quests, mappings. Full mode adds pattern evidence and chain health.',
+          enum: ['light', 'full'],
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'commit_progress',
+    description: 'Commit task progress from a Claude session. Creates/completes tasks on quests, awards RP and skill XP, saves identity statements and protective voice evidence, increments behavioral evidence on clusters. Claude should match accomplishments to quests and collect state responses BEFORE calling this. Each entry = one task created and completed. Returns points awarded, level-ups, and notable evidence patterns.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        entries: {
+          type: 'array',
+          description: 'Array of task entries to commit. Max 10 per call.',
+          items: {
+            type: 'object',
+            properties: {
+              quest_id: { type: 'string', description: 'Existing quest UUID. Required unless create_quest is provided.' },
+              create_quest: {
+                type: 'object',
+                description: 'Create a new quest instead of using an existing one.',
+                properties: {
+                  label: { type: 'string' },
+                  career_id: { type: 'string', description: 'Life path career ID (e.g. "c3") to link to. Null for new directions.' },
+                  predicted_state: { type: 'string', enum: ['vibe_rise', 'fun', 'stress', 'boring'] },
+                },
+                required: ['label', 'predicted_state'],
+              },
+              task_text: { type: 'string', description: 'Concise task name, e.g. "Built landing page"' },
+              complete_existing_task_id: { type: 'string', description: 'UUID of an existing uncompleted task to mark done instead of creating a new one.' },
+              skill_tags: {
+                type: 'array', items: { type: 'string' },
+                description: 'Skills used (1-3 from: storytelling, teaching, coaching, performing, creating, building, designing, leading, connecting, speaking_up)',
+              },
+              state: { type: 'string', enum: ['vibe_rise', 'fun', 'stress', 'boring'], description: 'How the user felt while doing this task.' },
+              identity_statement: { type: 'string', description: 'For vibe_rise/fun: "I am someone who..." (the verb/action part only)' },
+              protective_voice: { type: 'string', enum: ['controller', 'ghost', 'perfectionist', 'auto_pilot', 'people_pleaser'], description: 'For stress state: which voice showed up.' },
+              cross_quest_ids: { type: 'array', items: { type: 'string' }, description: 'For vibe_rise: other quest UUIDs this work also fed.' },
+            },
+            required: ['task_text', 'skill_tags', 'state'],
+          },
+        },
+        set_context_mapping: {
+          type: 'object',
+          description: 'Save a directory/project → quest mapping for future auto-detection.',
+          properties: {
+            context_type: { type: 'string', enum: ['claude_code_directory', 'claude_desktop_project'] },
+            context_identifier: { type: 'string', description: 'Directory path or project folder name.' },
+            quest_id: { type: 'string', description: 'Quest UUID to map to.' },
+          },
+          required: ['context_type', 'context_identifier', 'quest_id'],
+        },
+      },
+      required: ['entries'],
     },
   },
 ]
@@ -806,6 +878,834 @@ function getWeekStartDate(): string {
   return monday.toISOString().split('T')[0]
 }
 
+// --- Interior Scoreboard handler ---
+
+const MINIMUM_ACTIONS = 5
+
+async function handleGetInteriorScoreboard(args: any, auth: AuthResult): Promise<any> {
+  const userId = auth.userId
+  const sb = auth.supabase
+  const mode = args?.mode || 'light'
+
+  // Get user email for life_path_sessions lookup
+  const { data: userData } = await sb.auth.admin.getUserById(userId)
+  const userEmail = userData?.user?.email || null
+
+  // --- Light mode: 8 parallel queries ---
+  const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString()
+
+  const [
+    clustersRes,
+    courageRes,
+    taskSignalRes,
+    dailyCheckinRes,
+    lifetimeRes,
+    skillsRes,
+    questsRes,
+    contextMappingsRes,
+    identityRes,
+    lifePathRes,
+  ] = await Promise.all([
+    // 1. Clarity: clusters with resonance
+    sb.from('nikigai_clusters')
+      .select('resonance_state, resonance_rating')
+      .eq('user_id', userId)
+      .in('cluster_type', ['skills', 'problems', 'persona'])
+      .is('step_id', null)
+      .eq('cluster_stage', 'final')
+      .eq('is_removed', false),
+
+    // 2a. Action: courage completions (wahoo classification)
+    sb.from('quest_completions')
+      .select('reflection_text')
+      .eq('user_id', userId)
+      .eq('quest_category', 'Groans')
+      .gte('created_at', sevenDaysAgo)
+      .not('reflection_text', 'is', null),
+
+    // 2b. Action: task signals
+    sb.from('quest_tasks')
+      .select('task_signal')
+      .eq('user_id', userId)
+      .not('task_signal', 'is', null)
+      .gte('completed_at', sevenDaysAgo),
+
+    // 2c. Action: daily check-ins
+    sb.from('nervous_system_checkins')
+      .select('after_state')
+      .eq('user_id', userId)
+      .eq('checkin_type', 'daily')
+      .gte('created_at', sevenDaysAgo),
+
+    // 3. RP + Level
+    sb.from('user_lifetime_scores')
+      .select('lifetime_courage_score, lifetime_healing_score, lifetime_business_score, lifetime_total_score')
+      .eq('user_id', userId)
+      .is('project_id', null)
+      .maybeSingle(),
+
+    // 4. Skills
+    sb.from('user_skill_progress')
+      .select('skill_id, xp, level')
+      .eq('user_id', userId),
+
+    // 5. Active quests + tasks
+    sb.from('quests')
+      .select('id, label, career_id, skill_tags, branch, predicted_state, status, created_at, updated_at')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false }),
+
+    // 6. Context mappings
+    sb.from('quest_context_mappings')
+      .select('context_type, context_identifier, quest_id')
+      .eq('user_id', userId),
+
+    // 7. Identity statements (last 100 courage completions)
+    sb.from('quest_completions')
+      .select('reflection_text')
+      .eq('user_id', userId)
+      .eq('quest_category', 'Groans')
+      .not('reflection_text', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(100),
+
+    // 8. Life path sessions
+    userEmail
+      ? sb.from('life_path_sessions')
+          .select('careers')
+          .eq('client_email', userEmail)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
+  ])
+
+  // --- Calculate Clarity Score ---
+  const clusters = clustersRes.data || []
+  let clarityScore: number | null = null
+  if (clusters.length > 0) {
+    const aligned = clusters.filter((c: any) => {
+      const state = c.resonance_state || (c.resonance_rating >= 4 ? 'vibe_rise' : c.resonance_rating >= 3 ? 'fun' : null)
+      return state === 'vibe_rise' || state === 'fun'
+    })
+    clarityScore = Math.round((aligned.length / clusters.length) * 100)
+  }
+
+  // --- Calculate Action Score ---
+  let actionAligned = 0
+  let actionTotal = 0
+
+  ;(courageRes.data || []).forEach((row: any) => {
+    try {
+      const parsed = JSON.parse(row.reflection_text)
+      if (parsed.wahoo_classification) {
+        actionTotal++
+        if (['vibe', 'wahoo', 'peace'].includes(parsed.wahoo_classification)) actionAligned++
+      }
+    } catch {}
+  })
+
+  ;(taskSignalRes.data || []).forEach((t: any) => {
+    actionTotal++
+    if (t.task_signal === 'lit_me_up') actionAligned++
+  })
+
+  ;(dailyCheckinRes.data || []).forEach((c: any) => {
+    if (!c.after_state) return // skip null states to avoid inflating denominator
+    actionTotal++
+    if (['vibe_rise', 'ventral'].includes(c.after_state)) actionAligned++
+  })
+
+  const actionScore = actionTotal >= MINIMUM_ACTIONS
+    ? Math.round((actionAligned / actionTotal) * 100)
+    : null
+
+  // --- Zone ---
+  let zone: string | null = null
+  if (actionScore != null && clarityScore != null) {
+    if (actionScore > 60 && clarityScore > 60) zone = 'Self-Actualisation'
+    else if (actionScore <= 60 && clarityScore > 60) zone = 'Head Full of Dreams'
+    else if (actionScore > 60 && clarityScore <= 60) zone = 'Misguided Zone'
+    else zone = 'Unfulfilment'
+  }
+
+  // --- RP + Level ---
+  const rpTotal = lifetimeRes.data?.lifetime_total_score || 0
+  const rpLevel = getRPLevel(rpTotal)
+
+  // --- Skills (fill in all 10, even if user has no progress) ---
+  const skillRows = skillsRes.data || []
+  const skillMap: Record<string, { xp: number; level: number }> = {}
+  skillRows.forEach((s: any) => { skillMap[s.skill_id] = { xp: s.xp || 0, level: s.level || 0 } })
+
+  const skills = VALID_SKILL_IDS.map(id => {
+    const s = skillMap[id] || { xp: 0, level: 0 }
+    const levelInfo = getSkillLevel(s.xp)
+    return {
+      id,
+      display_name: SKILL_DISPLAY_NAMES[id] || id,
+      xp: s.xp,
+      level: levelInfo.level,
+      level_name: levelInfo.name,
+    }
+  })
+
+  // --- Active quests with task counts ---
+  const questIds = (questsRes.data || []).map((q: any) => q.id)
+  let questTasksData: any[] = []
+  if (questIds.length > 0) {
+    const { data: tasks } = await sb
+      .from('quest_tasks')
+      .select('quest_id, done, is_courage_challenge, id, text, completed_at')
+      .in('quest_id', questIds)
+    questTasksData = tasks || []
+  }
+
+  const tasksByQuest: Record<string, any[]> = {}
+  questTasksData.forEach((t: any) => {
+    if (!tasksByQuest[t.quest_id]) tasksByQuest[t.quest_id] = []
+    tasksByQuest[t.quest_id].push(t)
+  })
+
+  const activeQuests = (questsRes.data || []).map((q: any) => {
+    const tasks = tasksByQuest[q.id] || []
+    // Use most recent task completion, falling back to quest updated_at
+    const completedTasks = tasks.filter((t: any) => t.done && t.completed_at)
+    const lastActivity = completedTasks.length > 0
+      ? Math.max(...completedTasks.map((t: any) => new Date(t.completed_at).getTime()))
+      : (q.updated_at ? new Date(q.updated_at).getTime() : Date.now())
+    const daysSince = Math.floor((Date.now() - lastActivity) / 86400000)
+    return {
+      id: q.id,
+      label: q.label,
+      career_id: q.career_id,
+      skill_tags: q.skill_tags || [],
+      branch: q.branch,
+      predicted_state: q.predicted_state,
+      tasks_total: tasks.length,
+      tasks_done: tasks.filter((t: any) => t.done).length,
+      courage_total: tasks.filter((t: any) => t.is_courage_challenge).length,
+      courage_done: tasks.filter((t: any) => t.is_courage_challenge && t.done).length,
+      days_since_activity: daysSince,
+      uncompleted_tasks: tasks
+        .filter((t: any) => !t.done)
+        .slice(0, 20)
+        .map((t: any) => ({ id: t.id, text: t.text })),
+    }
+  })
+
+  // --- Unstarted life paths ---
+  const lifePaths = lifePathRes.data?.careers || []
+  const existingCareerIds = new Set((questsRes.data || []).map((q: any) => q.career_id).filter(Boolean))
+  const unstartedLifePaths = lifePaths
+    .filter((c: any) => c.id && !existingCareerIds.has(c.id))
+    .map((c: any) => ({
+      career_id: c.id,
+      label: c.label,
+      predicted_state: c.predictedState || null,
+    }))
+
+  // --- Context mappings (resolve quest labels) ---
+  const mappings = (contextMappingsRes.data || []).map((m: any) => {
+    const quest = (questsRes.data || []).find((q: any) => q.id === m.quest_id)
+    return {
+      context_type: m.context_type,
+      context_identifier: m.context_identifier,
+      quest_id: m.quest_id,
+      quest_label: quest?.label || 'Unknown quest',
+    }
+  })
+
+  // --- Identity statements ---
+  const identityCounts: Record<string, number> = {}
+  ;(identityRes.data || []).forEach((row: any) => {
+    try {
+      const parsed = JSON.parse(row.reflection_text)
+      if (parsed.identity_statement) {
+        const stmt = parsed.identity_statement.trim()
+        identityCounts[stmt] = (identityCounts[stmt] || 0) + 1
+      }
+    } catch {}
+  })
+  const identityStatements = Object.entries(identityCounts)
+    .map(([text, count]) => ({ text, count }))
+    .sort((a, b) => b.count - a.count)
+
+  // --- Build response ---
+  const result: any = {
+    scores: {
+      clarity: clarityScore,
+      action: actionScore,
+      zone,
+      rp_total: rpTotal,
+      rp_level: rpLevel,
+      streak: 0, // TODO: compute from challenge_instances or checkins
+    },
+    skills,
+    active_quests: activeQuests,
+    unstarted_life_paths: unstartedLifePaths,
+    context_mappings: mappings,
+    identity_statements: identityStatements,
+  }
+
+  // --- Full mode: additional evidence queries ---
+  if (mode === 'full') {
+    const [voiceRes, hiVoiceRes, dailyStatesRes, courageSkillRes, drainRes, healingIncompleteRes] = await Promise.all([
+      // Protective voice counts from NS checkins
+      sb.from('nervous_system_checkins')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+
+      // Protective voice counts from healing intentions
+      sb.from('healing_intentions')
+        .select('protective_voice')
+        .eq('user_id', userId)
+        .not('protective_voice', 'is', null),
+
+      // Last 14 daily states
+      sb.from('nervous_system_checkins')
+        .select('created_at, after_state')
+        .eq('user_id', userId)
+        .eq('checkin_type', 'daily')
+        .order('created_at', { ascending: false })
+        .limit(14),
+
+      // Courage challenges by skill
+      sb.from('groan_challenges')
+        .select('status, source_label')
+        .eq('user_id', userId)
+        .in('status', ['active', 'completed']),
+
+      // Drain frequency
+      sb.from('nervous_system_checkins')
+        .select('source_quest_id')
+        .eq('user_id', userId)
+        .eq('checkin_type', 'drain'),
+
+      // Incomplete healing
+      sb.from('healing_intentions')
+        .select('pattern, quest_task_id')
+        .eq('user_id', userId)
+        .eq('healing_stage', 'in_progress'),
+    ])
+
+    // Protective voice evidence
+    const voiceCounts: Record<string, number> = {}
+    ;[...(voiceRes.data || []), ...(hiVoiceRes.data || [])].forEach((r: any) => {
+      if (r.protective_voice) {
+        voiceCounts[r.protective_voice] = (voiceCounts[r.protective_voice] || 0) + 1
+      }
+    })
+
+    // Daily states + streak
+    const dailyStates = (dailyStatesRes.data || []).map((d: any) => ({
+      date: d.created_at?.split('T')[0] || '',
+      state: d.after_state,
+    }))
+
+    let stateStreak: { state: string; days: number } | null = null
+    if (dailyStates.length >= 2) {
+      const firstState = dailyStates[0].state
+      let streakDays = 1
+      for (let i = 1; i < dailyStates.length; i++) {
+        if (dailyStates[i].state === firstState) streakDays++
+        else break
+      }
+      if (streakDays >= 3) stateStreak = { state: firstState, days: streakDays }
+    }
+
+    // Courage by skill (approximate via source_label → quest label matching)
+    const courageBySkill: Record<string, { created: number; completed: number }> = {}
+    ;(courageSkillRes.data || []).forEach((c: any) => {
+      // Group by source_label as proxy for skill area
+      const label = c.source_label || 'unknown'
+      if (!courageBySkill[label]) courageBySkill[label] = { created: 0, completed: 0 }
+      courageBySkill[label].created++
+      if (c.status === 'completed') courageBySkill[label].completed++
+    })
+
+    // Task signals (overall counts)
+    const allTaskSignals = { lit_me_up: 0, was_okay: 0, bored: 0 }
+    ;(taskSignalRes.data || []).forEach((t: any) => {
+      if (t.task_signal === 'lit_me_up') allTaskSignals.lit_me_up++
+      else if (t.task_signal === 'was_okay') allTaskSignals.was_okay++
+      else if (t.task_signal === 'bored') allTaskSignals.bored++
+    })
+
+    // Drain frequency
+    const drainFreq: Record<string, number> = {}
+    ;(drainRes.data || []).forEach((d: any) => {
+      const cat = d.source_quest_id || 'unknown'
+      drainFreq[cat] = (drainFreq[cat] || 0) + 1
+    })
+
+    // Stale quests
+    const staleQuests = activeQuests
+      .filter((q: any) => q.days_since_activity >= 14)
+      .map((q: any) => ({ label: q.label, days_inactive: q.days_since_activity }))
+
+    // Incomplete healing
+    const healingIncomplete = (healingIncompleteRes.data || []).map((h: any) => ({
+      pattern: h.pattern || 'unnamed',
+      quest_label: '', // would need a join to get quest label
+    }))
+
+    // Chain health
+    const chainHealth = await getChainHealth(sb, userId)
+    chainHealth.life_paths_without_quests = unstartedLifePaths.length
+
+    result.evidence = {
+      protective_voices: voiceCounts,
+      voice_skill_contexts: {}, // TODO: requires joining voice → quest → skill_tags
+      daily_state_last_14: dailyStates,
+      state_streak: stateStreak,
+      courage_by_skill: courageBySkill,
+      task_signals: allTaskSignals,
+      drain_frequency: drainFreq,
+      stale_quests: staleQuests,
+      healing_incomplete: healingIncomplete,
+    }
+    result.chain_health = chainHealth
+  }
+
+  return textResult(result)
+}
+
+// --- Commit Progress handler ---
+
+async function handleCommitProgress(args: any, auth: AuthResult): Promise<any> {
+  const userId = auth.userId
+  const sb = auth.supabase
+  const entries = args?.entries || []
+  const weekStart = getWeekStartDate()
+
+  if (!Array.isArray(entries) || entries.length === 0) {
+    return errorResult('entries array is required and must not be empty')
+  }
+  if (entries.length > 10) {
+    return errorResult('Maximum 10 entries per commit')
+  }
+
+  // Dedup entries by (task_text + quest_id) to prevent double-awarding
+  const seen = new Set<string>()
+  const dedupedEntries: any[] = []
+  for (const entry of entries) {
+    const key = `${entry.task_text}::${entry.quest_id || entry.create_quest?.label || ''}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    dedupedEntries.push(entry)
+  }
+
+  // --- Pre-read: skill XP before writes (for level-up detection) ---
+  const { data: preSkills } = await sb
+    .from('user_skill_progress')
+    .select('skill_id, xp')
+    .eq('user_id', userId)
+  const preSkillXP: Record<string, number> = {}
+  ;(preSkills || []).forEach((s: any) => { preSkillXP[s.skill_id] = s.xp || 0 })
+
+  // --- Pre-read: RP total (for level-up detection) ---
+  const { data: preLifetime } = await sb
+    .from('user_lifetime_scores')
+    .select('lifetime_total_score')
+    .eq('user_id', userId)
+    .is('project_id', null)
+    .maybeSingle()
+  const preRPTotal = preLifetime?.lifetime_total_score || 0
+
+  // --- Process each entry ---
+  const synced: any[] = []
+  let totalRP = 0
+  let totalXP = 0
+  let totalClusters = 0
+  let chainsHealed = 0
+
+  for (const entry of dedupedEntries) {
+    try {
+      const result = await processEntry(entry, userId, sb, weekStart)
+      synced.push(result)
+      totalRP += result.rp_awarded
+      totalXP += Object.values(result.xp_awarded || {}).reduce((a: number, b: any) => a + (b as number), 0)
+      totalClusters += result.clusters_updated
+      if (result.chain_healed) chainsHealed++
+    } catch (err: any) {
+      synced.push({
+        task_text: entry.task_text || 'unknown',
+        quest_label: 'error',
+        error: err.message || 'Unknown error',
+        rp_awarded: 0,
+        xp_awarded: null,
+        clusters_updated: 0,
+      })
+    }
+  }
+
+  // --- Context mapping (if provided) ---
+  let contextMappingSaved = false
+  if (args?.set_context_mapping) {
+    const cm = args.set_context_mapping
+    if (cm.context_type && cm.context_identifier && cm.quest_id) {
+      const { error: cmError } = await sb
+        .from('quest_context_mappings')
+        .upsert({
+          user_id: userId,
+          quest_id: cm.quest_id,
+          context_type: cm.context_type,
+          context_identifier: cm.context_identifier,
+        }, { onConflict: 'user_id,context_type,context_identifier' })
+      if (!cmError) contextMappingSaved = true
+    }
+  }
+
+  // --- Notable evidence (post-write reads) ---
+  const notable: any = {}
+
+  // Skill level-ups
+  const { data: postSkills } = await sb
+    .from('user_skill_progress')
+    .select('skill_id, xp')
+    .eq('user_id', userId)
+  const skillLevelUps: Array<{ skill: string; new_level: string }> = []
+  ;(postSkills || []).forEach((s: any) => {
+    const pre = preSkillXP[s.skill_id] || 0
+    const post = s.xp || 0
+    if (pre !== post) {
+      const preLvl = getSkillLevel(pre)
+      const postLvl = getSkillLevel(post)
+      if (postLvl.level > preLvl.level) {
+        skillLevelUps.push({
+          skill: SKILL_DISPLAY_NAMES[s.skill_id] || s.skill_id,
+          new_level: `L${postLvl.level} ${postLvl.name}`,
+        })
+      }
+    }
+  })
+  if (skillLevelUps.length > 0) notable.skill_level_ups = skillLevelUps
+
+  // RP level-up
+  const { data: postLifetime } = await sb
+    .from('user_lifetime_scores')
+    .select('lifetime_total_score')
+    .eq('user_id', userId)
+    .is('project_id', null)
+    .maybeSingle()
+  const postRPTotal = postLifetime?.lifetime_total_score || 0
+  const preLevel = getRPLevel(preRPTotal)
+  const postLevel = getRPLevel(postRPTotal)
+  if (preLevel !== postLevel) notable.rp_level_up = { new_level: postLevel }
+
+  // Re-gen ready clusters (any just crossed threshold 5)
+  const regenEntrySkills = entries
+    .filter((e: any) => COURAGE_STATES.includes(e.state))
+    .flatMap((e: any) => e.skill_tags || [])
+  if (regenEntrySkills.length > 0) {
+    const matchingClusters = await findMatchingClusters(sb, userId, regenEntrySkills)
+    if (matchingClusters.length > 0) {
+      const clusterIds = matchingClusters.map(c => c.id)
+      const { data: regenClusters } = await sb
+        .from('nikigai_clusters')
+        .select('cluster_label, behavioral_evidence')
+        .in('id', clusterIds)
+        .gte('behavioral_evidence', 5)
+      if (regenClusters && regenClusters.length > 0) {
+        notable.regen_ready_clusters = regenClusters.map((c: any) => ({
+          label: c.cluster_label,
+          evidence: c.behavioral_evidence,
+        }))
+      }
+    }
+  }
+
+  // Protective voice total (if any stress entries recorded a voice)
+  const voiceEntries = entries.filter((e: any) => e.state === 'stress' && e.protective_voice)
+  if (voiceEntries.length > 0) {
+    const voice = voiceEntries[0].protective_voice
+    const { count } = await sb
+      .from('nervous_system_checkins')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('protective_voice', voice)
+    const { count: hiCount } = await sb
+      .from('healing_intentions')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('protective_voice', voice)
+    notable.voice_total = { voice, total_count: (count || 0) + (hiCount || 0) }
+  }
+
+  // Days since last lit_me_up
+  const { data: lastLit } = await sb
+    .from('quest_tasks')
+    .select('completed_at')
+    .eq('user_id', userId)
+    .eq('task_signal', 'lit_me_up')
+    .eq('done', true)
+    .order('completed_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (lastLit?.completed_at) {
+    const days = Math.floor((Date.now() - new Date(lastLit.completed_at).getTime()) / 86400000)
+    if (days > 3) notable.days_since_lit_me_up = days
+  }
+
+  // Action score after
+  const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString()
+  const [cRes, tRes, dRes] = await Promise.all([
+    sb.from('quest_completions').select('reflection_text')
+      .eq('user_id', userId).eq('quest_category', 'Groans')
+      .gte('created_at', sevenDaysAgo).not('reflection_text', 'is', null),
+    sb.from('quest_tasks').select('task_signal')
+      .eq('user_id', userId).not('task_signal', 'is', null)
+      .gte('completed_at', sevenDaysAgo),
+    sb.from('nervous_system_checkins').select('after_state')
+      .eq('user_id', userId).eq('checkin_type', 'daily')
+      .gte('created_at', sevenDaysAgo),
+  ])
+  let aAligned = 0, aTotal = 0
+  ;(cRes.data || []).forEach((r: any) => {
+    try { const p = JSON.parse(r.reflection_text); if (p.wahoo_classification) { aTotal++; if (['vibe','wahoo','peace'].includes(p.wahoo_classification)) aAligned++ } } catch {}
+  })
+  ;(tRes.data || []).forEach((t: any) => { aTotal++; if (t.task_signal === 'lit_me_up') aAligned++ })
+  ;(dRes.data || []).forEach((c: any) => { if (!c.after_state) return; aTotal++; if (['vibe_rise','ventral'].includes(c.after_state)) aAligned++ })
+  notable.action_score_after = aTotal >= MINIMUM_ACTIONS ? Math.round((aAligned / aTotal) * 100) : null
+
+  return textResult({
+    synced,
+    totals: {
+      total_rp: totalRP,
+      total_xp: totalXP,
+      total_clusters_touched: totalClusters,
+      chains_healed: chainsHealed,
+    },
+    notable_evidence: Object.keys(notable).length > 0 ? notable : null,
+    context_mapping_saved: contextMappingSaved,
+  })
+}
+
+// --- Process a single commit entry ---
+
+async function processEntry(
+  entry: any, userId: string, sb: any, weekStart: string
+): Promise<any> {
+  const { task_text, skill_tags, state } = entry
+
+  // Validate required fields
+  if (!task_text) throw new Error('task_text is required')
+  if (!skill_tags || !Array.isArray(skill_tags) || skill_tags.length === 0) {
+    throw new Error('skill_tags must be a non-empty array')
+  }
+  if (!VALID_STATES.includes(state)) {
+    throw new Error(`state must be one of: ${VALID_STATES.join(', ')}`)
+  }
+
+  // Validate skill_tags against taxonomy
+  const invalidTags = skill_tags.filter((t: string) => !VALID_SKILL_IDS.includes(t as any))
+  if (invalidTags.length > 0) {
+    throw new Error(`Invalid skill_tags: ${invalidTags.join(', ')}. Valid: ${VALID_SKILL_IDS.join(', ')}`)
+  }
+
+  // --- Step 1: Resolve quest ---
+  if (entry.quest_id && entry.create_quest) {
+    throw new Error('Provide either quest_id or create_quest, not both')
+  }
+
+  let questId = entry.quest_id
+  let questLabel = ''
+  let questSkillTags: string[] = []
+
+  if (entry.create_quest) {
+    const cq = entry.create_quest
+    const { data: newQuest, error: qErr } = await sb.from('quests').insert({
+      user_id: userId,
+      label: cq.label,
+      career_id: cq.career_id || null,
+      predicted_state: STATE_TO_WAHOO[cq.predicted_state] || cq.predicted_state,
+      status: 'active',
+    }).select('id').single()
+    if (qErr) throw new Error(`Failed to create quest: ${qErr.message}`)
+    questId = newQuest.id
+    questLabel = cq.label
+
+    // Async skill tagging (fire-and-forget, chain healer catches failures later)
+    healMissingSkillTags(sb, questId, cq.label).catch(() => {})
+  } else if (questId) {
+    // Validate existing quest
+    const { data: quest, error: qErr } = await sb.from('quests')
+      .select('id, label, skill_tags, status')
+      .eq('id', questId)
+      .eq('user_id', userId)
+      .single()
+    if (qErr || !quest) throw new Error('Quest not found or does not belong to you')
+    if (quest.status !== 'active') throw new Error(`Quest "${quest.label}" is ${quest.status}. Reopen it or pick another quest.`)
+    questLabel = quest.label
+    questSkillTags = quest.skill_tags || []
+  } else {
+    throw new Error('Either quest_id or create_quest is required')
+  }
+
+  // --- Step 2: Resolve task ---
+  let taskId: string
+  let rpAwarded = 0
+  let chainHealed = false
+
+  if (entry.complete_existing_task_id) {
+    // Validate existing task
+    const { data: task, error: tErr } = await sb.from('quest_tasks')
+      .select('id, done, quest_id')
+      .eq('id', entry.complete_existing_task_id)
+      .eq('user_id', userId)
+      .single()
+    if (tErr || !task) throw new Error('Task not found')
+    if (task.done) throw new Error('Task already completed')
+    if (task.quest_id !== questId) throw new Error('Task does not belong to the specified quest')
+    taskId = task.id
+    // No creation RP for existing task
+  } else {
+    // Get max sort_order for this quest
+    const { data: maxRow } = await sb.from('quest_tasks')
+      .select('sort_order')
+      .eq('quest_id', questId)
+      .order('sort_order', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    const nextSort = (maxRow?.sort_order ?? -1) + 1
+
+    // Insert new task
+    const { data: newTask, error: tErr } = await sb.from('quest_tasks').insert({
+      quest_id: questId,
+      user_id: userId,
+      text: task_text,
+      sort_order: nextSort,
+      is_courage_challenge: false,
+    }).select('id').single()
+    if (tErr) throw new Error(`Failed to create task: ${tErr.message}`)
+    taskId = newTask.id
+
+    // 2 RP for task creation
+    await sb.rpc('increment_scores', {
+      p_user_id: userId, p_project_id: null,
+      p_category: 'courage', p_points: 2, p_week_start: weekStart,
+    })
+    rpAwarded += 2
+  }
+
+  // --- Step 3: Complete task ---
+  const taskSignal = STATE_TO_TASK_SIGNAL[state] || 'was_okay'
+  await sb.from('quest_tasks').update({
+    done: true,
+    completed_at: new Date().toISOString(),
+    task_signal: taskSignal,
+  }).eq('id', taskId).eq('user_id', userId)
+
+  // 3 RP for task completion
+  await sb.rpc('increment_scores', {
+    p_user_id: userId, p_project_id: null,
+    p_category: 'courage', p_points: 3, p_week_start: weekStart,
+  })
+  rpAwarded += 3
+
+  // --- Step 4: State-dependent writes ---
+  let identitySaved: string | null = null
+  let voiceRecorded: string | null = null
+
+  if (state === 'vibe_rise') {
+    // Insert quest_completions with reflection_text JSON (matches GroanCompletionModal format)
+    const reflectionJSON = {
+      challenge_id: null,
+      source_label: questLabel,
+      visibility_layer: null,
+      before_state: null,
+      after_state: null,
+      wahoo_classification: STATE_TO_WAHOO[state],
+      identity_statement: entry.identity_statement || null,
+      voice_objection: null,
+      expectation_result: null,
+      reflection: null,
+      submitted_via: 'mcp',
+    }
+    await sb.from('quest_completions').insert({
+      user_id: userId,
+      challenge_instance_id: null,
+      quest_id: `mcp_task_${taskId}`,
+      quest_category: 'Groans',
+      quest_type: 'Rewire',
+      points_earned: 0, // RP already awarded via increment_scores
+      challenge_day: 0,
+      project_id: null,
+      reflection_text: JSON.stringify(reflectionJSON),
+    })
+    identitySaved = entry.identity_statement || null
+
+    // Cross-pollination
+    if (entry.cross_quest_ids?.length > 0) {
+      const cpRows = entry.cross_quest_ids.map((targetId: string) => ({
+        user_id: userId,
+        source_quest_id: questId,
+        target_quest_id: targetId,
+        groan_challenge_id: null,
+      }))
+      await sb.from('quest_cross_pollination').insert(cpRows).catch(() => {})
+    }
+  }
+
+  if (state === 'stress' && entry.protective_voice) {
+    // Validate voice
+    if (VALID_PROTECTIVE_VOICES.includes(entry.protective_voice as any)) {
+      await sb.from('nervous_system_checkins').insert({
+        user_id: userId,
+        after_state: 'sympathetic',
+        checkin_type: 'stall',
+        protective_voice: entry.protective_voice,
+        source_quest_id: questId,
+      })
+      voiceRecorded = entry.protective_voice
+    }
+  }
+
+  // --- Step 5: Skill XP + behavioral evidence (courage-level states only) ---
+  let xpAwarded: Record<string, number> | null = null
+  let clustersUpdated = 0
+
+  if (COURAGE_STATES.includes(state as any)) {
+    xpAwarded = {}
+    const uniqueSkillTags = [...new Set(skill_tags as string[])]
+    for (const skillId of uniqueSkillTags) {
+      await sb.rpc('increment_skill_xp', { p_user_id: userId, p_skill_id: skillId })
+      xpAwarded[skillId] = 1
+    }
+
+    // Behavioral evidence on matching clusters
+    const effectiveSkillTags = questSkillTags.length > 0 ? questSkillTags : skill_tags
+    const matchingClusters = await findMatchingClusters(sb, userId, effectiveSkillTags)
+    for (const cluster of matchingClusters) {
+      await sb.rpc('increment_behavioral_evidence', { p_cluster_id: cluster.id })
+      clustersUpdated++
+    }
+  }
+
+  // --- Step 6: Chain healing ---
+  if (questId && questSkillTags.length === 0 && !entry.create_quest) {
+    // Quest exists but has no skill_tags — heal it
+    const healed = await healMissingSkillTags(sb, questId, questLabel)
+    if (healed.skill_tags.length > 0) chainHealed = true
+  }
+
+  return {
+    task_text,
+    quest_label: questLabel,
+    skill_tags,
+    state,
+    rp_awarded: rpAwarded,
+    xp_awarded: xpAwarded,
+    clusters_updated: clustersUpdated,
+    identity_saved: identitySaved,
+    voice_recorded: voiceRecorded,
+    chain_healed: chainHealed,
+  }
+}
+
 // --- MCP protocol router ---
 
 async function handleMcpRequest(body: any, auth: AuthResult): Promise<Response> {
@@ -861,6 +1761,12 @@ async function handleMcpRequest(body: any, auth: AuthResult): Promise<Response> 
           break
         case 'complete_quest':
           result = await handleCompleteQuest(toolArgs, auth)
+          break
+        case 'get_interior_scoreboard':
+          result = await handleGetInteriorScoreboard(toolArgs, auth)
+          break
+        case 'commit_progress':
+          result = await handleCommitProgress(toolArgs, auth)
           break
         default:
           return jsonRpcError(id, INVALID_PARAMS, `Unknown tool: ${toolName}`)
