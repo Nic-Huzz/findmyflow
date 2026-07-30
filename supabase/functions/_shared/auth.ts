@@ -1,5 +1,6 @@
 // supabase/functions/_shared/auth.ts
-// Shared API key authentication for agent-submit and mcp-server.
+// Shared authentication for agent-submit and mcp-server.
+// Supports both fmf_k1_ API keys AND Supabase OAuth JWTs.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
@@ -15,7 +16,7 @@ export const corsHeaders = {
 }
 
 /**
- * Validate a fmf_k1_ API key from the Authorization header.
+ * Authenticate a request via API key or OAuth JWT.
  * Returns AuthResult on success, or a Response (401/403) on failure.
  */
 export async function authenticateRequest(
@@ -23,14 +24,35 @@ export async function authenticateRequest(
 ): Promise<AuthResult | Response> {
   const authHeader = req.headers.get('Authorization')
   if (!authHeader?.startsWith('Bearer ')) {
+    // MCP spec: return 401 with resource_metadata hint for OAuth discovery
     return new Response(
-      JSON.stringify({ error: 'Missing Authorization header. Expected: Bearer <api_key>' }),
-      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: 'Authorization required. Provide a Bearer token (API key or OAuth access token).' }),
+      {
+        status: 401,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+          'WWW-Authenticate': 'Bearer',
+        },
+      }
     )
   }
-  const apiKey = authHeader.replace('Bearer ', '')
+  const token = authHeader.replace('Bearer ', '')
 
-  if (!apiKey.startsWith('fmf_k1_') || apiKey.length < 20) {
+  // Route to API key auth or OAuth JWT auth based on prefix
+  if (token.startsWith('fmf_k1_')) {
+    return authenticateApiKey(token)
+  }
+
+  // Treat as Supabase OAuth JWT
+  return authenticateOAuthToken(token)
+}
+
+/**
+ * Authenticate via fmf_k1_ API key (existing flow).
+ */
+async function authenticateApiKey(apiKey: string): Promise<AuthResult | Response> {
+  if (apiKey.length < 20) {
     return new Response(
       JSON.stringify({ error: 'Invalid API key format. Keys start with fmf_k1_' }),
       { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -81,5 +103,38 @@ export async function authenticateRequest(
     userId: keyRow.user_id,
     supabase,
     permissions: keyRow.permissions,
+  }
+}
+
+/**
+ * Authenticate via Supabase OAuth JWT (from Claude Connectors).
+ * The JWT is issued by Supabase GoTrue's OAuth server.
+ * We validate it by calling getUser() which checks signature + expiry.
+ */
+async function authenticateOAuthToken(token: string): Promise<AuthResult | Response> {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
+  // Create a client with the user's token to validate it
+  const userClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY') || serviceRoleKey, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  })
+
+  const { data: { user }, error } = await userClient.auth.getUser(token)
+
+  if (error || !user) {
+    return new Response(
+      JSON.stringify({ error: 'Invalid or expired access token' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
+
+  // Use service role client for DB operations (bypasses RLS)
+  const supabase = createClient(supabaseUrl, serviceRoleKey)
+
+  return {
+    userId: user.id,
+    supabase,
+    permissions: null, // OAuth users get full access (no flow restrictions)
   }
 }
