@@ -191,6 +191,7 @@ const TryEssenceMirror = lazyRetry(() => import('./flows/TryEssenceMirror'))
 const ShiftScorecard = lazyRetry(() => import('./flows/ShiftScorecard'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const OAuthConsent = lazyRetry(() => import('./pages/OAuthConsent'))
+import { OAuthAuthorize, OAuthToken } from './pages/OAuthRedirect'
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
 const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
 const BreathworkLanding = lazyRetry(() => import('./pages/BreathworkLanding'))
@@ -590,6 +591,8 @@ function AppRouter() {
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
               <Route path="/essence-identify" element={<EssenceIdentify />} />
               <Route path="/protective-identify" element={<ProtectiveIdentify />} />
+              <Route path="/authorize" element={<OAuthAuthorize />} />
+              <Route path="/token" element={<OAuthToken />} />
               <Route path="/oauth/consent" element={<Suspense fallback={<LoadingSpinner />}><OAuthConsent /></Suspense>} />
               <Route path="/log-in" element={IS_CREATOR ? <CreatorLogin /> : <PersonaAssessment />} />
               <Route path="/login" element={<Navigate to="/log-in" replace />} />
