@@ -1,17 +1,14 @@
 {
+  "headers": [
+    {
+      "source": "/.well-known/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    }
+  ],
   "rewrites": [
-    {
-      "source": "/.well-known/oauth-authorization-server",
-      "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/.well-known/openid-configuration"
-    },
-    {
-      "source": "/authorize",
-      "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/authorize"
-    },
-    {
-      "source": "/token",
-      "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/token"
-    },
     {
       "source": "/api/mcp",
       "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/mcp-server"
