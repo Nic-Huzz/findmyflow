@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/.well-known/oauth-authorization-server",
+      "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/.well-known/openid-configuration"
+    },
+    {
+      "source": "/api/mcp",
+      "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/mcp-server"
+    },
+    {
       "source": "/Vibe-Rise-Game",
       "destination": "/vibe-rise-game.html"
     },
