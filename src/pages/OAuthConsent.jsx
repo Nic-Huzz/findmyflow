@@ -21,12 +21,12 @@ export default function OAuthConsent() {
   const storedAuthId = sessionStorage.getItem('oauth_authorization_id')
   const authorizationId = urlAuthId || storedAuthId
 
-  // Clear stored ID once we have it from the URL
+  // Clear stored ID once we're on the consent page (no longer needed)
   useEffect(() => {
-    if (urlAuthId && storedAuthId) {
+    if (storedAuthId) {
       sessionStorage.removeItem('oauth_authorization_id')
     }
-  }, [urlAuthId, storedAuthId])
+  }, [storedAuthId])
 
   const [loading, setLoading] = useState(true)
   const [approving, setApproving] = useState(false)
