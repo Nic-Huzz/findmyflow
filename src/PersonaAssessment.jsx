@@ -79,6 +79,12 @@ function PersonaAssessment() {
           .maybeSingle()
 
         if (profile) {
+          // Check if returning from OAuth consent flow
+          const oauthAuthId = sessionStorage.getItem('oauth_authorization_id')
+          if (oauthAuthId) {
+            navigate(`/oauth/consent?authorization_id=${oauthAuthId}`)
+            return
+          }
           // User has profile, redirect to dashboard
           navigate('/me')
         }
@@ -145,7 +151,8 @@ function PersonaAssessment() {
       }
 
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/me'), 1500)
+      const oauthReturn = sessionStorage.getItem('oauth_authorization_id')
+      setTimeout(() => navigate(oauthReturn ? `/oauth/consent?authorization_id=${oauthReturn}` : '/me'), 1500)
     } catch (err) {
       console.error('Error completing archetype quiz:', err)
       setError('Something went wrong. Please try again.')
