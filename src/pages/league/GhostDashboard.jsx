@@ -13,7 +13,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { buildDailyScores, getScoresThrough, compareCategories, applyDecay, getWeekDates } from '../../lib/ghost/ghostScoring'
 import { getOrCreateCurrentWeek, getGhostStreak, getWeekHistory, getContentSubmissions, saveGhostScores } from '../../lib/ghost/ghostService'
 import { DAY_LABELS } from '../../lib/ghost/ghostConfig'
-import { getWeekStartLocal, formatLocalDate } from '../../lib/dateUtils'
+import { getWeekStartLocal, formatLocalDate, getWeekStartInTimezone } from '../../lib/dateUtils'
 import { hapticLight } from '../../lib/haptics'
 import './GhostDashboard.css'
 
@@ -30,8 +30,9 @@ export default function GhostDashboard() {
   const [history, setHistory] = useState([])
   const [showDayTable, setShowDayTable] = useState(false)
 
-  const weekStart = getWeekStartLocal()
-  const lastWeekStart = getWeekStartLocal(new Date(), -1)
+  // Week boundaries use fixed Bali timezone for DB queries (prevents drift when traveling)
+  const weekStart = getWeekStartInTimezone(0)
+  const lastWeekStart = getWeekStartInTimezone(-1)
   const today = formatLocalDate(new Date())
   const weekDates = getWeekDates(weekStart)
 
@@ -184,15 +185,24 @@ export default function GhostDashboard() {
         })}
       </div>
 
-      {/* Day Timeline — shows how many categories you're winning (0-3) */}
+      {/* Day Timeline — shows categories won THIS day vs ghost's same day (not cumulative) */}
       <div className="ghost-dash-timeline">
         <div className="ghost-dash-days">
           {weekDates.map((date, i) => {
             const isFuture = date > today
             const isToday = date === today
-            const currentDay = currentDaily[date] || { tune: 0, courage: 0, community: 0 }
-            const ghostDay = ghostRow?.ghost_daily_scores?.[date] || { tune: 0, courage: 0, community: 0 }
-            const dayComparison = compareCategories(currentDay, ghostDay)
+            const prevDate = i > 0 ? weekDates[i - 1] : null
+
+            // Extract single-day scores by subtracting previous day's cumulative
+            const cumCurrent = currentDaily[date] || { tune: 0, courage: 0, community: 0 }
+            const prevCurrent = prevDate ? (currentDaily[prevDate] || { tune: 0, courage: 0, community: 0 }) : { tune: 0, courage: 0, community: 0 }
+            const cumGhost = ghostRow?.ghost_daily_scores?.[date] || { tune: 0, courage: 0, community: 0 }
+            const prevGhost = prevDate ? (ghostRow?.ghost_daily_scores?.[prevDate] || { tune: 0, courage: 0, community: 0 }) : { tune: 0, courage: 0, community: 0 }
+
+            const dayUser = { tune: cumCurrent.tune - prevCurrent.tune, courage: cumCurrent.courage - prevCurrent.courage, community: cumCurrent.community - prevCurrent.community }
+            const dayGhost = { tune: cumGhost.tune - prevGhost.tune, courage: cumGhost.courage - prevGhost.courage, community: cumGhost.community - prevGhost.community }
+
+            const dayComparison = compareCategories(dayUser, dayGhost)
             const wins = dayComparison.userWins
 
             return (

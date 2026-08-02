@@ -11,7 +11,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/ghost/ghostConfig'
 import { buildDailyScores, getScoresThrough, compareCategories, getFinalTotals, applyDecay, getWeekDates } from '../lib/ghost/ghostScoring'
 import { getOrCreateCurrentWeek, getPreviousWeekResult, saveGhostScores, getGhostStreak, getContentSubmissions } from '../lib/ghost/ghostService'
-import { getWeekStartLocal, formatLocalDate } from '../lib/dateUtils'
+import { getWeekStartLocal, formatLocalDate, getWeekStartInTimezone } from '../lib/dateUtils'
 import { triggerSideCannons } from '../components/Celebrations'
 import { hapticSuccess } from '../lib/haptics'
 import { supabase } from '../lib/supabaseClient'
@@ -33,8 +33,10 @@ export function useGhostMatchup({ completions, userId }) {
     initRef.current = false
   }
 
-  const weekStart = getWeekStartLocal()
-  const lastWeekStart = getWeekStartLocal(new Date(), -1)
+  // Week boundaries use fixed Bali timezone for DB queries (prevents drift when traveling)
+  // today stays local because buildDailyScores keys daily scores in local timezone
+  const weekStart = getWeekStartInTimezone(0)
+  const lastWeekStart = getWeekStartInTimezone(-1)
   const today = formatLocalDate(new Date())
 
   // ─── Initialize: fetch/create ghost row, streak, content subs ───

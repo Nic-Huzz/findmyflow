@@ -77,3 +77,22 @@ export function getMondayDate(date = new Date(), weekOffset = 0) {
 export function getWeekStartLocal(date = new Date(), weekOffset = 0) {
   return formatLocalDate(getMondayDate(date, weekOffset))
 }
+
+/**
+ * Get the Monday of a given week as YYYY-MM-DD in a fixed IANA timezone.
+ * Prevents week-boundary drift when users travel between timezones.
+ * @param {number} [weekOffset=0] - Shift by N weeks (-1 = last week, 1 = next week)
+ * @param {string} [tz='Asia/Makassar'] - IANA timezone (default: Bali/WITA, UTC+8)
+ * @returns {string} e.g. "2026-07-27"
+ */
+export function getWeekStartInTimezone(weekOffset = 0, tz = 'Asia/Makassar') {
+  // Get "today" in the target timezone, then do all arithmetic in UTC
+  // to avoid local-timezone pollution from Date getters
+  const nowStr = formatDateInTimezone(new Date(), tz)
+  const [year, month, day] = nowStr.split('-').map(Number)
+  const d = new Date(Date.UTC(year, month - 1, day, 12, 0, 0))
+  const dayOfWeek = d.getUTCDay()
+  const diff = day - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) + (weekOffset * 7)
+  const result = new Date(Date.UTC(year, month - 1, diff, 12, 0, 0))
+  return `${result.getUTCFullYear()}-${String(result.getUTCMonth() + 1).padStart(2, '0')}-${String(result.getUTCDate()).padStart(2, '0')}`
+}
