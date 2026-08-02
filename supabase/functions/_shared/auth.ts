@@ -32,7 +32,7 @@ export async function authenticateRequest(
         headers: {
           ...corsHeaders,
           'Content-Type': 'application/json',
-          'WWW-Authenticate': 'Bearer',
+          'WWW-Authenticate': 'Bearer resource_metadata="https://findmyflow.nichuzz.com/.well-known/oauth-protected-resource"',
         },
       }
     )
