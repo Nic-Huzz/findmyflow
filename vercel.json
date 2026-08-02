@@ -10,6 +10,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/oauth/token",
+      "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/token"
+    },
+    {
       "source": "/api/mcp",
       "destination": "https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/mcp-server"
     },

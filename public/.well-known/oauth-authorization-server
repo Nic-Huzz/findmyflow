@@ -1,7 +1,7 @@
 {
   "issuer": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1",
-  "authorization_endpoint": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/authorize",
-  "token_endpoint": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/token",
+  "authorization_endpoint": "https://findmyflow.nichuzz.com/authorize",
+  "token_endpoint": "https://findmyflow.nichuzz.com/api/oauth/token",
   "registration_endpoint": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/register",
   "jwks_uri": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/.well-known/jwks.json",
   "scopes_supported": ["openid", "profile", "email"],
