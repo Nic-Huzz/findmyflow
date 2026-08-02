@@ -19,6 +19,23 @@ export function formatLocalDate(date) {
 }
 
 /**
+ * Format a Date as YYYY-MM-DD in a fixed IANA timezone (zero-padded).
+ * Prevents streak/date drift when users travel between timezones.
+ * @param {Date} date
+ * @param {string} [tz='Asia/Makassar'] - IANA timezone (default: Bali/WITA, UTC+8)
+ * @returns {string} e.g. "2026-02-10"
+ */
+export function formatDateInTimezone(date, tz = 'Asia/Makassar') {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date)
+  return parts // en-CA format is YYYY-MM-DD
+}
+
+/**
  * Get today's date as YYYY-MM-DD in local timezone.
  * @returns {string}
  */

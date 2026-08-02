@@ -230,7 +230,7 @@ serve(async (req: Request) => {
     }
 
     // 7. Seed next week's ghost (apply decay if needed)
-    const nextMonday = new Date(mondayDate)
+    const nextMonday = new Date(mondayLocal)
     nextMonday.setDate(nextMonday.getDate() + 7)
     const nextWeekStart = nextMonday.toISOString().slice(0, 10)
 

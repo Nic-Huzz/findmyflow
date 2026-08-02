@@ -230,21 +230,17 @@ function ZarloWidget({ activeChat, setActiveChat }) {
         </div>
       )}
 
-      {/* Floating button */}
-      <button
-        className={`zarlo-fab ${isOpen ? 'open' : ''}`}
-        onClick={handleToggle}
-        aria-label={isOpen ? 'Close Zarlo' : 'Open Zarlo'}
-      >
-        {isOpen ? (
-          <span className="zarlo-fab-icon">×</span>
-        ) : (
-          <>
-            <span className="zarlo-fab-icon">🌞</span>
-            {hasNotification && <span className="zarlo-fab-notification" />}
-          </>
-        )}
-      </button>
+      {/* Floating button — hidden when chat is open (chat header has its own close button) */}
+      {!isOpen && (
+        <button
+          className="zarlo-fab"
+          onClick={handleToggle}
+          aria-label="Open Zarlo"
+        >
+          <span className="zarlo-fab-icon">🌞</span>
+          {hasNotification && <span className="zarlo-fab-notification" />}
+        </button>
+      )}
     </div>
   )
 }

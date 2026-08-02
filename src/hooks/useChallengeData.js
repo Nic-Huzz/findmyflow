@@ -26,7 +26,7 @@ import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
 import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
 import { logError, showErrorWithSupport } from '../lib/errorSupport'
 import { cacheBustUrl } from '../lib/fetchJson'
-import { getWeekStartLocal } from '../lib/dateUtils'
+import { getWeekStartLocal, formatDateInTimezone } from '../lib/dateUtils'
 import { getEssenceDisplayName } from '../lib/essencePreferences'
 
 // Default community group — all new challenges auto-join this group
@@ -1601,15 +1601,14 @@ export function useChallengeData() {
   }
 
   // Calculate consecutive days with quest completions (for streak flame)
+  // Uses fixed Bali timezone (UTC+8) so streak doesn't break when traveling
   const getConsecutiveStreakDays = () => {
     if (!completions || completions.length === 0) return 0
 
-    // Get unique dates of completions (normalized to date only)
+    // Get unique dates of completions in Bali time (timezone-stable)
     const completionDates = new Set()
     completions.forEach(c => {
-      const date = new Date(c.completed_at)
-      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-      completionDates.add(dateKey)
+      completionDates.add(formatDateInTimezone(new Date(c.completed_at)))
     })
 
     // Count consecutive days from today backwards (forgiving: allow 1 day gap)
@@ -1620,7 +1619,7 @@ export function useChallengeData() {
     let checkDate = new Date(today)
 
     for (let i = 0; ; i++) {
-      const dateKey = `${checkDate.getFullYear()}-${checkDate.getMonth() + 1}-${checkDate.getDate()}`
+      const dateKey = formatDateInTimezone(checkDate)
       if (completionDates.has(dateKey)) {
         streak++
         checkDate.setDate(checkDate.getDate() - 1)

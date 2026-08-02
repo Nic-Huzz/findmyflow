@@ -553,19 +553,7 @@ export default function MePage() {
         <CapacityCard userId={user?.id} onNavigate={() => navigate('/7-day-challenge')} hideMaintenance />
       </section>
 
-      {/* ============================================================
-         SECTION 3: FANTASY LEAGUE
-         ============================================================ */}
-      <section className="league-promo-section">
-        <a href="/league" className="league-promo-card">
-          <span className="league-promo-icon">🏆</span>
-          <div className="league-promo-text">
-            <span className="league-promo-title">Join the Fantasy League</span>
-            <span className="league-promo-sub">Compete head-to-head across Wahoos, Healing, and Tune</span>
-          </div>
-          <span className="league-promo-arrow">→</span>
-        </a>
-      </section>
+      {/* Fantasy League promo removed — re-enable when league is ready for spotlight */}
 
       {/* ARCHIVED: Flow Journey — re-enable if needed
       <section className="journey-section reveal-fade-up" ref={journeyRevealRef}>

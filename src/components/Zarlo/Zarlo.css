@@ -167,7 +167,7 @@
 
 .zarlo-chat-wrapper {
   position: absolute;
-  bottom: 70px;
+  bottom: 0;
   right: 0;
   width: 360px;
   max-width: calc(100vw - 40px);
