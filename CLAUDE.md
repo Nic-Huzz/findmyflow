@@ -462,6 +462,18 @@ These components are built and working but temporarily removed from the UI. Code
 | Play Profile Content Recs | `PlayProfileContentRec` | `src/components/CreatorHome/PlayProfileRecs.jsx` | Active on Growth tab, event rec archived separately | Currently live on Growth tab. |
 | Quarterly Planner | `QuarterlyPlanner` | `src/components/CreatorHome/QuarterlyPlanner.jsx` | Entry flow felt clunky, needs UX rethink | Was a one-time-per-quarter modal with experience library dropdown. Intent: nudge users to plan quarterly experiences. Revisit as a lighter prompt or integrate into Upcoming section header. |
 
+## MCP Session Sync
+
+This project has an MCP server that tracks the user's self-knowledge graph. At the end of sessions in this project, offer to sync progress using the `/sync` skill (see `findmyflow-plugin/skills/sync/SKILL.md`).
+
+**MCP tools available** (via `.mcp.json`):
+- `get_interior_scoreboard` — load user's scores, skills, quests, patterns at session start
+- `commit_progress` — sync completed tasks with state responses at session end
+
+**The sync flow**: Identify accomplishments from the session, match to quests (check `context_mappings` or ask user), ask how each felt (Vibe Rise / Fun / Stress / Boring), then call `commit_progress`. Report results conversationally.
+
+Full handoff doc: `docs/features/mcp-session-sync-handoff.md`
+
 ## Links
 
 - **Vibe Rise (Consumer)**: https://viberise.nichuzz.com
