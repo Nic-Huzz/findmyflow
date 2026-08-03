@@ -464,13 +464,27 @@ These components are built and working but temporarily removed from the UI. Code
 
 ## MCP Session Sync
 
-This project has an MCP server that tracks the user's self-knowledge graph. At the end of sessions in this project, offer to sync progress using the `/sync` skill (see `findmyflow-plugin/skills/sync/SKILL.md`).
+This project has an MCP server that tracks the user's self-knowledge graph. **At the end of every non-trivial session, offer to sync progress** by calling the MCP tools below.
 
 **MCP tools available** (via `.mcp.json`):
 - `get_interior_scoreboard` — load user's scores, skills, quests, patterns at session start
 - `commit_progress` — sync completed tasks with state responses at session end
 
-**The sync flow**: Identify accomplishments from the session, match to quests (check `context_mappings` or ask user), ask how each felt (Vibe Rise / Fun / Stress / Boring), then call `commit_progress`. Report results conversationally.
+**Directory → Quest mapping** (which project feeds which quest):
+
+| Directories | Quest |
+|------------|-------|
+| `/creations/Findmyflow`, `/creations/scale-portal`, `/creations/Events` | Vibe Rise (`8b07e527-3881-40df-b618-a4e6edd65849`) |
+| `/creations/TTT`, `/creations/ttt-day-edition` | Travel Experience Host (`a9598f1f-111a-4827-8a42-1c4547780f9b`) |
+| `/creations/Landingpages/headset-sales`, `/creations/Landingpages/headset-rental-bali` | Buy Headsets Ecommerce Site (`87e0f331-6d0b-4299-b5a9-08f4dc921d97`) |
+
+**The sync flow** (see `findmyflow-plugin/skills/sync/SKILL.md` for full prompt):
+1. Identify accomplishments from the session (code shipped, content created, decisions made)
+2. Match to the quest for this directory (see table above)
+3. Tag 1-3 skills from: storytelling, teaching, coaching, performing, creating, building, designing, leading, connecting, speaking_up
+4. Ask: "How did each feel while doing it? (Vibe Rise / Fun / Stress / Boring)"
+5. Call `commit_progress` with entries
+6. Report results (RP, XP, clusters, patterns)
 
 Full handoff doc: `docs/features/mcp-session-sync-handoff.md`
 
