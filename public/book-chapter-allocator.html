@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Flow — Chapter Allocator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #0a0a12; color: #d0d0d0;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 14px 24px;
+    background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px);
+  }
+  .header h1 {
+    font-size: 15px; font-weight: 800;
+    background: linear-gradient(135deg,#5e17eb,#E9A23B);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-right: auto;
+  }
+  .header-stats { font-size: 11px; color: #666; }
+  .header-stats b { color: #999; }
+  .header-btn {
+    padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04); color: #888;
+  }
+  .header-btn:hover { background: rgba(94,23,235,0.15); color: #ccc; border-color: rgba(94,23,235,0.3); }
+  .header-btn.primary { background: #5e17eb; color: #fff; border: none; }
+  .header-btn.primary:hover { background: #7c3aed; }
+
+  /* ── Layout ── */
+  .layout { display: flex; height: calc(100vh - 53px); }
+
+  /* ── Pool (left) ── */
+  .pool {
+    width: 300px; flex-shrink: 0; display: flex; flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.2);
+  }
+  .pool-top {
+    padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .pool-label { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+  .pool-count {
+    font-size: 10px; color: #555; background: rgba(255,255,255,0.05);
+    padding: 2px 8px; border-radius: 8px;
+  }
+  .pool-search {
+    margin: 8px 14px; padding: 7px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+    color: #bbb; font-size: 11px; outline: none; font-family: inherit;
+  }
+  .pool-search:focus { border-color: rgba(94,23,235,0.4); }
+  .pool-search::placeholder { color: #444; }
+  .pool-cards {
+    flex: 1; overflow-y: auto; padding: 6px 10px 16px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+
+  /* ── Stages (right) ── */
+  .stages {
+    flex: 1; overflow-y: auto; padding: 16px 20px 40px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  /* ── Stage ── */
+  .stage {
+    border: 1px solid rgba(255,255,255,0.05); border-radius: 10px;
+    background: rgba(255,255,255,0.02); transition: all 0.15s;
+  }
+  .stage.drag-over { border-color: rgba(94,23,235,0.4); background: rgba(94,23,235,0.04); }
+  .stage-header {
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+    cursor: pointer; user-select: none; border-radius: 10px;
+  }
+  .stage-header:hover { background: rgba(255,255,255,0.02); }
+  .stage.assign-mode .stage-header { background: rgba(94,23,235,0.04); cursor: pointer; }
+  .stage.assign-mode .stage-header:hover { background: rgba(94,23,235,0.08); }
+  .stage-num {
+    font-size: 10px; font-weight: 800; width: 22px; height: 22px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    background: rgba(94,23,235,0.12); color: #a78bfa;
+  }
+  .stage-info { flex: 1; min-width: 0; }
+  .stage-title { font-size: 13px; font-weight: 700; color: #ddd; }
+  .stage-life { font-size: 10px; color: #555; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stage-count {
+    font-size: 10px; font-weight: 600; color: #555;
+    background: rgba(255,255,255,0.04); padding: 2px 7px; border-radius: 8px;
+  }
+  .stage-count.has-cards { color: #a78bfa; background: rgba(94,23,235,0.1); }
+  .stage-toggle { font-size: 11px; color: #333; transition: transform 0.15s; }
+  .stage.collapsed .stage-toggle { transform: rotate(-90deg); }
+
+  .stage-cards {
+    padding: 2px 10px 10px; display: flex; flex-direction: column; gap: 2px;
+  }
+  .stage.collapsed .stage-cards { display: none; }
+  .stage-drop-zone {
+    padding: 6px; text-align: center; font-size: 10px; color: #2a2a3a;
+    border: 1px dashed rgba(255,255,255,0.04); border-radius: 6px;
+  }
+
+  /* ── Card ── */
+  .card {
+    padding: 7px 10px; border-radius: 6px; cursor: grab; transition: all 0.1s;
+    border: 1px solid rgba(255,255,255,0.03); background: rgba(255,255,255,0.015);
+    display: flex; align-items: flex-start; gap: 8px; user-select: none;
+    position: relative;
+  }
+  .card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+  .card.dragging { opacity: 0.3; }
+  .card-num { font-size: 9px; color: #555; font-weight: 700; min-width: 24px; padding-top: 2px; font-variant-numeric: tabular-nums; }
+  .card-body { flex: 1; min-width: 0; }
+  .card-title { font-size: 11px; font-weight: 600; color: #bbb; }
+  .card-topic { font-size: 9px; color: #555; margin-top: 1px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-tags { display: flex; gap: 4px; margin-top: 3px; flex-wrap: wrap; }
+  .card-tag {
+    font-size: 7px; padding: 1px 5px; border-radius: 3px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .tag-powerup { background: rgba(233,162,59,0.12); color: #E9A23B; }
+  .tag-flagged { background: rgba(248,113,113,0.12); color: #f87171; }
+  .tag-branch { background: rgba(94,23,235,0.08); color: #8b6fcc; }
+  .tag-conf { color: #3a3a4a; }
+  .card-actions {
+    position: absolute; top: 4px; right: 6px; display: none; gap: 2px; align-items: center;
+  }
+  .card:hover .card-actions { display: flex; }
+  .card-btn {
+    font-size: 10px; color: #2a2a3a; cursor: pointer; padding: 2px 5px;
+    border-radius: 3px; line-height: 1; border: none; background: none; font-family: inherit;
+  }
+  .card-btn:hover { color: #a78bfa; background: rgba(94,23,235,0.1); }
+  .card-btn.remove:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+  .drop-bar {
+    height: 2px; margin: -1px 0; border-radius: 1px; transition: all 0.15s;
+  }
+  .drop-bar.active { height: 3px; background: #5e17eb; box-shadow: 0 0 6px rgba(94,23,235,0.4); margin: 2px 0; }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .layout { flex-direction: column; height: auto; }
+    .pool { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); max-height: 40vh; }
+    .stages { padding: 12px 12px 80px; }
+    .header { padding: 10px 14px; gap: 8px; }
+    .header h1 { font-size: 13px; }
+    .header-btn { padding: 5px 10px; font-size: 10px; }
+    .stage-life { white-space: normal; }
+    .card { touch-action: none; }
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 3px; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(10px);
+    background: #5e17eb; color: #fff; padding: 8px 18px;
+    border-radius: 8px; font-size: 11px; font-weight: 600;
+    opacity: 0; transition: all 0.2s; pointer-events: none;
+  }
+  .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Chapter Allocator</h1>
+  <div class="header-stats" id="stats"></div>
+  <button class="header-btn" onclick="resetAll()">Reset</button>
+  <button class="header-btn" onclick="toggleAll()">Collapse / Expand</button>
+  <button class="header-btn" onclick="shareLink()">Share Link</button>
+  <button class="header-btn primary" onclick="exportMD()">Export MD</button>
+</div>
+
+<div class="layout">
+  <div class="pool">
+    <div class="pool-top">
+      <span class="pool-label">Unassigned</span>
+      <span class="pool-count" id="poolCount">0</span>
+    </div>
+    <input class="pool-search" id="search" type="text" placeholder="Search..." oninput="render()">
+    <div class="pool-cards" id="pool"></div>
+  </div>
+  <div class="stages" id="stages"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STAGES = [
+  { id: 1, title: 'Ordinary World', life: 'Pre-crack. School, uni, VC job. The golden road.' },
+  { id: 2, title: 'Call to Adventure', life: 'March 2020. The crack. Dream job, felt nothing.' },
+  { id: 3, title: 'Refusal of the Call', life: '2020-2023. Three years stuck. $30K courses. Head Full of Dreams.' },
+  { id: 4, title: 'Meeting the Mentor', life: 'Ease & Resistance. Flow. The universe\'s language.' },
+  { id: 5, title: 'Crossing the Threshold', life: 'Jan-Feb 2023. Fear challenge begins. Lion moment.' },
+  { id: 6, title: 'Tests, Allies, Enemies', life: '2023. Week-by-week. Magic show, stand-up, Bondi, Bali, quit.' },
+  { id: 7, title: 'Approach to the Inmost Cave', life: 'Live a life of Vibe Rise. Get paid to have fun. Find my flow.' },
+  { id: 8, title: 'The Ordeal', life: 'Ego death. All we are is a vessel of experience.' },
+  { id: 9, title: 'The Reward', life: 'Life design around fun. Making money whilst experiencing joy.' },
+  { id: 10, title: 'The Road Back', life: 'TBC — Europe disco tour. Return to Sydney. Opera House paid gig.' },
+  { id: 11, title: 'The Resurrection', life: 'TBC — Friends come to see it. Old world celebrates new you.' },
+  { id: 12, title: 'Return with the Elixir', life: 'This book. The app. The framework shared.' },
+];
+
+const CH = [
+  { 1 },
+  { 1 },
+  { 2 },
+  { 2 },
+  { 3 },
+  { 3 },
+  { 2 },
+  { 3 },
+  { 3 },
+  { 3 },
+  { 9 },
+  { id:'ch09', n:'09', t:'Vulnerability', d:'Seen/safe/connection material. Place later.', b:'', p:'', c:'95', f:false, pre:null },
+  { 3 },
+  { 3 },
+  { 3 },
+  { 7 },
+  { 3 },
+  { 3 },
+  { 6 },
+  { 7 },
+  { 3 },
+  { 3 },
+  { 3 },
+  { id:'ch26', n:'26', t:'The Belief Graph', d:'Merged: belief x capability, 3 zones, lack of fulfilment.', b:'self-knowledge journey', p:'The Belief Graph', c:'80', f:false, pre:null },
+  { 5 },
+  { 4 },
+  { 10 },
+  { 10 },
+  { 10 },
+  { 5 },
+  { 5 },
+  { id:'ch40', n:'40', t:'The Protective Voice Sounds Like', d:'"You\'re not ready yet."', b:'protective voices', p:'', c:'85', f:false, pre:null },
+  { 6 },
+  { 6 },
+  { 6 },
+  { 6 },
+  { 6 },
+  { 6 },
+  { 6 },
+  { id:'ch49', n:'49', t:'The Equation Works Both Ways', d:'Work either side. Increase essence OR decrease wound.', b:'healing', p:'', c:'85', f:false, pre:null },
+  { 3 },
+  { 3 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 3 },
+  { 5 },
+  { 5 },
+  { 5 },
+  { 9 },
+  { 9 },
+  { 9 },
+  { 9 },
+  { 9 },
+  { 9 },
+  { 4 },
+  { 12 },
+  { 4 },
+  { 4 },
+  { 6 },
+  { 4 },
+  { 4 },
+  { 4 },
+  { 4 },
+  { id:'chCE', n:'NEW', t:'Creation is Excavation', d:'You create to figure it out. Depression = suppressed expression. Work is your art.', b:'essence', p:'Creation is Excavation', c:'', f:false, pre:null },
+  { 8 },
+  { id:'chLF', n:'NEW', t:'Love vs Fear', d:'Two operating systems. Everything flows from one or the other.', b:'essence', p:'', c:'', f:false, pre:null },
+  { 2 },
+];
+
+let alloc = {};
+let order = {};
+const SK = 'fyf-alloc-v5';
+const OK = 'fyf-order-v5';
+
+function load() {
+  // Check URL hash first (shared link)
+  const hash = window.location.hash.slice(1);
+  if (hash) {
+    try {
+      const decoded = JSON.parse(decodeURIComponent(atob(hash)));
+      if (decoded.a) alloc = decoded.a;
+      if (decoded.o) order = decoded.o;
+      // Save to localStorage so it persists
+      save();
+      // Clean the URL
+      history.replaceState(null, '', window.location.pathname);
+      toast('Loaded from shared link');
+      return;
+    } catch {}
+  }
+  // Fall back to localStorage
+  try { alloc = JSON.parse(localStorage.getItem(SK)) || {}; } catch { alloc = {}; }
+  try { order = JSON.parse(localStorage.getItem(OK)) || {}; } catch { order = {}; }
+  if (!Object.keys(alloc).length) CH.forEach(c => { if (c.pre) alloc[c.id] = c.pre; });
+}
+
+function save() {
+  localStorage.setItem(SK, JSON.stringify(alloc));
+  localStorage.setItem(OK, JSON.stringify(order));
+  updateStats();
+}
+
+function updateStats() {
+  const a = Object.keys(alloc).length;
+  document.getElementById('stats').innerHTML = `<b>${a}</b>/${CH.length} assigned`;
+  document.getElementById('poolCount').textContent = CH.length - a;
+}
+
+function ordered(sid) {
+  const inStage = CH.filter(c => alloc[c.id] === sid);
+  const o = order[sid] || [];
+  const result = [];
+  o.forEach(id => { const c = inStage.find(x => x.id === id); if (c) result.push(c); });
+  inStage.forEach(c => { if (!result.includes(c)) result.push(c); });
+  return result;
+}
+
+function card(ch, removable) {
+  const el = document.createElement('div');
+  el.className = 'card'; el.dataset.id = ch.id; el.draggable = true;
+  let tags = '';
+  if (ch.p) tags += `<span class="card-tag tag-powerup">${ch.p}</span>`;
+  if (ch.f) tags += `<span class="card-tag tag-flagged">FLAG</span>`;
+  if (ch.c) tags += `<span class="card-tag tag-conf">${ch.c}%</span>`;
+  if (selectedCard === ch.id) el.style.borderColor = 'rgba(94,23,235,0.6)';
+  const actionsHtml = removable ? `<div class="card-actions"><button class="card-btn move-up" title="Move up">▲</button><button class="card-btn move-down" title="Move down">▼</button><button class="card-btn remove" title="Remove">×</button></div>` : '';
+  el.innerHTML = `<div class="card-num">${ch.n}</div><div class="card-body"><div class="card-title">${ch.t}</div><div class="card-topic">${ch.d}</div>${tags ? `<div class="card-tags">${tags}</div>` : ''}</div>${actionsHtml}`;
+  // Desktop drag
+  el.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', ch.id); dragSourceStage = alloc[ch.id] || null; el.classList.add('dragging'); setTimeout(() => el.style.display='none', 0); });
+  el.addEventListener('dragend', () => { el.classList.remove('dragging'); el.style.display=''; dragSourceStage = null; document.querySelectorAll('.stage').forEach(s => s.classList.remove('drag-over')); clearDropBars(); });
+  // Mobile tap select (only for pool cards)
+  if (!removable) el.addEventListener('click', () => selectCard(ch.id));
+  if (removable) {
+    el.querySelector('.remove').addEventListener('click', e => { e.stopPropagation(); delete alloc[ch.id]; save(); render(); });
+    el.querySelector('.move-up').addEventListener('click', e => { e.stopPropagation(); moveCard(ch.id, -1); });
+    el.querySelector('.move-down').addEventListener('click', e => { e.stopPropagation(); moveCard(ch.id, 1); });
+  }
+  return el;
+}
+
+function render() {
+  const pool = document.getElementById('pool');
+  pool.innerHTML = '';
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  CH.filter(c => !alloc[c.id]).forEach(c => {
+    if (q && !c.t.toLowerCase().includes(q) && !c.d.toLowerCase().includes(q) && !c.n.includes(q)) return;
+    pool.appendChild(card(c, false));
+  });
+
+  const sc = document.getElementById('stages');
+  sc.innerHTML = '';
+  STAGES.forEach(s => {
+    const chs = ordered(s.id);
+    const el = document.createElement('div');
+    el.className = `stage${selectedCard ? ' assign-mode' : ''}`; el.dataset.sid = s.id;
+    el.innerHTML = `<div class="stage-header"><div class="stage-num">${s.id}</div><div class="stage-info"><div class="stage-title">${s.title}</div><div class="stage-life">${s.life}</div></div><div class="stage-count ${chs.length ? 'has-cards' : ''}">${chs.length}</div><div class="stage-toggle">▾</div></div><div class="stage-cards"></div>`;
+    const cc = el.querySelector('.stage-cards');
+    if (!chs.length) {
+      const dz = document.createElement('div'); dz.className='stage-drop-zone'; dz.textContent='Drop chapters here'; cc.appendChild(dz);
+    }
+    // Add drop bars between cards for positional insertion
+    chs.forEach((c, i) => {
+      // Drop bar before each card
+      const bar = document.createElement('div');
+      bar.className = 'drop-bar';
+      bar.dataset.beforeId = c.id;
+      bar.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); clearDropBars(); bar.classList.add('active'); });
+      bar.addEventListener('dragleave', () => bar.classList.remove('active'));
+      bar.addEventListener('drop', e => {
+        e.preventDefault(); e.stopPropagation(); clearDropBars();
+        const id = e.dataTransfer.getData('text/plain');
+        insertAtPosition(s.id, id, c.id);
+        toast(`→ Stage ${s.id}: ${s.title}`);
+      });
+      cc.appendChild(bar);
+      cc.appendChild(card(c, true));
+    });
+    // Drop bar after last card
+    if (chs.length) {
+      const barEnd = document.createElement('div');
+      barEnd.className = 'drop-bar';
+      barEnd.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); clearDropBars(); barEnd.classList.add('active'); });
+      barEnd.addEventListener('dragleave', () => barEnd.classList.remove('active'));
+      barEnd.addEventListener('drop', e => {
+        e.preventDefault(); e.stopPropagation(); clearDropBars();
+        const id = e.dataTransfer.getData('text/plain');
+        insertAtPosition(s.id, id, null); // null = append to end
+        toast(`→ Stage ${s.id}: ${s.title}`);
+      });
+      cc.appendChild(barEnd);
+    }
+
+    el.querySelector('.stage-header').addEventListener('click', () => {
+      if (selectedCard) { assignSelected(s.id); return; }
+      el.classList.toggle('collapsed');
+    });
+    // Stage-level drop (fallback for dropping on header or empty area)
+    el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+    el.addEventListener('dragleave', e => { if (!el.contains(e.relatedTarget)) { el.classList.remove('drag-over'); clearDropBars(); } });
+    el.addEventListener('drop', e => {
+      e.preventDefault(); el.classList.remove('drag-over'); clearDropBars();
+      const id = e.dataTransfer.getData('text/plain');
+      if (!id) return;
+      insertAtPosition(s.id, id, null); // append to end
+      toast(`→ Stage ${s.id}: ${s.title}`);
+    });
+    sc.appendChild(el);
+  });
+  updateStats();
+}
+
+function toggleAll() {
+  const ss = document.querySelectorAll('.stage');
+  const any = [...ss].some(s => !s.classList.contains('collapsed'));
+  ss.forEach(s => any ? s.classList.add('collapsed') : s.classList.remove('collapsed'));
+}
+
+function resetAll() {
+  if (!confirm('Reset all?')) return;
+  localStorage.removeItem(SK); localStorage.removeItem(OK);
+  alloc = {}; order = {};
+  CH.forEach(c => { if (c.pre) alloc[c.id] = c.pre; });
+  save(); render(); toast('Reset');
+}
+
+function exportMD() {
+  let md = '# Chapter Allocation\n\n';
+  STAGES.forEach(s => {
+    const chs = ordered(s.id);
+    md += `## Stage ${s.id}: ${s.title}\n*${s.life}*\n\n`;
+    if (!chs.length) { md += '*No chapters*\n\n'; return; }
+    md += '| Ch | Title | Topic | Power-Up |\n|---|---|---|---|\n';
+    chs.forEach(c => md += `| ${c.n} | ${c.t} | ${c.d} | ${c.p || '—'} |\n`);
+    md += '\n';
+  });
+  const un = CH.filter(c => !alloc[c.id]);
+  if (un.length) { md += '## Unassigned\n\n| Ch | Title | Topic |\n|---|---|---|\n'; un.forEach(c => md += `| ${c.n} | ${c.t} | ${c.d} |\n`); }
+  navigator.clipboard.writeText(md).then(() => toast('Copied to clipboard'));
+}
+
+function shareLink() {
+  const state = { a: alloc, o: order };
+  const encoded = btoa(encodeURIComponent(JSON.stringify(state)));
+  const url = window.location.origin + window.location.pathname + '#' + encoded;
+  if (navigator.share) {
+    navigator.share({ title: 'Chapter Allocator', url }).catch(() => {
+      navigator.clipboard.writeText(url).then(() => toast('Link copied'));
+    });
+  } else {
+    navigator.clipboard.writeText(url).then(() => toast('Link copied to clipboard'));
+  }
+}
+
+// ── Mobile tap-to-assign ──
+let selectedCard = null;
+
+function selectCard(id) {
+  if (selectedCard === id) { selectedCard = null; render(); return; }
+  selectedCard = id;
+  render();
+}
+
+function assignSelected(stageId) {
+  if (!selectedCard) return;
+  alloc[selectedCard] = stageId;
+  if (!order[stageId]) order[stageId] = [];
+  if (!order[stageId].includes(selectedCard)) order[stageId].push(selectedCard);
+  order[stageId] = order[stageId].filter(x => alloc[x] === stageId);
+  save(); selectedCard = null; render();
+  const s = STAGES.find(x => x.id === stageId);
+  toast(`→ Stage ${stageId}: ${s.title}`);
+}
+
+let dragSourceStage = null;
+
+function moveCard(chId, direction) {
+  const sid = alloc[chId];
+  if (!sid) return;
+  const o = order[sid] || ordered(sid).map(c => c.id);
+  const idx = o.indexOf(chId);
+  if (idx === -1) return;
+  const newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= o.length) return;
+  o.splice(idx, 1);
+  o.splice(newIdx, 0, chId);
+  order[sid] = o;
+  save(); render();
+}
+
+function clearDropBars() {
+  document.querySelectorAll('.drop-bar').forEach(b => b.classList.remove('active'));
+}
+
+function insertAtPosition(stageId, chId, beforeChId) {
+  alloc[chId] = stageId;
+  if (!order[stageId]) order[stageId] = ordered(stageId).map(c => c.id);
+  // Remove if already in this stage's order
+  order[stageId] = order[stageId].filter(id => id !== chId);
+  if (beforeChId) {
+    const idx = order[stageId].indexOf(beforeChId);
+    if (idx !== -1) order[stageId].splice(idx, 0, chId);
+    else order[stageId].push(chId);
+  } else {
+    order[stageId].push(chId);
+  }
+  // Clean
+  order[stageId] = order[stageId].filter(id => alloc[id] === stageId);
+  save(); render();
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), 1800);
+}
+
+document.getElementById('pool').addEventListener('dragover', e => e.preventDefault());
+document.getElementById('pool').addEventListener('drop', e => {
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  delete alloc[id]; save(); render(); toast('Unassigned');
+});
+
+load(); render();
+</script>
+</body>
+</html>
