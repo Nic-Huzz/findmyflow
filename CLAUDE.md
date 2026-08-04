@@ -206,7 +206,7 @@ Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `p
 
 **Healing tab** (`HealingIntentionsList.jsx`): Per-task healing intentions. "What's blocking you?" → QuestSelector → HealingFlowModal (7-step: Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best). DB: `healing_intentions` linked to `quest_tasks`.
 
-**Scoring**: RP (Rise Points). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2. Levels: Getting Started (0) → Habit Builder (100) → Strong Foundation (500) → Vibe Rise (1250) → Vibe Master (2750) → Movement Maker (5750). Forgiving streak (1 day miss allowed).
+**Scoring**: RP (Rise Points). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2. Levels: Getting Started (0) → Habit Builder (100) → Strong Foundation (500) → Vibe Rise (1250) → Flow Finder (2750) → Movement Maker (5750). Forgiving streak (1 day miss allowed).
 
 **Post-courage flow**: 4-state NS classification (Vibe Rise/Fun/Pressure/Uninterested) → identity statement ("I am someone who...") → 3% reflection. Saves to `quest_completions.reflection_text` JSON. Also increments `behavioral_evidence` on matching clusters + awards skill XP.
 

@@ -45,7 +45,7 @@ export function getSkillLevel(xp: number): { level: number; name: string } {
 // RP level thresholds (mirrors Challenge.jsx / CLAUDE.md)
 const RP_LEVELS = [
   { threshold: 5750, name: 'Movement Maker' },
-  { threshold: 2750, name: 'Vibe Master' },
+  { threshold: 2750, name: 'Flow Finder' },
   { threshold: 1250, name: 'Vibe Rise' },
   { threshold: 500, name: 'Strong Foundation' },
   { threshold: 100, name: 'Habit Builder' },
