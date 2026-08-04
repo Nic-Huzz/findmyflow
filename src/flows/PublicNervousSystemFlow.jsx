@@ -426,7 +426,7 @@ export default function PublicNervousSystemFlow() {
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Where This Fits</h1>
       <div className="welcome-message animated-text">
-        <p><strong>In the Vibe Rise journey...</strong></p>
+        <p><strong>In the Find My Flow journey...</strong></p>
         <p className="highlight-box">
           <span className="highlight-word">Flow Finder</span> helps you discover <em>what</em> you're meant to build.<br /><br />
           <span className="highlight-word">Nervous System Map</span> reveals <em>why</em> you might be holding yourself back from building it.
@@ -894,7 +894,7 @@ export default function PublicNervousSystemFlow() {
           onClick={() => window.location.href = 'https://viberise.nichuzz.com'}
           style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
         >
-          Continue to Vibe Rise
+          Continue to Find My Flow
         </button>
       </div>
     </div>
@@ -1001,7 +1001,7 @@ export default function PublicNervousSystemFlow() {
               activeContracts,
               warningSigns
             })
-            downloadResultsPdf(pdfContent, 'Nervous System Map - Vibe Rise')
+            downloadResultsPdf(pdfContent, 'Nervous System Map - Find My Flow')
           }}
         />
 

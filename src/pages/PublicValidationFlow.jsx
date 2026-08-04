@@ -907,11 +907,11 @@ const PublicValidationFlow = () => {
             </div>
           )}
 
-          {/* Vibe Rise CTA */}
+          {/* Find My Flow CTA */}
           <div className="completion-cta">
             <p className="cta-intro">Curious what they're using to build this?</p>
             <p className="cta-description">
-              Vibe Rise helps people discover what they're meant to create — and actually follow through on it.
+              Find My Flow helps people discover what they're meant to create — and actually follow through on it.
             </p>
             {!launchNotifySubmitted ? (
               <button
@@ -919,12 +919,12 @@ const PublicValidationFlow = () => {
                 onClick={handleLaunchNotify}
                 disabled={launchNotifySubmitting}
               >
-                {launchNotifySubmitting ? 'Saving...' : 'Keen to learn more about scaling your business and be notified when Vibe Rise launches?'}
+                {launchNotifySubmitting ? 'Saving...' : 'Keen to learn more about scaling your business and be notified when Find My Flow launches?'}
               </button>
             ) : (
               <div className="launch-notify-success">
                 <span className="launch-notify-icon">🎉</span>
-                <p>You're on the list! We'll let you know when Vibe Rise is ready.</p>
+                <p>You're on the list! We'll let you know when Find My Flow is ready.</p>
               </div>
             )}
           </div>
@@ -949,7 +949,7 @@ const PublicValidationFlow = () => {
       {/* Main Content */}
       <div className="validation-container">
         <div className="validation-header">
-          <div className="validation-logo">Vibe Rise</div>
+          <div className="validation-logo">Find My Flow</div>
           <div className="validation-step-counter">
             {currentStepIndex + 1} / {flowData.steps.length}
           </div>
@@ -1029,7 +1029,7 @@ const PublicValidationFlow = () => {
 
         {/* Footer */}
         <div className="validation-footer">
-          <p>Powered by Vibe Rise</p>
+          <p>Powered by Find My Flow</p>
         </div>
       </div>
     </div>

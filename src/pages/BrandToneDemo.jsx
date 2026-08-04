@@ -8,7 +8,7 @@ const BrandToneDemo = () => {
     <div className={`brand-demo-page tone-${activeTone}`}>
       <div className="brand-demo-header">
         <h1>Brand Tone Explorer</h1>
-        <p>Click each tab to see how Vibe Rise could feel</p>
+        <p>Click each tab to see how Find My Flow could feel</p>
 
         <div className="tone-tabs">
           <button

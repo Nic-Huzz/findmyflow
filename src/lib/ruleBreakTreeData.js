@@ -1627,7 +1627,7 @@ export const industryNodes = [
     who: 'MrBeast / Ali Abdaal / Sahil Bloom', mergeWith: 'story-video' },
   { id: 'sub-creator-2024', label: 'Experience\nCreator\nEconomy', year: 2024, branch: 'story-creator', subBranch: true, type: 'merge',
     assumption: 'Creators monetise through content: ads, sponsorships, courses, merch',
-    ruleBreak: 'The transformational experience IS a creator product. The retreat designer is an experience creator with an audience-funding model. This is what Vibe Rise formalises.',
+    ruleBreak: 'The transformational experience IS a creator product. The retreat designer is an experience creator with an audience-funding model. This is what Find My Flow formalises.',
     who: 'Emerging movement (2020s+)', mergeWith: 'story-immersive' },
 
   // ── Nourishment Sub-Branch: Ancestral / Whole Food (4 nodes) ──
@@ -1703,7 +1703,7 @@ export const industryNodes = [
     who: 'USDA / McGovern Committee' },
   { id: 'sub-industrial-1971', label: 'Hyperpalatable\nFood / Bliss Point', year: 1971, branch: 'food-industrial', subBranch: true,
     assumption: 'Food companies optimise for taste, which is the same as what the body needs.',
-    ruleBreak: '"Vanishing caloric density: food engineered to feel like it disappears so you eat more." Intentional nervous system manipulation. This is a DRAIN in Vibe Rise terms.',
+    ruleBreak: '"Vanishing caloric density: food engineered to feel like it disappears so you eat more." Intentional nervous system manipulation. This is a DRAIN in Find My Flow terms.',
     who: 'Howard Moskowitz (1971 US Army, 1980s commercial)' },
   { id: 'sub-industrial-1960', label: 'Seed Oil\nProliferation', year: 1960, branch: 'food-industrial', subBranch: true,
     assumption: 'Vegetable oils are healthier than animal fats. The name says "vegetable."',

@@ -737,7 +737,7 @@ export default function LifePathFlow() {
                   </div>
                   <div className={`flp-punchline flp-punchline-2 ${showPunchline2 ? 'visible' : ''}`}>
                     <p style={{ margin: '0 0 12px' }}>The golden cone on your map is where you feel safe right now. Everything outside it feels too risky.</p>
-                    <p style={{ margin: 0 }}>Vibe Rise expands what feels possible.</p>
+                    <p style={{ margin: 0 }}>Find My Flow expands what feels possible.</p>
                   </div>
                 </>
               )}

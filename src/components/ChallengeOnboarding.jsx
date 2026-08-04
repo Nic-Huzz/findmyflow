@@ -173,7 +173,7 @@ function ChallengeOnboarding({
               <span className="install-icon">📱</span>
               <h1>Add to Home Screen</h1>
               <p className="install-subtitle">
-                For the best experience, add Vibe Rise to your home screen.
+                For the best experience, add Find My Flow to your home screen.
                 It'll work like an app and you'll get helpful reminders.
               </p>
             </div>

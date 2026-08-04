@@ -17,7 +17,7 @@ import './MovementMakers.css'
 const ExperienceCreatorFlow = lazy(() => import('../flows/ExperienceCreatorFlow'))
 
 const FAQS = [
-  { q: "What if I'm just starting out?", a: "Scale is for facilitators who already run experiences. If you're still figuring out what you want to create, start with the free Vibe Rise app. It'll help you discover your play-skills and build courage. When you're ready to build a business from them, Scale is here." },
+  { q: "What if I'm just starting out?", a: "Scale is for facilitators who already run experiences. If you're still figuring out what you want to create, start with the free Find My Flow app. It'll help you discover your play-skills and build courage. When you're ready to build a business from them, Scale is here." },
   { q: "What do I get in the $499 setup?", a: "The identity work that everything else builds on. We find your rule break (the thing you do differently that makes word spread), map your business model based on creators like you, and turn it all into a clear positioning statement. You do it once and it's yours forever." },
   { q: "How is this different from a course?", a: "Courses dump information. Scale gives you a system you actually use. The app tracks your checklists, your challenges, your 3% improvements. You're not learning. You're building." },
   { q: "Can I cancel anytime?", a: "Yes. The $99 subscription is monthly with no lock-in, and your first month is fully refundable if it's not for you. The $499 setup is not refundable, because it gives you full access to the identity content straight away." },
@@ -221,7 +221,7 @@ export default function MovementMakers() {
               </div>
               <div>
                 <div className="mm-story-name">Huzz</div>
-                <div className="mm-story-role">Founder, Vibe Rise</div>
+                <div className="mm-story-role">Founder, Find My Flow</div>
                 <div className="mm-story-role">200+ experiences facilitated in Bali</div>
               </div>
             </div>
@@ -552,7 +552,7 @@ export default function MovementMakers() {
           <div className="mm-logo" style={{ justifyContent: 'center', marginBottom: '0.5rem' }}>
             <span className="mm-logo-dot" /> Scale
           </div>
-          <p style={{ fontSize: '0.78rem', color: '#999' }}>by Vibe Rise. Built in Bali.</p>
+          <p style={{ fontSize: '0.78rem', color: '#999' }}>by Find My Flow. Built in Bali.</p>
         </div>
       </footer>
 

@@ -707,7 +707,7 @@ const Profile = () => {
       {/* Mobile Top Bar */}
       <div className="mobile-topbar">
         <div className="topbar-content">
-          <div className="topbar-logo">Vibe Rise</div>
+          <div className="topbar-logo">Find My Flow</div>
           <button className="hamburger-btn" onClick={toggleSidebar}>
             ☰
           </button>
@@ -721,7 +721,7 @@ const Profile = () => {
 
       {/* Sidebar */}
       <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
-        <div className="logo">Vibe Rise</div>
+        <div className="logo">Find My Flow</div>
 
         <div className="user-profile">
           <div className="user-avatar">{userData?.user_name?.substring(0, 2).toUpperCase() || getUserInitials(user?.email)}</div>

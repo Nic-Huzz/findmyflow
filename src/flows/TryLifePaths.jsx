@@ -521,7 +521,7 @@ export default function TryLifePaths() {
           <div className="lps-bridge">
             <div className="lps-bridge-text">
               This map is one moment in time.
-              Vibe Rise tracks your cone expanding week by week.
+              Find My Flow tracks your cone expanding week by week.
             </div>
             <a href="/get-started" style={{ textDecoration: 'none' }}>
               <button className="lps-btn-gold" style={{ width: '100%' }}>

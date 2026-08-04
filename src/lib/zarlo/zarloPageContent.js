@@ -124,16 +124,16 @@ export const PAGE_CONTENT = {
   'onboarding_welcome': {
     pageId: 'onboarding_welcome',
     pageName: 'Welcome',
-    whatIsThis: `This is your first step into Vibe Rise! We're about to ask you four quick questions to find where your flow is getting stuck. No wrong answers — just honest ones.`,
+    whatIsThis: `This is your first step into Find My Flow! We're about to ask you four quick questions to find where your flow is getting stuck. No wrong answers — just honest ones.`,
     whyMatters: `Everyone's journey is different. Someone still exploring needs different guidance than someone who's already running a business.\n\nThese questions help us meet you where you are — not where we assume you are.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'why_questions', label: 'Why do you need to ask me questions?' },
       { id: 'what_happens', label: 'What happens after I answer?' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
       why_questions: `Because one-size-fits-all doesn't work.\n\nSomeone still exploring needs different support than someone who's already visible but can't charge.\n\nThese four questions check where your flow is blocked — identity, nervous system, visibility, or value — so we can focus your journey on the right thing first.`,
       what_happens: `After you answer, we'll show you your "persona" — basically which stage of the journey you're on.\n\nThen, depending on your answers, you'll either:\n• Start discovering what you're meant to build (Flow Finder)\n• Or capture what you're already working on (Quick Capture)\n\nEither way, you'll be set up and ready to go in about 5 minutes.`
@@ -146,13 +146,13 @@ export const PAGE_CONTENT = {
     whatIsThis: `This question helps us understand your current work situation. Are you employed? Self-employed? Building something on the side? Each path has different challenges and opportunities.`,
     whyMatters: `Your employment status shapes everything:\n\n• **Still employed?** You need strategies that work around a job\n• **Recently quit?** Time pressure is real — we'll focus on momentum\n• **Already running something?** Let's optimise what you've got\n\nNo judgment here. Every path is valid.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'which_pick', label: "I'm between options — which should I pick?" },
       { id: 'why_matters', label: 'Why does this matter?' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
       which_pick: `Pick the one that feels most true RIGHT NOW.\n\nIf you're employed but have a side project, pick the "building something on the side" option.\n\nIf you're between jobs and not sure what's next, pick whatever reflects your current reality.\n\nYou can always adjust later. This isn't a permanent label — it's just where you're starting from.`,
       why_matters: `It changes the advice we give you.\n\nSomeone with a full-time job needs evening/weekend-friendly strategies. Someone who just quit needs faster paths to income. Someone established needs optimization, not basics.\n\nWe don't want to waste your time with stuff that doesn't apply to your situation.`
@@ -165,13 +165,13 @@ export const PAGE_CONTENT = {
     whatIsThis: `This is about what you've created so far — not what you dream of creating. Have you built anything? Sold anything? Or are you still in discovery mode?\n\nWe call this the "Business Ladder" — where you currently stand in building income from your own work.`,
     whyMatters: `The Business Ladder has four rungs:\n\n• **Still discovering** — No concrete offer yet (that's okay!)\n• **Trading time** — You have a service, working with clients directly\n• **Productised service** — Systematised your service, less 1:1 time\n• **Products** — Digital products, courses, things that sell while you sleep\n\nEach rung has different challenges. We'll tailor your experience accordingly.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'not_sure_rung', label: "I'm not sure which rung I'm on" },
       { id: 'want_higher', label: 'I want to be higher on the ladder' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
       not_sure_rung: `Here's a quick test:\n\n**Do you have paying customers?**\n• No → You're "Still discovering"\n• Yes → Keep going...\n\n**How do you deliver value?**\n• 1:1 calls, custom work, your time = each sale → "Trading time"\n• Some systems, but still mostly you involved → "Productised service"\n• Products that sell without you there → "Products"\n\nPick what's most true today. Don't pick where you want to be — pick where you ARE.`,
       want_higher: `That's exactly why you're here!\n\nBut here's the thing: you can't skip rungs. Each one builds skills and insights you need for the next.\n\nPeople who try to jump straight to "passive income products" without going through the earlier stages usually fail. They don't understand their customers well enough yet.\n\nWe'll help you climb — but we'll make sure you're building on solid ground.`
@@ -184,13 +184,13 @@ export const PAGE_CONTENT = {
     whatIsThis: `This is about what you want to focus on RIGHT NOW. Not your life mission — just your next chapter. What's the thing that would make the biggest difference?`,
     whyMatters: `We can't help you with everything at once. Focus creates progress.\n\nSome options might be greyed out based on your previous answers — that's intentional. Certain goals only make sense at certain stages.\n\nPick the one that resonates most. You can always shift focus later.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'greyed_out', label: 'Why are some options greyed out?' },
       { id: 'want_all', label: 'I want to do all of these!' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
       greyed_out: `Some goals don't make sense for where you are on the Business Ladder.\n\nFor example, you can't "scale your business" if you don't have a business yet. You can't "optimise your funnel" if you don't have customers.\n\nThe greyed-out options will unlock as you progress. Think of them as future levels in a game — they're coming, just not yet.`,
       want_all: `Ha! Classic ambitious human. I respect it.\n\nBut here's the truth: trying to do everything at once is a recipe for doing nothing well.\n\nPick ONE focus for now. We'll help you make real progress on that thing. Then you can shift to the next priority.\n\nFocused action beats scattered intention every single time.`
@@ -203,13 +203,13 @@ export const PAGE_CONTENT = {
     whatIsThis: `Based on your answers, we've identified your "persona" — which stage of the journey you're on. This helps us personalise everything that comes next.`,
     whyMatters: `Your persona isn't a personality test. It's a practical label that shapes:\n\n• Which quests and challenges you see\n• What advice is most relevant\n• How we talk to you about progress\n\nIt's based on where you ARE, not who you are as a person. As you grow, your persona can change too.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'what_personas', label: 'What are the different personas?' },
       { id: 'change_later', label: 'Can this change later?' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
       what_personas: `There are three main personas:\n\n**Flow Seeker** — Still discovering what you want to build. Focus: exploration, self-discovery, finding your direction.\n\n**Flow Finder** — You know what you're building, now making it real. Focus: creation, validation, first customers.\n\n**Movement Maker** — You've got something working, time to grow. Focus: scaling, systems, bigger impact.\n\nEach one has different challenges and different wins. None is "better" — they're just different chapters.`,
       change_later: `Absolutely. Your persona is based on where you are TODAY.\n\nAs you make progress — get your first customers, build your first product, scale your systems — you'll naturally move through the personas.\n\nThink of it like levels in a game. You don't stay at Level 1 forever. You level up by doing the work.`
@@ -226,14 +226,14 @@ export const PAGE_CONTENT = {
     whatIsThis: `This question checks whether you've found your "spring" — the source of your river. Do you know what your thing is? What you're building? What direction you're heading?`,
     whyMatters: `You can't have a river without a source. If you don't know your direction yet, that's completely normal — but it's the first thing to address.\n\nMany people try to build visibility or charge money before they even know what they're offering. That's like trying to fill a bucket from a dry well.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
       { id: 'what_is_river', label: 'What\'s this "river" about?' },
       { id: 'why_questions', label: 'Why these questions?' },
       { id: 'honest_answer', label: 'What if I pick the "wrong" one?' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise helps people discover what they're meant to build — and actually follow through. Strategy + healing + accountability + tools, all in one place.`,
-      what_is_river: `"Vibe Rise" isn't just a name — it's the whole framework.\n\nImagine your personal growth as a river system. The Spring is where the water emerges (your identity/direction). The Riverbed holds it (your nervous system). The Current carries it forward (your visibility). The Ocean is where it meets the world (your value/pricing).\n\nThese four questions check which part of your river is blocked. That's where we focus first.`,
+      what_is_fmf: `Find My Flow helps people discover what they're meant to build — and actually follow through. Strategy + healing + accountability + tools, all in one place.`,
+      what_is_river: `"Find My Flow" isn't just a name — it's the whole framework.\n\nImagine your personal growth as a river system. The Spring is where the water emerges (your identity/direction). The Riverbed holds it (your nervous system). The Current carries it forward (your visibility). The Ocean is where it meets the world (your value/pricing).\n\nThese four questions check which part of your river is blocked. That's where we focus first.`,
       why_questions: `These four questions identify where your flow is stuck. Instead of guessing what you need, we pinpoint the exact blockage — then focus your journey there.\n\nMost people are stuck at one specific layer. Fix that, and everything downstream starts moving.`,
       honest_answer: `There's no wrong answer. Pick whichever feels most true RIGHT NOW.\n\nThis isn't a test — it's a mirror. We're not judging your score, we're using it to give you the right starting point.`
     }
@@ -252,7 +252,7 @@ export const PAGE_CONTENT = {
     faq: {
       nervous_system: `Your nervous system runs the show behind the scenes. It decides what feels safe and what triggers fight/flight/freeze.\n\nWhen you get anxious about posting online, pitching your work, or raising prices — that's your nervous system pulling the emergency brake. Not because you're weak, but because it's trying to protect you from a perceived threat.`,
       body_response: `Your body holds memories of every time visibility, exposure, or "putting yourself out there" led to pain.\n\nMaybe you were mocked for sharing an idea. Maybe a parent's criticism made you associate being seen with danger. Your body remembers even if your conscious mind has moved on.\n\nThe tightness, panic, or shutdown is your body trying to protect you from repeating that pain.`,
-      can_fix: `Absolutely. Your nervous system isn't fixed — it's plastic. It can learn new patterns.\n\nVibe Rise has specific healing and rewiring quests designed to gradually teach your system that growth is safe. Small exposures, processed well, over time. It's like strength training for your capacity to handle discomfort.`
+      can_fix: `Absolutely. Your nervous system isn't fixed — it's plastic. It can learn new patterns.\n\nFind My Flow has specific healing and rewiring quests designed to gradually teach your system that growth is safe. Small exposures, processed well, over time. It's like strength training for your capacity to handle discomfort.`
     }
   },
 
@@ -285,7 +285,7 @@ export const PAGE_CONTENT = {
     ],
     faq: {
       charging_guilt: `Charging guilt usually comes from one of these beliefs:\n\n• "Good people don't charge for helping others"\n• "My work isn't valuable enough yet"\n• "If I charge, people will judge me"\n• "I should give freely because I care"\n\nThese beliefs feel noble but they're actually self-sabotage. Charging appropriately lets you do MORE good, not less — because you can sustain the work.`,
-      how_price: `Pricing isn't about your self-worth — it's about the transformation you deliver.\n\nVibe Rise has money model flows that help you calculate and structure pricing based on the value you create for others, not how you feel about yourself.\n\nShort version: if your work saves someone time, money, pain, or confusion — that has measurable value. Price based on that, not on your imposter syndrome.`,
+      how_price: `Pricing isn't about your self-worth — it's about the transformation you deliver.\n\nFind My Flow has money model flows that help you calculate and structure pricing based on the value you create for others, not how you feel about yourself.\n\nShort version: if your work saves someone time, money, pain, or confusion — that has measurable value. Price based on that, not on your imposter syndrome.`,
       value_work: `The app has several features for this layer:\n\n• **Money Model Flows** — Calculate and structure your pricing\n• **Offer Builder** — Package your work into clear offerings\n• **Funnel Calculator** — Track your revenue pipeline\n\nBut honestly, if Value is your priority layer, the real work often starts with the beliefs underneath. That's why we might recommend healing quests alongside business strategy.`
     }
   },
@@ -593,7 +593,7 @@ export const PAGE_CONTENT = {
   '/me': {
     pageId: 'profile_page',
     pageName: 'Profile',
-    whatIsThis: `Your home base — see your points, streak, stage progress, and quick access to key flows. This is mission control for your Vibe Rise journey.`,
+    whatIsThis: `Your home base — see your points, streak, stage progress, and quick access to key flows. This is mission control for your Find My Flow journey.`,
     whyMatters: `Progress visibility creates motivation. Seeing your streak, your points, and how far you've come reminds your nervous system that you're capable of growth.\n\nIt's evidence against the "I always quit" narrative. Look — you're still here.`,
     contextualPrompts: [
       { id: 'stages', label: 'What do the stages mean?' },
@@ -696,16 +696,16 @@ export const PAGE_CONTENT = {
 
   default: {
     pageId: 'default',
-    pageName: 'Vibe Rise',
-    whatIsThis: `You're exploring Vibe Rise — a system designed to help you build something that aligns with who you actually are, not who you think you should be.`,
-    whyMatters: `Every piece of Vibe Rise is designed to help you work WITH your nervous system instead of fighting against it. If you're unsure why you're here or what to do next, I've got you.`,
+    pageName: 'Find My Flow',
+    whatIsThis: `You're exploring Find My Flow — a system designed to help you build something that aligns with who you actually are, not who you think you should be.`,
+    whyMatters: `Every piece of Find My Flow is designed to help you work WITH your nervous system instead of fighting against it. If you're unsure why you're here or what to do next, I've got you.`,
     contextualPrompts: [
       { id: 'what_is', label: 'What is this?' },
       { id: 'why_matters', label: 'Why does this matter?' },
       { id: 'something_else', label: 'I want to do something else' }
     ],
     faq: {
-      what_is: `You're in Vibe Rise — where people who want to create a positive impact figure out what they're meant to build and actually follow through on it.`,
+      what_is: `You're in Find My Flow — where people who want to create a positive impact figure out what they're meant to build and actually follow through on it.`,
       why_matters: `Here's the sneaky truth: you don't rise to the level of your ambitions — you fall to what your nervous system thinks is safe. Everything here is designed to help you find that line and expand it.`,
       something_else: `No problem! What do you want to focus on?\n\n• Understand why you're stuck → Nervous System Map\n• Figure out what to build → Flow Finder\n• Push your comfort zone → 7-Day Challenge\n• Heal and process → Healing tab\n• Work on your offer → Money Model flows\n• See your progress → Library of Answers`
     }
@@ -747,16 +747,16 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're taking a free assessment based on Alex Hormozi's $100M Offers framework. In a few minutes, you'll know exactly what type of offer fits your skills and audience — and how to position it so people actually want to buy.`,
     whyMatters: `Most people guess at their offer and hope it works. This assessment cuts through the guesswork and shows you the strategic path forward.\n\nAnd here's the thing most business tools won't tell you: knowing WHAT to build is only half the battle. The other half? Actually doing it without your brain sabotaging you every step of the way.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow. It has everything Huzz wishes he had on his journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.`,
-      how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nVibe Rise treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
-      what_next: `After you finish this assessment, you'll see your results and have a chance to explore the full Vibe Rise experience.\n\nInside, you'd get:\n• AI-guided discovery of your skills, ideal customers, and what to build\n• Nervous system work to clear the invisible blocks\n• A gamified 7-day challenge to expand your comfort zone\n• CRM to manage your customer relationships\n• Content and marketing strategy tools\n\nBasically everything you need to go from "I have an idea" to "I have paying customers" — without the usual self-sabotage along the way.`
+      how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nFind My Flow treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
+      what_next: `After you finish this assessment, you'll see your results and have a chance to explore the full Find My Flow experience.\n\nInside, you'd get:\n• AI-guided discovery of your skills, ideal customers, and what to build\n• Nervous system work to clear the invisible blocks\n• A gamified 7-day challenge to expand your comfort zone\n• CRM to manage your customer relationships\n• Content and marketing strategy tools\n\nBasically everything you need to go from "I have an idea" to "I have paying customers" — without the usual self-sabotage along the way.`
     }
   },
 
@@ -766,8 +766,8 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're figuring out your upsell strategy — what to offer people AFTER they buy your main thing. This isn't about squeezing more money out of people. It's about serving the ones who want to go deeper.`,
     whyMatters: `The best upsells feel like a gift, not a pitch. When someone gets great results from you, they naturally ask "what's next?" Having an answer ready isn't pushy — it's helpful.\n\nThis assessment helps you design that next step strategically.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
@@ -780,8 +780,8 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're designing an accessible entry point — something valuable for people who aren't ready for your main offer yet. Think of it as a trust-builder that lets people experience your magic at a lower commitment.`,
     whyMatters: `Not everyone is ready to buy your main thing. A good downsell serves them anyway AND builds the relationship for when they ARE ready.\n\nSome of your biggest fans will start as downsell customers.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
@@ -794,8 +794,8 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're exploring recurring revenue models — memberships, subscriptions, ongoing support. The stuff that lets you stop starting from zero every month.`,
     whyMatters: `One-time sales = hamster wheel. Continuity = stability.\n\nEven a small amount of recurring revenue ($1-2K/month) completely changes how your nervous system feels about money. You can breathe. You can take creative risks. You're not in desperation mode.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
@@ -808,8 +808,8 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're mapping out how you'll attract people into your world. Where will they come from? What will draw them in? This is the top of your funnel — the foundation of everything else.`,
     whyMatters: `No leads = no business. But trying to be everywhere at once = burnout.\n\nA clear strategy helps you show up consistently where YOUR people actually hang out. No more random acts of marketing.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
@@ -822,8 +822,8 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're figuring out what free thing to offer in exchange for someone's email. Could be a PDF, video, quiz, template, or mini-course. Something that gives people a taste of your value.`,
     whyMatters: `A lead magnet lets people experience you before they pay. It builds trust, shows your expertise, and starts the relationship.\n\nPlus, email lists are still one of the most valuable assets you can own. Social platforms come and go — your list is yours.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
@@ -836,18 +836,18 @@ export const PUBLIC_FLOW_CONTENT = {
     whatIsThis: `You're about to discover the invisible line where your nervous system says "nope, too scary" — even when your brain says "let's go."\n\nThrough some simple questions (and maybe a body-based test), we'll find the beliefs that are quietly running the show behind the scenes.`,
     whyMatters: `Here's the sneaky truth nobody talks about:\n\n**You don't rise to the level of your ambitions. You fall to what your nervous system thinks is safe.**\n\nIt's like having an overprotective bodyguard who won't let you into the VIP section of your own life. This assessment shows you exactly where that bouncer is standing.\n\nOnce you see the line, you can start moving it.`,
     contextualPrompts: [
-      { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
-      { id: 'what_is_flow', label: 'What do you mean by "Vibe Rise"?' },
+      { id: 'what_is_fmf', label: 'What is Find My Flow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "Find My Flow"?' },
       { id: 'how_different', label: 'How is this different?' },
       { id: 'why_ns', label: 'Why does nervous system stuff matter for business?' },
       { id: 'what_next', label: 'What happens after this?' }
     ],
     faq: {
-      what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow. It has everything Huzz wishes he had on his journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.`,
-      how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nVibe Rise treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
+      how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nFind My Flow treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
       why_ns: `Ever wonder why you KNOW what to do but can't make yourself do it?\n\nThat's not a discipline problem. It's a nervous system problem.\n\nYour body learned somewhere along the way that being visible, charging money, or putting yourself out there = danger. Maybe you got rejected. Maybe you were laughed at. Maybe success meant losing people you loved.\n\nNow that belief runs in the background like invisible software, quietly vetoing your dreams.\n\n**Most business programs ignore this entirely.** They give you more strategy, more tactics, more "just do it" energy. And you keep not doing it.\n\nWe fix the root cause first. Then the tactics actually work.`,
-      what_next: `After you finish this assessment, you'll see what beliefs might be holding you back — and have a chance to explore the full Vibe Rise experience.\n\nInside, you'd get:\n• Deep nervous system work to clear those invisible blocks\n• AI-guided discovery of your skills, ideal customers, and what to build\n• A gamified 7-day challenge to expand your comfort zone\n• Healing practices to process stuck emotions\n• CRM, content tools, marketing strategy — the whole tactical stack\n\nIt's everything you need to build something meaningful without your brain sabotaging you along the way.`
+      what_next: `After you finish this assessment, you'll see what beliefs might be holding you back — and have a chance to explore the full Find My Flow experience.\n\nInside, you'd get:\n• Deep nervous system work to clear those invisible blocks\n• AI-guided discovery of your skills, ideal customers, and what to build\n• A gamified 7-day challenge to expand your comfort zone\n• Healing practices to process stuck emotions\n• CRM, content tools, marketing strategy — the whole tactical stack\n\nIt's everything you need to build something meaningful without your brain sabotaging you along the way.`
     }
   }
 }
@@ -881,20 +881,20 @@ export const PUBLIC_VALIDATION_CONTENT = {
   whyMatters: `This isn't a corporate market research thing. A real human is on the other end, trying to understand your world so they can actually help. Your input matters more than you'd think.`,
   contextualPrompts: [
     { id: 'what_is_this', label: 'What is this survey for?' },
-    { id: 'what_is_fmf', label: 'What is Vibe Rise?' },
+    { id: 'what_is_fmf', label: 'What is Find My Flow?' },
     { id: 'use_for_business', label: 'Can I use this for my business?' }
   ],
   faq: {
     what_is_this: `Someone's building something to help people like you — and they want to get it right.\n\nInstead of guessing what you need, they're asking. Wild concept, right?\n\nYour answers go directly into shaping what gets built. No fluff. Just real input from real humans.`,
-    what_is_fmf: `Vibe Rise is where people who want to create a positive impact figure out what they're meant to build and actually follow through on it.\n\nThe person who sent you this survey is using Vibe Rise to create something meaningful. They're not just chasing money — they're trying to solve a real problem for people like you.\n\nSound interesting? You might be a good fit too.`,
-    use_for_business: `Absolutely. If you've got something you want to build — or you're stuck on something you've already started — Vibe Rise might be exactly what you need.\n\nHere's what makes it different: most people don't fail because they lack skills or strategy. They fail because their nervous system quietly sabotages them every time they try to grow.\n\nWe fix that part.`
+    what_is_fmf: `Find My Flow is where people who want to create a positive impact figure out what they're meant to build and actually follow through on it.\n\nThe person who sent you this survey is using Find My Flow to create something meaningful. They're not just chasing money — they're trying to solve a real problem for people like you.\n\nSound interesting? You might be a good fit too.`,
+    use_for_business: `Absolutely. If you've got something you want to build — or you're stuck on something you've already started — Find My Flow might be exactly what you need.\n\nHere's what makes it different: most people don't fail because they lack skills or strategy. They fail because their nervous system quietly sabotages them every time they try to grow.\n\nWe fix that part.`
   },
   completionCTA: {
     title: 'Thanks for sharing your thoughts!',
     subtitle: 'The person who sent this is building something for people like you. Keep an eye out — you might be first in line.',
     ctaText: 'Curious about what they\'re using?',
-    ctaDescription: 'Vibe Rise helps people discover what they\'re meant to build and actually make it happen — by working WITH their nervous system instead of fighting against it.',
-    ctaButton: 'Check out Vibe Rise →',
+    ctaDescription: 'Find My Flow helps people discover what they\'re meant to build and actually make it happen — by working WITH their nervous system instead of fighting against it.',
+    ctaButton: 'Check out Find My Flow →',
     ctaLink: '/'
   }
 }

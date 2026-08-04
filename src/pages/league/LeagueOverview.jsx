@@ -332,7 +332,7 @@ export default function LeagueOverview() {
   const handleShare = async () => {
     if (!userTeam?.invite_code) return
     const shareUrl = `${window.location.origin}/league?join=${userTeam.invite_code}`
-    const shareText = `Join my Fantasy League on Vibe Rise! Code: ${userTeam.invite_code} — ${shareUrl}`
+    const shareText = `Join my Fantasy League on Find My Flow! Code: ${userTeam.invite_code} — ${shareUrl}`
 
     if (navigator.share) {
       try {
@@ -598,7 +598,7 @@ export default function LeagueOverview() {
             {[
               { emoji: '📅', label: 'Duration', value: '4 weeks' },
               { emoji: '⚔️', label: 'Format', value: 'Weekly matchup' },
-              { emoji: '📱', label: 'Platform', value: 'Vibe Rise app' },
+              { emoji: '📱', label: 'Platform', value: 'Find My Flow app' },
               { emoji: '🏆', label: 'Prize', value: 'Bragging rights' },
             ].map(item => (
               <div key={item.label} className="lo-land-detail">

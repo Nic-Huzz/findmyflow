@@ -80,7 +80,7 @@ export default function FestLeaderboard({ userId, onClose }) {
     <div className="fl-overlay" onClick={onClose}>
       <div className="fl-modal fl-leaderboard-modal" onClick={e => e.stopPropagation()}>
         <div className="fl-header">
-          <h2 className="fl-title">Vibe Rise Leaderboard</h2>
+          <h2 className="fl-title">Find My Flow Leaderboard</h2>
           <button className="fl-close" onClick={onClose}>×</button>
         </div>
 

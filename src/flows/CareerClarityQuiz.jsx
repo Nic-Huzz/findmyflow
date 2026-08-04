@@ -613,8 +613,8 @@ const CareerClarityQuiz = () => {
           ? `You have ${unmetNeeds.length} unmet need${unmetNeeds.length > 1 ? 's' : ''} right now. Here's why building your own thing is likely to solve ${unmetNeeds.length > 1 ? 'them' : 'it'}:`
           : "Your needs are mostly met, but your structural profile still points to ownership. You might be in a good situation now, but you'll likely feel the pull toward building your own thing eventually.",
         ctaHeadline: "Ready to figure out what to build?",
-        ctaBody: "Vibe Rise helps you identify business opportunities based on your skills, the problems you care about, and the people you want to serve.",
-        ctaButton: "Start Vibe Rise",
+        ctaBody: "Find My Flow helps you identify business opportunities based on your skills, the problems you care about, and the people you want to serve.",
+        ctaButton: "Start Find My Flow",
         ctaLink: "/get-started"
       };
     } else {
@@ -1077,7 +1077,7 @@ const CareerClarityQuiz = () => {
                 <h3 className="ccq-cta-headline">Build a product or company</h3>
                 <p className="ccq-cta-body">Software, physical products, content, services. Build something that scales beyond you.</p>
                 <button onClick={() => navigate('/get-started')} className="ccq-cta-btn">
-                  Start Vibe Rise →
+                  Start Find My Flow →
                 </button>
               </div>
             </>

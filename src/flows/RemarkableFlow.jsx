@@ -516,7 +516,7 @@ export default function RemarkableFlow() {
                 className="rmk-textarea"
                 value={projectName}
                 onChange={e => setProjectName(e.target.value)}
-                placeholder={projectType === 'one_thing' ? 'e.g. Vibe Rise' : 'e.g. My breathwork workshop'}
+                placeholder={projectType === 'one_thing' ? 'e.g. Find My Flow' : 'e.g. My breathwork workshop'}
                 rows={1}
               />
             </div>

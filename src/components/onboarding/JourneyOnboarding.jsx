@@ -642,7 +642,7 @@ function JourneyOnboarding({ onComplete, onSignUp }) {
 
         <div className="jo-promise-content">
           <div className="jo-promise-icon">🌊</div>
-          <h2 className="jo-promise-heading">That's what Vibe Rise is for.</h2>
+          <h2 className="jo-promise-heading">That's what Find My Flow is for.</h2>
           <p className="jo-promise-subtext">Your journey starts here.</p>
           <button className="jo-cta-button" onClick={handleSignUp}>
             <span className="jo-shimmer-layer" />

@@ -87,7 +87,7 @@ const ONRAMP_EXAMPLES = [
   { text: 'Skip breakfast tomorrow', category: 'fasting' },
   { text: 'Show up Saturday 9am. Walk if you want. It\'s free.', category: 'parkrun' },
   { text: 'Light a candle tonight instead of turning on the overhead light', category: 'circadian' },
-  { text: 'Download the app and tap check in', category: 'Vibe Rise' },
+  { text: 'Download the app and tap check in', category: 'Find My Flow' },
 ]
 
 export default function AccessArchitectureFlow() {

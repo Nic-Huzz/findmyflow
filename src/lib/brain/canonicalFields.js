@@ -139,7 +139,7 @@ const PERFORMANCE_FIELDS = [
   { key: 'performance.three_percent_chain', section: 'Improvements', label: '3% Chain', type: 'array', description: 'Recent 3% improvement notes from completed experiences' },
   { key: 'performance.content_volume', section: 'Content', label: 'Content Volume', type: 'number', description: 'Total pieces of content created' },
   { key: 'performance.top_content', section: 'Content', label: 'Top Content', type: 'array', description: 'Best performing content pieces' },
-  { key: 'performance.streak_days', section: 'Engagement', label: 'Current Streak', type: 'number', description: 'Current daily streak (Vibe Rise challenge)' },
+  { key: 'performance.streak_days', section: 'Engagement', label: 'Current Streak', type: 'number', description: 'Current daily streak (Find My Flow challenge)' },
   { key: 'performance.rise_points', section: 'Engagement', label: 'Rise Points', type: 'number', description: 'Total RP earned' },
   { key: 'performance.weeks_active', section: 'Engagement', label: 'Weeks Active', type: 'number', description: 'Number of weeks with activity on the platform' },
 ]

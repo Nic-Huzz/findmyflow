@@ -59,7 +59,7 @@ function InstallPWA() {
       <div className="install-pwa-content">
         <span className="install-pwa-icon">📱</span>
         <div className="install-pwa-text">
-          <strong>Install Vibe Rise</strong>
+          <strong>Install Find My Flow</strong>
           <p>Add to your home screen for quick access and notifications</p>
         </div>
         <button

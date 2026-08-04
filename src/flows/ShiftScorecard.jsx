@@ -359,7 +359,7 @@ export default function ShiftScorecard() {
           <div className="ss-email-block">
             <h3 className="ss-email-title">Want to close these gaps?</h3>
             <p className="ss-email-subtitle">
-              Vibe Rise helps experience creators design workshops, retreats, and sessions that create lasting shifts. The Shift Architecture framework is built in.
+              Find My Flow helps experience creators design workshops, retreats, and sessions that create lasting shifts. The Shift Architecture framework is built in.
             </p>
             <a
               href="/"

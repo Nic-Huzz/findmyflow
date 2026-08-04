@@ -85,7 +85,7 @@ const OldLandingPage = () => {
       <header className="landing-header">
         <div className="landing-container header-inner">
           <div className="header-logo" onClick={() => navigate('/')}>
-            Vibe Rise
+            Find My Flow
           </div>
           <button
             className="header-login"
@@ -393,7 +393,7 @@ const OldLandingPage = () => {
             <div className="founder-image">
               <img
                 src="/images/huzz-profile.jpg"
-                alt="Huzz - Founder of Vibe Rise"
+                alt="Huzz - Founder of Find My Flow"
                 onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
               />
               <div className="founder-image-fallback" style={{ display: 'none' }}>
@@ -477,7 +477,7 @@ const OldLandingPage = () => {
 
               <div className="founder-solution">
                 <p>
-                  <strong>Vibe Rise</strong> is designed to change what feels safe to you.
+                  <strong>Find My Flow</strong> is designed to change what feels safe to you.
                 </p>
                 <div className="solution-methods">
                   <div className="method-item">
@@ -1280,7 +1280,7 @@ const OldLandingPage = () => {
                 </div>
                 <div className="lore-slide">
                   <p className="lore-text">Welcome to the game, hero.</p>
-                  <p className="lore-subtext">Vibe Rise is the training program the Flow Masters would have built. The game is real. And you've already begun.</p>
+                  <p className="lore-subtext">Find My Flow is the training program the Flow Masters would have built. The game is real. And you've already begun.</p>
                 </div>
               </div>
             </div>
@@ -1454,7 +1454,7 @@ const OldLandingPage = () => {
       {/* Footer */}
       <footer className="landing-footer">
         <div className="landing-container footer-inner">
-          <p>© {new Date().getFullYear()} Vibe Rise. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Find My Flow. All rights reserved.</p>
           <button
             className="footer-login"
             onClick={() => navigate('/log-in')}

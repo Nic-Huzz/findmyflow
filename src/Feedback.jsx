@@ -196,7 +196,7 @@ const Feedback = () => {
         </button>
         <h1>Share Your Feedback</h1>
         <p className="feedback-subtitle">
-          Help us improve Vibe Rise by sharing your honest thoughts and experiences
+          Help us improve Find My Flow by sharing your honest thoughts and experiences
         </p>
       </div>
 

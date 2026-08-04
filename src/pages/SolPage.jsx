@@ -365,7 +365,7 @@ function TerminateModal({ manageSol, onClose }) {
         headers: ghHeaders,
         body: JSON.stringify({
           name: repoName,
-          description: 'Sol AI Co-Founder backup — exported from Vibe Rise',
+          description: 'Sol AI Co-Founder backup — exported from Find My Flow',
           private: true,
           auto_init: true,
         }),
@@ -394,7 +394,7 @@ function TerminateModal({ manageSol, onClose }) {
         },
         {
           path: 'README.md',
-          content: `# Sol Backup\n\nExported from Vibe Rise on ${now}.\n\nThis repo contains your Sol AI co-founder's configuration and personality.\nYou can use this to restore Sol or as a reference for your business journey.\n`,
+          content: `# Sol Backup\n\nExported from Find My Flow on ${now}.\n\nThis repo contains your Sol AI co-founder's configuration and personality.\nYou can use this to restore Sol or as a reference for your business journey.\n`,
         },
       ]
 
@@ -449,7 +449,7 @@ function TerminateModal({ manageSol, onClose }) {
               Shut Down Sol?
             </h2>
             <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 20px', lineHeight: 1.5 }}>
-              This will permanently delete Sol's server. Your CRM data in Vibe Rise is safe —
+              This will permanently delete Sol's server. Your CRM data in Find My Flow is safe —
               only Sol's personality and config will be lost unless you back up.
             </p>
             <button className="btn-gold" onClick={() => setStep('github')} style={{ marginBottom: '10px' }}>
@@ -531,7 +531,7 @@ function TerminateModal({ manageSol, onClose }) {
               Sol has been shut down
             </h2>
             <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 20px', lineHeight: 1.5 }}>
-              {ghToken ? 'Your data has been saved to GitHub.' : 'Your CRM data is still safe in Vibe Rise.'}
+              {ghToken ? 'Your data has been saved to GitHub.' : 'Your CRM data is still safe in Find My Flow.'}
               {' '}You can re-launch Sol anytime.
             </p>
             <a href="/sol" className="btn-purple" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>

@@ -665,7 +665,7 @@ export default function HealingCompassLanding() {
                 Your Healing Compass results are on their way to <strong>{email}</strong>
               </p>
               <a href="https://viberise.nichuzz.com" className="hcl-cta-gold" style={{ marginTop: '2rem' }}>
-                Explore Vibe Rise →
+                Explore Find My Flow →
               </a>
             </div>
           )}
@@ -675,7 +675,7 @@ export default function HealingCompassLanding() {
       {/* ===== FOOTER ===== */}
       <footer className="hcl-footer" ref={footerRef}>
         <div className="hcl-container">
-          <p className="hcl-footer-brand">Vibe Rise · Built by Huzz</p>
+          <p className="hcl-footer-brand">Find My Flow · Built by Huzz</p>
           <p className="hcl-footer-tagline">
             "The missing layer between knowing what to do and being able to do it."
           </p>

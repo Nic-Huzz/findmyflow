@@ -895,7 +895,7 @@ export default function IncomeCalculator() {
           {!user && (
             <div className="ic-cta-section">
               <h3>Ready to Close the Gap?</h3>
-              <p>Vibe Rise helps you build the visibility courage you need to hit your income goals.</p>
+              <p>Find My Flow helps you build the visibility courage you need to hit your income goals.</p>
 
               <div className="ic-cta-features">
                 <div className="ic-cta-feature">✓ Identify exact beliefs blocking your income</div>

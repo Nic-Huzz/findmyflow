@@ -1,6 +1,6 @@
 {
   "appId": "com.nichuzz.viberise.creator",
-  "appName": "Vibe Rise for Creators",
+  "appName": "Scale",
   "webDir": "dist-creator",
   "server": {
     "url": "https://create.viberise.com",

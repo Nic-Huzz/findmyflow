@@ -17,7 +17,7 @@ export const CODEX_CATEGORIES = {
     id: 'flowScrolls',
     name: 'Flow Scrolls',
     icon: '⚡',
-    description: 'Core teachings of the Vibe Rise philosophy',
+    description: 'Core teachings of the Find My Flow philosophy',
     order: 2,
   },
   founderJourney: {

@@ -583,7 +583,7 @@ export default function NervousSystemFlow() {
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Where This Fits</h1>
       <div className="welcome-message animated-text">
-        <p><strong>In the Vibe Rise journey...</strong></p>
+        <p><strong>In the Find My Flow journey...</strong></p>
         <p className="highlight-box">
           <span className="highlight-word">Flow Finder</span> helps you discover <em>what</em> you're meant to build.<br /><br />
           <span className="highlight-word">Nervous System Map</span> reveals <em>why</em> you might be holding yourself back from building it.

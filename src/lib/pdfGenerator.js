@@ -183,7 +183,7 @@ export function generateMoneyModelPdf(results) {
   return `
     <div class="pdf-container">
       <div class="pdf-header">
-        <div class="pdf-logo">Vibe Rise</div>
+        <div class="pdf-logo">Find My Flow</div>
         <div class="pdf-subtitle">Your Personalized Business Strategy</div>
       </div>
 
@@ -220,7 +220,7 @@ export function generateMoneyModelPdf(results) {
         <h2 class="pdf-section-title">🎯 Next Steps</h2>
         <ul class="pdf-list">
           <li>Review your recommended strategy in detail</li>
-          <li>Complete the full Vibe Rise journey to build your business</li>
+          <li>Complete the full Find My Flow journey to build your business</li>
           <li>Work through the 7-day challenge to put this into action</li>
         </ul>
       </div>
@@ -229,7 +229,7 @@ export function generateMoneyModelPdf(results) {
         <p>Ready to bring this to life?</p>
         <a href="https://viberise.nichuzz.com" class="pdf-cta">Continue Your Journey</a>
         <p style="margin-top: 24px;">Based on Alex Hormozi's $100M Offers framework</p>
-        <p>© ${new Date().getFullYear()} Vibe Rise | viberise.nichuzz.com</p>
+        <p>© ${new Date().getFullYear()} Find My Flow | viberise.nichuzz.com</p>
       </div>
     </div>
   `
@@ -263,7 +263,7 @@ export function generateNervousSystemPdf(results) {
   return `
     <div class="pdf-container">
       <div class="pdf-header">
-        <div class="pdf-logo">Vibe Rise</div>
+        <div class="pdf-logo">Find My Flow</div>
         <div class="pdf-subtitle">Nervous System Calibration</div>
       </div>
 
@@ -348,7 +348,7 @@ export function generateNervousSystemPdf(results) {
       <div class="pdf-footer">
         <p>Ready to expand your edges?</p>
         <a href="https://viberise.nichuzz.com" class="pdf-cta">Continue Your Journey</a>
-        <p style="margin-top: 24px;">© ${new Date().getFullYear()} Vibe Rise | viberise.nichuzz.com</p>
+        <p style="margin-top: 24px;">© ${new Date().getFullYear()} Find My Flow | viberise.nichuzz.com</p>
       </div>
     </div>
   `
@@ -357,7 +357,7 @@ export function generateNervousSystemPdf(results) {
 /**
  * Open print dialog with PDF content
  */
-export function downloadResultsPdf(htmlContent, title = 'Vibe Rise Results') {
+export function downloadResultsPdf(htmlContent, title = 'Find My Flow Results') {
   // Create a new window for printing
   const printWindow = window.open('', '_blank', 'width=800,height=600')
 

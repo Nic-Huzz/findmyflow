@@ -42,7 +42,7 @@ export default function ScopeMap({ stage = null, animated = false, width = '100%
 
       {/* Title */}
       <text x="220" y="46" textAnchor="middle" fill="white" fontSize="22" fontWeight="800" fontStyle="italic">
-        Vibe Rise
+        Find My Flow
       </text>
 
       {/* Quadrant backgrounds (subtle) */}

@@ -629,7 +629,7 @@ export default function FlowFinderSkills() {
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Where This Fits</h1>
       <div className="welcome-message animated-text">
-        <p><strong>In the Vibe Rise journey...</strong></p>
+        <p><strong>In the Find My Flow journey...</strong></p>
         <p className="highlight-box">
           <span className="highlight-word">Flow Finder: Skills</span> is the first step.<br /><br />
           You'll discover the <em>skills and curiosities</em> that make you unique — the dots you've been collecting your whole life.

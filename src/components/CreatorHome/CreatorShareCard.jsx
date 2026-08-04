@@ -180,7 +180,7 @@ export default function CreatorShareCard({ essenceName, archetypeLabel, ruleBrea
     footGrad.addColorStop(1, '#E9A23B')
     ctx.font = `bold 18px ${FONT}`
     ctx.fillStyle = footGrad
-    ctx.fillText('VIBE RISE · CREATE.NICHUZZ.COM', CARD_WIDTH / 2, CARD_HEIGHT - 50)
+    ctx.fillText('FIND MY FLOW · CREATE.NICHUZZ.COM', CARD_WIDTH / 2, CARD_HEIGHT - 50)
 
     setImageDataUrl(canvas.toDataURL('image/png'))
   }
@@ -233,7 +233,7 @@ export default function CreatorShareCard({ essenceName, archetypeLabel, ruleBrea
             <div className="ch2-foil-type">{archetypeLabel || 'Creator'}</div>
             <div className="ch2-foil-name">{essenceName || 'Creator'}</div>
             {ruleBreak && <div className="ch2-foil-break">{ruleBreak}</div>}
-            <div className="ch2-foil-footer">Vibe Rise · create.nichuzz.com</div>
+            <div className="ch2-foil-footer">Find My Flow · create.nichuzz.com</div>
           </div>
         </div>
 

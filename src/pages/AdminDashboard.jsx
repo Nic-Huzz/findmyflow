@@ -166,7 +166,7 @@ export default function AdminDashboard() {
       {engagement && (
         <div className="ad-hero" style={{ marginTop: 12 }}>
           <span className="ad-hero-label">Engagement</span>
-          <h2 className="ad-hero-title">Vibe Rise Metrics</h2>
+          <h2 className="ad-hero-title">Find My Flow Metrics</h2>
           <div className="ad-stats-grid">
             <div className="ad-stat">
               <span className="ad-stat-value ad-stat-gold">{engagement.appOpens1d}</span>

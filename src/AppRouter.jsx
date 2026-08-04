@@ -555,7 +555,7 @@ const IS_CONSUMER = APP_MODE === 'consumer'
 
 // Set document title for creator build
 if (IS_CREATOR && typeof document !== 'undefined') {
-  document.title = 'Vibe Rise — Where Experience Creators Grow'
+  document.title = 'Find My Flow — Where Experience Creators Grow'
 }
 
 function RedirectWithParam({ to }) {

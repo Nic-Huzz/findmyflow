@@ -94,7 +94,7 @@ export default function LandingPage() {
         <div className="fmf-container fmf-nav-inner">
           <div className="fmf-logo" onClick={() => navigate('/')}>
             <span className="fmf-logo-dot" aria-hidden="true" />
-            Vibe Rise
+            Find My Flow
           </div>
           <button className="fmf-nav-btn" onClick={() => navigate('/log-in')}>Log in</button>
         </div>
@@ -463,7 +463,7 @@ export default function LandingPage() {
             <p>We don't rise to the level of our ambitions — we fall to the level of what feels safe.</p>
           </blockquote>
           <p className="fmf-origin-close reveal-blur-up">
-            <strong>Vibe Rise</strong> is the only platform that merges business teaching with healing — so you actually do the things you know you should do.
+            <strong>Find My Flow</strong> is the only platform that merges business teaching with healing — so you actually do the things you know you should do.
           </p>
         </div>
       </section>
@@ -550,7 +550,7 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className="fmf-footer">
         <div className="fmf-container">
-          <p className="fmf-footer-text">Vibe Rise &middot; Built by Huzz &middot; &copy; {new Date().getFullYear()}</p>
+          <p className="fmf-footer-text">Find My Flow &middot; Built by Huzz &middot; &copy; {new Date().getFullYear()}</p>
         </div>
       </footer>
 

@@ -894,7 +894,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
               </>}
 
               <div className="ch2-id-footer">
-                <div className="ch2-id-brand">VIBE RISE</div>
+                <div className="ch2-id-brand">FIND MY FLOW</div>
                 <div className="ch2-id-brand">viberise.nichuzz.com</div>
               </div>
             </div>

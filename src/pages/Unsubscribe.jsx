@@ -33,12 +33,12 @@ export default function Unsubscribe() {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Vibe Rise</h1>
+        <h1 style={styles.title}>Find My Flow</h1>
 
         {status === 'confirming' && (
           <>
             <p style={styles.text}>
-              Unsubscribe <strong>{email}</strong> from Vibe Rise emails?
+              Unsubscribe <strong>{email}</strong> from Find My Flow emails?
             </p>
             <button onClick={handleUnsubscribe} style={styles.button}>
               Unsubscribe

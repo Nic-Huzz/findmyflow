@@ -1,7 +1,7 @@
 {
-  "name": "Vibe Rise",
-  "short_name": "Vibe Rise",
-  "description": "The app that gamifies courage. Safety × Expression = experiences you love.",
+  "name": "Find My Flow",
+  "short_name": "Find My Flow",
+  "description": "Live your ikigai. Safety × Expression = experiences you love.",
   "start_url": "/7-day-challenge",
   "scope": "/",
   "display": "standalone",

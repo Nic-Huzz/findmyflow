@@ -163,7 +163,7 @@ export default function OAuthConsent() {
     return (
       <div className="welcome-container" style={{ padding: '2rem', textAlign: 'center' }}>
         <h2>Missing authorization request</h2>
-        <p>This page is used by AI assistants to connect to your Vibe Rise account.</p>
+        <p>This page is used by AI assistants to connect to your Find My Flow account.</p>
       </div>
     )
   }
@@ -192,7 +192,7 @@ export default function OAuthConsent() {
     return (
       <div className="welcome-container" style={{ padding: '2rem', maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧠</div>
-        <h2 style={{ margin: '0 0 0.5rem' }}>Connect to Vibe Rise</h2>
+        <h2 style={{ margin: '0 0 0.5rem' }}>Connect to Find My Flow</h2>
         <p style={{ color: '#666', marginBottom: '1.5rem' }}>
           Log in to approve this connection
         </p>
@@ -219,7 +219,7 @@ export default function OAuthConsent() {
     <div className="welcome-container" style={{ padding: '2rem', maxWidth: '480px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧠</div>
-        <h2 style={{ margin: '0 0 0.5rem' }}>Connect to Vibe Rise</h2>
+        <h2 style={{ margin: '0 0 0.5rem' }}>Connect to Find My Flow</h2>
         <p style={{ color: '#666', margin: 0 }}>
           <strong>{clientName}</strong> wants to access your account
         </p>

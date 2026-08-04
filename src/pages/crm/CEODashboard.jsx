@@ -9,7 +9,7 @@ import './CEODashboard.css'
 
 const PROJECTS = {
   viberise: {
-    name: 'Vibe Rise',
+    name: 'Find My Flow',
     color: '#5e17eb',
     accent: '#E9A23B',
     icon: '🔥',

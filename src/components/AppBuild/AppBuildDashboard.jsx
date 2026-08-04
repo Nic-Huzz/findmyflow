@@ -154,7 +154,7 @@ export default function AppBuildDashboard() {
       })}
 
       <div className="abd-footer">
-        Built with Vibe Rise
+        Built with Find My Flow
       </div>
     </div>
   )

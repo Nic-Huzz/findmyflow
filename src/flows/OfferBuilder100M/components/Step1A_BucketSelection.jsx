@@ -164,7 +164,7 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
           </div>
 
           <p className="suggestion-text">
-            Based on your Vibe Rise results, we think your offer is in the{' '}
+            Based on your Find My Flow results, we think your offer is in the{' '}
             <strong>{bucket.title} {bucket.emoji}</strong> bucket.
           </p>
 
@@ -247,7 +247,7 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
               <div className="context-section">
                 <strong>Ideal customer:</strong>
                 <span className="context-persona">
-                  {contextData.persona.name || contextData.persona.description || 'Defined in Vibe Rise'}
+                  {contextData.persona.name || contextData.persona.description || 'Defined in Find My Flow'}
                 </span>
               </div>
             )}

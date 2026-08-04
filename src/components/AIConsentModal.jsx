@@ -38,7 +38,7 @@ export default function AIConsentModal({ userId, onContinue }) {
           <h1 className="ai-consent-heading">AI Features Required</h1>
 
           <p className="ai-consent-body">
-            Vibe Rise uses AI to create personalised insights, coaching,
+            Find My Flow uses AI to create personalised insights, coaching,
             and visual content throughout the app. Without AI features,
             the app cannot function.
           </p>

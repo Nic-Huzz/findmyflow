@@ -160,7 +160,7 @@ function ShareableArchetypeCard({ essence, protective, imagePath, onClose }) {
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         await navigator.share({
           title: `I'm a ${essence?.name || 'Hero'}`,
-          text: essence?.poeticLine || 'Discover your archetype at Vibe Rise',
+          text: essence?.poeticLine || 'Discover your archetype at Find My Flow',
           files: [file]
         })
       } else {
