@@ -1,4 +1,4 @@
-# Vibe Rise - Claude Guide
+# Find My Flow - Claude Guide
 
 ## Maintaining This File
 
@@ -32,7 +32,7 @@ Personal development web app helping burnt-out professionals discover their idea
 
 **The Journey Story (Zone Calibration Framework):**
 
-Users arrive at Vibe Rise at **The Crack** or after sitting in **Head Full of Dreams** too long. The app's job is to move them along the Sprouter diagonal toward **Self-Actualisation** (self-knowledge + action moving together).
+Users arrive at Find My Flow at **The Crack** or after sitting in **Head Full of Dreams** too long. The app's job is to move them along the Sprouter diagonal toward **Self-Actualisation** (self-knowledge + action moving together).
 
 - **0,0 → Unfulfilment → The Crack**: This happened before the app. The user's constructed life stopped working. Burnout, breakdown, or a moment of honest self-confrontation brought them here.
 - **Head Full of Dreams (Paralysis Zone)**: Where most users ARE when they sign up. Self-knowledge is emerging but action hasn't caught up. They can see what they want but can't move toward it.
@@ -47,13 +47,13 @@ Users arrive at Vibe Rise at **The Crack** or after sitting in **Head Full of Dr
 2. "Now I have words for it" — the framework language is a gift, not a lecture. Users leave with vocabulary they've never had for their experience
 3. "This is the coolest thing I've ever seen" — the visual experience is so premium they're genuinely excited
 
-**Vibe Rise's value proposition**: We build your X axis so your Y axis stops wasting your life.
+**Find My Flow's value proposition**: We build your X axis so your Y axis stops wasting your life.
 
-**Core Offer (Hormozi Grand Slam)**: "I'll teach you to design experiences that create lasting shifts, fill the room every time, and make a living doing what you love. You get the method (Shift Architecture), the tools (Vibe Rise), the community (weekly group), and the equipment (headsets). No one else offers all four."
+**Core Offer (Hormozi Grand Slam)**: "I'll teach you to design experiences that create lasting shifts, fill the room every time, and make a living doing what you love. You get the method (Shift Architecture), the tools (Find My Flow), the community (weekly group), and the equipment (headsets). No one else offers all four."
 
 **Three products, three categories:**
 - **Vibe Rise Sessions** (the CrossFit) — weekly in-person events: Connect → Heal → Wahoo → Close. Brand = category. See `docs/vibe-rise-sessions.md`.
-- **Vibe Rise App** (the Nike Run Club / Strava) — consumer progress ledger between sessions. `/7-day-challenge` is for everyone. Digital bridge to physical community, not replacement.
+- **Find My Flow App** (the Nike Run Club / Strava) — consumer progress ledger between sessions. `/7-day-challenge` is for everyone. Digital bridge to physical community, not replacement.
 - **Creator Portal / Scale** (the CRM for experience creators) — `/create` tools for hosts to design, validate, and scale experiences. Remarkable Results → Reach → Growth → Scale Score pipeline.
 
 See `docs/frameworks/zone-calibration-framework.md` for the full theoretical framework (Original IP: Huzz Hurrell). See `docs/frameworks/find-my-flow-x-category-pirates.md` for Category Pirates integration and category definitions.
@@ -64,7 +64,7 @@ React 18 + Vite + React Router v7 | Supabase (PostgreSQL, Auth, Edge Functions) 
 
 **Two Products, One Repo**: Single codebase produces two branded apps via `VITE_APP_MODE` env var. Vite plugin (`creatorBrandPlugin` in `vite.config.js`) swaps index.html meta, icons, manifest, splash screen, and JSON-LD at build time.
 
-| | Vibe Rise (Consumer) | Scale (Creator) |
+| | Find My Flow (Consumer) | Scale (Creator) |
 |---|---|---|
 | Domain | `viberise.nichuzz.com` | `create.nichuzz.com` |
 | Vercel project | `findmyflow` | `viberise-creator` |
@@ -192,7 +192,7 @@ Users browse 59 experience creators organized by 6 business model archetypes, se
 
 Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `primaryBranch` + `secondaryBranch`), `public/data/experienceCreatorOfferMap.json`, `public/images/creators/`. Brief: `docs/features/matching-dna/feature-brief-experience-creator-matching.md`.
 
-### 6. 7-Day Challenge System (Vibe Rise Maintenance Engine)
+### 6. 7-Day Challenge System (Find My Flow Maintenance Engine)
 
 **Tabs**: Journey → Quests → Tune → Courage. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Journey + Tune always open. Quests unlocks when life paths completed. Courage unlocks via "Unlock →" button in Getting Started (Journey tab).
 
@@ -490,7 +490,7 @@ Full handoff doc: `docs/features/mcp-session-sync-handoff.md`
 
 ## Links
 
-- **Vibe Rise (Consumer)**: https://viberise.nichuzz.com
+- **Find My Flow (Consumer)**: https://viberise.nichuzz.com
 - **Scale (Creator)**: https://create.nichuzz.com
 - **Repo**: https://github.com/Nic-Huzz/findmyflow
 - **Supabase**: https://supabase.com/dashboard/project/qlwfcfypnoptsocdpxuv
