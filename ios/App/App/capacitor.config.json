@@ -1,6 +1,6 @@
 {
 	"appId": "com.nichuzz.viberise",
-	"appName": "Vibe Rise",
+	"appName": "Find My Flow",
 	"webDir": "dist",
 	"server": {
 		"url": "https://viberise.nichuzz.com",

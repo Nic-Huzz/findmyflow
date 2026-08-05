@@ -1,0 +1,12 @@
+{
+  "issuer": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1",
+  "authorization_endpoint": "https://findmyflow.nichuzz.com/authorize",
+  "token_endpoint": "https://findmyflow.nichuzz.com/api/oauth/token",
+  "registration_endpoint": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/oauth/register",
+  "jwks_uri": "https://qlwfcfypnoptsocdpxuv.supabase.co/auth/v1/.well-known/jwks.json",
+  "scopes_supported": ["openid", "profile", "email"],
+  "response_types_supported": ["code"],
+  "grant_types_supported": ["authorization_code", "refresh_token"],
+  "code_challenge_methods_supported": ["S256"],
+  "token_endpoint_auth_methods_supported": ["none"]
+}

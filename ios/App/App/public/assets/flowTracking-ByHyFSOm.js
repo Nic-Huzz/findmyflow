@@ -1,0 +1,1 @@
+import{s as a}from"./index-BY2Mc454.js";async function n({userId:e,projectId:o,flowType:t,flowVersion:s="v1",experienceId:l=null}){try{await a.from("flow_sessions").insert({user_id:e,project_id:o||null,experience_id:l||null,flow_type:t,flow_version:s,status:"completed",last_step_id:"complete"})}catch(r){console.warn("Flow tracking failed:",r)}}export{n as t};

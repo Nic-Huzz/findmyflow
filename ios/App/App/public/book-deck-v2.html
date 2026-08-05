@@ -264,6 +264,9 @@
   .progress-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.03); z-index: 100; }
   .progress-fill { height: 100%; background: linear-gradient(90deg,#5e17eb,#E9A23B); transition: width 0.4s ease; }
 
+  /* ── Editor note banner ── */
+  .editor-note { padding: 8px 14px; background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.15); border-radius: 8px; margin-bottom: 12px; font-size: 11px; color: #E9A23B; line-height: 1.4; }
+
   /* ── Mobile responsive ── */
   @media (max-width: 768px) {
     .slide { flex-direction: column; }
@@ -443,6 +446,12 @@ function renderSlideContent(el, slide, i) {
         <span style="color:#555">Each chapter: 4-beat skeleton (Scene → Tension → Turn → Land)</span><br>
         <span style="color:#555">→ Arrow keys to navigate · B for bird's eye · W for writing mode</span>
       </div></div>`;
+  } else if (slide.type === 'prologue') {
+    el.innerHTML = `<div class="title-slide">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:3px;color:#555;margin-bottom:32px">Author's Note</div>
+      <div style="font-family:'Crimson Pro',serif;font-size:clamp(18px,3vw,24px);color:#ccc;max-width:500px;line-height:1.8;font-style:italic;margin-bottom:24px">${slide.text}</div>
+      <div style="font-size:11px;color:#444">${slide.note}</div>
+    </div>`;
   } else if (slide.type === 'instructions') {
     el.innerHTML = `<div class="instructions-slide">
       <h2>How to Voice-Record a Chapter</h2>
@@ -562,6 +571,7 @@ function renderSlideContent(el, slide, i) {
 
     el.innerHTML = `
       <div class="slide-left">
+        ${slide.editorNote ? '<div class="editor-note">' + esc(slide.editorNote) + '</div>' : ''}
         <div class="ch-header">
           <div class="ch-number">Chapter ${slide.number}</div>
           <div class="ch-status-dot ${status}" data-ch="${slide.number}" onclick="handleStatusClick(this)" title="Click to change status: not started → drafting → done"></div>

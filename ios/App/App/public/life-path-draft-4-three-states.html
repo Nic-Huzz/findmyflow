@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft 4 — Three Line States</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a14; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  .phone { width: 100%; max-width: 420px; margin: 0 auto; min-height: 100vh; }
+
+  .slide-title {
+    text-align: center; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 2px; color: rgba(233,162,59,0.5); padding: 52px 0 4px;
+    font-weight: 600;
+  }
+  .state-journey {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 11px; color: rgba(255,255,255,0.3); padding: 2px 0 8px;
+  }
+  .state-journey .arrow { opacity: 0.3; }
+
+  svg { width: 100%; border-radius: 16px; display: block; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; gap: 16px; justify-content: center; padding: 14px 16px 6px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; color: rgba(255,255,255,0.35);
+  }
+  .legend-line {
+    width: 24px; height: 3px; border-radius: 2px;
+  }
+  .legend-line.safe { background: linear-gradient(90deg, #ef4444, #E9A23B, #10b981); }
+  .legend-line.done { background: rgba(255,255,255,0.15); }
+  .legend-line.ghost { background: repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 4px, transparent 4px 8px); }
+
+  /* ── Footer ── */
+  .focus-footer { padding: 12px 16px 0; }
+
+  .progress-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .progress-bar-bg {
+    flex: 1; height: 4px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; overflow: hidden; position: relative;
+  }
+  .progress-bar-done {
+    position: absolute; left: 0; top: 0; height: 100%; border-radius: 2px;
+    background: rgba(255,255,255,0.12);
+  }
+  .progress-bar-safe {
+    position: absolute; left: 0; top: 0; height: 100%; border-radius: 2px;
+  }
+  .progress-labels {
+    display: flex; justify-content: space-between; font-size: 10px; margin-top: -6px; margin-bottom: 12px;
+  }
+  .progress-labels span { color: rgba(255,255,255,0.2); }
+
+  .action-card {
+    border-radius: 12px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .action-card.courage {
+    background: rgba(233,162,59,0.06); border: 1px solid rgba(233,162,59,0.12);
+  }
+  .action-card.healing {
+    background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.1);
+  }
+  .action-card.expand {
+    background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.1);
+  }
+  .action-icon { font-size: 18px; }
+  .action-content { flex: 1; }
+  .action-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .action-text { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 2px; font-weight: 500; }
+  .action-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+  .action-arrow { opacity: 0.3; font-size: 16px; }
+
+  .action-card.courage .action-label { color: rgba(233,162,59,0.5); }
+  .action-card.healing .action-label { color: rgba(239,68,68,0.5); }
+  .action-card.expand .action-label { color: rgba(16,185,129,0.5); }
+
+  .concept-note {
+    margin: 20px 16px; padding: 14px; border-radius: 12px;
+    background: rgba(94,23,235,0.06); border: 1px solid rgba(94,23,235,0.12);
+    font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.7;
+  }
+  .concept-note strong { color: rgba(255,255,255,0.6); }
+  .concept-note .label { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin: 0 2px; }
+  .concept-note .label.safe { background: rgba(16,185,129,0.15); color: #10b981; }
+  .concept-note .label.done { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+  .concept-note .label.ghost { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); }
+
+  /* ── Cone label ── */
+  .cone-indicator {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 10px; color: rgba(233,162,59,0.3); padding: 4px 0;
+  }
+  .cone-indicator .cone-icon {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+    border: 1px solid rgba(233,162,59,0.15);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="slide-title">Festival Creator</div>
+  <div class="state-journey">
+    <span style="color:rgba(239,68,68,0.6)">😰 Pressure</span>
+    <span class="arrow">→</span>
+    <span style="color:rgba(233,162,59,0.6)">🔥 Vibe Rise</span>
+  </div>
+
+  <div style="padding: 0 16px;">
+    <svg viewBox="0 0 400 440">
+      <rect width="400" height="440" rx="16" fill="#0a0a14"/>
+
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <radialGradient id="tGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ef4444" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- State-mapped gradient for the SAFE portion -->
+        <!-- Red (Uninterested) → Yellow (Pressure) → Green (Fun) → Pink/Purple (Vibe Rise) -->
+        <linearGradient id="safeGrad" x1="0" y1="1" x2="0.8" y2="0">
+          <stop offset="0%" stop-color="#ef4444"/>
+          <stop offset="35%" stop-color="#f59e0b"/>
+          <stop offset="65%" stop-color="#10b981"/>
+          <stop offset="100%" stop-color="#c084fc"/>
+        </linearGradient>
+
+        <!-- Subtle glow version of the gradient -->
+        <linearGradient id="safeGlowGrad" x1="0" y1="1" x2="0.8" y2="0">
+          <stop offset="0%" stop-color="#ef4444" stop-opacity="0.08"/>
+          <stop offset="35%" stop-color="#f59e0b" stop-opacity="0.06"/>
+          <stop offset="65%" stop-color="#10b981" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#c084fc" stop-opacity="0.08"/>
+        </linearGradient>
+
+        <!-- Cone gradient (triangular light) -->
+        <linearGradient id="coneGrad" x1="0" y1="0.5" x2="1" y2="0.5">
+          <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
+          <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.02"/>
+          <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+
+      <!-- ── State zone labels ── -->
+      <text x="388" y="62" fill="rgba(192,132,252,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">VIBE RISE</text>
+      <text x="388" y="155" fill="rgba(16,185,129,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">FUN</text>
+      <text x="388" y="275" fill="rgba(245,158,11,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">PRESSURE</text>
+      <text x="388" y="388" fill="rgba(239,68,68,0.12)" font-size="9" font-weight="800" text-anchor="end" letter-spacing="1">UNINTERESTED</text>
+
+      <line x1="15" y1="105" x2="388" y2="105" stroke="rgba(255,255,255,0.015)"/>
+      <line x1="15" y1="210" x2="388" y2="210" stroke="rgba(255,255,255,0.015)"/>
+      <line x1="15" y1="330" x2="388" y2="330" stroke="rgba(255,255,255,0.015)"/>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CONE OF SAFETY (what feels safe — currently up to Fun)     -->
+      <!-- Trunk at Pressure (y=275), cone reaches up to Fun (y=155) -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <path d="M 35 310 L 380 130 L 380 385 Z"
+            fill="url(#coneGrad)" opacity="0.5"/>
+
+      <!-- Cone edge lines (very subtle) -->
+      <line x1="35" y1="310" x2="380" y2="130" stroke="rgba(245,158,11,0.06)" stroke-width="0.5"/>
+      <line x1="35" y1="310" x2="380" y2="385" stroke="rgba(245,158,11,0.06)" stroke-width="0.5"/>
+
+      <!-- Cone label -->
+      <text x="300" y="290" fill="rgba(245,158,11,0.12)" font-size="8" font-style="italic">what feels safe</text>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- THE PATH: Festival Creator                                 -->
+      <!--                                                            -->
+      <!-- Full path: Pressure (y~310) → Vibe Rise (y~55)            -->
+      <!-- Tasks done up to 75% (character at ~75%)                   -->
+      <!-- Cone reaches ~50% of the path (up to Fun zone)             -->
+      <!-- So: 0-50% = coloured, 50-75% = grey, 75-100% = ghost      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+
+      <!-- 3. GHOST — future (dashed, barely visible) -->
+      <path d="M 35 310 C 70 305, 100 280, 140 240
+               C 180 200, 220 150, 260 110
+               C 290 80, 320 60, 350 52
+               C 365 48, 375 50, 380 55"
+            fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="2.5"
+            stroke-dasharray="5,12" stroke-linecap="round"/>
+
+      <!-- Healing gap in the ghost portion -->
+      <rect x="330" y="48" width="36" height="18" rx="9"
+            fill="rgba(239,68,68,0.04)" stroke="rgba(239,68,68,0.12)" stroke-width="0.8"/>
+      <text x="348" y="60" fill="rgba(239,68,68,0.3)" font-size="7" text-anchor="middle" font-weight="500">fear</text>
+      <text x="348" y="40" fill="rgba(239,68,68,0.22)" font-size="7" text-anchor="middle">charging money</text>
+
+      <!-- 2. DONE BUT NOT SAFE — grey solid (beyond cone, before character) -->
+      <!-- From ~50% (Fun zone, y~160) to ~75% (character, y~95) -->
+      <path d="M 200 168 C 220 148, 240 125, 260 110 C 275 98, 285 92, 295 88"
+            fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="3" stroke-linecap="round"/>
+      <!-- Subtle grey glow -->
+      <path d="M 200 168 C 220 148, 240 125, 260 110 C 275 98, 285 92, 295 88"
+            fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="10" stroke-linecap="round"
+            filter="url(#softGlow)"/>
+
+      <!-- "Done but not safe" label -->
+      <text x="265" y="140" fill="rgba(255,255,255,0.1)" font-size="7" font-style="italic" text-anchor="middle">done, not safe yet</text>
+
+      <!-- 1. SAFE — coloured gradient (inside cone) -->
+      <!-- From trunk (y=310) to cone edge (~50%, y~168) -->
+      <path d="M 35 310 C 70 305, 100 280, 140 240
+               C 165 215, 185 190, 200 168"
+            fill="none" stroke="url(#safeGrad)" stroke-width="3.5" stroke-linecap="round">
+        <animate attributeName="stroke-opacity" values="0.85;1;0.85" dur="4s" repeatCount="indefinite"/>
+      </path>
+      <!-- Coloured glow -->
+      <path d="M 35 310 C 70 305, 100 280, 140 240
+               C 165 215, 185 190, 200 168"
+            fill="none" stroke="url(#safeGlowGrad)" stroke-width="16" stroke-linecap="round"
+            filter="url(#softGlow)"/>
+
+      <!-- ── Milestones ── -->
+
+      <!-- Milestone 1: "hosted pop-up" — SAFE (coloured) -->
+      <circle cx="95" cy="285" r="5" fill="#ef4444" opacity="0.6"/>
+      <circle cx="95" cy="285" r="5" fill="none" stroke="#ef4444" stroke-width="1" opacity="0.2"/>
+      <text x="95" y="273" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">hosted pop-up</text>
+
+      <!-- Milestone 2: "sold 20 tickets" — SAFE (coloured, in yellow zone) -->
+      <circle cx="155" cy="225" r="5" fill="#f59e0b" opacity="0.6"/>
+      <circle cx="155" cy="225" r="5" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.2"/>
+      <text x="155" y="213" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">sold 20 tickets</text>
+
+      <!-- Milestone 3: "venue partner" — SAFE (at cone edge, green zone) -->
+      <circle cx="200" cy="168" r="5" fill="#10b981" opacity="0.6"/>
+      <circle cx="200" cy="168" r="5" fill="none" stroke="#10b981" stroke-width="1" opacity="0.2"/>
+      <text x="200" y="156" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle">venue partner</text>
+
+      <!-- ── Cone edge marker (where safe meets unsafe) ── -->
+      <circle cx="200" cy="168" r="12" fill="none" stroke="rgba(245,158,11,0.15)" stroke-width="1" stroke-dasharray="3,3">
+        <animate attributeName="r" values="12;16;12" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-opacity" values="0.15;0.05;0.15" dur="3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Milestone 4: "pitched sponsors" — DONE BUT NOT SAFE (grey) -->
+      <circle cx="255" cy="112" r="4.5" fill="rgba(255,255,255,0.15)"/>
+      <text x="255" y="102" fill="rgba(255,255,255,0.2)" font-size="8" text-anchor="middle">pitched sponsors</text>
+
+      <!-- Milestone 5: "booked headline DJ" — DONE BUT NOT SAFE (grey, further out) -->
+      <circle cx="290" cy="90" r="4.5" fill="rgba(255,255,255,0.12)"/>
+      <text x="290" y="80" fill="rgba(255,255,255,0.18)" font-size="8" text-anchor="middle">booked headline DJ</text>
+
+      <!-- ── Character marker (furthest point reached) ── -->
+      <circle cx="295" cy="88" r="5.5" fill="#fff" opacity="0.9"/>
+      <circle cx="295" cy="88" r="11" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.1">
+        <animate attributeName="r" values="11;20;11" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ── Future task ── -->
+      <circle cx="355" cy="52" r="3" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+      <text x="355" y="70" fill="rgba(255,255,255,0.08)" font-size="7" text-anchor="middle">buy headsets</text>
+
+      <!-- ── Destination ── -->
+      <circle cx="380" cy="55" r="6" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.15)" stroke-width="1"/>
+      <text x="380" y="42" fill="rgba(192,132,252,0.25)" font-size="9" text-anchor="middle">🔥</text>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- TRUNK                                                      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <circle cx="35" cy="310" r="24" fill="url(#tGlow)"/>
+      <circle cx="35" cy="310" r="7" fill="#ef4444" opacity="0.7"/>
+      <circle cx="35" cy="310" r="3.5" fill="#fff" opacity="0.5"/>
+      <circle cx="35" cy="310" r="7" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.12">
+        <animate attributeName="r" values="7;18;7" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.12;0;0.12" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="35" y="340" fill="rgba(255,255,255,0.35)" font-size="8" text-anchor="middle" font-weight="600">YOU</text>
+      <text x="35" y="353" fill="rgba(239,68,68,0.3)" font-size="7" text-anchor="middle">Pressure</text>
+    </svg>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-line safe"></div>
+      <span>Done + feels safe</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-line done"></div>
+      <span>Done, not safe yet</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-line ghost"></div>
+      <span>Not done yet</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="focus-footer">
+    <!-- Dual progress bar -->
+    <div class="progress-row">
+      <div class="progress-bar-bg">
+        <!-- Grey = done (75%) -->
+        <div class="progress-bar-done" style="width: 75%;"></div>
+        <!-- Coloured = safe (50%) -->
+        <div class="progress-bar-safe" style="width: 50%; background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);"></div>
+      </div>
+    </div>
+    <div class="progress-labels">
+      <span></span>
+      <span style="color: rgba(16,185,129,0.4);">50% safe</span>
+      <span style="color: rgba(255,255,255,0.2);">75% done</span>
+    </div>
+
+    <!-- Next courage step -->
+    <div class="action-card courage">
+      <div class="action-icon">⚡</div>
+      <div class="action-content">
+        <div class="action-label">Next courage step</div>
+        <div class="action-text">Buy first set of headsets</div>
+      </div>
+      <div class="action-arrow">›</div>
+    </div>
+
+    <!-- Fear blocking path -->
+    <div class="action-card healing">
+      <div class="action-icon">💚</div>
+      <div class="action-content">
+        <div class="action-label">Fear blocking your path</div>
+        <div class="action-text">Scared of charging money</div>
+      </div>
+      <div class="action-arrow">›</div>
+    </div>
+
+    <!-- Safety expansion prompt -->
+    <div class="action-card expand">
+      <div class="action-icon">🔓</div>
+      <div class="action-content">
+        <div class="action-label">Expand your safety</div>
+        <div class="action-text">2 tasks done but don't feel safe yet</div>
+        <div class="action-sub">Complete healing flows to light them up</div>
+      </div>
+      <div class="action-arrow">›</div>
+    </div>
+  </div>
+
+  <div class="concept-note">
+    <strong>Three line states:</strong><br><br>
+    <span class="label safe">Coloured</span> You did it AND it feels safe now. Inside the cone. This is real progress — your safety expanded to match your actions.<br><br>
+    <span class="label done">Grey solid</span> You did it but it still scares you. Beyond the cone. "Head Full of Dreams" — action without safety. Healing flows move these into the coloured zone.<br><br>
+    <span class="label ghost">Dashed</span> Haven't done it yet. The ghost of your possible future.<br><br>
+    <strong>The progress bar shows both:</strong> grey fill = % done, coloured fill = % safe. The gap between them is your growth edge. Closing that gap IS the app's purpose.<br><br>
+    <strong>Data inputs:</strong> "How did that feel?" (4-state) + "Better/As expected/Worse" after each courage challenge determine whether the cone expands. Vibe Rise + Better = cone grows. Pressure + Worse = cone stays, healing prompt appears.
+  </div>
+
+</div>
+</body>
+</html>

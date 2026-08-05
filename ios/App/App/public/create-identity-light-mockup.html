@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Create Portal · Light Theme Mockup</title>
+<style>
+  /* ═══════════════════════════════════════════════════════════
+     CREATE PORTAL — LIGHT THEME MOCKUP (all 4 tabs)
+     Ported from /7-day-challenge + Tune tab design language.
+     Demo toggle (top right) switches Identity between
+     Established and New User states.
+     ═══════════════════════════════════════════════════════════ */
+
+  :root {
+    --purple: #5e17eb;
+    --purple-light: #8b5cf6;
+    --gold: #E9A23B;
+    --gold-light: #f0b94e;
+    --gold-text: #c88520;
+    --green: #10b981;
+    --green-light: #34d399;
+    --blue: #3b82f6;
+    --ink: #1a1a2e;
+    --grey: #6c757d;
+    --grey-light: #adb5bd;
+    --line: #e9ecef;
+    --line-soft: #f2f3f5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #dfe2e6;
+    -webkit-font-smoothing: antialiased;
+    color: var(--ink);
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  .tab-view { display: none; }
+  .tab-view.active { display: block; }
+
+  /* State variants (Identity tab demo) */
+  .variant-new { display: none; }
+  body.state-new .variant-est { display: none; }
+  body.state-new .variant-new { display: block; }
+
+  /* ═══ DEMO STATE TOGGLE ═══ */
+  .state-toggle {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateX(160px);
+    z-index: 300;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(26,26,46,0.85);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+  @media (max-width: 500px) {
+    .state-toggle { transform: none; left: auto; right: 10px; }
+  }
+
+  /* ═══ HERO — purple gradient, challenge header treatment ═══ */
+  .hero {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 28px 20px 22px;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -40px; right: -20px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,162,59,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -50px; left: -30px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero.slim { padding: 22px 20px 18px; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: -0.3px; position: relative; z-index: 1; }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 3px; position: relative; z-index: 1; }
+
+  .hero-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-avatar {
+    width: 84px; height: 84px;
+    border-radius: 20px;
+    padding: 2.5px;
+    background: linear-gradient(135deg, var(--gold), #fff3, var(--gold));
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+  .hero-avatar-inner {
+    width: 100%; height: 100%;
+    border-radius: 18px;
+    background: linear-gradient(160deg, #7c3aed, #4c1d95);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    overflow: hidden;
+  }
+  .hero-avatar-empty {
+    width: 84px; height: 84px;
+    border-radius: 20px;
+    border: 2px dashed rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 12px; font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    text-align: center; line-height: 1.35;
+    cursor: pointer;
+  }
+  .hero-type {
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: #fbd38d;
+    margin-bottom: 3px;
+  }
+  .hero-name {
+    font-size: 26px; font-weight: 900;
+    line-height: 1.1; letter-spacing: -0.5px;
+  }
+  .hero-focus {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 8px;
+    padding: 4px 11px;
+    background: rgba(255,255,255,0.16);
+    border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+  .hero-share {
+    position: absolute;
+    top: 18px; right: 16px;
+    z-index: 2;
+    width: 34px; height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .hero-share:hover { background: rgba(255,255,255,0.3); }
+
+  .hero-progress { margin-top: 18px; position: relative; z-index: 1; }
+  .hero-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .hero-pill {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-size: 11px; font-weight: 700;
+    cursor: pointer;
+    border: none; color: white; font-family: inherit;
+  }
+  .hero-pill .tick { color: var(--green-light); font-size: 11px; }
+  .hero-pill.dim { opacity: 0.45; }
+
+  .hero-bar-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .hero-bar {
+    flex: 1; height: 8px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .hero-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(233,162,59,0.5);
+    animation: barGrow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.4s;
+    transform-origin: left;
+  }
+  @keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .hero-bar-label {
+    font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+  }
+
+  /* ═══ CONTENT ═══ */
+  .content {
+    padding: 16px 12px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .content > * { animation: riseIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .content > *:nth-child(1) { animation-delay: 0.05s; }
+  .content > *:nth-child(2) { animation-delay: 0.1s; }
+  .content > *:nth-child(3) { animation-delay: 0.15s; }
+  .content > *:nth-child(4) { animation-delay: 0.2s; }
+  .content > *:nth-child(5) { animation-delay: 0.25s; }
+  .content > *:nth-child(6) { animation-delay: 0.3s; }
+  .content > *:nth-child(7) { animation-delay: 0.35s; }
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    margin: 0 4px;
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .card-header-left { display: flex; align-items: center; gap: 8px; }
+  .card-icon { font-size: 1.15rem; }
+  .card-title {
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--purple);
+  }
+  .card-sub { font-size: 13px; color: var(--grey); margin: 2px 0 10px; line-height: 1.4; }
+  .card-badge {
+    font-size: 10px; font-weight: 800;
+    padding: 2px 8px; border-radius: 8px;
+    letter-spacing: 0.3px;
+  }
+  .badge-done { background: rgba(16,185,129,0.08); color: var(--green); }
+  .badge-next { background: rgba(233,162,59,0.1); color: var(--gold-text); }
+
+  /* ═══ PILLS ═══ */
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .pill {
+    padding: 6px 13px; border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    background: rgba(94,23,235,0.06);
+    border: 1px solid rgba(94,23,235,0.15);
+    color: var(--purple);
+  }
+  .pill-gold {
+    background: rgba(233,162,59,0.08);
+    border-color: rgba(233,162,59,0.25);
+    color: var(--gold-text);
+  }
+  .pill-more {
+    background: #ffffff;
+    border: 1.5px dashed #dde0e5;
+    color: var(--grey-light);
+    cursor: pointer;
+  }
+
+  .stars { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .star {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 12px 4px 4px;
+    background: #f8f9fa;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .star:hover { border-color: var(--purple); background: rgba(94,23,235,0.04); }
+  .star img {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--line);
+  }
+  .star span { font-size: 12px; font-weight: 600; color: #495057; }
+
+  .section-label {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--grey-light);
+  }
+
+  /* ═══ SUB-TABS ═══ */
+  .subtabs { display: flex; gap: 8px; padding: 2px 4px; }
+  .subtab {
+    flex: 1;
+    padding: 11px 0;
+    border: none;
+    background: white;
+    color: #495057;
+    border-radius: 12px;
+    font-size: 13px; font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .subtab.active {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  }
+  .subtab.locked { opacity: 0.5; cursor: not-allowed; }
+
+  /* ═══ PIPELINE STEPPER (Quest Path style) ═══ */
+  .stepper {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 4px 4px;
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    width: 64px;
+  }
+  .step-node {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    position: relative;
+    background: var(--line-soft);
+    border: 2px solid var(--line);
+  }
+  .step-label {
+    font-size: 9.5px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    color: var(--grey-light);
+    text-align: center;
+  }
+  .step.done .step-node {
+    background: rgba(16,185,129,0.1);
+    border-color: var(--green-light);
+  }
+  .step.done .step-node::after {
+    content: '✓';
+    position: absolute;
+    bottom: -3px; right: -3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--green-light);
+    color: white;
+    font-size: 9px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid white;
+  }
+  .step.done .step-label { color: var(--green); }
+  .step.current .step-node {
+    background: linear-gradient(135deg, rgba(233,162,59,0.15), rgba(233,162,59,0.25));
+    border-color: var(--gold);
+    animation: nodePulse 2s ease-in-out infinite;
+  }
+  @keyframes nodePulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(233,162,59,0.12); }
+    50% { box-shadow: 0 0 0 9px rgba(233,162,59,0.05); }
+  }
+  .step.current .step-label { color: var(--gold-text); }
+  .step.locked .step-node { opacity: 0.5; filter: grayscale(0.6); }
+  .step-line {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--line);
+    margin-top: 19px;
+    min-width: 12px;
+  }
+  .step-line.done { background: var(--green-light); }
+  .step-line.half { background: linear-gradient(90deg, var(--green-light), var(--line)); }
+
+  /* ═══ ROWS (ht-item pattern) ═══ */
+  .rows { margin-top: 6px; }
+  .row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 2px;
+    border-bottom: 1px solid var(--line-soft);
+    cursor: pointer;
+  }
+  .row:last-child { border-bottom: none; }
+  .row.dim { opacity: 0.5; cursor: default; }
+  .row-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .row-body { flex: 1; min-width: 0; }
+  .row-label {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--grey-light);
+  }
+  .row-val { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+  .row-chevron { color: #ccd0d6; font-size: 18px; font-weight: 700; flex-shrink: 0; transition: transform 0.2s ease; }
+
+  .check {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid #dde0e5;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: transparent;
+    flex-shrink: 0;
+  }
+  .check.done { background: var(--green-light); border-color: var(--green-light); color: white; }
+
+  .tagline {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(94,23,235,0.05), rgba(233,162,59,0.07));
+    border: 1px solid rgba(233,162,59,0.25);
+    border-radius: 12px;
+    font-size: 15px; font-weight: 700;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .tagline::before {
+    content: 'YOUR RULE BREAK';
+    display: block;
+    font-size: 9px; font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--gold-text);
+    margin-bottom: 5px;
+  }
+
+  .see-more {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    background: rgba(233,162,59,0.08);
+    border: 1px solid rgba(233,162,59,0.25);
+    color: var(--gold-text);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .hidden { display: none !important; }
+
+  .r-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 2px; }
+  .r-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .r-green { background: var(--green); box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+  .r-amber { background: var(--gold); box-shadow: 0 0 0 3px rgba(233,162,59,0.15); }
+  .r-grey { background: #ccd0d6; box-shadow: 0 0 0 3px rgba(0,0,0,0.04); }
+  .r-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .r-hint { font-size: 12px; color: var(--grey); line-height: 1.4; margin-top: 1px; }
+
+  /* Next-up block inside pipeline card */
+  .next-block {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1.5px solid rgba(233,162,59,0.4);
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fffdf8, #ffffff);
+  }
+  .next-block .card-sub { margin-bottom: 0; }
+  .cta-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--ink);
+    font-size: 14px; font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(233,162,59,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(233,162,59,0.4); }
+
+  /* ═══ MODEL DOTS + STATUS ═══ */
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin: 0 11px; }
+  .dot-attraction { background: var(--purple-light); }
+  .dot-core { background: var(--gold); }
+  .dot-continuity { background: var(--blue); }
+  .status {
+    font-size: 13px; font-weight: 800;
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .st-done { background: rgba(16,185,129,0.1); color: var(--green); }
+  .st-wip { background: rgba(233,162,59,0.12); color: var(--gold-text); }
+  .st-todo { background: var(--line-soft); color: var(--grey-light); }
+
+  .positioning-quote {
+    margin-top: 10px;
+    padding: 14px 16px 14px 18px;
+    border-left: 3px solid var(--purple);
+    background: rgba(94,23,235,0.04);
+    border-radius: 0 12px 12px 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #343a50;
+    font-style: italic;
+  }
+
+  /* ═══ ACTION CARDS ═══ */
+  .actions-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .action-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 14px;
+    background: #f8f9fa;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .action-card:hover { border-color: var(--purple); background: rgba(94,23,235,0.03); transform: translateY(-1px); }
+  .action-card.locked { opacity: 0.55; cursor: default; }
+  .action-card.locked:hover { border-color: var(--line); background: #f8f9fa; transform: none; }
+  .action-icon {
+    width: 38px; height: 38px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, rgba(94,23,235,0.1), rgba(233,162,59,0.1));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .action-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .action-sub { font-size: 12px; color: var(--grey); line-height: 1.35; margin-top: 1px; }
+  .action-count {
+    font-size: 10px; font-weight: 800;
+    padding: 3px 8px; border-radius: 8px;
+    background: rgba(94,23,235,0.08); color: var(--purple);
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  .edit-identity {
+    display: block;
+    width: calc(100% - 8px);
+    margin: 0 4px;
+    padding: 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    background: white;
+    color: var(--grey);
+    font-size: 13px; font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .edit-identity:hover { border-color: var(--purple); color: var(--purple); }
+
+  .cta-outline {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 9px 16px;
+    border: 1.5px solid rgba(94,23,235,0.3);
+    border-radius: 10px;
+    background: rgba(94,23,235,0.04);
+    color: var(--purple);
+    font-size: 12px; font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* ═══ EXPERIENCES TAB ═══ */
+  .exp-card {
+    padding: 14px;
+    background: #f8f9fa;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 8px;
+  }
+  .exp-card:hover { border-color: var(--purple); }
+  .exp-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .exp-meta { font-size: 12px; color: var(--grey); margin-top: 2px; }
+  .exp-countdown {
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: rgba(233,162,59,0.12);
+    color: var(--gold-text);
+    font-size: 10px; font-weight: 800;
+  }
+  .exp-open { font-size: 11px; font-weight: 700; color: var(--purple); }
+  .exp-dots { display: flex; gap: 4px; margin-top: 10px; }
+  .exp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .exp-dot.on { background: #22c55e; }
+  .exp-dot.mid { background: #eab308; }
+
+  /* Spots filled */
+  .exp-spots { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .exp-spots-bar { flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .exp-spots-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .exp-spots-fill.low { background: linear-gradient(90deg, #f87171, #fca5a5); }
+  .exp-spots-label { font-size: 11px; font-weight: 800; color: var(--gold-text); white-space: nowrap; }
+  .exp-spots-label.low { color: #dc2626; }
+
+  /* Fill your next event block */
+  .fill-next {
+    background: white;
+    border: 1.5px solid rgba(233,162,59,0.4);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(233,162,59,0.12);
+  }
+  .fill-next-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .fill-next-event { font-size: 15px; font-weight: 800; color: var(--ink); }
+  .fill-next-action { font-size: 13px; color: var(--grey); line-height: 1.5; }
+  .fill-next-action strong { color: var(--ink); }
+
+  .create-options { display: flex; gap: 8px; margin: 0 4px; }
+  .create-opt {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 14px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: all 0.15s;
+  }
+  .create-opt:hover { border-color: var(--purple); transform: translateY(-2px); }
+  .create-opt-icon { font-size: 26px; margin-bottom: 6px; }
+  .create-opt-label { font-size: 13px; font-weight: 800; color: var(--ink); }
+  .create-opt-sub { font-size: 11px; color: var(--grey); margin-top: 2px; }
+
+  .past-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 2px;
+    border-bottom: 1px solid var(--line-soft);
+    cursor: pointer;
+  }
+  .past-item:last-child { border-bottom: none; }
+  .past-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple-light); flex-shrink: 0; }
+  .past-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .past-meta { font-size: 11px; color: var(--grey-light); }
+  .past-3pct {
+    margin-left: auto;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: rgba(16,185,129,0.08);
+    color: var(--green);
+    white-space: nowrap;
+    max-width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ═══ GROWTH TAB ═══ */
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 4px; }
+  .kpi {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .kpi-val { font-size: 24px; font-weight: 900; color: var(--purple); }
+  .kpi-label {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--grey-light);
+    margin-top: 2px;
+  }
+
+  .momentum-bars { margin-top: 10px; display: flex; flex-direction: column; gap: 12px; }
+  .m-bar-row { display: flex; align-items: center; gap: 10px; }
+  .m-bar-name { font-size: 12px; font-weight: 700; width: 52px; color: var(--ink); }
+  .m-bar { flex: 1; height: 10px; background: var(--line-soft); border-radius: 8px; overflow: hidden; }
+  .m-bar-fill { height: 100%; border-radius: 8px; }
+  .m-roots { width: 62%; background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+  .m-reach { width: 34%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .m-bar-val { font-size: 12px; font-weight: 800; color: var(--grey); width: 32px; text-align: right; }
+
+  .chain-item { display: flex; gap: 10px; padding: 9px 2px; align-items: flex-start; }
+  .chain-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.1);
+    color: var(--green);
+    font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .chain-exp { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .chain-note { font-size: 12px; color: var(--grey); font-style: italic; line-height: 1.4; }
+
+  .fan-row { display: flex; align-items: center; gap: 10px; padding: 8px 2px; }
+  .fan-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--gold));
+    color: white;
+    font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .fan-name { font-size: 13px; font-weight: 700; color: var(--ink); flex: 1; }
+  .fan-count { font-size: 11px; font-weight: 700; color: var(--grey-light); }
+
+  /* ═══ CREATOR CARD SHARE MODAL ═══ */
+  .share-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,46,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 400;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .share-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .share-wrap { max-width: 340px; width: 100%; animation: cardUp 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes cardUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .foil {
+    padding: 3px;
+    border-radius: 22px;
+    background: conic-gradient(from 0deg, #5e17eb, #E9A23B, #10b981, #5e17eb, #E9A23B, #5e17eb);
+    animation: foilSpin 6s linear infinite;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  @keyframes foilSpin { to { filter: hue-rotate(360deg); } }
+  .foil-inner {
+    background: linear-gradient(170deg, #ffffff, #f6f3fc);
+    border-radius: 19px;
+    padding: 26px 22px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .foil-inner::before {
+    content: '';
+    position: absolute; top: -60px; right: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(233,162,59,0.12) 0%, transparent 70%);
+  }
+  .foil-avatar {
+    width: 92px; height: 92px;
+    margin: 0 auto 12px;
+    border-radius: 24px;
+    padding: 2.5px;
+    background: linear-gradient(135deg, var(--gold), var(--purple));
+  }
+  .foil-avatar-inner {
+    width: 100%; height: 100%;
+    border-radius: 21px;
+    background: linear-gradient(160deg, #7c3aed, #4c1d95);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px;
+  }
+  .foil-type {
+    font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--gold-text);
+  }
+  .foil-name { font-size: 26px; font-weight: 900; color: var(--ink); letter-spacing: -0.5px; margin: 2px 0 12px; }
+  .foil-break {
+    font-size: 15px; font-weight: 700;
+    line-height: 1.45;
+    color: #343a50;
+    padding: 12px 8px;
+    border-top: 1px solid rgba(94,23,235,0.1);
+    border-bottom: 1px solid rgba(94,23,235,0.1);
+  }
+  .foil-footer {
+    margin-top: 14px;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--purple), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .share-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .share-btn {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px; font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .share-btn.primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--ink);
+    box-shadow: 0 3px 12px rgba(233,162,59,0.4);
+  }
+  .share-btn.ghost { background: rgba(255,255,255,0.15); color: white; }
+
+  /* ═══ BOTTOM TOOLBAR ═══ */
+  .toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.05);
+    display: flex;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+    z-index: 100;
+  }
+  .tb-item {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 10px; font-weight: 700;
+    color: var(--grey-light);
+    cursor: pointer;
+    border: none; background: none; font-family: inherit;
+  }
+  .tb-item .tb-icon { font-size: 20px; }
+  .tb-item.active { color: var(--purple); }
+</style>
+</head>
+<body>
+
+<button class="state-toggle" onclick="toggleState()">DEMO: ESTABLISHED ⇄</button>
+
+<div class="app">
+
+  <!-- ════════════════ IDENTITY TAB ════════════════ -->
+  <div class="tab-view active" id="tab-identity">
+
+    <!-- ── Established state ── -->
+    <div class="variant-est">
+      <div class="hero">
+        <button class="hero-share" onclick="openShare()" title="Share your card">⤴</button>
+        <div class="hero-main">
+          <div class="hero-avatar"><div class="hero-avatar-inner">🔥</div></div>
+          <div>
+            <div class="hero-type">Radiant Rebel</div>
+            <div class="hero-name">Huzz</div>
+            <div class="hero-focus">🎯 Burnt-out professionals finding their path</div>
+          </div>
+        </div>
+        <div class="hero-progress">
+          <div class="hero-pills">
+            <button class="hero-pill" onclick="scrollToPlaybook()">💎 Results <span class="tick">✓</span></button>
+            <button class="hero-pill dim" onclick="scrollToPlaybook()">📡 Reach</button>
+            <button class="hero-pill dim" onclick="scrollToPlaybook()">🚀 Growth</button>
+            <button class="hero-pill dim" onclick="scrollToPlaybook()">📊 Score</button>
+          </div>
+          <div class="hero-bar-row">
+            <div class="hero-bar"><div class="hero-bar-fill" style="width:25%;"></div></div>
+            <div class="hero-bar-label">Playbook 1 of 4</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- Who You Are -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">🧬</span>
+              <span class="card-title">Who You Are</span>
+            </div>
+          </div>
+          <p class="card-sub">Pulled from your Life Map and Essence Mirror.</p>
+
+          <div class="section-label">Your Skills</div>
+          <div class="pills">
+            <span class="pill">Storytelling</span>
+            <span class="pill">Performing</span>
+            <span class="pill pill-more" onclick="togglePills(this)">+2 more</span>
+            <span class="pill hidden">Teaching</span>
+            <span class="pill hidden">Connecting</span>
+          </div>
+
+          <div class="section-label" style="margin-top:14px;">Problems You Solve</div>
+          <div class="pills">
+            <span class="pill pill-gold">Living a life that isn't yours</span>
+            <span class="pill pill-gold">Forgot what it's all for</span>
+          </div>
+
+          <div class="section-label" style="margin-top:14px;">North Stars</div>
+          <div class="stars">
+            <div class="star"><img src="/images/creators/priya-parker.png" alt="" onerror="this.style.display='none'"><span>Priya Parker</span></div>
+            <div class="star"><img src="/images/creators/gabor-mate.png" alt="" onerror="this.style.display='none'"><span>Gabor Maté</span></div>
+            <div class="star"><img src="/images/creators/larry-harvey.png" alt="" onerror="this.style.display='none'"><span>Larry Harvey</span></div>
+            <div class="star"><img src="/images/creators/joe-dispenza.png" alt="" onerror="this.style.display='none'"><span>Joe Dispenza</span></div>
+          </div>
+        </div>
+
+        <!-- Sub-tabs -->
+        <div class="subtabs">
+          <button class="subtab active">Playbook</button>
+          <button class="subtab locked" disabled>Inner Game 🔒</button>
+        </div>
+
+        <!-- ═══ BLOW UP YOUR BRAND — single pipeline card ═══ -->
+        <div class="card" id="playbook-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">📣</span>
+              <span class="card-title">Blow Up Your Brand</span>
+            </div>
+            <span class="card-badge badge-next">STEP 2 OF 4</span>
+          </div>
+
+          <!-- Path stepper -->
+          <div class="stepper">
+            <div class="step done">
+              <div class="step-node">💎</div>
+              <div class="step-label">Results</div>
+            </div>
+            <div class="step-line half"></div>
+            <div class="step current">
+              <div class="step-node">📡</div>
+              <div class="step-label">Reach</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step locked">
+              <div class="step-node">🚀</div>
+              <div class="step-label">Growth</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step locked">
+              <div class="step-node">📊</div>
+              <div class="step-label">Score</div>
+            </div>
+          </div>
+
+          <div class="tagline">Healing that feels like a party, not a therapy session.</div>
+
+          <!-- Completed: Results -->
+          <div class="rows">
+            <div class="row" onclick="toggleResults()">
+              <div class="check done">✓</div>
+              <div class="row-body">
+                <div class="row-label">Remarkable Results · Done</div>
+                <div class="row-val">Silent disco healing journeys that create real shifts in 90 minutes.</div>
+              </div>
+              <div class="row-chevron" id="results-arrow">›</div>
+            </div>
+          </div>
+
+          <div class="hidden" id="results-more">
+            <div class="rows">
+              <div class="row">
+                <div class="row-icon">🎪</div>
+                <div class="row-body">
+                  <div class="row-label">The Experience</div>
+                  <div class="row-val">A guided journey through headphones. Music, movement, and a moment of honesty.</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="row-icon">🔥</div>
+                <div class="row-body">
+                  <div class="row-label">The Assumption You Break</div>
+                  <div class="row-val">Healing has to be quiet, serious, and slow.</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="row-icon">🔀</div>
+                <div class="row-body">
+                  <div class="row-label">Two Worlds</div>
+                  <div class="row-val">Festival culture × nervous system science</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="row-icon">📊</div>
+                <div class="row-body">
+                  <div class="row-label">Remarkability Score</div>
+                  <div class="row-val">4 × 5 × 4 = <strong>80</strong></div>
+                </div>
+              </div>
+            </div>
+            <div class="section-label" style="margin-top:8px;">Readiness</div>
+            <div class="r-row">
+              <div class="r-dot r-green"></div>
+              <div>
+                <div class="r-name">Distilled</div>
+                <div class="r-hint">Your method is compressed into one clear promise.</div>
+              </div>
+            </div>
+            <div class="r-row">
+              <div class="r-dot r-amber"></div>
+              <div>
+                <div class="r-name">Proven</div>
+                <div class="r-hint">1 to 10 people so far. Keep going.</div>
+              </div>
+            </div>
+            <div class="r-row">
+              <div class="r-dot r-grey"></div>
+              <div>
+                <div class="r-name">Ceiling</div>
+                <div class="r-hint">Keep filling the room you're in.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current: Reach -->
+          <div class="next-block">
+            <div class="card-header" style="margin-bottom:2px;">
+              <div class="card-header-left">
+                <span class="card-icon">📡</span>
+                <span class="card-title" style="color:var(--gold-text);">Remarkable Reach</span>
+              </div>
+              <span class="card-badge badge-next">NEXT UP</span>
+            </div>
+            <p class="card-sub">How do people hear about you? Find your strongest vehicle, your language, and who gives your audience permission.</p>
+            <button class="cta-btn">Build your reach →</button>
+          </div>
+
+          <!-- Coming up -->
+          <div class="rows" style="margin-top:6px;">
+            <div class="row dim">
+              <div class="row-icon">🚀</div>
+              <div class="row-body">
+                <div class="row-label">Remarkable Growth</div>
+                <div class="row-val" style="font-weight:500; color:var(--grey);">Unlocks after Reach</div>
+              </div>
+              <div style="font-size:13px;">🔒</div>
+            </div>
+            <div class="row dim">
+              <div class="row-icon">📊</div>
+              <div class="row-body">
+                <div class="row-label">Scale Score</div>
+                <div class="row-val" style="font-weight:500; color:var(--grey);">Unlocks after Growth</div>
+              </div>
+              <div style="font-size:13px;">🔒</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">⚡</span>
+              <span class="card-title">Actions</span>
+            </div>
+          </div>
+          <div class="actions-grid">
+            <div class="action-card">
+              <div class="action-icon">⚡</div>
+              <div class="row-body">
+                <div class="action-title">Create</div>
+                <div class="action-sub">Design a Lightning Strike that makes your movement impossible to ignore</div>
+              </div>
+              <div class="action-count">1 active</div>
+              <div class="row-chevron">›</div>
+            </div>
+            <div class="action-card">
+              <div class="action-icon">🌉</div>
+              <div class="row-body">
+                <div class="action-title">Bridge</div>
+                <div class="action-sub">Find 5 people slightly ahead of you and build mutual value</div>
+              </div>
+              <div class="action-count">2 of 5</div>
+              <div class="row-chevron">›</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Your Model -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">🧱</span>
+              <span class="card-title">Your Model</span>
+            </div>
+          </div>
+          <div class="rows">
+            <div class="row">
+              <div class="row-icon">💼</div>
+              <div class="row-body">
+                <div class="row-label">Pay Rent</div>
+                <div class="row-val">Silent disco headset rentals</div>
+              </div>
+              <div class="status st-done">✓</div>
+            </div>
+            <div class="row">
+              <div class="dot dot-attraction"></div>
+              <div class="row-body">
+                <div class="row-label">Attraction</div>
+                <div class="row-val">Free taster session at the park</div>
+              </div>
+              <div class="status st-done">✓</div>
+            </div>
+            <div class="row">
+              <div class="dot dot-core"></div>
+              <div class="row-body">
+                <div class="row-label">Core</div>
+                <div class="row-val">Vibe Rise Sessions, weekly</div>
+              </div>
+              <div class="status st-wip">~</div>
+            </div>
+            <div class="row">
+              <div class="dot dot-continuity"></div>
+              <div class="row-body">
+                <div class="row-label">Continuity</div>
+                <div class="row-val">Not set yet</div>
+              </div>
+              <div class="status st-todo">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Positioning -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">🧭</span>
+              <span class="card-title">Positioning</span>
+            </div>
+            <span class="see-more" style="margin-top:0;">Edit</span>
+          </div>
+          <div class="positioning-quote">
+            "I help burnt-out professionals feel alive again through silent disco healing journeys. Big shifts, zero incense."
+          </div>
+        </div>
+
+        <button class="edit-identity">Edit Identity</button>
+
+      </div>
+    </div>
+
+    <!-- ── New user state ── -->
+    <div class="variant-new">
+      <div class="hero">
+        <div class="hero-main">
+          <div class="hero-avatar-empty">Discover<br>Your<br>Essence →</div>
+          <div>
+            <div class="hero-type" style="color:rgba(255,255,255,0.6);">Experience Creator</div>
+            <div class="hero-name">Your Identity</div>
+            <div class="hero-focus">✨ Let's find out who you are</div>
+          </div>
+        </div>
+        <div class="hero-progress">
+          <div class="hero-pills">
+            <button class="hero-pill dim">💎 Results</button>
+            <button class="hero-pill dim">📡 Reach</button>
+            <button class="hero-pill dim">🚀 Growth</button>
+            <button class="hero-pill dim">📊 Score</button>
+          </div>
+          <div class="hero-bar-row">
+            <div class="hero-bar"><div class="hero-bar-fill" style="width:3%;"></div></div>
+            <div class="hero-bar-label">Playbook 0 of 4</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- Who You Are (empty) -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">🧬</span>
+              <span class="card-title">Who You Are</span>
+            </div>
+          </div>
+          <p class="card-sub">Two quick flows fill this in. Most people finish both in one sitting.</p>
+          <div class="rows">
+            <div class="row">
+              <div class="row-icon">🗺️</div>
+              <div class="row-body">
+                <div class="row-label">Your Skills + Problems</div>
+                <div class="row-val">Complete your Life Map to discover these</div>
+              </div>
+              <div class="row-chevron">›</div>
+            </div>
+            <div class="row">
+              <div class="row-icon">⭐</div>
+              <div class="row-body">
+                <div class="row-label">North Stars</div>
+                <div class="row-val">Meet the creators who work like you</div>
+              </div>
+              <div class="row-chevron">›</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blow Up Your Brand (fresh) -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">📣</span>
+              <span class="card-title">Blow Up Your Brand</span>
+            </div>
+            <span class="card-badge badge-next">START HERE</span>
+          </div>
+
+          <div class="stepper">
+            <div class="step current">
+              <div class="step-node">💎</div>
+              <div class="step-label">Results</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step locked">
+              <div class="step-node">📡</div>
+              <div class="step-label">Reach</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step locked">
+              <div class="step-node">🚀</div>
+              <div class="step-label">Growth</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step locked">
+              <div class="step-node">📊</div>
+              <div class="step-label">Score</div>
+            </div>
+          </div>
+
+          <div class="next-block">
+            <div class="card-header" style="margin-bottom:2px;">
+              <div class="card-header-left">
+                <span class="card-icon">💎</span>
+                <span class="card-title" style="color:var(--gold-text);">Remarkable Results</span>
+              </div>
+              <span class="card-badge badge-next">NEXT UP</span>
+            </div>
+            <p class="card-sub">What do you do differently that gets unexpected results? Find your rule break. It powers everything after this.</p>
+            <button class="cta-btn">Find your rule break →</button>
+          </div>
+        </div>
+
+        <!-- Actions (Bridge open, Create locked) -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">⚡</span>
+              <span class="card-title">Actions</span>
+            </div>
+          </div>
+          <div class="actions-grid">
+            <div class="action-card">
+              <div class="action-icon">🌉</div>
+              <div class="row-body">
+                <div class="action-title">Bridge</div>
+                <div class="action-sub">Find 5 people slightly ahead of you and build mutual value. You can start this today.</div>
+              </div>
+              <div class="row-chevron">›</div>
+            </div>
+            <div class="action-card locked">
+              <div class="action-icon">⚡</div>
+              <div class="row-body">
+                <div class="action-title">Create 🔒</div>
+                <div class="action-sub">Unlocks with your rule break</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Your Model (empty) -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-icon">🧱</span>
+              <span class="card-title">Your Model</span>
+            </div>
+          </div>
+          <p class="card-sub" style="margin-bottom:0;">How do you pay rent? What's your attraction, core, and continuity?</p>
+          <button class="cta-outline">Build Your Model →</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════ EXPERIENCES TAB ════════════════ -->
+  <div class="tab-view" id="tab-experiences">
+    <div class="hero slim">
+      <div class="hero-title">Experiences</div>
+      <div class="hero-sub">Design them, fill them, run them, improve them.</div>
+    </div>
+    <div class="content">
+
+      <div class="fill-next">
+        <div class="fill-next-top">
+          <div class="fill-next-event">Silent Disco Sunrise</div>
+          <span class="card-badge badge-next">9 DAYS OUT</span>
+        </div>
+        <div class="exp-spots" style="margin-top:0; margin-bottom:10px;">
+          <div class="exp-spots-bar"><div class="exp-spots-fill low" style="width:40%"></div></div>
+          <span class="exp-spots-label low">12 / 30 spots</span>
+        </div>
+        <div class="fill-next-action">Next step: <strong>post your attract content</strong>. Your capture page is live, now send people to it.</div>
+        <button class="cta-btn">Fill this event →</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-icon">📅</span>
+            <span class="card-title">Upcoming</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div class="exp-name">Silent Disco Sunrise</div>
+              <div class="exp-meta">workshop · 18 Jul <span class="exp-countdown">9 days</span></div>
+            </div>
+            <div class="exp-open">Open →</div>
+          </div>
+          <div class="exp-spots">
+            <div class="exp-spots-bar"><div class="exp-spots-fill low" style="width:40%"></div></div>
+            <span class="exp-spots-label low">12 / 30 spots</span>
+          </div>
+          <div class="exp-dots">
+            <div class="exp-dot on" title="Attract"></div>
+            <div class="exp-dot mid" title="Capture"></div>
+            <div class="exp-dot" title="Convert"></div>
+            <div class="exp-dot on" title="Deliver"></div>
+            <div class="exp-dot" title="Grow"></div>
+          </div>
+        </div>
+        <div class="exp-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div class="exp-name">Vibe Rise Session #12</div>
+              <div class="exp-meta">weekly session · 21 Jul <span class="exp-countdown">12 days</span></div>
+            </div>
+            <div class="exp-open">Open →</div>
+          </div>
+          <div class="exp-spots">
+            <div class="exp-spots-bar"><div class="exp-spots-fill" style="width:73%"></div></div>
+            <span class="exp-spots-label">22 / 30 spots</span>
+          </div>
+          <div class="exp-dots">
+            <div class="exp-dot mid"></div>
+            <div class="exp-dot"></div>
+            <div class="exp-dot"></div>
+            <div class="exp-dot"></div>
+            <div class="exp-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="create-options">
+        <div class="create-opt">
+          <div class="create-opt-icon">✨</div>
+          <div class="create-opt-label">Find Inspiration</div>
+          <div class="create-opt-sub">From creators you admire</div>
+        </div>
+        <div class="create-opt">
+          <div class="create-opt-icon">➕</div>
+          <div class="create-opt-label">New Experience</div>
+          <div class="create-opt-sub">I know what I want</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-icon">🗂️</span>
+            <span class="card-title">Past Experiences</span>
+          </div>
+        </div>
+        <div class="past-item">
+          <div class="past-dot"></div>
+          <div>
+            <div class="past-name">Vibe Rise Session #11</div>
+            <div class="past-meta">2 Jul · weekly session</div>
+          </div>
+          <div class="past-3pct">3%: shorter opening circle</div>
+        </div>
+        <div class="past-item">
+          <div class="past-dot"></div>
+          <div>
+            <div class="past-name">Full Moon Journey</div>
+            <div class="past-meta">28 Jun · workshop</div>
+          </div>
+          <div class="past-3pct">3%: name tags earlier</div>
+        </div>
+        <div class="past-item">
+          <div class="past-dot"></div>
+          <div>
+            <div class="past-name">Vibe Rise Session #10</div>
+            <div class="past-meta">25 Jun · weekly session</div>
+          </div>
+        </div>
+        <span class="see-more">See all 14 experiences</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════ GROWTH TAB ════════════════ -->
+  <div class="tab-view" id="tab-growth">
+    <div class="hero slim">
+      <div class="hero-title">Growth</div>
+      <div class="hero-sub">Your movement, measured.</div>
+    </div>
+    <div class="content">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-icon">🌱</span>
+            <span class="card-title">Creator Momentum</span>
+          </div>
+        </div>
+        <p class="card-sub">Roots is how deep your method goes. Reach is how far your story travels.</p>
+        <div class="momentum-bars">
+          <div class="m-bar-row">
+            <div class="m-bar-name">Roots</div>
+            <div class="m-bar"><div class="m-bar-fill m-roots"></div></div>
+            <div class="m-bar-val">62</div>
+          </div>
+          <div class="m-bar-row">
+            <div class="m-bar-name">Reach</div>
+            <div class="m-bar"><div class="m-bar-fill m-reach"></div></div>
+            <div class="m-bar-val">34</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">187</div><div class="kpi-label">Total Attendees</div></div>
+        <div class="kpi"><div class="kpi-val">41%</div><div class="kpi-label">Repeat Rate</div></div>
+        <div class="kpi"><div class="kpi-val">14</div><div class="kpi-label">Experiences Run</div></div>
+        <div class="kpi"><div class="kpi-val">2</div><div class="kpi-label">Upcoming</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-icon">📈</span>
+            <span class="card-title">3% Improvement Chain</span>
+          </div>
+        </div>
+        <p class="card-sub">Each experience builds on the last.</p>
+        <div class="chain-item">
+          <div class="chain-dot">12</div>
+          <div>
+            <div class="chain-exp">Vibe Rise Session #11</div>
+            <div class="chain-note">"Shorter opening circle. People wanted to move sooner."</div>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-dot">11</div>
+          <div>
+            <div class="chain-exp">Full Moon Journey</div>
+            <div class="chain-note">"Name tags in the first 5 minutes changed the whole room."</div>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-dot">10</div>
+          <div>
+            <div class="chain-exp">Vibe Rise Session #10</div>
+            <div class="chain-note">"Ending with silence, not music. People stayed 20 minutes longer."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-icon">💜</span>
+            <span class="card-title">Your Top Fans</span>
+          </div>
+        </div>
+        <p class="card-sub">People who keep coming back.</p>
+        <div class="fan-row">
+          <div class="fan-avatar">SK</div>
+          <div class="fan-name">Sarah K</div>
+          <div class="fan-count">7 experiences</div>
+        </div>
+        <div class="fan-row">
+          <div class="fan-avatar">TM</div>
+          <div class="fan-name">Tom M</div>
+          <div class="fan-count">5 experiences</div>
+        </div>
+        <div class="fan-row">
+          <div class="fan-avatar">JL</div>
+          <div class="fan-name">Jess L</div>
+          <div class="fan-count">4 experiences</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-icon">🎯</span>
+            <span class="card-title">Your Focus</span>
+          </div>
+        </div>
+        <div style="font-size:16px; font-weight:800; margin-top:4px;">The Waterfall</div>
+        <p class="card-sub" style="margin-top:4px; margin-bottom:0;">You know exactly what you offer. Now more people need to find it. Reach is your lever.</p>
+        <button class="cta-outline">Retake Diagnostic →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════ AI PORTAL TAB ════════════════ -->
+  <div class="tab-view" id="tab-ai">
+    <div class="hero slim">
+      <div class="hero-title">AI Portal</div>
+      <div class="hero-sub">Your co-founder, on demand.</div>
+    </div>
+    <div class="content">
+      <div class="card" style="text-align:center; padding:32px 20px;">
+        <div style="font-size:40px; margin-bottom:10px;">🤖</div>
+        <div style="font-size:16px; font-weight:800;">Available on desktop</div>
+        <p class="card-sub" style="margin-top:6px; margin-bottom:0;">The AI Portal runs in the Scale desktop app. Open it on your computer to plan content, write copy, and think through your next move.</p>
+        <button class="cta-outline">Get the desktop app →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ SHARE MODAL — Creator Card ═══ -->
+<div class="share-overlay" id="share-overlay" onclick="closeShare(event)">
+  <div class="share-wrap" onclick="event.stopPropagation()">
+    <div class="foil">
+      <div class="foil-inner">
+        <div class="foil-avatar"><div class="foil-avatar-inner">🔥</div></div>
+        <div class="foil-type">Radiant Rebel</div>
+        <div class="foil-name">Huzz</div>
+        <div class="foil-break">Healing that feels like a party, not a therapy session.</div>
+        <div class="foil-footer">Vibe Rise · create.nichuzz.com</div>
+      </div>
+    </div>
+    <div class="share-actions">
+      <button class="share-btn ghost" onclick="closeShare()">Close</button>
+      <button class="share-btn primary">Share ⤴</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BOTTOM TOOLBAR ═══ -->
+<div class="toolbar">
+  <button class="tb-item active" data-tab="identity" onclick="switchTab('identity', this)"><span class="tb-icon">🧬</span>Identity</button>
+  <button class="tb-item" data-tab="experiences" onclick="switchTab('experiences', this)"><span class="tb-icon">🎪</span>Experiences</button>
+  <button class="tb-item" data-tab="growth" onclick="switchTab('growth', this)"><span class="tb-icon">📈</span>Growth</button>
+  <button class="tb-item" data-tab="ai" onclick="switchTab('ai', this)"><span class="tb-icon">🤖</span>AI Portal</button>
+</div>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelectorAll('.tb-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({ top: 0 });
+  }
+
+  function toggleState() {
+    const isNew = document.body.classList.toggle('state-new');
+    document.querySelector('.state-toggle').textContent = isNew ? 'DEMO: NEW USER ⇄' : 'DEMO: ESTABLISHED ⇄';
+    window.scrollTo({ top: 0 });
+  }
+
+  function togglePills(btn) {
+    btn.parentElement.querySelectorAll('.pill.hidden').forEach(p => p.classList.remove('hidden'));
+    btn.remove();
+  }
+
+  function toggleResults() {
+    const more = document.getElementById('results-more');
+    const arrow = document.getElementById('results-arrow');
+    const closed = more.classList.toggle('hidden');
+    arrow.style.transform = closed ? 'rotate(0deg)' : 'rotate(90deg)';
+  }
+
+  function scrollToPlaybook() {
+    document.getElementById('playbook-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function openShare() {
+    document.getElementById('share-overlay').classList.add('open');
+  }
+  function closeShare(e) {
+    document.getElementById('share-overlay').classList.remove('open');
+  }
+</script>
+</body>
+</html>

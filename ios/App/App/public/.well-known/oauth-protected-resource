@@ -1,0 +1,6 @@
+{
+  "resource": "https://findmyflow.nichuzz.com/api/mcp",
+  "authorization_servers": ["https://findmyflow.nichuzz.com"],
+  "scopes_supported": ["mcp:tools"],
+  "bearer_methods_supported": ["header"]
+}

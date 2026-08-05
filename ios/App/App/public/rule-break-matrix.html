@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 3 × Spiral Dynamics — Innovation Matrix</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(ellipse at center, #0d0a1a 0%, #07060b 65%);
+      color: #fff; font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      min-height: 100vh; overflow-x: hidden;
+    }
+    .header { text-align: center; padding: 2rem 1.5rem 1rem; }
+    .header h1 {
+      font-size: 1.8rem; font-weight: 800;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header .subtitle {
+      font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-top: 0.4rem;
+      max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.5;
+    }
+    .header .insight {
+      font-size: 0.75rem; color: #E9A23B; margin-top: 0.8rem; font-weight: 600;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex; justify-content: center; gap: 1.2rem; padding: 0.8rem 1rem;
+      flex-wrap: wrap; font-size: 0.65rem; color: rgba(255,255,255,0.4);
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+    .legend-swatch {
+      width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Matrix Container */
+    .matrix-wrap {
+      padding: 0 1rem 2rem; overflow-x: auto;
+      display: flex; justify-content: center;
+    }
+    .matrix {
+      display: grid;
+      grid-template-columns: 140px repeat(6, 1fr);
+      gap: 2px; min-width: 860px; max-width: 1100px; width: 100%;
+    }
+
+    /* Column Headers */
+    .col-header {
+      padding: 0.6rem 0.3rem; text-align: center; border-radius: 6px 6px 0 0;
+    }
+    .col-header .sd-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .col-header .sd-sub { font-size: 0.6rem; opacity: 0.6; margin-top: 0.15rem; }
+    .col-corner { background: transparent; }
+
+    /* Row Headers */
+    .row-header {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 0.6rem; border-radius: 6px 0 0 6px;
+      background: rgba(255,255,255,0.03); cursor: pointer; transition: background 0.2s;
+    }
+    .row-header:hover { background: rgba(255,255,255,0.06); }
+    .row-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .row-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+    .row-industry { font-size: 0.58rem; color: rgba(255,255,255,0.35); margin-top: 0.1rem; }
+
+    /* Cells */
+    .cell {
+      padding: 0.5rem 0.4rem; border-radius: 4px; cursor: pointer;
+      transition: all 0.25s; position: relative; min-height: 58px;
+      display: flex; flex-direction: column; justify-content: center;
+      border: 1px solid transparent;
+    }
+    .cell:hover { transform: scale(1.03); z-index: 3; }
+    .cell .cell-assumption {
+      font-size: 0.58rem; line-height: 1.35; color: rgba(255,255,255,0.7);
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .cell .cell-badge {
+      position: absolute; top: 3px; right: 4px; font-size: 0.5rem;
+      padding: 1px 4px; border-radius: 3px; font-weight: 700;
+      letter-spacing: 0.3px; text-transform: uppercase;
+    }
+
+    /* Cell states */
+    .cell.broken {
+      background: rgba(255,255,255,0.04);
+    }
+    .cell.broken .cell-badge { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.3); }
+    .cell.broken .cell-assumption { color: rgba(255,255,255,0.4); }
+
+    .cell.active {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.08);
+    }
+    .cell.active .cell-badge { background: rgba(251,191,36,0.15); color: #fbbf24; }
+
+    .cell.frontier {
+      border-color: rgba(233,162,59,0.4);
+      background: rgba(233,162,59,0.08);
+      animation: frontierPulse 3s ease-in-out infinite;
+    }
+    .cell.frontier .cell-badge { background: rgba(233,162,59,0.25); color: #E9A23B; }
+    @keyframes frontierPulse {
+      0%, 100% { border-color: rgba(233,162,59,0.3); box-shadow: 0 0 0 0 rgba(233,162,59,0); }
+      50% { border-color: rgba(233,162,59,0.6); box-shadow: 0 0 12px rgba(233,162,59,0.08); }
+    }
+
+    .cell.emerging {
+      background: rgba(94,23,235,0.06);
+      border: 1px dashed rgba(94,23,235,0.25);
+    }
+    .cell.emerging .cell-badge { background: rgba(94,23,235,0.15); color: #a78bfa; }
+
+    .cell.returning {
+      background: rgba(168,85,247,0.06);
+      border-color: rgba(168,85,247,0.2);
+    }
+    .cell.returning .cell-badge { background: rgba(168,85,247,0.15); color: #c084fc; }
+
+    /* Detail Panel */
+    .detail-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(7,6,11,0.85); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .detail-overlay.open { display: flex; }
+    .detail-panel {
+      background: rgba(18,15,30,0.98); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 2rem; max-width: 560px; width: 100%;
+      max-height: 85vh; overflow-y: auto; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .detail-close {
+      position: absolute; top: 1rem; right: 1rem; background: none;
+      border: none; color: rgba(255,255,255,0.4); font-size: 1.2rem;
+      cursor: pointer; font-family: inherit; padding: 0.3rem;
+    }
+    .detail-close:hover { color: #fff; }
+    .detail-branch { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+    .detail-sd { font-size: 0.6rem; margin-top: 0.2rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+    .detail-assumption {
+      font-size: 1.1rem; font-weight: 600; margin-top: 1rem; line-height: 1.4;
+      color: rgba(255,255,255,0.9);
+    }
+    .detail-status {
+      display: inline-block; margin-top: 0.8rem; padding: 0.25rem 0.6rem;
+      border-radius: 4px; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .detail-section { margin-top: 1.2rem; }
+    .detail-section h4 {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;
+      color: rgba(255,255,255,0.35); margin-bottom: 0.4rem;
+    }
+    .detail-section p { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+    .detail-section .highlight { color: #E9A23B; font-weight: 600; }
+    .detail-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 1.2rem 0; }
+    .detail-phase3 {
+      background: rgba(94,23,235,0.08); border: 1px solid rgba(94,23,235,0.15);
+      border-radius: 8px; padding: 0.8rem; margin-top: 1rem;
+    }
+    .detail-phase3 h4 { color: #a78bfa; margin-bottom: 0.3rem; }
+
+    /* Patterns Section */
+    .patterns {
+      max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 1rem;
+    }
+    .patterns h2 {
+      font-size: 1.2rem; font-weight: 800; text-align: center;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+    .pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+    .pattern-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 1.2rem;
+    }
+    .pattern-card h3 { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pattern-card p { font-size: 0.75rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* Diagnostic Section */
+    .diagnostic {
+      max-width: 640px; margin: 2rem auto; padding: 2rem 1.5rem;
+      background: rgba(94,23,235,0.04); border: 1px solid rgba(94,23,235,0.12);
+      border-radius: 16px;
+    }
+    .diagnostic h2 {
+      font-size: 1.1rem; font-weight: 800; text-align: center; margin-bottom: 0.3rem;
+    }
+    .diagnostic .diag-sub {
+      font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; margin-bottom: 1.5rem;
+    }
+    .diag-step { display: none; }
+    .diag-step.active { display: block; }
+    .diag-question { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; }
+    .diag-options { display: flex; flex-direction: column; gap: 0.5rem; }
+    .diag-opt {
+      padding: 0.7rem 1rem; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+      color: rgba(255,255,255,0.7); font-size: 0.8rem; text-align: left;
+    }
+    .diag-opt:hover { background: rgba(94,23,235,0.12); border-color: rgba(94,23,235,0.3); color: #fff; }
+    .diag-opt.selected { background: rgba(94,23,235,0.2); border-color: #5e17eb; color: #fff; }
+    .diag-result {
+      background: rgba(233,162,59,0.06); border: 1px solid rgba(233,162,59,0.15);
+      border-radius: 12px; padding: 1.5rem; margin-top: 1rem;
+    }
+    .diag-result h3 { font-size: 0.9rem; font-weight: 700; color: #E9A23B; margin-bottom: 0.8rem; }
+    .diag-result p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.5; margin-bottom: 0.5rem; }
+    .diag-result .score-row {
+      display: flex; align-items: center; gap: 0.5rem; margin: 0.6rem 0;
+    }
+    .diag-result .score-bar {
+      flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden;
+    }
+    .diag-result .score-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+    .diag-result .score-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); min-width: 80px; }
+    .diag-restart {
+      margin-top: 1rem; padding: 0.5rem 1.2rem; background: rgba(94,23,235,0.2);
+      border: 1px solid rgba(94,23,235,0.3); border-radius: 6px; color: #fff;
+      font-size: 0.75rem; cursor: pointer; font-family: inherit; font-weight: 600;
+    }
+    .diag-restart:hover { background: rgba(94,23,235,0.35); }
+
+    /* Utilities Section */
+    .utilities {
+      max-width: 900px; margin: 0 auto; padding: 1rem 1.5rem 3rem;
+    }
+    .utilities h2 {
+      font-size: 1.1rem; font-weight: 800; text-align: center; margin-bottom: 1.2rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .util-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; }
+    .util-card {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px; padding: 1rem;
+    }
+    .util-card h3 { font-size: 0.75rem; font-weight: 700; color: #E9A23B; margin-bottom: 0.3rem; }
+    .util-card p { font-size: 0.7rem; color: rgba(255,255,255,0.4); line-height: 1.4; }
+
+    .footer {
+      text-align: center; padding: 2rem 1rem;
+      font-size: 0.6rem; color: rgba(255,255,255,0.15);
+    }
+    .footer a { color: rgba(94,23,235,0.5); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Phase 3 × Spiral Dynamics</h1>
+  <p class="subtitle">Every industry is stuck at a developmental level. The next rule break comes from the level above. This matrix shows you where.</p>
+  <p class="insight">10 Primal Branches × 6 Value Systems = 60 Cells of Hidden Opportunity</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:rgba(255,255,255,0.04)"></div> Broken</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:rgba(168,85,247,0.15); border-color:rgba(168,85,247,0.3)"></div> Phase 3 returning</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:rgba(255,255,255,0.06); border-color:rgba(251,191,36,0.2)"></div> Active</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:rgba(233,162,59,0.12); border-color:rgba(233,162,59,0.4)"></div> Frontier</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:rgba(94,23,235,0.08); border:1px dashed rgba(94,23,235,0.3)"></div> Emerging</div>
+</div>
+
+<div class="matrix-wrap">
+  <div class="matrix" id="matrix"></div>
+</div>
+
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-panel" id="detailPanel"></div>
+</div>
+
+<div class="patterns">
+  <h2>Five Patterns the Matrix Reveals</h2>
+  <div class="pattern-grid">
+    <div class="pattern-card">
+      <h3 style="color:#f97316">1. Orange Dominance</h3>
+      <p>~70% of Rule Break Tree nodes are Orange. The entire modern era, from the Industrial Revolution to Silicon Valley, is an Orange project: efficiency, metrics, competition, scale.</p>
+    </div>
+    <div class="pattern-card">
+      <h3 style="color:#22c55e">2. Green Is the Current Wave</h3>
+      <p>Green entries cluster in the last 20-30 years. Organic food, sharing economy, de-influencing, integrative medicine. This is the reaction to Orange excess. But Green alone doesn't scale.</p>
+    </div>
+    <div class="pattern-card">
+      <h3 style="color:#eab308">3. Yellow Is the Blow-Up Zone</h3>
+      <p>Yellow entries are newest and most transformative. Lean manufacturing, mRNA vaccines, transformer AI. Yellow integrates ALL previous levels. Phase 3 products that blow up are Yellow disguised as Green.</p>
+    </div>
+    <div class="pattern-card">
+      <h3 style="color:#a78bfa">4. Phase 3 = SD Transition</h3>
+      <p>Phase 3 isn't just "going back to nature." It's a developmental transition: Green reacts to Orange excess, Yellow integrates everything. CrossFit activates 6 SD levels simultaneously. That's why it's a blow-up.</p>
+    </div>
+    <div class="pattern-card">
+      <h3 style="color:#E9A23B">5. Bigger Jump = Bigger Break</h3>
+      <p>Within-level breaks are incremental. Cross-level breaks are disruptive. Multi-level integrations are paradigm shifts. Count how many levels your product speaks to. Fewer than 3 = limited. 5+ = blow-up conditions.</p>
+    </div>
+  </div>
+</div>
+
+<div class="diagnostic" id="diagnostic">
+  <h2>Creator Matrix Diagnostic</h2>
+  <p class="diag-sub">Position yourself in the matrix. Find your Phase 3 opportunity.</p>
+  <div id="diagFlow"></div>
+</div>
+
+<div class="utilities">
+  <h2>What This Matrix Unlocks</h2>
+  <div class="util-grid">
+    <div class="util-card">
+      <h3>Innovation Prediction</h3>
+      <p>Input any current-day problem. The matrix identifies branch + SD level + predicted next break. The frontier cells ARE the opportunities.</p>
+    </div>
+    <div class="util-card">
+      <h3>Content Engine</h3>
+      <p>60 cells = 60 original content pieces. "Why your organic food habit is still Phase 2." "The status game you can't see." Each cell is a provocation.</p>
+    </div>
+    <div class="util-card">
+      <h3>SD Integration Score</h3>
+      <p>Enhancement to Scale Score. Count which SD levels your product activates. Fewer than 3 = limited reach. 5+ = blow-up architecture. CrossFit scores 6/6.</p>
+    </div>
+    <div class="util-card">
+      <h3>Class Ceiling Finder</h3>
+      <p>Which cells have NO products yet? Shelter-Green and Threat-Green are wide open. The first creator to fill an empty frontier cell wins that branch.</p>
+    </div>
+    <div class="util-card">
+      <h3>Merge Predictor</h3>
+      <p>When two branches at different SD levels approach each other, a merge is forming. AI (Yellow) × Healing (Orange) = precision wellness. The matrix shows which collisions are imminent.</p>
+    </div>
+    <div class="util-card">
+      <h3>The Costume Test</h3>
+      <p>True Yellow doesn't announce it's Yellow. If your marketing says "holistic" you're probably Green. Yellow products just work across all levels without labeling themselves.</p>
+    </div>
+    <div class="util-card">
+      <h3>Overshoot Detector</h3>
+      <p>When a branch stalls at one SD level for too long, pressure builds. The longer Orange dominates (e.g. Food's 70-year industrial run), the more explosive the Green/Yellow break.</p>
+    </div>
+    <div class="util-card">
+      <h3>Creator Positioning Map</h3>
+      <p>Place all 91 experience creators on the matrix. See which branches are crowded (Healing-Green is packed) and which are empty (Threat-Green, Shelter-Yellow). Go where no one is.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Original IP: Huzz Hurrell. <a href="rule-break-tree.html">View the Rule Break Tree</a></p>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  SD LEVELS
+// ═══════════════════════════════════════════
+
+const SD = [
+  { id: 'purple', label: 'Purple', sub: 'Tribal', color: '#7c3aed', bg: 'rgba(124,58,237,0.08)' },
+  { id: 'red',    label: 'Red',    sub: 'Power',  color: '#ef4444', bg: 'rgba(239,68,68,0.08)' },
+  { id: 'blue',   label: 'Blue',   sub: 'Order',  color: '#3b82f6', bg: 'rgba(59,130,246,0.08)' },
+  { id: 'orange', label: 'Orange', sub: 'Achievement', color: '#f97316', bg: 'rgba(249,115,22,0.08)' },
+  { id: 'green',  label: 'Green',  sub: 'Community', color: '#22c55e', bg: 'rgba(34,197,94,0.08)' },
+  { id: 'yellow', label: 'Yellow', sub: 'Integrative', color: '#eab308', bg: 'rgba(234,179,8,0.08)' },
+]
+
+// ═══════════════════════════════════════════
+//  BRANCHES
+// ═══════════════════════════════════════════
+
+const BRANCHES = [
+  { id: 'movement',    label: 'Movement',    color: '#7c3aed', industry: 'Transport' },
+  { id: 'nourishment', label: 'Nourishment', color: '#22c55e', industry: 'Food' },
+  { id: 'tools',       label: 'Tools',       color: '#0ea5e9', industry: 'Technology' },
+  { id: 'status',      label: 'Status',      color: '#e879f9', industry: 'Fashion & Identity' },
+  { id: 'bonds',       label: 'Bonds',       color: '#f472b6', industry: 'Communication' },
+  { id: 'shelter',     label: 'Shelter',      color: '#38bdf8', industry: 'Property' },
+  { id: 'story',       label: 'Story',        color: '#fb923c', industry: 'Media' },
+  { id: 'fire',        label: 'Fire',         color: '#f59e0b', industry: 'Energy' },
+  { id: 'healing',     label: 'Healing',      color: '#a78bfa', industry: 'Medicine & Wellness' },
+  { id: 'threat',      label: 'Threat',       color: '#ef4444', industry: 'Security' },
+]
+
+// ═══════════════════════════════════════════
+//  MATRIX CELLS — 60 cells (10 × 6)
+//  s: status (broken/returning/active/frontier/emerging)
+//  a: assumption
+//  b: breaker (who/when)
+//  p: prediction (for frontier/emerging)
+//  p3: phase 3 loop-back example
+//  pr: current problem
+//  next: what the next level sees
+// ═══════════════════════════════════════════
+
+const C = {
+  // ── MOVEMENT ──
+  'movement-purple':  { s:'broken', a:'Travel is sacred journey; animals carry the tribe', b:'Domestication of horses (~4000 BC)', p3:'Pilgrimage walks, Camino revival, barefoot movement' },
+  'movement-red':     { s:'broken', a:'Speed = conquest; the fastest warrior controls territory', b:'Roman road networks, naval empires', p3:'Competitive cycling, ultramarathons' },
+  'movement-blue':    { s:'broken', a:'Transport is institutional: rail networks, public transit, regulation', b:'Karl Benz, Motorcar (1886). Individual mobility.', next:'Orange saw personal ownership as freedom' },
+  'movement-orange':  { s:'broken', a:'Cars must be big, powerful, personally owned. Bigger = better.', b:'VW Beetle (1959), Toyota Lean (1973), Uber (2010). Each broke Orange from a different level: Green counter-culture, Yellow systems thinking, Orange-within-Orange market disruption.', next:'Green saw the environmental and urban cost' },
+  'movement-green':   { s:'frontier', a:'Individual cars remain the unit, just make them electric. EV = solved.', pr:'EV adoption plateauing. Cities still designed around car storage. E-bikes outselling EVs in Europe.', p:'The unit itself changes: shared fleets, multimodal, walkable cities', next:'Yellow sees the whole system needs redesign, not just cleaner cars' },
+  'movement-yellow':  { s:'emerging', a:'Multimodal, autonomous, responsive transport systems', b:'Waymo (2020) is an early signal but no city has integrated fully', p:'Cities redesigned for HUMAN movement. Technology serves walking, cycling, transit. The car becomes optional, not central.', p3:'Rucking, ruck clubs, 12-3-30 walking trend' },
+
+  // ── NOURISHMENT ──
+  'nourishment-purple':{ s:'returning', a:'Food from land spirits; seasonal, ritual, communal eating', b:'Agriculture (~10,000 BC) broke seasonal dependence', p3:'Cacao ceremonies, ritual meals, foraging courses, ancestral diet movement' },
+  'nourishment-red':   { s:'broken', a:'Control the land = control the food = control the people', b:'Market trade and merchant class replaced territorial control' },
+  'nourishment-blue':  { s:'active', a:'Food safety requires government standards, regulation, and the food pyramid', pr:'FDA, USDA standards still dominant but increasingly questioned. Food pyramid was influenced by industry lobbying.', next:'Orange saw efficiency opportunities the regulators were blocking' },
+  'nourishment-orange':{ s:'broken', a:'Industrial scale + chemicals + GMO = feed the world efficiently. Optimise yield above all.', b:'Whole Foods (1980) pioneered premium natural grocery. USDA Organic Certification (2002) gave the movement federal legitimacy. Counter-break: reject the industrial assumption.', next:'Green saw the health and environmental cost of industrial food' },
+  'nourishment-green': { s:'frontier', a:'Food should be organic, local, ethical, sustainable. Consumer choice drives the system.', pr:'Organic costs 2-3x more. Bottom 60% still deep in Phase 2 ultra-processed food. "Ethical consumerism" is a luxury.', p:'Consumer choice alone can\'t fix a broken system. Needs structural change.', next:'Yellow sees the system needs to integrate ALL approaches contextually' },
+  'nourishment-yellow':{ s:'emerging', a:'Integrate all approaches: regenerative agriculture + personalised nutrition + adaptive food systems', p:'Soil health metrics that include industrial AND organic. Personalised nutrition based on microbiome. Regional food networks that are affordable, not boutique.', p3:'Fermentation revival, sourdough, kombucha, ancestral preservation' },
+
+  // ── TOOLS ──
+  'tools-purple':  { s:'broken', a:'Tools are sacred; the craftsman\'s hands channel spirit into material', b:'Mass production (Industrial Revolution) separated maker from meaning', p3:'Maker movement, artisanal craft, hand tools revival' },
+  'tools-red':     { s:'active', a:'Whoever controls the tools controls everything. Technology is power.', pr:'Big Tech concentration. 5 companies control most of global computing infrastructure. AI arms race between nations.', next:'Blue tried to regulate; Orange tried to compete; neither fully worked' },
+  'tools-blue':    { s:'broken', a:'Technology serves institutional order: military, government, corporations', b:'Personal Computer (1975), World Wide Web (1991) democratised access', next:'Orange saw individual competitive advantage' },
+  'tools-orange':  { s:'active', a:'Technology = competitive advantage, growth metrics, disruption, move fast and break things', pr:'VC-funded growth-at-all-costs model. SaaS metrics obsession. Tech debt accumulating across industry.', next:'Green sees the human cost: burnout, surveillance, inequality' },
+  'tools-green':   { s:'active', a:'Technology should be open, accessible, equitable. Digital rights matter.', pr:'Open source thriving but Big Tech still dominant. AI safety discourse is Green-level.', next:'Yellow sees human-AI symbiosis as an emergent system, not a rights issue' },
+  'tools-yellow':  { s:'frontier', a:'Human-AI co-evolution. Technology as emergent complex system, not a tool to wield.', b:'ChatGPT (2022), Claude, transformer architecture — early signals', p:'AI doesn\'t replace or threaten humans. It\'s a new kind of partner. The interesting question isn\'t "will AI take jobs" but "what becomes possible when human + AI think together?"', p3:'Coding with AI (pair programming), AI-assisted creativity' },
+
+  // ── STATUS ──
+  'status-purple':  { s:'returning', a:'Status = closeness to ancestors, ritual role, lineage', b:'Market economies disconnected status from lineage', p3:'Heritage brands, ancestral identity, "where are you from?" resurgence, traditional tattoos' },
+  'status-red':     { s:'active', a:'Status = dominance displays, visible wealth, flexing', pr:'Luxury goods market growing. Flex culture on social media. Red is alive and well.', next:'Blue tried to regulate through sumptuary laws; Orange channeled it into achievement' },
+  'status-blue':    { s:'active', a:'Status = rank, title, institutional position, moral correctness', pr:'Institutional credentials declining but not gone. Degrees, job titles, and professional licenses still carry weight. Weakening steadily as entrepreneurship and creator economy prove alternative paths.', next:'Orange saw achievement as the real status marker' },
+  'status-orange':  { s:'active', a:'Status = wealth, metrics, follower count, achievements. You are what you\'ve accomplished.', pr:'Hustle culture. LinkedIn personal branding. Follower count as currency. Still dominant frame.', next:'Green sees this as shallow and performative' },
+  'status-green':   { s:'frontier', a:'Status = authenticity, vulnerability, being seen as caring and healed. Anti-status as status.', pr:'De-influencing trend. "I don\'t care about followers" (posted to 500K followers). Green denial of status IS a status game.', p:'The assumption that anti-status is genuine. Green\'s claim that "no perspective is superior" is self-contradictory.', next:'Yellow sees ALL status games as games, including Green\'s' },
+  'status-yellow':  { s:'emerging', a:'See all status games as games. Status flows to competence, not display. The Costume Test.', p:'True Yellow doesn\'t announce it\'s Yellow. Claiming second-tier status is usually a first-tier move in costume. Almost nobody is genuinely here yet.', p3:'Skill-over-stuff culture, craftspeople who don\'t post' },
+
+  // ── BONDS ──
+  'bonds-purple':   { s:'returning', a:'Bonds = tribe, physical proximity, shared ritual, belonging', b:'Cities, mobility, nuclear family fragmented tribal bonds', p3:'CrossFit boxes, men\'s circles, women\'s retreats, co-living, ayahuasca ceremonies' },
+  'bonds-red':      { s:'active', a:'Bonds = loyalty to the strong leader, followers, in-group/out-group', pr:'Influencer-follower dynamics. Political tribalism. Parasocial relationships.', next:'Blue organized bonds into institutions' },
+  'bonds-blue':     { s:'broken', a:'Bonds = institutional membership: church, nation, employer, alumni', b:'Declining institutional trust (2000s-2020s). People stopped joining.', next:'Orange turned relationships into networking' },
+  'bonds-orange':   { s:'active', a:'Bonds = strategic networking, contacts, LinkedIn connections. Relationships as ROI.', pr:'Professional networking culture. "Your network is your net worth." Transactional relationships.', next:'Green saw the emptiness of transactional bonds' },
+  'bonds-green':    { s:'frontier', a:'Bonds = authentic community, shared values, radical inclusion. Community as product.', pr:'"Community-washing" everywhere. Most online "communities" are just audiences with a Slack. No reciprocal obligation.', p:'The assumption that intention alone creates real bonds. Green communities often collapse because they avoid structure (structure = hierarchy = bad).', next:'Yellow sees context-dependent community: sometimes you need structure, sometimes flow' },
+  'bonds-yellow':   { s:'emerging', a:'Multi-community, purposeful, context-dependent bonds. Structure serves belonging.', p:'Communities that include Orange metrics (accountability), Blue structure (roles, rituals), AND Green values (care, inclusion). Nobody has cracked this yet at scale.', p3:'Vibe Rise sessions: structured healing + play + accountability in physical community' },
+
+  // ── SHELTER ──
+  'shelter-purple':  { s:'broken', a:'Home is sacred ground, ancestral land, cannot be bought or sold', b:'Property rights, feudalism, then capitalism commoditised land', p3:'Land stewardship movement, indigenous land return, sacred architecture' },
+  'shelter-red':     { s:'active', a:'Territory = power. Real estate = wealth accumulation and dominance.', pr:'Property speculation, housing as investment vehicle, NIMBY as territory defence', next:'Blue regulated with zoning; Orange optimised returns' },
+  'shelter-blue':    { s:'active', a:'Housing regulated by zoning, building codes, institutional planning', pr:'NIMBYism blocks new builds. Zoning laws from the 1950s still shape cities. Regulation serves incumbents.', next:'Orange saw investment opportunity' },
+  'shelter-orange':  { s:'active', a:'Property is an investment asset. Maximise ROI. Housing is a financial product.', pr:'Housing unaffordable for young generations globally. Airbnb hollowing out city centres. The "ladder" is broken.', next:'Green sees housing as a right, not an asset class' },
+  'shelter-green':   { s:'frontier', a:'Housing should be sustainable, equitable, community-oriented. Co-housing, not commodities.', pr:'Co-housing is tiny market. Sustainable building is premium. Green housing = wealthy early adopters only.', p:'The class ceiling: who can afford to live Green? Until Phase 3 shelter is affordable, it stays niche.', next:'Yellow sees adaptive, responsive, modular systems' },
+  'shelter-yellow':  { s:'emerging', a:'Adaptive, modular, responsive to inhabitants and environment. Buildings as living systems.', b:'3D Printed Homes (ICON, 2021) are an early signal', p:'Homes that cost $50K, adapt to climate, generate energy, and build community. This cell is nearly empty.', p3:'Tiny homes, van life, biophilic design, earthships' },
+
+  // ── STORY ──
+  'story-purple':   { s:'returning', a:'Story is oral, ritual, around the fire. The storyteller holds sacred role.', b:'Writing (~3200 BC) externalised story from human memory', p3:'Podcasts = campfire + smartphone. Live storytelling events. Oral history revival.' },
+  'story-red':      { s:'active', a:'Story belongs to the powerful. Propaganda, controlled narrative, the king\'s version.', pr:'State media, platform manipulation, algorithmic amplification of outrage. Red is resurgent in media.', next:'Blue organised story into institutions' },
+  'story-blue':     { s:'broken', a:'Story is published by institutions, curated by editors, filtered by gatekeepers', b:'Web publishing (1991), social media (2004) eliminated gatekeepers', next:'Orange monetised the open playing field' },
+  'story-orange':   { s:'active', a:'Story is content. Optimise for engagement, clicks, watch time. Attention is the commodity.', pr:'TikTok algorithm. Content mills. Engagement farming. Creator burnout. The "content treadmill."', next:'Green saw the human cost: shallow, addictive, extractive' },
+  'story-green':    { s:'active', a:'Everyone\'s story matters equally. Democratised storytelling. Authenticity over polish.', pr:'Algorithmic bias undermines Green\'s promise: not all stories get equal reach. "Authentic" became a performance.', next:'Yellow sees story as emergent: human + AI co-creation, new forms' },
+  'story-yellow':   { s:'frontier', a:'Story as emergent property. AI + human co-creation. Authorship dissolves. New forms.', b:'AI-generated content (2022) — but no genuinely new FORM has emerged yet', p:'The next Gutenberg moment: not just new distribution (Green) but new KINDS of stories that couldn\'t exist without AI. Interactive, personalised, adaptive narrative.', p3:'Live events (return to embodied story), immersive theatre' },
+
+  // ── FIRE ──
+  'fire-purple':    { s:'returning', a:'Fire is sacred, to be tended and honored. The hearth is the centre of community.', b:'Industrial energy made fire invisible (pipes, wires, grids)', p3:'$12B global candle market. Campfire retreats. Fire ceremony. Circadian lighting.' },
+  'fire-red':       { s:'active', a:'Energy = conquest and control. Oil wars. Resource geopolitics. Petrostates.', pr:'Energy weaponisation (Russia/EU). Middle East geopolitics. Control of energy = control of nations.', next:'Blue regulated into utilities' },
+  'fire-blue':      { s:'active', a:'Energy is a public utility. Regulated, standardised, institutional. Nuclear = state project.', pr:'Grid infrastructure aging. Nuclear regulation so heavy that new plants take 15+ years. Blue slows innovation.', next:'Orange saw extraction profit' },
+  'fire-orange':    { s:'active', a:'Maximise extraction, minimise cost. Shale, fracking, fossil fuel economics.', pr:'Climate crisis. Stranded assets. But fossil fuels still 80%+ of global energy. Orange won\'t let go.', next:'Green demands renewables' },
+  'fire-green':     { s:'frontier', a:'Energy must be renewable. Solar, wind, sustainable. Carbon neutral.', pr:'Solar and wind growing rapidly but grid integration unresolved. Battery storage insufficient. Intermittency problem.', p:'Green\'s assumption: renewables + behaviour change = solved. But the grid is a complex system that can\'t be wished into sustainability.', next:'Yellow sees the whole energy system needs adaptive intelligence' },
+  'fire-yellow':    { s:'emerging', a:'Distributed, stored, intelligent energy systems. Grid as adaptive network.', b:'Grid-scale storage (Tesla, 2017), microgrids — early signals', p:'AI-managed energy networks that route solar/wind/storage dynamically. Every building both produces and consumes. The grid becomes a living system.', p3:'Circadian lighting, off-grid living, solar punk' },
+
+  // ── HEALING ──
+  'healing-purple':  { s:'returning', a:'Healing is shamanic, spiritual, plant-based. The healer channels through ceremony.', b:'Scientific medicine separated healing from spirit', p3:'Plant medicine retreats, ayahuasca, psilocybin therapy, cacao ceremony, sweat lodges' },
+  'healing-red':     { s:'broken', a:'The powerful healer commands the body. Healing requires submission to authority.', b:'Patient rights movement, informed consent', p3:'Doctor-patient power hierarchy persists as a returning pattern' },
+  'healing-blue':    { s:'active', a:'Healing requires institutional authority: medical licence, FDA approval, hospital system', pr:'Pharma gatekeeping. Alternative practitioners criminalised. Licensing restricts innovation.', next:'Orange saw efficiency and data opportunities' },
+  'healing-orange':  { s:'active', a:'Healing = data, drugs, measurable outcomes. One pill fits the diagnosis. Evidence-based only.', pr:'Chronic disease epidemic. Mental health crisis. 93% of healthcare is reactive. Pharma treats symptoms, not root causes.', next:'Green saw the whole person being ignored' },
+  'healing-green':   { s:'frontier', a:'Heal the whole person: mind, body, spirit. Integrative medicine. Holistic approach.', pr:'"Wellness grifting" — the industry is full of Green-level products with no results. "Holistic" became a marketing word. No accountability for outcomes.', p:'Green\'s assumption: good intentions + whole-person framing = healing. But without routing people to the RIGHT modality, "holistic" is just expensive vagueness.', next:'Yellow sees contextual routing: match modality to wound depth' },
+  'healing-yellow':  { s:'emerging', a:'Contextual healing: route people to the right modality based on their nervous system state and wound depth', b:'Polyvagal-informed therapy, trauma-responsive design — emerging but not scaled', p:'Dorsal wounds need somatic work (body first). Sympathetic wounds respond to courage challenges (mind can engage). The system routes automatically. THIS IS VIBE RISE.', p3:'Breathwork, somatic experiencing, cold plunges, nervous system education' },
+
+  // ── THREAT ──
+  'threat-purple':   { s:'returning', a:'Threats are spiritual. Ward off with ritual, amulets, sacred protection.', b:'Rational security replaced spiritual protection', p3:'"Energetic protection," boundary rituals, sage cleansing, evil eye jewellery boom' },
+  'threat-red':      { s:'active', a:'Security = overwhelming force. Domination deters. The strongest survive.', pr:'Nuclear deterrence. Police militarisation. "Might makes right" still the dominant security paradigm.', next:'Blue institutionalised force into standing armies and courts' },
+  'threat-blue':     { s:'active', a:'Security requires institutional order: standing armies, police, courts, intelligence agencies', pr:'Institutional trust declining. Police reform debates. Intelligence agencies questioned. But no replacement exists.', next:'Orange added technology' },
+  'threat-orange':   { s:'frontier', a:'Security = technology. Surveillance, encryption, cybersecurity, AI monitoring, drones.', pr:'AI mass surveillance. Deepfakes. Autonomous weapons. Cybercrime. Technology creates as many threats as it solves.', p:'Orange security creates an arms race: better tech vs. better tech. No equilibrium. The assumption is that more surveillance = more safety.', next:'Green asks: security for whom? At what cost to freedom?' },
+  'threat-green':    { s:'emerging', a:'Security should be community-based, restorative, equitable. Prevention over punishment.', p:'Restorative justice programs. Community policing. Conflict mediation. Very early, politically charged. Almost no scaled examples.', p3:'Martial arts as community practice, neighbourhood watch revival' },
+  'threat-yellow':   { s:'emerging', a:'Security as complex adaptive resilience. Systems that absorb shocks rather than prevent them.', p:'Anti-fragile communities. Distributed resilience networks. Security that makes the SYSTEM stronger through stress, not by eliminating all threats. Almost nobody is here.', p3:'Wilderness survival communities, resilience training' },
+}
+
+// ═══════════════════════════════════════════
+//  RENDER MATRIX
+// ═══════════════════════════════════════════
+
+const matrix = document.getElementById('matrix')
+
+// Corner cell
+const corner = document.createElement('div')
+corner.className = 'col-corner col-header'
+matrix.appendChild(corner)
+
+// Column headers
+SD.forEach(sd => {
+  const h = document.createElement('div')
+  h.className = 'col-header'
+  h.style.background = sd.bg
+  h.innerHTML = `<div class="sd-name" style="color:${sd.color}">${sd.label}</div><div class="sd-sub">${sd.sub}</div>`
+  matrix.appendChild(h)
+})
+
+// Rows
+BRANCHES.forEach(br => {
+  // Row header
+  const rh = document.createElement('div')
+  rh.className = 'row-header'
+  rh.innerHTML = `<div class="row-dot" style="background:${br.color}"></div><div><div class="row-label">${br.label}</div><div class="row-industry">${br.industry}</div></div>`
+  matrix.appendChild(rh)
+
+  // Cells
+  SD.forEach(sd => {
+    const key = `${br.id}-${sd.id}`
+    const data = C[key]
+    if (!data) {
+      const empty = document.createElement('div')
+      empty.className = 'cell broken'
+      empty.innerHTML = '<span class="cell-assumption" style="opacity:0.3">—</span>'
+      matrix.appendChild(empty)
+      return
+    }
+
+    const cell = document.createElement('div')
+    cell.className = `cell ${data.s}`
+    const badges = { broken: 'Broken', returning: 'Loop-back', active: 'Active', frontier: 'Next break', emerging: 'Emerging' }
+    cell.innerHTML = `
+      <span class="cell-badge">${badges[data.s] || ''}</span>
+      <span class="cell-assumption">${data.a}</span>
+    `
+    cell.addEventListener('click', () => openDetail(br, sd, data))
+    matrix.appendChild(cell)
+  })
+})
+
+// ═══════════════════════════════════════════
+//  DETAIL PANEL
+// ═══════════════════════════════════════════
+
+const overlay = document.getElementById('detailOverlay')
+const panel = document.getElementById('detailPanel')
+
+overlay.addEventListener('click', e => { if (e.target === overlay) closeDetail() })
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail() })
+
+function closeDetail() { overlay.classList.remove('open') }
+
+function openDetail(br, sd, data) {
+  const statusColors = {
+    broken: 'rgba(255,255,255,0.08)', returning: 'rgba(168,85,247,0.2)',
+    active: 'rgba(251,191,36,0.15)', frontier: 'rgba(233,162,59,0.25)',
+    emerging: 'rgba(94,23,235,0.15)'
+  }
+  const statusLabels = {
+    broken: 'Assumption Broken', returning: 'Phase 3 Loop-Back',
+    active: 'Currently Active', frontier: 'Next Rule Break',
+    emerging: 'Barely Emerging'
+  }
+
+  let html = `
+    <button class="detail-close" onclick="closeDetail()">&times;</button>
+    <div class="detail-branch" style="color:${br.color}">${br.label} &mdash; ${br.industry}</div>
+    <div class="detail-sd" style="color:${sd.color}">${sd.label} / ${sd.sub}</div>
+    <div class="detail-assumption">"${data.a}"</div>
+    <div class="detail-status" style="background:${statusColors[data.s]}; color:${data.s === 'frontier' ? '#E9A23B' : data.s === 'emerging' ? '#a78bfa' : data.s === 'returning' ? '#c084fc' : 'rgba(255,255,255,0.5)'}">${statusLabels[data.s]}</div>
+  `
+
+  if (data.b) {
+    html += `<div class="detail-section"><h4>Who Broke It</h4><p>${data.b}</p></div>`
+  }
+
+  if (data.pr) {
+    html += `<div class="detail-section"><h4>Current Problem</h4><p>${data.pr}</p></div>`
+  }
+
+  if (data.p) {
+    html += `<div class="detail-divider"></div><div class="detail-section"><h4>Prediction</h4><p class="highlight">${data.p}</p></div>`
+  }
+
+  if (data.next) {
+    html += `<div class="detail-section"><h4>What the Next Level Sees</h4><p>${data.next}</p></div>`
+  }
+
+  if (data.p3) {
+    html += `<div class="detail-phase3"><h4>Phase 3 Loop-Back</h4><p>${data.p3}</p></div>`
+  }
+
+  panel.innerHTML = html
+  overlay.classList.add('open')
+}
+
+// ═══════════════════════════════════════════
+//  CREATOR DIAGNOSTIC
+// ═══════════════════════════════════════════
+
+const diagFlow = document.getElementById('diagFlow')
+let diagState = { branch: null, level: null }
+
+function renderDiagStep1() {
+  diagState = { branch: null, level: null }
+  let html = `<div class="diag-step active" id="dStep1">
+    <div class="diag-question">1. Which primal need does your work serve?</div>
+    <div class="diag-options">`
+  BRANCHES.forEach(br => {
+    const descs = {
+      movement: 'Fitness, transport, mobility, physical freedom',
+      nourishment: 'Food, nutrition, cooking, farming, diet',
+      tools: 'Technology, software, building, craftsmanship',
+      status: 'Fashion, branding, identity, luxury, self-image',
+      bonds: 'Community, relationships, communication, belonging',
+      shelter: 'Housing, architecture, interior, property, spaces',
+      story: 'Media, content, publishing, entertainment, narrative',
+      fire: 'Energy, power, warmth, lighting, resources',
+      healing: 'Health, wellness, therapy, medicine, transformation',
+      threat: 'Security, safety, defence, resilience, protection',
+    }
+    html += `<button class="diag-opt" onclick="selectBranch('${br.id}')" style="border-left: 3px solid ${br.color}">
+      <strong>${br.label}</strong> &mdash; ${descs[br.id]}
+    </button>`
+  })
+  html += `</div></div>`
+  diagFlow.innerHTML = html
+}
+
+function selectBranch(branchId) {
+  diagState.branch = BRANCHES.find(b => b.id === branchId)
+  renderDiagStep2()
+}
+
+function renderDiagStep2() {
+  const br = diagState.branch
+  let html = `<div class="diag-step active" id="dStep2">
+    <div class="diag-question" style="color:${br.color}">Branch: ${br.label}</div>
+    <div class="diag-question">2. What is the dominant assumption in your industry that you see as wrong?</div>
+    <div class="diag-options">`
+  SD.forEach(sd => {
+    const key = `${br.id}-${sd.id}`
+    const data = C[key]
+    if (!data || data.s === 'broken' || data.s === 'returning') return
+    html += `<button class="diag-opt" onclick="selectLevel('${sd.id}')" style="border-left: 3px solid ${sd.color}">
+      <strong style="color:${sd.color}">${sd.label}</strong>: \u201c${data.a}\u201d
+    </button>`
+  })
+  if (!html.includes('diag-opt')) {
+    html += `<p style="color:rgba(255,255,255,0.4); font-size:0.8rem; padding:0.8rem">All assumptions in this branch have already been broken. Pick another branch.</p>`
+  }
+  html += `</div>
+    <button class="diag-restart" onclick="renderDiagStep1()" style="margin-top:1rem; background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1)">Back</button>
+  </div>`
+  diagFlow.innerHTML = html
+}
+
+function selectLevel(levelId) {
+  diagState.level = SD.find(s => s.id === levelId)
+  renderDiagResult()
+}
+
+function renderDiagResult() {
+  const br = diagState.branch
+  const sd = diagState.level
+  const key = `${br.id}-${sd.id}`
+  const data = C[key]
+  const sdIdx = SD.findIndex(s => s.id === sd.id)
+  const nextSD = SD[sdIdx + 1]
+  const nextKey = nextSD ? `${br.id}-${nextSD.id}` : null
+  const nextData = nextKey ? C[nextKey] : null
+
+  // Calculate SD integration score based on position
+  const integrationBase = sdIdx + 1 // breaking FROM this level means you see it + levels below
+  const integrationBonus = data.p3 ? 1 : 0 // loop-back adds Purple/Beige
+  const sdScore = Math.min(integrationBase + integrationBonus, 6)
+  const blowUpPotential = sdScore >= 5 ? 'Blow-up conditions' : sdScore >= 3 ? 'Strong potential' : 'Limited reach'
+  const blowUpColor = sdScore >= 5 ? '#E9A23B' : sdScore >= 3 ? '#22c55e' : '#ef4444'
+
+  let html = `<div class="diag-step active">
+    <div class="diag-result">
+      <h3>Your Matrix Position: ${br.label} × ${sd.label}</h3>
+      <p><strong>You're challenging:</strong> "${data.a}"</p>
+      <p><strong>Status of this assumption:</strong> ${data.s === 'frontier' ? 'This IS the frontier. You\'re at the bleeding edge.' : data.s === 'active' ? 'Still dominant in the industry. Ripe for breaking.' : data.s === 'emerging' ? 'Barely emerging. You\'re very early, potentially pioneering.' : 'Already being challenged by others.'}</p>
+      ${nextData ? `<p><strong>What ${nextSD.label} (${nextSD.sub}) sees that you might not:</strong> ${nextData.a}</p>` : '<p><strong>You\'re at Yellow.</strong> The highest mapped level. Your challenge is integration, not further transcendence.</p>'}
+
+      <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06)">
+        <p style="font-size:0.7rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.5rem">SD Integration Score</p>
+        <div class="score-row">
+          <span class="score-label">Levels activated</span>
+          <div class="score-bar"><div class="score-fill" style="width:${(sdScore/6)*100}%; background: linear-gradient(90deg, #5e17eb, #E9A23B)"></div></div>
+          <span style="font-size:0.8rem; font-weight:700; color:${blowUpColor}">${sdScore}/6</span>
+        </div>
+        <p style="color:${blowUpColor}; font-weight:600; font-size:0.85rem; margin-top:0.3rem">${blowUpPotential}</p>
+        <p style="font-size:0.75rem; margin-top:0.5rem">Phase 3 blow-ups integrate 5+ SD levels. CrossFit activates all 6. Ask yourself: does your product speak to tribal belonging (Purple), competitive drive (Red), structural rigour (Blue), measurable outcomes (Orange), community values (Green), AND systemic awareness (Yellow)?</p>
+      </div>
+
+      ${data.p3 ? `<div style="margin-top:1rem; padding:0.8rem; background:rgba(168,85,247,0.06); border:1px solid rgba(168,85,247,0.12); border-radius:8px">
+        <p style="font-size:0.7rem; color:#c084fc; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.3rem">Phase 3 Loop-Backs in Your Branch</p>
+        <p style="font-size:0.8rem">${data.p3}</p>
+      </div>` : ''}
+
+      <div style="margin-top:1rem; padding:0.8rem; background:rgba(233,162,59,0.06); border:1px solid rgba(233,162,59,0.12); border-radius:8px">
+        <p style="font-size:0.7rem; color:#E9A23B; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.3rem">The Costume Test</p>
+        <p style="font-size:0.8rem">True next-level thinking doesn't announce itself. If your marketing claims to be "holistic" or "integrative," you might be Green wearing Yellow's costume. The test: does your product WORK across multiple SD audiences without explaining the framework? CrossFit never mentions Spiral Dynamics. It just activates every level.</p>
+      </div>
+    </div>
+
+    <button class="diag-restart" onclick="renderDiagStep1()">Start Over</button>
+  </div>`
+
+  diagFlow.innerHTML = html
+}
+
+// Init
+renderDiagStep1()
+</script>
+</body>
+</html>

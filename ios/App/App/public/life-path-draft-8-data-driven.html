@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft 8 — Data-Driven Convergence (Real Wahoos)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f5f0; color: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; min-height: 100vh; }
+  .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 20px 10px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(0,0,0,0.35); text-align: center; margin-bottom: 4px; font-weight: 700; }
+  .subtitle { font-size: 13px; color: rgba(0,0,0,0.4); text-align: center; margin-bottom: 14px; font-weight: 500; }
+  svg { width: 100%; display: block; border-radius: 16px; }
+  svg text { font-family: 'Inter', -apple-system, sans-serif; user-select: none; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 12px 0 6px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 9px; color: rgba(0,0,0,0.4); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .concept { margin-top: 12px; padding: 12px; border-radius: 12px; background: rgba(94,23,235,0.04); border: 1px solid rgba(94,23,235,0.08); font-size: 11px; color: rgba(0,0,0,0.45); line-height: 1.7; }
+  .concept strong { color: rgba(0,0,0,0.65); }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Nic's Life Paths</h2>
+  <div class="subtitle">6 curiosities evolving over 2.5 years</div>
+
+  <!--
+    COORDINATE SYSTEM:
+    X axis = post-state zone (with lane offsets to prevent overlap)
+      Uninterested: 40-110  (center 75)
+      Pressure:     120-210 (center 165)
+      Fun:          220-310 (center 265)
+      Vibe Rise:    320-420 (center 370)
+
+    LANE ASSIGNMENTS (within Vibe Rise zone):
+      Dance Events:      X=345
+      Breathwork:        X=370
+      Tuk Tuks:          X=395
+      VR Digital (in VR): X=410
+
+    LANE ASSIGNMENTS (within Fun zone):
+      Breathwork (early): X=240
+      VR Digital:         X=265
+      AI Teacher:         X=280
+      Dance Events (dip): X=300
+
+    Y axis = time (bottom=Feb '24, top=Jul '26)
+      Feb '24 = 880
+      Mid '24 = 720
+      End '24 = 560
+      Mid '25 = 400
+      End '25 = 240
+      Mid '26 = 120
+      Jul '26 = 60
+
+    Each month ≈ 28px
+  -->
+
+  <svg viewBox="0 0 460 950">
+    <rect width="460" height="950" rx="16" fill="#f5f5f0"/>
+
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <radialGradient id="mergeGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E9A23B" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#E9A23B" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- STATE ZONE BANDS (vertical columns) -->
+    <rect x="30" y="40" width="90" height="880" rx="6" fill="#ef4444" opacity="0.03"/>
+    <rect x="130" y="40" width="90" height="880" rx="6" fill="#f59e0b" opacity="0.03"/>
+    <rect x="230" y="40" width="90" height="880" rx="6" fill="#10b981" opacity="0.04"/>
+    <rect x="330" y="40" width="100" height="880" rx="6" fill="#c084fc" opacity="0.04"/>
+
+    <!-- Zone labels -->
+    <text x="75" y="30" fill="#ef4444" font-size="7" font-weight="800" text-anchor="middle" letter-spacing="1" opacity="0.45">UNINTERESTED</text>
+    <text x="175" y="30" fill="#f59e0b" font-size="7" font-weight="800" text-anchor="middle" letter-spacing="1" opacity="0.45">PRESSURE</text>
+    <text x="275" y="30" fill="#10b981" font-size="7" font-weight="800" text-anchor="middle" letter-spacing="1" opacity="0.5">FUN</text>
+    <text x="380" y="30" fill="#c084fc" font-size="7" font-weight="800" text-anchor="middle" letter-spacing="1" opacity="0.5">VIBE RISE</text>
+
+    <!-- Zone dividers -->
+    <line x1="125" y1="40" x2="125" y2="920" stroke="rgba(0,0,0,0.03)"/>
+    <line x1="225" y1="40" x2="225" y2="920" stroke="rgba(0,0,0,0.03)"/>
+    <line x1="325" y1="40" x2="325" y2="920" stroke="rgba(0,0,0,0.03)"/>
+
+    <!-- Time labels -->
+    <text x="14" y="880" fill="rgba(0,0,0,0.15)" font-size="6" font-weight="600" transform="rotate(-90,14,880)">Feb '24</text>
+    <text x="14" y="720" fill="rgba(0,0,0,0.15)" font-size="6" font-weight="600" transform="rotate(-90,14,720)">Jul '24</text>
+    <text x="14" y="560" fill="rgba(0,0,0,0.15)" font-size="6" font-weight="600" transform="rotate(-90,14,560)">Dec '24</text>
+    <text x="14" y="400" fill="rgba(0,0,0,0.15)" font-size="6" font-weight="600" transform="rotate(-90,14,400)">May '25</text>
+    <text x="14" y="240" fill="rgba(0,0,0,0.15)" font-size="6" font-weight="600" transform="rotate(-90,14,240)">Oct '25</text>
+    <text x="14" y="120" fill="rgba(0,0,0,0.2)" font-size="6" font-weight="700" transform="rotate(-90,14,120)">May '26</text>
+    <text x="14" y="60" fill="rgba(0,0,0,0.25)" font-size="6" font-weight="700" transform="rotate(-90,14,60)">Jul '26</text>
+
+    <!-- Time gridlines -->
+    <line x1="30" y1="880" x2="430" y2="880" stroke="rgba(0,0,0,0.025)"/>
+    <line x1="30" y1="720" x2="430" y2="720" stroke="rgba(0,0,0,0.025)"/>
+    <line x1="30" y1="560" x2="430" y2="560" stroke="rgba(0,0,0,0.025)"/>
+    <line x1="30" y1="400" x2="430" y2="400" stroke="rgba(0,0,0,0.025)"/>
+    <line x1="30" y1="240" x2="430" y2="240" stroke="rgba(0,0,0,0.025)"/>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 1: DANCE EVENTS (green) — 19 wahoos               -->
+    <!-- Feb '24 → Jul '26, Fun → Vibe Rise                     -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <!-- Path: Dance Events lane = X=345 in VR zone, X=300 when Fun -->
+    <!-- Ends at merge point (357, 120) -->
+    <path d="M 345 876 C 345 850, 345 820, 345 796
+             C 345 770, 345 740, 345 718
+             C 345 690, 345 660, 345 636
+             C 345 620, 345 590, 345 570
+             C 345 546, 345 520, 345 496
+             C 345 472, 345 440, 345 416
+             C 345 385, 345 360, 345 344
+             C 345 300, 300 200, 345 160
+             C 345 140, 350 130, 357 120"
+          fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+    <!-- Thicker recent -->
+    <path d="M 345 344 C 345 300, 300 200, 345 160
+             C 345 140, 350 130, 357 120"
+          fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 345 300 C 300 200, 345 160, 350 130"
+          fill="none" stroke="#10b981" stroke-width="9" stroke-linecap="round" opacity="0.05" filter="url(#glow)"/>
+
+    <text x="350" y="895" fill="#10b981" font-size="7" font-weight="700" opacity="0.5">Dance Events</text>
+
+    <!-- Dots (Y=time, X=lane position) -->
+    <circle cx="345" cy="876" r="2.5" fill="#10b981" opacity="0.4"/>
+    <text x="330" y="873" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">Bondi</text>
+
+    <circle cx="345" cy="770" r="2.5" fill="#10b981" opacity="0.45"/>
+    <text x="330" y="767" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">Opera House</text>
+
+    <circle cx="345" cy="718" r="2.5" fill="#10b981" opacity="0.45"/>
+    <circle cx="345" cy="690" r="2.5" fill="#10b981" opacity="0.5"/>
+    <circle cx="345" cy="636" r="2.5" fill="#10b981" opacity="0.5"/>
+
+    <circle cx="345" cy="620" r="3" fill="#10b981" opacity="0.55"/>
+    <text x="330" y="617" fill="rgba(0,0,0,0.25)" font-size="5" text-anchor="end">First paid disco</text>
+
+    <circle cx="345" cy="560" r="3" fill="#10b981" opacity="0.55"/>
+    <circle cx="345" cy="546" r="2.5" fill="#10b981" opacity="0.5"/>
+    <circle cx="345" cy="520" r="3" fill="#10b981" opacity="0.6"/>
+
+    <circle cx="345" cy="496" r="3" fill="#10b981" opacity="0.6"/>
+    <text x="330" y="493" fill="rgba(0,0,0,0.25)" font-size="5" text-anchor="end">Guerilla Marketing</text>
+
+    <circle cx="345" cy="472" r="3" fill="#10b981" opacity="0.6"/>
+    <circle cx="345" cy="380" r="3" fill="#10b981" opacity="0.65"/>
+    <circle cx="345" cy="360" r="3" fill="#10b981" opacity="0.65"/>
+    <circle cx="345" cy="344" r="3" fill="#10b981" opacity="0.65"/>
+
+    <!-- #83 HBF promo, Apr '26, Fun — dips to Fun lane -->
+    <circle cx="300" cy="160" r="3" fill="#10b981" opacity="0.55"/>
+    <text x="285" y="157" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">HBF promo</text>
+
+    <circle cx="345" cy="120" r="3.5" fill="#10b981" opacity="0.7"/>
+    <text x="330" y="117" fill="rgba(0,0,0,0.3)" font-size="5" text-anchor="end">Hostel mission</text>
+
+    <circle cx="345" cy="120" r="3.5" fill="#10b981" opacity="0.75"/>
+    <text x="330" y="117" fill="rgba(0,0,0,0.35)" font-size="6" text-anchor="end">100 headsets</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 2: BREATHWORK (red) — 7 wahoos                     -->
+    <!-- Jul '24 → Mar '26, Fun → Vibe Rise                     -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <!-- Breathwork lane = X=370 in VR, X=240 in Fun, X=165 in Pressure -->
+    <!-- Full path from start to merge point at Y=120 -->
+    <path d="M 240 718 C 240 700, 165 685, 240 660
+             C 240 640, 240 620, 370 460
+             C 370 400, 370 340, 370 270
+             C 370 250, 370 220, 370 180
+             C 370 160, 370 140, 357 120"
+          fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+    <path d="M 370 340 C 370 310, 370 280, 370 260
+             C 370 240, 370 220, 370 180
+             C 370 160, 370 140, 357 120"
+          fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+
+    <text x="235" y="735" fill="#ef4444" font-size="7" font-weight="700" opacity="0.45">Breathwork</text>
+
+    <circle cx="240" cy="718" r="2.5" fill="#ef4444" opacity="0.4"/>
+    <text x="225" y="715" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">Training</text>
+
+    <circle cx="165" cy="690" r="2.5" fill="#ef4444" opacity="0.35"/>
+    <text x="150" y="687" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">Daily videos</text>
+
+    <circle cx="240" cy="660" r="2.5" fill="#ef4444" opacity="0.4"/>
+
+    <circle cx="240" cy="636" r="3" fill="#ef4444" opacity="0.45"/>
+    <text x="225" y="633" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">First for strangers</text>
+
+    <circle cx="370" cy="460" r="3" fill="#ef4444" opacity="0.55"/>
+
+    <circle cx="370" cy="260" r="3" fill="#ef4444" opacity="0.6"/>
+    <text x="385" y="257" fill="rgba(0,0,0,0.25)" font-size="5">Host at Bwork</text>
+
+    <circle cx="370" cy="218" r="3" fill="#ef4444" opacity="0.65"/>
+    <text x="385" y="215" fill="rgba(0,0,0,0.3)" font-size="5">Krislin</text>
+
+    <!-- No hero avatar — merged into Vibe Rise Sessions avatar -->
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 3: VIBE RISE DIGITAL (blue) — 14 wahoos            -->
+    <!-- Mar '24 → Jun '26, Fun → mixed                          -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <path d="M 265 852 C 265 830, 265 800, 175 770
+             C 175 740, 370 710, 265 680
+             C 175 650, 370 620, 265 590
+             C 175 560, 265 530, 265 500
+             C 265 400, 265 330, 265 260
+             C 265 220, 265 180, 265 140
+             C 265 120, 265 100, 265 90"
+          fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+    <path d="M 265 260 C 265 220, 265 180, 265 140
+             C 265 120, 265 100, 265 90"
+          fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+
+    <text x="270" y="868" fill="#3b82f6" font-size="7" font-weight="700" opacity="0.45">Coaching</text>
+
+    <!-- #6 Framework, Mar '24, Fun -->
+    <circle cx="265" cy="852" r="2.5" fill="#3b82f6" opacity="0.35"/>
+
+    <!-- #16 Shared Sprouter, May '24, Fun -->
+    <circle cx="265" cy="796" r="2.5" fill="#3b82f6" opacity="0.35"/>
+
+    <!-- #20 Sales Calls, Jun '24, Pressure -->
+    <circle cx="175" cy="770" r="2.5" fill="#3b82f6" opacity="0.3"/>
+    <text x="160" y="767" fill="rgba(0,0,0,0.2)" font-size="5" text-anchor="end">Sales calls</text>
+
+    <!-- #29 Building Nikigai, Aug '24, VR -->
+    <circle cx="410" cy="690" r="3" fill="#3b82f6" opacity="0.5"/>
+    <text x="420" y="687" fill="rgba(0,0,0,0.25)" font-size="5">Nikigai Uni</text>
+
+    <!-- #32 Two Programs, Sep '24, Fun -->
+    <circle cx="265" cy="636" r="2.5" fill="#3b82f6" opacity="0.4"/>
+
+    <!-- #37 100 Reach Outs, Oct '24, Pressure -->
+    <circle cx="175" cy="600" r="2.5" fill="#3b82f6" opacity="0.35"/>
+
+    <!-- #54 Masterclass, Feb '25, VR -->
+    <circle cx="410" cy="460" r="3" fill="#3b82f6" opacity="0.5"/>
+
+    <!-- #58 Share Workshop, Mar '25, Pressure -->
+    <circle cx="175" cy="420" r="2.5" fill="#3b82f6" opacity="0.35"/>
+
+    <!-- #62 Archetype Workshop, Apr '25, VR -->
+    <circle cx="410" cy="380" r="3" fill="#3b82f6" opacity="0.55"/>
+
+    <!-- #67 Fantasy story, Feb '26, Fun -->
+    <circle cx="265" cy="268" r="2.5" fill="#3b82f6" opacity="0.45"/>
+
+    <!-- #72 Fantasy test, Mar '26, Fun -->
+    <circle cx="265" cy="230" r="2.5" fill="#3b82f6" opacity="0.45"/>
+
+    <!-- #80 Healing compass Krislin, Mar '26, VR -->
+    <circle cx="410" cy="210" r="3" fill="#3b82f6" opacity="0.55"/>
+
+    <!-- #84 Creator guide, Apr '26, Fun -->
+    <circle cx="265" cy="160" r="3" fill="#3b82f6" opacity="0.5"/>
+    <text x="250" y="157" fill="rgba(0,0,0,0.25)" font-size="5" text-anchor="end">Creator guide</text>
+
+    <!-- #93 Published app, Jun '26, Fun -->
+    <circle cx="265" cy="90" r="3.5" fill="#3b82f6" opacity="0.6"/>
+    <text x="250" y="87" fill="rgba(0,0,0,0.3)" font-size="6" text-anchor="end">Published app</text>
+
+    <!-- Hero avatar -->
+    <circle cx="265" cy="85" r="12" fill="url(#avatarGlow)"/>
+    <circle cx="265" cy="85" r="6" fill="#3b82f6" opacity="0.7"/>
+    <text x="265" y="88" fill="#fff" font-size="6" font-weight="700" text-anchor="middle">💻</text>
+    <text x="265" y="73" fill="#3b82f6" font-size="7" font-weight="600" opacity="0.55">Vibe Rise Digital</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 4: AI CODING TEACHER (orange) — 6 wahoos           -->
+    <!-- Mar '26, all Fun                                        -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <path d="M 265 240 C 265 230, 265 220, 265 210
+             C 265 200, 265 190, 265 180"
+          fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+
+    <text x="240" y="253" fill="#f97316" font-size="6" font-weight="700" opacity="0.4" text-anchor="end">AI Teacher</text>
+
+    <!-- #71 buildwithAI, Mar '26, Fun -->
+    <circle cx="265" cy="238" r="2.5" fill="#f97316" opacity="0.4"/>
+    <!-- #74 AI masterclass, Mar '26, Fun -->
+    <circle cx="265" cy="228" r="2.5" fill="#f97316" opacity="0.45"/>
+    <!-- #75 Greenhouse, Mar '26, Fun -->
+    <circle cx="265" cy="220" r="2.5" fill="#f97316" opacity="0.45"/>
+    <!-- #76 Coding program, Mar '26, Fun -->
+    <circle cx="265" cy="212" r="2.5" fill="#f97316" opacity="0.45"/>
+    <!-- #77 Creel update, Mar '26, Fun -->
+    <circle cx="265" cy="204" r="2.5" fill="#f97316" opacity="0.45"/>
+    <!-- #79 AI hub portal, Mar '26, Fun -->
+    <circle cx="265" cy="196" r="2.5" fill="#f97316" opacity="0.45"/>
+
+    <!-- Hero avatar -->
+    <circle cx="265" cy="180" r="8" fill="url(#avatarGlow)"/>
+    <circle cx="265" cy="180" r="4" fill="#f97316" opacity="0.6"/>
+    <text x="265" y="183" fill="#fff" font-size="4" font-weight="700" text-anchor="middle">🤖</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 5: TUK TUKS (teal) — 2 wahoos                     -->
+    <!-- Oct '24 + May '26, both Vibe Rise                       -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <!-- Tuk Tuks lane = X=395 in VR zone -->
+    <path d="M 395 590 C 395 500, 395 400, 395 300
+             C 395 200, 395 150, 395 115"
+          fill="none" stroke="#14b8a6" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
+
+    <text x="410" y="605" fill="#14b8a6" font-size="6" font-weight="700" opacity="0.35">Tuk Tuks</text>
+
+    <circle cx="395" cy="590" r="3" fill="#14b8a6" opacity="0.45"/>
+    <text x="410" y="587" fill="rgba(0,0,0,0.2)" font-size="5">Tournament</text>
+
+    <circle cx="395" cy="115" r="3" fill="#14b8a6" opacity="0.55"/>
+    <text x="410" y="112" fill="rgba(0,0,0,0.25)" font-size="5">Presentation</text>
+
+    <!-- Hero avatar -->
+    <circle cx="395" cy="108" r="8" fill="url(#avatarGlow)"/>
+    <circle cx="395" cy="108" r="4" fill="#14b8a6" opacity="0.55"/>
+    <text x="395" y="111" fill="#fff" font-size="4" font-weight="700" text-anchor="middle">🛺</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- LINE 6: HEADSET SALES (amber) — 1 wahoo                 -->
+    <!-- Jul '26                                                  -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <circle cx="265" cy="55" r="3" fill="#d97706" opacity="0.5"/>
+    <text x="280" y="52" fill="#d97706" font-size="6" font-weight="600" opacity="0.4">Headset Sales</text>
+    <text x="280" y="62" fill="rgba(0,0,0,0.2)" font-size="5">Run first ads</text>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- CROSS-POLLINATION ARCS                                  -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <!-- #61 Retreat Disco + Breathwork, Apr '25 — first cross-pollination -->
+    <path d="M 370 380 Q 385 370, 370 360" fill="none" stroke="#5e17eb" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.2"/>
+    <text x="395" y="372" fill="#5e17eb" font-size="5" opacity="0.25" font-style="italic">disco + breathwork</text>
+
+    <!-- Dance Events ↔ Breathwork in Vibe Rise zone, getting close -->
+    <path d="M 370 270 Q 380 240, 370 220" fill="none" stroke="#5e17eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.15"/>
+
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- MERGE: #86 Vibe Rise Fest, May '26                      -->
+    <!-- Dance Events + Breathwork become Vibe Rise Sessions     -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <!-- Merge point glow (between Dance=345 and Breathwork=370, center=357) -->
+    <circle cx="357" cy="120" r="18" fill="url(#mergeGlow)" opacity="0.7"/>
+    <circle cx="357" cy="120" r="5" fill="#5e17eb" opacity="0.3"/>
+    <circle cx="357" cy="120" r="3" fill="#5e17eb" opacity="0.45"/>
+
+    <!-- Merged line continues upward -->
+    <path d="M 357 120 C 357 105, 357 90, 357 75
+             C 357 65, 357 58, 357 52"
+          fill="none" stroke="#5e17eb" stroke-width="5.5" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 357 120 C 357 105, 357 90, 357 75"
+          fill="none" stroke="#5e17eb" stroke-width="14" stroke-linecap="round" opacity="0.04" filter="url(#glow)"/>
+
+    <!-- Merge label -->
+    <text x="357" y="48" fill="#5e17eb" font-size="8" font-weight="800" text-anchor="middle" opacity="0.6">Vibe Rise Sessions</text>
+    <text x="357" y="38" fill="#5e17eb" font-size="5" text-anchor="middle" opacity="0.3">disco + breathwork merged</text>
+
+    <!-- Merged groan: #86 Vibe Rise Fest -->
+    <circle cx="357" cy="115" r="4" fill="#5e17eb" opacity="0.6"/>
+    <text x="340" y="130" fill="rgba(0,0,0,0.35)" font-size="6" text-anchor="end">Vibe Rise Fest</text>
+
+    <!-- Hero avatar on merged line -->
+    <circle cx="357" cy="55" r="14" fill="url(#avatarGlow)"/>
+    <circle cx="357" cy="55" r="7" fill="#5e17eb" opacity="0.7"/>
+    <text x="357" y="58" fill="#fff" font-size="7" font-weight="700" text-anchor="middle">🔥</text>
+    <circle cx="357" cy="55" r="10" fill="none" stroke="#5e17eb" stroke-width="1.5" opacity="0.1">
+      <animate attributeName="r" values="10;18;10" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.1;0;0.1" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Dance Events (19)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Breathwork (7)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Vibe Rise Digital (14)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>AI Teacher (6)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#14b8a6"></div>Tuk Tuks (2)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d97706"></div>Headset Sales (1)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#5e17eb"></div>Merged: Vibe Rise Sessions</div>
+  </div>
+
+  <div class="concept">
+    <strong>Real data, real positions.</strong> Every dot is an actual wahoo mapped to its post-state (X) and date (Y).<br><br>
+    <strong>Dance Events</strong> lives almost entirely in Vibe Rise (right). This curiosity consistently lights you up. 19 wahoos, barely dips to Fun.<br><br>
+    <strong>Vibe Rise Digital</strong> zigzags between Fun and Pressure. Product work oscillates. Some moments (Nikigai Uni, Masterclass, Archetype Workshop) hit Vibe Rise. Sales calls and workshop promotion feel like Pressure.<br><br>
+    <strong>Breathwork</strong> started in Fun/Pressure (training, daily videos) and migrated firmly to Vibe Rise by 2026 (hosting, facilitating).<br><br>
+    <strong>AI Coding Teacher</strong> is a tight cluster in Fun zone, Mar '26. All the same month. Early curiosity, hasn't spread yet.<br><br>
+    <strong>The merge</strong> at May '26: Dance Events (green) + Breathwork (red) converge into Vibe Rise Sessions (purple). Both lines were already in the Vibe Rise zone before merging — the cross-pollination was building since Apr '25 (#61 Retreat Disco + Breathwork).<br><br>
+    <strong>Tuk Tuks</strong> is thin and dashed — only 2 data points across 20 months. Both Vibe Rise though. The curiosity is alive but hasn't grown.
+  </div>
+</div>
+</body>
+</html>
