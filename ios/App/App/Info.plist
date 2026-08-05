@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Vibe Rise</string>
+	<string>Find My Flow</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Vibe Rise uses the camera to take photos for your avatar and profile.</string>
+	<string>Find My Flow uses the camera to take photos for your avatar and profile.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Vibe Rise accesses your photo library so you can choose a profile photo or avatar.</string>
+	<string>Find My Flow accesses your photo library so you can choose a profile photo or avatar.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
