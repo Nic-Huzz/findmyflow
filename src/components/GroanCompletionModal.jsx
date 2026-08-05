@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti'
 import { trackWahooCompleted } from '../lib/analytics'
 import { postFeedEvent } from '../lib/communityFeed'
 import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
+import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import { detectShift } from '../lib/shiftDetection'
 import './GroanCompletionModal.css'
 
@@ -188,7 +189,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         console.warn('NS check-in insert error:', e)
       }
 
-      // 4. Update scores
+      // 4. Update scores + level-up detection
       try {
         await supabase.rpc('increment_scores', {
           p_user_id: userId,
@@ -197,6 +198,20 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           p_points: WAHOO_RP[wahooClassification] || 7,
           p_week_start: getWeekStartLocal(),
         })
+
+        // 4a1. Level-up detection → community feed (only if increment succeeded)
+        const { data: freshScores } = await supabase
+          .from('user_lifetime_scores')
+          .select('lifetime_total_score')
+          .eq('user_id', userId)
+          .is('project_id', null)
+          .maybeSingle()
+        const freshXP = freshScores?.lifetime_total_score || 0
+        const priorXP = freshXP - (WAHOO_RP[wahooClassification] || 7)
+        if (getLevelNumber(freshXP) > getLevelNumber(priorXP)) {
+          const newLevel = getLevel(freshXP)
+          postFeedEvent(userId, 'level_up', `Reached ${newLevel?.name || 'a new level'}`)
+        }
       } catch (e) {
         console.warn('Score increment error:', e)
       }
@@ -214,7 +229,12 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         }
       } catch (e) { /* best effort */ }
 
-      // 4a3. Mystery box: new wahoo category check
+      // 4a3. Auto-post first_vibe_rise (dedup index handles repeat calls)
+      if (wahooClassification === 'vibe') {
+        postFeedEvent(userId, 'first_vibe_rise', 'Reached Vibe Rise for the first time')
+      }
+
+      // 4a4. Mystery box: new wahoo category check
       checkNewCategoryBox(userId, challenge.visibility_layer).catch(() => {})
 
       // 4b. Track wahoo analytics

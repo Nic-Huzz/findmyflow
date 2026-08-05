@@ -9,6 +9,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { postFeedEvent } from '../lib/communityFeed'
 import './HealingFlowModal.css'
 
 const PATTERNS = [
@@ -31,6 +32,8 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
   const [expectationText, setExpectationText] = useState(existingData?.expectation_text || '')
   const [clickedBook, setClickedBook] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [sharingHealing, setSharingHealing] = useState(false)
+  const [shareCaption, setShareCaption] = useState('')
 
   const patternMeta = PATTERNS.find(p => p.id === pattern)
 
@@ -141,7 +144,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
       window.dispatchEvent(new CustomEvent('zarlo:reaction', {
         detail: { actionType: 'healing_completed', actionData: { stage: 'recognised', pattern: pattern || 'unnamed' } }
       }))
-      onComplete?.()
+      setStep('done')
     } catch (e) {
       console.error('Healing flow save error:', e)
     }
@@ -174,7 +177,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
         </div>
 
         <div className="hfm-progress">
-          <div className="hfm-progress-fill" style={{ width: `${Math.round((step / 7) * 100)}%` }} />
+          <div className="hfm-progress-fill" style={{ width: `${Math.round(((typeof step === 'number' ? step : 7) / 7) * 100)}%` }} />
         </div>
 
         <div className="hfm-body">
@@ -305,10 +308,39 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
               <p className="hfm-trick">Secret trick: Now tell yourself this before you do it and watch anxiety turn into excitement</p>
             </div>
           )}
+
+          {/* Done: Share prompt */}
+          {step === 'done' && (
+            <div className="hfm-step">
+              <h3 className="hfm-question">Healing Flow Complete</h3>
+              <p className="hfm-sub">You faced the fear, found its origin, and rewired the narrative.</p>
+              <textarea className="hfm-textarea" value={shareCaption}
+                onChange={e => setShareCaption(e.target.value)}
+                placeholder="What would you like to share? (optional)"
+                rows={2} />
+              <div className="hfm-deeper-options">
+                <button className="hfm-deeper-btn hfm-deeper-primary" disabled={sharingHealing}
+                  onClick={async () => {
+                    setSharingHealing(true)
+                    postFeedEvent(userId, 'shared_healing',
+                      'Completed a healing flow',
+                      shareCaption.trim() || null)
+                    hapticSuccess()
+                    onComplete?.()
+                    onClose()
+                  }}>
+                  {sharingHealing ? 'Sharing...' : 'Share with the community'}
+                </button>
+                <button className="hfm-deeper-btn hfm-deeper-skip" onClick={() => { onComplete?.(); onClose() }}>
+                  Done
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Footer — skip for step 6 (has its own buttons) */}
-        {step !== 6 && (
+        {/* Footer — skip for step 6 and done (have their own buttons) */}
+        {step !== 6 && step !== 'done' && (
           <div className="hfm-footer">
             {step > 1 && (
               <button className="hfm-back" onClick={() => setStep(step - 1)}>← Back</button>

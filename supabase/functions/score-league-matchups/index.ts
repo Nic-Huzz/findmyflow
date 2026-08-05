@@ -143,7 +143,7 @@ async function scoreLeague(supabase: any, league: any, now: Date): Promise<numbe
   // Load teams + members once
   const { data: teams } = await supabase
     .from('fantasy_teams')
-    .select('id, fantasy_team_members(user_id)')
+    .select('id, name, fantasy_team_members(user_id)')
     .eq('league_id', league.id)
 
   const teamMembers: Record<string, string[]> = {}
@@ -200,6 +200,29 @@ async function scoreLeague(supabase: any, league: any, now: Date): Promise<numbe
 
         if (updateErr) {
           console.error(`Failed to update matchup ${matchup.id}:`, updateErr)
+          continue
+        }
+
+        // Post league_win to community feed — only for finalized (past) weeks
+        if (wk < currentWeek) {
+          let winnerTeamId: string | null = null
+          if (result.teamAMatchPoints === MATCH_POINTS.WIN) {
+            winnerTeamId = matchup.team_a_id
+          } else if (result.teamBMatchPoints === MATCH_POINTS.WIN) {
+            winnerTeamId = matchup.team_b_id
+          }
+          if (winnerTeamId) {
+            const team = (teams || []).find((t: any) => t.id === winnerTeamId)
+            const teamName = team?.name || 'their team'
+            const winnerMembers = teamMembers[winnerTeamId] || []
+            for (const memberId of winnerMembers) {
+              await supabase.from('community_feed').insert({
+                user_id: memberId,
+                event_type: 'league_win',
+                title: `${teamName} won Week ${wk}`,
+              }).then(() => {}).catch(() => {}) // dedup index handles repeats
+            }
+          }
         }
       }
 

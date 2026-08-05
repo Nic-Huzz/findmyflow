@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { postFeedEvent } from '../lib/communityFeed'
 import confetti from 'canvas-confetti'
 import WeeklyReviewCard from './WeeklyReviewCard'
 import './WeeklyReview.css'
@@ -88,6 +89,9 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
         p_points: 5,
         p_week_start: getWeekStartLocal(),
       })
+      postFeedEvent(userId, 'shared_weekly_review',
+        `Shared their weekly review (${weekLabel})`,
+        savedReview?.narrative_revision?.slice(0, 140) || null)
       onComplete?.()
     } catch (err) {
       console.error('Share bonus error:', err)
