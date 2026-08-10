@@ -89,6 +89,13 @@
   flex-shrink: 0;
 }
 
+.dome-ob-card-progress {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
 .dome-ob-primal-name {
   font-size: 26px;
   font-weight: 800;

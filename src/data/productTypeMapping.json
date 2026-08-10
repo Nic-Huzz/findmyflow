@@ -1,0 +1,279 @@
+{
+  "_meta": {
+    "description": "Maps the 18 product types from ProductSelectionFlow to PlaySkills and dome node signals. Used to recommend product types based on a user's dome + skill profile.",
+    "version": "1.0",
+    "source": "SOLUTION_LABELS in src/flows/ProductSelectionFlow.jsx"
+  },
+  "productTypes": {
+    "one_to_one": {
+      "label": "1:1 Service",
+      "tier": "service",
+      "scalability": "time_bound",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["coaching"],
+        "secondary": ["teaching", "speaking_up"]
+      },
+      "domeSignals": {
+        "strong": ["sub-coaching-1995", "sub-coaching-2010", "sub-mental-1900", "sub-mental-2019"],
+        "moderate": ["sub-somatic-1400", "sub-mindbody-1979"]
+      },
+      "description": "You work with one person at a time. Deep transformation, premium pricing, limited by your calendar."
+    },
+    "one_to_many": {
+      "label": "1:Many Service",
+      "tier": "service",
+      "scalability": "semi_scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["teaching", "performing"],
+        "secondary": ["coaching", "leading"]
+      },
+      "domeSignals": {
+        "strong": ["sub-oral-1400c", "sub-oral-2006", "sub-ordeal-2015", "sub-ritual-2018"],
+        "moderate": ["sub-dance-1975", "sub-strength-2000", "sub-sacred-2010"]
+      },
+      "description": "You deliver to groups. Workshops, classes, group sessions. More leverage than 1:1 but still requires your presence."
+    },
+    "custom_service": {
+      "label": "Custom Service",
+      "tier": "service",
+      "scalability": "time_bound",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["designing", "creating"],
+        "secondary": ["coaching", "building"]
+      },
+      "domeSignals": {
+        "strong": ["sub-immersive-2015", "sub-craft-1880", "sub-craft-2005"],
+        "moderate": ["sub-fashion-2007", "sub-light-1400"]
+      },
+      "description": "You design bespoke solutions for each client. High value, high effort, hard to scale."
+    },
+    "packaged_service": {
+      "label": "Packaged Service",
+      "tier": "service",
+      "scalability": "semi_scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["coaching", "teaching"],
+        "secondary": ["designing"]
+      },
+      "domeSignals": {
+        "strong": ["sub-coaching-2010", "sub-coaching-1937"],
+        "moderate": ["sub-mindbody-1979", "sub-somatic-1400", "sub-mental-1964"]
+      },
+      "description": "A standardised program delivered to clients. Same method, repeatable results. The bridge between service and product."
+    },
+    "hybrid_service": {
+      "label": "Hybrid Service",
+      "tier": "service",
+      "scalability": "semi_scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["coaching", "building"],
+        "secondary": ["teaching", "creating"]
+      },
+      "domeSignals": {
+        "strong": ["sub-coaching-2010", "ai-2022"],
+        "moderate": ["sub-coaching-2024", "media-2012"]
+      },
+      "description": "Part human, part digital. Live coaching plus self-paced content. Best of both worlds."
+    },
+    "group_program": {
+      "label": "Group Program",
+      "tier": "productized",
+      "scalability": "semi_scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["teaching", "leading"],
+        "secondary": ["coaching", "connecting"]
+      },
+      "domeSignals": {
+        "strong": ["sub-coaching-1937", "sub-ordeal-2015", "sub-ritual-1985"],
+        "moderate": ["sub-digital-2017", "sub-communal-2015"]
+      },
+      "description": "A cohort moves through a structured program together. Community creates accountability. You teach once, many benefit."
+    },
+    "automated_group": {
+      "label": "Self-Paced Course",
+      "tier": "productized",
+      "scalability": "scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["teaching", "creating"],
+        "secondary": ["storytelling", "designing"]
+      },
+      "domeSignals": {
+        "strong": ["media-2012", "sub-video-2005", "sub-audio-2015"],
+        "moderate": ["sub-written-2017", "sub-video-2024"]
+      },
+      "description": "Record once, sell forever. The classic scalable product. No calendar dependency."
+    },
+    "live_group": {
+      "label": "Live Cohort",
+      "tier": "productized",
+      "scalability": "semi_scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["teaching", "leading"],
+        "secondary": ["performing", "connecting"]
+      },
+      "domeSignals": {
+        "strong": ["sub-coaching-1937", "comms-2020", "sub-ordeal-2015"],
+        "moderate": ["sub-digital-2017", "sub-ritual-1985"]
+      },
+      "description": "A live group with a start and end date. Higher engagement than self-paced, more scalable than 1:1."
+    },
+    "managed_service": {
+      "label": "Done-For-You",
+      "tier": "productized",
+      "scalability": "semi_scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["building", "designing"],
+        "secondary": ["leading", "creating"]
+      },
+      "domeSignals": {
+        "strong": ["ai-2022", "tech-2004", "sub-digital-2010b"],
+        "moderate": ["sub-craft-2005", "media-1991"]
+      },
+      "description": "You do the work for them using your system. Agency model. Scales with a team, not just you."
+    },
+    "membership": {
+      "label": "Membership",
+      "tier": "productized",
+      "scalability": "scalable",
+      "hormoziLayer": "continuity",
+      "skills": {
+        "primary": ["connecting", "leading"],
+        "secondary": ["coaching", "creating"]
+      },
+      "domeSignals": {
+        "strong": ["sub-digital-2015", "sub-digital-2017", "sub-communal-2017"],
+        "moderate": ["sub-ritual-1985", "sub-coaching-1937", "sub-ordeal-2015"]
+      },
+      "description": "People pay monthly to be part of your world. Community is the product. Value compounds with every member."
+    },
+    "digital_product": {
+      "label": "Digital Product",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["creating", "designing"],
+        "secondary": ["teaching", "building"]
+      },
+      "domeSignals": {
+        "strong": ["sub-craft-2005", "sub-written-2017", "media-2022"],
+        "moderate": ["sub-craft-2020", "sub-toy-1932"]
+      },
+      "description": "Templates, ebooks, guides, presets. Make once, distribute infinitely. Low price, high volume."
+    },
+    "tech_digital": {
+      "label": "Tech/Digital Tool",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["building"],
+        "secondary": ["designing", "creating"]
+      },
+      "domeSignals": {
+        "strong": ["ai-2022", "tech-2004", "media-1991"],
+        "moderate": ["play-1972", "sub-digital-game-2005"]
+      },
+      "description": "An app, tool, or platform that solves a problem. Build once, users multiply."
+    },
+    "software": {
+      "label": "Software/SaaS",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "continuity",
+      "skills": {
+        "primary": ["building"],
+        "secondary": ["designing", "leading"]
+      },
+      "domeSignals": {
+        "strong": ["ai-2022", "tech-1991", "tech-1975"],
+        "moderate": ["sleep-2009", "sub-mindbody-2009"]
+      },
+      "description": "Subscription software. The ultimate recurring revenue model. Core offer IS continuity."
+    },
+    "physical_product": {
+      "label": "Physical Product",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "continuity",
+      "skills": {
+        "primary": ["building", "designing"],
+        "secondary": ["creating"]
+      },
+      "domeSignals": {
+        "strong": ["sub-craft-1880", "sub-craft-2005", "sub-ferment-1400"],
+        "moderate": ["sub-temperature-2018", "sub-light-2020", "sub-toy-1932"]
+      },
+      "description": "Something people hold. Supplements, equipment, merchandise, food products. Margins in manufacturing, moat in brand."
+    },
+    "content_podcast": {
+      "label": "Podcast",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "attraction",
+      "skills": {
+        "primary": ["storytelling"],
+        "secondary": ["connecting", "performing"]
+      },
+      "domeSignals": {
+        "strong": ["sub-audio-2005", "sub-oral-2015"],
+        "moderate": ["sub-oral-1860", "sub-coaching-1937", "sub-written-2017"]
+      },
+      "description": "Long-form audio. Builds deep trust over time. Primarily an attraction vehicle that can monetise via sponsorship or premium."
+    },
+    "content_newsletter": {
+      "label": "Newsletter",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "attraction",
+      "skills": {
+        "primary": ["storytelling", "teaching"],
+        "secondary": ["creating"]
+      },
+      "domeSignals": {
+        "strong": ["sub-written-1999", "sub-written-2017"],
+        "moderate": ["sub-written-1719", "sub-oral-2006"]
+      },
+      "description": "Written content delivered to inboxes. Builds authority. Monetises via sponsorship, paid tier, or as a funnel to other products."
+    },
+    "content_youtube": {
+      "label": "YouTube Channel",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "attraction",
+      "skills": {
+        "primary": ["storytelling", "performing"],
+        "secondary": ["creating", "teaching"]
+      },
+      "domeSignals": {
+        "strong": ["sub-video-2005", "media-2018", "sub-video-2018"],
+        "moderate": ["sub-oral-1860", "sub-creator-2007", "sub-creator-2022"]
+      },
+      "description": "Video content at scale. The most powerful attraction vehicle. Ad revenue plus funnel to premium products."
+    },
+    "mixed_products": {
+      "label": "Mixed Products",
+      "tier": "product",
+      "scalability": "scalable",
+      "hormoziLayer": "core",
+      "skills": {
+        "primary": ["creating", "building"],
+        "secondary": ["designing", "leading"]
+      },
+      "domeSignals": {
+        "strong": ["sub-creator-2024", "sub-creator-2022"],
+        "moderate": ["sub-immersive-2015", "fashion-2021"]
+      },
+      "description": "Multiple product types combined. The mature creator's portfolio. Each product feeds the others."
+    }
+  }
+}

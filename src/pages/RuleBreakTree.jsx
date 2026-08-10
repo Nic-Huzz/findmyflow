@@ -3,13 +3,14 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as d3 from 'd3'
 import { PRIMALS, PRIMAL_INDUSTRIES, INDUSTRIES, bridges, industryNodes, branchLinks, mergeLinks, PILL_CONFIG } from '../lib/ruleBreakTreeData'
 import { isExperiential, isCoreNode, getExperienceLabel, NS_COLORS } from '../lib/experienceDomeConfig'
-import { HUZZ_DOME_STATES, getHuzzDomeStats } from '../lib/huzzDomeData'
+import { useAuth } from '../auth/AuthProvider'
+import { useDomeData } from '../hooks/useDomeData'
+import './RuleBreakTree.css'
 
 // Lookup: primal ID → primal color (for dome mode)
 // Fire overridden to deeper amber-red so it's distinct from Story's orange
 const PRIMAL_COLOR_MAP = Object.fromEntries(PRIMALS.map(p => [p.id, p.color]))
 PRIMAL_COLOR_MAP['fire'] = '#ea580c'
-import './RuleBreakTree.css'
 
 const PRIMAL_R = 70
 const BRIDGE_R = 120
@@ -22,6 +23,8 @@ const SPEEDS = [1, 2, 5]
 export default function RuleBreakTree() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { user } = useAuth()
+  const { domeStates, setNodeState } = useDomeData(user?.id)
   const svgRef = useRef(null)
   const containerRef = useRef(null)
   const zoomRef = useRef(null)
@@ -74,9 +77,6 @@ export default function RuleBreakTree() {
   const [domeDetail, setDomeDetail] = useState('core') // 'core' | 'expanded'
   const [zoomScale, setZoomScale] = useState(1)
   const [hoveredNode, setHoveredNode] = useState(null)
-
-  // NS states for experience layer — starts with Huzz's data (will be replaced by Supabase hook)
-  const [domeStates, setDomeStates] = useState(() => ({ ...HUZZ_DOME_STATES }))
 
   // ═══════════════════════════════════════════
   //  LAYOUT COMPUTATION (useMemo)
@@ -263,16 +263,8 @@ export default function RuleBreakTree() {
   }, [])
 
   const handleDomeRate = useCallback((nodeId, state) => {
-    setDomeStates(prev => {
-      if (!state) {
-        const next = { ...prev }
-        delete next[nodeId]
-        return next
-      }
-      return { ...prev, [nodeId]: state }
-    })
-    // TODO: save to Supabase
-  }, [])
+    setNodeState(nodeId, state)
+  }, [setNodeState])
 
   const toggleFilter = useCallback((branchId) => {
     setActiveFilters(prev => {
@@ -752,8 +744,8 @@ export default function RuleBreakTree() {
                 ? getExperienceLabel(n.id, n.label)
                 : n.label
 
-              // Dome: hide labels unless zoomed in or selected
-              const showLabel = isDome ? (zoomScale > 2.5 || selectedNode?.id === n.id) : true
+              // Dome: show labels on hover, select, or zoom
+              const showLabel = isDome ? (zoomScale > 2.5 || selectedNode?.id === n.id || hoveredNode?.id === n.id) : true
 
               return (
                 <g key={n.id}
@@ -888,6 +880,13 @@ export default function RuleBreakTree() {
           <div className="rbt-cta" onClick={() => navigate('/create/remarkable')}>
             <div className="rbt-cta-text">Every branch started with one person breaking one rule.</div>
             <div className="rbt-cta-button">Find yours &rarr;</div>
+          </div>
+        )}
+
+        {/* CTA → Dome onboarding (dome + experience) */}
+        {(layer === 'dome' || layer === 'experience') && (
+          <div className="rbt-cta" onClick={() => navigate('/dome-onboarding')}>
+            <div className="rbt-cta-button">Add more nodes &rarr;</div>
           </div>
         )}
 

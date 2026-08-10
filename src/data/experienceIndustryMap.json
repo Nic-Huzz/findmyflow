@@ -1,0 +1,436 @@
+{
+  "_meta": {
+    "description": "Maps each core dome node to industries where it exists professionally and revenue models for earning from it",
+    "version": "1.0",
+    "industries": [
+      "wellness",
+      "sports_fitness",
+      "entertainment_media",
+      "tech_digital",
+      "food_hospitality",
+      "education_training",
+      "finance_professional",
+      "travel_adventure",
+      "community_social",
+      "creative_arts"
+    ],
+    "revenueModels": [
+      "salary",
+      "per_session",
+      "package_program",
+      "subscription",
+      "product",
+      "venue_owner",
+      "content_audience",
+      "licensing"
+    ]
+  },
+  "nodes": {
+    "car-1886": {
+      "label": "Driving / Road trips",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "entertainment_media"],
+      "revenueModels": ["per_session", "content_audience", "package_program"],
+      "exampleRoles": ["Tour driver", "Road trip content creator", "Driving instructor"]
+    },
+    "sub-endurance-1962": {
+      "label": "Jogging / recreational running",
+      "creatorViable": true,
+      "industries": ["sports_fitness", "wellness", "community_social"],
+      "revenueModels": ["per_session", "subscription", "content_audience", "product"],
+      "exampleRoles": ["Running coach", "Parkrun organiser", "Running app creator", "Athletic brand ambassador"]
+    },
+    "sub-strength-2000": {
+      "label": "CrossFit / functional fitness",
+      "creatorViable": true,
+      "industries": ["sports_fitness", "wellness", "education_training"],
+      "revenueModels": ["salary", "per_session", "subscription", "venue_owner", "licensing"],
+      "exampleRoles": ["CrossFit coach", "Box owner", "Online programming", "L1/L2 seminar staff"]
+    },
+    "sub-flexibility-1893": {
+      "label": "Yoga practice",
+      "creatorViable": true,
+      "industries": ["wellness", "sports_fitness", "education_training", "travel_adventure"],
+      "revenueModels": ["per_session", "package_program", "subscription", "venue_owner", "licensing"],
+      "exampleRoles": ["Yoga teacher", "Studio owner", "Retreat host", "Teacher trainer (RYT)", "Online yoga platform"]
+    },
+    "sub-temperature-2018": {
+      "label": "Cold plunge / ice bath",
+      "creatorViable": true,
+      "industries": ["wellness", "sports_fitness"],
+      "revenueModels": ["per_session", "venue_owner", "product", "content_audience"],
+      "exampleRoles": ["Cold exposure facilitator", "Plunge studio owner", "Cold plunge product seller"]
+    },
+    "sub-outdoor-1907": {
+      "label": "Scouting / camping",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "education_training", "community_social"],
+      "revenueModels": ["salary", "per_session", "package_program"],
+      "exampleRoles": ["Outdoor educator", "Camp director", "Wilderness guide", "Scout leader"]
+    },
+    "sub-dance-1975": {
+      "label": "Ecstatic dance / 5Rhythms",
+      "creatorViable": true,
+      "industries": ["wellness", "entertainment_media", "community_social"],
+      "revenueModels": ["per_session", "package_program", "venue_owner", "licensing"],
+      "exampleRoles": ["Ecstatic dance facilitator", "5Rhythms teacher", "Conscious event producer", "Silent disco host"]
+    },
+    "food-2002": {
+      "label": "Eating organic / Farmers market",
+      "creatorViable": true,
+      "industries": ["food_hospitality", "community_social"],
+      "revenueModels": ["product", "venue_owner", "subscription"],
+      "exampleRoles": ["Organic farmer", "Farmers market vendor", "Farm box subscription", "Food co-op organiser"]
+    },
+    "sub-ancestral-2002": {
+      "label": "Paleo / primal eating",
+      "creatorViable": true,
+      "industries": ["food_hospitality", "wellness", "education_training"],
+      "revenueModels": ["content_audience", "product", "package_program"],
+      "exampleRoles": ["Nutrition coach", "Paleo cookbook author", "Meal prep service"]
+    },
+    "sub-ferment-2010": {
+      "label": "Kombucha / cultured foods",
+      "creatorViable": true,
+      "industries": ["food_hospitality", "education_training"],
+      "revenueModels": ["product", "per_session", "content_audience"],
+      "exampleRoles": ["Fermentation workshop host", "Kombucha brewer", "Cultured food brand"]
+    },
+    "sub-fasting-2012": {
+      "label": "Intermittent fasting",
+      "creatorViable": true,
+      "industries": ["wellness", "education_training", "tech_digital"],
+      "revenueModels": ["content_audience", "subscription", "package_program"],
+      "exampleRoles": ["Fasting coach", "Fasting app creator", "Health content creator"]
+    },
+    "sub-regen-1971": {
+      "label": "Farm-to-table dining",
+      "creatorViable": true,
+      "industries": ["food_hospitality", "travel_adventure"],
+      "revenueModels": ["venue_owner", "per_session", "package_program"],
+      "exampleRoles": ["Farm-to-table chef", "Supper club host", "Agritourism operator"]
+    },
+    "tech-2007": {
+      "label": "Using a smartphone",
+      "creatorViable": false,
+      "industries": [],
+      "revenueModels": [],
+      "exampleRoles": []
+    },
+    "tech-2004": {
+      "label": "Using social media",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "tech_digital", "creative_arts"],
+      "revenueModels": ["salary", "content_audience", "per_session", "product"],
+      "exampleRoles": ["Social media manager", "Content creator", "Brand strategist", "Community manager"]
+    },
+    "ai-2022": {
+      "label": "Using AI tools (ChatGPT, Claude)",
+      "creatorViable": true,
+      "industries": ["tech_digital", "education_training", "creative_arts"],
+      "revenueModels": ["salary", "per_session", "package_program", "content_audience", "product"],
+      "exampleRoles": ["AI consultant", "Prompt engineer", "AI course creator", "AI tool builder", "AI integration freelancer"]
+    },
+    "fashion-2021": {
+      "label": "Building a personal brand",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "creative_arts", "education_training"],
+      "revenueModels": ["content_audience", "package_program", "per_session"],
+      "exampleRoles": ["Personal brand coach", "Influencer", "Creator economy educator"]
+    },
+    "sub-fashion-2007": {
+      "label": "Slow fashion / ethical fashion",
+      "creatorViable": true,
+      "industries": ["creative_arts", "community_social"],
+      "revenueModels": ["product", "content_audience", "venue_owner"],
+      "exampleRoles": ["Sustainable fashion brand", "Upcycling workshop host", "Ethical fashion blogger"]
+    },
+    "sub-digital-2010b": {
+      "label": "Instagram identity curation",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "creative_arts"],
+      "revenueModels": ["content_audience", "per_session", "product"],
+      "exampleRoles": ["Instagram strategist", "Visual brand consultant", "Content photographer"]
+    },
+    "sub-counter-2011": {
+      "label": "Minimalism / KonMari",
+      "creatorViable": true,
+      "industries": ["wellness", "education_training"],
+      "revenueModels": ["per_session", "package_program", "content_audience", "licensing"],
+      "exampleRoles": ["Professional organiser", "KonMari consultant", "Decluttering coach"]
+    },
+    "comms-2020": {
+      "label": "Video calling (Zoom)",
+      "creatorViable": false,
+      "industries": [],
+      "revenueModels": [],
+      "exampleRoles": []
+    },
+    "sub-ritual-2018": {
+      "label": "Cacao + breathwork ceremony",
+      "creatorViable": true,
+      "industries": ["wellness", "community_social", "travel_adventure"],
+      "revenueModels": ["per_session", "package_program", "venue_owner"],
+      "exampleRoles": ["Ceremony facilitator", "Retreat host", "Conscious event producer"]
+    },
+    "sub-communal-2017": {
+      "label": "Digital nomad hub",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "community_social", "tech_digital"],
+      "revenueModels": ["venue_owner", "subscription", "package_program"],
+      "exampleRoles": ["Co-living founder", "Nomad community builder", "Remote work retreat host"]
+    },
+    "sub-ordeal-2015": {
+      "label": "Adventure retreat",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "wellness", "sports_fitness"],
+      "revenueModels": ["package_program", "per_session", "venue_owner"],
+      "exampleRoles": ["Adventure retreat host", "Expedition leader", "Transformational travel operator"]
+    },
+    "sub-digital-2015": {
+      "label": "Discord community",
+      "creatorViable": true,
+      "industries": ["tech_digital", "community_social", "entertainment_media"],
+      "revenueModels": ["subscription", "content_audience"],
+      "exampleRoles": ["Community manager", "Paid community founder", "Discord moderator"]
+    },
+    "sub-coaching-1937": {
+      "label": "Mastermind group",
+      "creatorViable": true,
+      "industries": ["education_training", "finance_professional", "community_social"],
+      "revenueModels": ["subscription", "package_program", "per_session"],
+      "exampleRoles": ["Mastermind facilitator", "Business coach", "Peer advisory board leader"]
+    },
+    "intimacy-2012": {
+      "label": "Dating apps",
+      "creatorViable": true,
+      "industries": ["tech_digital", "community_social"],
+      "revenueModels": ["salary", "product"],
+      "exampleRoles": ["Dating app developer", "Dating coach", "Matchmaker"]
+    },
+    "property-2008": {
+      "label": "Staying in an Airbnb",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "food_hospitality"],
+      "revenueModels": ["venue_owner", "product"],
+      "exampleRoles": ["Airbnb host", "Property manager", "Experience host"]
+    },
+    "sub-alt-2011": {
+      "label": "Van life",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "creative_arts", "entertainment_media"],
+      "revenueModels": ["content_audience", "product", "per_session"],
+      "exampleRoles": ["Van life content creator", "Van conversion builder", "Mobile workshop host"]
+    },
+    "sub-proptech-2020": {
+      "label": "Working from home",
+      "creatorViable": false,
+      "industries": [],
+      "revenueModels": [],
+      "exampleRoles": []
+    },
+    "sub-sacred-2010": {
+      "label": "Wellness studio (SoulCycle)",
+      "creatorViable": true,
+      "industries": ["wellness", "sports_fitness"],
+      "revenueModels": ["venue_owner", "subscription", "salary"],
+      "exampleRoles": ["Studio owner", "Studio instructor", "Wellness franchise operator"]
+    },
+    "media-2018": {
+      "label": "Short-form video (TikTok)",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "creative_arts"],
+      "revenueModels": ["content_audience", "per_session", "product"],
+      "exampleRoles": ["TikTok creator", "Short-form video editor", "UGC creator for brands"]
+    },
+    "sub-oral-1860": {
+      "label": "Stand-up comedy",
+      "creatorViable": true,
+      "industries": ["entertainment_media"],
+      "revenueModels": ["per_session", "content_audience", "product"],
+      "exampleRoles": ["Stand-up comedian", "Comedy MC", "Comedy writer", "Comedy course host"]
+    },
+    "sub-written-1719": {
+      "label": "Reading a novel",
+      "creatorViable": true,
+      "industries": ["creative_arts", "entertainment_media", "education_training"],
+      "revenueModels": ["product", "content_audience", "per_session"],
+      "exampleRoles": ["Author", "Book reviewer", "Book club host", "Literary agent"]
+    },
+    "sub-audio-2005": {
+      "label": "Listening to podcasts",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "education_training"],
+      "revenueModels": ["content_audience", "subscription", "per_session"],
+      "exampleRoles": ["Podcast host", "Podcast producer", "Audio editor"]
+    },
+    "sub-video-2005": {
+      "label": "YouTube creator / watching",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "education_training", "creative_arts"],
+      "revenueModels": ["content_audience", "product", "subscription"],
+      "exampleRoles": ["YouTuber", "Video editor", "YouTube strategist", "Course creator"]
+    },
+    "play-1972": {
+      "label": "Playing video games",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "tech_digital"],
+      "revenueModels": ["salary", "content_audience", "per_session"],
+      "exampleRoles": ["Game designer", "Esports player", "Game streamer", "QA tester"]
+    },
+    "sub-board-1995": {
+      "label": "Eurogames (Catan)",
+      "creatorViable": true,
+      "industries": ["entertainment_media", "creative_arts", "community_social"],
+      "revenueModels": ["product", "venue_owner", "content_audience"],
+      "exampleRoles": ["Board game designer", "Board game cafe owner", "Board game reviewer"]
+    },
+    "sub-sport-1871": {
+      "label": "Professional sports (watching/playing)",
+      "creatorViable": true,
+      "industries": ["sports_fitness", "entertainment_media"],
+      "revenueModels": ["salary", "content_audience", "per_session"],
+      "exampleRoles": ["Athlete", "Sports commentator", "Sports analyst", "Coach", "Sports journalist"]
+    },
+    "sub-chance-2003": {
+      "label": "Poker",
+      "creatorViable": true,
+      "industries": ["entertainment_media"],
+      "revenueModels": ["per_session", "content_audience"],
+      "exampleRoles": ["Professional poker player", "Poker coach", "Poker content creator"]
+    },
+    "sub-toy-1932": {
+      "label": "LEGO / construction toys",
+      "creatorViable": true,
+      "industries": ["creative_arts", "entertainment_media", "education_training"],
+      "revenueModels": ["content_audience", "per_session", "product"],
+      "exampleRoles": ["LEGO certified professional", "LEGO content creator", "Toy designer"]
+    },
+    "sub-combustion-1400": {
+      "label": "Campfire / gathering around fire",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "community_social"],
+      "revenueModels": ["package_program", "per_session"],
+      "exampleRoles": ["Camp host", "Outdoor event facilitator", "Fire ceremony guide"]
+    },
+    "sub-light-1400": {
+      "label": "Firelight / candlelight ambiance",
+      "creatorViable": true,
+      "industries": ["creative_arts", "wellness"],
+      "revenueModels": ["product", "venue_owner"],
+      "exampleRoles": ["Candle maker", "Ambiance designer", "Event lighting specialist"]
+    },
+    "sub-light-2020": {
+      "label": "Candle ritual / hygge",
+      "creatorViable": true,
+      "industries": ["wellness", "creative_arts"],
+      "revenueModels": ["product", "content_audience", "per_session"],
+      "exampleRoles": ["Candle brand founder", "Hygge lifestyle content creator", "Ritual designer"]
+    },
+    "sub-ritual-fire-2000": {
+      "label": "Fire pit gathering",
+      "creatorViable": true,
+      "industries": ["travel_adventure", "food_hospitality", "community_social"],
+      "revenueModels": ["venue_owner", "package_program"],
+      "exampleRoles": ["Glamping host", "Outdoor event venue", "Social gathering facilitator"]
+    },
+    "sub-ritual-fire-2015b": {
+      "label": "Fire ceremony / cacao circle",
+      "creatorViable": true,
+      "industries": ["wellness", "community_social"],
+      "revenueModels": ["per_session", "package_program"],
+      "exampleRoles": ["Ceremony facilitator", "Ritual space holder", "Retreat host"]
+    },
+    "sub-traditional-2023": {
+      "label": "Cacao ceremony",
+      "creatorViable": true,
+      "industries": ["wellness", "community_social", "travel_adventure"],
+      "revenueModels": ["per_session", "package_program", "product"],
+      "exampleRoles": ["Cacao facilitator", "Ceremonial cacao supplier", "Retreat host"]
+    },
+    "sub-psychedelic-2016": {
+      "label": "Psilocybin therapy",
+      "creatorViable": true,
+      "industries": ["wellness", "education_training"],
+      "revenueModels": ["per_session", "package_program", "licensing"],
+      "exampleRoles": ["Psychedelic-assisted therapist", "Integration coach", "Retreat centre operator", "Research assistant"]
+    },
+    "sub-somatic-1400": {
+      "label": "Pranayama / breathwork",
+      "creatorViable": true,
+      "industries": ["wellness", "sports_fitness", "education_training"],
+      "revenueModels": ["per_session", "package_program", "subscription", "licensing"],
+      "exampleRoles": ["Breathwork facilitator", "Breathwork trainer", "Online breathwork app", "Corporate wellness provider"]
+    },
+    "sub-mindbody-1979": {
+      "label": "Mindfulness meditation (MBSR)",
+      "creatorViable": true,
+      "industries": ["wellness", "education_training", "tech_digital"],
+      "revenueModels": ["per_session", "subscription", "package_program", "licensing", "product"],
+      "exampleRoles": ["Meditation teacher", "MBSR instructor", "Meditation app creator", "Corporate mindfulness trainer"]
+    },
+    "sub-mental-1964": {
+      "label": "CBT (cognitive behavioral therapy)",
+      "creatorViable": true,
+      "industries": ["wellness", "education_training"],
+      "revenueModels": ["per_session", "salary", "subscription"],
+      "exampleRoles": ["CBT therapist", "Mental health counsellor", "Therapy app developer"]
+    },
+    "sub-energy-2015": {
+      "label": "Sound bath (attending)",
+      "creatorViable": true,
+      "industries": ["wellness", "entertainment_media", "community_social"],
+      "revenueModels": ["per_session", "package_program", "venue_owner"],
+      "exampleRoles": ["Sound healer", "Sound bath facilitator", "Crystal bowl practitioner"]
+    },
+    "sleep-2009": {
+      "label": "Sleep tracking (wearable)",
+      "creatorViable": true,
+      "industries": ["tech_digital", "wellness"],
+      "revenueModels": ["salary", "product", "content_audience"],
+      "exampleRoles": ["Sleep tech product manager", "Sleep coach", "Wearable reviewer"]
+    },
+    "sub-dream-1975": {
+      "label": "Lucid dreaming",
+      "creatorViable": true,
+      "industries": ["wellness", "education_training", "entertainment_media"],
+      "revenueModels": ["content_audience", "package_program", "product"],
+      "exampleRoles": ["Lucid dreaming coach", "Dream workshop facilitator", "Dream journal app creator"]
+    },
+    "sub-rest-1999": {
+      "label": "Intentional napping",
+      "creatorViable": false,
+      "industries": [],
+      "revenueModels": [],
+      "exampleRoles": []
+    },
+    "sub-states-1954": {
+      "label": "Float tank / sensory deprivation",
+      "creatorViable": true,
+      "industries": ["wellness"],
+      "revenueModels": ["venue_owner", "per_session", "subscription"],
+      "exampleRoles": ["Float centre owner", "Float therapist"]
+    },
+    "defense-1688": {
+      "label": "Buying insurance",
+      "creatorViable": true,
+      "industries": ["finance_professional"],
+      "revenueModels": ["salary", "per_session"],
+      "exampleRoles": ["Insurance broker", "Financial advisor", "Insurtech founder"]
+    },
+    "sub-safety-1400b": {
+      "label": "Martial arts",
+      "creatorViable": true,
+      "industries": ["sports_fitness", "education_training", "wellness"],
+      "revenueModels": ["per_session", "venue_owner", "licensing", "subscription"],
+      "exampleRoles": ["Martial arts instructor", "Dojo owner", "Self-defence coach", "MMA fighter"]
+    },
+    "sub-surveillance-2018": {
+      "label": "Privacy tools (Signal, VPN)",
+      "creatorViable": true,
+      "industries": ["tech_digital"],
+      "revenueModels": ["salary", "product", "content_audience"],
+      "exampleRoles": ["Cybersecurity consultant", "Privacy educator", "Security tool developer"]
+    }
+  }
+}

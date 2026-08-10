@@ -1,0 +1,301 @@
+[
+  {
+    "id": "lawyer",
+    "title": "Lawyer",
+    "onetCode": "23-1011.00",
+    "category": "corporate",
+    "nodes": {
+      "sub-written-1400": 0.91,
+      "sub-written-1620": 0.91,
+      "defense-1688": 0.88,
+      "sub-insurance-1897": 0.88,
+      "sub-oral-1400c": 0.87,
+      "sub-oral-2006": 0.86,
+      "sub-coaching-2010": 0.84,
+      "fashion-2021": 0.81,
+      "sub-coaching-1995": 0.78,
+      "media-2012": 0.78,
+      "sub-audio-2005": 0.78,
+      "sub-craft-1880": 0.72,
+      "sub-immersive-2015": 0.72,
+      "sub-ordeal-1863": 0.55,
+      "sub-mental-1900": 0.53
+    },
+    "primaryPrimals": [
+      "threat",
+      "status",
+      "story"
+    ],
+    "description": "Days built around reading, writing, and arguing positions under pressure, with research, negotiation, and high-stakes advocacy defining the rhythm.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "software-engineer",
+    "title": "Software Engineer",
+    "onetCode": "15-1252.00",
+    "category": "corporate",
+    "nodes": {
+      "ai-2022": 0.9,
+      "play-1100d": 0.84,
+      "sub-craft-1880": 0.83,
+      "media-2012": 0.78,
+      "sub-digital-2005": 0.76,
+      "sub-digital-2015": 0.76,
+      "sub-written-1999": 0.7,
+      "sub-mindbody-2009": 0.68,
+      "sub-oral-2006": 0.65,
+      "sub-coaching-2010": 0.64,
+      "sub-coaching-1995": 0.57
+    },
+    "primaryPrimals": [
+      "tools",
+      "story",
+      "play"
+    ],
+    "description": "Long focused hours solving logic puzzles, building systems, and creating new applications, with collaborative problem-solving and continuous learning.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "business-development-rep",
+    "title": "Business Development Rep",
+    "onetCode": "41-3091.00",
+    "category": "corporate",
+    "nodes": {
+      "fashion-2021": 0.99,
+      "sub-digital-2003": 0.99,
+      "sub-oral-2006": 0.99,
+      "sub-digital-2010b": 0.99,
+      "media-2004": 0.83,
+      "sub-oral-1400c": 0.82,
+      "media-2012": 0.68,
+      "sub-audio-2005": 0.68,
+      "sub-written-1999": 0.58,
+      "sub-coaching-1995": 0.56,
+      "sub-mindbody-2009": 0.54
+    },
+    "primaryPrimals": [
+      "status",
+      "bonds",
+      "story"
+    ],
+    "description": "Relentless outreach and relationship building, pitching value to new prospects, reading people quickly, and creatively positioning solutions under time pressure.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "accountant",
+    "title": "Accountant",
+    "onetCode": "13-2011.00",
+    "category": "corporate",
+    "nodes": {
+      "sub-written-1620": 0.87,
+      "media-1605": 0.87,
+      "defense-1688": 0.84,
+      "sub-written-1999": 0.82,
+      "sub-digital-1482": 0.8,
+      "sub-coaching-2010": 0.79,
+      "exchange-1602": 0.78,
+      "media-2012": 0.77,
+      "sub-audio-2005": 0.77,
+      "fashion-2021": 0.7,
+      "sub-oral-2006": 0.68,
+      "sub-mindbody-2009": 0.66,
+      "sub-ordeal-1863": 0.65,
+      "sub-coaching-1995": 0.58,
+      "sub-craft-1880": 0.58,
+      "sub-immersive-2015": 0.58
+    },
+    "primaryPrimals": [
+      "tools",
+      "threat",
+      "status"
+    ],
+    "description": "Methodical analysis of financial data with precision, ensuring compliance with standards, communicating findings to stakeholders, and training teams on processes.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "management-consultant",
+    "title": "Management Consultant",
+    "onetCode": "13-1111.00",
+    "category": "corporate",
+    "nodes": {
+      "sub-oral-2006": 0.93,
+      "sub-written-1999": 0.93,
+      "sub-coaching-1937": 0.91,
+      "sub-coaching-1995": 0.91,
+      "sub-craft-2014": 0.85,
+      "fashion-2021": 0.83,
+      "media-2012": 0.81,
+      "sub-audio-2005": 0.81,
+      "sub-ordeal-1863": 0.73,
+      "sub-mindbody-2009": 0.72,
+      "sub-coaching-2010": 0.69
+    },
+    "primaryPrimals": [
+      "status",
+      "story",
+      "bonds"
+    ],
+    "description": "High-velocity stakeholder interviews, data analysis, and framework building, presenting recommendations to executives and coaching organizations through change.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "retreat-facilitator",
+    "title": "Retreat Facilitator",
+    "onetCode": "39-9032.00",
+    "category": "experiential",
+    "nodes": {
+      "sub-mindbody-2007": 0.89,
+      "sub-audio-2015": 0.89,
+      "sub-immersive-2015": 0.88,
+      "sub-dance-1975": 0.88,
+      "sub-circadian-2012": 0.83,
+      "sub-ritual-1985": 0.8,
+      "sub-communal-2015": 0.8,
+      "sub-somatic-1997": 0.78,
+      "sub-mindbody-2009": 0.78,
+      "sub-traditional-2010": 0.76,
+      "sub-mindbody-2018": 0.76,
+      "sub-written-1999": 0.75,
+      "sub-somatic-1400": 0.73,
+      "sub-ritual-2018": 0.73,
+      "sub-mental-1900": 0.72,
+      "sub-energy-1922": 0.68,
+      "sub-coaching-2010": 0.68,
+      "sub-coaching-1995": 0.66,
+      "sub-flexibility-1893": 0.66,
+      "fashion-2021": 0.65
+    },
+    "primaryPrimals": [
+      "bonds",
+      "healing",
+      "story"
+    ],
+    "description": "Holding space for groups through structured experiences, managing group energy, scheduling activities, and creating containers for transformation and creative expression.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "crossfit-coach",
+    "title": "CrossFit Coach",
+    "onetCode": "39-9031.00",
+    "category": "experiential",
+    "nodes": {
+      "sub-strength-2000": 0.88,
+      "sub-strength-0776": 0.88,
+      "sub-endurance-1962": 0.88,
+      "sub-flexibility-1975": 0.88,
+      "sub-mindbody-2021": 0.81,
+      "sub-mindbody-2007": 0.81,
+      "sub-ordeal-2000": 0.79,
+      "sub-ordeal-1863": 0.79,
+      "sub-sport-2020": 0.78,
+      "sub-coaching-2010": 0.75,
+      "sub-mindbody-2009": 0.74,
+      "sub-somatic-1997": 0.73,
+      "sub-coaching-1995": 0.72,
+      "sub-strength-1400": 0.64,
+      "sub-oral-1400c": 0.53,
+      "fashion-2021": 0.53,
+      "sub-personal-1996": 0.5
+    },
+    "primaryPrimals": [
+      "movement",
+      "bonds",
+      "status"
+    ],
+    "description": "Demonstrating movements, coaching form under fatigue, programming workouts, building community through shared physical challenge, and developing athlete potential.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "podcast-host",
+    "title": "Podcast Host",
+    "onetCode": "27-3011.00",
+    "category": "experiential",
+    "nodes": {
+      "sub-creator-2022": 0.92,
+      "sub-video-2005": 0.92,
+      "sub-written-1999": 0.92,
+      "sub-oral-2015": 0.86,
+      "media-2004": 0.85,
+      "sub-audio-2005": 0.81,
+      "sub-written-2017": 0.8,
+      "media-1826": 0.8,
+      "sub-coaching-2010": 0.72,
+      "sub-mindbody-2009": 0.7,
+      "sub-oral-2006": 0.65,
+      "sub-ordeal-1863": 0.56
+    },
+    "primaryPrimals": [
+      "story",
+      "status",
+      "bonds"
+    ],
+    "description": "Researching guests, conducting long-form conversations, documenting and producing audio content, building an audience, and performing live for the public.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "chef",
+    "title": "Chef / Restaurant Owner",
+    "onetCode": "35-1011.00",
+    "category": "experiential",
+    "nodes": {
+      "sub-craft-1400": 0.78,
+      "sub-coaching-2010": 0.78,
+      "sub-ordeal-1863": 0.77,
+      "sub-regen-1971": 0.73,
+      "sub-ancestral-1939": 0.73,
+      "sub-circadian-1918": 0.7,
+      "sub-ancestral-1400": 0.68,
+      "sub-regen-2018": 0.68,
+      "food-2002": 0.68,
+      "sub-craft-1880": 0.68,
+      "sub-strength-1400": 0.67,
+      "sub-ferment-1400": 0.65,
+      "sub-oral-1400c": 0.6,
+      "sub-regen-1994": 0.56,
+      "media-2012": 0.56,
+      "sub-audio-2005": 0.56,
+      "sub-personal-1996": 0.55,
+      "sub-written-1999": 0.54,
+      "sub-coaching-1995": 0.54,
+      "fashion-2021": 0.5
+    },
+    "primaryPrimals": [
+      "nourishment",
+      "fire",
+      "bonds"
+    ],
+    "description": "Training and coordinating kitchen teams under pressure, creating dishes with quality ingredients, managing resources, and turning food into memorable experiences.",
+    "dataSource": "onet-v2"
+  },
+  {
+    "id": "adventure-tour-guide",
+    "title": "Adventure Tour Guide",
+    "onetCode": "39-7012.00",
+    "category": "experiential",
+    "nodes": {
+      "sub-oral-1400": 0.91,
+      "sub-outdoor-1941": 0.91,
+      "sub-ordeal-2015": 0.91,
+      "sub-oral-1400c": 0.88,
+      "sub-outdoor-1400": 0.85,
+      "sub-outdoor-1907": 0.85,
+      "sub-resilience-1993": 0.82,
+      "sub-ordeal-1400": 0.81,
+      "sub-immersive-2015": 0.78,
+      "sub-safety-1400": 0.65,
+      "sub-written-1999": 0.65,
+      "media-2012": 0.64,
+      "sub-audio-2005": 0.64,
+      "sub-outdoor-2008": 0.59,
+      "sub-endurance-2010": 0.59,
+      "sub-strength-2010": 0.55
+    },
+    "primaryPrimals": [
+      "movement",
+      "bonds",
+      "threat"
+    ],
+    "description": "Leading groups through wilderness and unfamiliar terrain, performing for the public, managing safety, storytelling, and creating peak moments through controlled adventure.",
+    "dataSource": "onet-v2"
+  }
+]

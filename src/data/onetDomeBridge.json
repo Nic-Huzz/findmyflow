@@ -1,0 +1,786 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2026-07-29",
+    "description": "Maps O*NET Work Activity element IDs to Experience Dome node IDs. Industry-specific overrides handle the same activity manifesting as different experiences across contexts.",
+    "unmappedActivities": [
+      {
+        "id": "4.A.2.b.6",
+        "name": "Organizing, Planning, and Prioritizing Work"
+      },
+      {
+        "id": "4.A.3.b.4",
+        "name": "Repairing and Maintaining Mechanical Equipment"
+      },
+      {
+        "id": "4.A.3.b.5",
+        "name": "Repairing and Maintaining Electronic Equipment"
+      },
+      {
+        "id": "4.A.4.a.2",
+        "name": "Communicating with Supervisors, Peers, or Subordinates"
+      },
+      {
+        "id": "4.A.4.c.1",
+        "name": "Performing Administrative Activities"
+      },
+      {
+        "id": "4.A.4.c.2",
+        "name": "Staffing Organizational Units"
+      }
+    ]
+  },
+  "bridge": {
+    "4.A.1.a.1": {
+      "name": "Getting Information",
+      "domeNodes": {
+        "default": [
+          "sub-written-1719",
+          "sub-audio-2005",
+          "media-2012"
+        ],
+        "legal": [
+          "sub-written-1400",
+          "sub-written-1620"
+        ],
+        "tech": [
+          "sub-digital-2005",
+          "sub-digital-2015",
+          "media-2012"
+        ],
+        "sales": [
+          "sub-digital-2003",
+          "sub-oral-2006"
+        ],
+        "finance": [
+          "sub-written-1620",
+          "media-1605"
+        ],
+        "consulting": [
+          "sub-oral-2006",
+          "sub-written-1999"
+        ],
+        "fitness": [
+          "sub-mindbody-2009",
+          "sub-mindbody-2021"
+        ],
+        "wellness": [
+          "sub-mindbody-2007",
+          "sub-audio-2015"
+        ],
+        "media": [
+          "sub-audio-2005",
+          "sub-video-2005"
+        ],
+        "food": [
+          "sub-regen-1971",
+          "sub-ancestral-1939"
+        ],
+        "adventure": [
+          "sub-outdoor-1400",
+          "sub-outdoor-1907"
+        ]
+      }
+    },
+    "4.A.1.a.2": {
+      "name": "Monitoring Processes, Materials, or Surroundings",
+      "domeNodes": {
+        "default": [
+          "sub-mindbody-2009"
+        ],
+        "fitness": [
+          "sub-mindbody-2009",
+          "sub-strength-0776"
+        ],
+        "wellness": [
+          "sub-somatic-1997",
+          "sub-mindbody-2009"
+        ],
+        "food": [
+          "sub-ferment-1400",
+          "sub-regen-1971"
+        ],
+        "adventure": [
+          "sub-outdoor-1907",
+          "sub-resilience-1993"
+        ]
+      }
+    },
+    "4.A.1.b.1": {
+      "name": "Identifying Objects, Actions, and Events",
+      "domeNodes": {
+        "default": [],
+        "adventure": [
+          "sub-outdoor-1400",
+          "sub-outdoor-1907"
+        ],
+        "food": [
+          "sub-ancestral-1400",
+          "sub-regen-1971"
+        ],
+        "media": [
+          "sub-video-2005",
+          "media-1826"
+        ]
+      }
+    },
+    "4.A.1.b.2": {
+      "name": "Inspecting Equipment, Structures, or Materials",
+      "domeNodes": {
+        "default": [],
+        "fitness": [
+          "sub-strength-0776"
+        ],
+        "food": [
+          "sub-ferment-1400"
+        ],
+        "adventure": [
+          "sub-outdoor-1907",
+          "sub-resilience-1993"
+        ]
+      }
+    },
+    "4.A.1.b.3": {
+      "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+      "domeNodes": {
+        "default": [],
+        "food": [
+          "sub-personal-1996"
+        ],
+        "consulting": [
+          "sub-craft-2014"
+        ]
+      }
+    },
+    "4.A.2.a.1": {
+      "name": "Judging the Qualities of Objects, Services, or People",
+      "domeNodes": {
+        "default": [],
+        "food": [
+          "sub-ancestral-1400",
+          "sub-regen-1994",
+          "food-2002"
+        ],
+        "media": [
+          "sub-video-2005",
+          "sub-audio-2005"
+        ],
+        "adventure": [
+          "sub-outdoor-1907"
+        ]
+      }
+    },
+    "4.A.2.a.2": {
+      "name": "Processing Information",
+      "domeNodes": {
+        "default": [],
+        "tech": [
+          "ai-2022"
+        ],
+        "finance": [
+          "sub-digital-1482"
+        ]
+      }
+    },
+    "4.A.2.a.3": {
+      "name": "Evaluating Information to Determine Compliance with Standards",
+      "domeNodes": {
+        "default": [],
+        "legal": [
+          "defense-1688",
+          "sub-insurance-1897"
+        ],
+        "finance": [
+          "defense-1688"
+        ]
+      }
+    },
+    "4.A.2.a.4": {
+      "name": "Analyzing Data or Information",
+      "domeNodes": {
+        "default": [],
+        "tech": [
+          "ai-2022"
+        ],
+        "consulting": [
+          "sub-craft-2014"
+        ],
+        "finance": [
+          "exchange-1602"
+        ]
+      }
+    },
+    "4.A.2.b.1": {
+      "name": "Making Decisions and Solving Problems",
+      "domeNodes": {
+        "default": [],
+        "tech": [
+          "play-1100d"
+        ],
+        "consulting": [
+          "sub-coaching-1995"
+        ],
+        "adventure": [
+          "sub-resilience-1993"
+        ]
+      }
+    },
+    "4.A.2.b.2": {
+      "name": "Thinking Creatively",
+      "domeNodes": {
+        "default": [
+          "sub-craft-1880",
+          "sub-immersive-2015"
+        ],
+        "tech": [
+          "play-1100d",
+          "sub-craft-1880"
+        ],
+        "media": [
+          "sub-creator-2022",
+          "sub-video-2005",
+          "sub-written-1999"
+        ],
+        "food": [
+          "sub-craft-1880",
+          "sub-ancestral-1400"
+        ],
+        "fitness": [
+          "sub-strength-2000",
+          "sub-sport-2020"
+        ],
+        "wellness": [
+          "sub-immersive-2015",
+          "sub-dance-1975"
+        ],
+        "adventure": [
+          "sub-immersive-2015",
+          "sub-outdoor-1941"
+        ],
+        "sales": [
+          "fashion-2021",
+          "media-2004"
+        ],
+        "consulting": [
+          "sub-oral-2006",
+          "sub-craft-2014"
+        ]
+      }
+    },
+    "4.A.2.b.3": {
+      "name": "Updating and Using Relevant Knowledge",
+      "domeNodes": {
+        "default": [
+          "media-2012",
+          "sub-audio-2005"
+        ],
+        "tech": [
+          "media-2012",
+          "ai-2022"
+        ],
+        "fitness": [
+          "sub-mindbody-2021",
+          "sub-mindbody-2007"
+        ],
+        "wellness": [
+          "sub-traditional-2010",
+          "sub-mindbody-2018"
+        ],
+        "media": [
+          "sub-audio-2005",
+          "sub-written-2017"
+        ]
+      }
+    },
+    "4.A.2.b.4": {
+      "name": "Developing Objectives and Strategies",
+      "domeNodes": {
+        "default": [],
+        "consulting": [
+          "sub-coaching-1995",
+          "sub-coaching-1937"
+        ],
+        "sales": [
+          "fashion-2021"
+        ],
+        "fitness": [
+          "sub-coaching-2010"
+        ]
+      }
+    },
+    "4.A.2.b.5": {
+      "name": "Scheduling Work and Activities",
+      "domeNodes": {
+        "default": [],
+        "wellness": [
+          "sub-circadian-2012"
+        ],
+        "food": [
+          "sub-circadian-1918"
+        ]
+      }
+    },
+    "4.A.2.b.6": {
+      "name": "Organizing, Planning, and Prioritizing Work",
+      "domeNodes": {
+        "default": []
+      }
+    },
+    "4.A.3.a.1": {
+      "name": "Performing General Physical Activities",
+      "domeNodes": {
+        "default": [
+          "sub-strength-0776",
+          "sub-endurance-1962"
+        ],
+        "fitness": [
+          "sub-strength-2000",
+          "sub-strength-0776",
+          "sub-endurance-1962",
+          "sub-flexibility-1975"
+        ],
+        "food": [
+          "sub-strength-1400"
+        ],
+        "adventure": [
+          "sub-outdoor-2008",
+          "sub-endurance-2010",
+          "sub-outdoor-1941"
+        ],
+        "wellness": [
+          "sub-dance-1975",
+          "sub-flexibility-1893"
+        ]
+      }
+    },
+    "4.A.3.a.2": {
+      "name": "Handling and Moving Objects",
+      "domeNodes": {
+        "default": [],
+        "fitness": [
+          "sub-strength-1400",
+          "sub-strength-0776"
+        ],
+        "food": [
+          "sub-craft-1880"
+        ],
+        "adventure": [
+          "sub-outdoor-2008",
+          "sub-strength-2010"
+        ]
+      }
+    },
+    "4.A.3.a.3": {
+      "name": "Controlling Machines and Processes",
+      "domeNodes": {
+        "default": [],
+        "food": [
+          "sub-ferment-1400"
+        ]
+      }
+    },
+    "4.A.3.a.4": {
+      "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+      "domeNodes": {
+        "default": [
+          "car-1886"
+        ],
+        "adventure": [
+          "car-1886",
+          "car-1956"
+        ]
+      }
+    },
+    "4.A.3.b.1": {
+      "name": "Working with Computers",
+      "isInfrastructure": true,
+      "domeNodes": {
+        "default": [],
+        "tech": [
+          "ai-2022"
+        ]
+      }
+    },
+    "4.A.3.b.2": {
+      "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+      "domeNodes": {
+        "default": [],
+        "tech": [
+          "sub-craft-1880"
+        ]
+      }
+    },
+    "4.A.3.b.4": {
+      "name": "Repairing and Maintaining Mechanical Equipment",
+      "domeNodes": {
+        "default": []
+      }
+    },
+    "4.A.3.b.5": {
+      "name": "Repairing and Maintaining Electronic Equipment",
+      "domeNodes": {
+        "default": []
+      }
+    },
+    "4.A.3.b.6": {
+      "name": "Documenting/Recording Information",
+      "domeNodes": {
+        "default": [
+          "sub-written-1999"
+        ],
+        "media": [
+          "sub-written-1999",
+          "sub-written-2017",
+          "sub-audio-2005"
+        ],
+        "legal": [
+          "sub-written-1400"
+        ],
+        "food": [
+          "sub-written-1999"
+        ]
+      }
+    },
+    "4.A.4.a.1": {
+      "name": "Interpreting the Meaning of Information for Others",
+      "domeNodes": {
+        "default": [
+          "sub-oral-2006"
+        ],
+        "legal": [
+          "sub-oral-2006",
+          "sub-oral-1400c"
+        ],
+        "consulting": [
+          "sub-oral-2006",
+          "sub-coaching-1995"
+        ],
+        "media": [
+          "sub-oral-2006",
+          "sub-oral-2015"
+        ],
+        "fitness": [
+          "sub-coaching-2010"
+        ],
+        "wellness": [
+          "sub-coaching-2010",
+          "sub-mental-1900"
+        ],
+        "adventure": [
+          "sub-oral-1400"
+        ]
+      }
+    },
+    "4.A.4.a.2": {
+      "name": "Communicating with Supervisors, Peers, or Subordinates",
+      "isInfrastructure": true,
+      "domeNodes": {
+        "default": []
+      }
+    },
+    "4.A.4.a.3": {
+      "name": "Communicating with People Outside the Organization",
+      "domeNodes": {
+        "default": [
+          "fashion-2021"
+        ],
+        "sales": [
+          "fashion-2021",
+          "sub-digital-2003"
+        ],
+        "media": [
+          "sub-oral-2015",
+          "media-2004"
+        ],
+        "consulting": [
+          "sub-oral-2006",
+          "fashion-2021"
+        ],
+        "adventure": [
+          "sub-oral-1400",
+          "sub-oral-1400c"
+        ]
+      }
+    },
+    "4.A.4.a.4": {
+      "name": "Establishing and Maintaining Interpersonal Relationships",
+      "domeNodes": {
+        "default": [
+          "sub-coaching-2010"
+        ],
+        "sales": [
+          "sub-digital-2003",
+          "fashion-2021"
+        ],
+        "wellness": [
+          "sub-ritual-1985",
+          "sub-communal-2015"
+        ],
+        "fitness": [
+          "sub-ordeal-2000",
+          "sub-ordeal-1863"
+        ],
+        "consulting": [
+          "sub-coaching-1937",
+          "sub-coaching-1995"
+        ],
+        "adventure": [
+          "sub-ordeal-2015",
+          "sub-ordeal-1400"
+        ]
+      }
+    },
+    "4.A.4.a.5": {
+      "name": "Assisting and Caring for Others",
+      "domeNodes": {
+        "default": [
+          "sub-mental-1900"
+        ],
+        "fitness": [
+          "sub-coaching-2010",
+          "sub-somatic-1997"
+        ],
+        "wellness": [
+          "sub-mental-1900",
+          "sub-somatic-1997",
+          "sub-energy-1922"
+        ],
+        "adventure": [
+          "sub-resilience-1993",
+          "sub-safety-1400"
+        ]
+      }
+    },
+    "4.A.4.a.6": {
+      "name": "Selling or Influencing Others",
+      "domeNodes": {
+        "default": [
+          "fashion-2021",
+          "sub-oral-2006"
+        ],
+        "sales": [
+          "fashion-2021",
+          "sub-digital-2003",
+          "sub-oral-2006",
+          "sub-digital-2010b"
+        ],
+        "legal": [
+          "sub-oral-1400c",
+          "sub-oral-2006"
+        ],
+        "consulting": [
+          "sub-oral-2006",
+          "fashion-2021"
+        ],
+        "fitness": [
+          "sub-oral-1400c",
+          "fashion-2021"
+        ],
+        "adventure": [
+          "sub-oral-1400",
+          "sub-immersive-2015"
+        ]
+      }
+    },
+    "4.A.4.a.7": {
+      "name": "Resolving Conflicts and Negotiating with Others",
+      "domeNodes": {
+        "default": [],
+        "legal": [
+          "sub-oral-1400c"
+        ],
+        "consulting": [
+          "sub-coaching-1995"
+        ],
+        "wellness": [
+          "sub-mental-1900",
+          "sub-ritual-1985"
+        ],
+        "food": [
+          "sub-ordeal-1863"
+        ]
+      }
+    },
+    "4.A.4.a.8": {
+      "name": "Performing for or Working Directly with the Public",
+      "domeNodes": {
+        "default": [
+          "sub-oral-1400c",
+          "sub-oral-2006"
+        ],
+        "fitness": [
+          "sub-strength-2000",
+          "sub-ordeal-2000"
+        ],
+        "wellness": [
+          "sub-somatic-1400",
+          "sub-ritual-2018",
+          "sub-dance-1975"
+        ],
+        "entertainment": [
+          "sub-oral-1860",
+          "sub-oral-2015"
+        ],
+        "media": [
+          "sub-oral-2015",
+          "sub-video-2005"
+        ],
+        "food": [
+          "sub-oral-1400c",
+          "sub-craft-1880"
+        ],
+        "adventure": [
+          "sub-oral-1400",
+          "sub-outdoor-1941",
+          "sub-ordeal-2015"
+        ],
+        "sales": [
+          "sub-oral-1400c",
+          "fashion-2021"
+        ]
+      }
+    },
+    "4.A.4.b.1": {
+      "name": "Coordinating the Work and Activities of Others",
+      "domeNodes": {
+        "default": [],
+        "food": [
+          "sub-ordeal-1863"
+        ],
+        "wellness": [
+          "sub-ritual-1985",
+          "sub-immersive-2015"
+        ]
+      }
+    },
+    "4.A.4.b.2": {
+      "name": "Developing and Building Teams",
+      "domeNodes": {
+        "default": [
+          "sub-ordeal-1863"
+        ],
+        "fitness": [
+          "sub-ordeal-2000",
+          "sub-ordeal-1863"
+        ],
+        "wellness": [
+          "sub-ritual-1985",
+          "sub-communal-2015"
+        ],
+        "food": [
+          "sub-ordeal-1863"
+        ],
+        "adventure": [
+          "sub-ordeal-2015",
+          "sub-ordeal-1400"
+        ]
+      }
+    },
+    "4.A.4.b.3": {
+      "name": "Training and Teaching Others",
+      "domeNodes": {
+        "default": [
+          "sub-coaching-2010",
+          "media-2012"
+        ],
+        "fitness": [
+          "sub-coaching-2010",
+          "sub-strength-2000"
+        ],
+        "wellness": [
+          "sub-coaching-2010",
+          "sub-somatic-1400"
+        ],
+        "food": [
+          "sub-craft-1400",
+          "sub-coaching-2010"
+        ],
+        "adventure": [
+          "sub-outdoor-1941",
+          "sub-resilience-1993"
+        ]
+      }
+    },
+    "4.A.4.b.4": {
+      "name": "Guiding, Directing, and Motivating Subordinates",
+      "domeNodes": {
+        "default": [],
+        "fitness": [
+          "sub-coaching-2010"
+        ],
+        "food": [
+          "sub-craft-1400"
+        ]
+      }
+    },
+    "4.A.4.b.5": {
+      "name": "Coaching and Developing Others",
+      "domeNodes": {
+        "default": [
+          "sub-coaching-2010"
+        ],
+        "fitness": [
+          "sub-coaching-2010",
+          "sub-coaching-1995"
+        ],
+        "wellness": [
+          "sub-coaching-2010",
+          "sub-mental-1900",
+          "sub-coaching-1995"
+        ],
+        "consulting": [
+          "sub-coaching-1995",
+          "sub-coaching-1937"
+        ]
+      }
+    },
+    "4.A.4.b.6": {
+      "name": "Providing Consultation and Advice to Others",
+      "domeNodes": {
+        "default": [
+          "sub-coaching-1995"
+        ],
+        "legal": [
+          "sub-coaching-1995",
+          "sub-oral-2006"
+        ],
+        "consulting": [
+          "sub-coaching-1995",
+          "sub-coaching-1937",
+          "sub-oral-2006"
+        ],
+        "fitness": [
+          "sub-coaching-2010",
+          "sub-personal-1996"
+        ],
+        "wellness": [
+          "sub-coaching-2010",
+          "sub-traditional-2010"
+        ]
+      }
+    },
+    "4.A.4.c.1": {
+      "name": "Performing Administrative Activities",
+      "isInfrastructure": true,
+      "domeNodes": {
+        "default": []
+      }
+    },
+    "4.A.4.c.2": {
+      "name": "Staffing Organizational Units",
+      "domeNodes": {
+        "default": []
+      }
+    },
+    "4.A.4.c.3": {
+      "name": "Monitoring and Controlling Resources",
+      "domeNodes": {
+        "default": [],
+        "food": [
+          "sub-regen-2018",
+          "food-2002"
+        ]
+      }
+    }
+  }
+}

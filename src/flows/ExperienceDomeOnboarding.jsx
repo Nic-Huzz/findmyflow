@@ -2,6 +2,8 @@ import React, { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
 import { isCoreNode, getExperienceLabel } from '../lib/experienceDomeConfig'
+import { useAuth } from '../auth/AuthProvider'
+import { useDomeData } from '../hooks/useDomeData'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './ExperienceDomeOnboarding.css'
 
@@ -11,8 +13,6 @@ const NS_ICONS = { vibe_rise: '✦', fun: '○', growth_edge: '↗', pressure: '
 
 // Build ordered primal data with their core nodes
 function buildPrimalCards() {
-  const nodeMap = Object.fromEntries(industryNodes.map(n => [n.id, n]))
-
   return PRIMALS.map(primal => {
     const nodes = industryNodes
       .filter(n => {
@@ -37,9 +37,11 @@ function buildPrimalCards() {
 
 export default function ExperienceDomeOnboarding() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const { bulkSetStates } = useDomeData(user?.id)
   const primalCards = useMemo(buildPrimalCards, [])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [ratings, setRatings] = useState({}) // { nodeId: 'vibe_rise' | 'fun' | 'pressure' }
+  const [ratings, setRatings] = useState({})
   const [exiting, setExiting] = useState(false)
   const [expandedNode, setExpandedNode] = useState(null)
 
@@ -48,8 +50,12 @@ export default function ExperienceDomeOnboarding() {
   const totalNodes = primalCards.reduce((sum, c) => sum + c.nodes.length, 0)
   const ratedCount = Object.keys(ratings).length
 
+  // Count rated for current card
+  const cardRated = card ? card.nodes.filter(n => ratings[n.id]).length : 0
+
   const handleToggle = useCallback((nodeId) => {
     hapticLight()
+    // Auto-close any other open dropdown
     setExpandedNode(prev => prev === nodeId ? null : nodeId)
   }, [])
 
@@ -70,7 +76,7 @@ export default function ExperienceDomeOnboarding() {
     if (exiting) return
     if (isLast) {
       hapticSuccess()
-      // TODO: save ratings to Supabase, navigate to dome
+      bulkSetStates(ratings)
       navigate('/rule-break-tree?layer=dome')
       return
     }
@@ -113,7 +119,7 @@ export default function ExperienceDomeOnboarding() {
 
       {/* Card */}
       <div className={`dome-ob-card ${exiting ? 'exiting' : ''}`}>
-        {/* Primal title */}
+        {/* Primal title + progress */}
         <div className="dome-ob-primal-header">
           <div
             className="dome-ob-primal-dot"
@@ -122,8 +128,11 @@ export default function ExperienceDomeOnboarding() {
           <h2 className="dome-ob-primal-name" style={{ color: card.color }}>
             {card.label}
           </h2>
+          <span className="dome-ob-card-progress" style={{ color: card.color }}>
+            {cardRated}/{card.nodes.length}
+          </span>
         </div>
-        <p className="dome-ob-primal-desc">{card.desc}</p>
+        <p className="dome-ob-primal-desc">{card.desc || ''}</p>
 
         {/* Experience pills */}
         <div className="dome-ob-nodes">
