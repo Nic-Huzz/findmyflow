@@ -118,7 +118,7 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
 **Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
 
@@ -134,9 +134,9 @@ docs/               # Specs, handoffs, research
 
 **Play Profile**: `/play-profile` (quiz + dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`
 
-**Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
+**Fantasy League**: `/league`, `/league/week`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing). `/league/matchup` now redirects to `/league`.
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/essence-mirror`, `/try/career-clarity`, `/try/experience-creators`, `/try/ai-diagnostic`, `/try/life-paths-test`, `/try/life-paths`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
 
@@ -385,6 +385,9 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
 
+### Ghost Self League
+`ghost_weekly_results` (user_id, week_start, ghost/user daily scores, categories_won/lost, result: pending/win/loss/draw) | `ghost_streaks` (user_id, current_streak, longest_streak, total_wins/losses/draws, pb_tune/courage/community) | `ghost_content_submissions` (user_id, week_start, content_type, points_value, link_url)
+
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
 
@@ -408,7 +411,7 @@ RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidenc
 RPCs: `get_user_id_by_email(lookup_email)` (SECURITY DEFINER, used by webhook for email-based user matching)
 
 ### Other
-`push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
+`push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences` | `quest_context_mappings` (user_id, quest_id, context_type, context_identifier; maps Claude Code dirs and Claude Desktop projects to quests for session sync)
 
 ENUMs: `groan_visibility_layer` (screen/live/money/vulnerable/authority), `groan_source_type` (skill/problem/persona), `groan_challenge_status` (active/completed/skipped), `groan_outcome_type`
 
