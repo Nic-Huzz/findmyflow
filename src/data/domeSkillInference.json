@@ -1,7 +1,18 @@
 {
   "_meta": {
     "description": "Maps dome nodes to PlaySkill inferences. Strong = practicing the skill. Moderate = involves the skill. Weak = consuming suggests interest.",
-    "skills": ["storytelling", "teaching", "coaching", "performing", "creating", "building", "designing", "leading", "connecting", "speaking_up"],
+    "skills": [
+      "storytelling",
+      "teaching",
+      "coaching",
+      "performing",
+      "creating",
+      "building",
+      "designing",
+      "leading",
+      "connecting",
+      "speaking_up"
+    ],
     "generated": "2026-07-29",
     "totalNodes": 379,
     "nodesWithSkills": 213,
@@ -10,930 +21,1492 @@
   "nodes": {
     "media-1826": {
       "label": "Photography / Taking photos",
-      "skills": { "creating": "strong", "storytelling": "moderate", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "storytelling": "moderate",
+        "designing": "moderate"
+      }
     },
     "media-1954": {
       "label": "Playing a musical instrument",
-      "skills": { "performing": "strong", "creating": "moderate" }
+      "skills": {
+        "performing": "strong",
+        "creating": "moderate"
+      }
     },
     "media-1991": {
       "label": "Publishing online (blog/website)",
-      "skills": { "storytelling": "strong", "creating": "strong", "building": "moderate" }
+      "skills": {
+        "storytelling": "strong",
+        "creating": "strong",
+        "building": "moderate"
+      }
     },
     "media-2004": {
       "label": "Posting on social media",
-      "skills": { "storytelling": "moderate", "creating": "moderate", "connecting": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "storytelling": "moderate",
+        "creating": "moderate",
+        "connecting": "moderate",
+        "speaking_up": "moderate"
+      }
     },
     "media-2012": {
       "label": "Online course / e-learning",
-      "skills": { "teaching": "weak", "building": "weak" }
+      "skills": {
+        "teaching": "weak",
+        "building": "weak"
+      }
     },
     "media-2018": {
       "label": "Short-form video (TikTok)",
-      "skills": { "creating": "moderate", "performing": "moderate", "storytelling": "moderate" }
+      "skills": {
+        "creating": "moderate",
+        "performing": "moderate",
+        "storytelling": "moderate"
+      }
     },
     "media-2022": {
       "label": "AI-generated content creation",
-      "skills": { "creating": "strong", "building": "moderate", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "building": "moderate",
+        "designing": "moderate"
+      }
     },
     "ai-2022": {
       "label": "Using AI tools (ChatGPT, Claude)",
-      "skills": { "building": "weak", "creating": "weak" }
+      "skills": {
+        "building": "weak",
+        "creating": "weak"
+      }
     },
     "tech-2004": {
       "label": "Using social media",
-      "skills": { "connecting": "weak" }
+      "skills": {
+        "connecting": "weak"
+      }
     },
     "comms-1775": {
       "label": "Writing/receiving letters",
-      "skills": { "storytelling": "moderate", "connecting": "moderate" }
+      "skills": {
+        "storytelling": "moderate",
+        "connecting": "moderate"
+      }
     },
     "comms-2020": {
       "label": "Video calling (Zoom)",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "fashion-2013": {
       "label": "Following influencers",
-      "skills": { "creating": "weak", "storytelling": "weak" }
+      "skills": {
+        "creating": "weak",
+        "storytelling": "weak"
+      }
     },
     "fashion-2021": {
       "label": "Building a personal brand",
-      "skills": { "creating": "strong", "storytelling": "strong", "designing": "moderate", "building": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "storytelling": "moderate",
+        "designing": "moderate",
+        "building": "moderate",
+        "speaking_up": "moderate"
+      }
     },
     "play-1100c": {
       "label": "Olympic sports (watching/competing)",
-      "skills": { "performing": "moderate", "leading": "weak" }
-    },
-    "play-1100d": {
-      "label": "Playing chess / strategy games",
-      "skills": { "building": "weak" }
+      "skills": {
+        "performing": "moderate",
+        "leading": "weak"
+      }
     },
     "play-1863": {
       "label": "Playing organised sport",
-      "skills": { "leading": "moderate", "connecting": "moderate" }
+      "skills": {
+        "leading": "moderate",
+        "connecting": "moderate"
+      }
     },
     "play-1971": {
       "label": "Karaoke",
-      "skills": { "performing": "strong", "speaking_up": "moderate" }
+      "skills": {
+        "performing": "strong",
+        "speaking_up": "moderate"
+      }
     },
     "play-1974": {
       "label": "Tabletop RPG (D&D)",
-      "skills": { "storytelling": "strong", "creating": "moderate", "performing": "moderate" }
+      "skills": {
+        "storytelling": "strong",
+        "creating": "moderate",
+        "performing": "moderate"
+      }
     },
     "play-2004": {
       "label": "MMO gaming (WoW, etc.)",
-      "skills": { "connecting": "moderate", "leading": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "leading": "weak"
+      }
     },
     "play-2006": {
       "label": "User-made games (Roblox)",
-      "skills": { "creating": "strong", "building": "strong", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "building": "strong",
+        "designing": "moderate"
+      }
     },
     "play-2009b": {
       "label": "Sandbox gaming (Minecraft)",
-      "skills": { "creating": "moderate", "building": "moderate", "designing": "moderate" }
+      "skills": {
+        "creating": "moderate",
+        "building": "moderate",
+        "designing": "moderate"
+      }
     },
     "play-2011": {
       "label": "Esports (watching/competing)",
-      "skills": { "performing": "moderate" }
+      "skills": {
+        "performing": "moderate"
+      }
     },
     "play-2012": {
       "label": "Therapeutic / gamified healing",
-      "skills": { "coaching": "weak", "designing": "weak" }
+      "skills": {
+        "coaching": "weak",
+        "designing": "weak"
+      }
     },
     "play-2019": {
       "label": "AI game master / AI RPG",
-      "skills": { "storytelling": "moderate", "creating": "moderate" }
+      "skills": {
+        "storytelling": "moderate",
+        "creating": "moderate"
+      }
     },
     "sleep-1899": {
       "label": "Dream journaling",
-      "skills": { "storytelling": "moderate", "creating": "weak" }
+      "skills": {
+        "storytelling": "moderate",
+        "creating": "weak"
+      }
     },
     "sleep-2020": {
       "label": "Dream incubation / lucid dreaming",
-      "skills": { "creating": "weak" }
+      "skills": {
+        "creating": "weak"
+      }
     },
-
     "sub-endurance-1984": {
       "label": "Women's marathon / breaking barriers",
-      "skills": { "speaking_up": "moderate", "leading": "moderate" }
+      "skills": {
+        "speaking_up": "moderate",
+        "leading": "moderate"
+      }
     },
     "sub-endurance-2004": {
       "label": "Social running (parkrun, Strava)",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
-
     "sub-outdoor-1907": {
       "label": "Scouting / camping",
-      "skills": { "leading": "weak", "building": "weak" }
+      "skills": {
+        "leading": "weak",
+        "building": "weak"
+      }
     },
     "sub-outdoor-1941": {
       "label": "Wilderness challenge (Outward Bound)",
-      "skills": { "leading": "moderate", "coaching": "weak" }
+      "skills": {
+        "leading": "moderate",
+        "coaching": "weak"
+      }
     },
     "sub-outdoor-2010": {
       "label": "GoRuck / outdoor team challenge",
-      "skills": { "leading": "moderate", "connecting": "moderate" }
+      "skills": {
+        "leading": "moderate",
+        "connecting": "moderate"
+      }
     },
-
     "sub-dance-1400": {
       "label": "Tribal / ceremonial dance",
-      "skills": { "performing": "strong", "connecting": "moderate" }
+      "skills": {
+        "performing": "strong",
+        "connecting": "moderate"
+      }
     },
     "sub-dance-1800": {
       "label": "Social dance (swing, salsa)",
-      "skills": { "performing": "strong", "connecting": "strong" }
+      "skills": {
+        "performing": "strong",
+        "connecting": "strong"
+      }
     },
     "sub-dance-1987": {
       "label": "Rave / electronic music event",
-      "skills": { "performing": "weak", "connecting": "moderate" }
+      "skills": {
+        "performing": "weak",
+        "connecting": "moderate"
+      }
     },
     "sub-dance-1972": {
       "label": "Contact improvisation",
-      "skills": { "performing": "strong", "connecting": "strong", "creating": "moderate" }
+      "skills": {
+        "performing": "strong",
+        "connecting": "strong",
+        "creating": "moderate"
+      }
     },
     "sub-dance-1975": {
       "label": "Ecstatic dance / 5Rhythms",
-      "skills": { "performing": "moderate", "connecting": "moderate" }
+      "skills": {
+        "performing": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-dance-1986": {
       "label": "Burning Man / art festival",
-      "skills": { "creating": "strong", "performing": "moderate", "connecting": "strong", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "performing": "moderate",
+        "connecting": "strong",
+        "designing": "moderate"
+      }
     },
     "sub-dance-2005": {
       "label": "Silent disco",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-dance-2013": {
       "label": "Morning sober dance event",
-      "skills": { "connecting": "moderate" }
-    },
-
-    "sub-somatic-1400": {
-      "label": "Pranayama / breathwork",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-somatic-1935": {
       "label": "Body-based therapy",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
     "sub-somatic-1976": {
       "label": "Holotropic breathwork",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
-
     "sub-mental-1900": {
       "label": "Talk therapy",
-      "skills": { "coaching": "weak", "storytelling": "weak" }
+      "skills": {
+        "coaching": "weak",
+        "storytelling": "weak"
+      }
     },
     "sub-mental-2019": {
       "label": "IFS / parts work",
-      "skills": { "coaching": "weak", "storytelling": "weak" }
+      "skills": {
+        "coaching": "weak",
+        "storytelling": "weak"
+      }
     },
-
     "sub-traditional-2023": {
       "label": "Cacao ceremony",
-      "skills": { "connecting": "moderate", "leading": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "leading": "weak"
+      }
     },
     "sub-energy-1922": {
       "label": "Reiki",
-      "skills": { "coaching": "weak", "connecting": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
     "sub-energy-1980": {
       "label": "Sound bath",
-      "skills": { "performing": "weak", "creating": "weak" }
+      "skills": {
+        "performing": "weak",
+        "creating": "weak"
+      }
     },
     "sub-energy-2015": {
       "label": "Sound bath (attending)",
-      "skills": { "performing": "weak", "creating": "weak" }
+      "skills": {
+        "creating": "weak"
+      }
     },
-
     "sub-ritual-1400": {
       "label": "Tribal initiation / rite of passage",
-      "skills": { "leading": "moderate", "connecting": "strong", "speaking_up": "moderate" }
+      "skills": {
+        "leading": "moderate",
+        "connecting": "strong",
+        "speaking_up": "moderate"
+      }
     },
     "sub-ritual-1400b": {
       "label": "Religious congregation",
-      "skills": { "connecting": "moderate", "speaking_up": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "speaking_up": "weak"
+      }
     },
     "sub-ritual-1935": {
       "label": "12-step / support group",
-      "skills": { "speaking_up": "strong", "connecting": "strong", "storytelling": "moderate" }
+      "skills": {
+        "speaking_up": "strong",
+        "connecting": "strong",
+        "storytelling": "moderate"
+      }
     },
     "sub-ritual-1985": {
       "label": "Men's / women's circle",
-      "skills": { "speaking_up": "strong", "connecting": "strong", "coaching": "moderate", "leading": "moderate" }
+      "skills": {
+        "speaking_up": "strong",
+        "connecting": "strong",
+        "coaching": "moderate",
+        "leading": "moderate"
+      }
     },
     "sub-ritual-2018": {
       "label": "Cacao + breathwork ceremony",
-      "skills": { "connecting": "moderate", "leading": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "leading": "weak"
+      }
     },
-
     "sub-communal-1910": {
       "label": "Kibbutz / intentional community",
-      "skills": { "connecting": "strong", "leading": "moderate", "building": "moderate" }
+      "skills": {
+        "connecting": "strong",
+        "leading": "moderate",
+        "building": "moderate"
+      }
     },
     "sub-communal-1965": {
       "label": "Commune / shared living",
-      "skills": { "connecting": "strong", "leading": "weak", "building": "weak" }
+      "skills": {
+        "connecting": "strong",
+        "leading": "weak",
+        "building": "weak"
+      }
     },
     "sub-communal-2015": {
       "label": "Co-living space",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-communal-2017": {
       "label": "Digital nomad hub",
-      "skills": { "connecting": "moderate", "building": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "building": "weak"
+      }
     },
-
     "sub-ordeal-1400": {
       "label": "Shared survival challenge",
-      "skills": { "leading": "moderate", "connecting": "strong" }
+      "skills": {
+        "leading": "moderate",
+        "connecting": "strong"
+      }
     },
     "sub-ordeal-1775": {
       "label": "Military bonding / service",
-      "skills": { "leading": "strong", "connecting": "strong" }
+      "skills": {
+        "leading": "strong",
+        "connecting": "strong"
+      }
     },
     "sub-ordeal-1863": {
       "label": "Team sports",
-      "skills": { "leading": "moderate", "connecting": "strong", "coaching": "weak" }
+      "skills": {
+        "leading": "moderate",
+        "connecting": "strong",
+        "coaching": "weak"
+      }
     },
     "sub-ordeal-2000": {
       "label": "CrossFit / group fitness ordeal",
-      "skills": { "connecting": "moderate", "coaching": "weak", "leading": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "coaching": "weak",
+        "leading": "weak"
+      }
     },
     "sub-ordeal-2015": {
       "label": "Adventure retreat",
-      "skills": { "connecting": "strong", "leading": "moderate", "coaching": "weak" }
+      "skills": {
+        "connecting": "strong",
+        "leading": "moderate",
+        "coaching": "weak"
+      }
     },
-
     "sub-digital-1979": {
       "label": "BBS / online forum",
-      "skills": { "connecting": "moderate", "storytelling": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "storytelling": "weak"
+      }
     },
     "sub-digital-2005": {
       "label": "Reddit / forums",
-      "skills": { "connecting": "moderate", "storytelling": "weak", "speaking_up": "moderate" }
+      "skills": {
+        "connecting": "moderate",
+        "storytelling": "weak",
+        "speaking_up": "moderate"
+      }
     },
     "sub-digital-2010": {
       "label": "Facebook groups",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-digital-2015": {
       "label": "Discord community",
-      "skills": { "connecting": "strong", "building": "weak" }
+      "skills": {
+        "connecting": "strong",
+        "building": "weak"
+      }
     },
     "sub-digital-2017": {
       "label": "Paid community (Circle, MN)",
-      "skills": { "connecting": "strong", "building": "moderate", "leading": "moderate" }
+      "skills": {
+        "connecting": "strong",
+        "building": "moderate",
+        "leading": "moderate"
+      }
     },
-
     "sub-coaching-1400": {
       "label": "Advisory board / council",
-      "skills": { "coaching": "strong", "leading": "strong", "speaking_up": "moderate" }
+      "skills": {
+        "coaching": "strong",
+        "leading": "strong",
+        "speaking_up": "moderate"
+      }
     },
     "sub-coaching-1937": {
       "label": "Mastermind group",
-      "skills": { "coaching": "moderate", "connecting": "strong", "leading": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "coaching": "moderate",
+        "connecting": "strong",
+        "leading": "moderate",
+        "speaking_up": "moderate"
+      }
     },
     "sub-coaching-1995": {
       "label": "Executive coaching",
-      "skills": { "coaching": "strong", "leading": "moderate" }
+      "skills": {
+        "coaching": "strong",
+        "leading": "moderate"
+      }
     },
     "sub-coaching-2010": {
       "label": "Online coaching",
-      "skills": { "coaching": "strong", "teaching": "moderate", "connecting": "moderate" }
+      "skills": {
+        "coaching": "strong",
+        "teaching": "weak",
+        "connecting": "moderate"
+      }
     },
     "sub-coaching-2024": {
       "label": "AI coaching",
-      "skills": { "coaching": "weak", "building": "weak" }
+      "skills": {
+        "coaching": "weak",
+        "building": "weak"
+      }
     },
-
     "sub-couples-1996": {
       "label": "Couples therapy (Gottman)",
-      "skills": { "connecting": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "connecting": "moderate",
+        "speaking_up": "moderate"
+      }
     },
     "sub-couples-1997": {
       "label": "Conscious relating / polarity work",
-      "skills": { "connecting": "strong", "speaking_up": "moderate", "coaching": "weak" }
+      "skills": {
+        "connecting": "strong",
+        "speaking_up": "moderate",
+        "coaching": "weak"
+      }
     },
-
     "sub-oral-1400": {
       "label": "Campfire storytelling",
-      "skills": { "storytelling": "strong", "performing": "moderate", "connecting": "moderate" }
+      "skills": {
+        "storytelling": "strong",
+        "performing": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-oral-1400b": {
       "label": "Watching live theatre",
-      "skills": { "storytelling": "weak", "performing": "weak" }
+      "skills": {
+        "storytelling": "weak",
+        "performing": "weak"
+      }
     },
     "sub-oral-1400c": {
       "label": "Attending a live performance",
-      "skills": { "performing": "weak" }
+      "skills": {
+        "performing": "weak"
+      }
     },
     "sub-oral-1860": {
       "label": "Stand-up comedy",
-      "skills": { "performing": "strong", "storytelling": "moderate", "speaking_up": "strong" }
+      "skills": {
+        "performing": "strong",
+        "storytelling": "moderate",
+        "speaking_up": "strong"
+      }
     },
     "sub-oral-2006": {
       "label": "TED talk (giving or watching)",
-      "skills": { "speaking_up": "strong", "teaching": "strong", "storytelling": "strong", "performing": "moderate" }
+      "skills": {
+        "speaking_up": "strong",
+        "teaching": "strong",
+        "storytelling": "strong",
+        "performing": "moderate"
+      }
     },
     "sub-oral-2015": {
       "label": "Live podcast",
-      "skills": { "storytelling": "strong", "performing": "moderate", "speaking_up": "moderate", "connecting": "moderate" }
+      "skills": {
+        "storytelling": "strong",
+        "performing": "moderate",
+        "speaking_up": "moderate",
+        "connecting": "moderate"
+      }
     },
-
     "sub-written-1400": {
       "label": "Reading manuscripts / sacred texts",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-written-1620": {
       "label": "Reading newspapers",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-written-1719": {
       "label": "Reading a novel",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-written-1999": {
       "label": "Blogging",
-      "skills": { "storytelling": "strong", "creating": "strong", "teaching": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "storytelling": "strong",
+        "creating": "strong",
+        "teaching": "moderate",
+        "speaking_up": "moderate"
+      }
     },
     "sub-written-2017": {
       "label": "Paid newsletter (Substack)",
-      "skills": { "storytelling": "strong", "creating": "strong", "teaching": "moderate", "building": "moderate" }
+      "skills": {
+        "storytelling": "strong",
+        "creating": "strong",
+        "teaching": "moderate",
+        "building": "moderate"
+      }
     },
-
     "sub-audio-1938": {
       "label": "Radio drama / audio fiction",
-      "skills": { "storytelling": "weak", "performing": "weak", "creating": "weak" }
+      "skills": {
+        "storytelling": "weak",
+        "performing": "weak",
+        "creating": "weak"
+      }
     },
     "sub-audio-1994": {
       "label": "Audiobooks",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-audio-2005": {
       "label": "Listening to podcasts",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-audio-2015": {
       "label": "Audio courses / guided meditations",
-      "skills": { "teaching": "weak", "coaching": "weak" }
+      "skills": {
+        "teaching": "weak",
+        "coaching": "weak"
+      }
     },
-
     "sub-video-1920": {
       "label": "Hollywood cinema",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-video-1951": {
       "label": "Watching serialized TV",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-video-1981": {
       "label": "Music videos",
-      "skills": { "creating": "weak", "performing": "weak" }
+      "skills": {
+        "creating": "weak",
+        "performing": "weak"
+      }
     },
     "sub-video-2005": {
       "label": "YouTube creator / watching",
-      "skills": { "creating": "strong", "storytelling": "moderate", "teaching": "moderate", "performing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "storytelling": "moderate",
+        "teaching": "moderate",
+        "performing": "moderate"
+      }
     },
     "sub-video-2013": {
       "label": "Netflix binge-watching",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
     "sub-video-2018": {
       "label": "TikTok short-form video",
-      "skills": { "creating": "moderate", "performing": "moderate", "storytelling": "moderate" }
+      "skills": {
+        "creating": "moderate",
+        "performing": "moderate",
+        "storytelling": "moderate"
+      }
     },
     "sub-video-2024": {
       "label": "AI video creation",
-      "skills": { "creating": "strong", "designing": "moderate", "storytelling": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "designing": "moderate",
+        "storytelling": "moderate"
+      }
     },
-
     "sub-immersive-2011": {
       "label": "Immersive theatre (Sleep No More)",
-      "skills": { "performing": "weak", "storytelling": "weak", "designing": "weak" }
+      "skills": {
+        "performing": "weak",
+        "storytelling": "weak",
+        "designing": "weak"
+      }
     },
     "sub-immersive-2015": {
       "label": "Experience design event",
-      "skills": { "designing": "strong", "creating": "strong", "leading": "moderate", "connecting": "moderate" }
+      "skills": {
+        "designing": "strong",
+        "creating": "strong",
+        "leading": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-immersive-2016": {
       "label": "VR storytelling",
-      "skills": { "storytelling": "moderate", "creating": "moderate", "designing": "moderate" }
+      "skills": {
+        "storytelling": "moderate",
+        "creating": "moderate",
+        "designing": "moderate"
+      }
     },
     "sub-immersive-2018": {
       "label": "Interactive fiction (Bandersnatch)",
-      "skills": { "storytelling": "weak", "creating": "weak", "designing": "weak" }
+      "skills": {
+        "storytelling": "weak",
+        "creating": "weak",
+        "designing": "weak"
+      }
     },
     "sub-immersive-2023": {
       "label": "AI interactive narrative",
-      "skills": { "storytelling": "moderate", "creating": "moderate", "designing": "moderate" }
+      "skills": {
+        "storytelling": "moderate",
+        "creating": "moderate",
+        "designing": "moderate"
+      }
     },
-
     "sub-creator-1965": {
       "label": "Fan fiction",
-      "skills": { "storytelling": "strong", "creating": "strong" }
+      "skills": {
+        "storytelling": "strong",
+        "creating": "strong"
+      }
     },
     "sub-creator-2007": {
       "label": "YouTube Partner / monetized creator",
-      "skills": { "creating": "strong", "storytelling": "strong", "performing": "strong", "building": "strong", "teaching": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "storytelling": "strong",
+        "performing": "strong",
+        "building": "strong",
+        "teaching": "moderate"
+      }
     },
     "sub-creator-2013": {
       "label": "Patreon supporter / creator",
-      "skills": { "creating": "strong", "building": "moderate", "connecting": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "building": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-creator-2022": {
       "label": "Solo media company",
-      "skills": { "creating": "strong", "building": "strong", "storytelling": "strong", "leading": "strong", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "building": "strong",
+        "storytelling": "strong",
+        "leading": "strong",
+        "designing": "moderate"
+      }
     },
     "sub-creator-2024": {
       "label": "Experience creator economy",
-      "skills": { "creating": "strong", "designing": "strong", "leading": "strong", "coaching": "moderate", "connecting": "strong", "building": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "designing": "strong",
+        "leading": "strong",
+        "coaching": "moderate",
+        "connecting": "strong",
+        "building": "moderate"
+      }
     },
-
     "sub-board-1995": {
       "label": "Eurogames (Catan)",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-board-2008": {
       "label": "Cooperative board games (Pandemic)",
-      "skills": { "connecting": "moderate", "leading": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "leading": "weak"
+      }
     },
     "sub-board-2016": {
       "label": "Board game cafe",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
-
     "sub-sport-1871": {
       "label": "Professional sports (watching/playing)",
-      "skills": { "performing": "moderate", "leading": "weak" }
+      "skills": {
+        "performing": "moderate",
+        "leading": "weak"
+      }
     },
     "sub-sport-1972": {
       "label": "Women's sport",
-      "skills": { "performing": "moderate", "speaking_up": "moderate", "leading": "moderate" }
+      "skills": {
+        "performing": "moderate",
+        "speaking_up": "moderate",
+        "leading": "moderate"
+      }
     },
     "sub-sport-1995": {
       "label": "Extreme sport (skateboarding, BMX)",
-      "skills": { "performing": "strong", "creating": "weak" }
+      "skills": {
+        "performing": "strong",
+        "creating": "weak"
+      }
     },
     "sub-sport-2020": {
       "label": "Boutique competition (Hyrox)",
-      "skills": { "performing": "moderate", "connecting": "moderate" }
+      "skills": {
+        "performing": "moderate",
+        "connecting": "moderate"
+      }
     },
-
     "sub-digital-game-1993": {
       "label": "Online multiplayer gaming",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-digital-game-2005": {
       "label": "Indie games",
-      "skills": { "creating": "weak", "designing": "weak" }
+      "skills": {
+        "creating": "weak",
+        "designing": "weak"
+      }
     },
-
     "sub-chance-2003": {
       "label": "Poker",
-      "skills": { "connecting": "weak" }
+      "skills": {
+        "connecting": "weak"
+      }
     },
-
     "sub-toy-1400": {
       "label": "Dolls / figurines",
-      "skills": { "creating": "weak", "storytelling": "weak" }
+      "skills": {
+        "creating": "weak",
+        "storytelling": "weak"
+      }
     },
     "sub-toy-1932": {
       "label": "LEGO / construction toys",
-      "skills": { "building": "moderate", "creating": "moderate", "designing": "moderate" }
+      "skills": {
+        "building": "moderate",
+        "creating": "moderate",
+        "designing": "moderate"
+      }
     },
     "sub-toy-1993": {
       "label": "Trading card games (MTG, Pokemon)",
-      "skills": { "connecting": "moderate", "building": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "building": "weak"
+      }
     },
-
     "sub-free-1400": {
       "label": "Free play / unstructured play",
-      "skills": { "creating": "moderate" }
+      "skills": {
+        "creating": "moderate"
+      }
     },
     "sub-free-1943": {
       "label": "Adventure playground",
-      "skills": { "creating": "weak", "building": "weak" }
+      "skills": {
+        "creating": "weak",
+        "building": "weak"
+      }
     },
     "sub-free-2011": {
       "label": "Free play advocacy / awareness",
-      "skills": { "teaching": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "teaching": "moderate",
+        "speaking_up": "moderate"
+      }
     },
     "sub-free-2017": {
       "label": "Nature play / forest school",
-      "skills": { "teaching": "moderate", "leading": "weak", "creating": "weak" }
+      "skills": {
+        "teaching": "moderate",
+        "leading": "weak",
+        "creating": "weak"
+      }
     },
-
     "sub-safety-1400": {
       "label": "Combat training",
-      "skills": { "coaching": "weak", "leading": "weak" }
+      "skills": {
+        "coaching": "weak",
+        "leading": "weak"
+      }
     },
     "sub-safety-1400b": {
       "label": "Martial arts",
-      "skills": { "coaching": "weak", "leading": "weak", "performing": "moderate" }
+      "skills": {
+        "coaching": "weak",
+        "leading": "weak",
+        "performing": "moderate"
+      }
     },
     "sub-safety-1993": {
       "label": "BJJ / MMA",
-      "skills": { "coaching": "weak", "connecting": "moderate", "performing": "moderate" }
+      "skills": {
+        "coaching": "weak",
+        "connecting": "moderate",
+        "performing": "moderate"
+      }
     },
     "sub-safety-1970": {
       "label": "Women's self-defence",
-      "skills": { "speaking_up": "moderate", "coaching": "weak", "teaching": "weak" }
+      "skills": {
+        "speaking_up": "moderate",
+        "coaching": "weak",
+        "teaching": "weak"
+      }
     },
     "sub-safety-2014": {
       "label": "Somatic safety / polyvagal work",
-      "skills": { "coaching": "moderate" }
+      "skills": {
+        "coaching": "moderate"
+      }
     },
-
     "sub-resilience-1400": {
       "label": "Community self-defence",
-      "skills": { "leading": "moderate", "connecting": "moderate" }
+      "skills": {
+        "leading": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-resilience-1950": {
       "label": "Civil defence training",
-      "skills": { "leading": "moderate", "teaching": "weak" }
+      "skills": {
+        "leading": "moderate",
+        "teaching": "weak"
+      }
     },
     "sub-resilience-1993": {
       "label": "Emergency response (CERT)",
-      "skills": { "leading": "strong", "teaching": "moderate", "connecting": "moderate" }
+      "skills": {
+        "leading": "strong",
+        "teaching": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-resilience-2020": {
       "label": "Prepper / mutual aid",
-      "skills": { "building": "moderate", "connecting": "moderate" }
+      "skills": {
+        "building": "moderate",
+        "connecting": "moderate"
+      }
     },
-
     "sub-surveillance-2013": {
       "label": "Digital privacy awareness",
-      "skills": { "teaching": "weak" }
+      "skills": {
+        "teaching": "weak"
+      }
     },
-
     "sub-arch-1144": {
       "label": "Visiting a cathedral / sacred architecture",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
     "sub-arch-1923": {
       "label": "Living in modernist space",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
     "sub-arch-1966": {
       "label": "Brutalist / postmodern architecture",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
     "sub-arch-2006": {
       "label": "Biophilic design space",
-      "skills": { "designing": "moderate" }
+      "skills": {
+        "designing": "moderate"
+      }
     },
-
     "sub-alt-1960": {
       "label": "Commune / intentional community",
-      "skills": { "connecting": "strong", "leading": "weak", "building": "weak" }
+      "skills": {
+        "connecting": "strong",
+        "leading": "weak",
+        "building": "weak"
+      }
     },
     "sub-alt-1972": {
       "label": "Off-grid living",
-      "skills": { "building": "strong" }
+      "skills": {
+        "building": "strong"
+      }
     },
     "sub-alt-2008": {
       "label": "Tiny home living",
-      "skills": { "building": "moderate", "designing": "moderate" }
+      "skills": {
+        "building": "moderate",
+        "designing": "moderate"
+      }
     },
     "sub-alt-2011": {
       "label": "Van life",
-      "skills": { "building": "moderate", "creating": "weak" }
+      "skills": {
+        "building": "moderate",
+        "creating": "weak"
+      }
     },
-
     "sub-proptech-2008": {
       "label": "Airbnb hosting",
-      "skills": { "building": "moderate", "designing": "moderate", "connecting": "moderate" }
+      "skills": {
+        "building": "moderate",
+        "designing": "moderate",
+        "connecting": "moderate"
+      }
     },
     "sub-proptech-2020": {
       "label": "Working from home",
-      "skills": { "building": "weak" }
+      "skills": {
+        "building": "weak"
+      }
     },
-
     "sub-sacred-2010": {
       "label": "Wellness studio (SoulCycle)",
-      "skills": { "connecting": "moderate", "performing": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "performing": "weak"
+      }
     },
-
     "sub-ferment-1400": {
       "label": "Fermenting food (sauerkraut, kimchi)",
-      "skills": { "creating": "moderate" }
+      "skills": {
+        "creating": "moderate"
+      }
     },
-
     "sub-fashion-2007": {
       "label": "Slow fashion / ethical fashion",
-      "skills": { "designing": "moderate", "creating": "weak", "speaking_up": "weak" }
+      "skills": {
+        "designing": "moderate",
+        "creating": "weak"
+      }
     },
-    "sub-fashion-2019": {
-      "label": "Rental / secondhand fashion",
-      "skills": { "speaking_up": "weak" }
-    },
-
     "sub-beauty-1400": {
       "label": "Ancient beauty practices",
-      "skills": { "creating": "weak" }
+      "skills": {
+        "creating": "weak"
+      }
     },
     "sub-beauty-1916": {
       "label": "Wearing makeup (modern cosmetics)",
-      "skills": { "creating": "moderate", "designing": "weak" }
+      "skills": {
+        "creating": "moderate",
+        "designing": "weak"
+      }
     },
     "sub-beauty-2014": {
       "label": "Clean beauty (Glossier)",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
     "sub-beauty-2017": {
       "label": "Body positivity / inclusive beauty",
-      "skills": { "speaking_up": "strong", "connecting": "moderate" }
+      "skills": {
+        "speaking_up": "strong",
+        "connecting": "moderate"
+      }
     },
-
     "sub-digital-1482": {
       "label": "Writing a CV / resume",
-      "skills": { "storytelling": "moderate" }
+      "skills": {
+        "storytelling": "moderate"
+      }
     },
     "sub-digital-2003": {
       "label": "LinkedIn",
-      "skills": { "connecting": "moderate", "storytelling": "weak", "building": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "storytelling": "weak",
+        "building": "weak"
+      }
     },
     "sub-digital-2010b": {
       "label": "Instagram identity curation",
-      "skills": { "creating": "strong", "storytelling": "moderate", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "storytelling": "moderate",
+        "designing": "moderate"
+      }
     },
     "sub-digital-2018b": {
       "label": "TikTok identity creation",
-      "skills": { "creating": "strong", "performing": "strong", "storytelling": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "performing": "strong",
+        "storytelling": "moderate"
+      }
     },
     "sub-digital-2023": {
       "label": "AI personal brand",
-      "skills": { "creating": "moderate", "building": "moderate", "storytelling": "moderate" }
+      "skills": {
+        "creating": "moderate",
+        "building": "moderate",
+        "storytelling": "moderate"
+      }
     },
-
     "sub-counter-1960": {
       "label": "Counterculture lifestyle",
-      "skills": { "speaking_up": "moderate", "creating": "weak" }
+      "skills": {
+        "speaking_up": "moderate",
+        "creating": "weak"
+      }
     },
     "sub-counter-1976": {
       "label": "Punk / anti-fashion",
-      "skills": { "speaking_up": "strong", "creating": "moderate", "performing": "moderate" }
+      "skills": {
+        "speaking_up": "strong",
+        "creating": "moderate",
+        "performing": "moderate"
+      }
     },
     "sub-counter-2011": {
       "label": "Minimalism / KonMari",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
     "sub-counter-2023": {
       "label": "De-influencing",
-      "skills": { "speaking_up": "strong", "storytelling": "moderate" }
+      "skills": {
+        "speaking_up": "strong",
+        "storytelling": "moderate"
+      }
     },
     "sub-counter-2018": {
       "label": "Visible mending / repair culture",
-      "skills": { "creating": "moderate", "designing": "moderate" }
+      "skills": {
+        "creating": "moderate",
+        "designing": "moderate"
+      }
     },
-
     "sub-craft-1400": {
       "label": "Guild / apprenticeship",
-      "skills": { "teaching": "strong", "building": "strong", "creating": "moderate" }
+      "skills": {
+        "teaching": "strong",
+        "building": "strong",
+        "creating": "moderate"
+      }
     },
     "sub-craft-1880": {
       "label": "Handcrafting (Arts & Crafts)",
-      "skills": { "creating": "strong", "designing": "moderate", "building": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "designing": "moderate",
+        "building": "moderate"
+      }
     },
     "sub-craft-2005": {
       "label": "Selling on Etsy / maker economy",
-      "skills": { "creating": "strong", "building": "strong", "designing": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "building": "strong",
+        "designing": "moderate"
+      }
     },
     "sub-craft-2020": {
       "label": "Pandemic crafting (sourdough, knitting)",
-      "skills": { "creating": "strong" }
+      "skills": {
+        "creating": "strong"
+      }
     },
     "sub-craft-2014": {
       "label": "Portfolio / show your work",
-      "skills": { "creating": "strong", "designing": "moderate", "storytelling": "moderate", "building": "moderate" }
+      "skills": {
+        "creating": "strong",
+        "designing": "moderate",
+        "storytelling": "moderate",
+        "building": "moderate"
+      }
     },
-
     "sub-combustion-1400": {
       "label": "Campfire / gathering around fire",
-      "skills": { "connecting": "moderate", "storytelling": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "storytelling": "weak"
+      }
     },
-
     "sub-personal-fire-2016": {
       "label": "Off-grid power system",
-      "skills": { "building": "strong" }
+      "skills": {
+        "building": "strong"
+      }
     },
-
     "sub-light-2020": {
       "label": "Candle ritual / hygge",
-      "skills": { "designing": "weak", "connecting": "weak" }
+      "skills": {
+        "designing": "weak",
+        "connecting": "weak"
+      }
     },
-
     "sub-ritual-fire-1400": {
       "label": "Campfire as social gathering",
-      "skills": { "connecting": "moderate", "storytelling": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "storytelling": "weak"
+      }
     },
     "sub-ritual-fire-2000": {
       "label": "Fire pit gathering",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-ritual-fire-2016": {
       "label": "Hygge / candle culture",
-      "skills": { "designing": "weak", "connecting": "weak" }
+      "skills": {
+        "designing": "weak",
+        "connecting": "weak"
+      }
     },
     "sub-ritual-fire-2015b": {
       "label": "Fire ceremony / cacao circle",
-      "skills": { "connecting": "strong", "leading": "moderate", "speaking_up": "moderate" }
+      "skills": {
+        "connecting": "strong",
+        "leading": "moderate",
+        "speaking_up": "moderate"
+      }
     },
-
     "sub-dream-1400": {
       "label": "Dream interpretation",
-      "skills": { "storytelling": "weak", "coaching": "weak" }
+      "skills": {
+        "storytelling": "weak",
+        "coaching": "weak"
+      }
     },
     "sub-dream-1913": {
       "label": "Jungian dream work",
-      "skills": { "storytelling": "weak", "coaching": "weak" }
+      "skills": {
+        "storytelling": "weak",
+        "coaching": "weak"
+      }
     },
-
     "sub-sleeptech-2017": {
       "label": "Sleep coaching app",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
-
     "sub-rest-2016": {
       "label": "Rest as resistance / Nap Ministry",
-      "skills": { "speaking_up": "moderate", "teaching": "weak" }
+      "skills": {
+        "speaking_up": "moderate",
+        "teaching": "weak"
+      }
     },
-
     "sub-communal-1400": {
       "label": "Band-level communal living",
-      "skills": { "connecting": "strong", "leading": "weak" }
+      "skills": {
+        "connecting": "strong",
+        "leading": "weak"
+      }
     },
-
     "sub-personal-fire-2015": {
       "label": "Rooftop solar / Powerwall",
-      "skills": { "building": "moderate" }
+      "skills": {
+        "building": "moderate"
+      }
     },
     "sub-renewable-2010": {
       "label": "Community solar",
-      "skills": { "building": "moderate", "connecting": "weak" }
+      "skills": {
+        "building": "moderate",
+        "connecting": "weak"
+      }
     },
-
     "sub-urban-1898": {
       "label": "Planned community living",
-      "skills": { "connecting": "weak", "designing": "weak" }
+      "skills": {
+        "connecting": "weak",
+        "designing": "weak"
+      }
     },
     "sub-urban-1993": {
       "label": "Walkable neighborhood",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
     "sub-urban-2016": {
       "label": "15-minute city living",
-      "skills": { "designing": "weak" }
+      "skills": {
+        "designing": "weak"
+      }
     },
-
     "sub-sacred-1400b": {
       "label": "Temple / church visit",
-      "skills": { "connecting": "weak" }
+      "skills": {
+        "connecting": "weak"
+      }
     },
-
     "sub-states-1843": {
       "label": "Clinical hypnosis",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
-
     "sub-mindbody-2007": {
       "label": "Biohacking",
-      "skills": { "building": "weak" }
+      "skills": {
+        "building": "weak"
+      }
     },
-
     "sub-sleepmedicine-1999": {
       "label": "CBT-I for insomnia",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
-
     "sub-insurance-1400": {
       "label": "Mutual aid / risk pooling",
-      "skills": { "connecting": "moderate", "leading": "weak" }
+      "skills": {
+        "connecting": "moderate",
+        "leading": "weak"
+      }
     },
-
     "exchange-1602": {
       "label": "Investing in stocks",
-      "skills": { "building": "weak" }
+      "skills": {
+        "building": "weak"
+      }
     },
-
     "media-1605": {
       "label": "Reading a newspaper",
-      "skills": { "storytelling": "weak" }
+      "skills": {
+        "storytelling": "weak"
+      }
     },
-
     "sub-psychedelic-1400": {
       "label": "Sacred mushroom ceremony",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
-
     "sub-endurance-1400": {
       "label": "Long-distance running / persistence",
-      "skills": { "performing": "weak" }
+      "skills": {
+        "performing": "weak"
+      }
     },
-
     "fashion-1916": {
       "label": "Wearing cosmetics / makeup",
-      "skills": { "creating": "moderate", "designing": "weak" }
+      "skills": {
+        "creating": "moderate",
+        "designing": "weak"
+      }
     },
-
     "property-2008": {
       "label": "Staying in an Airbnb",
-      "skills": { "building": "weak" }
+      "skills": {
+        "building": "weak"
+      }
     },
-
     "sub-circadian-2012": {
       "label": "Chronotype awareness",
-      "skills": { "teaching": "weak" }
+      "skills": {
+        "teaching": "weak"
+      }
     },
-
     "sub-proptech-2015": {
       "label": "Co-living",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
-
     "media-1877": {
       "label": "Listening to recorded music",
-      "skills": { "performing": "weak" }
+      "skills": {
+        "performing": "weak"
+      }
     },
-
     "sub-industrial-1971": {
       "label": "Ultra-processed food awareness",
-      "skills": { "teaching": "weak", "speaking_up": "weak" }
+      "skills": {
+        "teaching": "weak",
+        "speaking_up": "weak"
+      }
     },
-
     "comms-1971": {
       "label": "Sending email",
-      "skills": { "storytelling": "weak", "connecting": "weak" }
+      "skills": {
+        "storytelling": "weak",
+        "connecting": "weak"
+      }
     },
-
     "sub-board-2012": {
       "label": "Kickstarter board games",
-      "skills": { "creating": "moderate", "building": "moderate", "designing": "moderate" }
+      "skills": {
+        "creating": "moderate",
+        "building": "moderate",
+        "designing": "moderate"
+      }
     },
-
     "sub-endurance-1896": {
       "label": "Running a marathon",
-      "skills": { "performing": "moderate" }
+      "skills": {
+        "performing": "moderate"
+      }
     },
     "sub-endurance-2010": {
       "label": "Ultra-endurance (100mi, 24hr)",
-      "skills": { "performing": "moderate" }
+      "skills": {
+        "performing": "moderate"
+      }
     },
-
     "sub-sacred-2020": {
       "label": "Sound room / silent disco",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
-
     "sub-couples-1800": {
       "label": "Romantic love partnership",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
     "sub-couples-1400": {
       "label": "Arranged / traditional marriage",
-      "skills": { "connecting": "moderate" }
+      "skills": {
+        "connecting": "moderate"
+      }
     },
-
     "sub-mindbody-2021": {
       "label": "Huberman Lab protocols",
-      "skills": { "teaching": "weak" }
+      "skills": {
+        "teaching": "weak"
+      }
     },
-
     "sub-strength-1890": {
       "label": "Bodybuilding / physique training",
-      "skills": { "performing": "moderate" }
+      "skills": {
+        "performing": "moderate"
+      }
     },
-
     "sub-sport-1400": {
       "label": "Ancient athletics / competition",
-      "skills": { "performing": "moderate" }
+      "skills": {
+        "performing": "moderate"
+      }
     },
-
     "exchange-2009": {
       "label": "Buying/using cryptocurrency",
-      "skills": { "building": "weak" }
+      "skills": {
+        "building": "weak"
+      }
     },
-
     "sub-flexibility-1893": {
       "label": "Yoga practice",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
-
     "sub-mindbody-1893": {
       "label": "Yoga (mind-body practice)",
-      "skills": { "coaching": "weak" }
+      "skills": {
+        "coaching": "weak"
+      }
     },
-
     "sub-couples-1995": {
       "label": "Online dating",
-      "skills": { "connecting": "weak" }
+      "skills": {
+        "connecting": "weak"
+      }
     },
-
     "intimacy-2012": {
       "label": "Dating apps",
-      "skills": { "connecting": "weak" }
+      "skills": {
+        "connecting": "weak"
+      }
+    },
+    "sub-somatic-1400": {
+      "label": "Pranayama / breathwork",
+      "skills": {
+        "performing": "moderate",
+        "connecting": "weak"
+      }
     }
   }
 }

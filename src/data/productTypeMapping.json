@@ -11,12 +11,25 @@
       "scalability": "time_bound",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["coaching"],
-        "secondary": ["teaching", "speaking_up"]
+        "primary": [
+          "coaching"
+        ],
+        "secondary": [
+          "teaching",
+          "speaking_up"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-coaching-1995", "sub-coaching-2010", "sub-mental-1900", "sub-mental-2019"],
-        "moderate": ["sub-somatic-1400", "sub-mindbody-1979"]
+        "strong": [
+          "sub-coaching-1995",
+          "sub-coaching-2010",
+          "sub-mental-1900",
+          "sub-mental-2019"
+        ],
+        "moderate": [
+          "sub-somatic-1400",
+          "sub-mindbody-1979"
+        ]
       },
       "description": "You work with one person at a time. Deep transformation, premium pricing, limited by your calendar."
     },
@@ -26,12 +39,27 @@
       "scalability": "semi_scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["teaching", "performing"],
-        "secondary": ["coaching", "leading"]
+        "primary": [
+          "teaching",
+          "performing"
+        ],
+        "secondary": [
+          "coaching",
+          "leading"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-oral-1400c", "sub-oral-2006", "sub-ordeal-2015", "sub-ritual-2018"],
-        "moderate": ["sub-dance-1975", "sub-strength-2000", "sub-sacred-2010"]
+        "strong": [
+          "sub-oral-1400c",
+          "sub-oral-2006",
+          "sub-ordeal-2015",
+          "sub-ritual-2018"
+        ],
+        "moderate": [
+          "sub-dance-1975",
+          "sub-strength-2000",
+          "sub-sacred-2010"
+        ]
       },
       "description": "You deliver to groups. Workshops, classes, group sessions. More leverage than 1:1 but still requires your presence."
     },
@@ -41,12 +69,25 @@
       "scalability": "time_bound",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["designing", "creating"],
-        "secondary": ["coaching", "building"]
+        "primary": [
+          "designing",
+          "creating"
+        ],
+        "secondary": [
+          "coaching",
+          "building"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-immersive-2015", "sub-craft-1880", "sub-craft-2005"],
-        "moderate": ["sub-fashion-2007", "sub-light-1400"]
+        "strong": [
+          "sub-immersive-2015",
+          "sub-craft-1880",
+          "sub-craft-2005"
+        ],
+        "moderate": [
+          "sub-fashion-2007",
+          "sub-light-1400"
+        ]
       },
       "description": "You design bespoke solutions for each client. High value, high effort, hard to scale."
     },
@@ -56,12 +97,24 @@
       "scalability": "semi_scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["coaching", "teaching"],
-        "secondary": ["designing"]
+        "primary": [
+          "coaching",
+          "teaching"
+        ],
+        "secondary": [
+          "designing"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-coaching-2010", "sub-coaching-1937"],
-        "moderate": ["sub-mindbody-1979", "sub-somatic-1400", "sub-mental-1964"]
+        "strong": [
+          "sub-coaching-2010",
+          "sub-coaching-1937"
+        ],
+        "moderate": [
+          "sub-mindbody-1979",
+          "sub-somatic-1400",
+          "sub-mental-1964"
+        ]
       },
       "description": "A standardised program delivered to clients. Same method, repeatable results. The bridge between service and product."
     },
@@ -71,12 +124,24 @@
       "scalability": "semi_scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["coaching", "building"],
-        "secondary": ["teaching", "creating"]
+        "primary": [
+          "coaching",
+          "building"
+        ],
+        "secondary": [
+          "teaching",
+          "creating"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-coaching-2010", "ai-2022"],
-        "moderate": ["sub-coaching-2024", "media-2012"]
+        "strong": [
+          "sub-coaching-2010",
+          "ai-2022"
+        ],
+        "moderate": [
+          "sub-coaching-2024",
+          "media-2012"
+        ]
       },
       "description": "Part human, part digital. Live coaching plus self-paced content. Best of both worlds."
     },
@@ -86,12 +151,25 @@
       "scalability": "semi_scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["teaching", "leading"],
-        "secondary": ["coaching", "connecting"]
+        "primary": [
+          "teaching",
+          "leading"
+        ],
+        "secondary": [
+          "coaching",
+          "connecting"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-coaching-1937", "sub-ordeal-2015", "sub-ritual-1985"],
-        "moderate": ["sub-digital-2017", "sub-communal-2015"]
+        "strong": [
+          "sub-coaching-1937",
+          "sub-ordeal-2015",
+          "sub-ritual-1985"
+        ],
+        "moderate": [
+          "sub-digital-2017",
+          "sub-communal-2015"
+        ]
       },
       "description": "A cohort moves through a structured program together. Community creates accountability. You teach once, many benefit."
     },
@@ -101,12 +179,25 @@
       "scalability": "scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["teaching", "creating"],
-        "secondary": ["storytelling", "designing"]
+        "primary": [
+          "teaching",
+          "creating"
+        ],
+        "secondary": [
+          "storytelling",
+          "designing"
+        ]
       },
       "domeSignals": {
-        "strong": ["media-2012", "sub-video-2005", "sub-audio-2015"],
-        "moderate": ["sub-written-2017", "sub-video-2024"]
+        "strong": [
+          "media-2012",
+          "sub-video-2005",
+          "sub-audio-2015"
+        ],
+        "moderate": [
+          "sub-written-2017",
+          "sub-video-2024"
+        ]
       },
       "description": "Record once, sell forever. The classic scalable product. No calendar dependency."
     },
@@ -116,12 +207,25 @@
       "scalability": "semi_scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["teaching", "leading"],
-        "secondary": ["performing", "connecting"]
+        "primary": [
+          "teaching",
+          "leading"
+        ],
+        "secondary": [
+          "performing",
+          "connecting"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-coaching-1937", "comms-2020", "sub-ordeal-2015"],
-        "moderate": ["sub-digital-2017", "sub-ritual-1985"]
+        "strong": [
+          "sub-coaching-1937",
+          "comms-2020",
+          "sub-ordeal-2015"
+        ],
+        "moderate": [
+          "sub-digital-2017",
+          "sub-ritual-1985"
+        ]
       },
       "description": "A live group with a start and end date. Higher engagement than self-paced, more scalable than 1:1."
     },
@@ -131,12 +235,25 @@
       "scalability": "semi_scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["building", "designing"],
-        "secondary": ["leading", "creating"]
+        "primary": [
+          "building",
+          "designing"
+        ],
+        "secondary": [
+          "leading",
+          "creating"
+        ]
       },
       "domeSignals": {
-        "strong": ["ai-2022", "tech-2004", "sub-digital-2010b"],
-        "moderate": ["sub-craft-2005", "media-1991"]
+        "strong": [
+          "ai-2022",
+          "tech-2004",
+          "sub-digital-2010b"
+        ],
+        "moderate": [
+          "sub-craft-2005",
+          "media-1991"
+        ]
       },
       "description": "You do the work for them using your system. Agency model. Scales with a team, not just you."
     },
@@ -146,12 +263,26 @@
       "scalability": "scalable",
       "hormoziLayer": "continuity",
       "skills": {
-        "primary": ["connecting", "leading"],
-        "secondary": ["coaching", "creating"]
+        "primary": [
+          "connecting",
+          "leading"
+        ],
+        "secondary": [
+          "coaching",
+          "creating"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-digital-2015", "sub-digital-2017", "sub-communal-2017"],
-        "moderate": ["sub-ritual-1985", "sub-coaching-1937", "sub-ordeal-2015"]
+        "strong": [
+          "sub-digital-2015",
+          "sub-digital-2017",
+          "sub-communal-2017"
+        ],
+        "moderate": [
+          "sub-ritual-1985",
+          "sub-coaching-1937",
+          "sub-ordeal-2015"
+        ]
       },
       "description": "People pay monthly to be part of your world. Community is the product. Value compounds with every member."
     },
@@ -159,14 +290,27 @@
       "label": "Digital Product",
       "tier": "product",
       "scalability": "scalable",
-      "hormoziLayer": "core",
+      "hormoziLayer": "attraction",
       "skills": {
-        "primary": ["creating", "designing"],
-        "secondary": ["teaching", "building"]
+        "primary": [
+          "creating",
+          "designing"
+        ],
+        "secondary": [
+          "teaching",
+          "building"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-craft-2005", "sub-written-2017", "media-2022"],
-        "moderate": ["sub-craft-2020", "sub-toy-1932"]
+        "strong": [
+          "sub-craft-2005",
+          "sub-written-2017",
+          "media-2022"
+        ],
+        "moderate": [
+          "sub-craft-2020",
+          "sub-toy-1932"
+        ]
       },
       "description": "Templates, ebooks, guides, presets. Make once, distribute infinitely. Low price, high volume."
     },
@@ -176,12 +320,24 @@
       "scalability": "scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["building"],
-        "secondary": ["designing", "creating"]
+        "primary": [
+          "building"
+        ],
+        "secondary": [
+          "designing",
+          "creating"
+        ]
       },
       "domeSignals": {
-        "strong": ["ai-2022", "tech-2004", "media-1991"],
-        "moderate": ["play-1972", "sub-digital-game-2005"]
+        "strong": [
+          "ai-2022",
+          "tech-2004",
+          "media-1991"
+        ],
+        "moderate": [
+          "play-1972",
+          "sub-digital-game-2005"
+        ]
       },
       "description": "An app, tool, or platform that solves a problem. Build once, users multiply."
     },
@@ -191,12 +347,24 @@
       "scalability": "scalable",
       "hormoziLayer": "continuity",
       "skills": {
-        "primary": ["building"],
-        "secondary": ["designing", "leading"]
+        "primary": [
+          "building"
+        ],
+        "secondary": [
+          "designing",
+          "leading"
+        ]
       },
       "domeSignals": {
-        "strong": ["ai-2022", "tech-1991", "tech-1975"],
-        "moderate": ["sleep-2009", "sub-mindbody-2009"]
+        "strong": [
+          "ai-2022",
+          "tech-1991",
+          "tech-1975"
+        ],
+        "moderate": [
+          "sleep-2009",
+          "sub-mindbody-2009"
+        ]
       },
       "description": "Subscription software. The ultimate recurring revenue model. Core offer IS continuity."
     },
@@ -206,12 +374,25 @@
       "scalability": "scalable",
       "hormoziLayer": "continuity",
       "skills": {
-        "primary": ["building", "designing"],
-        "secondary": ["creating"]
+        "primary": [
+          "building",
+          "designing"
+        ],
+        "secondary": [
+          "creating"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-craft-1880", "sub-craft-2005", "sub-ferment-1400"],
-        "moderate": ["sub-temperature-2018", "sub-light-2020", "sub-toy-1932"]
+        "strong": [
+          "sub-craft-1880",
+          "sub-craft-2005",
+          "sub-ferment-1400"
+        ],
+        "moderate": [
+          "sub-temperature-2018",
+          "sub-light-2020",
+          "sub-toy-1932"
+        ]
       },
       "description": "Something people hold. Supplements, equipment, merchandise, food products. Margins in manufacturing, moat in brand."
     },
@@ -221,12 +402,24 @@
       "scalability": "scalable",
       "hormoziLayer": "attraction",
       "skills": {
-        "primary": ["storytelling"],
-        "secondary": ["connecting", "performing"]
+        "primary": [
+          "storytelling"
+        ],
+        "secondary": [
+          "connecting",
+          "performing"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-audio-2005", "sub-oral-2015"],
-        "moderate": ["sub-oral-1860", "sub-coaching-1937", "sub-written-2017"]
+        "strong": [
+          "sub-audio-2005",
+          "sub-oral-2015"
+        ],
+        "moderate": [
+          "sub-oral-1860",
+          "sub-coaching-1937",
+          "sub-written-2017"
+        ]
       },
       "description": "Long-form audio. Builds deep trust over time. Primarily an attraction vehicle that can monetise via sponsorship or premium."
     },
@@ -236,12 +429,23 @@
       "scalability": "scalable",
       "hormoziLayer": "attraction",
       "skills": {
-        "primary": ["storytelling", "teaching"],
-        "secondary": ["creating"]
+        "primary": [
+          "storytelling",
+          "teaching"
+        ],
+        "secondary": [
+          "creating"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-written-1999", "sub-written-2017"],
-        "moderate": ["sub-written-1719", "sub-oral-2006"]
+        "strong": [
+          "sub-written-1999",
+          "sub-written-2017"
+        ],
+        "moderate": [
+          "sub-written-1719",
+          "sub-oral-2006"
+        ]
       },
       "description": "Written content delivered to inboxes. Builds authority. Monetises via sponsorship, paid tier, or as a funnel to other products."
     },
@@ -251,12 +455,26 @@
       "scalability": "scalable",
       "hormoziLayer": "attraction",
       "skills": {
-        "primary": ["storytelling", "performing"],
-        "secondary": ["creating", "teaching"]
+        "primary": [
+          "storytelling",
+          "performing"
+        ],
+        "secondary": [
+          "creating",
+          "teaching"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-video-2005", "media-2018", "sub-video-2018"],
-        "moderate": ["sub-oral-1860", "sub-creator-2007", "sub-creator-2022"]
+        "strong": [
+          "sub-video-2005",
+          "media-2018",
+          "sub-video-2018"
+        ],
+        "moderate": [
+          "sub-oral-1860",
+          "sub-creator-2007",
+          "sub-creator-2022"
+        ]
       },
       "description": "Video content at scale. The most powerful attraction vehicle. Ad revenue plus funnel to premium products."
     },
@@ -266,12 +484,24 @@
       "scalability": "scalable",
       "hormoziLayer": "core",
       "skills": {
-        "primary": ["creating", "building"],
-        "secondary": ["designing", "leading"]
+        "primary": [
+          "creating",
+          "building"
+        ],
+        "secondary": [
+          "designing",
+          "leading"
+        ]
       },
       "domeSignals": {
-        "strong": ["sub-creator-2024", "sub-creator-2022"],
-        "moderate": ["sub-immersive-2015", "fashion-2021"]
+        "strong": [
+          "sub-creator-2024",
+          "sub-creator-2022"
+        ],
+        "moderate": [
+          "sub-immersive-2015",
+          "fashion-2021"
+        ]
       },
       "description": "Multiple product types combined. The mature creator's portfolio. Each product feeds the others."
     }
