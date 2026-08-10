@@ -118,9 +118,9 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
-**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
+**Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/experience/:id/:nodeKey`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet), `/create/plays` (experience plays library), `/create/growth`, `/create/experiences`, `/create/terminal`, `/create/profile`, `/create/bridge`, `/create/inspiration`, `/create/attraction-stack`, `/create/marketing-campaign`, `/create/scale-income`, `/create/pay-rent`, `/create/build-app` (app builder challenge, subroutes: `/interest`, `/prework`, `/challenge/:number`)
 
 **Direction**: `/career-clarity` (Career Clarity Quiz, public), `/people` (People Matching, AuthGate), `/experience-creators` (Experience Creator Matching)
 
@@ -134,19 +134,21 @@ docs/               # Specs, handoffs, research
 
 **Play Profile**: `/play-profile` (quiz + dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`
 
-**Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
+**Fantasy League**: `/league`, `/league/week`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`, `/try/essence-mirror`, `/try/ai-diagnostic`, `/try/life-paths`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
 
 **Self-Knowledge Flows**: `/curiosity-map` (curiosity mapping → clusters), `/life-paths` (career tagging → quest + courage challenge creation), `/career-alignment` (career alignment check), `/life-map` (life story chapters)
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share), `/facilitate/life-paths` (facilitator-run life paths), `/shift-scorecard`, `/quest-map`
+
+**OAuth/MCP**: `/authorize`, `/token`, `/oauth/consent` (OAuth flow for MCP Connectors)
 
 **CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
-**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/scale-diagnostic` → `/create/scale-diagnostic`
+**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/scale-diagnostic` → `/create/scale-diagnostic`, `/league/matchup` → `/league`, `/create/strike` → `/create/plays`
 
 ## Key Features
 
