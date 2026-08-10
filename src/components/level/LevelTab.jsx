@@ -59,6 +59,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   // Quest board state
   const [quests, setQuests] = useState([])
   const [questTasks, setQuestTasks] = useState({}) // { questId: [tasks] }
+  const [questExperiences, setQuestExperiences] = useState({}) // { questId: [experiences] }
   const [showAddQuest, setShowAddQuest] = useState(false)
   const [addQuestLabel, setAddQuestLabel] = useState('')
   const [addQuestState, setAddQuestState] = useState(null)
@@ -108,21 +109,28 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .order('sort_order', { ascending: true })
     if (questData) {
       setQuests(questData)
-      // Load tasks for all quests
+      // Load tasks + experiences for all quests
       const questIds = questData.map(q => q.id)
       if (questIds.length > 0) {
-        const { data: taskData } = await supabase
-          .from('quest_tasks')
-          .select('*')
-          .in('quest_id', questIds)
-          .order('sort_order', { ascending: true })
-        if (taskData) {
+        const [taskRes, expRes] = await Promise.all([
+          supabase.from('quest_tasks').select('*').in('quest_id', questIds).order('sort_order', { ascending: true }),
+          supabase.from('quest_experiences').select('*').in('quest_id', questIds).order('sort_order', { ascending: true }),
+        ])
+        if (taskRes.data) {
           const grouped = {}
-          taskData.forEach(t => {
+          taskRes.data.forEach(t => {
             if (!grouped[t.quest_id]) grouped[t.quest_id] = []
             grouped[t.quest_id].push(t)
           })
           setQuestTasks(grouped)
+        }
+        if (expRes.data) {
+          const grouped = {}
+          expRes.data.forEach(e => {
+            if (!grouped[e.quest_id]) grouped[e.quest_id] = []
+            grouped[e.quest_id].push(e)
+          })
+          setQuestExperiences(grouped)
         }
       }
     }
@@ -479,7 +487,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           const order = { vibe: 0, peace: 1, anxious: 2, shutdown: 3 }
           return (order[a.predicted_state] ?? 4) - (order[b.predicted_state] ?? 4)
         }).map(q => (
-          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
+          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} experiences={questExperiences[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
         ))}
         {hasLifePaths && !showAddQuest && (
           <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>

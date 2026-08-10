@@ -306,7 +306,29 @@
 
 .qbc-add-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-/* ── Task options (courage + timeframe) ── */
+/* ── Task options (stacked, shown on typing) ── */
+.qbc-task-options-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+  margin-bottom: 8px;
+  border-top: 1px solid #f2f3f5;
+  animation: qbcFadeIn 0.2s ease;
+}
+
+.qbc-option-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.qbc-option-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
 .qbc-task-options {
   display: flex;
   align-items: center;
@@ -486,3 +508,319 @@
   font-family: inherit; transition: all 0.15s ease;
 }
 .qbc-signal-btn:hover { background: #e9ecef; }
+
+/* ── Experience sections ── */
+.qbc-experience-section {
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f2f3f5;
+}
+.qbc-experience-section:last-child { border-bottom: none; }
+
+.qbc-exp-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0 4px;
+}
+
+.qbc-exp-icon { font-size: 13px; flex-shrink: 0; }
+
+.qbc-exp-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qbc-exp-label-muted { color: #868e96; }
+
+.qbc-exp-count {
+  font-size: 11px;
+  color: #868e96;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.qbc-exp-state-badge {
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1.5px solid #e9ecef;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.qbc-exp-state-badge:hover { opacity: 0.75; }
+
+.qbc-exp-rerate {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  animation: qbcFadeIn 0.15s ease;
+}
+
+.qbc-exp-state-btn {
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1.5px solid #e9ecef;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.qbc-exp-state-btn:hover { opacity: 0.75; }
+.qbc-exp-state-btn.current { font-weight: 700; }
+.qbc-exp-state-btn--vibe_rise.current     { border-color: #E9A23B; background: rgba(233,162,59,0.12); }
+.qbc-exp-state-btn--fun.current           { border-color: #10b981; background: rgba(16,185,129,0.1); }
+.qbc-exp-state-btn--pressure.current      { border-color: #ef4444; background: rgba(239,68,68,0.08); }
+.qbc-exp-state-btn--uninterested.current  { border-color: #6b7280; background: rgba(107,114,128,0.08); }
+
+.qbc-exp-all-done {
+  font-size: 12px;
+  color: #34d399;
+  font-weight: 600;
+  padding: 4px 0;
+}
+
+/* ── Add experience ── */
+.qbc-add-experience-btn {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+.qbc-add-experience-btn:hover { opacity: 0.7; }
+
+.qbc-add-experience {
+  background: rgba(94, 23, 235, 0.03);
+  border: 1.5px solid rgba(94, 23, 235, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  animation: qbcFadeIn 0.2s ease;
+}
+
+.qbc-add-exp-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.qbc-add-exp-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 8px 0 6px;
+}
+
+.qbc-exp-state-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.qbc-exp-pick-btn {
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: #495057;
+  transition: all 0.15s;
+}
+.qbc-exp-pick-btn.active { font-weight: 700; }
+.qbc-exp-pick-btn--vibe_rise.active     { border-color: #E9A23B; background: rgba(233,162,59,0.12); color: #b47d1e; }
+.qbc-exp-pick-btn--fun.active           { border-color: #10b981; background: rgba(16,185,129,0.1);  color: #059669; }
+.qbc-exp-pick-btn--pressure.active      { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #dc2626; }
+.qbc-exp-pick-btn--uninterested.active  { border-color: #6b7280; background: rgba(107,114,128,0.08); color: #6b7280; }
+.qbc-exp-pick-btn:hover:not(.active) { border-color: #ced4da; }
+
+.qbc-add-exp-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.qbc-add-experience .qbc-add-btn {
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+}
+
+/* ── Experience pill selector for to-dos ── */
+.qbc-exp-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 4px 0 6px;
+}
+
+.qbc-exp-pill {
+  padding: 3px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #e9ecef;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #868e96;
+  cursor: pointer;
+  transition: all 0.15s;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.qbc-exp-pill.active {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+  color: #5e17eb;
+}
+
+/* ── First-time discovery prompt ── */
+.qbc-exp-discovery {
+  background: rgba(94, 23, 235, 0.04);
+  border: 1.5px dashed rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.qbc-exp-discovery-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.qbc-exp-discovery-btn {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+}
+.qbc-exp-discovery-btn:hover { opacity: 0.7; }
+
+/* ── Assign tasks to experiences ── */
+.qbc-assign-btn {
+  padding: 2px 10px;
+  border-radius: 6px;
+  border: 1.5px solid #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+  font-size: 11px;
+  font-weight: 700;
+  color: #5e17eb;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.qbc-assign-btn:hover { background: rgba(94, 23, 235, 0.12); }
+
+.qbc-assign-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 2px 0 8px 38px;
+  animation: qbcFadeIn 0.15s ease;
+}
+
+/* ── Completed row (show + map buttons) ── */
+.qbc-completed-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.qbc-map-btn {
+  background: none;
+  border: none;
+  color: #E9A23B;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 6px 0;
+}
+.qbc-map-btn:hover { opacity: 0.7; }
+
+/* ── Map completed modal ── */
+.qbc-map-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  max-width: 480px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.qbc-map-modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.qbc-map-modal-sub {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.qbc-map-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.qbc-map-item {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f2f3f5;
+}
+.qbc-map-item:last-child { border-bottom: none; }
+
+.qbc-map-item-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qbc-map-item .qbc-assign-pills {
+  padding: 0;
+}
+
+.qbc-map-modal-empty {
+  text-align: center;
+  color: #34d399;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 20px 0;
+}

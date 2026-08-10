@@ -12,7 +12,7 @@ import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import './QuestBoardCard.css'
 
-export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
+export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate }) {
   const [expanded, setExpanded] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
@@ -29,51 +29,21 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
   const [outcomeTaskId, setOutcomeTaskId] = useState(null) // show outcome prompt after completion
   const [groanModalChallenge, setGroanModalChallenge] = useState(null) // courage completion modal
   const [signalTaskId, setSignalTaskId] = useState(null) // which task is showing "lit me up" prompt
-  const [courageTrend, setCourageTrend] = useState([]) // last N wahoo classifications
-  const [topIdentity, setTopIdentity] = useState(null) // { text, count }
+  // Experience state
+  const [showAddExperience, setShowAddExperience] = useState(false)
+  const [experienceInput, setExperienceInput] = useState('')
+  const [experienceState, setExperienceState] = useState(null)
+  const [experienceSaving, setExperienceSaving] = useState(false)
+  const [taskExperienceId, setTaskExperienceId] = useState(null) // which experience a new to-do is for
+  const [reRatingExpId, setReRatingExpId] = useState(null) // which experience is being re-rated
+  const [showAssignTasks, setShowAssignTasks] = useState(false) // bulk assign ungrouped tasks to experiences
+  const [showMapCompleted, setShowMapCompleted] = useState(false) // popup to map completed challenges
   const inputRef = useRef(null)
 
   const stateMeta = STATE_META[quest.predicted_state]
-  const completedCount = tasks.filter(t => t.done).length
-  const totalCount = tasks.length
-  const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
+  const courageCount = tasks.filter(t => t.is_courage_challenge).length
+  const courageDoneCount = tasks.filter(t => t.is_courage_challenge && t.done).length
   const taskIdKey = tasks.map(t => t.id).join(',')
-
-  // Load courage trend + top identity when expanded
-  useEffect(() => {
-    if (!expanded || !quest.id) return
-    // Courage trend: last 8 wahoo classifications for this quest's challenges
-    const groanIds = tasks.filter(t => t.groan_challenge_id).map(t => t.groan_challenge_id)
-    if (groanIds.length > 0) {
-      supabase.from('quest_completions')
-        .select('reflection_text')
-        .eq('user_id', userId)
-        .eq('quest_category', 'Groans')
-        .not('reflection_text', 'is', null)
-        .order('created_at', { ascending: false })
-        .limit(200)
-        .then(({ data }) => {
-          if (!data) return
-          const trend = []
-          const stmtCounts = {}
-          data.forEach(row => {
-            try {
-              const parsed = JSON.parse(row.reflection_text)
-              if (parsed.challenge_id && groanIds.includes(parsed.challenge_id)) {
-                if (parsed.wahoo_classification) trend.push(parsed.wahoo_classification)
-                if (parsed.identity_statement) {
-                  const s = parsed.identity_statement.trim().toLowerCase()
-                  if (s) stmtCounts[s] = (stmtCounts[s] || 0) + 1
-                }
-              }
-            } catch {}
-          })
-          setCourageTrend(trend.slice(0, 8).reverse())
-          const top = Object.entries(stmtCounts).sort((a, b) => b[1] - a[1])[0]
-          if (top) setTopIdentity({ text: top[0], count: top[1] })
-        })
-    }
-  }, [expanded, quest.id, taskIdKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load healing intentions for all tasks
   useEffect(() => {
@@ -112,11 +82,13 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
         is_courage_challenge: false,
         sort_order: totalCount,
         timeframe: taskTimeframe,
+        experience_id: taskExperienceId || null,
       }).select('id').single()
 
       if (error) console.error('Add task error:', error)
       else {
         setTaskInput('')
+        setTaskExperienceId(null)
 
         // Award 2 RP for adding a quest task
         await supabase.from('quest_completions').insert({
@@ -260,6 +232,48 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
     }
   }
 
+  const activeExperiences = experiences.filter(e => e.status === 'active')
+  const hasExperiences = activeExperiences.length > 0
+
+  const addExperience = async () => {
+    if (!experienceInput.trim() || !experienceState || experienceSaving) return
+    setExperienceSaving(true)
+    try {
+      const { error } = await supabase.from('quest_experiences').insert({
+        quest_id: quest.id,
+        user_id: userId,
+        label: experienceInput.trim(),
+        capacity_state: experienceState,
+        sort_order: experiences.length,
+      })
+      if (error) console.error('Add experience error:', error)
+      else {
+        setExperienceInput('')
+        setExperienceState(null)
+        setShowAddExperience(false)
+        onUpdate?.()
+      }
+    } catch (e) { console.error('Add experience error:', e) }
+    setExperienceSaving(false)
+  }
+
+  const reRateExperience = async (expId, newState) => {
+    const { error } = await supabase.from('quest_experiences')
+      .update({ capacity_state: newState, updated_at: new Date().toISOString() })
+      .eq('id', expId)
+    if (error) console.error('Re-rate experience error:', error)
+    setReRatingExpId(null)
+    onUpdate?.()
+  }
+
+  const assignTaskToExperience = async (taskId, expId) => {
+    const { error } = await supabase.from('quest_tasks')
+      .update({ experience_id: expId })
+      .eq('id', taskId)
+    if (error) console.error('Assign task error:', error)
+    else onUpdate?.()
+  }
+
   return (
     <div className={`qbc ${expanded ? 'qbc-expanded' : ''}`}>
       {/* Collapsed header */}
@@ -269,13 +283,8 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
           <div className="qbc-label">{quest.label}</div>
           <div className="qbc-meta">
             <span className="qbc-state-name" style={{ color: stateMeta?.color }}>{stateMeta?.label || 'Unknown'}</span>
-            {totalCount > 0 && <span className="qbc-progress"> · {completedCount}/{totalCount} tasks</span>}
+            {courageCount > 0 && <span className="qbc-progress"> · ⚡ {courageDoneCount}/{courageCount} courage</span>}
           </div>
-          {totalCount > 0 && (
-            <div className="qbc-progress-bar">
-              <div className="qbc-progress-fill" style={{ width: `${progressPct}%` }} />
-            </div>
-          )}
         </div>
         <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
       </div>
@@ -283,26 +292,48 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
       {/* Expanded content */}
       {expanded && (
         <div className="qbc-body">
-          {/* Courage trend + identity + zone warning */}
-          {courageTrend.length > 0 && (
-            <div className="qbc-insights">
-              <div className="qbc-trend">
-                {courageTrend.map((c, i) => (
-                  <span key={i} className="qbc-trend-dot" title={c}>
-                    {c === 'vibe' || c === 'wahoo' ? '🔥' : c === 'peace' ? '😌' : c === 'anxious' ? '😰' : '😶'}
-                  </span>
+          {/* Add experience — always at top (hierarchy: life path → experiences → tasks) */}
+          {!showAddExperience && (
+            <button className="qbc-add-experience-btn" onClick={() => setShowAddExperience(true)}>
+              + Add experience
+            </button>
+          )}
+          {showAddExperience && (
+            <div className="qbc-add-experience">
+              <div className="qbc-add-exp-title">What experience are you building toward?</div>
+              <input
+                className="qbc-input"
+                type="text"
+                value={experienceInput}
+                onChange={e => setExperienceInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && experienceState && addExperience()}
+                placeholder="e.g. Lead a public class, run a retreat..."
+                autoFocus
+              />
+              <div className="qbc-add-exp-label">How does imagining this feel right now?</div>
+              <div className="qbc-exp-state-picker">
+                {[
+                  { id: 'vibe_rise', emoji: '🔥', label: 'Vibe Rise' },
+                  { id: 'fun', emoji: '😊', label: 'Fun' },
+                  { id: 'pressure', emoji: '😰', label: 'Pressure' },
+                  { id: 'uninterested', emoji: '😐', label: 'Not for me' },
+                ].map(s => (
+                  <button key={s.id}
+                    className={`qbc-exp-pick-btn qbc-exp-pick-btn--${s.id} ${experienceState === s.id ? 'active' : ''}`}
+                    onClick={() => setExperienceState(s.id)}>
+                    {s.emoji} {s.label}
+                  </button>
                 ))}
               </div>
-              {topIdentity && (
-                <div className="qbc-top-identity">
-                  "I am someone who {topIdentity.text}" <span className="qbc-identity-count">{'\u00D7'}{topIdentity.count}</span>
-                </div>
-              )}
-              {courageTrend.length >= 3 && courageTrend.slice(-3).every(c => c === 'anxious') && (
-                <div className="qbc-zone-warning">
-                  You're skilled here but it doesn't light you up. This might be your Zone of Excellence.
-                </div>
-              )}
+              <div className="qbc-add-exp-actions">
+                <button className="qbc-add-btn" onClick={addExperience}
+                  disabled={!experienceInput.trim() || !experienceState || experienceSaving}>
+                  Save
+                </button>
+                <button className="qbc-close-cancel" onClick={() => { setShowAddExperience(false); setExperienceInput(''); setExperienceState(null) }}>
+                  Cancel
+                </button>
+              </div>
             </div>
           )}
 
@@ -312,15 +343,6 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               {(() => {
                 const incomplete = tasks.filter(t => !t.done)
                 const completed = tasks.filter(t => t.done)
-                const TIMEFRAME_ORDER = { week: 0, month: 1, quarter: 2 }
-                const TIMEFRAME_LABELS = { week: 'This week', month: 'This month', quarter: 'This quarter' }
-                const grouped = { week: [], month: [], quarter: [] }
-                incomplete.forEach(t => {
-                  const tf = t.timeframe || 'week'
-                  if (grouped[tf]) grouped[tf].push(t)
-                  else grouped.week.push(t)
-                })
-                const hasMultipleTimeframes = Object.values(grouped).filter(g => g.length > 0).length > 1
 
                 const renderTask = (task) => (
                   <div key={task.id}>
@@ -339,6 +361,141 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
                     )}
                   </div>
                 )
+
+                // If experiences exist: group to-dos under experiences, courage challenges separate
+                if (hasExperiences) {
+                  const STATE_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', uninterested: '😐' }
+                  const STATE_LABEL = { vibe_rise: 'Vibe Rise', fun: 'Fun', pressure: 'Pressure', uninterested: 'Not for me' }
+
+                  return (
+                    <>
+                      {/* Experience sections with their to-dos */}
+                      {activeExperiences.map(exp => {
+                        const expTasks = incomplete.filter(t => t.experience_id === exp.id)
+                        const expCompleted = completed.filter(t => t.experience_id === exp.id)
+                        const isReRating = reRatingExpId === exp.id
+                        return (
+                          <div key={exp.id} className="qbc-experience-section">
+                            <div className="qbc-exp-header">
+                              <span className="qbc-exp-icon">🎯</span>
+                              <span className="qbc-exp-label">{exp.label}</span>
+                              {isReRating ? (
+                                <div className="qbc-exp-rerate">
+                                  {['vibe_rise', 'fun', 'pressure', 'uninterested'].map(s => (
+                                    <button key={s} className={`qbc-exp-state-btn qbc-exp-state-btn--${s} ${exp.capacity_state === s ? 'current' : ''}`}
+                                      onClick={() => reRateExperience(exp.id, s)}>
+                                      {STATE_EMOJI[s]}
+                                    </button>
+                                  ))}
+                                </div>
+                              ) : (
+                                <button className="qbc-exp-state-badge"
+                                  onClick={(e) => { e.stopPropagation(); setReRatingExpId(exp.id) }}
+                                  title={`${STATE_LABEL[exp.capacity_state] || 'Not rated'}, tap to update`}>
+                                  {STATE_EMOJI[exp.capacity_state] || '?'} {STATE_LABEL[exp.capacity_state] || 'Rate'}
+                                </button>
+                              )}
+                            </div>
+                            {expTasks.map(renderTask)}
+                            {expCompleted.length > 0 && expTasks.length === 0 && (
+                              <div className="qbc-exp-all-done">All tasks done</div>
+                            )}
+                          </div>
+                        )
+                      })}
+
+                      {/* Unassigned tasks + courage challenges */}
+                      {(() => {
+                        const unassigned = incomplete.filter(t => !t.experience_id)
+                        if (unassigned.length === 0) return null
+                        return (
+                          <div className="qbc-experience-section">
+                            <div className="qbc-exp-header">
+                              <span className="qbc-exp-icon">☑️</span>
+                              <span className="qbc-exp-label qbc-exp-label-muted">Unassigned</span>
+                              {!showAssignTasks ? (
+                                <button className="qbc-assign-btn" onClick={() => setShowAssignTasks(true)}>
+                                  Assign
+                                </button>
+                              ) : (
+                                <button className="qbc-assign-btn" onClick={() => setShowAssignTasks(false)}>
+                                  Done
+                                </button>
+                              )}
+                            </div>
+                            {unassigned.map(task => (
+                              <div key={`assign-${task.id}`}>
+                                <div className="qbc-task">
+                                  <button className="qbc-check" onClick={() => toggleTask(task)} />
+                                  <span className="qbc-task-text">{task.text}</span>
+                                  {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                                  {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                                </div>
+                                {signalTaskId === task.id && (
+                                  <div className="qbc-signal-row">
+                                    <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}>🔥 Lit me up</button>
+                                    <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'was_okay')}>😐 Was okay</button>
+                                    <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'bored')}>😴 Bored</button>
+                                  </div>
+                                )}
+                                {showAssignTasks && (
+                                  <div className="qbc-assign-pills">
+                                    {activeExperiences.map(exp => (
+                                      <button key={exp.id} className="qbc-exp-pill"
+                                        onClick={() => assignTaskToExperience(task.id, exp.id)}>
+                                        🎯 {exp.label.length > 18 ? exp.label.slice(0, 18) + '...' : exp.label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      })()}
+
+                      {/* Completed + map unmapped */}
+                      {(() => {
+                        const unmappedCompleted = completed.filter(t => !t.experience_id)
+                        return (
+                          <>
+                            {completed.length > 0 && (
+                              <div className="qbc-completed-row">
+                                <button className="qbc-show-more" onClick={(e) => { e.stopPropagation(); setShowAllTasks(!showAllTasks) }}>
+                                  {showAllTasks ? 'Hide completed' : `Show ${completed.length} completed`}
+                                </button>
+                                {unmappedCompleted.length > 0 && (
+                                  <button className="qbc-map-btn" onClick={() => setShowMapCompleted(true)}>
+                                    Map {unmappedCompleted.length} unmapped
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                            {showAllTasks && completed.map(task => (
+                              <div key={task.id} className="qbc-task done">
+                                <button className="qbc-check checked" onClick={() => toggleTask(task)}>✓</button>
+                                <span className="qbc-task-text">{task.text}</span>
+                                {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                                {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
+                              </div>
+                            ))}
+                          </>
+                        )
+                      })()}
+                    </>
+                  )
+                }
+
+                // No experiences: existing timeframe grouping
+                const TIMEFRAME_ORDER = { week: 0, month: 1, quarter: 2 }
+                const TIMEFRAME_LABELS = { week: 'This week', month: 'This month', quarter: 'This quarter' }
+                const grouped = { week: [], month: [], quarter: [] }
+                incomplete.forEach(t => {
+                  const tf = t.timeframe || 'week'
+                  if (grouped[tf]) grouped[tf].push(t)
+                  else grouped.week.push(t)
+                })
+                const hasMultipleTimeframes = Object.values(grouped).filter(g => g.length > 0).length > 1
 
                 return (
                   <>
@@ -402,24 +559,51 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               Add
             </button>
           </div>
-          <div className="qbc-task-options">
-            <label className="qbc-courage-toggle">
-              <input type="checkbox" checked={isCourage} onChange={e => setIsCourage(e.target.checked)} />
-              <span>⚡ Courage challenge</span>
-            </label>
-            <div className="qbc-timeframe-picker">
-              {['week', 'month', 'quarter'].map(tf => (
-                <button
-                  key={tf}
-                  className={`qbc-tf-btn ${taskTimeframe === tf ? 'active' : ''}`}
-                  onClick={() => setTaskTimeframe(tf)}
-                  type="button"
-                >
-                  {tf === 'week' ? 'This week' : tf === 'month' ? 'This month' : 'This quarter'}
-                </button>
-              ))}
+          {/* Task options — only show when typing */}
+          {taskInput.trim() && (
+            <div className="qbc-task-options-stack">
+              {/* Experience assignment */}
+              {hasExperiences && (
+                <div className="qbc-option-row">
+                  <span className="qbc-option-label">What experience?</span>
+                  <div className="qbc-exp-pills">
+                    <button className={`qbc-exp-pill ${!taskExperienceId ? 'active' : ''}`}
+                      onClick={() => setTaskExperienceId(null)}>General</button>
+                    {activeExperiences.map(exp => (
+                      <button key={exp.id} className={`qbc-exp-pill ${taskExperienceId === exp.id ? 'active' : ''}`}
+                        onClick={() => setTaskExperienceId(exp.id)}>
+                        {exp.label.length > 20 ? exp.label.slice(0, 20) + '...' : exp.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* Courage toggle */}
+              <div className="qbc-option-row">
+                <span className="qbc-option-label">Is this a courage challenge?</span>
+                <label className="qbc-courage-toggle">
+                  <input type="checkbox" checked={isCourage} onChange={e => setIsCourage(e.target.checked)} />
+                  <span>⚡ Yes</span>
+                </label>
+              </div>
+              {/* Timeframe */}
+              <div className="qbc-option-row">
+                <span className="qbc-option-label">When will you do it?</span>
+                <div className="qbc-timeframe-picker">
+                  {['week', 'month', 'quarter'].map(tf => (
+                    <button
+                      key={tf}
+                      className={`qbc-tf-btn ${taskTimeframe === tf ? 'active' : ''}`}
+                      onClick={() => setTaskTimeframe(tf)}
+                      type="button"
+                    >
+                      {tf === 'week' ? 'This week' : tf === 'month' ? 'This month' : 'This quarter'}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Close quest */}
           {!showClose ? (
@@ -484,6 +668,38 @@ export default function QuestBoardCard({ quest, tasks, userId, onUpdate }) {
               }}
               onClose={() => { setShowWahooCreator(false); setTaskInput(''); setIsCourage(false) }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Map completed challenges to experiences */}
+      {showMapCompleted && (
+        <div className="wc-modal-overlay" onClick={() => setShowMapCompleted(false)}>
+          <div className="qbc-map-modal" onClick={e => e.stopPropagation()}>
+            <button className="wc-modal-close" onClick={() => setShowMapCompleted(false)}>&times;</button>
+            <div className="qbc-map-modal-title">Map completed challenges</div>
+            <div className="qbc-map-modal-sub">Assign past challenges to the experiences they built toward</div>
+            <div className="qbc-map-modal-list">
+              {tasks.filter(t => t.done && !t.experience_id).map(task => (
+                <div key={task.id} className="qbc-map-item">
+                  <div className="qbc-map-item-text">
+                    {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
+                    {task.text}
+                  </div>
+                  <div className="qbc-assign-pills">
+                    {activeExperiences.map(exp => (
+                      <button key={exp.id} className="qbc-exp-pill"
+                        onClick={() => assignTaskToExperience(task.id, exp.id)}>
+                        🎯 {exp.label.length > 18 ? exp.label.slice(0, 18) + '...' : exp.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              {tasks.filter(t => t.done && !t.experience_id).length === 0 && (
+                <div className="qbc-map-modal-empty">All challenges mapped</div>
+              )}
+            </div>
           </div>
         </div>
       )}
