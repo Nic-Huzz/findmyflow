@@ -53,8 +53,7 @@
           "sub-oral-2006"
         ],
         "finance": [
-          "sub-written-1620",
-          "media-1605"
+          "sub-written-1620"
         ],
         "consulting": [
           "sub-oral-2006",
@@ -229,12 +228,10 @@
       "name": "Thinking Creatively",
       "domeNodes": {
         "default": [
-          "sub-craft-1880",
           "sub-immersive-2015"
         ],
         "tech": [
-          "play-1100d",
-          "sub-craft-1880"
+          "play-1100d"
         ],
         "media": [
           "sub-creator-2022",
@@ -680,7 +677,6 @@
       "name": "Training and Teaching Others",
       "domeNodes": {
         "default": [
-          "sub-coaching-2010",
           "media-2012"
         ],
         "fitness": [
@@ -716,9 +712,7 @@
     "4.A.4.b.5": {
       "name": "Coaching and Developing Others",
       "domeNodes": {
-        "default": [
-          "sub-coaching-2010"
-        ],
+        "default": [],
         "fitness": [
           "sub-coaching-2010",
           "sub-coaching-1995"

@@ -16,18 +16,17 @@
       "sub-coaching-1995": 0.78,
       "media-2012": 0.78,
       "sub-audio-2005": 0.78,
-      "sub-craft-1880": 0.72,
       "sub-immersive-2015": 0.72,
       "sub-ordeal-1863": 0.55,
       "sub-mental-1900": 0.53
     },
     "primaryPrimals": [
-      "threat",
-      "status",
-      "story"
+      "story",
+      "bonds",
+      "threat"
     ],
-    "description": "Days built around reading, writing, and arguing positions under pressure, with research, negotiation, and high-stakes advocacy defining the rhythm.",
-    "dataSource": "onet-api-v2"
+    "description": "Lawyers",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "software-engineer",
@@ -35,9 +34,8 @@
     "onetCode": "15-1252.00",
     "category": "corporate",
     "nodes": {
-      "ai-2022": 0.85,
+      "ai-2022": 0.9,
       "play-1100d": 0.84,
-      "sub-craft-1880": 0.83,
       "media-2012": 0.78,
       "sub-digital-2005": 0.76,
       "sub-digital-2015": 0.76,
@@ -48,17 +46,17 @@
       "sub-coaching-1995": 0.57
     },
     "primaryPrimals": [
-      "tools",
+      "bonds",
       "story",
-      "play"
+      "tools"
     ],
-    "description": "Long focused hours solving logic puzzles, building systems, and creating new applications, with collaborative problem-solving and continuous learning.",
-    "dataSource": "onet-api-v2"
+    "description": "Software Developers",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "business-development-rep",
     "title": "Business Development Rep",
-    "onetCode": "41-3091.00",
+    "onetCode": "41-3011.00",
     "category": "corporate",
     "nodes": {
       "fashion-2021": 0.99,
@@ -74,12 +72,12 @@
       "sub-mindbody-2009": 0.54
     },
     "primaryPrimals": [
+      "story",
       "status",
-      "bonds",
-      "story"
+      "bonds"
     ],
-    "description": "Relentless outreach and relationship building, pitching value to new prospects, reading people quickly, and creatively positioning solutions under time pressure.",
-    "dataSource": "onet-api-v2"
+    "description": "Advertising Sales Agents",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "accountant",
@@ -88,7 +86,6 @@
     "category": "corporate",
     "nodes": {
       "sub-written-1620": 0.87,
-      "media-1605": 0.87,
       "defense-1688": 0.84,
       "sub-written-1999": 0.82,
       "sub-digital-1482": 0.8,
@@ -101,16 +98,15 @@
       "sub-mindbody-2009": 0.66,
       "sub-ordeal-1863": 0.65,
       "sub-coaching-1995": 0.58,
-      "sub-craft-1880": 0.58,
       "sub-immersive-2015": 0.58
     },
     "primaryPrimals": [
-      "tools",
-      "threat",
+      "story",
+      "bonds",
       "status"
     ],
-    "description": "Methodical analysis of financial data with precision, ensuring compliance with standards, communicating findings to stakeholders, and training teams on processes.",
-    "dataSource": "onet-api-v2"
+    "description": "Accountants and Auditors",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "management-consultant",
@@ -127,16 +123,15 @@
       "media-2012": 0.81,
       "sub-audio-2005": 0.81,
       "sub-ordeal-1863": 0.73,
-      "sub-mindbody-2009": 0.72,
-      "sub-coaching-2010": 0.69
+      "sub-mindbody-2009": 0.72
     },
     "primaryPrimals": [
-      "status",
       "story",
-      "bonds"
+      "bonds",
+      "status"
     ],
-    "description": "High-velocity stakeholder interviews, data analysis, and framework building, presenting recommendations to executives and coaching organizations through change.",
-    "dataSource": "onet-api-v2"
+    "description": "Management Analysts",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "retreat-facilitator",
@@ -163,15 +158,16 @@
       "sub-coaching-2010": 0.68,
       "sub-coaching-1995": 0.66,
       "sub-flexibility-1893": 0.66,
-      "fashion-2021": 0.65
+      "fashion-2021": 0.65,
+      "sub-oral-2006": 0.54
     },
     "primaryPrimals": [
-      "bonds",
       "healing",
+      "bonds",
       "story"
     ],
-    "description": "Holding space for groups through structured experiences, managing group energy, scheduling activities, and creating containers for transformation and creative expression.",
-    "dataSource": "onet-api-v2"
+    "description": "Recreation Workers",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "crossfit-coach",
@@ -194,15 +190,16 @@
       "sub-coaching-1995": 0.72,
       "sub-strength-1400": 0.64,
       "sub-oral-1400c": 0.53,
-      "fashion-2021": 0.53
+      "fashion-2021": 0.53,
+      "sub-personal-1996": 0.5
     },
     "primaryPrimals": [
       "movement",
-      "bonds",
-      "status"
+      "healing",
+      "bonds"
     ],
-    "description": "Demonstrating movements, coaching form under fatigue, programming workouts, building community through shared physical challenge, and developing athlete potential.",
-    "dataSource": "onet-api-v2"
+    "description": "Exercise Trainers and Group Fitness Instructors",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "podcast-host",
@@ -225,11 +222,11 @@
     },
     "primaryPrimals": [
       "story",
-      "status",
-      "bonds"
+      "bonds",
+      "healing"
     ],
-    "description": "Researching guests, conducting long-form conversations, documenting and producing audio content, building an audience, and performing live for the public.",
-    "dataSource": "onet-api-v2"
+    "description": "Broadcast Announcers and Radio Disc Jockeys",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "chef",
@@ -255,15 +252,16 @@
       "sub-audio-2005": 0.56,
       "sub-personal-1996": 0.55,
       "sub-written-1999": 0.54,
-      "sub-coaching-1995": 0.54
+      "sub-coaching-1995": 0.54,
+      "fashion-2021": 0.5
     },
     "primaryPrimals": [
       "nourishment",
-      "fire",
-      "bonds"
+      "story",
+      "status"
     ],
-    "description": "Training and coordinating kitchen teams under pressure, creating dishes with quality ingredients, managing resources, and turning food into memorable experiences.",
-    "dataSource": "onet-api-v2"
+    "description": "Chefs and Head Cooks",
+    "dataSource": "onet-api-v2-fixed"
   },
   {
     "id": "adventure-tour-guide",
@@ -289,11 +287,11 @@
       "sub-strength-2010": 0.55
     },
     "primaryPrimals": [
+      "story",
       "movement",
-      "bonds",
-      "threat"
+      "bonds"
     ],
-    "description": "Leading groups through wilderness and unfamiliar terrain, performing for the public, managing safety, storytelling, and creating peak moments through controlled adventure.",
-    "dataSource": "onet-api-v2"
+    "description": "Travel Guides",
+    "dataSource": "onet-api-v2-fixed"
   }
 ]
