@@ -27,7 +27,7 @@
       "story"
     ],
     "description": "Days built around reading, writing, and arguing positions under pressure, with research, negotiation, and high-stakes advocacy defining the rhythm.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "software-engineer",
@@ -35,7 +35,7 @@
     "onetCode": "15-1252.00",
     "category": "corporate",
     "nodes": {
-      "ai-2022": 0.9,
+      "ai-2022": 0.85,
       "play-1100d": 0.84,
       "sub-craft-1880": 0.83,
       "media-2012": 0.78,
@@ -53,7 +53,7 @@
       "play"
     ],
     "description": "Long focused hours solving logic puzzles, building systems, and creating new applications, with collaborative problem-solving and continuous learning.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "business-development-rep",
@@ -79,7 +79,7 @@
       "story"
     ],
     "description": "Relentless outreach and relationship building, pitching value to new prospects, reading people quickly, and creatively positioning solutions under time pressure.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "accountant",
@@ -110,7 +110,7 @@
       "status"
     ],
     "description": "Methodical analysis of financial data with precision, ensuring compliance with standards, communicating findings to stakeholders, and training teams on processes.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "management-consultant",
@@ -136,7 +136,7 @@
       "bonds"
     ],
     "description": "High-velocity stakeholder interviews, data analysis, and framework building, presenting recommendations to executives and coaching organizations through change.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "retreat-facilitator",
@@ -171,7 +171,7 @@
       "story"
     ],
     "description": "Holding space for groups through structured experiences, managing group energy, scheduling activities, and creating containers for transformation and creative expression.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "crossfit-coach",
@@ -194,8 +194,7 @@
       "sub-coaching-1995": 0.72,
       "sub-strength-1400": 0.64,
       "sub-oral-1400c": 0.53,
-      "fashion-2021": 0.53,
-      "sub-personal-1996": 0.5
+      "fashion-2021": 0.53
     },
     "primaryPrimals": [
       "movement",
@@ -203,7 +202,7 @@
       "status"
     ],
     "description": "Demonstrating movements, coaching form under fatigue, programming workouts, building community through shared physical challenge, and developing athlete potential.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "podcast-host",
@@ -230,7 +229,7 @@
       "bonds"
     ],
     "description": "Researching guests, conducting long-form conversations, documenting and producing audio content, building an audience, and performing live for the public.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "chef",
@@ -256,8 +255,7 @@
       "sub-audio-2005": 0.56,
       "sub-personal-1996": 0.55,
       "sub-written-1999": 0.54,
-      "sub-coaching-1995": 0.54,
-      "fashion-2021": 0.5
+      "sub-coaching-1995": 0.54
     },
     "primaryPrimals": [
       "nourishment",
@@ -265,7 +263,7 @@
       "bonds"
     ],
     "description": "Training and coordinating kitchen teams under pressure, creating dishes with quality ingredients, managing resources, and turning food into memorable experiences.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   },
   {
     "id": "adventure-tour-guide",
@@ -296,6 +294,6 @@
       "threat"
     ],
     "description": "Leading groups through wilderness and unfamiliar terrain, performing for the public, managing safety, storytelling, and creating peak moments through controlled adventure.",
-    "dataSource": "onet-v2"
+    "dataSource": "onet-api-v2"
   }
 ]

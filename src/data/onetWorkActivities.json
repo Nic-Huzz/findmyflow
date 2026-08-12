@@ -1,392 +1,2122 @@
 {
   "metadata": {
-    "source": "O*NET OnLine (onetonline.org)",
+    "source": "O*NET Web Services API v2",
+    "apiDomain": "api-v2.onetcenter.org",
     "retrieved": "2026-07-29",
-    "version": "29.1",
-    "notes": "41-3091.00 (Sales Representatives of Services) had incomplete data; substituted 41-3011.00 (Advertising Sales Agents) as closest available proxy with full work activity scores."
+    "databaseVersion": "30.3"
   },
-  "activities": {
-    "4.A.1.a.1": "Getting Information",
-    "4.A.1.a.2": "Monitoring Processes, Materials, or Surroundings",
-    "4.A.1.b.1": "Identifying Objects, Actions, and Events",
-    "4.A.1.b.2": "Inspecting Equipment, Structures, or Materials",
-    "4.A.1.b.3": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
-    "4.A.2.a.1": "Judging the Qualities of Objects, Services, or People",
-    "4.A.2.a.2": "Processing Information",
-    "4.A.2.a.3": "Evaluating Information to Determine Compliance with Standards",
-    "4.A.2.a.4": "Analyzing Data or Information",
-    "4.A.2.b.1": "Making Decisions and Solving Problems",
-    "4.A.2.b.2": "Thinking Creatively",
-    "4.A.2.b.3": "Updating and Using Relevant Knowledge",
-    "4.A.2.b.4": "Developing Objectives and Strategies",
-    "4.A.2.b.5": "Scheduling Work and Activities",
-    "4.A.2.b.6": "Organizing, Planning, and Prioritizing Work",
-    "4.A.3.a.1": "Performing General Physical Activities",
-    "4.A.3.a.2": "Handling and Moving Objects",
-    "4.A.3.a.3": "Controlling Machines and Processes",
-    "4.A.3.a.4": "Operating Vehicles, Mechanized Devices, or Equipment",
-    "4.A.3.b.1": "Working with Computers",
-    "4.A.3.b.2": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
-    "4.A.3.b.4": "Repairing and Maintaining Mechanical Equipment",
-    "4.A.3.b.5": "Repairing and Maintaining Electronic Equipment",
-    "4.A.3.b.6": "Documenting/Recording Information",
-    "4.A.4.a.1": "Interpreting the Meaning of Information for Others",
-    "4.A.4.a.2": "Communicating with Supervisors, Peers, or Subordinates",
-    "4.A.4.a.3": "Communicating with People Outside the Organization",
-    "4.A.4.a.4": "Establishing and Maintaining Interpersonal Relationships",
-    "4.A.4.a.5": "Assisting and Caring for Others",
-    "4.A.4.a.6": "Selling or Influencing Others",
-    "4.A.4.a.7": "Resolving Conflicts and Negotiating with Others",
-    "4.A.4.a.8": "Performing for or Working Directly with the Public",
-    "4.A.4.b.1": "Coordinating the Work and Activities of Others",
-    "4.A.4.b.2": "Developing and Building Teams",
-    "4.A.4.b.3": "Training and Teaching Others",
-    "4.A.4.b.4": "Guiding, Directing, and Motivating Subordinates",
-    "4.A.4.b.5": "Coaching and Developing Others",
-    "4.A.4.b.6": "Providing Consultation and Advice to Others",
-    "4.A.4.c.1": "Performing Administrative Activities",
-    "4.A.4.c.2": "Staffing Organizational Units",
-    "4.A.4.c.3": "Monitoring and Controlling Resources"
-  },
-  "occupations": [
-    {
-      "code": "23-1011.00",
+  "occupations": {
+    "23-1011.00": {
       "title": "Lawyers",
       "roleId": "lawyer",
-      "scores": {
-        "4.A.1.a.1": 91,
-        "4.A.4.a.2": 90,
-        "4.A.2.b.1": 89,
-        "4.A.2.a.3": 88,
-        "4.A.4.a.7": 87,
-        "4.A.4.a.1": 86,
-        "4.A.4.a.4": 84,
-        "4.A.4.a.3": 81,
-        "4.A.4.b.6": 78,
-        "4.A.2.b.3": 78,
-        "4.A.2.b.6": 77,
-        "4.A.2.a.2": 77,
-        "4.A.3.b.1": 75,
-        "4.A.3.b.6": 74,
-        "4.A.1.b.1": 73,
-        "4.A.2.b.4": 72,
-        "4.A.2.b.2": 72,
-        "4.A.2.a.4": 68,
-        "4.A.4.b.1": 66,
-        "4.A.2.a.1": 61,
-        "4.A.4.a.6": 61,
-        "4.A.2.b.5": 57,
-        "4.A.4.b.4": 56,
-        "4.A.4.a.8": 56,
-        "4.A.4.b.2": 55,
-        "4.A.4.a.5": 53,
-        "4.A.4.c.1": 53,
-        "4.A.4.b.5": 52
-      }
+      "activities": [
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 91
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 90
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 89
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 88
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 87
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 86
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 84
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 77
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 77
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 53
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 53
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 52
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 49
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 49
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 47
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 22
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 17
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 17
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 15
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 14
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 11
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 6
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 3
+        }
+      ]
     },
-    {
-      "code": "15-1252.00",
+    "15-1252.00": {
       "title": "Software Developers",
       "roleId": "software-engineer",
-      "scores": {
-        "4.A.3.b.1": 90,
-        "4.A.2.a.2": 85,
-        "4.A.2.b.1": 84,
-        "4.A.2.b.2": 83,
-        "4.A.4.a.2": 81,
-        "4.A.2.a.4": 80,
-        "4.A.2.b.3": 78,
-        "4.A.2.b.6": 77,
-        "4.A.1.a.1": 76,
-        "4.A.2.a.3": 74,
-        "4.A.3.b.6": 70,
-        "4.A.2.b.4": 69,
-        "4.A.1.a.2": 68,
-        "4.A.1.b.1": 67,
-        "4.A.4.a.1": 65,
-        "4.A.4.a.4": 64,
-        "4.A.2.b.5": 58,
-        "4.A.4.b.6": 57
-      }
+      "activities": [
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 90
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 84
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 83
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 77
+        },
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 76
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 67
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 46
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 42
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 40
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 38
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 35
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 34
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 33
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 32
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 32
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 31
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 28
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 27
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 17
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 17
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 17
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 16
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 15
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 13
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 5
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 3
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 3
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 2
+        }
+      ]
     },
-    {
-      "code": "41-3011.00",
+    "41-3011.00": {
       "title": "Advertising Sales Agents",
       "roleId": "business-development-rep",
+      "activities": [
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 99
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 93
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 88
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 83
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 82
+        },
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 62
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 59
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 54
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 51
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 39
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 39
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 38
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 34
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 34
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 33
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 29
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 27
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 21
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 19
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 16
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 12
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 10
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 6
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 2
+        }
+      ],
       "originalCode": "41-3091.00",
-      "notes": "41-3091.00 had incomplete O*NET data; using 41-3011.00 as proxy",
-      "scores": {
-        "4.A.4.a.6": 99,
-        "4.A.4.a.3": 93,
-        "4.A.4.a.4": 88,
-        "4.A.2.b.2": 83,
-        "4.A.4.a.8": 82,
-        "4.A.1.a.1": 81,
-        "4.A.2.b.6": 80,
-        "4.A.4.a.7": 78,
-        "4.A.3.b.1": 78,
-        "4.A.4.a.2": 75,
-        "4.A.2.b.1": 74,
-        "4.A.2.b.3": 68,
-        "4.A.4.c.1": 64,
-        "4.A.2.a.2": 62,
-        "4.A.2.b.4": 61,
-        "4.A.2.b.5": 59,
-        "4.A.3.b.6": 58,
-        "4.A.2.a.1": 57,
-        "4.A.4.b.6": 56,
-        "4.A.1.b.1": 55,
-        "4.A.1.a.2": 54,
-        "4.A.2.a.3": 51,
-        "4.A.2.a.4": 50,
-        "4.A.4.a.1": 50
-      }
+      "notes": "41-3091.00 (Sales Representatives of Services) has no O*NET work activity data; using 41-3011.00 as closest proxy"
     },
-    {
-      "code": "13-2011.00",
+    "13-2011.00": {
       "title": "Accountants and Auditors",
       "roleId": "accountant",
-      "scores": {
-        "4.A.1.a.1": 87,
-        "4.A.4.a.2": 86,
-        "4.A.3.b.1": 86,
-        "4.A.2.a.3": 84,
-        "4.A.3.b.6": 82,
-        "4.A.2.a.2": 80,
-        "4.A.4.a.4": 79,
-        "4.A.2.b.1": 79,
-        "4.A.2.b.6": 79,
-        "4.A.2.a.4": 78,
-        "4.A.2.b.3": 77,
-        "4.A.4.a.3": 70,
-        "4.A.1.b.1": 69,
-        "4.A.4.c.1": 69,
-        "4.A.4.a.1": 68,
-        "4.A.4.b.3": 67,
-        "4.A.4.b.1": 66,
-        "4.A.1.a.2": 66,
-        "4.A.4.b.2": 65,
-        "4.A.2.b.5": 62,
-        "4.A.4.b.5": 61,
-        "4.A.4.b.4": 59,
-        "4.A.2.b.4": 58,
-        "4.A.4.b.6": 58,
-        "4.A.2.b.2": 58,
-        "4.A.4.c.3": 55,
-        "4.A.4.a.7": 55,
-        "4.A.2.a.1": 51
-      }
+      "activities": [
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 87
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 86
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 86
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 84
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 82
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 77
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 67
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 62
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 59
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 51
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 49
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 48
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 36
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 36
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 29
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 15
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 14
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 14
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 8
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 7
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 6
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 4
+        }
+      ]
     },
-    {
-      "code": "13-1111.00",
+    "13-1111.00": {
       "title": "Management Analysts",
       "roleId": "management-consultant",
-      "scores": {
-        "4.A.1.a.1": 93,
-        "4.A.4.a.2": 91,
-        "4.A.4.a.4": 91,
-        "4.A.2.b.1": 91,
-        "4.A.4.b.6": 86,
-        "4.A.2.a.4": 85,
-        "4.A.2.b.4": 85,
-        "4.A.4.a.1": 85,
-        "4.A.4.a.3": 83,
-        "4.A.2.b.6": 82,
-        "4.A.3.b.1": 82,
-        "4.A.2.b.3": 81,
-        "4.A.2.a.2": 79,
-        "4.A.2.b.2": 79,
-        "4.A.3.b.6": 76,
-        "4.A.1.b.1": 75,
-        "4.A.4.a.7": 74,
-        "4.A.4.a.6": 74,
-        "4.A.4.b.2": 73,
-        "4.A.2.a.3": 73,
-        "4.A.1.a.2": 72,
-        "4.A.4.b.5": 69,
-        "4.A.4.b.3": 69,
-        "4.A.4.b.1": 65,
-        "4.A.2.a.1": 65,
-        "4.A.1.b.3": 63,
-        "4.A.2.b.5": 60,
-        "4.A.4.c.3": 55,
-        "4.A.4.c.1": 55,
-        "4.A.4.b.4": 54
-      }
+      "activities": [
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 93
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 91
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 91
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 91
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 86
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 83
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 82
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 82
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 76
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 63
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 60
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 54
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 48
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 37
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 35
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 25
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 18
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 18
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 17
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 14
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 13
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 8
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 6
+        }
+      ]
     },
-    {
-      "code": "39-9032.00",
+    "39-9032.00": {
       "title": "Recreation Workers",
       "roleId": "retreat-facilitator",
-      "scores": {
-        "4.A.1.a.1": 89,
-        "4.A.2.b.2": 88,
-        "4.A.4.a.2": 85,
-        "4.A.2.b.5": 83,
-        "4.A.4.a.4": 80,
-        "4.A.2.b.1": 80,
-        "4.A.2.b.6": 79,
-        "4.A.1.a.2": 78,
-        "4.A.2.b.3": 76,
-        "4.A.4.b.1": 75,
-        "4.A.3.b.6": 75,
-        "4.A.2.a.2": 75,
-        "4.A.4.b.2": 74,
-        "4.A.4.a.8": 73,
-        "4.A.4.a.7": 72,
-        "4.A.3.b.1": 72,
-        "4.A.2.a.3": 70,
-        "4.A.4.c.3": 69,
-        "4.A.4.a.5": 68,
-        "4.A.2.b.4": 68,
-        "4.A.2.a.1": 68,
-        "4.A.4.b.3": 68,
-        "4.A.4.b.5": 66,
-        "4.A.1.b.1": 66,
-        "4.A.3.a.1": 66,
-        "4.A.4.a.3": 65,
-        "4.A.4.a.1": 64,
-        "4.A.4.c.1": 64,
-        "4.A.4.b.6": 64,
-        "4.A.2.a.4": 63,
-        "4.A.4.c.2": 59,
-        "4.A.4.b.4": 58,
-        "4.A.1.b.3": 57,
-        "4.A.1.b.2": 57,
-        "4.A.4.a.6": 54,
-        "4.A.3.a.2": 52
-      }
+      "activities": [
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 89
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 88
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 83
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 76
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 63
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 59
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 54
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 52
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 37
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 37
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 35
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 34
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 17
+        }
+      ]
     },
-    {
-      "code": "39-9031.00",
+    "39-9031.00": {
       "title": "Exercise Trainers and Group Fitness Instructors",
       "roleId": "crossfit-coach",
-      "scores": {
-        "4.A.3.a.1": 88,
-        "4.A.2.b.3": 81,
-        "4.A.4.a.4": 79,
-        "4.A.4.a.8": 78,
-        "4.A.2.b.2": 78,
-        "4.A.4.b.3": 75,
-        "4.A.1.a.1": 74,
-        "4.A.4.a.5": 73,
-        "4.A.4.b.5": 72,
-        "4.A.2.b.6": 70,
-        "4.A.4.a.2": 67,
-        "4.A.3.a.2": 64,
-        "4.A.2.b.1": 64,
-        "4.A.2.b.4": 62,
-        "4.A.1.b.2": 61,
-        "4.A.2.a.3": 57,
-        "4.A.4.a.1": 56,
-        "4.A.2.b.5": 54,
-        "4.A.4.a.6": 53,
-        "4.A.1.b.1": 51,
-        "4.A.1.a.2": 51,
-        "4.A.4.b.6": 50
-      }
+      "activities": [
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 88
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 79
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 75
+        },
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 74
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 67
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 62
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 54
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 53
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 51
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 51
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 48
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 47
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 42
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 38
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 38
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 35
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 33
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 33
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 31
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 29
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 26
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 22
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 20
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 16
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 12
+        }
+      ]
     },
-    {
-      "code": "27-3011.00",
+    "27-3011.00": {
       "title": "Broadcast Announcers and Radio Disc Jockeys",
       "roleId": "podcast-host",
-      "scores": {
-        "4.A.2.b.2": 92,
-        "4.A.4.a.8": 86,
-        "4.A.4.a.3": 85,
-        "4.A.4.a.2": 85,
-        "4.A.1.a.1": 81,
-        "4.A.3.b.6": 80,
-        "4.A.1.b.1": 80,
-        "4.A.2.b.1": 80,
-        "4.A.2.b.3": 76,
-        "4.A.2.b.6": 73,
-        "4.A.2.a.2": 73,
-        "4.A.4.a.4": 72,
-        "4.A.2.a.3": 70,
-        "4.A.1.a.2": 70,
-        "4.A.3.b.1": 69,
-        "4.A.2.a.1": 66,
-        "4.A.4.a.1": 65,
-        "4.A.2.b.4": 62,
-        "4.A.2.b.5": 57,
-        "4.A.4.b.2": 56,
-        "4.A.4.b.1": 53,
-        "4.A.1.b.3": 51
-      }
+      "activities": [
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 92
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 86
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 80
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 76
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 69
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 66
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 62
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 53
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 51
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 49
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 42
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 42
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 42
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 40
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 40
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 39
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 32
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 32
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 26
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 26
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 25
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 23
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 22
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 20
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 15
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 13
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 10
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 8
+        }
+      ]
     },
-    {
-      "code": "35-1011.00",
+    "35-1011.00": {
       "title": "Chefs and Head Cooks",
       "roleId": "chef",
-      "scores": {
-        "4.A.4.b.3": 78,
-        "4.A.4.b.1": 77,
-        "4.A.4.b.2": 76,
-        "4.A.4.b.5": 73,
-        "4.A.1.a.1": 73,
-        "4.A.2.b.6": 73,
-        "4.A.4.b.4": 72,
-        "4.A.2.b.1": 72,
-        "4.A.4.a.2": 70,
-        "4.A.4.a.4": 70,
-        "4.A.2.b.5": 70,
-        "4.A.1.b.1": 68,
-        "4.A.4.c.3": 68,
-        "4.A.4.a.7": 68,
-        "4.A.2.b.2": 68,
-        "4.A.3.a.1": 67,
-        "4.A.1.a.2": 65,
-        "4.A.2.a.3": 62,
-        "4.A.3.a.2": 61,
-        "4.A.1.b.2": 60,
-        "4.A.4.a.8": 60,
-        "4.A.4.c.2": 60,
-        "4.A.2.a.1": 56,
-        "4.A.2.b.3": 56,
-        "4.A.1.b.3": 55,
-        "4.A.3.b.1": 55,
-        "4.A.3.b.6": 54,
-        "4.A.4.b.6": 54,
-        "4.A.2.b.4": 53,
-        "4.A.2.a.4": 52,
-        "4.A.3.a.3": 52,
-        "4.A.4.a.3": 50,
-        "4.A.4.c.1": 50,
-        "4.A.2.a.2": 50
-      }
+      "activities": [
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 77
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 76
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 73
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 72
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 70
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 68
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 67
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 62
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 60
+        },
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 60
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 60
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 54
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 54
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 53
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 52
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 52
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 49
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 42
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 39
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 38
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 30
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 25
+        }
+      ]
     },
-    {
-      "code": "39-7012.00",
+    "39-7012.00": {
       "title": "Travel Guides",
       "roleId": "adventure-tour-guide",
-      "scores": {
-        "4.A.4.a.8": 91,
-        "4.A.4.a.3": 88,
-        "4.A.1.b.1": 85,
-        "4.A.1.a.1": 84,
-        "4.A.1.a.2": 82,
-        "4.A.4.a.4": 81,
-        "4.A.2.b.2": 78,
-        "4.A.2.b.1": 77,
-        "4.A.4.a.5": 65,
-        "4.A.3.b.6": 65,
-        "4.A.2.a.1": 64,
-        "4.A.2.b.3": 64,
-        "4.A.4.a.7": 63,
-        "4.A.4.b.3": 61,
-        "4.A.3.a.1": 59,
-        "4.A.2.b.6": 58,
-        "4.A.2.b.5": 57,
-        "4.A.2.a.2": 56,
-        "4.A.4.a.6": 56,
-        "4.A.4.a.2": 55,
-        "4.A.2.b.4": 55,
-        "4.A.3.a.2": 55,
-        "4.A.1.b.2": 53,
-        "4.A.4.b.2": 50,
-        "4.A.1.b.3": 50
-      }
+      "activities": [
+        {
+          "elementId": "4.A.4.a.8",
+          "name": "Performing for or Working Directly with the Public",
+          "importance": 91
+        },
+        {
+          "elementId": "4.A.4.a.3",
+          "name": "Communicating with People Outside the Organization",
+          "importance": 88
+        },
+        {
+          "elementId": "4.A.1.b.1",
+          "name": "Identifying Objects, Actions, and Events",
+          "importance": 85
+        },
+        {
+          "elementId": "4.A.1.a.1",
+          "name": "Getting Information",
+          "importance": 84
+        },
+        {
+          "elementId": "4.A.1.a.2",
+          "name": "Monitoring Processes, Materials, or Surroundings",
+          "importance": 82
+        },
+        {
+          "elementId": "4.A.4.a.4",
+          "name": "Establishing and Maintaining Interpersonal Relationships",
+          "importance": 81
+        },
+        {
+          "elementId": "4.A.2.b.2",
+          "name": "Thinking Creatively",
+          "importance": 78
+        },
+        {
+          "elementId": "4.A.2.b.1",
+          "name": "Making Decisions and Solving Problems",
+          "importance": 77
+        },
+        {
+          "elementId": "4.A.4.a.5",
+          "name": "Assisting and Caring for Others",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.3.b.6",
+          "name": "Documenting/Recording Information",
+          "importance": 65
+        },
+        {
+          "elementId": "4.A.2.a.1",
+          "name": "Judging the Qualities of Objects, Services, or People",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.2.b.3",
+          "name": "Updating and Using Relevant Knowledge",
+          "importance": 64
+        },
+        {
+          "elementId": "4.A.4.a.7",
+          "name": "Resolving Conflicts and Negotiating with Others",
+          "importance": 63
+        },
+        {
+          "elementId": "4.A.4.b.3",
+          "name": "Training and Teaching Others",
+          "importance": 61
+        },
+        {
+          "elementId": "4.A.3.a.1",
+          "name": "Performing General Physical Activities",
+          "importance": 59
+        },
+        {
+          "elementId": "4.A.2.b.6",
+          "name": "Organizing, Planning, and Prioritizing Work",
+          "importance": 58
+        },
+        {
+          "elementId": "4.A.2.b.5",
+          "name": "Scheduling Work and Activities",
+          "importance": 57
+        },
+        {
+          "elementId": "4.A.2.a.2",
+          "name": "Processing Information",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.4.a.6",
+          "name": "Selling or Influencing Others",
+          "importance": 56
+        },
+        {
+          "elementId": "4.A.4.a.2",
+          "name": "Communicating with Supervisors, Peers, or Subordinates",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.2.b.4",
+          "name": "Developing Objectives and Strategies",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.3.a.2",
+          "name": "Handling and Moving Objects",
+          "importance": 55
+        },
+        {
+          "elementId": "4.A.1.b.2",
+          "name": "Inspecting Equipment, Structures, or Materials",
+          "importance": 53
+        },
+        {
+          "elementId": "4.A.4.b.2",
+          "name": "Developing and Building Teams",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.1.b.3",
+          "name": "Estimating the Quantifiable Characteristics of Products, Events, or Information",
+          "importance": 50
+        },
+        {
+          "elementId": "4.A.2.a.3",
+          "name": "Evaluating Information to Determine Compliance with Standards",
+          "importance": 47
+        },
+        {
+          "elementId": "4.A.4.a.1",
+          "name": "Interpreting the Meaning of Information for Others",
+          "importance": 47
+        },
+        {
+          "elementId": "4.A.3.a.4",
+          "name": "Operating Vehicles, Mechanized Devices, or Equipment",
+          "importance": 47
+        },
+        {
+          "elementId": "4.A.3.b.1",
+          "name": "Working with Computers",
+          "importance": 46
+        },
+        {
+          "elementId": "4.A.4.c.1",
+          "name": "Performing Administrative Activities",
+          "importance": 45
+        },
+        {
+          "elementId": "4.A.2.a.4",
+          "name": "Analyzing Data or Information",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.3.a.3",
+          "name": "Controlling Machines and Processes",
+          "importance": 44
+        },
+        {
+          "elementId": "4.A.4.b.5",
+          "name": "Coaching and Developing Others",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.4.b.1",
+          "name": "Coordinating the Work and Activities of Others",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.4.c.3",
+          "name": "Monitoring and Controlling Resources",
+          "importance": 43
+        },
+        {
+          "elementId": "4.A.4.b.4",
+          "name": "Guiding, Directing, and Motivating Subordinates",
+          "importance": 39
+        },
+        {
+          "elementId": "4.A.4.b.6",
+          "name": "Providing Consultation and Advice to Others",
+          "importance": 33
+        },
+        {
+          "elementId": "4.A.3.b.5",
+          "name": "Repairing and Maintaining Electronic Equipment",
+          "importance": 27
+        },
+        {
+          "elementId": "4.A.3.b.4",
+          "name": "Repairing and Maintaining Mechanical Equipment",
+          "importance": 27
+        },
+        {
+          "elementId": "4.A.4.c.2",
+          "name": "Staffing Organizational Units",
+          "importance": 22
+        },
+        {
+          "elementId": "4.A.3.b.2",
+          "name": "Drafting, Laying Out, and Specifying Technical Devices, Parts, and Equipment",
+          "importance": 13
+        }
+      ]
     }
-  ]
+  }
 }
