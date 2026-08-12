@@ -43,26 +43,18 @@ export default function NodeWorkspace() {
   const meta = NODE_META[nodeKey]
 
   function renderNodeContent() {
-    if (nodeKey === 'capture') {
-      return <CaptureWorkspace
-        node={node}
-        experience={experience}
-        userId={userId}
-        experienceId={id}
-        isModuleComplete={isModuleComplete}
-        wahoos={wahoos}
-        checklists={checklists}
-        navigate={navigate}
-        nodeKey={nodeKey}
-        onLogActivity={() => { hapticLight(); setMetricSheetOpen(true) }}
-      />
-    }
-
-    return (
-      <div className="nw-placeholder">
-        Coming soon — {meta?.label || nodeKey} workspace
-      </div>
-    )
+    return <NodeContent
+      node={node}
+      experience={experience}
+      userId={userId}
+      experienceId={id}
+      isModuleComplete={isModuleComplete}
+      wahoos={wahoos}
+      checklists={checklists}
+      navigate={navigate}
+      nodeKey={nodeKey}
+      onLogActivity={() => { hapticLight(); setMetricSheetOpen(true) }}
+    />
   }
 
   return (
@@ -103,12 +95,12 @@ export default function NodeWorkspace() {
 }
 
 /**
- * CaptureWorkspace — Full implementation of the Capture node workspace.
- * Shows nudge, log activity button, and module cards.
+ * NodeContent — Generic workspace for any pipeline node.
+ * Shows nudge, log activity button, and module cards from pipelineConfig.
  */
-function CaptureWorkspace({ node, experience, userId, experienceId, isModuleComplete, wahoos, checklists, navigate, nodeKey, onLogActivity }) {
+function NodeContent({ node, experience, userId, experienceId, isModuleComplete, wahoos, checklists, navigate, nodeKey, onLogActivity }) {
   const nudge = node ? getNodeNudge(node, experience, isModuleComplete, wahoos, checklists) : null
-  const modules = (NODE_MODULES.capture || []).filter(m => !m.certification)
+  const modules = (NODE_MODULES[nodeKey] || []).filter(m => !m.certification)
 
   return (
     <>
