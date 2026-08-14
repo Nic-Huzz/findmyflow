@@ -342,12 +342,13 @@ export async function fetchTicketsSold(userId, experienceIds) {
 }
 
 // Utility: save a manual metric
-export async function savePipelineMetric(userId, experienceId, { node, method, metric_key, metric_value, partner_name, notes }) {
+export async function savePipelineMetric(userId, experienceId, { node, method, channel, metric_key, metric_value, partner_name, notes }) {
   const { error } = await supabase.from('pipeline_metrics').insert({
     user_id: userId,
     experience_id: experienceId,
     node,
     method: method || null,
+    channel: channel || null,
     metric_key,
     metric_value,
     partner_name: partner_name || null,

@@ -18,19 +18,38 @@ import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import './MetricInputSheet.css'
 
 const ATTRACT_METHODS = [
-  { id: 'content', label: 'Content', icon: '📱', hasScreenshot: true, fields: [
+  { id: 'content', label: 'Content', icon: '📱', hasScreenshot: true, channels: [
+    { id: 'instagram', label: 'Instagram' },
+    { id: 'tiktok', label: 'TikTok' },
+    { id: 'youtube', label: 'YouTube' },
+    { id: 'other_content', label: 'Other' },
+  ], fields: [
     { key: 'posts', label: 'Posts made', type: 'number' },
     { key: 'reach', label: 'Reach / impressions', type: 'number' },
   ]},
-  { id: 'warm', label: 'Warm Outreach', icon: '☀️', hasScreenshot: true, fields: [
+  { id: 'warm', label: 'Warm Outreach', icon: '☀️', hasScreenshot: true, channels: [
+    { id: 'personal_dms', label: 'Personal DMs' },
+    { id: 'group_chats', label: 'Group Chats' },
+  ], fields: [
     { key: 'dms_sent', label: 'DMs sent', type: 'number' },
     { key: 'replies', label: 'Replies received', type: 'number' },
   ]},
-  { id: 'cold', label: 'Cold Outreach', icon: '❄️', fields: [
+  { id: 'cold', label: 'Cold Outreach', icon: '❄️', channels: [
+    { id: 'posters', label: 'Posters' },
+    { id: 'flyers', label: 'Flyer Handout' },
+    { id: 'dms_personal', label: 'Personal DMs' },
+    { id: 'dms_group', label: 'Group Chat' },
+    { id: 'event_platform', label: 'Event Platform' },
+  ], fields: [
     { key: 'messages_sent', label: 'Messages sent', type: 'number' },
     { key: 'replies', label: 'Replies received', type: 'number' },
   ]},
-  { id: 'paid', label: 'Paid Ads', icon: '💰', hasScreenshot: true, fields: [
+  { id: 'paid', label: 'Paid Ads', icon: '💰', hasScreenshot: true, channels: [
+    { id: 'meta', label: 'Meta (FB / IG)' },
+    { id: 'google', label: 'Google Ads' },
+    { id: 'tiktok_ads', label: 'TikTok Ads' },
+    { id: 'other_ads', label: 'Other' },
+  ], fields: [
     { key: 'spend', label: 'Ad spend', type: 'number' },
     { key: 'reach', label: 'Impressions', type: 'number' },
     { key: 'clicks', label: 'Clicks', type: 'number' },
@@ -58,6 +77,7 @@ const NODE_FIELDS = {
 
 export default function MetricInputSheet({ node, experienceId, userId, onSaved, onClose }) {
   const [method, setMethod] = useState(null)
+  const [channel, setChannel] = useState(null)
   const [values, setValues] = useState({})
   const [saving, setSaving] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
@@ -66,8 +86,10 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
 
   const isAttract = node === 'attract'
   const currentMethod = isAttract ? ATTRACT_METHODS.find(m => m.id === method) : null
+  const hasChannels = currentMethod?.channels?.length > 0
+  const needsChannel = isAttract && method && hasChannels && !channel
   const fields = isAttract
-    ? (currentMethod?.fields || [])
+    ? (needsChannel ? [] : currentMethod?.fields || [])
     : (NODE_FIELDS[node] || [])
   const hasScreenshot = currentMethod?.hasScreenshot
 
@@ -143,6 +165,7 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
       await savePipelineMetric(userId, experienceId, {
         node,
         method: isAttract ? method : null,
+        channel: isAttract ? channel : null,
         metric_key: field.key,
         metric_value: Number(values[field.key]) || 0,
         partner_name: partnerName || null,
@@ -182,12 +205,35 @@ export default function MetricInputSheet({ node, experienceId, userId, onSaved, 
           </div>
         )}
 
+        {/* Attract: channel picker */}
+        {needsChannel && (
+          <div className="mis-methods">
+            <button className="mis-back" onClick={() => { setMethod(null); setChannel(null) }}>
+              ← Different method
+            </button>
+            <p className="mis-prompt">Which channel?</p>
+            {currentMethod.channels.map(ch => (
+              <button
+                key={ch.id}
+                className="mis-method-btn"
+                onClick={() => { hapticLight(); setChannel(ch.id) }}
+              >
+                <span className="mis-method-label">{ch.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Fields */}
         {fields.length > 0 && (
           <div className="mis-fields">
             {isAttract && method && (
-              <button className="mis-back" onClick={() => { setMethod(null); setValues({}); setAnalyzeError(null) }}>
-                ← Different method
+              <button className="mis-back" onClick={() => {
+                if (hasChannels) { setChannel(null) }
+                else { setMethod(null) }
+                setValues({}); setAnalyzeError(null)
+              }}>
+                ← {hasChannels ? 'Different channel' : 'Different method'}
               </button>
             )}
 
