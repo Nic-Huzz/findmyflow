@@ -1,0 +1,147 @@
+{
+  "_meta": {
+    "description": "Earnings ballpark per business model type. Domain-agnostic — these economics apply regardless of which experience you're delivering. The experience determines WHICH models are available, not HOW MUCH they earn.",
+    "version": "1.0",
+    "created": "2026-08-15",
+    "caveat": "Ranges are honest ballparks, not guarantees. Self-employed pay 25-30% in taxes + expenses. Revenue ≠ income."
+  },
+  "models": [
+    {
+      "id": "employed",
+      "label": "Employed (salary)",
+      "description": "Someone hires you full-time",
+      "typical": [35000, 80000],
+      "ceiling": [80000, 150000],
+      "timeToEarn": "Immediate",
+      "risk": "low",
+      "freedom": "low",
+      "dataConfidence": "high",
+      "productTypes": ["one_to_one", "one_to_many"],
+      "hormoziLayer": "core",
+      "progression": 1
+    },
+    {
+      "id": "per_session",
+      "label": "Per Session / Freelance",
+      "description": "Clients pay you per session or day",
+      "typical": [30000, 60000],
+      "ceiling": [80000, 120000],
+      "timeToEarn": "3-12 months",
+      "risk": "medium",
+      "freedom": "medium",
+      "dataConfidence": "medium",
+      "productTypes": ["one_to_one", "custom_service", "packaged_service"],
+      "hormoziLayer": "core",
+      "progression": 2
+    },
+    {
+      "id": "group_program",
+      "label": "Group Program / Workshop",
+      "description": "You teach groups, live or virtual",
+      "typical": [40000, 80000],
+      "ceiling": [120000, 200000],
+      "timeToEarn": "6-18 months",
+      "risk": "medium",
+      "freedom": "medium-high",
+      "dataConfidence": "medium",
+      "productTypes": ["one_to_many", "group_program", "live_group"],
+      "hormoziLayer": "core",
+      "progression": 3
+    },
+    {
+      "id": "digital_product",
+      "label": "Online Course / Digital Product",
+      "description": "Build once, sell repeatedly",
+      "typical": [5000, 30000],
+      "ceiling": [100000, 500000],
+      "timeToEarn": "12-24 months",
+      "risk": "medium-high",
+      "freedom": "high",
+      "dataConfidence": "low",
+      "productTypes": ["automated_group", "digital_product"],
+      "hormoziLayer": "core",
+      "progression": 4
+    },
+    {
+      "id": "membership",
+      "label": "Membership / Community",
+      "description": "People pay monthly to be in your world",
+      "typical": [20000, 60000],
+      "ceiling": [120000, 500000],
+      "timeToEarn": "12-24 months",
+      "risk": "medium",
+      "freedom": "high",
+      "dataConfidence": "medium",
+      "productTypes": ["membership"],
+      "hormoziLayer": "continuity",
+      "formula": "price_per_month × members",
+      "progression": 4
+    },
+    {
+      "id": "content_audience",
+      "label": "Content / Audience",
+      "description": "Build audience, monetise via ads/sponsors",
+      "typical": [0, 5000],
+      "ceiling": [100000, 1000000],
+      "timeToEarn": "18-36 months",
+      "risk": "very-high",
+      "freedom": "very-high",
+      "dataConfidence": "high",
+      "warning": "85% of content creators earn $0. Bimodal distribution.",
+      "productTypes": ["content_podcast", "content_newsletter", "content_youtube"],
+      "hormoziLayer": "attraction",
+      "progression": 3
+    },
+    {
+      "id": "certification",
+      "label": "Certification / Licensing",
+      "description": "Train others to deliver your method",
+      "typical": [50000, 150000],
+      "ceiling": [500000, 5000000],
+      "timeToEarn": "3-5 years",
+      "risk": "low",
+      "freedom": "very-high",
+      "dataConfidence": "medium",
+      "productTypes": ["group_program", "live_group"],
+      "hormoziLayer": "scale",
+      "prerequisite": "Proven method with documented results",
+      "progression": 6
+    },
+    {
+      "id": "retainer_hybrid",
+      "label": "Retainer / Portfolio Career",
+      "description": "Part-time corporate + independent practice",
+      "typical": [80000, 150000],
+      "ceiling": [200000, 300000],
+      "timeToEarn": "6-12 months",
+      "risk": "low-medium",
+      "freedom": "medium-high",
+      "dataConfidence": "very-low",
+      "warning": "Emerging model. No reliable earnings data exists yet.",
+      "productTypes": ["hybrid_service", "packaged_service"],
+      "hormoziLayer": "core",
+      "progression": 2
+    }
+  ],
+  "progressionPaths": {
+    "standard": {
+      "label": "Full transition",
+      "steps": [
+        { "year": 0, "model": "employed", "earnings": "35-80K", "note": "Learning the craft, safe income" },
+        { "year": 1, "model": "per_session", "earnings": "+5-15K side", "note": "Weekends/evenings, testing demand" },
+        { "year": 2, "model": "per_session", "earnings": "40-80K", "note": "Full-time independent" },
+        { "year": "2-3", "model": "group_program", "earnings": "60-120K", "note": "Add workshops and groups" },
+        { "year": "3-4", "model": "digital_product", "earnings": "80-200K", "note": "Add course or membership" },
+        { "year": "5+", "model": "certification", "earnings": "150-500K+", "note": "Train others in your method" }
+      ]
+    },
+    "portfolio": {
+      "label": "Safe bridge (portfolio career)",
+      "steps": [
+        { "year": 0, "model": "retainer_hybrid", "earnings": "90K corp + 30K independent = 120K", "note": "3 days corporate, 2 days building" },
+        { "year": "1-2", "model": "retainer_hybrid", "earnings": "60K corp + 60K independent = 120K", "note": "Reduce corporate, grow independent" },
+        { "year": "3+", "model": "retainer_hybrid", "earnings": "30K corp + 100K+ independent = 130K+", "note": "1 day corporate, 4 days independent" }
+      ]
+    }
+  }
+}
