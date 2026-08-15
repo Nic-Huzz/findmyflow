@@ -26,7 +26,14 @@
       "threat"
     ],
     "description": "Lawyers",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 151160,
+      "low10": 72780,
+      "high10": 239200,
+      "hourly": 72.67,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "software-engineer",
@@ -51,7 +58,14 @@
       "tools"
     ],
     "description": "Software Developers",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 132684,
+      "low10": 79850,
+      "high10": 211450,
+      "hourly": 63.79,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "business-development-rep",
@@ -77,7 +91,14 @@
       "bonds"
     ],
     "description": "Advertising Sales Agents",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 73950,
+      "low10": 35400,
+      "high10": 139200,
+      "hourly": 35.55,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "accountant",
@@ -106,7 +127,14 @@
       "status"
     ],
     "description": "Accountants and Auditors",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 82880,
+      "low10": 48200,
+      "high10": 137280,
+      "hourly": 39.85,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "management-consultant",
@@ -131,7 +159,14 @@
       "status"
     ],
     "description": "Management Analysts",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 101860,
+      "low10": 52960,
+      "high10": 172470,
+      "hourly": 48.97,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "retreat-facilitator",
@@ -167,7 +202,14 @@
       "story"
     ],
     "description": "Recreation Workers",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 33720,
+      "low10": 23170,
+      "high10": 52620,
+      "hourly": 16.21,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "crossfit-coach",
@@ -199,7 +241,14 @@
       "bonds"
     ],
     "description": "Exercise Trainers and Group Fitness Instructors",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 47160,
+      "low10": 28800,
+      "high10": 83100,
+      "hourly": 22.67,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "podcast-host",
@@ -226,7 +275,14 @@
       "healing"
     ],
     "description": "Broadcast Announcers and Radio Disc Jockeys",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 78720,
+      "low10": 32800,
+      "high10": 168000,
+      "hourly": 37.85,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "chef",
@@ -261,7 +317,14 @@
       "status"
     ],
     "description": "Chefs and Head Cooks",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 60990,
+      "low10": 33800,
+      "high10": 99330,
+      "hourly": 29.32,
+      "source": "BLS OES May 2025"
+    }
   },
   {
     "id": "adventure-tour-guide",
@@ -292,6 +355,13 @@
       "bonds"
     ],
     "description": "Travel Guides",
-    "dataSource": "onet-api-v2-fixed"
+    "dataSource": "onet-api-v2-fixed",
+    "wages": {
+      "median": 38120,
+      "low10": 25200,
+      "high10": 62400,
+      "hourly": 18.33,
+      "source": "BLS OES May 2025"
+    }
   }
 ]
