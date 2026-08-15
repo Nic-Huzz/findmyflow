@@ -1,0 +1,79 @@
+{
+  "_meta": {
+    "description": "Independent/entrepreneurial earnings data for experiential roles. Complements BLS employed wages.",
+    "version": "1.0",
+    "retrieved": "2026-08-15",
+    "caveat": "Self-reported data dominates. Survivorship bias in all sources. Revenue ≠ income (25-30% taxes + expenses). Always use median over mean."
+  },
+  "roles": {
+    "breathwork-facilitator": {
+      "title": "Breathwork / Retreat Facilitator",
+      "onetProxy": "39-9032.00",
+      "sessionRates": { "private": [90, 250], "group": [25, 90], "workshop_half_day": 1800, "weekend_retreat_gross": [9600, 43200] },
+      "tiers": {
+        "employed": { "median": 33720, "source": "BLS OES May 2025", "confidence": "high" },
+        "independent_entry": { "range": [20000, 60000], "source": "ZipRecruiter avg $49K + cert program estimates", "confidence": "low", "notes": "Many certified facilitators never reach full-time income" },
+        "independent_established": { "range": [60000, 150000], "source": "Industry estimates, unverified", "confidence": "low", "notes": "9D aspirational claim: $109K-$218K. No verified survey data." },
+        "entrepreneurial_top": { "range": [150000, 250000], "source": "Retreat center owner estimates", "confidence": "low", "notes": "No verified individual facilitator income data at top end" }
+      },
+      "dataQuality": "LOW-MEDIUM. No industry association survey exists. Best neutral figure: ZipRecruiter $49,774 (blends employed and self-employed).",
+      "sources": ["ZipRecruiter Aug 2025", "Breath Skills 2026", "Elemental Rhythm", "The Retreat Planner 2026"]
+    },
+    "fitness-coach": {
+      "title": "Fitness Coach / CrossFit Coach",
+      "onetProxy": "39-9031.00",
+      "sessionRates": { "private": [40, 150], "premium": [100, 300], "small_group": [20, 50], "online_monthly": [150, 300] },
+      "tiers": {
+        "employed": { "median": 47160, "source": "BLS OES May 2025", "confidence": "high" },
+        "independent_entry": { "range": [30000, 45000], "source": "PTDC survey n=837", "confidence": "medium-high", "notes": "In-person-only trainers average $34,585" },
+        "independent_established": { "range": [61000, 100000], "source": "ZipRecruiter avg $61K, NSCA-certified avg $65K", "confidence": "medium", "notes": "Independent contractors earn 45% more than employed (IDEA 2025)" },
+        "entrepreneurial_top": { "range": [127000, 200000], "source": "PTDC: online coaches with 100+ clients avg $127K", "confidence": "medium" },
+        "box_owner": { "median": 48000, "mean": 87492, "source": "BarBend 2024 survey n=8,800", "confidence": "high", "notes": "More than half take home $4K/mo or less. Mean skewed by top performers." }
+      },
+      "dataQuality": "MEDIUM-HIGH. PTDC (n=837) and BarBend (n=8,800) are real surveys. Self-reported but large samples.",
+      "sources": ["PTDC Salary Survey n=837", "BarBend 2024 State of Industry n=8,800", "IDEA 2025", "ZipRecruiter Jun 2026"]
+    },
+    "podcast-host": {
+      "title": "Podcast Host",
+      "onetProxy": "27-3011.00",
+      "rates": { "cpm_programmatic": [5, 25], "cpm_host_read": [25, 50], "cpm_top_100": [60, 120], "per_episode_10k_downloads": [500, 900] },
+      "tiers": {
+        "employed": { "median": 78720, "source": "BLS OES May 2025 (Broadcast Announcers)", "confidence": "high", "notes": "BLS category includes radio DJs, not just podcasters" },
+        "independent_entry": { "range": [0, 6000], "source": "Industry data: 85% of indie podcasters earn $0", "confidence": "high", "notes": "Only 15% report making any money. Only 26% actively monetizing." },
+        "independent_established": { "range": [12000, 120000], "source": "WNYC Werk It survey n=600: median $30-44/hr among profitable", "confidence": "medium", "notes": "Extreme survivorship bias. This only counts those who ARE profitable." },
+        "entrepreneurial_top": { "range": [1000000, 82000000], "source": "Forbes 2026 Highest-Paid Podcasters list", "confidence": "high", "notes": "Top 20 combined $638M. Joe Rogan $82M. Jay Shetty $21M." }
+      },
+      "industryScale": { "us_ad_revenue_2026": 4200000000, "patreon_podcast_earnings_2025": 629000000 },
+      "dataQuality": "HIGH at extremes (Forbes verified, BLS verified). LOW in the middle. The median podcaster earns $0.",
+      "sources": ["Forbes Jul 2026", "WNYC Werk It n=600", "The Podcast Host survey n=1,200", "DemandSage 2026"]
+    },
+    "chef-food-entrepreneur": {
+      "title": "Chef / Food Entrepreneur",
+      "onetProxy": "35-1011.00",
+      "sessionRates": { "hourly_median": 48, "hourly_range": [32, 95], "day_rate": [500, 900], "private_dinner_per_person": [75, 250], "celebrity_hourly": 400 },
+      "tiers": {
+        "employed": { "median": 60990, "source": "BLS OES May 2025 (Chefs and Head Cooks)", "confidence": "high" },
+        "independent_entry": { "range": [20000, 55000], "source": "PayScale + industry estimates", "confidence": "medium", "notes": "Personal chef serving 2-5 weekly clients. Catering year 1: $20-40K net." },
+        "independent_established": { "range": [55000, 120000], "source": "ZipRecruiter avg private chef $82K, PayScale median $48/hr", "confidence": "medium", "notes": "Full-time private chef (single household): $80-95K avg" },
+        "entrepreneurial_top": { "range": [150000, 250000], "source": "UHNW household private chefs in NYC/LA/Aspen", "confidence": "medium", "notes": "Plus brand revenue (courses, books, consulting) can add $100K+" }
+      },
+      "failureRate": "60% of food trucks fail within first year",
+      "dataQuality": "MEDIUM. No single authoritative survey. ZipRecruiter and PayScale provide best aggregated data.",
+      "sources": ["PayScale 2026", "ZipRecruiter Aug 2026", "CaterCamp 2026", "Toast POS 2025"]
+    },
+    "life-career-coach": {
+      "title": "Life / Career Coach",
+      "onetProxy": "13-1111.00",
+      "sessionRates": { "new_coach": [50, 150], "experienced": [150, 350], "icf_average": 244, "executive": [300, 1000] },
+      "tiers": {
+        "employed": { "median": 101860, "source": "BLS OES May 2025 (Management Analysts — proxy)", "confidence": "medium", "notes": "BLS has no 'coach' category. Management Analysts is closest proxy." },
+        "independent_entry": { "range": [10000, 40000], "source": "ICF 2023: 53% of coaches earned under $30K", "confidence": "high", "notes": "~50% of coaching businesses fail within 5 years" },
+        "independent_established": { "range": [50000, 72000], "source": "ICF/PwC 2025 Global Coaching Study n=10,000: US avg $71,719", "confidence": "high", "notes": "Average pulled up by high earners. Median likely $45-55K given the 53% under $30K finding." },
+        "entrepreneurial_top": { "range": [200000, 500000], "source": "Coaches with courses + group programs", "confidence": "medium", "notes": "Revenue from courses/groups not 1:1 sessions. Tiny fraction of coaches reach this." }
+      },
+      "industryScale": { "global_revenue": 5340000000, "us_revenue": 16000000000, "practitioners_worldwide": 122974, "practitioners_us": 232000 },
+      "dataQuality": "HIGH. ICF/PwC 2025 study (n=10,000+, 127 countries) is gold standard. Still self-reported.",
+      "sources": ["ICF/PwC 2025 Global Coaching Study n=10,000+", "ICF 2023 Global Coaching Study", "EntrepreneursHQ 2026"]
+    }
+  }
+}
