@@ -26,7 +26,7 @@ import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
 import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
 import { logError, showErrorWithSupport } from '../lib/errorSupport'
 import { cacheBustUrl } from '../lib/fetchJson'
-import { getWeekStartLocal, formatDateInTimezone } from '../lib/dateUtils'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import { getEssenceDisplayName } from '../lib/essencePreferences'
 
 // Default community group — all new challenges auto-join this group
@@ -1601,14 +1601,17 @@ export function useChallengeData() {
   }
 
   // Calculate consecutive days with quest completions (for streak flame)
-  // Uses fixed Bali timezone (UTC+8) so streak doesn't break when traveling
+  // Uses local timezone so "today" matches the user's actual day wherever they are.
+  // Forgiving: allows 1 missed day without breaking the streak.
   const getConsecutiveStreakDays = () => {
     if (!completions || completions.length === 0) return 0
 
-    // Get unique dates of completions in Bali time (timezone-stable)
+    const fmtDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+    // Get unique dates of completions in local timezone
     const completionDates = new Set()
     completions.forEach(c => {
-      completionDates.add(formatDateInTimezone(new Date(c.completed_at)))
+      completionDates.add(fmtDate(new Date(c.completed_at)))
     })
 
     // Count consecutive days from today backwards (forgiving: allow 1 day gap)
@@ -1618,16 +1621,15 @@ export function useChallengeData() {
     const MAX_MISSES = 1 // forgiving streak: 1 day grace period
     let checkDate = new Date(today)
 
-    for (let i = 0; ; i++) {
-      const dateKey = formatDateInTimezone(checkDate)
+    for (let i = 0; i < 200; i++) {
+      const dateKey = fmtDate(checkDate)
       if (completionDates.has(dateKey)) {
         streak++
+        missesUsed = 0 // reset after each hit — forgiveness is per-gap, not total
         checkDate.setDate(checkDate.getDate() - 1)
       } else if (i === 0) {
-        // If no completions today, skip to yesterday (today doesn't count as a miss yet)
         checkDate.setDate(checkDate.getDate() - 1)
       } else if (missesUsed < MAX_MISSES) {
-        // Forgiving: skip this gap day, keep checking
         missesUsed++
         checkDate.setDate(checkDate.getDate() - 1)
       } else {
