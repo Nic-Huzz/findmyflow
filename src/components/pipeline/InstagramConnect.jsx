@@ -70,7 +70,14 @@ export default function InstagramConnect({ onRefresh }) {
       }
 
       if (result.redirect_url) {
-        window.open(result.redirect_url, '_blank', 'noopener,noreferrer')
+        // Electron intercepts window.open via shell.openExternal (system browser).
+        // PWA/browser: use location.href to avoid popup blocker after async fetch.
+        const isElectron = navigator.userAgent.includes('Electron')
+        if (isElectron) {
+          window.open(result.redirect_url, '_blank', 'noopener,noreferrer')
+        } else {
+          window.location.href = result.redirect_url
+        }
       }
     } catch (err) {
       console.error('Connect failed:', err)

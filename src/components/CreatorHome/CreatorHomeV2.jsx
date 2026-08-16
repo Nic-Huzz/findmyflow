@@ -199,11 +199,11 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const upcoming = experiences.filter(e => {
-    if (e.experience_date && new Date(e.experience_date) < today) return false
+    if (e.experience_date && new Date(e.experience_date + 'T00:00:00') < today) return false
     return e.status === 'upcoming'
   })
   const past = experiences
-    .filter(e => e.status === 'completed' || e.status === 'archived' || (e.status === 'upcoming' && e.experience_date && new Date(e.experience_date) < today))
+    .filter(e => e.status === 'completed' || e.status === 'archived' || (e.status === 'upcoming' && e.experience_date && new Date(e.experience_date + 'T00:00:00') < today))
     .sort((a, b) => new Date(b.experience_date || b.updated_at || 0) - new Date(a.experience_date || a.updated_at || 0))
 
   const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0 })
