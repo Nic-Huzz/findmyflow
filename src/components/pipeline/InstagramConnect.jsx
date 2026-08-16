@@ -64,7 +64,7 @@ export default function InstagramConnect({ onRefresh }) {
 
       const result = await res.json()
 
-      if (result.status === 'already_connected') {
+      if (result.status === 'already_connected' || result.status === 'reconnected') {
         await loadIntegration()
         return
       }

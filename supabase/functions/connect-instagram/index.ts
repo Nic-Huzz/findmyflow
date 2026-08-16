@@ -46,6 +46,39 @@ serve(async (req) => {
       )
     }
 
+    // If row exists but disconnected, check if Composio still has an active connection.
+    // If so, just reactivate it — don't start a new OAuth flow (Composio won't redirect
+    // to our callback for already-connected accounts, causing a reconnect loop).
+    if (existing?.status === 'disconnected') {
+      const { data: existingRow } = await supabase
+        .from('user_integrations')
+        .select('composio_connection_id')
+        .eq('user_id', user.id)
+        .eq('platform', 'instagram')
+        .single()
+
+      if (existingRow?.composio_connection_id) {
+        const checkRes = await fetch(
+          `${COMPOSIO_BASE}/connected_accounts/${existingRow.composio_connection_id}`,
+          { headers: { 'x-api-key': COMPOSIO_API_KEY! } }
+        )
+        if (checkRes.ok) {
+          const checkData = await checkRes.json()
+          if (checkData.status === 'ACTIVE' || checkData.status === 'active') {
+            // Composio connection is still active — just reactivate our row
+            await supabase.from('user_integrations')
+              .update({ status: 'active', connected_at: new Date().toISOString() })
+              .eq('user_id', user.id)
+              .eq('platform', 'instagram')
+            return new Response(
+              JSON.stringify({ status: 'reconnected' }),
+              { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            )
+          }
+        }
+      }
+    }
+
     // Initiate Composio connection for this user
     const authConfigId = Deno.env.get('COMPOSIO_INSTAGRAM_AUTH_CONFIG_ID')
     if (!authConfigId) throw new Error('COMPOSIO_INSTAGRAM_AUTH_CONFIG_ID not set')
