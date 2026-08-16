@@ -28,11 +28,11 @@
     "description": "Lawyers",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 151160,
-      "low10": 72780,
-      "high10": 239200,
-      "hourly": 72.67,
-      "source": "BLS OES May 2025"
+      "median": 159670,
+      "low10": 78360,
+      "high10": 351600,
+      "hourly": 76.76,
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -60,11 +60,11 @@
     "description": "Software Developers",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 132684,
-      "low10": 79850,
-      "high10": 211450,
-      "hourly": 63.79,
-      "source": "BLS OES May 2025"
+      "median": 135980,
+      "low10": 82460,
+      "high10": 214670,
+      "hourly": 65.38,
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -93,11 +93,12 @@
     "description": "Advertising Sales Agents",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 73950,
-      "low10": 35400,
-      "high10": 139200,
-      "hourly": 35.55,
-      "source": "BLS OES May 2025"
+      "median": 69990,
+      "low10": 37980,
+      "high10": 148840,
+      "hourly": 33.65,
+      "source": "BLS OES May 2025 (bulk)",
+      "note": "Using 41-3091 (Sales Reps of Services). O*NET work activities from proxy 41-3011."
     }
   },
   {
@@ -129,11 +130,11 @@
     "description": "Accountants and Auditors",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 82880,
-      "low10": 48200,
-      "high10": 137280,
-      "hourly": 39.85,
-      "source": "BLS OES May 2025"
+      "median": 83680,
+      "low10": 56020,
+      "high10": 144090,
+      "hourly": 40.23,
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -162,10 +163,10 @@
     "dataSource": "onet-api-v2-fixed",
     "wages": {
       "median": 101860,
-      "low10": 52960,
-      "high10": 172470,
+      "low10": 60640,
+      "high10": 171640,
       "hourly": 48.97,
-      "source": "BLS OES May 2025"
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -204,11 +205,11 @@
     "description": "Recreation Workers",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 33720,
-      "low10": 23170,
-      "high10": 52620,
-      "hourly": 16.21,
-      "source": "BLS OES May 2025"
+      "median": 36560,
+      "low10": 27600,
+      "high10": 50410,
+      "hourly": 17.58,
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -247,7 +248,7 @@
       "low10": 28800,
       "high10": 83100,
       "hourly": 22.67,
-      "source": "BLS OES May 2025"
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -277,11 +278,11 @@
     "description": "Broadcast Announcers and Radio Disc Jockeys",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 78720,
-      "low10": 32800,
-      "high10": 168000,
-      "hourly": 37.85,
-      "source": "BLS OES May 2025"
+      "median": 47340,
+      "low10": 28190,
+      "high10": 138440,
+      "hourly": 22.76,
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -319,11 +320,11 @@
     "description": "Chefs and Head Cooks",
     "dataSource": "onet-api-v2-fixed",
     "wages": {
-      "median": 60990,
-      "low10": 33800,
-      "high10": 99330,
-      "hourly": 29.32,
-      "source": "BLS OES May 2025"
+      "median": 62470,
+      "low10": 37900,
+      "high10": 98560,
+      "hourly": 30.03,
+      "source": "BLS OES May 2025 (bulk)"
     }
   },
   {
@@ -358,10 +359,10 @@
     "dataSource": "onet-api-v2-fixed",
     "wages": {
       "median": 38120,
-      "low10": 25200,
-      "high10": 62400,
+      "low10": 28520,
+      "high10": 60930,
       "hourly": 18.33,
-      "source": "BLS OES May 2025"
+      "source": "BLS OES May 2025 (bulk)"
     }
   }
 ]
