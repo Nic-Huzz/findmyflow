@@ -177,7 +177,7 @@ export default function ExperienceCreate() {
       <div className="exp-create-container">
         <button
           className="exp-back"
-          onClick={() => navigate('/create')}
+          onClick={() => navigate('/create/experiences')}
           type="button"
         >
           ← Back

@@ -207,7 +207,7 @@ export default function ExperienceDetail() {
         }
       }
       setSavingDetails(false)
-      navigate('/create')
+      navigate('/create/experiences')
       return
     } catch (err) {
       console.error('Save details error:', err, JSON.stringify(err))
@@ -312,7 +312,7 @@ export default function ExperienceDetail() {
         <div className="exp-detail-container">
           <div className="exp-state exp-error">
             <p>{error || 'Experience not found'}</p>
-            <button className="exp-back" onClick={() => navigate('/create')}>← Back</button>
+            <button className="exp-back" onClick={() => navigate('/create/experiences')}>← Back</button>
           </div>
         </div>
       </div>
@@ -327,7 +327,7 @@ export default function ExperienceDetail() {
       <div className="exp-orb exp-orb-2" />
 
       <div className="exp-detail-container">
-        <button className="exp-back" onClick={() => navigate('/create')}>← All Experiences</button>
+        <button className="exp-back" onClick={() => navigate('/create/experiences')}>← All Experiences</button>
 
         {/* Header (editable) */}
         <header className="exp-detail-header">
@@ -742,7 +742,7 @@ export default function ExperienceDetail() {
                   // Delete the experience (related data cascades via ON DELETE CASCADE)
                   const { error: delError } = await supabase.from('experiences').delete().eq('id', id)
                   if (delError) throw delError
-                  navigate('/create')
+                  navigate('/create/experiences')
                 } catch (err) {
                   console.error('Delete experience error:', err)
                   alert('Failed to delete. Please try again.')

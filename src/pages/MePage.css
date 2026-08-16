@@ -289,6 +289,9 @@
 .me-page .welcome-banner-cta span {
   margin-left: 4px;
 }
+.me-page .welcome-banner-play {
+  background: linear-gradient(135deg, #7c3aed 0%, #E9A23B 60%, #f0b84d 100%);
+}
 @keyframes welcomeFadeIn {
   from { opacity: 0; transform: translateY(-12px); }
   to { opacity: 1; transform: translateY(0); }

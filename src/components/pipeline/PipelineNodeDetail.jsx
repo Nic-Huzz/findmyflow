@@ -150,7 +150,7 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
               const done = isModuleComplete(mod.key)
               return (
                 <div key={mod.key} className="pl-item" onClick={() => {
-                  const base = `${mod.route}${mod.route.includes('?') ? '&' : '?'}experienceId=${experience.id}&returnTo=/create`
+                  const base = `${mod.route}${mod.route.includes('?') ? '&' : '?'}experienceId=${experience.id}&returnTo=/create/experience/${experience.id}`
                   navigate(base)
                 }}>
                   <div className={`pl-ico ${done ? 'done' : 'todo'}`}>{mod.icon}</div>
@@ -195,6 +195,9 @@ export default function PipelineNodeDetail({ node, experience, userId, checklist
           </CollapsibleSection>
         )}
 
+        {/* Logged Activities */}
+        <LoggedActivities nodeKey={node.key} experienceId={experience.id} userId={userId} />
+
         {/* Templates */}
         <TemplateSelector
           nodeKey={node.key}
@@ -230,5 +233,65 @@ function ChecklistItems({ experienceId, section, userId }) {
       <div className={`pl-ck-text${item.completed ? ' struck' : ''}`}>{item.label}</div>
     </div>
   ))
+}
+
+function LoggedActivities({ nodeKey, experienceId, userId }) {
+  const [entries, setEntries] = useState([])
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!experienceId || !userId) return
+    let cancelled = false
+    supabase.from('pipeline_metrics')
+      .select('id, method, channel, metric_key, metric_value, notes, created_at')
+      .eq('experience_id', experienceId)
+      .eq('user_id', userId)
+      .eq('node', nodeKey)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (!cancelled) {
+          setEntries(data || [])
+          setLoaded(true)
+        }
+      })
+    return () => { cancelled = true }
+  }, [experienceId, userId, nodeKey])
+
+  if (!loaded || entries.length === 0) return null
+
+  // Group by method
+  const grouped = {}
+  entries.forEach(e => {
+    const key = e.method || 'Other'
+    if (!grouped[key]) grouped[key] = []
+    grouped[key].push(e)
+  })
+
+  return (
+    <CollapsibleSection title={`Logged Activities (${entries.length})`}>
+      {Object.entries(grouped).map(([method, items]) => (
+        <div key={method} style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.04em', padding: '4px 0' }}>
+            {method}
+          </div>
+          {items.map(item => (
+            <div key={item.id} className="pl-item" style={{ cursor: 'default' }}>
+              <div className="pl-ico tool">📊</div>
+              <div className="pl-txt">
+                <div className="pl-nm">
+                  {item.metric_key}: {Number(item.metric_value).toLocaleString()}
+                  {item.channel && <span style={{ color: '#adb5bd', fontWeight: 400 }}> · {item.channel}</span>}
+                </div>
+                {item.notes && <div className="pl-ds">{item.notes}</div>}
+              </div>
+              <span style={{ fontSize: 10, color: '#adb5bd', whiteSpace: 'nowrap' }}>
+                {new Date(item.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+              </span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </CollapsibleSection>
+  )
 }
 

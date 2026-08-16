@@ -39,7 +39,6 @@ export default function MePage() {
     projects,
     totalXP,
     groanChallenges,
-    voiceTracker,
     loading: heroLoading,
     refresh: refreshHero,
   } = useHeroProfile(user?.id, user?.email)
@@ -50,14 +49,24 @@ export default function MePage() {
   const [hasWoundMap, setHasWoundMap] = useState(false)
   useEffect(() => {
     if (!user?.id) return
-    supabase.from('user_stage_progress')
-      .select('welcome_dismissed, essence_mirror_completed')
-      .eq('user_id', user.id)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!data?.welcome_dismissed) setShowWelcome(true)
-        setEssenceMirrorDone(!!data?.essence_mirror_completed)
-      })
+    Promise.all([
+      supabase.from('user_stage_progress')
+        .select('welcome_dismissed, essence_mirror_completed')
+        .eq('user_id', user.id)
+        .maybeSingle(),
+      supabase.from('quests')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1),
+    ]).then(([{ data: stageData }, { data: questsData }]) => {
+      setEssenceMirrorDone(!!stageData?.essence_mirror_completed)
+      // Show welcome banner only if not dismissed AND user has no quests yet
+      // (existing active users with quests skip this)
+      const hasQuests = questsData?.length > 0
+      if (!stageData?.welcome_dismissed && !hasQuests) setShowWelcome(true)
+    }).catch(() => {
+      setEssenceMirrorDone(false) // safe fallback: show pre-essence CTA
+    })
     // Check wound map completion (4+ stage selections)
     supabase.from('journey_onboarding_selections')
       .select('id')
@@ -358,19 +367,6 @@ export default function MePage() {
 
   // Derived: protective pattern tag (e.g., "Freeze + sympathetic blend")
 
-  // Derived: voice tracker
-  const essencePct = voiceTracker?.essencePercentage ?? 50
-  const protectivePct = voiceTracker ? (100 - essencePct) : 50
-  const hasVoiceData = voiceTracker?.totalVoiceMoments > 0
-
-  const voiceStatusText = useMemo(() => {
-    if (!hasVoiceData) return 'Complete voice quests in the 7-Day Challenge to start tracking'
-    const total = voiceTracker.totalVoiceMoments
-    const essenceCount = voiceTracker.essenceCount || 0
-    if (essencePct >= 60) return `Essence leads — ${essenceCount} of ${total} voice moments`
-    if (essencePct >= 40) return `Balanced — ${essenceCount} of ${total} voice moments`
-    return `Protective leads — ${total - essenceCount} of ${total} voice moments`
-  }, [hasVoiceData, essencePct, voiceTracker])
 
   // Narrative generation
   const narrativeText = useMemo(() => {
@@ -516,8 +512,8 @@ export default function MePage() {
         </div>
       </section>
 
-      {/* Essence Mirror CTA — shown until user completes it */}
-      {!essenceMirrorDone && (
+      {/* Welcome banner — two states: pre-essence and post-essence */}
+      {!essenceMirrorDone ? (
         <section className="welcome-banner">
           <h3 className="welcome-banner-start-here">Start Here:</h3>
           <div className="welcome-banner-inner">
@@ -528,6 +524,20 @@ export default function MePage() {
             </p>
             <button className="welcome-banner-cta" onClick={() => navigate('/essence-mirror?returnTo=/me')}>
               Start Essence Mirror <span>→</span>
+            </button>
+          </div>
+        </section>
+      ) : !showWelcome ? null : (
+        <section className="welcome-banner">
+          <h3 className="welcome-banner-start-here">Next Step:</h3>
+          <div className="welcome-banner-inner welcome-banner-play">
+            <div className="welcome-banner-icon">🎮</div>
+            <h2 className="welcome-banner-title">Start finding your flow</h2>
+            <p className="welcome-banner-text">
+              Your essence is discovered. Now it's time to play. Build daily habits, explore your curiosities, and take your first brave action.
+            </p>
+            <button className="welcome-banner-cta" onClick={() => { dismissWelcome(); navigate('/7-day-challenge') }}>
+              Let's Play <span>→</span>
             </button>
           </div>
         </section>
@@ -604,23 +614,6 @@ export default function MePage() {
               </div>
             </div>
             <span className="hp-chevron">›</span>
-          </div>
-
-          {/* Voice tracker */}
-          <div className={`hp-voice-tracker ${!hasVoiceData ? 'hp-vt-empty' : ''}`}>
-            <div className="hp-vt-labels">
-              <span className="hp-vt-label essence">
-                ✨ <span className="hp-vt-pct">{hasVoiceData ? `${essencePct}%` : '--%'}</span> Essence
-              </span>
-              <span className="hp-vt-label protective">
-                Protective <span className="hp-vt-pct">{hasVoiceData ? `${protectivePct}%` : '--%'}</span> 🛡️
-              </span>
-            </div>
-            <div className="hp-vt-bar">
-              <div className="hp-vt-fill-essence" style={{ width: hasVoiceData ? `${essencePct}%` : '0%' }} />
-              <div className="hp-vt-fill-protective" style={{ width: hasVoiceData ? `${protectivePct}%` : '0%' }} />
-            </div>
-            <div className="hp-vt-status">{voiceStatusText}</div>
           </div>
 
           <div className="hp-divider" />

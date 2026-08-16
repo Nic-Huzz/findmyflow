@@ -122,7 +122,7 @@
 .exp-detail-countdown {
   display: inline-block;
   padding: 6px 16px;
-  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  background: #5e17eb;
   color: #fff;
   font-size: 13px;
   font-weight: 700;
@@ -328,7 +328,7 @@
 }
 
 .exp-item-done .exp-item-check {
-  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  background: #5e17eb;
   border-color: transparent;
 }
 
