@@ -9,7 +9,6 @@ import JourneyMap from './JourneyMap'
 import ProjectExpressionCard, { CreateExpressionCard } from './ProjectExpressionCard'
 import ProjectDetailView from './ProjectDetailView'
 import PlayListProgress from './PlayListProgress'
-import EssenceVsProtectiveTracker from './EssenceVsProtectiveTracker'
 import VibeColorPicker from '../VibeColorPicker'
 import './HeroProfile.css'
 import './JourneyMap.css'
@@ -68,7 +67,6 @@ function HeroCommandCenter() {
     projectDetail,
     groanChallenges,
     visibilityProgress,
-    voiceTracker,
     nervousSystemArchetype,
     loading,
     error,
@@ -158,13 +156,6 @@ function HeroCommandCenter() {
       <PlayListProgress
         visibilityProgress={visibilityProgress}
         groanChallenges={groanChallenges}
-      />
-
-      {/* Essence vs Protective Voice Tracker */}
-      <EssenceVsProtectiveTracker
-        voiceTracker={voiceTracker}
-        archetypes={archetypes}
-        nervousSystemArchetype={nervousSystemArchetype}
       />
 
       {/* Journey Map */}

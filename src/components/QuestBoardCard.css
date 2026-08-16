@@ -35,6 +35,41 @@
   flex-shrink: 0;
 }
 
+.qbc-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  transition: transform 0.15s;
+}
+.qbc-color-dot:hover { transform: scale(1.2); }
+
+.qbc-color-picker {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+  animation: qbcFadeIn 0.15s ease;
+}
+
+.qbc-color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 0;
+}
+.qbc-color-swatch:hover { transform: scale(1.15); }
+.qbc-color-swatch.active {
+  border-color: #1a1a2e;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px #1a1a2e;
+}
+
 .qbc-info { flex: 1; min-width: 0; }
 
 .qbc-label {

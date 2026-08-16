@@ -67,13 +67,27 @@ const STATE_ZONES = {
 
 function stateX(s) { return STATE_ZONES[s]?.center ?? 255 }
 
-// State gradient colours (for the safe portion of the line)
+// State gradient colours (for zone backgrounds)
 const SAFE_COLOURS = {
   shutdown: '#ef4444',    // red
   anxious:  '#f59e0b',    // yellow
   peace:    '#10b981',    // green
   vibe:     '#c084fc',    // purple/pink
 }
+
+// Distinct quest line colours — each quest gets its own colour regardless of NS state
+const QUEST_COLOURS = [
+  '#5e17eb',  // brand purple
+  '#10b981',  // emerald
+  '#E9A23B',  // brand gold
+  '#ef4444',  // red
+  '#3b82f6',  // blue
+  '#ec4899',  // pink
+  '#14b8a6',  // teal
+  '#f97316',  // orange
+  '#8b5cf6',  // violet
+  '#06b6d4',  // cyan
+]
 
 export default function QuestPathMap({
   quests,
@@ -421,9 +435,9 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
         })}
 
         {/* Quest flow lines + courage challenge dots */}
-        {quests.map(quest => {
+        {quests.map((quest, qi) => {
           const x = laneOffsets[quest.id] || stateX(quest.predicted_state || 'peace')
-          const colour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
+          const colour = quest.color || QUEST_COLOURS[qi % QUEST_COLOURS.length]
           const isClosed = quest.status === 'closed' || quest.status === 'completed'
           const tasks = questTasks[quest.id] || []
           const courageTasks = tasks
@@ -514,9 +528,9 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
                 </>
               )}
 
-              {/* Courage dots — positioned at their wahoo X */}
-              {pathPoints.map(({ task, x: dotX, y: dotY, state: dotState }) => {
-                const dotColour = dotState ? (SAFE_COLOURS[dotState] || colour) : colour
+              {/* Courage dots — positioned at their wahoo X, coloured by quest */}
+              {pathPoints.map(({ task, x: dotX, y: dotY }) => {
+                const dotColour = colour
                 return (
                   <g key={task.id}>
                     <circle cx={dotX} cy={dotY} r="4.5"

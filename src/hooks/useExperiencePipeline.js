@@ -60,6 +60,7 @@ export default function useExperiencePipeline(experienceId) {
   const [nodes, setNodes] = useState([])
   const [checklists, setChecklists] = useState({})
   const [wahoos, setWahoos] = useState([])
+  const [rawMetrics, setRawMetrics] = useState([])
   const [moduleData, setModuleData] = useState({})
   const [experience, setExperience] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -77,7 +78,7 @@ export default function useExperiencePipeline(experienceId) {
       supabase.from('experiences').select('*').eq('id', experienceId).single(),
       // Manual pipeline metrics (primary source)
       supabase.from('pipeline_metrics')
-        .select('node, method, metric_key, metric_value, partner_name')
+        .select('node, method, channel, metric_key, metric_value, partner_name')
         .eq('experience_id', experienceId)
         .eq('user_id', userId),
       // Fallback: Attract content for this event
@@ -163,6 +164,7 @@ export default function useExperiencePipeline(experienceId) {
 
     // Aggregate manual pipeline metrics by node
     const metrics = metricsRes.data || []
+    setRawMetrics(metrics)
     const metricSum = (node, key) => metrics
       .filter(m => m.node === node && m.metric_key === key)
       .reduce((sum, m) => sum + Number(m.metric_value || 0), 0)
@@ -301,6 +303,7 @@ export default function useExperiencePipeline(experienceId) {
     nodes,
     checklists,
     wahoos,
+    rawMetrics,
     experience,
     userId,
     loading,

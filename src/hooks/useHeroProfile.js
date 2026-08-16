@@ -115,8 +115,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
     projectDetail: null,
     groanChallenges: [],
     visibilityProgress: {},
-    // Voice tracker data
-    voiceTracker: null,
     // Nervous system archetype
     nervousSystemArchetype: null,
   })
@@ -155,18 +153,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         ? supabase.from('groan_challenges').select('id, visibility_layer, status, completed_at').eq('user_id', userId)
         : Promise.resolve({ data: null })
 
-      const voicePromise = supabase
-        .from('quest_completions')
-        .select('quest_id, quest_type, quest_category, completed_at')
-        .eq('user_id', userId)
-        .or('quest_category.eq.Voices,quest_type.eq.Voice')
-
-      const healingPromise = supabase
-        .from('quest_completions')
-        .select('quest_id, quest_type, quest_category, completed_at')
-        .eq('user_id', userId)
-        .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect,Rest)')
-
       const nervousSystemPromise = supabase
         .from('nervous_system_responses')
         .select('archetype, archetype_description, core_fear, nervous_system_impact_limit, nervous_system_income_limit, safety_contracts, rewiring_needed, fear_interpretation')
@@ -175,8 +161,8 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         .limit(1)
 
       // Await all parallel queries
-      const [profileResult, projectsResult, totalXP, dashboardGroansResult, voiceResult, healingResult, nervousSystemResult] = await Promise.all([
-        profilePromise, projectsPromise, xpPromise, dashboardGroansPromise, voicePromise, healingPromise, nervousSystemPromise,
+      const [profileResult, projectsResult, totalXP, dashboardGroansResult, nervousSystemResult] = await Promise.all([
+        profilePromise, projectsPromise, xpPromise, dashboardGroansPromise, nervousSystemPromise,
       ])
 
       // 1. Process profile (with email fallback if needed)
@@ -316,40 +302,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         }
       }
 
-      // 4. Process voice tracker
-      const voiceCompletions = voiceResult.data || []
-      const healingCompletions = healingResult.data || []
-
-      const essenceCount = voiceCompletions.filter(c =>
-        c.quest_id?.endsWith('_essence_voice') ||
-        c.quest_id?.includes('essence') ||
-        c.quest_type?.toLowerCase().includes('essence')
-      ).length
-      const protectiveCount = voiceCompletions.filter(c =>
-        c.quest_id?.endsWith('_protective_voice') ||
-        c.quest_id?.includes('protective') ||
-        c.quest_type?.toLowerCase().includes('protective')
-      ).length
-      const totalVoice = essenceCount + protectiveCount
-
-      const voiceTracker = {
-        essenceCount,
-        protectiveCount,
-        totalVoiceMoments: totalVoice,
-        essencePercentage: totalVoice > 0
-          ? Math.round((essenceCount / totalVoice) * 100)
-          : 50,
-        healingByType: {
-          recognise: healingCompletions.filter(c => c.quest_id?.startsWith('recognise_') || c.quest_type === 'Recognise').length,
-          release: healingCompletions.filter(c => c.quest_id?.startsWith('release_') || c.quest_type === 'Release').length,
-          rewire: healingCompletions.filter(c => c.quest_id?.startsWith('rewire_') || c.quest_type === 'Rewire').length,
-          reconnect: healingCompletions.filter(c => c.quest_id?.startsWith('reconnect_') || c.quest_type === 'Reconnect').length,
-          rest: healingCompletions.filter(c => c.quest_id?.startsWith('rest_') || c.quest_type === 'Rest').length,
-        },
-        totalHealingCompleted: healingCompletions.length,
-      }
-
-      // 5. Process nervous system archetype
+      // 4. Process nervous system archetype
       const nsData = nervousSystemResult.data?.[0] || null
       const nervousSystemArchetype = nsData ? {
         archetype: nsData.archetype,
@@ -369,7 +322,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         projectDetail,
         groanChallenges,
         visibilityProgress,
-        voiceTracker,
         nervousSystemArchetype,
       })
     } catch (err) {

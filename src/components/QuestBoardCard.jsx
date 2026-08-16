@@ -12,6 +12,19 @@ import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import './QuestBoardCard.css'
 
+const QUEST_COLOURS = [
+  { id: '#5e17eb', label: 'Purple' },
+  { id: '#10b981', label: 'Emerald' },
+  { id: '#E9A23B', label: 'Gold' },
+  { id: '#ef4444', label: 'Red' },
+  { id: '#3b82f6', label: 'Blue' },
+  { id: '#ec4899', label: 'Pink' },
+  { id: '#14b8a6', label: 'Teal' },
+  { id: '#f97316', label: 'Orange' },
+  { id: '#8b5cf6', label: 'Violet' },
+  { id: '#06b6d4', label: 'Cyan' },
+]
+
 export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate }) {
   const [expanded, setExpanded] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
@@ -38,6 +51,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [reRatingExpId, setReRatingExpId] = useState(null) // which experience is being re-rated
   const [showAssignTasks, setShowAssignTasks] = useState(false) // bulk assign ungrouped tasks to experiences
   const [showMapCompleted, setShowMapCompleted] = useState(false) // popup to map completed challenges
+  const [showColorPicker, setShowColorPicker] = useState(false)
   const inputRef = useRef(null)
 
   const stateMeta = STATE_META[quest.predicted_state]
@@ -274,11 +288,25 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     else onUpdate?.()
   }
 
+  const setQuestColor = async (color) => {
+    if (!quest.id) return
+    const { error } = await supabase.from('quests')
+      .update({ color })
+      .eq('id', quest.id)
+    if (error) console.error('Set quest color error:', error)
+    setShowColorPicker(false)
+    onUpdate?.()
+  }
+
   return (
     <div className={`qbc ${expanded ? 'qbc-expanded' : ''}`}>
       {/* Collapsed header */}
-      <div className="qbc-header" onClick={() => setExpanded(!expanded)}>
-        <div className="qbc-state-dot" style={{ background: stateMeta?.color || '#6b7280' }} />
+      <div className="qbc-header" onClick={() => { setExpanded(!expanded); setShowColorPicker(false) }}>
+        <div className="qbc-color-dot"
+          style={{ background: quest.color || stateMeta?.color || '#6b7280' }}
+          onClick={(e) => { e.stopPropagation(); if (expanded) setShowColorPicker(!showColorPicker) }}
+          title="Change color"
+        />
         <div className="qbc-info">
           <div className="qbc-label">{quest.label}</div>
           <div className="qbc-meta">
@@ -288,6 +316,18 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
         </div>
         <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
       </div>
+      {/* Color picker */}
+      {showColorPicker && (
+        <div className="qbc-color-picker">
+          {QUEST_COLOURS.map(c => (
+            <button key={c.id} className={`qbc-color-swatch ${quest.color === c.id ? 'active' : ''}`}
+              style={{ background: c.id }}
+              onClick={() => setQuestColor(c.id)}
+              title={c.label}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Expanded content */}
       {expanded && (

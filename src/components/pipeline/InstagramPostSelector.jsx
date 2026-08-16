@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import './InstagramPostSelector.css'
 
 export default function InstagramPostSelector({ experienceId, experienceName, onClose, onSave }) {
   const { user } = useAuth()

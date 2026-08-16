@@ -133,3 +133,62 @@
   color: rgba(0,0,0,0.3);
   font-size: 14px;
 }
+
+/* ─── Channel breakdown ─── */
+.nw-channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nw-channel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+}
+
+.nw-channel-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.nw-channel-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.nw-channel-stat {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.nw-channel-stat strong {
+  color: #1a1a2e;
+  font-weight: 700;
+}
+
+/* ─── Instagram tag button ─── */
+.nw-ig-tag-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: rgba(94,23,235,0.06);
+  border: 1px dashed rgba(94,23,235,0.2);
+  border-radius: 10px;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+  transition: background 0.15s, border-color 0.15s;
+}
+.nw-ig-tag-btn:hover {
+  background: rgba(94,23,235,0.1);
+  border-color: rgba(94,23,235,0.35);
+}
