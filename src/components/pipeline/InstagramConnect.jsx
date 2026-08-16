@@ -70,7 +70,7 @@ export default function InstagramConnect({ onRefresh }) {
       }
 
       if (result.redirect_url) {
-        window.location.href = result.redirect_url
+        window.open(result.redirect_url, '_blank', 'noopener,noreferrer')
       }
     } catch (err) {
       console.error('Connect failed:', err)
