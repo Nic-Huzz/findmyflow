@@ -415,7 +415,7 @@ export const SPIDER_AXES = {
   consistency: { label: 'Consistency', tiers: [3, 10, 25, 50, 100, 250], unit: 'experiences' },
   retention: { label: 'Retention', tiers: [5, 15, 25, 40, 60, 80], unit: '%' },
   brand: { label: 'Brand', tiers: [1, 3, 5, 7, 10, 13], unit: '/15' },
-  price: { label: 'Price', tiers: [20, 50, 100, 250, 500, 1000], unit: '$' },
+  price: { label: 'Price', tiers: [20, 50, 100, 250, 500, 1000], unit: 'usd' },
   reach: { label: 'Reach', tiers: [100, 500, 1000, 5000, 10000, 50000], unit: 'views' },
 }
 

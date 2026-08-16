@@ -12,6 +12,7 @@ export default function InstagramConnect({ onRefresh }) {
   const [integration, setIntegration] = useState(null)
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
+  const [syncError, setSyncError] = useState(null)
 
   useEffect(() => {
     if (!user?.id) return
@@ -80,10 +81,11 @@ export default function InstagramConnect({ onRefresh }) {
 
   async function handleRefresh() {
     setSyncing(true)
+    setSyncError(null)
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) throw new Error('Not authenticated')
-      await fetch(
+      const res = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/fetch-instagram`,
         {
           method: 'POST',
@@ -94,10 +96,15 @@ export default function InstagramConnect({ onRefresh }) {
           body: JSON.stringify({ user_id: user.id, initial_sync: true }),
         }
       )
+      if (!res.ok) {
+        const body = await res.text().catch(() => '')
+        throw new Error(body || `Sync failed (${res.status})`)
+      }
       await loadIntegration()
       onRefresh?.()
     } catch (err) {
       console.error('Refresh failed:', err)
+      setSyncError(err.message || 'Sync failed. Try again.')
     } finally {
       setSyncing(false)
     }
@@ -148,6 +155,9 @@ export default function InstagramConnect({ onRefresh }) {
             </button>
           </div>
         </div>
+        {syncError && (
+          <div style={{ fontSize: 11, color: '#ef4444', marginTop: 8 }}>{syncError}</div>
+        )}
       </div>
     )
   }

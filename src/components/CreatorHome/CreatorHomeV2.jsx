@@ -178,7 +178,9 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const [movementXP, setMovementXP] = useState(0)
   const [creatorXP, setCreatorXP] = useState(0)
   const [scaleScoreValue, setScaleScoreValue] = useState(null)
-  const [maxTicketPrice, setMaxTicketPrice] = useState(null)
+  const [maxTicketPrice, setMaxTicketPrice] = useState(null)       // USD-normalised for tier calc
+  const [maxTicketPriceRaw, setMaxTicketPriceRaw] = useState(null) // original value for display
+  const [ticketPriceCurrency, setTicketPriceCurrency] = useState('USD')
   const [isFoundingMember, setIsFoundingMember] = useState(false)
   const [instagramConnected, setInstagramConnected] = useState(false)
   const [repeatAttendeeCount, setRepeatAttendeeCount] = useState(0)
@@ -194,9 +196,14 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
   const { experiences, loading: expLoading } = useExperienceList()
   const { reach: reachScore } = useReachScore(userId)
 
-  const upcoming = experiences.filter(e => e.status === 'upcoming')
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const upcoming = experiences.filter(e => {
+    if (e.experience_date && new Date(e.experience_date) < today) return false
+    return e.status === 'upcoming'
+  })
   const past = experiences
-    .filter(e => e.status === 'completed' || e.status === 'archived')
+    .filter(e => e.status === 'completed' || e.status === 'archived' || (e.status === 'upcoming' && e.experience_date && new Date(e.experience_date) < today))
     .sort((a, b) => new Date(b.experience_date || b.updated_at || 0) - new Date(a.experience_date || a.updated_at || 0))
 
   const [dashboardKPIs, setDashboardKPIs] = useState({ totalAttendees: 0, repeatRate: 0 })
@@ -408,8 +415,26 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
       repeatRate: dashboardKPIs.repeatRate,
       totalAttendees: dashboardKPIs.totalAttendees,
     }))
-    const prices = experiences.map(e => e.ticket_price).filter(p => p != null && p > 0)
-    setMaxTicketPrice(prices.length > 0 ? Math.max(...prices) : null)
+    // Find max ticket price and its currency for radar chart
+    const priced = experiences.filter(e => e.ticket_price != null && e.ticket_price > 0)
+    if (priced.length > 0) {
+      const maxExp = priced.reduce((best, e) => {
+        // Normalise to USD for comparison
+        const toUSD = (p, cur) => cur === 'IDR' ? p / 16000 : p
+        return toUSD(e.ticket_price, e.currency) > toUSD(best.ticket_price, best.currency) ? e : best
+      })
+      const currency = maxExp.currency || 'USD'
+      const rawPrice = maxExp.ticket_price
+      // USD-equivalent for tier calc; raw for display
+      const usdPrice = currency === 'IDR' ? Math.round(rawPrice / 16000) : rawPrice
+      setMaxTicketPrice(usdPrice)
+      setMaxTicketPriceRaw(rawPrice)
+      setTicketPriceCurrency(currency)
+    } else {
+      setMaxTicketPrice(null)
+      setMaxTicketPriceRaw(null)
+      setTicketPriceCurrency('USD')
+    }
   }, [loading, expLoading, past, experiences, remarkableAngle, hasReach, hasGrowth, hasScaleScore, dashboardKPIs])
 
   // ── Derived ────────────────────────────────────────────────────────────
@@ -1170,6 +1195,8 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
             retention: dashboardKPIs.repeatRate || 0,
             brand: scaleScoreValue,
             price: maxTicketPrice,
+            priceRaw: maxTicketPriceRaw,
+            priceCurrency: ticketPriceCurrency,
             reach: null, // TODO: wire Instagram views when BrandPulse data is lifted
           }} />
 
@@ -1366,6 +1393,8 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
           retention: dashboardKPIs.repeatRate || 0,
           brand: scaleScoreValue,
           price: maxTicketPrice,
+          priceRaw: maxTicketPriceRaw,
+          priceCurrency: ticketPriceCurrency,
           reach: null, // TODO: wire Instagram views
         }}
       />

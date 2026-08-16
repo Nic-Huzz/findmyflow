@@ -23,6 +23,14 @@ function polarToXY(angle, radius) {
   }
 }
 
+function formatPrice(rawValue, currency) {
+  if (rawValue == null) return null
+  if (currency === 'IDR') {
+    return rawValue >= 1000000 ? `Rp${(rawValue / 1000000).toFixed(1)}M` : rawValue >= 1000 ? `Rp${Math.round(rawValue / 1000)}K` : `Rp${rawValue}`
+  }
+  return `$${rawValue}`
+}
+
 export default function CreatorRadarChart({ data = {} }) {
   // Build axes from data — skip reach if not available
   const axisKeys = ['impact', 'consistency', 'retention', 'brand', 'price']
@@ -73,7 +81,7 @@ export default function CreatorRadarChart({ data = {} }) {
       ...pos,
       label: axis.label,
       tier,
-      value: value != null ? (axis.unit === '%' ? `${Math.round(value)}%` : axis.unit === '/15' ? `${value}/15` : axis.unit === '$' ? `$${value}` : String(Math.round(value))) : null,
+      value: value != null ? (axis.unit === '%' ? `${Math.round(value)}%` : axis.unit === '/15' ? `${value}/15` : axis.unit === 'usd' ? formatPrice(data.priceRaw ?? value, data.priceCurrency) : String(Math.round(value))) : null,
     }
   })
 
