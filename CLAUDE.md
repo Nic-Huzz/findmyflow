@@ -116,9 +116,9 @@ docs/               # Specs, handoffs, research
 
 **Core**: `/` (Landing) | `/log-in` (Auth) | `/me` (Profile) | `/7-day-challenge` | `/library` | `/flow-compass` | `/feedback` | `/hero-profile` | `/guidebook`
 
-**Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
+**Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`, `/dome-onboarding` (Experience Dome onboarding)
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
 **Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
 
@@ -134,9 +134,9 @@ docs/               # Specs, handoffs, research
 
 **Play Profile**: `/play-profile` (quiz + dashboard), `?mode=retake`, `?mode=unstuck`, `?mode=rate`
 
-**Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
+**Fantasy League**: `/league`, `/league/week`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing) | `/league/matchup` redirects to `/league`
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/essence-mirror`, `/try/career-clarity`, `/try/experience-creators`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
 
@@ -380,7 +380,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `nikigai_clusters` | `nikigai_responses` | `nikigai_key_outcomes` | `persona_profiles` | `nervous_system_responses` | `healing_compass_responses` | `lead_flow_profiles` | `scope_map_results` | `quiz_results` | `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
 
 ### CRM Tables
-`crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
+`crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations` | `pipeline_metrics` (attraction activity log; includes `channel` text for sub-tagging e.g. instagram/tiktok/posters)
 
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
@@ -392,7 +392,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `experience_checkins` | `weekly_reviews` (3 questions: narrative_revision, identity_did, compounding_text) | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
 
 ### Interior Scoreboard
-`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
+`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat), `quests.color` text (user-chosen color for QuestPathMap) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
 
 RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidence(p_cluster_id)`
 
