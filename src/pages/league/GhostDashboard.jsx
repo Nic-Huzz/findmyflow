@@ -13,7 +13,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { buildDailyScores, getScoresThrough, compareCategories, applyDecay, getWeekDates } from '../../lib/ghost/ghostScoring'
 import { getOrCreateCurrentWeek, getGhostStreak, getWeekHistory, getContentSubmissions, saveGhostScores } from '../../lib/ghost/ghostService'
 import { DAY_LABELS } from '../../lib/ghost/ghostConfig'
-import { getWeekStartLocal, formatLocalDate, getWeekStartInTimezone } from '../../lib/dateUtils'
+import { getWeekStartLocal, formatLocalDate } from '../../lib/dateUtils'
 import { hapticLight } from '../../lib/haptics'
 import './GhostDashboard.css'
 
@@ -30,9 +30,9 @@ export default function GhostDashboard() {
   const [history, setHistory] = useState([])
   const [showDayTable, setShowDayTable] = useState(false)
 
-  // Week boundaries use fixed Bali timezone for DB queries (prevents drift when traveling)
-  const weekStart = getWeekStartInTimezone(0)
-  const lastWeekStart = getWeekStartInTimezone(-1)
+  // Week boundaries use device local timezone so "today" matches the user's clock
+  const weekStart = getWeekStartLocal(new Date(), 0)
+  const lastWeekStart = getWeekStartLocal(new Date(), -1)
   const today = formatLocalDate(new Date())
   const weekDates = getWeekDates(weekStart)
 
