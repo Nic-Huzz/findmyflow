@@ -1712,11 +1712,10 @@ export function useChallengeData() {
     }
   }, [leaderboardView])
 
-  // Refresh data when page becomes visible (returning from a flow)
+  // Refresh data when page becomes visible (returning from background/another tab)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible' && user) {
-        // Reload completions and progress to get latest points
         loadUserProgress()
       }
     }

@@ -89,6 +89,26 @@ export async function saveGhostScores(rowId, ghostDailyScores) {
 }
 
 /**
+ * Get all pending past weeks (before current week) that need finalization.
+ * Returns them in chronological order so they can be finalized sequentially.
+ * @param {string} userId
+ * @param {string} currentWeekStart - YYYY-MM-DD of current week's Monday
+ * @returns {Array} pending ghost_weekly_results rows
+ */
+export async function getPendingPastWeeks(userId, currentWeekStart) {
+  const { data } = await supabase
+    .from('ghost_weekly_results')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('result', 'pending')
+    .lt('week_start', currentWeekStart)
+    .order('week_start', { ascending: true })
+    .limit(4)
+
+  return data || []
+}
+
+/**
  * Get past week results for the History tab.
  * @param {string} userId
  * @param {number} [limit=12]

@@ -10,7 +10,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/ghost/ghostConfig'
 import { buildDailyScores, getScoresThrough, compareCategories, getFinalTotals, applyDecay, getWeekDates } from '../lib/ghost/ghostScoring'
-import { getOrCreateCurrentWeek, getPreviousWeekResult, saveGhostScores, getGhostStreak, getContentSubmissions } from '../lib/ghost/ghostService'
+import { getOrCreateCurrentWeek, getPreviousWeekResult, saveGhostScores, getGhostStreak, getContentSubmissions, getPendingPastWeeks } from '../lib/ghost/ghostService'
 import { getWeekStartLocal, formatLocalDate, getWeekStartInTimezone } from '../lib/dateUtils'
 import { triggerSideCannons } from '../components/Celebrations'
 import { hapticSuccess } from '../lib/haptics'
@@ -60,19 +60,23 @@ export function useGhostMatchup({ completions, userId }) {
 
       if (!row) { setLoading(false); return }
 
-      // Check if previous week needs finalization
-      const prevResult = await getPreviousWeekResult(userId, weekStart)
-      if (prevResult && prevResult.result !== 'pending') {
-        setLastWeekRow(prevResult)
-      }
-      if (prevResult && prevResult.result === 'pending') {
-        // Finalize previous week via edge function
-        try {
-          const { data: finalizeResult } = await supabase.functions.invoke('finalize-ghost-week', {
-            body: { userId, weekStart: lastWeekStart, utcOffsetMinutes: new Date().getTimezoneOffset() },
-          })
+      // Check if ANY past weeks need finalization (not just previous week)
+      const pendingWeeks = await getPendingPastWeeks(userId, weekStart)
+      if (pendingWeeks.length > 0) {
+        // Finalize each pending week sequentially (order matters — each week's ghost = previous week's scores)
+        for (const pendingWeek of pendingWeeks) {
+          try {
+            const { error } = await supabase.functions.invoke('finalize-ghost-week', {
+              body: { userId, weekStart: pendingWeek.week_start, utcOffsetMinutes: new Date().getTimezoneOffset() },
+            })
+            if (error) console.warn('Ghost: finalization failed for week', pendingWeek.week_start, error)
+          } catch (err) {
+            console.warn('Ghost: network error finalizing week', pendingWeek.week_start, err)
+          }
+        }
 
-          // Refresh streak + finalized previous week row
+        // Refresh streak + finalized previous week row
+        try {
           const [updatedStreak, finalizedPrev] = await Promise.all([
             getGhostStreak(userId),
             getPreviousWeekResult(userId, weekStart),
@@ -86,8 +90,14 @@ export function useGhostMatchup({ completions, userId }) {
           setLoading(false)
           return
         } catch (err) {
-          console.warn('Ghost: finalization failed:', err)
+          console.warn('Ghost: post-finalization refresh failed:', err)
         }
+      }
+
+      // No pending weeks — just check if previous week has a finalized result to display
+      const prevResult = await getPreviousWeekResult(userId, weekStart)
+      if (prevResult && prevResult.result !== 'pending') {
+        setLastWeekRow(prevResult)
       }
 
       // If ghost is empty (new week, not yet populated), compute from completions
