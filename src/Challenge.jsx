@@ -49,6 +49,8 @@ import DailyCheckin from './components/DailyCheckin'
 import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
 import JourneyTab from './components/JourneyTab'
+import DiscoverTab from './components/DiscoverTab'
+import './components/DiscoverTab.css'
 import ProgressTab from './components/ProgressTab'
 import './components/ProgressTab.css'
 import { getLevelConfig } from './components/level/LevelConfig'
@@ -380,7 +382,7 @@ function Challenge() {
   // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Journey', 'Tune', 'Progress']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Tune', 'Progress']))
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
   const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
@@ -1700,9 +1702,9 @@ function Challenge() {
           />
         )}
 
-        {/* Journey Tab — hero stage, voice progress, thresholds */}
-        {activeCategory === 'Journey' && (
-          <JourneyTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
+        {/* Discover Tab — Phase 1 discovery */}
+        {activeCategory === 'Discover' && (
+          <DiscoverTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
         )}
 
         {/* Level Tab */}

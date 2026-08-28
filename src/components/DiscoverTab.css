@@ -1,0 +1,125 @@
+/* DiscoverTab — Phase 1 discovery tab */
+
+.discover-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dt-loading {
+  text-align: center;
+  padding: 40px 0;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Discovery cards */
+.dt-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.06);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  position: relative;
+  border: none;
+}
+
+.dt-card:active {
+  background: #fafafa;
+}
+
+.dt-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dt-card-icon { font-size: 18px; }
+
+.dt-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a0b3d;
+}
+
+.dt-card-badge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+.dt-card-desc {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.dt-card-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+/* Dome viz container */
+.dt-dome-viz {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: center;
+}
+
+/* Bridge CTA */
+.dt-bridge-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
+  border-radius: 16px;
+  padding: 18px 16px;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.dt-bridge-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.dt-bridge-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.dt-bridge-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.dt-bridge-arrow {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+}
