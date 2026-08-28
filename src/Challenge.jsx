@@ -49,6 +49,8 @@ import DailyCheckin from './components/DailyCheckin'
 import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
 import JourneyTab from './components/JourneyTab'
+import ProgressTab from './components/ProgressTab'
+import './components/ProgressTab.css'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
@@ -378,7 +380,7 @@ function Challenge() {
   // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Journey', 'Tune']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Journey', 'Tune', 'Progress']))
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
   const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
@@ -434,7 +436,6 @@ function Challenge() {
           : Promise.resolve({ data: [] }),
       ]).then(([wahoos, skills, lifePaths]) => {
         const unlocks = []
-        if (wahoos.data?.length > 0 || skills.data?.length > 0) unlocks.push('Courage')
         if (lifePaths.data?.length > 0) unlocks.push('Quests')
         if (unlocks.length > 0) {
           setUnlockedTabs(prev => new Set([...prev, ...unlocks]))
@@ -1595,7 +1596,7 @@ function Challenge() {
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
-            onBack={() => setActiveCategory('Courage')}
+            onBack={() => setActiveCategory('Quests')}
             progress={progress}
             completions={completions}
           />
@@ -1604,7 +1605,7 @@ function Challenge() {
         {/* Healing Summary */}
         {activeCategory === 'HealingSummary' && (
           <HealingSummary
-            onBack={() => setActiveCategory('Courage')}
+            onBack={() => setActiveCategory('Quests')}
             progress={progress}
           />
         )}
@@ -1672,7 +1673,12 @@ function Challenge() {
           />
         )}
 
-        {/* Courage Tab — Wahoo challenges + Reach (league) */}
+        {/* Progress Tab — reporting scorecard */}
+        {activeCategory === 'Progress' && (
+          <ProgressTab userId={user?.id} />
+        )}
+
+        {/* Courage Tab (legacy, hidden from tabs but kept for deep links) */}
         {activeCategory === 'Courage' && (
           <PlayListTab
             userId={user?.id}

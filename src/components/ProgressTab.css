@@ -1,0 +1,185 @@
+/* ProgressTab — reporting/scorecard tab */
+
+.progress-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pt-loading {
+  text-align: center;
+  padding: 40px 0;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Hero Journey card */
+.pt-hero-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pt-hero-stage {
+  font-size: 11px;
+  font-weight: 700;
+  color: #5e17eb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pt-hero-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a0b3d;
+  margin: 4px 0 12px;
+}
+
+.pt-hero-bar {
+  height: 6px;
+  background: rgba(94, 23, 235, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.pt-hero-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.pt-hero-endpoints {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* Stats row */
+.pt-stats-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pt-stat {
+  flex: 1;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pt-stat-num {
+  font-size: 22px;
+  font-weight: 900;
+  color: #5e17eb;
+}
+
+.pt-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+/* Sections */
+.pt-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pt-section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1a0b3d;
+  margin-bottom: 10px;
+}
+
+/* Zone matrix */
+.pt-matrix-scores {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.pt-zone-badge {
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+/* Dimensions grid */
+.pt-dim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.pt-dim-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.02);
+  opacity: 0.4;
+}
+
+.pt-dim-item.active {
+  opacity: 1;
+  background: rgba(94, 23, 235, 0.04);
+}
+
+.pt-dim-icon { font-size: 14px; }
+.pt-dim-label { font-size: 12px; font-weight: 600; color: #1a0b3d; flex: 1; }
+.pt-dim-count { font-size: 13px; font-weight: 800; color: #5e17eb; }
+
+/* Skills grid */
+.pt-skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pt-skill-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(94, 23, 235, 0.03);
+}
+
+.pt-skill-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0b3d;
+  flex: 1;
+  text-transform: capitalize;
+}
+
+.pt-skill-level {
+  font-size: 12px;
+  font-weight: 800;
+  color: #5e17eb;
+}
+
+.pt-skill-xp {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+}

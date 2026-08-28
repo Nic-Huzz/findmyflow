@@ -45,11 +45,11 @@ const OV_BOTTOM = OV_H - 100
 
 // Depth level Y positions (L0=bottom, L4=top)
 const DEPTH_LEVELS = [
-  { id: 'education',   label: 'L0 Learning',    short: 'L0' },
-  { id: 'testing',     label: 'L1 Testing',     short: 'L1' },
-  { id: 'practising',  label: 'L2 Practising',  short: 'L2' },
-  { id: 'charging',    label: 'L3 Charging',    short: 'L3' },
-  { id: 'teaching',    label: 'L4 Teaching',     short: 'L4' },
+  { id: 'education',   label: 'L1',  short: 'L1' },
+  { id: 'testing',     label: 'L2',  short: 'L2' },
+  { id: 'practising',  label: 'L3',  short: 'L3' },
+  { id: 'charging',    label: 'L4',  short: 'L4' },
+  { id: 'teaching',    label: 'L5',  short: 'L5' },
 ]
 const DEPTH_ORDER = { education: 0, testing: 1, practising: 2, charging: 3, teaching: 4 }
 function depthY(d) {
