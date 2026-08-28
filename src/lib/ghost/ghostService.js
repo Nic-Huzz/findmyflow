@@ -2,6 +2,7 @@
  * ghostService.js — DB operations for Ghost Self League
  */
 import { supabase } from '../supabaseClient'
+import { formatLocalDate } from '../dateUtils'
 
 /**
  * Get or create the ghost_weekly_results row for the given week.
@@ -61,7 +62,7 @@ export async function getOrCreateCurrentWeek(userId, weekStart) {
 export async function getPreviousWeekResult(userId, currentWeekStart) {
   const prevMonday = new Date(currentWeekStart + 'T00:00:00')
   prevMonday.setDate(prevMonday.getDate() - 7)
-  const prevWeekStart = prevMonday.toISOString().slice(0, 10)
+  const prevWeekStart = formatLocalDate(prevMonday)
 
   const { data } = await supabase
     .from('ghost_weekly_results')

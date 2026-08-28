@@ -180,11 +180,13 @@ export function useChallengeData() {
         // Run both queries in parallel - they're independent
         const [userLevelResult, anyPreviousResult] = await Promise.all([
           // Load user-level completions so Flow Finder quests show correct completion state
+          // Ordered newest-first so Supabase's 1000-row server limit drops old data, not new
           supabase
             .from('quest_completions')
             .select('*')
             .eq('user_id', user.id)
-            .is('challenge_instance_id', null),
+            .is('challenge_instance_id', null)
+            .order('completed_at', { ascending: false }),
           // Check if user has any previous challenges (returning user)
           supabase
             .from('challenge_progress')
@@ -276,13 +278,15 @@ export function useChallengeData() {
           .from('quest_completions')
           .select('*')
           .eq('user_id', user.id)
-          .in('challenge_instance_id', projectInstanceIds),
+          .in('challenge_instance_id', projectInstanceIds)
+          .order('completed_at', { ascending: false }),
         supabase
           .from('quest_completions')
           .select('*')
           .eq('user_id', user.id)
           .is('challenge_instance_id', null)
           .or(`project_id.is.null,project_id.eq.${projectData?.id || '00000000-0000-0000-0000-000000000000'}`)
+          .order('completed_at', { ascending: false })
       ])
 
       const { data: challengeCompletions, error: completionsError } = challengeCompletionsResult

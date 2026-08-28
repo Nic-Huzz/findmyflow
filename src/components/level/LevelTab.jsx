@@ -27,6 +27,8 @@ import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
 import JourneyGraphPopup from '../JourneyGraphPopup'
+import WeeklyFocus from './WeeklyFocus'
+import './WeeklyFocus.css'
 import './LevelTab.css'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onRefreshPoints = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
@@ -82,6 +84,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       setMatrixData({ actionScore: actionResult.score, clarityPct, zone, total: actionResult.total, aligned: actionResult.aligned })
     }).catch(err => console.warn('Matrix data load error:', err))
   }, [userId])
+  const [courageCount, setCourageCount] = useState(0) // all-time completed courage challenges
   const [unlockExplainer, setUnlockExplainer] = useState(null) // 'courage' | 'healing' | null
   const [hasCuriosityCompass, setHasCuriosityCompass] = useState(false)
   const [hasHealingCompletion, setHasHealingCompletion] = useState(false)
@@ -111,6 +114,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       setQuests(questData)
       // Load tasks + experiences for all quests
       const questIds = questData.map(q => q.id)
+      // Fetch courage count in parallel with tasks
+      supabase.from('groan_challenges')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('status', 'completed')
+        .then(({ count }) => setCourageCount(count || 0))
+
       if (questIds.length > 0) {
         const [taskRes, expRes] = await Promise.all([
           supabase.from('quest_tasks').select('*').in('quest_id', questIds).order('sort_order', { ascending: true }),
@@ -461,6 +471,21 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           <span className="quest-path-btn-arrow">→</span>
         </button>
       )}
+
+      {/* Weekly Focus — one courage challenge a week */}
+      <WeeklyFocus
+        quests={quests}
+        questTasks={questTasks}
+        userId={userId}
+        courageCount={courageCount}
+        onCompleteCourage={() => {
+          loadQuests()
+          onRefreshPoints?.()
+        }}
+        onAddChallenge={() => {
+          loadQuests()
+        }}
+      />
 
       <div className="quest-section">
         <div className="quest-section-header">

@@ -53,7 +53,7 @@ export default function GhostRecapCard({ recapData }) {
             const lost = cat.current < cat.ghost
             return (
               <div key={cat.label} className="grc-row">
-                <span className="grc-row-label">{cat.icon} {cat.label}</span>
+                <span className="grc-row-label">{cat.icon}{'\u00A0'}{cat.label}</span>
                 <span className={`grc-row-score ${won ? 'grc-win-text' : ''}`}>{cat.current}</span>
                 <span className={`grc-row-score ${lost ? 'grc-loss-text' : ''}`}>{cat.ghost}</span>
                 <span className={`grc-row-marker ${won ? 'grc-marker-win' : lost ? 'grc-marker-loss' : 'grc-marker-tied'}`}>

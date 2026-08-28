@@ -1,0 +1,219 @@
+/* WeeklyFocus — "one courage challenge a week" prompt */
+
+.wf-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.08);
+}
+
+.wf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.wf-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a0b3d;
+}
+
+.wf-change {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* Focused challenge display */
+.wf-focus {
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.wf-focus.wf-completed {
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.wf-focus-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a0b3d;
+  margin-bottom: 4px;
+}
+
+.wf-completed .wf-focus-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.wf-focus-quest {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.wf-action {
+  width: 100%;
+  padding: 12px;
+  background: #5e17eb;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wf-healing-link {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: center;
+}
+
+.wf-healing-link:active {
+  color: #5e17eb;
+}
+
+.wf-done-msg {
+  text-align: center;
+  font-size: 13px;
+  color: #10b981;
+  font-weight: 600;
+  padding: 8px 0 0;
+}
+
+/* Picker mode */
+.wf-empty {
+  font-size: 13px;
+  color: #6c757d;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.wf-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wf-quest-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wf-quest-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 4px;
+}
+
+.wf-pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: rgba(94, 23, 235, 0.03);
+  border: 1px solid rgba(94, 23, 235, 0.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.wf-pick:active {
+  background: rgba(94, 23, 235, 0.08);
+}
+
+.wf-pick-active {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+}
+
+.wf-pick-radio {
+  font-size: 14px;
+  color: #5e17eb;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+}
+
+.wf-pick-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a0b3d;
+}
+
+/* Inline counter — small, at the bottom of the card */
+.wf-counter-inline {
+  text-align: center;
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+  padding-top: 12px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.wf-counter-num {
+  font-weight: 800;
+  color: #5e17eb;
+  font-size: 13px;
+}
+
+/* Add new challenge link */
+.wf-add-new {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 1px dashed rgba(94, 23, 235, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  margin-top: 2px;
+}
+
+.wf-add-new:active {
+  background: rgba(94, 23, 235, 0.04);
+}
+
+.wf-cancel {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px;
+}
