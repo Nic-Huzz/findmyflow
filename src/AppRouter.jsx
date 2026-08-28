@@ -38,6 +38,7 @@ import PlaySkillsOnboarding from './components/onboarding/PlaySkillsOnboarding'
 const PlaySkillsIdentifier = lazy(() => import('./flows/PlaySkillsIdentifier'))
 const RuleBreakTree = lazy(() => import('./pages/RuleBreakTree'))
 const ExperienceDomeOnboarding = lazy(() => import('./flows/ExperienceDomeOnboarding'))
+const ExperienceGameFlow = lazy(() => import('./flows/ExperienceGameFlow'))
 const ScaleDiagnosticFlow = lazy(() => import('./flows/ScaleDiagnosticFlow'))
 const AIDiagnostic = lazy(() => import('./pages/AIDiagnostic'))
 const NarrativeBuilderFlow = lazyRetry(() => import('./flows/NarrativeBuilderFlow'))
@@ -599,6 +600,8 @@ function AppRouter() {
               <Route path="/unsubscribe" element={<Unsubscribe />} />
               <Route path="/rule-break-tree" element={<Suspense fallback={<LoadingSpinner />}><RuleBreakTree /></Suspense>} />
               <Route path="/dome-onboarding" element={<Suspense fallback={<LoadingSpinner />}><ExperienceDomeOnboarding /></Suspense>} />
+              <Route path="/experience-game" element={<Suspense fallback={<LoadingSpinner />}><ExperienceGameFlow /></Suspense>} />
+              <Route path="/try/experience-game" element={<Suspense fallback={<LoadingSpinner />}><ExperienceGameFlow /></Suspense>} />
               <Route path="/create/scale-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
               <Route path="/scale-diagnostic" element={<Navigate to="/create/scale-diagnostic" replace />} />
 

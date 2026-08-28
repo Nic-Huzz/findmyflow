@@ -1,0 +1,86 @@
+/* ── Mini Dome Viz ── */
+
+.dome-mini {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Popup mode — full screen overlay between branches */
+.dome-mini-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #f5f5f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: domeMiniEnter 0.4s ease;
+}
+
+@keyframes domeMiniEnter {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.dome-mini svg {
+  display: block;
+}
+
+/* Pulse animation for pressure/growth-edge nodes */
+.dome-mini-pulse {
+  animation: domeMiniPulse 2s ease-in-out infinite;
+}
+
+@keyframes domeMiniPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.15; }
+}
+
+/* Center stat overlay */
+.dome-mini-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.dome-mini-num {
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.dome-mini-label {
+  font-size: 0.5em;
+  font-weight: 600;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Continue button in popup mode */
+.dome-mini-close {
+  margin-top: 24px;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5e17eb, #7b3ff2);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.dome-mini-close:active {
+  transform: scale(0.97);
+}

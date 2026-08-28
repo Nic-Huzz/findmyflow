@@ -1,0 +1,193 @@
+import React, { useMemo } from 'react'
+import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
+import { isCoreNode } from '../lib/experienceDomeConfig'
+import './DomeRadar.css'
+
+const PRIMAL_COLOR_MAP = Object.fromEntries(PRIMALS.map(p => [p.id, p.color]))
+PRIMAL_COLOR_MAP['fire'] = '#ea580c'
+
+const NS_GLOW = {
+  vibe_rise: 1.0,
+  fun: 0.6,
+  pressure: 0.8,
+  bored: 0,
+}
+
+/**
+ * MiniDome — simplified version of the Rule Break Tree dome viz.
+ * Shows 58 core experience nodes in a radial layout, grouped by primal.
+ * Nodes light up when checked/rated.
+ */
+export default function DomeRadar({ checked = {}, ratings = {}, size = 280, showLabels = true, onClose }) {
+  const layout = useMemo(() => {
+    const cx = size / 2
+    const cy = size / 2
+    const primalR = size * 0.12       // primal label ring
+    const nodeStartR = size * 0.18    // inner node ring
+    const nodeEndR = size * 0.34      // outer node ring
+
+    // Get core nodes grouped by primal
+    const primalNodes = {}
+    PRIMALS.forEach(p => { primalNodes[p.id] = [] })
+
+    industryNodes.forEach(n => {
+      if (!isCoreNode(n.id)) return
+      const ind = INDUSTRIES[n.branch]
+      if (!ind) return
+      const primalId = ind.primal
+      if (primalNodes[primalId]) {
+        primalNodes[primalId].push(n)
+      }
+    })
+
+    const step = (2 * Math.PI) / PRIMALS.length
+    const nodes = []
+    const primalLabels = []
+
+    PRIMALS.forEach((primal, pi) => {
+      const baseAngle = -Math.PI / 2 + pi * step
+      const color = PRIMAL_COLOR_MAP[primal.id] || primal.color
+      const pNodes = primalNodes[primal.id]
+
+      // Primal label position
+      const lx = cx + Math.cos(baseAngle) * (nodeEndR + size * 0.08)
+      const ly = cy + Math.sin(baseAngle) * (nodeEndR + size * 0.08)
+      primalLabels.push({ id: primal.id, label: primal.label, x: lx, y: ly, color, angle: baseAngle })
+
+      // Spread nodes within this primal's angular sector
+      const sectorWidth = step * 0.75 // use 75% of sector, leave gap
+      const startA = baseAngle - sectorWidth / 2
+      const nodeCount = pNodes.length
+
+      pNodes.forEach((n, ni) => {
+        // Distribute radially and angularly
+        const angleOffset = nodeCount > 1
+          ? startA + (ni / (nodeCount - 1)) * sectorWidth
+          : baseAngle
+        // Alternate between inner and outer rings for visual spread
+        const ringT = nodeCount > 1 ? (ni % 3) / 2 : 0.5
+        const r = nodeStartR + ringT * (nodeEndR - nodeStartR)
+
+        const x = cx + Math.cos(angleOffset) * r
+        const y = cy + Math.sin(angleOffset) * r
+
+        nodes.push({
+          id: n.id,
+          x,
+          y,
+          color,
+          primalId: primal.id,
+        })
+      })
+    })
+
+    return { cx, cy, primalR, nodeStartR, nodeEndR, nodes, primalLabels }
+  }, [size])
+
+  const totalChecked = layout.nodes.filter(n => checked[n.id]).length
+
+  return (
+    <div className={`dome-mini ${onClose ? 'dome-mini-popup' : ''}`} style={{ fontSize: size * 0.08 }}>
+      <svg width={size} height={size} viewBox={`${-size * 0.12} ${-size * 0.06} ${size * 1.24} ${size * 1.12}`}>
+        {/* Background rings */}
+        <circle cx={layout.cx} cy={layout.cy} r={layout.nodeStartR} fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5} />
+        <circle cx={layout.cx} cy={layout.cy} r={layout.nodeEndR} fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5} />
+        <circle cx={layout.cx} cy={layout.cy} r={layout.primalR} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={0.5} />
+
+        {/* Sector lines (subtle) */}
+        {layout.primalLabels.map(p => (
+          <line
+            key={`line-${p.id}`}
+            x1={layout.cx}
+            y1={layout.cy}
+            x2={layout.cx + Math.cos(p.angle) * layout.nodeEndR}
+            y2={layout.cy + Math.sin(p.angle) * layout.nodeEndR}
+            stroke="rgba(0,0,0,0.03)"
+            strokeWidth={0.5}
+          />
+        ))}
+
+        {/* Nodes */}
+        {layout.nodes.map(n => {
+          const isChecked = !!checked[n.id]
+          const nsState = ratings[n.id]
+          const glowLevel = nsState ? (NS_GLOW[nsState] || 0) : (isChecked ? 0.5 : 0)
+          const isDark = !isChecked
+          const nodeR = size * 0.018
+
+          return (
+            <g key={n.id}>
+              {/* Glow */}
+              {glowLevel > 0 && (
+                <circle
+                  cx={n.x}
+                  cy={n.y}
+                  r={nodeR + size * 0.025}
+                  fill={n.color}
+                  opacity={glowLevel * 0.35}
+                  className={nsState === 'pressure' ? 'dome-mini-pulse' : ''}
+                />
+              )}
+              {/* Node circle */}
+              <circle
+                cx={n.x}
+                cy={n.y}
+                r={nodeR}
+                fill={isDark ? '#e0e0dc' : n.color}
+                stroke={isDark ? '#d0d0cc' : n.color}
+                strokeWidth={isDark ? 1 : 1.5}
+                opacity={isDark ? 0.7 : 1}
+                style={{ transition: 'all 0.4s ease' }}
+              />
+              {/* Inner bright fill for lit nodes */}
+              {isChecked && (
+                <circle
+                  cx={n.x}
+                  cy={n.y}
+                  r={nodeR * 0.5}
+                  fill={nsState === 'vibe_rise' ? '#E9A23B' : n.color}
+                  opacity={glowLevel > 0.5 ? 0.9 : 0.6}
+                  style={{ transition: 'all 0.4s ease' }}
+                />
+              )}
+            </g>
+          )
+        })}
+
+        {/* Primal labels */}
+        {showLabels && layout.primalLabels.map(p => {
+          const isRight = p.x > layout.cx + 2
+          const isLeft = p.x < layout.cx - 2
+          const hasChecked = layout.nodes.some(n => n.primalId === p.id && checked[n.id])
+          return (
+            <text
+              key={`label-${p.id}`}
+              x={p.x}
+              y={p.y}
+              textAnchor={isRight ? 'start' : isLeft ? 'end' : 'middle'}
+              dominantBaseline="central"
+              fontSize={size * 0.038}
+              fontWeight="600"
+              fill={hasChecked ? p.color : '#ccc'}
+              style={{ transition: 'fill 0.4s ease' }}
+            >
+              {p.label}
+            </text>
+          )
+        })}
+      </svg>
+
+      {/* Center stat */}
+      <div className="dome-mini-center" style={{ fontSize: size * 0.08 }}>
+        <span className="dome-mini-num">{totalChecked}</span>
+        <span className="dome-mini-label">experienced</span>
+      </div>
+
+      {onClose && (
+        <button className="dome-mini-close" onClick={onClose}>
+          Continue →
+        </button>
+      )}
+    </div>
+  )
+}

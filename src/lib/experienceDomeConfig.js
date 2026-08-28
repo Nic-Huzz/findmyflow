@@ -160,7 +160,7 @@ const EXPERIENCE_LABELS = {
   'comms-1983': 'Using a mobile phone',
   'comms-1992': 'Text messaging',
   'comms-2009': 'Messaging apps (WhatsApp)',
-  'comms-2020': 'Video calling (Zoom)',
+  'comms-2020': 'Virtual hangouts',
 
   // Exchange
   'exchange-1602': 'Investing in stocks',
@@ -188,7 +188,7 @@ const EXPERIENCE_LABELS = {
 
   // Property
   'property-1947': 'Living in suburbia',
-  'property-2008': 'Staying in an Airbnb',
+  'property-2008': 'Unique stays / boutique accommodation',
   'property-2011': 'Smart home living',
 
   // Defense
@@ -449,7 +449,7 @@ const EXPERIENCE_LABELS = {
   'sub-personal-2019': 'Microbiome testing (ZOE)',
 
   'sub-regen-1971': 'Farm-to-table dining',
-  'sub-regen-1994': 'Nose-to-tail eating',
+  'sub-regen-1994': 'Cooking for others / hosting dinner',
   'sub-regen-2018': 'Eating regeneratively sourced food',
 
   // Status sub-branches
@@ -485,7 +485,7 @@ const EXPERIENCE_LABELS = {
   'sub-craft-2014': 'Portfolio / show your work',
 
   // Fire sub-branches
-  'sub-combustion-1400': 'Campfire / gathering around fire',
+  'sub-combustion-1400': 'Campfire / fire pit gathering',
   'sub-renewable-2010': 'Community solar',
   'sub-personal-fire-1400': 'Gathering fuel / energy labor',
   'sub-personal-fire-2015': 'Rooftop solar / Powerwall',
@@ -511,12 +511,12 @@ const EXPERIENCE_LABELS = {
   'sub-oral-1400c': 'Attending a live performance',
   'sub-oral-1860': 'Stand-up comedy',
   'sub-oral-2006': 'TED talk (giving or watching)',
-  'sub-oral-2015': 'Live podcast',
+  'sub-oral-2015': 'Live music / concerts / festivals',
 
   'sub-written-1400': 'Reading manuscripts / sacred texts',
   'sub-written-1620': 'Reading newspapers',
   'sub-written-1719': 'Reading a novel',
-  'sub-written-1999': 'Blogging',
+  'sub-written-1999': 'Journaling / writing',
   'sub-written-2017': 'Paid newsletter (Substack)',
 
   'sub-audio-1938': 'Radio drama / audio fiction',
@@ -527,7 +527,7 @@ const EXPERIENCE_LABELS = {
   'sub-video-1920': 'Hollywood cinema',
   'sub-video-1951': 'Watching serialized TV',
   'sub-video-1981': 'Music videos',
-  'sub-video-2005': 'YouTube creator / watching',
+  'sub-video-2005': 'Creating YouTube videos',
   'sub-video-2013': 'Netflix binge-watching',
   'sub-video-2018': 'TikTok short-form video',
   'sub-video-2024': 'AI video creation',
@@ -552,8 +552,8 @@ const EXPERIENCE_LABELS = {
   'sub-board-2016': 'Board game cafe',
 
   'sub-sport-1400': 'Ancient athletics / competition',
-  'sub-sport-1871': 'Professional sports (watching/playing)',
-  'sub-sport-1936': 'Broadcast sport',
+  'sub-sport-1871': 'Playing team sport',
+  'sub-sport-1936': 'Watching live sport',
   'sub-sport-1972': "Women's sport",
   'sub-sport-1995': 'Extreme sport (skateboarding, BMX)',
   'sub-sport-2020': 'Boutique competition (Hyrox)',
@@ -622,10 +622,9 @@ const CORE_NODE_IDS = new Set([
   'sub-ferment-2010',        // Kombucha / cultured foods
   'sub-fasting-2012',        // Intermittent fasting
   'sub-regen-1971',          // Farm-to-table dining
+  'sub-regen-1994',          // Cooking for others / hosting dinner
 
-  // Tools (3)
-  'tech-2007',               // Using a smartphone
-  'tech-2004',               // Using social media
+  // Tools (1) — dropped smartphone (universal) and privacy tools (utility)
   'ai-2022',                 // Using AI tools (ChatGPT, Claude)
 
   // Status (4)
@@ -634,40 +633,40 @@ const CORE_NODE_IDS = new Set([
   'sub-digital-2010b',       // Instagram identity curation
   'sub-counter-2011',        // Minimalism / KonMari
 
-  // Bonds (7)
-  'comms-2020',              // Video calling (Zoom)
+  // Bonds (6) — removed Cacao + breathwork ceremony (redundant with Healing breathwork + cacao)
+  'comms-2020',              // Virtual hangouts
   'intimacy-2012',           // Dating apps
-  'sub-ritual-2018',         // Cacao + breathwork ceremony
   'sub-communal-2017',       // Digital nomad hub
   'sub-ordeal-2015',         // Adventure retreat
   'sub-digital-2015',        // Discord community
   'sub-coaching-1937',       // Mastermind group
 
   // Shelter (4)
-  'property-2008',           // Staying in an Airbnb
+  'property-2008',           // Unique stays / boutique accommodation
   'sub-alt-2011',            // Van life
   'sub-proptech-2020',       // Working from home
   'sub-sacred-2010',         // Wellness studio (SoulCycle)
 
-  // Story (5)
+  // Story (7) — split YouTube, added live music + journaling
   'media-2018',              // Short-form video (TikTok)
   'sub-oral-1860',           // Stand-up comedy
+  'sub-oral-2015',           // Live music / concerts / festivals
   'sub-written-1719',        // Reading a novel
+  'sub-written-1999',        // Journaling / writing
   'sub-audio-2005',          // Listening to podcasts
-  'sub-video-2005',          // YouTube creator / watching
+  'sub-video-2005',          // Creating YouTube videos
 
-  // Play (5)
+  // Play (6) — split sports into playing + watching
   'play-1972',               // Playing video games
   'sub-board-1995',          // Eurogames (Catan)
-  'sub-sport-1871',          // Professional sports
+  'sub-sport-1871',          // Playing team sport
+  'sub-sport-1936',          // Watching live sport
   'sub-chance-2003',         // Poker
   'sub-toy-1932',            // LEGO / construction toys
 
-  // Fire (5)
-  'sub-combustion-1400',     // Campfire / gathering around fire
-  'sub-light-1400',          // Firelight / candlelight ambiance
+  // Fire (3) — merged campfire+fire pit, dropped firelight/candlelight (ambient, not an experience)
+  'sub-combustion-1400',     // Campfire / fire pit gathering
   'sub-light-2020',          // Candle ritual / hygge
-  'sub-ritual-fire-2000',    // Fire pit gathering
   'sub-ritual-fire-2015b',   // Fire ceremony / cacao circle
 
   // Healing (6)
@@ -678,16 +677,13 @@ const CORE_NODE_IDS = new Set([
   'sub-mental-1964',         // CBT
   'sub-energy-2015',         // Sound bath
 
-  // Sleep (4)
-  'sleep-2009',              // Sleep tracking (wearable)
+  // Sleep (3) — dropped sleep tracking (wearing a device isn't an experience)
   'sub-dream-1975',          // Lucid dreaming
   'sub-rest-1999',           // Intentional napping
   'sub-states-1954',         // Float tank / sensory deprivation
 
-  // Threat (3)
-  'defense-1688',            // Buying insurance
+  // Threat (1) — dropped insurance (chore) and privacy tools (utility)
   'sub-safety-1400b',        // Martial arts
-  'sub-surveillance-2018',   // Privacy tools (Signal, VPN)
 ])
 
 // ── NS State colors ──
