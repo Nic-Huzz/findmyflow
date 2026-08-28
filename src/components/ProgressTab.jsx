@@ -95,14 +95,18 @@ export default function ProgressTab({ userId }) {
     })
 
     // Zone Matrix (Action Score + Clarity)
+    let mounted = true
     import('../lib/scoreUtilities').then(async (m) => {
       const [actionResult, clarityPct] = await Promise.all([
         m.calculateActionScore(userId),
         m.calculateClarityScore(userId),
       ])
+      if (!mounted) return
       const zone = m.getZone(actionResult.score, clarityPct)
       setMatrixData({ actionScore: actionResult.score, clarityPct, zone, total: actionResult.total, aligned: actionResult.aligned })
     }).catch(err => console.warn('Matrix load error:', err))
+
+    return () => { mounted = false }
   }, [userId])
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]

@@ -34,10 +34,10 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
-  'play-list': 'Courage',
-  'playlist': 'Courage',
-  'wahoo': 'Courage',        // backward compat
-  'courage': 'Courage',
+  'play-list': 'Quests',
+  'playlist': 'Quests',
+  'wahoo': 'Quests',         // backward compat — courage merged into quests
+  'courage': 'Quests',       // backward compat — courage merged into quests
   'priority': 'Quests',
   'level': 'Quests',         // backward compat
   'quests': 'Quests',
@@ -45,10 +45,12 @@ const TAB_TO_CATEGORY = {
   'create': 'Quests',        // backward compat
   'groans': 'Courage',       // backward compat
   'healing': 'Courage',
-  'tracker': 'Courage',      // backward compat
+  'tracker': 'Quests',       // backward compat — courage merged into quests
   'tune': 'Tune',
   'bonus': 'Tune',           // backward compat
-  'journey': 'Journey',
+  'journey': 'Discover',     // renamed
+  'discover': 'Discover',
+  'progress': 'Progress',
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
   'healing-summary': 'HealingSummary'
