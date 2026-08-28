@@ -13,6 +13,25 @@ import './ChallengeIntro.css'
 
 const SLIDES = [
   {
+    heading: 'Life is a game.',
+    body: [
+      'The most magical game in the world.',
+      'The purpose? Have experiences you love.',
+      'There is a life path that is uniquely yours. This app helps you find it.',
+    ],
+    duration: 7000,
+  },
+  {
+    heading: 'The rules.',
+    body: [
+      'If you don\'t choose a quest, one is chosen for you.',
+      'Your spawn point was random. But your build? That\'s up to you.',
+      'XP only comes from action. Reading and planning doesn\'t level you up.',
+      'Failing isn\'t game over. The only real loss is quitting the run.',
+    ],
+    duration: 9000,
+  },
+  {
     heading: 'Something cracked.',
     body: [
       'Maybe it was burnout.',
@@ -31,9 +50,9 @@ const SLIDES = [
     duration: 8000,
   },
   {
-    heading: "Your Hero's Journey.",
+    heading: 'Your quest starts now.',
     body: [
-      'Map what you love.',
+      'Discover what lights you up.',
       'Face what scares you.',
       'Heal what holds you back.',
       'Your flow is on the other side.',

@@ -24,6 +24,16 @@ const VOICE_META = {
   'auto-pilot': { name: 'Auto-Pilot', icon: '🤖', desc: 'Goes through the motions, checks out' },
 }
 
+const EXPANSION_DIMENSIONS = [
+  { id: 'duration', label: 'Duration', icon: '⏱', group: 'craft' },
+  { id: 'frequency', label: 'Frequency', icon: '🔁', group: 'craft' },
+  { id: 'medium', label: 'Medium', icon: '📡', group: 'craft' },
+  { id: 'people', label: 'People', icon: '👥', group: 'craft' },
+  { id: 'money', label: 'Money', icon: '💰', group: 'scale' },
+  { id: 'location', label: 'Location', icon: '📍', group: 'scale' },
+  { id: 'independence', label: 'Independence', icon: '🚀', group: 'scale' },
+]
+
 const DEPTH_LEVELS = [
   { id: 'education', label: 'Learning about it', icon: '📚' },
   { id: 'testing', label: 'Tried it / testing it', icon: '🧪' },
@@ -100,6 +110,7 @@ export default function WahooCreator({
   const [protectiveVoice, setProtectiveVoice] = useState(null)
   const [showDisambig, setShowDisambig] = useState(false) // voice disambiguation popup
   const [wantsHealing, setWantsHealing] = useState(null) // null | 'yes' | 'no'
+  const [expansionDims, setExpansionDims] = useState([]) // expansion dimension tags
   const [healingTiming, setHealingTiming] = useState(null) // null | 'now' | 'later'
   const successTimerRef = useRef(null)
 
@@ -153,6 +164,7 @@ export default function WahooCreator({
         depthLevel,
         visibilityLayers: selectedFear ? [selectedFear.id] : [],
         questId: linkedQuestId || null,
+        expansionDimensions: expansionDims,
       })
       if (saveError || !dbRecord) throw saveError || new Error('Challenge was not saved')
 
@@ -409,6 +421,32 @@ export default function WahooCreator({
               </button>
             </div>
           </div>
+        )}
+
+        {/* Expansion dimensions — what capacity is this stretching? */}
+        {protectiveVoice && !showDisambig && healingComplete && (
+          <>
+            <div className="wc-field-label">What are you stretching?</div>
+            <div className="wc-dim-options">
+              {EXPANSION_DIMENSIONS.map(d => {
+                const active = expansionDims.includes(d.id)
+                return (
+                  <button
+                    key={d.id}
+                    className={`wc-dim-pill ${active ? 'selected' : ''} wc-dim-${d.group}`}
+                    onClick={() => {
+                      hapticLight()
+                      setExpansionDims(prev =>
+                        active ? prev.filter(x => x !== d.id) : [...prev, d.id]
+                      )
+                    }}
+                  >
+                    {d.icon} {d.label}
+                  </button>
+                )
+              })}
+            </div>
+          </>
         )}
 
         {error && <p className="wc-error">{error}</p>}
