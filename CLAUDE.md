@@ -194,7 +194,9 @@ Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `p
 
 ### 6. 7-Day Challenge System (Find My Flow Maintenance Engine)
 
-**Tabs**: Journey → Quests → Tune → Courage. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Journey + Tune always open. Quests unlocks when life paths completed. Courage unlocks via "Unlock →" button in Getting Started (Journey tab).
+**Tabs**: Discover → Quests → Tune → Progress. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Discover, Tune, Progress always open. Quests unlocks when life paths completed. Courage merged into Quests via WeeklyFocus component.
+
+**Three-phase journey**: Phase 1 (Discover tab: Experience Dome + Life Map + Essence Mirror), Phase 2 (Quests + Tune: courage challenges with expansion dimensions, daily practices), Phase 3 (Scale Portal). Bridge CTA on Discover tab: "Ready to go deeper?" → Life Paths flow. See `docs/features/three-phase-journey.md` and `docs/features/phase2-restructure.md`.
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
