@@ -27,6 +27,7 @@ export default function LifePathWidget({ userId, onWahooIdentified }) {
   const [step, setStep] = useState(WIDGET_STEPS.CURRENT)
   const [currentCareer, setCurrentCareer] = useState(null)
   const [careers, setCareers] = useState([])
+  const [suggestions, setSuggestions] = useState([]) // from dome + life map
   const [input, setInput] = useState('')
   const [tagTotal, setTagTotal] = useState(0)
   const [safety, setSafety] = useState(0)
@@ -44,6 +45,32 @@ export default function LifePathWidget({ userId, onWahooIdentified }) {
   }, [careers, step])
   const currentTagCareer = careersToTag[0] || null
   const taggedSoFar = tagTotal - careersToTag.length
+
+  // Fetch Vibe Rise suggestions from dome + Life Map
+  useEffect(() => {
+    if (!userId) return
+    Promise.all([
+      // Dome Vibe Rise nodes
+      supabase.from('experience_dome_ratings')
+        .select('node_id')
+        .eq('user_id', userId)
+        .eq('ns_state', 'vibe_rise'),
+      // Life Map Vibe Rise clusters
+      supabase.from('nikigai_clusters')
+        .select('label')
+        .eq('user_id', userId)
+        .eq('resonance_state', 'vibe_rise'),
+    ]).then(([domeRes, clusterRes]) => {
+      const sug = []
+      ;(clusterRes.data || []).forEach(c => {
+        if (c.label) sug.push(c.label)
+      })
+      ;(domeRes.data || []).forEach(d => {
+        if (d.node_id) sug.push(d.node_id.replace(/_/g, ' '))
+      })
+      setSuggestions(sug)
+    })
+  }, [userId])
 
   useEffect(() => {
     if (step === WIDGET_STEPS.CURRENT || step === WIDGET_STEPS.ENTER) {
@@ -212,6 +239,23 @@ export default function LifePathWidget({ userId, onWahooIdentified }) {
       {step === WIDGET_STEPS.ENTER && (
         <div style={{ padding: '0 4px' }}>
           <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 8 }}>What are all the career options available to you?</div>
+          {suggestions.length > 0 && careers.length === 0 && (
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#5e17eb', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Based on what lights you up
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {suggestions.filter(s => !careers.some(c => c.label.toLowerCase() === s.toLowerCase())).slice(0, 8).map((s, i) => (
+                  <button key={i} onClick={() => addCareer(s)}
+                    style={{ padding: '6px 12px', borderRadius: 20, border: '1px solid rgba(94,23,235,0.15)',
+                      background: 'rgba(94,23,235,0.04)', color: '#5e17eb', fontSize: 13, fontWeight: 600,
+                      cursor: 'pointer', fontFamily: 'inherit' }}>
+                    + {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div style={{ display: 'flex', gap: 8 }}>
             <input ref={inputRef} style={inputStyle} type="text" value={input}
               onChange={e => setInput(e.target.value)}
