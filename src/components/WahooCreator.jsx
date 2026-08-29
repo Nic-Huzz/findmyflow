@@ -141,8 +141,7 @@ export default function WahooCreator({
   }
 
   async function handleSubmit() {
-    const healingOk = !protectiveVoice || (wantsHealing === 'no') || (wantsHealing === 'yes' && healingTiming !== null)
-    if (!freeText.trim() || !linkedQuestId || !depthLevel || !protectiveVoice || showDisambig || !healingOk || generating) return
+    if (!freeText.trim() || !linkedQuestId || generating) return
     setGenerating(true)
     setError(null)
 
@@ -158,11 +157,11 @@ export default function WahooCreator({
         userId,
         title: freeText.trim(),
         description: freeText.trim(),
-        visibilityLayer: selectedFear?.layer || 'screen',
+        visibilityLayer: 'screen',
         sourceType: 'skill',
         sourceLabel: sourceLabel || 'Courage',
-        depthLevel,
-        visibilityLayers: selectedFear ? [selectedFear.id] : [],
+        depthLevel: null,
+        visibilityLayers: [],
         questId: linkedQuestId || null,
         expansionDimensions: expansionDims,
       })
@@ -201,7 +200,7 @@ export default function WahooCreator({
       }
 
       // Save healing intention if protective voice was identified
-      if (protectiveVoice && linkedQuestId && wantsHealing !== null) {
+      if (protectiveVoice && linkedQuestId) {
         const { data: taskRow } = await supabase
           .from('quest_tasks')
           .select('id')
@@ -213,25 +212,14 @@ export default function WahooCreator({
             user_id: userId,
             protective_voice: protectiveVoice,
             pattern: protectiveVoice,
-            healing_stage: wantsHealing === 'yes' ? 'in_progress' : 'in_progress',
+            healing_stage: 'pending',
             updated_at: new Date().toISOString(),
           }, { onConflict: 'quest_task_id' }).then(() => {}).catch(() => {})
         }
       }
 
       hapticSuccess()
-
-      // If user chose "dig in now", pass the task ID + voice so parent can open HealingFlowModal
-      if (wantsHealing === 'yes' && healingTiming === 'now') {
-        const { data: taskRow } = await supabase
-          .from('quest_tasks')
-          .select('id, text')
-          .eq('groan_challenge_id', dbRecord.id)
-          .maybeSingle()
-        onWahooAccepted?.(taskRow || null, protectiveVoice)
-      } else {
-        onWahooAccepted?.(null, null)
-      }
+      onWahooAccepted?.(null, protectiveVoice || null)
       setStep('success')
       successTimerRef.current = setTimeout(() => onClose?.(), 1500)
     } catch (err) {
@@ -310,130 +298,52 @@ export default function WahooCreator({
     )
   }
 
-  const fearOptions = depthLevel ? FEAR_OPTIONS[depthLevel] : []
-  const healingComplete = !protectiveVoice || (wantsHealing === 'no') || (wantsHealing === 'yes' && healingTiming !== null)
-  const canSubmit = freeText.trim() && linkedQuestId && depthLevel && protectiveVoice && !showDisambig && healingComplete && !generating
+  // Voice lies (from protectiveVoices.js)
+  const VOICE_LIES = [
+    { voice: 'ghost', icon: '👻', lie: "I don't feel comfortable sharing." },
+    { voice: 'perfectionist', icon: '🎭', lie: "I'm not ready yet." },
+    { voice: 'people-pleaser', icon: '🪞', lie: "As long as everyone's happy, I'm good." },
+    { voice: 'controller', icon: '🎮', lie: "Leaving it to chance isn't an option." },
+    { voice: 'auto-pilot', icon: '🛋️', lie: "I'm fine, just tired." },
+  ]
+
+  const canSubmit = freeText.trim() && linkedQuestId && !generating
 
   return (
     <div className="wc-container">
       <div className="wc-header">
         <h3 className="wc-title">Add a Courage Challenge</h3>
-        <p className="wc-explainer">Something you&apos;d love to do that scares you a little.</p>
+        <p className="wc-explainer">Something you'd love to do that scares you a little.</p>
       </div>
 
       <div className="wc-card">
-        <h3 className="wc-card-title">What&apos;s the challenge?</h3>
-        <textarea
-          className="wc-textarea"
-          placeholder="I want to..."
-          value={freeText}
-          onChange={e => setFreeText(e.target.value)}
-          rows={2}
-        />
-
-        <QuestSelector userId={userId} value={linkedQuestId}
-          onChange={(id) => setLinkedQuestId(id)} />
-
-        <div className="wc-field-label">Where are you with this?</div>
-        <div className="wc-depth-options">
-          {DEPTH_LEVELS.map(d => (
-            <button
-              key={d.id}
-              className={`wc-depth-btn ${depthLevel === d.id ? 'selected' : ''}`}
-              onClick={() => { hapticLight(); setDepthLevel(d.id); setSelectedFear(null); setProtectiveVoice(null); setShowDisambig(false); setWantsHealing(null); setHealingTiming(null) }}
-            >
-              <span className="wc-depth-icon">{d.icon}</span>
-              <span className="wc-depth-label">{d.label}</span>
-            </button>
-          ))}
+        {/* Step 1: What's the brave action? */}
+        <div className="wc-step">
+          <div className="wc-step-q">What's the brave action?</div>
+          <textarea
+            className="wc-textarea"
+            placeholder="I want to..."
+            value={freeText}
+            onChange={e => setFreeText(e.target.value)}
+            rows={2}
+          />
+          {!initialQuestId && (
+            <QuestSelector userId={userId} value={linkedQuestId}
+              onChange={(id) => setLinkedQuestId(id)} />
+          )}
         </div>
 
-        {depthLevel && (
-          <>
-            <div className="wc-field-label">What makes this scary?</div>
-            <div className="wc-vis-options">
-              {fearOptions.map(f => (
-                <button
-                  key={f.id}
-                  className={`wc-vis-btn ${selectedFear?.id === f.id ? 'selected' : ''}`}
-                  onClick={() => handleFearSelect(f)}
-                >
-                  <span className="wc-vis-icon">{VOICE_META[f.voice]?.icon || '?'}</span>
-                  <span className="wc-vis-label">{f.label}</span>
-                </button>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* Voice disambiguation — only for ambiguous fears */}
-        {showDisambig && selectedFear?.ambiguous && (
-          <div className="wc-disambig">
-            <div className="wc-field-label">Which sounds more like you?</div>
-            <div className="wc-disambig-options">
-              {selectedFear.ambiguous.map(voiceId => {
-                const v = VOICE_META[voiceId]
-                return (
-                  <button key={voiceId}
-                    className={`wc-disambig-btn ${protectiveVoice === voiceId ? 'selected' : ''}`}
-                    onClick={() => handleDisambig(voiceId)}>
-                    <span className="wc-disambig-icon">{v?.icon}</span>
-                    <span className="wc-disambig-name">{v?.name}</span>
-                    <span className="wc-disambig-desc">{DISAMBIG_DESC[voiceId]}</span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Auto-tagged voice indicator */}
-        {protectiveVoice && !showDisambig && (
-          <div className="wc-voice-tag">
-            {VOICE_META[protectiveVoice]?.icon} Sounds like your {VOICE_META[protectiveVoice]?.name}
-          </div>
-        )}
-
-        {/* Healing prompt (after voice is resolved) */}
-        {protectiveVoice && !showDisambig && wantsHealing === null && (
-          <div className="wc-healing-prompt">
-            <div className="wc-field-label">Keen to explore why?</div>
-            <div className="wc-healing-buttons">
-              <button className="wc-healing-btn yes" onClick={() => { hapticLight(); setWantsHealing('yes') }}>
-                Yes, dig in 💚
-              </button>
-              <button className="wc-healing-btn no" onClick={() => { hapticLight(); setWantsHealing('no') }}>
-                No, all good
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Timing (only if wants healing) */}
-        {wantsHealing === 'yes' && healingTiming === null && (
-          <div className="wc-healing-prompt">
-            <div className="wc-healing-buttons">
-              <button className="wc-healing-btn yes" onClick={() => { hapticLight(); setHealingTiming('now') }}>
-                Dive in now 💚
-              </button>
-              <button className="wc-healing-btn later" onClick={() => { hapticLight(); setHealingTiming('later') }}>
-                Later
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Expansion dimensions — what capacity is this stretching? */}
-        {protectiveVoice && !showDisambig && healingComplete && (
-          <>
-            <div className="wc-field-label">What are you stretching?</div>
-            <div className="wc-dim-options">
+        {/* Step 2: What capacity are you building? */}
+        {freeText.trim() && linkedQuestId && (
+          <div className="wc-step">
+            <div className="wc-step-q">What capacity are you building?</div>
+            <div className="wc-dim-grid">
               {EXPANSION_DIMENSIONS.map(d => {
                 const active = expansionDims.includes(d.id)
                 return (
                   <button
                     key={d.id}
-                    className={`wc-dim-pill ${active ? 'selected' : ''} wc-dim-${d.group}`}
+                    className={`wc-dim-option ${active ? (d.group === 'scale' ? 'scale-active' : 'active') : ''}`}
                     onClick={() => {
                       hapticLight()
                       setExpansionDims(prev =>
@@ -441,18 +351,38 @@ export default function WahooCreator({
                       )
                     }}
                   >
-                    {d.icon} {d.label}
+                    <span className="wc-dim-icon">{d.icon}</span>
+                    <span className="wc-dim-name">{d.label}</span>
                   </button>
                 )
               })}
             </div>
-          </>
+          </div>
+        )}
+
+        {/* Step 3: Which voice is holding you back? */}
+        {freeText.trim() && linkedQuestId && expansionDims.length > 0 && (
+          <div className="wc-step">
+            <div className="wc-step-q">Which voice is holding you back?</div>
+            <div className="wc-voice-options">
+              {VOICE_LIES.map(v => (
+                <button
+                  key={v.voice}
+                  className={`wc-voice-btn ${protectiveVoice === v.voice ? 'active' : ''}`}
+                  onClick={() => { hapticLight(); setProtectiveVoice(v.voice) }}
+                >
+                  <span className="wc-voice-icon">{v.icon}</span>
+                  <span className="wc-voice-lie">{v.lie}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         )}
 
         {error && <p className="wc-error">{error}</p>}
 
         <button className="wc-cta" disabled={!canSubmit} onClick={handleSubmit}>
-          {generating ? 'Saving...' : 'Submit'}
+          {generating ? 'Saving...' : 'Add courage challenge'}
         </button>
 
         {bucketList.length > 0 && linkedQuestId && (

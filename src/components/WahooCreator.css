@@ -541,3 +541,93 @@
   color: #5e17eb;
   text-align: center;
 }
+
+/* ── New conversation-style steps ── */
+
+.wc-step {
+  margin-bottom: 16px;
+  animation: wcStepIn 0.25s ease;
+}
+
+@keyframes wcStepIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wc-step-q {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+/* Dimension grid (2-col) */
+.wc-dim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.wc-dim-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.05);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0b3d;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.wc-dim-option .wc-dim-icon { font-size: 16px; }
+.wc-dim-option .wc-dim-name { flex: 1; }
+
+.wc-dim-option.active {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+  color: #5e17eb;
+}
+
+.wc-dim-option.scale-active {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.04);
+  color: #E9A23B;
+}
+
+/* Voice lie buttons */
+.wc-voice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wc-voice-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.05);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a0b3d;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.wc-voice-btn .wc-voice-icon { font-size: 18px; flex-shrink: 0; }
+.wc-voice-btn .wc-voice-lie { flex: 1; }
+
+.wc-voice-btn.active {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
+}
