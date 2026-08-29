@@ -35,7 +35,7 @@ See `docs/features/three-phase-journey.md` for the full breakdown.
 ## Phase 1: The Experience Dome
 
 ### What it is
-A **decision tool for the Phase 1→2 bridge**, not an ongoing dashboard. 56 core nodes across 12 primal branches. Users tick what they've experienced, rate each with NS state per branch, and see their dome shape emerge. Once they've decided which life paths to pursue, the dome's job is done.
+A **decision tool for the Phase 1→2 bridge**, not an ongoing dashboard. 67 core nodes (61 from innovation tree + 6 virtual human experience nodes) across 12 primal branches. Users tick what they've experienced, rate each with NS state per branch, and see their dome shape emerge. Once they've decided which life paths to pursue, the dome's job is done.
 
 ### Flow (updated Aug 29)
 Per-branch flow: tick experiences → rate with NS state → see dome update → next branch.
@@ -239,7 +239,7 @@ Learning is meta to all branches, not its own primal.
 
 | File | Contents | Confidence | Phase |
 |------|----------|-----------|-------|
-| `experienceDomeConfig.js` | ~380 nodes, 56 core, pruning, labels | 95% | 1 |
+| `experienceDomeConfig.js` | ~380 nodes + 6 virtual, 67 core, pruning, labels | 95% |
 | `domeSkillInference.json` | 211 nodes → PlaySkill signals | 85% | 2→3 |
 | `roleExperienceFingerprints.json` | 10 roles, O*NET API-validated + BLS wages | 90% | 2→3 |
 | `onetDomeBridge.json` | 41 activities → dome nodes by industry | 85% | 2→3 |
@@ -291,7 +291,7 @@ Learning is meta to all branches, not its own primal.
 4. Feedback loops are aspirational — courage completion doesn't auto-update dome.
 5. 33 creator profiles only validate wellness industry.
 6. Tools (1 node) and Threat (1 node) branches are thin. May need expanding after user testing.
-7. Core nodes changed from 54 to 56 — doc previously said 54, config has 56. Need to reconcile.
+7. "Bored" label used in Experience Game, but "Uninterested" still used in Life Paths, zone assessments, and other components. Needs app-wide rename pass.
 
 ---
 
