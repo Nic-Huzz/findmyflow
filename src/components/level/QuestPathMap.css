@@ -54,6 +54,44 @@
   padding: 6px 0 2px; font-weight: 700;
 }
 
+/* ── Colour picker ── */
+.qpm-colour-picker {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 0;
+}
+
+.qpm-colour-dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.qpm-colour-dot:active { transform: scale(1.2); }
+
+.qpm-colour-row {
+  display: flex; gap: 8px; padding: 8px 0 4px;
+  animation: qpm-fade 0.15s ease;
+}
+
+@keyframes qpm-fade {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+.qpm-colour-swatch {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer; padding: 0;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.qpm-colour-swatch:active { transform: scale(1.15); }
+.qpm-colour-swatch.active {
+  border-color: #1a0b3d;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px #1a0b3d;
+}
+
 .qpm-state-journey {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   font-size: 13px; color: rgba(0,0,0,0.45); padding: 2px 0 6px; font-weight: 500;

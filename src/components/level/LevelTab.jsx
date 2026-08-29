@@ -586,48 +586,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         {/* Zone Matrix moved to Progress tab */}
       </div>
 
-      {/* Struggle Pills */}
-      <div className="quest-section">
-        <div className="quest-section-header">
-          <span className="quest-section-icon">🧭</span>
-          <span className="quest-section-title">I need help with...</span>
-        </div>
-        <div className="struggle-pills">
-          <button className={`struggle-pill ${activeStruggle === 'direction' ? 'active' : ''}`}
-            onClick={() => setActiveStruggle(activeStruggle === 'direction' ? null : 'direction')}>
-            🧭 What career path is best?
-          </button>
-          <button className={`struggle-pill ${activeStruggle === 'fear' ? 'active' : ''}`}
-            onClick={() => setActiveStruggle(activeStruggle === 'fear' ? null : 'fear')}>
-            😨 What's keeping me stuck?
-          </button>
-          <button className={`struggle-pill ${activeStruggle === 'scale' ? 'active' : ''}`}
-            onClick={() => setActiveStruggle(activeStruggle === 'scale' ? null : 'scale')}>
-            🚀 Scaling my experiences
-          </button>
-        </div>
-
-        {activeStruggle === 'direction' && (
-          <div className="struggle-flows">
-            <DeepDiveCard deepDive={{ id: 'career_alignment', name: 'What career path is best?', route: '/career-alignment', narrative: 'See how aligned your current career is with your curiosities.', icon: '🎯' }} isCompleted={hasCareerAlignment} />
-            <DeepDiveCard deepDive={{ id: 'career_clarity', name: 'Career Clarity Quiz', route: '/career-clarity', narrative: 'Different job or start own thing?', icon: '🧭' }} isCompleted={hasCareerClarity} />
-          </div>
-        )}
-
-        {activeStruggle === 'fear' && (
-          <div className="struggle-flows">
-            <DeepDiveCard deepDive={{ id: 'wound_map', name: 'Map Your Origin Story', route: '/wound-map?returnTo=/7-day-challenge', narrative: 'What happened before you arrived here?', icon: '🗺️' }} isCompleted={hasWoundMap} />
-            <DeepDiveCard deepDive={{ id: 'matrix_codes', name: 'Matrix Codes', route: '/matrix-code-deep-dive', narrative: 'What permission are you missing?', icon: '🔓' }} isCompleted={!!hasFlowDeepDive['recognise_shadow_work']} />
-            <DeepDiveCard deepDive={{ id: 'nervous_system', name: 'NS Boundaries', route: '/nervous-system', narrative: 'Where does your nervous system say stop?', icon: '🧠' }} isCompleted={!!hasFlowDeepDive['nervous_system_map']} />
-          </div>
-        )}
-
-        {activeStruggle === 'scale' && (
-          <div className="struggle-flows">
-            <DeepDiveCard deepDive={{ id: 'scale_portal', name: 'Scale My Impact + Income', route: '/create', narrative: 'Tools for experience creators to fill rooms and build a business.', icon: '🚀' }} isCompleted={false} />
-          </div>
-        )}
-      </div>
+      {/* Struggle Pills — hidden for now, revisit later */}
 
       {/* Unlock explainer modals */}
       {unlockExplainer === 'courage' && (
@@ -894,6 +853,26 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         questsCompleted={questsCompleted}
       />
 
+
+      {/* Life Map enrichment CTA — optional, shown when user has quests but no Life Map */}
+      {quests.length > 0 && !hasLifeMap && (
+        <button
+          onClick={() => navigate('/life-map')}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+            padding: '14px 16px', borderRadius: 14, border: '1px solid rgba(94,23,235,0.1)',
+            background: 'rgba(94,23,235,0.03)', cursor: 'pointer', fontFamily: 'inherit',
+            textAlign: 'left', marginTop: 16,
+          }}
+        >
+          <span style={{ fontSize: 24, flexShrink: 0 }}>🗺️</span>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#5e17eb' }}>Understand WHY these light you up</div>
+            <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.4)', marginTop: 2 }}>Map your life story to uncover the deeper patterns.</div>
+          </div>
+          <span style={{ fontSize: 16, color: 'rgba(0,0,0,0.2)', flexShrink: 0 }}>›</span>
+        </button>
+      )}
 
       {showJourney && (
         <JourneyGraphPopup

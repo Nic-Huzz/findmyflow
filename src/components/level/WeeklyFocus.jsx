@@ -170,7 +170,12 @@ export default function WeeklyFocus({ quests, questTasks, userId, courageCount =
             </button>
           </>
         ) : (
-          <div className="wf-done-msg">Done this week. Pick a new one next Monday.</div>
+          <>
+            <div className="wf-done-msg">Done! Pick another?</div>
+            <button className="wf-action wf-action-secondary" onClick={() => setPicking(true)}>
+              Pick another
+            </button>
+          </>
         )}
 
         {courageCount > 0 && (

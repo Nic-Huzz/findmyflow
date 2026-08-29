@@ -25,13 +25,13 @@ const VOICE_META = {
 }
 
 const EXPANSION_DIMENSIONS = [
-  { id: 'duration', label: 'Duration', icon: '⏱', group: 'craft' },
-  { id: 'frequency', label: 'Frequency', icon: '🔁', group: 'craft' },
-  { id: 'medium', label: 'Medium', icon: '📡', group: 'craft' },
-  { id: 'people', label: 'People', icon: '👥', group: 'craft' },
-  { id: 'money', label: 'Money', icon: '💰', group: 'scale' },
-  { id: 'location', label: 'Location', icon: '📍', group: 'scale' },
-  { id: 'independence', label: 'Independence', icon: '🚀', group: 'scale' },
+  { id: 'duration', label: 'Duration', sub: 'Doing it for longer', icon: '⏱', group: 'craft' },
+  { id: 'frequency', label: 'Frequency', sub: 'Doing it more often', icon: '🔁', group: 'craft' },
+  { id: 'medium', label: 'Medium', sub: 'Trying a new format', icon: '📡', group: 'craft' },
+  { id: 'people', label: 'People', sub: 'More people watching or involved', icon: '👥', group: 'craft' },
+  { id: 'money', label: 'Money', sub: 'Charging or investing money', icon: '💰', group: 'scale' },
+  { id: 'location', label: 'Location', sub: 'Somewhere new or public', icon: '📍', group: 'scale' },
+  { id: 'independence', label: 'Independence', sub: 'Doing it on your own terms', icon: '🚀', group: 'scale' },
 ]
 
 export default function WahooCreator({
@@ -254,7 +254,10 @@ export default function WahooCreator({
                     }}
                   >
                     <span className="wc-dim-icon">{d.icon}</span>
-                    <span className="wc-dim-name">{d.label}</span>
+                    <span className="wc-dim-text">
+                      <span className="wc-dim-name">{d.label}</span>
+                      <span className="wc-dim-sub">{d.sub}</span>
+                    </span>
                   </button>
                 )
               })}

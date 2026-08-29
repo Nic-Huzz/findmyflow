@@ -43,19 +43,6 @@ const OV_H = 900
 const OV_TOP = 60
 const OV_BOTTOM = OV_H - 100
 
-// Depth level Y positions (L0=bottom, L4=top)
-const DEPTH_LEVELS = [
-  { id: 'education',   label: 'L1',  short: 'L1' },
-  { id: 'testing',     label: 'L2',  short: 'L2' },
-  { id: 'practising',  label: 'L3',  short: 'L3' },
-  { id: 'charging',    label: 'L4',  short: 'L4' },
-  { id: 'teaching',    label: 'L5',  short: 'L5' },
-]
-const DEPTH_ORDER = { education: 0, testing: 1, practising: 2, charging: 3, teaching: 4 }
-function depthY(d) {
-  const idx = DEPTH_ORDER[d] ?? 0
-  return OV_BOTTOM - (idx / 4) * (OV_BOTTOM - OV_TOP)
-}
 
 // State zone X ranges (left=uninterested, right=vibe rise)
 const STATE_ZONES = {
@@ -179,19 +166,9 @@ export default function QuestPathMap({
     supabase.from('quest_cross_pollination')
       .select('id, source_quest_id, target_quest_id, groan_challenge_id, created_at')
       .eq('user_id', userId)
-      .then(async ({ data }) => {
+      .then(({ data }) => {
         if (!data) return
-        // Fetch merge challenge depths
-        const mergeIds = data.filter(cp => cp.groan_challenge_id).map(cp => cp.groan_challenge_id)
-        let mergeDepths = {}
-        if (mergeIds.length > 0) {
-          const { data: depths } = await supabase.from('groan_challenges').select('id, depth_level').in('id', mergeIds)
-          depths?.forEach(d => { mergeDepths[d.id] = d.depth_level })
-        }
-        setCrossPollination(data.map(cp => ({
-          ...cp,
-          merge_depth: mergeDepths[cp.groan_challenge_id] || null,
-        })))
+        setCrossPollination(data)
       })
   }, [userId])
 
@@ -278,36 +255,47 @@ export default function QuestPathMap({
         </div>
 
         {/* ── Slides 1-N: Individual quest focus ── */}
-        {activeQuests.map(quest => (
-          <div key={quest.id} className="qpm-slide">
-            <div className="qpm-slide-title" style={{ color: `${SAFE_COLOURS[quest.predicted_state] || '#c084fc'}80` }}>
-              {quest.label}
+        {activeQuests.map((quest, qi) => {
+          const questColour = quest.color || QUEST_COLOURS[qi % QUEST_COLOURS.length]
+          return (
+            <div key={quest.id} className="qpm-slide">
+              <div className="qpm-slide-title" style={{ color: `${questColour}cc` }}>
+                {quest.label}
+              </div>
+              <QuestColourPicker
+                currentColour={questColour}
+                onPick={async (colour) => {
+                  await supabase.from('quests').update({ color: colour }).eq('id', quest.id)
+                  onUpdate?.()
+                }}
+              />
+              <div className="qpm-state-journey">
+                <span style={{ color: `${SAFE_COLOURS[trunkS]}99` }}>
+                  {STATE_META[trunkS]?.emoji} {STATE_META[trunkS]?.label}
+                </span>
+                <span className="qpm-arrow">→</span>
+                <span style={{ color: `${SAFE_COLOURS[quest.predicted_state] || '#c084fc'}99` }}>
+                  {STATE_META[quest.predicted_state]?.emoji} {STATE_META[quest.predicted_state]?.label}
+                </span>
+              </div>
+              <FocusSVG
+                uid={`${uid}f${quest.id}`}
+                quest={quest}
+                colour={questColour}
+                tasks={questTasks[quest.id] || []}
+                healingIntentions={healingIntentions}
+              />
+              <FocusFooter
+                quest={quest}
+                tasks={questTasks[quest.id] || []}
+                healingIntentions={healingIntentions}
+                trunkState={trunkS}
+                userId={userId}
+                onUpdate={onUpdate}
+              />
             </div>
-            <div className="qpm-state-journey">
-              <span style={{ color: `${SAFE_COLOURS[trunkS]}99` }}>
-                {STATE_META[trunkS]?.emoji} {STATE_META[trunkS]?.label}
-              </span>
-              <span className="qpm-arrow">→</span>
-              <span style={{ color: `${SAFE_COLOURS[quest.predicted_state] || '#c084fc'}99` }}>
-                {STATE_META[quest.predicted_state]?.emoji} {STATE_META[quest.predicted_state]?.label}
-              </span>
-            </div>
-            <FocusSVG
-              uid={`${uid}f${quest.id}`}
-              quest={quest}
-              tasks={questTasks[quest.id] || []}
-              healingIntentions={healingIntentions}
-            />
-            <FocusFooter
-              quest={quest}
-              tasks={questTasks[quest.id] || []}
-              healingIntentions={healingIntentions}
-              trunkState={trunkS}
-              userId={userId}
-              onUpdate={onUpdate}
-            />
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <div className="qpm-swipe-hint">← swipe →</div>
@@ -355,6 +343,35 @@ export default function QuestPathMap({
 }
 
 
+// ─── Colour picker for focus slides ──────────────────────────────────────────
+
+function QuestColourPicker({ currentColour, onPick }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="qpm-colour-picker">
+      <button
+        className="qpm-colour-dot"
+        style={{ background: currentColour }}
+        onClick={() => setOpen(!open)}
+        title="Change colour"
+      />
+      {open && (
+        <div className="qpm-colour-row">
+          {QUEST_COLOURS.map(c => (
+            <button
+              key={c}
+              className={`qpm-colour-swatch ${c === currentColour ? 'active' : ''}`}
+              style={{ background: c }}
+              onClick={() => { onPick(c); setOpen(false) }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+
 // ─── Overview SVG (vertical: Y=time, X=state) ────────────────────────────────
 
 function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, trunkState, light, crossPollination, heroAvatarUrl, onDotTap }) {
@@ -377,15 +394,15 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
     return offsets
   }, [quests])
 
-  // Find the most advanced quest (highest depth) for avatar placement
+  // Find the most active quest (most courage challenges) for avatar placement
   const mostAdvancedId = useMemo(() => {
-    let best = null, bestDepth = -1
+    let best = null, bestCount = -1
     quests.forEach(q => {
-      const d = DEPTH_ORDER[q.depth_level] ?? 0
-      if (d > bestDepth) { bestDepth = d; best = q.id }
+      const count = (questTasks[q.id] || []).filter(t => t.is_courage_challenge).length
+      if (count > bestCount) { bestCount = count; best = q.id }
     })
     return best
-  }, [quests])
+  }, [quests, questTasks])
 
   return (
     <div className="qpm-canvas qpm-canvas-vertical">
@@ -420,19 +437,7 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
         <line x1="210" y1={OV_TOP - 10} x2="210" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
         <line x1="310" y1={OV_TOP - 10} x2="310" y2={OV_BOTTOM + 10} stroke="rgba(0,0,0,0.03)" />
 
-        {/* Depth level rows (Y axis) */}
-        {DEPTH_LEVELS.map((d, i) => {
-          const y = depthY(d.id)
-          return (
-            <g key={d.id}>
-              <line x1="25" y1={y} x2={OV_W - 15} y2={y} stroke="rgba(0,0,0,0.04)" strokeDasharray="4 4" />
-              <text x="18" y={y + 4} fill="rgba(0,0,0,0.2)"
-                fontSize="8" fontWeight="700" textAnchor="end">
-                {d.short}
-              </text>
-            </g>
-          )
-        })}
+        {/* Y axis = time (earliest at bottom, now at top). No grid lines needed. */}
 
         {/* Quest flow lines + courage challenge dots */}
         {quests.map((quest, qi) => {
@@ -441,15 +446,14 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
           const isClosed = quest.status === 'closed' || quest.status === 'completed'
           const tasks = questTasks[quest.id] || []
           const courageTasks = tasks
-            .filter(t => t.is_courage_challenge && t.depth_level)
+            .filter(t => t.is_courage_challenge)
             .sort((a, b) => new Date(a.backdated_date || a.created_at) - new Date(b.backdated_date || b.created_at))
 
           if (courageTasks.length === 0) {
-            // No courage tasks — just show label + position dot
-            const y = depthY(quest.depth_level || 'education')
+            // No courage tasks — show label + starting dot at bottom
             return (
               <g key={quest.id} opacity={isClosed ? 0.4 : 1}>
-                <circle cx={x} cy={y} r="6" fill={colour} opacity="0.6" />
+                <circle cx={x} cy={OV_BOTTOM} r="6" fill={colour} opacity="0.6" />
                 <text x={x} y={OV_BOTTOM + 16} fill={colour} opacity={isClosed ? 0.3 : 0.5}
                   fontSize="10" fontWeight="700" textAnchor="end"
                   transform={`rotate(-45, ${x}, ${OV_BOTTOM + 16})`}>
@@ -459,43 +463,15 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
             )
           }
 
-          // Place dots vertically: within each depth band, spread chronologically
-          // Band boundaries: each depth zone gets equal vertical space
-          const bandH = (OV_BOTTOM - OV_TOP) / 5 // 5 levels, each gets a band
-          const dotPoints = courageTasks.map(t => {
-            const depthIdx = DEPTH_ORDER[t.depth_level] ?? 0
-            return { task: t, depthIdx }
-          })
-
-          // Within each depth band, assign Y positions chronologically
-          const byDepth = {}
-          dotPoints.forEach(p => {
-            if (!byDepth[p.depthIdx]) byDepth[p.depthIdx] = []
-            byDepth[p.depthIdx].push(p)
-          })
-
-          const positioned = []
-          Object.entries(byDepth).forEach(([depthIdx, points]) => {
-            const idx = parseInt(depthIdx)
-            const bandTop = OV_BOTTOM - (idx + 1) * bandH
-            const bandBottom = OV_BOTTOM - idx * bandH
-            const padding = 12
-            const usableH = bandBottom - bandTop - padding * 2
-            points.forEach((p, i) => {
-              const t = points.length > 1 ? i / (points.length - 1) : 0.5
-              const y = bandBottom - padding - t * usableH
-              positioned.push({ ...p, y })
-            })
-          })
-
-          // Sort all positioned dots by Y (bottom to top) for the line path
-          positioned.sort((a, b) => b.y - a.y)
-
-          // Build path through all dots — each dot gets its own X from wahoo classification
-          const pathPoints = positioned.map(p => {
-            const dotState = wahooStates?.[p.task.groan_challenge_id]
+          // Chronological Y positioning: earliest at bottom, most recent at top
+          const padding = 16
+          const usableH = OV_BOTTOM - OV_TOP - padding * 2
+          const pathPoints = courageTasks.map((task, i) => {
+            const frac = courageTasks.length > 1 ? i / (courageTasks.length - 1) : 0.5
+            const y = OV_BOTTOM - padding - frac * usableH
+            const dotState = wahooStates?.[task.groan_challenge_id]
             const dotX = dotState ? stateX(dotState) : x
-            return { x: dotX, y: p.y, state: dotState, task: p.task }
+            return { x: dotX, y, state: dotState, task }
           })
           const firstY = pathPoints.length > 0 ? pathPoints[0].y : OV_BOTTOM
           const lastPoint = pathPoints.length > 0 ? pathPoints[pathPoints.length - 1] : { x, y: OV_TOP }
@@ -584,15 +560,9 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
           const targetQuest = quests.find(q => q.id === cp.target_quest_id)
           if (!sourceQuest || !targetQuest) return null
           const sourceColour = SAFE_COLOURS[sourceQuest.predicted_state] || '#5e17eb'
-          // Source departs from its highest depth
-          const sourceTasks = (questTasks[cp.source_quest_id] || []).filter(t => t.is_courage_challenge && t.depth_level)
-          const sourceMaxDepth = sourceTasks.length > 0
-            ? Math.max(...sourceTasks.map(t => DEPTH_ORDER[t.depth_level] ?? 0))
-            : (DEPTH_ORDER[sourceQuest.depth_level] ?? 0)
-          const sourceDepthKey = Object.keys(DEPTH_ORDER).find(k => DEPTH_ORDER[k] === sourceMaxDepth) || 'education'
-          const sy = depthY(sourceDepthKey)
-          // Target: use merge challenge depth, or fall back to quest depth
-          const ty = depthY(cp.merge_depth || targetQuest.depth_level || 'education')
+          // Place merge curves at midpoint of the visible area
+          const sy = (OV_TOP + OV_BOTTOM) / 2 - 40
+          const ty = (OV_TOP + OV_BOTTOM) / 2 + 40
           return (
             <g key={cp.id || `merge-${cp.source_quest_id}-${cp.target_quest_id}`}>
               <path d={`M ${sourceX} ${sy} C ${(sourceX + targetX) / 2} ${sy}, ${(sourceX + targetX) / 2} ${ty}, ${targetX} ${ty}`}
@@ -609,8 +579,8 @@ function OverviewSVG({ uid, quests, questTasks, healingIntentions, wahooStates, 
 
 // ─── Focus SVG (single quest, vertical) ───────────────────────────────────────
 
-function FocusSVG({ uid, quest, tasks, healingIntentions }) {
-  const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
+function FocusSVG({ uid, quest, colour, tasks, healingIntentions }) {
+  const destColour = colour || SAFE_COLOURS[quest.predicted_state] || '#c084fc'
   const n = tasks.length
   const FH = 500
   const FW = 320

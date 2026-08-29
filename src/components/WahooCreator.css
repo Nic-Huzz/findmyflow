@@ -585,8 +585,10 @@
   text-align: left;
 }
 
-.wc-dim-option .wc-dim-icon { font-size: 16px; }
-.wc-dim-option .wc-dim-name { flex: 1; }
+.wc-dim-option .wc-dim-icon { font-size: 16px; flex-shrink: 0; }
+.wc-dim-option .wc-dim-text { flex: 1; display: flex; flex-direction: column; }
+.wc-dim-option .wc-dim-name { font-size: 13px; font-weight: 600; }
+.wc-dim-option .wc-dim-sub { font-size: 10px; font-weight: 500; opacity: 0.6; line-height: 1.3; margin-top: 1px; }
 
 .wc-dim-option.active {
   border-color: #5e17eb;
