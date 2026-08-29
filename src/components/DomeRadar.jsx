@@ -12,7 +12,11 @@ const PRIMAL_OVERRIDES = {
   'sub-safety-1993': 'movement',   // BJJ/MMA: combat sport, not "threat"
   'sub-craft-1880': 'story',       // Art class: creative expression, not "status"
   'sub-temperature-2019': 'healing', // Sauna: passive recovery, not movement
+  'sub-communal-2017': 'shelter',   // Living abroad: where you live, not bonds
 }
+
+// Only show experience branches (Threat + Tools dropped)
+const EXPERIENCE_PRIMALS = PRIMALS.filter(p => p.id !== 'threat' && p.id !== 'tools')
 
 const NS_GLOW = {
   vibe_rise: 1.0,
@@ -43,9 +47,9 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
     const maxNodeR = size * 0.36      // furthest node distance (unrated/bored)
     const minNodeR = size * 0.08      // closest node distance (vibe rise)
 
-    // Get core nodes grouped by primal
+    // Get core nodes grouped by primal (experience branches only)
     const primalNodes = {}
-    PRIMALS.forEach(p => { primalNodes[p.id] = [] })
+    EXPERIENCE_PRIMALS.forEach(p => { primalNodes[p.id] = [] })
 
     industryNodes.forEach(n => {
       if (!isCoreNode(n.id)) return
@@ -64,11 +68,11 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
       }
     })
 
-    const step = (2 * Math.PI) / PRIMALS.length
+    const step = (2 * Math.PI) / EXPERIENCE_PRIMALS.length
     const nodes = []
     const primalLabels = []
 
-    PRIMALS.forEach((primal, pi) => {
+    EXPERIENCE_PRIMALS.forEach((primal, pi) => {
       const baseAngle = -Math.PI / 2 + pi * step
       const color = PRIMAL_COLOR_MAP[primal.id] || primal.color
       const pNodes = primalNodes[primal.id]

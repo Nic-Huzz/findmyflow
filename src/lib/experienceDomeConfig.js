@@ -160,7 +160,7 @@ const EXPERIENCE_LABELS = {
   'comms-1983': 'Using a mobile phone',
   'comms-1992': 'Text messaging',
   'comms-2009': 'Messaging apps (WhatsApp)',
-  'comms-2020': 'Virtual hangouts',
+  // comms-2020 removed from core (too generic)
 
   // Exchange
   'exchange-1602': 'Investing in stocks',
@@ -173,7 +173,7 @@ const EXPERIENCE_LABELS = {
   'intimacy-1170': 'Romantic love / falling in love',
   'intimacy-1960': 'Hormonal contraception',
   'intimacy-1978': 'IVF / fertility treatment',
-  'intimacy-2012': 'Going on a first date',
+  'intimacy-2012': 'Going on a date',
   'intimacy-2017a': 'AI companion / emotional AI',
 
   // Medicine
@@ -238,13 +238,13 @@ const EXPERIENCE_LABELS = {
   'sub-strength-1400': 'Carrying heavy loads',
   'sub-strength-0776': 'Athletic training / gym',
   'sub-strength-1890': 'Bodybuilding / physique training',
-  'sub-strength-2000': 'CrossFit / functional fitness',
+  'sub-strength-2000': 'CrossFit / high-intensity training',
   'sub-strength-2012': 'Home workout (Peloton, Mirror)',
   'sub-strength-2010': 'Hiking / nature walk',
 
   'sub-flexibility-1400': 'Deep squatting / ground living',
-  'sub-flexibility-1893': 'Yoga / Pilates / group fitness',
-  'sub-flexibility-1920': 'Pilates',
+  'sub-flexibility-1893': 'Yoga',
+  'sub-flexibility-1920': 'Studio fitness class',
   'sub-flexibility-1975': 'Stretching routine',
   'sub-flexibility-2010': 'Mobility work / foam rolling',
 
@@ -266,7 +266,7 @@ const EXPERIENCE_LABELS = {
   'sub-dance-1800': 'Social dance (swing, salsa)',
   'sub-dance-1987': 'Rave / electronic music event',
   'sub-dance-1972': 'Contact improvisation',
-  'sub-dance-1975': 'Ecstatic dance / 5Rhythms',
+  'sub-dance-1975': 'Ecstatic dance',
   'sub-dance-1986': 'Burning Man / art festival',
   'sub-dance-2005': 'Silent disco',
   'sub-dance-2013': 'Morning sober dance event',
@@ -316,7 +316,7 @@ const EXPERIENCE_LABELS = {
   'sub-communal-1910': 'Kibbutz / intentional community',
   'sub-communal-1965': 'Commune / shared living',
   'sub-communal-2015': 'Co-living space',
-  'sub-communal-2017': 'Digital nomad hub',
+  'sub-communal-2017': 'Living abroad',
 
   'sub-ordeal-1400': 'Shared survival challenge',
   'sub-ordeal-1775': 'Military bonding / service',
@@ -423,7 +423,7 @@ const EXPERIENCE_LABELS = {
   'sub-sacred-1400': 'Cave / natural sacred space',
   'sub-sacred-1400b': 'Temple / church visit',
   'sub-sacred-1900': 'Spa / bathhouse ritual',
-  'sub-sacred-2010': 'Wellness studio (SoulCycle)',
+  // sub-sacred-2010 removed from core (redundant with yoga/pilates/group fitness)
   'sub-sacred-2020': 'Sound room / silent disco',
 
   // Nourishment sub-branches
@@ -503,7 +503,7 @@ const EXPERIENCE_LABELS = {
   'sub-ritual-fire-1885': 'Central heating',
   'sub-ritual-fire-2000': 'Fire pit gathering',
   'sub-ritual-fire-2016': 'Hygge / candle culture',
-  'sub-ritual-fire-2015b': 'Fire ceremony / cacao circle',
+  'sub-ritual-fire-2015b': 'Fire ceremony / fire walking',
 
   // Story sub-branches
   'sub-oral-1400': 'Campfire storytelling',
@@ -546,7 +546,7 @@ const EXPERIENCE_LABELS = {
 
   // Play sub-branches
   'sub-board-1400': 'Go / Mancala / ancient strategy',
-  'sub-board-1995': 'Eurogames (Catan)',
+  'sub-board-1995': 'Board games / Games night',
   'sub-board-2008': 'Cooperative board games (Pandemic)',
   'sub-board-2012': 'Kickstarter board games',
   'sub-board-2016': 'Board game cafe',
@@ -613,11 +613,12 @@ const CORE_NODE_IDS = new Set([
   'sub-endurance-1962',      // Jogging / running
   'sub-strength-2000',       // CrossFit / functional fitness
   'sub-strength-2010',       // Hiking / nature walk
-  'sub-flexibility-1893',    // Yoga / Pilates / group fitness
+  'sub-flexibility-1893',    // Yoga
+  'sub-flexibility-1920',    // Pilates / group fitness
   'sub-temperature-2018',    // Cold plunge / ice bath
   // sub-temperature-2019 moved to Healing (passive recovery, not movement)
   'sub-outdoor-1907',        // Camping / scouting
-  'sub-dance-1975',          // Ecstatic dance / 5Rhythms
+  'sub-dance-1975',          // Ecstatic dance
   'sub-safety-1400b',        // Martial arts
   'sub-safety-1993',         // BJJ / MMA
   'exp-surfing',             // Surfing
@@ -632,15 +633,13 @@ const CORE_NODE_IDS = new Set([
   'exp-farmers-market',      // Visiting a farmers market
   'exp-new-cuisine',         // Trying a cuisine you've never had
 
-  // Style (4) — how you present yourself to the world
+  // Style (3) — how you present yourself to the world
   'exp-choosing-style',      // Choosing your style
   'exp-tattoo',              // Tattoo / body art / piercings
   'sub-fashion-2007',        // Slow fashion / thrifting
-  'sub-counter-2011',        // Minimalism / decluttering
 
-  // Bonds (9) — dropped Virtual hangouts (too generic), renamed Dating apps + Discord
-  'intimacy-2012',           // Going on a first date
-  'sub-communal-2017',       // Digital nomad hub (TBC: may become "Live abroad")
+  // Bonds (8) — Living abroad moved to Shelter, Unique stays dropped
+  'intimacy-2012',           // Going on a date
   'sub-ordeal-2015',         // Adventure retreat
   'sub-digital-2015',        // Being part of an online community
   'sub-coaching-1937',       // Mastermind group
@@ -649,12 +648,12 @@ const CORE_NODE_IDS = new Set([
   'exp-drinks-friends',      // Drinks with friends / hanging out
   'exp-vulnerable-convo',    // Vulnerable conversation / clearing the air
 
-  // Shelter (5)
-  'property-2008',           // Unique stays / boutique accommodation
+  // Shelter (5) — how you shape your environment
   'sub-alt-2011',            // Van life
   'sub-proptech-2020',       // Decorating / designing your space
-  'sub-sacred-2010',         // Wellness studio (SoulCycle)
+  'sub-communal-2017',       // Living abroad
   'exp-making',              // Making something with your hands (woodwork, DIY, renovating)
+  'exp-hosting-home',        // Hosting people in your home
 
   // Story (15) — creative expression, narrative, performance.
   'media-1826',              // Photography / videography
@@ -728,6 +727,7 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-thrill', label: 'Adrenaline / thrill ride', branch: 'play-sport', primal: 'play' },
   { id: 'exp-spiritual', label: 'Spiritual practice', branch: 'med-mindbody', primal: 'healing' },
   { id: 'exp-nature-stillness', label: 'Being in nature without an activity', branch: 'sleep-rest', primal: 'sleep' },
+  { id: 'exp-hosting-home', label: 'Hosting people in your home', branch: 'shelter-sacred', primal: 'shelter' },
   { id: 'exp-farmers-market', label: 'Visiting a farmers market', branch: 'food-regen', primal: 'nourishment' },
   { id: 'exp-new-cuisine', label: 'Trying a cuisine you\'ve never had', branch: 'food-regen', primal: 'nourishment' },
 ]

@@ -85,27 +85,36 @@ Drop domain segmenting (was Education/Testing/etc). Life paths plotted by:
 ## Phase 1 → Phase 2 Handoff
 
 **Phase 1 core loop (12-year-old simple):**
-1. Life Map first (what have you already experienced?) → auto-populates dome nodes
-2. Browse dome → pick an experience to try next
-3. Try it in real life
-4. Come back, rate it with NS state
-5. Repeat from step 2
+1. Experience Dome — tick what you've experienced, rate with NS state
+2. See your dome shape (primal signature)
+3. Pick an experience to try this week
+4. Try it in real life → come back and rate
+5. Repeat from step 3
 
-**Bridge CTA:** Always visible somewhere on the Discover tab: "Ready to go deeper on a life path?"
-- User-declared, not app-triggered. No gates or thresholds.
-- When tapped → opens the Life Paths questionnaire flow
-- Life Paths flow pre-populated with Vibe Rise data from both Life Map clusters AND dome nodes
-- User confirms which to pursue → creates quests → activates Quests tab
+**Bridge sequence (triggered by "Ready to go deeper?"):**
+1. Curiosity Compass — "What do you keep reading/watching about?" (books, podcasts, courses → AI clusters into problem territory + branch)
+2. Life Map — "Walk through your life story" (5 periods → skills/problems/personas clusters, with curiosity context cards populated from step 1)
+3. Life Paths — AI suggests career paths using all three data sources, user confirms → creates quests
+
+**Why this order:**
+- Dome first (not Life Map) — dome had higher engagement. Fast, visual, gamified. Life Map had low completion as opener.
+- Curiosity Compass before Life Map — populates Life Map's context cards ("You're curious about X, did your work give space for this?")
+- Life Paths last — synthesizes dome (body), curiosity (mind), life map (story) into actionable career directions
+
+**Three data sources at Life Paths (zero redundancy):**
+- `experience_dome_ratings` — what your body loves (primal signature, growth edges, experiences to avoid)
+- `curiosity_clusters` — what your mind keeps chasing (problem territory, intellectual interests)
+- `nikigai_clusters` — where it all came from (biographical patterns, skills + problems + personas)
 
 **Life Paths flow update needed:**
-- Currently asks "what careers/paths are you pursuing?" from scratch
-- Should ingest dome data: "Based on what lights you up, here are paths worth exploring"
-- User confirms, removes, or adds paths
-- Confirmed paths → quests with courage challenges
+- `suggest-life-paths` edge function needs dome data as 4th input section (primal signature + vibe_rise experiences + growth edges)
+- Life Paths SUGGESTIONS step needs to query `experience_dome_ratings` alongside existing curiosity + life map queries
+- Bridge CTA always visible on Discover tab: "Ready to go deeper on a life path?"
+- User-declared, not app-triggered. No gates or thresholds.
 
 **The 12-year-old test across phases:**
 - Phase 1: "Pick your next experience" (one action)
-- Bridge: "Ready to go deeper?" (one question)
+- Bridge: "Ready to go deeper?" → Curiosity Compass → Life Map → Life Paths
 - Phase 2: "Pick your brave action for this week" (one action, WeeklyFocus)
 
 ---
@@ -142,15 +151,16 @@ The "Life as a Video Game" rules (see `docs/research/life-as-game-inspiration.md
 
 ---
 
-## Phase 1: Discover Tab — Life Map and Dome
+## Phase 1: Discover Tab — Essence Mirror and Dome
 
-Both live in the Discover tab, both unlocked. App suggests Life Map first, Dome second.
+Both live in the Discover tab. Essence Mirror first, then Dome.
 
-- **Life Map** = your past (what experiences have you already had?) — add node map UX/UI so life map experiences plot as dome nodes
-- **Dome** = fills gaps Life Map missed (experiences you haven't tried yet but want to)
-- Both feed the same quest pipeline
+- **Essence Mirror** = who you are (archetype, identity anchor)
+- **Dome** = what experiences light you up (NS ratings on ~80 core experiences, primal signature)
+- Dome is the primary Phase 1 activity. It's fast, visual, gamified.
+- Life Map is NOT Phase 1 — it lives at the bridge (see Phase 1 → Phase 2 Handoff above)
 
-**Onboarding order:** sign up → Essence Mirror (who are you?) → Discover tab: Life Map (what have you experienced?) → Dome (what else could you try?). Similar to current Journey tab onboarding order but feeding the dome visualization.
+**Onboarding order:** sign up → Essence Mirror (who are you?) → Discover tab: Experience Dome (what lights you up?) → rate experiences → see dome shape → "Ready to go deeper?" bridge CTA
 
 ---
 

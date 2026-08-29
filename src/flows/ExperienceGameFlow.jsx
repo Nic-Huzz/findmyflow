@@ -41,9 +41,9 @@ const EXPERIENCE_DESC = {
   'sub-coaching-1937': 'Small group of peers meeting regularly to grow',
   'car-1886': 'Road trips, scenic drives, cross-country adventures',
   'sub-endurance-1962': 'Jogging, running, marathon training',
-  'sub-strength-2000': 'CrossFit, functional fitness, group training',
+  'sub-strength-2000': 'CrossFit, F45, HIIT, bootcamp, intense group workouts',
   'sub-flexibility-1893': 'Yoga classes, stretching, mind-body flow',
-  'sub-flexibility-1920': 'Pilates, barre, spin, SoulCycle, Hyrox, any group class',
+  'sub-flexibility-1920': 'Pilates, barre, spin, SoulCycle, instructor-led studio classes',
   'sub-temperature-2018': 'Ice baths, cold plunges, Wim Hof method',
   'sub-outdoor-1907': 'Camping, hiking, scouting, bushcraft',
   'sub-dance-1975': 'Free-form dancing, movement without choreography',
@@ -68,7 +68,7 @@ const EXPERIENCE_DESC = {
   'sub-audio-2005': 'Podcasts, audiobooks, audio learning',
   'sub-video-2005': 'Filming, editing, colour grading, publishing videos',
   'play-1972': 'Console games, PC gaming, mobile games',
-  'sub-board-1995': 'Board game nights, Catan, strategy games',
+  'sub-board-1995': 'Catan, Monopoly, card games, game nights with friends',
   'sub-sport-1871': 'Team sports, pickup games, leagues',
   'sub-sport-1936': 'Watching live sport, stadium energy',
   'sub-chance-2003': 'Poker nights, card games, friendly competition',
@@ -592,27 +592,47 @@ const CHECKED_KEY = 'exp-game-checked'
 export default function ExperienceGameFlow() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { bulkSetStates } = useDomeData(user?.id)
+  const { domeStates, loading: domeLoading, bulkSetStates } = useDomeData(user?.id)
   const branches = useMemo(buildBranches, [])
-  const [phase, setPhase] = useState(() => {
-    try {
-      const saved = localStorage.getItem(CHECKED_KEY)
-      if (saved && Object.keys(JSON.parse(saved)).length > 0) return 'play'
-    } catch {}
-    return 'intro'
-  })
-  const [checked, setChecked] = useState(() => {
-    try {
-      const saved = localStorage.getItem(CHECKED_KEY)
-      return saved ? JSON.parse(saved) : {}
-    } catch { return {} }
-  })
-  const [ratings, setRatings] = useState(() => {
-    try {
-      const pending = localStorage.getItem(STORAGE_KEY)
-      return pending ? JSON.parse(pending) : {}
-    } catch { return {} }
-  })
+  const [phase, setPhase] = useState('intro')
+  const [checked, setChecked] = useState({})
+  const [ratings, setRatings] = useState({})
+  const [hydrated, setHydrated] = useState(false)
+
+  // Hydrate from Supabase (authenticated) or localStorage (unauthenticated)
+  useEffect(() => {
+    if (hydrated) return
+    if (domeLoading) return // wait for Supabase to load
+
+    const supabaseRatings = domeStates || {}
+    const supabaseCount = Object.keys(supabaseRatings).length
+
+    if (supabaseCount > 0) {
+      // Use Supabase data — build checked map from ratings
+      const checkedFromSupabase = {}
+      Object.keys(supabaseRatings).forEach(id => { checkedFromSupabase[id] = true })
+      setChecked(checkedFromSupabase)
+      setRatings(supabaseRatings)
+      setPhase('insight') // already completed — show results
+      // Clear any stale localStorage
+      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(CHECKED_KEY) } catch {}
+    } else {
+      // Fall back to localStorage (unauthenticated or first time)
+      try {
+        const savedChecked = localStorage.getItem(CHECKED_KEY)
+        const savedRatings = localStorage.getItem(STORAGE_KEY)
+        if (savedChecked) {
+          const parsed = JSON.parse(savedChecked)
+          if (Object.keys(parsed).length > 0) {
+            setChecked(parsed)
+            setPhase('play')
+          }
+        }
+        if (savedRatings) setRatings(JSON.parse(savedRatings))
+      } catch {}
+    }
+    setHydrated(true)
+  }, [domeLoading, domeStates, hydrated])
 
   const handleToggle = useCallback((nodeId) => {
     hapticLight()
