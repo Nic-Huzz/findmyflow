@@ -35,7 +35,7 @@ See `docs/features/three-phase-journey.md` for the full breakdown.
 ## Phase 1: The Experience Dome
 
 ### What it is
-A **decision tool for the Phase 1→2 bridge**, not an ongoing dashboard. 67 core nodes (61 from innovation tree + 6 virtual human experience nodes) across 12 primal branches. Users tick what they've experienced, rate each with NS state per branch, and see their dome shape emerge. Once they've decided which life paths to pursue, the dome's job is done.
+A **decision tool for the Phase 1→2 bridge**, not an ongoing dashboard. 77 core nodes (58 from innovation tree + 19 virtual human experience nodes) across 10 primal branches (Movement, Story, Bonds, Healing, Nourishment, Play, Shelter, Style, Sleep, Fire). Threat and Tools dropped as innovation branches. See `docs/features/experience-dome-node-map.md` for the full node list.
 
 ### Flow (updated Aug 29)
 Per-branch flow: tick experiences → rate with NS state → see dome update → next branch.
@@ -250,7 +250,7 @@ Learning is meta to all branches, not its own primal.
 
 | File | Contents | Confidence | Phase |
 |------|----------|-----------|-------|
-| `experienceDomeConfig.js` | ~380 nodes + 6 virtual, 67 core, pruning, labels | 95% |
+| `experienceDomeConfig.js` | ~380 tree nodes + 19 virtual, 77 core, 10 branches, pruning, labels | 95% |
 | `domeSkillInference.json` | 211 nodes → PlaySkill signals | 85% | 2→3 |
 | `roleExperienceFingerprints.json` | 10 roles, O*NET API-validated + BLS wages | 90% | 2→3 |
 | `onetDomeBridge.json` | 41 activities → dome nodes by industry | 85% | 2→3 |

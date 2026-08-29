@@ -117,6 +117,16 @@ const EXPERIENCE_DESC = {
   'exp-coaching': 'Guiding someone through a challenge, being their mentor',
   'sub-extreme-2012': 'Extreme sports, high-adrenaline activities',
   'sub-flexibility-1893': 'Yoga, Pilates, barre, group fitness classes',
+  // MasterMind Council additions (Aug 29)
+  'exp-swimming': 'Ocean swimming, lake dips, laps at the pool',
+  'exp-club-dancing': 'Nightclubs, DJ sets, dancing with friends after dark',
+  'exp-drinks-friends': 'Pub nights, wine bars, catching up over drinks',
+  'exp-vulnerable-convo': 'Hard conversations, truth-telling, clearing the air with someone',
+  'exp-cinema': 'Cinema dates, film festivals, watching a great movie on the big screen',
+  'exp-making': 'Woodworking, DIY, renovating, fixing things, improving your space',
+  'exp-thrill': 'Skydiving, bungee jumping, roller coasters, theme parks',
+  'exp-spiritual': 'Prayer, church, mosque, temple, nature reverence, connection to something larger',
+  'exp-nature-stillness': 'Sitting by a river, watching a sunset, stargazing, walking in the rain',
 }
 
 // Override primal assignment for nodes whose tree branch doesn't match their experiential primal
@@ -124,6 +134,7 @@ const PRIMAL_OVERRIDES = {
   'sub-safety-1400b': 'movement',  // Martial arts → Movement
   'sub-safety-1993': 'movement',   // BJJ/MMA → Movement
   'sub-craft-1880': 'story',       // Art class → Story
+  'sub-temperature-2019': 'healing', // Sauna → Healing (passive recovery)
 }
 
 // ─── Data helpers ───
@@ -377,7 +388,7 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
 
   // Dome view between branches
   if (step === 'dome') {
-    const domeSize = Math.min(window.innerWidth - 32, 420)
+    const domeSize = Math.min(window.innerWidth - 16, 500)
     return (
       <DomeRadar
         checked={checked}

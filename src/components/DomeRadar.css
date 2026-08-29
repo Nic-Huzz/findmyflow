@@ -16,9 +16,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px 16px;
+  justify-content: space-between;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom));
   animation: domeMiniEnter 0.4s ease;
+}
+
+.dome-mini-popup svg {
+  margin-top: auto;
+}
+
+.dome-mini-popup .dome-mini-stat {
+  margin-bottom: auto;
 }
 
 @keyframes domeMiniEnter {

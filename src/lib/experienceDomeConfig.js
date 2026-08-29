@@ -108,7 +108,7 @@ const EXPERIENCE_LABELS = {
   // Cars
   'car-1886': 'Driving / Road trips',
   'car-1903': 'Flying / Air travel',
-  'car-1952': 'International travel',
+  'car-1952': 'International travel / backpacking',
   'car-1956': 'Long-distance road trip',
   'car-2008': 'Driving an electric vehicle',
   'car-2010': 'Ride-sharing (Uber/Lyft)',
@@ -127,7 +127,7 @@ const EXPERIENCE_LABELS = {
 
   // Media
   'media-1605': 'Reading a newspaper',
-  'media-1826': 'Photography / Taking photos',
+  'media-1826': 'Photography / videography',
   'media-1877': 'Listening to recorded music',
   'media-1895': 'Watching a film in cinema',
   'media-1920': 'Listening to radio',
@@ -240,10 +240,10 @@ const EXPERIENCE_LABELS = {
   'sub-strength-1890': 'Bodybuilding / physique training',
   'sub-strength-2000': 'CrossFit / functional fitness',
   'sub-strength-2012': 'Home workout (Peloton, Mirror)',
-  'sub-strength-2010': 'Rucking / weighted hiking',
+  'sub-strength-2010': 'Hiking / nature walk',
 
   'sub-flexibility-1400': 'Deep squatting / ground living',
-  'sub-flexibility-1893': 'Yoga practice',
+  'sub-flexibility-1893': 'Yoga / Pilates / group fitness',
   'sub-flexibility-1920': 'Pilates',
   'sub-flexibility-1975': 'Stretching routine',
   'sub-flexibility-2010': 'Mobility work / foam rolling',
@@ -253,7 +253,7 @@ const EXPERIENCE_LABELS = {
   'sub-temperature-1849': 'Hydrotherapy / cold water',
   'sub-temperature-2011': 'Wim Hof method',
   'sub-temperature-2018': 'Cold plunge / ice bath',
-  'sub-temperature-2019': 'Sauna protocol / deliberate heat',
+  'sub-temperature-2019': 'Sauna / deliberate heat',
 
   'sub-outdoor-1400': 'Foraging in nature',
   'sub-outdoor-1907': 'Scouting / camping',
@@ -286,7 +286,7 @@ const EXPERIENCE_LABELS = {
   'sub-mindbody-2021': 'Huberman Lab protocols',
 
   'sub-mental-1900': 'Talk therapy',
-  'sub-mental-1964': 'CBT (cognitive behavioral therapy)',
+  'sub-mental-1964': 'Therapy / counselling',
   'sub-mental-2012': 'Online therapy (BetterHelp)',
   'sub-mental-2017': 'AI therapy / chatbot',
   'sub-mental-2019': 'IFS / parts work',
@@ -454,7 +454,7 @@ const EXPERIENCE_LABELS = {
 
   // Status sub-branches
   'sub-fashion-1400b': 'Silk Road trade goods',
-  'sub-fashion-2007': 'Slow fashion / ethical fashion',
+  'sub-fashion-2007': 'Slow fashion / thrifting',
   'sub-fashion-2019': 'Rental / secondhand fashion',
 
   'sub-beauty-1400': 'Ancient beauty practices',
@@ -474,12 +474,12 @@ const EXPERIENCE_LABELS = {
 
   'sub-counter-1960': 'Counterculture lifestyle',
   'sub-counter-1976': 'Punk / anti-fashion',
-  'sub-counter-2011': 'Minimalism / KonMari',
+  'sub-counter-2011': 'Minimalism / decluttering',
   'sub-counter-2023': 'De-influencing',
   'sub-counter-2018': 'Visible mending / repair culture',
 
   'sub-craft-1400': 'Guild / apprenticeship',
-  'sub-craft-1880': 'Handcrafting (Arts & Crafts)',
+  'sub-craft-1880': 'Art class / painting / pottery',
   'sub-craft-2005': 'Selling on Etsy / maker economy',
   'sub-craft-2020': 'Pandemic crafting (sourdough, knitting)',
   'sub-craft-2014': 'Portfolio / show your work',
@@ -607,47 +607,61 @@ export const EXPERIENCE_DUPLICATES = {
 // Used for onboarding and the default dome view. Must pass the test:
 // "Would a 25-year-old instantly know what this is and have an opinion on it?"
 const CORE_NODE_IDS = new Set([
-  // Movement (7)
+  // Movement (15)
   'car-1886',                // Driving / road trips
+  'car-1952',                // International travel / backpacking
   'sub-endurance-1962',      // Jogging / running
   'sub-strength-2000',       // CrossFit / functional fitness
-  'sub-flexibility-1893',    // Yoga
+  'sub-strength-2010',       // Hiking / nature walk
+  'sub-flexibility-1893',    // Yoga / Pilates / group fitness
   'sub-temperature-2018',    // Cold plunge / ice bath
+  // sub-temperature-2019 moved to Healing (passive recovery, not movement)
   'sub-outdoor-1907',        // Camping / scouting
   'sub-dance-1975',          // Ecstatic dance / 5Rhythms
+  'sub-safety-1400b',        // Martial arts
+  'sub-safety-1993',         // BJJ / MMA
+  'exp-surfing',             // Surfing
+  'exp-climbing',            // Rock climbing / bouldering
+  'exp-swimming',            // Swimming / ocean
+  'exp-club-dancing',        // Going out dancing / clubbing
 
-  // Nourishment (5)
+  // Nourishment (7)
   'food-2002',               // Eating organic / farmers market
   'sub-ancestral-2002',      // Paleo / primal eating
   'sub-ferment-2010',        // Kombucha / cultured foods
   'sub-fasting-2012',        // Intermittent fasting
   'sub-regen-1971',          // Farm-to-table dining
   'sub-regen-1994',          // Cooking for others / hosting dinner
+  'exp-gardening',           // Gardening / growing food
 
-  // Tools (1) — dropped smartphone (universal) and privacy tools (utility)
-  'ai-2022',                 // Using AI tools (ChatGPT, Claude)
+  // Style (4) — how you present yourself to the world
+  'exp-choosing-style',      // Choosing your style
+  'exp-tattoo',              // Tattoo / body art / piercings
+  'sub-fashion-2007',        // Slow fashion / thrifting
+  'sub-counter-2011',        // Minimalism / decluttering
 
-  // Status (4)
-  'fashion-2021',            // Building a personal brand
-  'sub-fashion-2007',        // Slow fashion / ethical fashion
-  'sub-digital-2010b',       // Instagram identity curation
-  'sub-counter-2011',        // Minimalism / KonMari
-
-  // Bonds (6) — removed Cacao + breathwork ceremony (redundant with Healing breathwork + cacao)
+  // Bonds (10)
   'comms-2020',              // Virtual hangouts
   'intimacy-2012',           // Dating apps
   'sub-communal-2017',       // Digital nomad hub
   'sub-ordeal-2015',         // Adventure retreat
   'sub-digital-2015',        // Discord community
   'sub-coaching-1937',       // Mastermind group
+  'exp-volunteering',        // Volunteering / giving back
+  'exp-pets',                // Pet ownership / caring for animals
+  'exp-drinks-friends',      // Drinks with friends / hanging out
+  'exp-vulnerable-convo',    // Vulnerable conversation / clearing the air
 
-  // Shelter (4)
+  // Shelter (5)
   'property-2008',           // Unique stays / boutique accommodation
   'sub-alt-2011',            // Van life
   'sub-proptech-2020',       // Working from home
   'sub-sacred-2010',         // Wellness studio (SoulCycle)
+  'exp-making',              // Making something with your hands (woodwork, DIY, renovating)
 
-  // Story (7) — split YouTube, added live music + journaling
+  // Story (15) — creative expression, narrative, performance.
+  'media-1826',              // Photography / videography
+  'media-1954',              // Playing a musical instrument
   'media-2018',              // Short-form video (TikTok)
   'sub-oral-1860',           // Stand-up comedy
   'sub-oral-2015',           // Live music / concerts / festivals
@@ -655,16 +669,22 @@ const CORE_NODE_IDS = new Set([
   'sub-written-1999',        // Journaling / writing
   'sub-audio-2005',          // Listening to podcasts
   'sub-video-2005',          // Creating YouTube videos
+  'sub-craft-1880',          // Art class / painting / pottery
+  'exp-public-speaking',     // Public speaking / presenting
+  'exp-selling',             // Selling / pitching
+  'exp-coaching',            // Coaching / mentoring someone
+  'exp-cinema',              // Going to the cinema / watching a great film
 
-  // Play (6) — split sports into playing + watching
+  // Play (7)
   'play-1972',               // Playing video games
   'sub-board-1995',          // Eurogames (Catan)
   'sub-sport-1871',          // Playing team sport
   'sub-sport-1936',          // Watching live sport
   'sub-chance-2003',         // Poker
   'sub-toy-1932',            // LEGO / construction toys
+  'exp-thrill',              // Adrenaline / thrill ride (skydiving, bungee, roller coaster)
 
-  // Fire (3) — merged campfire+fire pit, dropped firelight/candlelight (ambient, not an experience)
+  // Fire (3)
   'sub-combustion-1400',     // Campfire / fire pit gathering
   'sub-light-2020',          // Candle ritual / hygge
   'sub-ritual-fire-2015b',   // Fire ceremony / cacao circle
@@ -674,17 +694,42 @@ const CORE_NODE_IDS = new Set([
   'sub-psychedelic-2016',    // Psilocybin therapy
   'sub-somatic-1400',        // Pranayama / breathwork
   'sub-mindbody-1979',       // Mindfulness meditation
-  'sub-mental-1964',         // CBT
+  'sub-mental-1964',         // Therapy / counselling
   'sub-energy-2015',         // Sound bath
+  'sub-temperature-2019',    // Sauna / deliberate heat
+  'exp-spiritual',           // Spiritual practice / prayer / connection to something larger
 
-  // Sleep (3) — dropped sleep tracking (wearing a device isn't an experience)
+  // Sleep (4) — added passive nature
   'sub-dream-1975',          // Lucid dreaming
   'sub-rest-1999',           // Intentional napping
   'sub-states-1954',         // Float tank / sensory deprivation
-
-  // Threat (1) — dropped insurance (chore) and privacy tools (utility)
-  'sub-safety-1400b',        // Martial arts
+  'exp-nature-stillness',    // Being in nature without an activity (sunset, river, stargazing)
 ])
+
+// ── Virtual experience nodes (human experiences not in the innovation tree) ──
+// These are genuine experiences that don't map to an innovation node.
+// They have exp-* IDs and need branch assignment for the dome layout.
+export const VIRTUAL_EXPERIENCE_NODES = [
+  { id: 'exp-surfing', label: 'Surfing', branch: 'move-outdoor', primal: 'movement' },
+  { id: 'exp-climbing', label: 'Rock climbing / bouldering', branch: 'move-strength', primal: 'movement' },
+  { id: 'exp-gardening', label: 'Gardening / growing food', branch: 'food-regen', primal: 'nourishment' },
+  { id: 'exp-volunteering', label: 'Volunteering / giving back', branch: 'bonds-communal', primal: 'bonds' },
+  { id: 'exp-pets', label: 'Pet ownership / caring for animals', branch: 'bonds-communal', primal: 'bonds' },
+  { id: 'exp-public-speaking', label: 'Public speaking / presenting', branch: 'story-oral', primal: 'story' },
+  { id: 'exp-selling', label: 'Selling / pitching', branch: 'story-oral', primal: 'story' },
+  { id: 'exp-coaching', label: 'Coaching / mentoring someone', branch: 'story-oral', primal: 'story' },
+  { id: 'exp-choosing-style', label: 'Choosing your style', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-tattoo', label: 'Tattoo / body art / piercings', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-swimming', label: 'Swimming / ocean', branch: 'move-outdoor', primal: 'movement' },
+  { id: 'exp-club-dancing', label: 'Going out dancing / clubbing', branch: 'move-dance', primal: 'movement' },
+  { id: 'exp-drinks-friends', label: 'Drinks with friends / hanging out', branch: 'bonds-ritual', primal: 'bonds' },
+  { id: 'exp-vulnerable-convo', label: 'Vulnerable conversation / clearing the air', branch: 'bonds-ritual', primal: 'bonds' },
+  { id: 'exp-cinema', label: 'Going to the cinema / watching a great film', branch: 'story-video', primal: 'story' },
+  { id: 'exp-making', label: 'Making something with your hands', branch: 'shelter-sacred', primal: 'shelter' },
+  { id: 'exp-thrill', label: 'Adrenaline / thrill ride', branch: 'play-sport', primal: 'play' },
+  { id: 'exp-spiritual', label: 'Spiritual practice', branch: 'med-mindbody', primal: 'healing' },
+  { id: 'exp-nature-stillness', label: 'Being in nature without an activity', branch: 'sleep-rest', primal: 'sleep' },
+]
 
 // ── NS State colors ──
 export const NS_COLORS = {

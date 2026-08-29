@@ -11,6 +11,7 @@ const PRIMAL_OVERRIDES = {
   'sub-safety-1400b': 'movement',  // Martial arts: physical discipline, not "threat"
   'sub-safety-1993': 'movement',   // BJJ/MMA: combat sport, not "threat"
   'sub-craft-1880': 'story',       // Art class: creative expression, not "status"
+  'sub-temperature-2019': 'healing', // Sauna: passive recovery, not movement
 }
 
 const NS_GLOW = {
