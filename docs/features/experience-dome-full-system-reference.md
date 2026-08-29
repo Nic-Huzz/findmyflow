@@ -516,3 +516,54 @@ Mystery boxes awarded at stages 4 (gold) and 7 (legendary).
 | 6→7: 5+ protective voices | Too niche | First healing flow started |
 | 7→8: Session with Nic | Not scalable | 3+ healing outcomes + 20+ courage |
 | 8+: Not implemented | Missing | Stages 9-12 defined above |
+
+---
+
+## Pending Work (Phase 3 Fixes for Future Agent)
+
+### High Priority
+
+**1. Income tracking for Stages 10-12**
+Stages 10-12 are defined but unreachable. Need:
+- Monthly revenue self-report (simple number input, prompted once/month on Tune tab or Progress tab)
+- User-set "living expenses" target (settings or onboarding)
+- DB table: `income_reports` (user_id, month, revenue, created_at)
+- Stage 10 trigger: revenue > 0 for 3 consecutive months
+- Stage 11 trigger: revenue >= user's expenses target
+- Stage 12: self-declared "I'm free" + revenue >= 2x expenses for 3+ months
+- See "Future: Income Tracking for Stages 10-12" section above
+
+**2. Stage 3 trigger: Dome tick count may be too high**
+Stage 3 requires 10+ rows in `experience_checkins`. The current user only has 2. The Experience Dome was rewritten this session (per-branch tick flow). Verify the new dome flow creates `experience_checkins` rows correctly. If the dome saves to a different table or format, update the Stage 3 query in `heroStageChecker.js`.
+
+**3. Hero stage catch-up mode**
+The checker advances ONE stage per `Challenge.jsx` mount. A user who qualifies for Stage 9 but is at Stage 7 needs 2 page loads to catch up. Consider changing the checker to loop until no more graduations are possible, or at minimum advance 2-3 stages per call.
+
+**4. QuestMapPage dead depth_level fetch**
+`src/pages/QuestMapPage.jsx` lines 48-57 still fetch `depth_level` from `groan_challenges` and attach it to tasks. This data is no longer used by the overview SVG (which is now chronological). The fetch runs on every QuestMap load for zero effect. Remove it.
+
+### Medium Priority
+
+**5. Healing flow completion rate is 1/60**
+59 of 60 `healing_intentions` rows only have `pattern` filled (pre-seeded from WahooCreator protective voice selection). Only 1 has all 7 steps completed. This suggests either:
+- Users don't know how to access the full healing flow after creation
+- The flow is too long (7 steps)
+- The entry point isn't visible enough
+Consider: shorter healing flow (3 steps: Pattern + Fear + Rewire), or a nudge system that reminds users to complete started flows.
+
+**6. Struggle pills (hidden, needs redesign)**
+"I need help with..." section in `LevelTab.jsx` is commented out (`<!-- hidden for now -->`). Contains 3 pills: career path, what's keeping me stuck, scaling. Code preserved, needs a design decision on whether to bring back and where.
+
+**7. FocusFooter quest color mismatch**
+`QuestPathMap.jsx` FocusFooter (line ~710) still uses `SAFE_COLOURS[quest.predicted_state]` for action card styling instead of the quest's chosen line color. Minor visual inconsistency between the focus slide SVG line (uses quest color) and the footer cards below it (uses NS state color). May be intentional since cards are typed by courage/healing/todo.
+
+### Low Priority
+
+**8. Quest color picker on QuestBoardCard**
+Color picker was intentionally removed from `QuestBoardCard` during the Option A redesign. Colors can now only be changed from the Quest Map focus slides. If users want to change colors without opening the Quest Map, consider adding a subtle color dot to the QuestBoardCard header (tap to pick).
+
+**9. WeeklyFocus Monday reset verification**
+The "Pick another" flow after completing a weekly courage challenge works via localStorage key rotation (`weekly_focus_challenge_{weekStart}`). Verify the Monday boundary works correctly across timezones. `getWeekStartLocal()` should handle this but hasn't been tested at the boundary.
+
+**10. ProgressTab "Go" deep-links to tab**
+The "Go ›" links on stages 5-7 navigate to `/7-day-challenge` but the user lands on whatever tab was last active (Discover by default). There's no URL param to deep-link to the Quests tab. Consider adding `?tab=Quests` support to `Challenge.jsx` so the Progress tab can link directly to the right tab.
