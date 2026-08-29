@@ -310,7 +310,48 @@
 .qbc-outcome-better { color: #E9A23B; }
 .qbc-outcome-better:hover { border-color: #E9A23B; background: rgba(233, 162, 59, 0.04); }
 
-/* ── Add task ── */
+/* ── Add actions (Option A) ── */
+.qbc-add-actions {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.qbc-add-courage-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: 2px dashed rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  background: transparent;
+  color: #5e17eb;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.qbc-add-courage-btn:active {
+  background: rgba(94, 23, 235, 0.04);
+  border-style: solid;
+}
+
+.qbc-add-task-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.03);
+  color: #9ca3af;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.qbc-add-task-btn:active {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ── Add task input ── */
 .qbc-add-row {
   display: flex;
   gap: 8px;

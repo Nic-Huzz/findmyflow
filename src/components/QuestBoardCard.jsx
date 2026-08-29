@@ -593,8 +593,21 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             </div>
           )}
 
-          {/* Add task input */}
-          <div className="qbc-add-row">
+          {/* Add actions — two clean buttons */}
+          <div className="qbc-add-actions">
+            <button className="qbc-add-courage-btn" onClick={() => {
+              setWahooCreatorText('')
+              setShowWahooCreator(true)
+            }}>
+              ⚡ Add courage challenge
+            </button>
+            <button className="qbc-add-task-btn" onClick={() => inputRef.current?.focus()}>
+              + Add task
+            </button>
+          </div>
+
+          {/* Inline task input — hidden until "Add task" tapped */}
+          <div className="qbc-add-row" style={{ display: taskInput || document.activeElement === inputRef.current ? 'flex' : 'none' }}>
             <input
               ref={inputRef}
               className="qbc-input"
@@ -602,57 +615,12 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               value={taskInput}
               onChange={e => setTaskInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && addTask()}
-              placeholder="Add a task..."
+              placeholder="What needs doing?"
             />
             <button className="qbc-add-btn" onClick={addTask} disabled={!taskInput.trim() || saving}>
               Add
             </button>
           </div>
-          {/* Task options — only show when typing */}
-          {taskInput.trim() && (
-            <div className="qbc-task-options-stack">
-              {/* Experience assignment */}
-              {hasExperiences && (
-                <div className="qbc-option-row">
-                  <span className="qbc-option-label">What experience?</span>
-                  <div className="qbc-exp-pills">
-                    <button className={`qbc-exp-pill ${!taskExperienceId ? 'active' : ''}`}
-                      onClick={() => setTaskExperienceId(null)}>General</button>
-                    {activeExperiences.map(exp => (
-                      <button key={exp.id} className={`qbc-exp-pill ${taskExperienceId === exp.id ? 'active' : ''}`}
-                        onClick={() => setTaskExperienceId(exp.id)}>
-                        {exp.label.length > 20 ? exp.label.slice(0, 20) + '...' : exp.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {/* Courage toggle */}
-              <div className="qbc-option-row">
-                <span className="qbc-option-label">Is this a courage challenge?</span>
-                <label className="qbc-courage-toggle">
-                  <input type="checkbox" checked={isCourage} onChange={e => setIsCourage(e.target.checked)} />
-                  <span>⚡ Yes</span>
-                </label>
-              </div>
-              {/* Timeframe */}
-              <div className="qbc-option-row">
-                <span className="qbc-option-label">When will you do it?</span>
-                <div className="qbc-timeframe-picker">
-                  {['week', 'month', 'quarter'].map(tf => (
-                    <button
-                      key={tf}
-                      className={`qbc-tf-btn ${taskTimeframe === tf ? 'active' : ''}`}
-                      onClick={() => setTaskTimeframe(tf)}
-                      type="button"
-                    >
-                      {tf === 'week' ? 'This week' : tf === 'month' ? 'This month' : 'This quarter'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Close quest */}
           {!showClose ? (
