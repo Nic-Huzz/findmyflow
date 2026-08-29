@@ -11,10 +11,10 @@ import './ExperienceGameFlow.css'
 // ─── Constants ───
 
 const NS_STATES = [
-  { id: 'vibe_rise', label: 'Vibe Rise', icon: '✦', color: '#E9A23B' },
-  { id: 'fun', label: 'Fun', icon: '○', color: '#10b981' },
-  { id: 'pressure', label: 'Stressful', icon: '◇', color: '#ef4444' },
-  { id: 'bored', label: 'Bored', icon: '—', color: '#6b7280' },
+  { id: 'vibe_rise', label: 'Vibe Rise', subtitle: 'Fully alive and energised', icon: '✦', color: '#E9A23B' },
+  { id: 'fun', label: 'Fun', subtitle: null, icon: '○', color: '#10b981' },
+  { id: 'pressure', label: 'Stressful', subtitle: null, icon: '◇', color: '#ef4444' },
+  { id: 'bored', label: 'Bored', subtitle: null, icon: '—', color: '#6b7280' },
 ]
 
 const INTRO_LINES = [
@@ -35,10 +35,9 @@ const BRANCH_ORDER = [
 
 const EXPERIENCE_DESC = {
   'sub-ordeal-2015': 'Multi-day outdoor challenges, survival experiences',
-  'comms-2020': 'Catching up with friends and family over video call',
-  'intimacy-2012': 'Tinder, Hinge, Bumble, meeting people online',
+  'intimacy-2012': 'The nerves, the excitement, meeting someone new for the first time',
   'sub-communal-2017': 'Co-working spaces, living abroad with a community',
-  'sub-digital-2015': 'Online communities, group chats, forums',
+  'sub-digital-2015': 'Forums, group chats, finding your people online',
   'sub-coaching-1937': 'Small group of peers meeting regularly to grow',
   'car-1886': 'Road trips, scenic drives, cross-country adventures',
   'sub-endurance-1962': 'Jogging, running, marathon training',
@@ -47,12 +46,10 @@ const EXPERIENCE_DESC = {
   'sub-temperature-2018': 'Ice baths, cold plunges, Wim Hof method',
   'sub-outdoor-1907': 'Camping, hiking, scouting, bushcraft',
   'sub-dance-1975': 'Ecstatic dance, 5Rhythms, free movement',
-  'food-2002': 'Organic groceries, farmers markets, health-conscious eating',
-  'sub-ancestral-2002': 'Paleo, primal eating, ancestral health',
-  'sub-ferment-2010': 'Kombucha, kefir, fermented foods',
-  'sub-fasting-2012': 'Intermittent fasting, time-restricted eating',
-  'sub-regen-1971': 'Farm-to-table restaurants, slow food',
-  'sub-regen-1994': 'Hosting dinner parties, cooking for friends',
+  'sub-regen-1971': 'Farm-to-table restaurants, slow food, knowing where it came from',
+  'sub-regen-1994': 'Hosting dinner parties, cooking a meal for friends',
+  'exp-farmers-market': 'Browsing stalls, tasting samples, buying direct from growers',
+  'exp-new-cuisine': 'Eating something completely new, food adventures, street food in a new country',
   'ai-2022': 'ChatGPT, Claude, AI assistants, prompt engineering',
   'exp-choosing-style': 'Getting dressed with intention, expressing who you are through what you wear',
   'exp-tattoo': 'Tattoos, piercings, body modification, permanent self-expression',
@@ -68,7 +65,7 @@ const EXPERIENCE_DESC = {
   'sub-written-1719': 'Getting lost in a great novel',
   'sub-written-1999': 'Journaling, personal writing, creative writing',
   'sub-audio-2005': 'Podcasts, audiobooks, audio learning',
-  'sub-video-2005': 'Making and publishing your own videos',
+  'sub-video-2005': 'Filming, editing, colour grading, publishing videos',
   'play-1972': 'Console games, PC gaming, mobile games',
   'sub-board-1995': 'Board game nights, Catan, strategy games',
   'sub-sport-1871': 'Team sports, pickup games, leagues',
@@ -121,12 +118,13 @@ const EXPERIENCE_DESC = {
   'exp-swimming': 'Ocean swimming, lake dips, laps at the pool',
   'exp-club-dancing': 'Nightclubs, DJ sets, dancing with friends after dark',
   'exp-drinks-friends': 'Pub nights, wine bars, catching up over drinks',
-  'exp-vulnerable-convo': 'Hard conversations, truth-telling, clearing the air with someone',
+  'exp-vulnerable-convo': 'Opening up, sharing something real, being honest about how you feel',
   'exp-cinema': 'Cinema dates, film festivals, watching a great movie on the big screen',
   'exp-making': 'Woodworking, DIY, renovating, fixing things, improving your space',
   'exp-thrill': 'Skydiving, bungee jumping, roller coasters, theme parks',
   'exp-spiritual': 'Prayer, church, mosque, temple, nature reverence, connection to something larger',
   'exp-nature-stillness': 'Sitting by a river, watching a sunset, stargazing, walking in the rain',
+  'exp-research': 'Deep dives, rabbit holes, investigating something that fascinates you',
 }
 
 // Override primal assignment for nodes whose tree branch doesn't match their experiential primal
@@ -477,6 +475,7 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
                     >
                       <span className="exp-game-rate-icon">{ns.icon}</span>
                       <span className="exp-game-rate-label">{ns.label}</span>
+                      {ns.subtitle && <span className="exp-game-rate-sub">{ns.subtitle}</span>}
                     </button>
                   ))}
                 </div>

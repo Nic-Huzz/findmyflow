@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quest Card Redesign — 3 Options</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=Fraunces:opsz,wght@9..144,300..900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #5e17eb;
+  --purple-light: rgba(94, 23, 235, 0.06);
+  --purple-mid: rgba(94, 23, 235, 0.12);
+  --gold: #E9A23B;
+  --gold-light: rgba(233, 162, 59, 0.08);
+  --green: #10b981;
+  --green-light: rgba(16, 185, 129, 0.08);
+  --red: #ef4444;
+  --gray: #6b7280;
+  --dark: #1a0b3d;
+  --bg: #f5f5f0;
+  --card: #ffffff;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: #e8e4df;
+  color: var(--dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  padding: 40px 16px 100px;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--dark);
+  margin-bottom: -20px;
+}
+
+.option-label {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--purple);
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.option-desc {
+  font-size: 13px;
+  color: var(--gray);
+  text-align: center;
+  max-width: 360px;
+  margin: 4px auto 16px;
+}
+
+.phone {
+  width: 100%;
+  max-width: 390px;
+  background: var(--bg);
+  border-radius: 32px;
+  padding: 20px 16px 32px;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.08),
+    0 0 0 1px rgba(0,0,0,0.04);
+}
+
+/* ═══════════════════════════════════════════
+   OPTION A: MINIMAL — Progressive Disclosure
+   ═══════════════════════════════════════════ */
+
+.a-card {
+  background: var(--card);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.a-header {
+  padding: 18px 18px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.a-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.a-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.a-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--purple);
+  background: var(--purple-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* Experience groups */
+.a-exp {
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+
+.a-exp-header {
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.a-exp-icon { font-size: 14px; }
+
+.a-exp-name {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.a-exp-state {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.a-exp-state.vibe { background: var(--gold-light); color: var(--gold); }
+.a-exp-state.fun { background: var(--green-light); color: var(--green); }
+
+.a-exp-chevron {
+  font-size: 12px;
+  color: #ccc;
+  transition: transform 0.2s;
+}
+
+/* Tasks */
+.a-tasks {
+  padding: 0 18px 12px;
+}
+
+.a-task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.a-task:last-child { border-bottom: none; }
+
+.a-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.a-check:hover { border-color: var(--purple); }
+
+.a-task-text {
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.a-task-icons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.a-courage-icon { font-size: 12px; color: var(--gold); }
+.a-heal-icon { font-size: 12px; }
+
+/* Dimension pills on tasks */
+.a-dims {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.a-dim {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+.a-dim.scale {
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+/* Floating add button */
+.a-add-float {
+  position: relative;
+  padding: 0 18px 18px;
+}
+
+.a-add-btn {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--purple-mid);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--purple);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.a-add-btn:hover {
+  background: var(--purple-light);
+  border-style: solid;
+}
+
+/* Add sheet (slides up) */
+.a-sheet {
+  padding: 0 18px 18px;
+  animation: sheetUp 0.25s ease;
+}
+
+@keyframes sheetUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.a-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.a-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 2px solid var(--purple-mid);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  background: var(--bg);
+}
+
+.a-input:focus { border-color: var(--purple); }
+
+.a-submit {
+  padding: 12px 20px;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Dimension selector in add flow */
+.a-dim-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.a-dim-pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--purple-mid);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.a-dim-pill.active {
+  border-color: var(--purple);
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+.a-dim-pill.scale-active {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+.a-dim-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   OPTION B: CARD-PER-EXPERIENCE
+   ═══════════════════════════════════════════ */
+
+.b-path-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px 14px;
+}
+
+.b-path-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.b-path-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.b-path-progress {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.b-exp-card {
+  background: var(--card);
+  border-radius: 16px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.b-exp-top {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.b-exp-emoji { font-size: 16px; }
+
+.b-exp-info { flex: 1; }
+
+.b-exp-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.b-exp-sub {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 1px;
+}
+
+.b-state-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.b-state-dot.vibe { background: var(--gold); }
+.b-state-dot.fun { background: var(--green); }
+
+.b-exp-body {
+  padding: 0 16px 14px;
+}
+
+.b-task {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.b-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #ddd;
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+}
+
+.b-task-content { flex: 1; }
+
+.b-task-text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.b-task-meta {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.b-dim-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.b-dim-tag.craft { background: var(--purple-light); color: var(--purple); }
+.b-dim-tag.scale { background: var(--gold-light); color: var(--gold); }
+
+.b-task-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding-top: 2px;
+}
+
+.b-icon-btn {
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+/* Add task inline */
+.b-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 4px;
+}
+
+.b-add-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1.5px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  background: var(--bg);
+  outline: none;
+}
+
+.b-add-input:focus { border-color: var(--purple); }
+
+.b-add-submit {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dimensions inline selector */
+.b-dim-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 0;
+}
+
+.b-dim-chip {
+  padding: 4px 10px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(0,0,0,0.06);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.b-dim-chip.sel {
+  border-color: var(--purple);
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+.b-dim-chip.scale-sel {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+/* ═══════════════════════════════════════════
+   OPTION C: CONVERSATION-STYLE STEPPER
+   ═══════════════════════════════════════════ */
+
+.c-card {
+  background: var(--card);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.c-header {
+  padding: 18px 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.c-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.c-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.c-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+/* Task list (compact) */
+.c-tasks {
+  padding: 14px 18px;
+}
+
+.c-task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.c-task:last-child { border-bottom: none; }
+
+.c-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  flex-shrink: 0;
+}
+
+.c-task-info { flex: 1; }
+
+.c-task-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.c-task-exp {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 1px;
+}
+
+.c-task-dims {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.c-mini-dim {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+}
+
+.c-mini-dim.craft { background: var(--purple); opacity: 0.4; }
+.c-mini-dim.scale { background: var(--gold); opacity: 0.6; }
+
+/* Conversation add flow */
+.c-add-flow {
+  padding: 0 18px 18px;
+}
+
+.c-flow-step {
+  margin-bottom: 14px;
+  animation: cStepIn 0.3s ease;
+}
+
+@keyframes cStepIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.c-flow-q {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--purple);
+  margin-bottom: 8px;
+}
+
+.c-flow-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--purple-mid);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+  background: var(--bg);
+  outline: none;
+}
+
+.c-flow-input:focus { border-color: var(--purple); }
+
+/* Step 2: Dimension grid */
+.c-dim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.c-dim-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid rgba(0,0,0,0.05);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dark);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.c-dim-option .icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
+}
+
+.c-dim-option.active {
+  border-color: var(--purple);
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+.c-dim-option.scale-active {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  color: var(--gold);
+}
+
+/* Step 3: Fear (optional) */
+.c-fear-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.c-fear-btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(0,0,0,0.06);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s;
+}
+
+.c-fear-btn.active {
+  border-color: var(--purple);
+  background: var(--purple-light);
+}
+
+/* Submit */
+.c-submit {
+  width: 100%;
+  padding: 14px;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.c-skip {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--gray);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+/* Separator */
+.c-sep {
+  height: 1px;
+  background: rgba(0,0,0,0.04);
+  margin: 0 18px;
+}
+</style>
+</head>
+<body>
+
+<h1>Quest Card Redesign</h1>
+
+<!-- ═══════════════════════════════════
+     OPTION A: MINIMAL
+     ═══════════════════════════════════ -->
+
+<div>
+  <div class="option-label">Option A: Minimal</div>
+  <div class="option-desc">Hide complexity behind progressive disclosure. One clean card, tap to expand experiences, simple add button reveals the form.</div>
+</div>
+
+<div class="phone">
+  <div class="a-card">
+    <div class="a-header">
+      <div class="a-dot"></div>
+      <div class="a-title">Vibe Rise</div>
+      <div class="a-badge">50/52 courage</div>
+    </div>
+
+    <!-- Experience 1 -->
+    <div class="a-exp">
+      <div class="a-exp-header">
+        <span class="a-exp-icon">🎯</span>
+        <span class="a-exp-name">Monument Disco Tour</span>
+        <span class="a-exp-state vibe">Vibe Rise</span>
+        <span class="a-exp-chevron">&#9662;</span>
+      </div>
+      <div class="a-tasks">
+        <div class="a-task">
+          <div class="a-check"></div>
+          <div style="flex:1">
+            <div class="a-task-text">Rome Flash Mob</div>
+            <div class="a-dims">
+              <span class="a-dim">People</span>
+              <span class="a-dim scale">Location</span>
+            </div>
+          </div>
+          <div class="a-task-icons">
+            <span class="a-courage-icon">&#9889;</span>
+            <span class="a-heal-icon">&#128154;</span>
+          </div>
+        </div>
+        <div class="a-task">
+          <div class="a-check"></div>
+          <div style="flex:1">
+            <div class="a-task-text">Eiffel Tower Monument Rave</div>
+            <div class="a-dims">
+              <span class="a-dim">People</span>
+              <span class="a-dim">Duration</span>
+              <span class="a-dim scale">Location</span>
+            </div>
+          </div>
+          <div class="a-task-icons">
+            <span class="a-courage-icon">&#9889;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience 2 -->
+    <div class="a-exp">
+      <div class="a-exp-header">
+        <span class="a-exp-icon">🎯</span>
+        <span class="a-exp-name">Made life feel like a game</span>
+        <span class="a-exp-state fun">Fun</span>
+        <span class="a-exp-chevron">&#9656;</span>
+      </div>
+    </div>
+
+    <!-- Add courage challenge -->
+    <div class="a-sheet">
+      <div class="a-input-row">
+        <input class="a-input" placeholder="What's the brave action?" value="Copenhagen street performance">
+        <button class="a-submit">Add</button>
+      </div>
+      <div class="a-dim-label">What are you stretching?</div>
+      <div class="a-dim-select">
+        <button class="a-dim-pill">&#9201; Duration</button>
+        <button class="a-dim-pill">&#128257; Frequency</button>
+        <button class="a-dim-pill">&#128225; Medium</button>
+        <button class="a-dim-pill active">&#128101; People</button>
+        <button class="a-dim-pill scale-active">&#128176; Money</button>
+        <button class="a-dim-pill scale-active">&#128205; Location</button>
+        <button class="a-dim-pill">&#128640; Independence</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     OPTION B: CARD-PER-EXPERIENCE
+     ═══════════════════════════════════ -->
+
+<div>
+  <div class="option-label">Option B: Card per Experience</div>
+  <div class="option-desc">Each experience is its own mini-card. Tasks nest cleanly inside. Adding is inline and ultra-compact.</div>
+</div>
+
+<div class="phone">
+  <div class="b-path-header">
+    <div class="b-path-dot"></div>
+    <div class="b-path-title">Vibe Rise</div>
+    <div class="b-path-progress">50/52</div>
+  </div>
+
+  <!-- Experience Card 1 -->
+  <div class="b-exp-card">
+    <div class="b-exp-top">
+      <span class="b-exp-emoji">🎯</span>
+      <div class="b-exp-info">
+        <div class="b-exp-name">Monument Disco Tour</div>
+        <div class="b-exp-sub">2 challenges remaining</div>
+      </div>
+      <div class="b-state-dot vibe"></div>
+    </div>
+    <div class="b-exp-body">
+      <div class="b-task">
+        <div class="b-check"></div>
+        <div class="b-task-content">
+          <div class="b-task-text">Rome Flash Mob</div>
+          <div class="b-task-meta">
+            <span class="b-dim-tag craft">People</span>
+            <span class="b-dim-tag scale">Location</span>
+          </div>
+        </div>
+        <div class="b-task-actions">
+          <span class="b-icon-btn">&#9889;</span>
+          <span class="b-icon-btn">&#128154;</span>
+        </div>
+      </div>
+      <div class="b-task">
+        <div class="b-check"></div>
+        <div class="b-task-content">
+          <div class="b-task-text">Eiffel Tower Monument Rave</div>
+          <div class="b-task-meta">
+            <span class="b-dim-tag craft">People</span>
+            <span class="b-dim-tag craft">Duration</span>
+            <span class="b-dim-tag scale">Location</span>
+          </div>
+        </div>
+        <div class="b-task-actions">
+          <span class="b-icon-btn">&#9889;</span>
+        </div>
+      </div>
+
+      <!-- Inline add -->
+      <div class="b-add">
+        <input class="b-add-input" placeholder="Add a brave action...">
+        <button class="b-add-submit">+</button>
+      </div>
+      <div class="b-dim-row">
+        <button class="b-dim-chip">&#9201; Duration</button>
+        <button class="b-dim-chip">&#128257; Freq</button>
+        <button class="b-dim-chip">&#128225; Medium</button>
+        <button class="b-dim-chip sel">&#128101; People</button>
+        <button class="b-dim-chip scale-sel">&#128176; Money</button>
+        <button class="b-dim-chip">&#128205; Location</button>
+        <button class="b-dim-chip">&#128640; Indep.</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Experience Card 2 -->
+  <div class="b-exp-card">
+    <div class="b-exp-top">
+      <span class="b-exp-emoji">🎯</span>
+      <div class="b-exp-info">
+        <div class="b-exp-name">Made life feel like a game</div>
+        <div class="b-exp-sub">1 challenge remaining</div>
+      </div>
+      <div class="b-state-dot fun"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     OPTION C: CONVERSATION-STYLE
+     ═══════════════════════════════════ -->
+
+<div>
+  <div class="option-label">Option C: Conversation Stepper</div>
+  <div class="option-desc">Adding a challenge is a 3-step conversation. Each step appears after the previous is answered. Clean, guided, zero overwhelm.</div>
+</div>
+
+<div class="phone">
+  <div class="c-card">
+    <div class="c-header">
+      <div class="c-dot"></div>
+      <div class="c-title">Vibe Rise</div>
+      <div class="c-count">50/52</div>
+    </div>
+
+    <!-- Existing tasks (compact) -->
+    <div class="c-tasks">
+      <div class="c-task">
+        <div class="c-check"></div>
+        <div class="c-task-info">
+          <div class="c-task-text">Rome Flash Mob</div>
+          <div class="c-task-exp">Monument Disco Tour</div>
+          <div class="c-task-dims">
+            <div class="c-mini-dim craft"></div>
+            <div class="c-mini-dim scale"></div>
+          </div>
+        </div>
+      </div>
+      <div class="c-task">
+        <div class="c-check"></div>
+        <div class="c-task-info">
+          <div class="c-task-text">Message quit-job people about FMF</div>
+          <div class="c-task-exp">Made life feel like a game</div>
+          <div class="c-task-dims">
+            <div class="c-mini-dim craft"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="c-sep"></div>
+
+    <!-- Conversation add flow -->
+    <div class="c-add-flow">
+      <!-- Step 1: What -->
+      <div class="c-flow-step">
+        <div class="c-flow-q">What's the brave action?</div>
+        <input class="c-flow-input" placeholder="I want to..." value="Street perform in Copenhagen">
+      </div>
+
+      <!-- Step 2: What are you stretching? -->
+      <div class="c-flow-step">
+        <div class="c-flow-q">What capacity are you building?</div>
+        <div class="c-dim-grid">
+          <button class="c-dim-option"><span class="icon">&#9201;</span> Duration</button>
+          <button class="c-dim-option"><span class="icon">&#128257;</span> Frequency</button>
+          <button class="c-dim-option"><span class="icon">&#128225;</span> Medium</button>
+          <button class="c-dim-option active"><span class="icon">&#128101;</span> People</button>
+          <button class="c-dim-option scale-active"><span class="icon">&#128176;</span> Money</button>
+          <button class="c-dim-option scale-active"><span class="icon">&#128205;</span> Location</button>
+          <button class="c-dim-option"><span class="icon">&#128640;</span> Independence</button>
+        </div>
+      </div>
+
+      <!-- Step 3: What makes this scary? -->
+      <div class="c-flow-step">
+        <div class="c-flow-q">What makes this scary?</div>
+        <div class="c-fear-options">
+          <button class="c-fear-btn active">People will judge me</button>
+          <button class="c-fear-btn">I'm not good enough yet</button>
+          <button class="c-fear-btn">I'll fail publicly</button>
+          <button class="c-fear-btn">I'll have to charge money</button>
+        </div>
+      </div>
+
+      <button class="c-submit">Add courage challenge</button>
+      <button class="c-skip">Skip fear for now</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

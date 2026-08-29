@@ -93,7 +93,7 @@ export const PROTECTIVE_VOICES = {
     id: 'people-pleaser',
     name: 'The People Pleaser',
     icon: '🪞',
-    lie: "As long as everyone's happy, I'm safe.",
+    lie: "As long as everyone's happy, I'm good.",
     origin: 'Developed when authenticity led to rejection or judgment',
     howItProtects: 'By making you agreeable, it prevents conflict and rejection',
     kryptonite: 'Showing up as yourself, setting boundaries, saying no',

@@ -138,7 +138,7 @@ const EXPERIENCE_LABELS = {
   'media-2007': 'Streaming (Netflix, etc.)',
   'media-2008': 'Music streaming (Spotify)',
   'media-2012': 'Online course / e-learning',
-  'media-2018': 'Short-form video (TikTok)',
+  'media-2018': 'Creating short-form video (Reels, TikTok)',
   'media-2022': 'AI-generated content creation',
 
   // Food
@@ -173,7 +173,7 @@ const EXPERIENCE_LABELS = {
   'intimacy-1170': 'Romantic love / falling in love',
   'intimacy-1960': 'Hormonal contraception',
   'intimacy-1978': 'IVF / fertility treatment',
-  'intimacy-2012': 'Dating apps',
+  'intimacy-2012': 'Going on a first date',
   'intimacy-2017a': 'AI companion / emotional AI',
 
   // Medicine
@@ -327,7 +327,7 @@ const EXPERIENCE_LABELS = {
   'sub-digital-1979': 'BBS / online forum',
   'sub-digital-2005': 'Reddit / forums',
   'sub-digital-2010': 'Facebook groups',
-  'sub-digital-2015': 'Discord community',
+  'sub-digital-2015': 'Being part of an online community',
   'sub-digital-2017': 'Paid community (Circle, MN)',
 
   'sub-coaching-1400': 'Advisory board / council',
@@ -418,7 +418,7 @@ const EXPERIENCE_LABELS = {
 
   'sub-proptech-2008': 'Airbnb hosting',
   'sub-proptech-2015': 'Co-living',
-  'sub-proptech-2020': 'Working from home',
+  'sub-proptech-2020': 'Decorating / designing your space',
 
   'sub-sacred-1400': 'Cave / natural sacred space',
   'sub-sacred-1400b': 'Temple / church visit',
@@ -527,7 +527,7 @@ const EXPERIENCE_LABELS = {
   'sub-video-1920': 'Hollywood cinema',
   'sub-video-1951': 'Watching serialized TV',
   'sub-video-1981': 'Music videos',
-  'sub-video-2005': 'Creating YouTube videos',
+  'sub-video-2005': 'Creating / editing video',
   'sub-video-2013': 'Netflix binge-watching',
   'sub-video-2018': 'TikTok short-form video',
   'sub-video-2024': 'AI video creation',
@@ -625,14 +625,12 @@ const CORE_NODE_IDS = new Set([
   'exp-swimming',            // Swimming / ocean
   'exp-club-dancing',        // Going out dancing / clubbing
 
-  // Nourishment (7)
-  'food-2002',               // Eating organic / farmers market
-  'sub-ancestral-2002',      // Paleo / primal eating
-  'sub-ferment-2010',        // Kombucha / cultured foods
-  'sub-fasting-2012',        // Intermittent fasting
+  // Nourishment (5)
   'sub-regen-1971',          // Farm-to-table dining
   'sub-regen-1994',          // Cooking for others / hosting dinner
   'exp-gardening',           // Gardening / growing food
+  'exp-farmers-market',      // Visiting a farmers market
+  'exp-new-cuisine',         // Trying a cuisine you've never had
 
   // Style (4) — how you present yourself to the world
   'exp-choosing-style',      // Choosing your style
@@ -640,12 +638,11 @@ const CORE_NODE_IDS = new Set([
   'sub-fashion-2007',        // Slow fashion / thrifting
   'sub-counter-2011',        // Minimalism / decluttering
 
-  // Bonds (10)
-  'comms-2020',              // Virtual hangouts
-  'intimacy-2012',           // Dating apps
-  'sub-communal-2017',       // Digital nomad hub
+  // Bonds (9) — dropped Virtual hangouts (too generic), renamed Dating apps + Discord
+  'intimacy-2012',           // Going on a first date
+  'sub-communal-2017',       // Digital nomad hub (TBC: may become "Live abroad")
   'sub-ordeal-2015',         // Adventure retreat
-  'sub-digital-2015',        // Discord community
+  'sub-digital-2015',        // Being part of an online community
   'sub-coaching-1937',       // Mastermind group
   'exp-volunteering',        // Volunteering / giving back
   'exp-pets',                // Pet ownership / caring for animals
@@ -655,7 +652,7 @@ const CORE_NODE_IDS = new Set([
   // Shelter (5)
   'property-2008',           // Unique stays / boutique accommodation
   'sub-alt-2011',            // Van life
-  'sub-proptech-2020',       // Working from home
+  'sub-proptech-2020',       // Decorating / designing your space
   'sub-sacred-2010',         // Wellness studio (SoulCycle)
   'exp-making',              // Making something with your hands (woodwork, DIY, renovating)
 
@@ -674,6 +671,7 @@ const CORE_NODE_IDS = new Set([
   'exp-selling',             // Selling / pitching
   'exp-coaching',            // Coaching / mentoring someone
   'exp-cinema',              // Going to the cinema / watching a great film
+  'exp-research',            // Researching / going down rabbit holes
 
   // Play (7)
   'play-1972',               // Playing video games
@@ -723,12 +721,15 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-swimming', label: 'Swimming / ocean', branch: 'move-outdoor', primal: 'movement' },
   { id: 'exp-club-dancing', label: 'Going out dancing / clubbing', branch: 'move-dance', primal: 'movement' },
   { id: 'exp-drinks-friends', label: 'Drinks with friends / hanging out', branch: 'bonds-ritual', primal: 'bonds' },
-  { id: 'exp-vulnerable-convo', label: 'Vulnerable conversation / clearing the air', branch: 'bonds-ritual', primal: 'bonds' },
+  { id: 'exp-vulnerable-convo', label: 'Vulnerable conversation', branch: 'bonds-ritual', primal: 'bonds' },
   { id: 'exp-cinema', label: 'Going to the cinema / watching a great film', branch: 'story-video', primal: 'story' },
+  { id: 'exp-research', label: 'Researching / going down rabbit holes', branch: 'story-written', primal: 'story' },
   { id: 'exp-making', label: 'Making something with your hands', branch: 'shelter-sacred', primal: 'shelter' },
   { id: 'exp-thrill', label: 'Adrenaline / thrill ride', branch: 'play-sport', primal: 'play' },
   { id: 'exp-spiritual', label: 'Spiritual practice', branch: 'med-mindbody', primal: 'healing' },
   { id: 'exp-nature-stillness', label: 'Being in nature without an activity', branch: 'sleep-rest', primal: 'sleep' },
+  { id: 'exp-farmers-market', label: 'Visiting a farmers market', branch: 'food-regen', primal: 'nourishment' },
+  { id: 'exp-new-cuisine', label: 'Trying a cuisine you\'ve never had', branch: 'food-regen', primal: 'nourishment' },
 ]
 
 // ── NS State colors ──
