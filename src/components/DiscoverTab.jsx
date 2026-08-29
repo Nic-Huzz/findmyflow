@@ -23,7 +23,6 @@ function getWeekKey() {
 export default function DiscoverTab({ userId, onUnlockTab }) {
   const navigate = useNavigate()
   const [essenceDone, setEssenceDone] = useState(false)
-  const [lifeMapDone, setLifeMapDone] = useState(false)
   const [domeCount, setDomeCount] = useState(0)
   const [domeRatings, setDomeRatings] = useState({})
   const [domeChecked, setDomeChecked] = useState({})
@@ -45,15 +44,11 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       supabase.from('user_stage_progress')
         .select('essence_mirror_completed')
         .eq('user_id', userId).maybeSingle(),
-      supabase.from('nikigai_clusters')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId),
       supabase.from('experience_dome_ratings')
         .select('node_id, ns_state')
         .eq('user_id', userId),
-    ]).then(([essenceRes, lifeMapRes, domeRes]) => {
+    ]).then(([essenceRes, domeRes]) => {
       setEssenceDone(!!essenceRes.data?.essence_mirror_completed)
-      setLifeMapDone((lifeMapRes.count || 0) > 0)
 
       const ratings = {}
       const checked = {}
