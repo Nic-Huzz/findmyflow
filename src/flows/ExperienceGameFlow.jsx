@@ -4,6 +4,8 @@ import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
 import { isCoreNode, getExperienceLabel, VIRTUAL_EXPERIENCE_NODES } from '../lib/experienceDomeConfig'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
+import { supabase } from '../lib/supabaseClient'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import DomeRadar from '../components/DomeRadar'
 import './ExperienceGameFlow.css'
@@ -812,9 +814,48 @@ export default function ExperienceGameFlow() {
     setPhase('insight')
   }, [user, ratings, bulkSetStates])
 
-  const handleExplore = useCallback(() => {
+  const handleExplore = useCallback(async (selectedNodeId) => {
+    if (!selectedNodeId) {
+      navigate('/7-day-challenge?tab=discover')
+      return
+    }
+
+    // Find the node label + branch
+    let nodeLabel = selectedNodeId
+    let branchLabel = ''
+    for (const b of branches) {
+      const node = b.nodes.find(n => n.id === selectedNodeId)
+      if (node) {
+        nodeLabel = node.label
+        branchLabel = b.label
+        break
+      }
+    }
+
+    // Save to groan_challenges if authenticated
+    if (user?.id) {
+      await supabase.from('groan_challenges').insert({
+        user_id: user.id,
+        title: nodeLabel,
+        challenge_text: nodeLabel,
+        status: 'active',
+        source_type: 'skill',
+        source_value: selectedNodeId,
+        source_label: branchLabel,
+        challenge_source: 'dome',
+        visibility_layer: 'screen',
+      })
+    }
+
+    // Save to localStorage so Discover tab shows it immediately
+    const weekKey = 'weekly_experience_focus_' + getWeekStartLocal()
+    try {
+      localStorage.setItem(weekKey, JSON.stringify({ nodeId: selectedNodeId, nodeLabel, picked: true }))
+    } catch {}
+
+    hapticSuccess()
     navigate('/7-day-challenge?tab=discover')
-  }, [navigate])
+  }, [user, branches, navigate])
 
 
   if (phase === 'intro') {

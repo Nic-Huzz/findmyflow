@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import { hapticLight } from '../lib/haptics'
+import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { isCoreNode } from '../lib/experienceDomeConfig'
 import DomeRadar from './DomeRadar'
 import './DiscoverTab.css'
@@ -27,7 +27,9 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
   const [domeRatings, setDomeRatings] = useState({})
   const [domeChecked, setDomeChecked] = useState({})
   const [unratedNodes, setUnratedNodes] = useState([])
-  const [weeklyExp, setWeeklyExp] = useState(null) // localStorage: { nodeId, picked }
+  const [weeklyExp, setWeeklyExp] = useState(null) // { nodeId, nodeLabel, picked }
+  const [activeDomeChallenge, setActiveDomeChallenge] = useState(null) // from groan_challenges
+  const [showNsRating, setShowNsRating] = useState(false)
   const [loading, setLoading] = useState(true)
   const [domeExpanded, setDomeExpanded] = useState(false)
 
@@ -47,7 +49,18 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       supabase.from('experience_dome_ratings')
         .select('node_id, ns_state')
         .eq('user_id', userId),
-    ]).then(([essenceRes, domeRes]) => {
+      supabase.from('groan_challenges')
+        .select('id, title, source_value, source_label, status')
+        .eq('user_id', userId)
+        .eq('challenge_source', 'dome')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1),
+    ]).then(([essenceRes, domeRes, domeChallRes]) => {
+      // Active dome challenge
+      if (domeChallRes.data?.[0]) {
+        setActiveDomeChallenge(domeChallRes.data[0])
+      }
       setEssenceDone(!!essenceRes.data?.essence_mirror_completed)
 
       const ratings = {}
@@ -75,35 +88,105 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
     })
   }, [userId])
 
-  const pickExperience = (nodeId) => {
-    const data = { nodeId, picked: true }
+  const pickExperience = (nodeId, nodeLabel) => {
+    const data = { nodeId, nodeLabel: nodeLabel || nodeId, picked: true }
     localStorage.setItem(getWeekKey(), JSON.stringify(data))
     setWeeklyExp(data)
     hapticLight()
+  }
+
+  const handleDomeComplete = async (nsState) => {
+    if (!activeDomeChallenge || !userId) return
+    hapticSuccess()
+
+    const nsMap = { vibe_rise: 10, fun: 7, pressure: 5, bored: 0 }
+    const rp = nsMap[nsState] || 0
+
+    // 1. Mark challenge completed
+    await supabase.from('groan_challenges')
+      .update({ status: 'completed', completed_at: new Date().toISOString() })
+      .eq('id', activeDomeChallenge.id)
+
+    // 2. Upsert dome rating with NS state
+    if (activeDomeChallenge.source_value) {
+      await supabase.from('experience_dome_ratings').upsert({
+        user_id: userId,
+        node_id: activeDomeChallenge.source_value,
+        ns_state: nsState,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,node_id' })
+    }
+
+    // 3. Insert quest completion for RP
+    await supabase.from('quest_completions').insert({
+      user_id: userId,
+      quest_id: 'dome_challenge_' + activeDomeChallenge.id,
+      quest_category: 'Groans',
+      quest_type: 'Rewire',
+      points_earned: rp,
+      reflection_text: JSON.stringify({
+        challenge_id: activeDomeChallenge.id,
+        ns_state: nsState,
+        source: 'dome',
+      }),
+    })
+
+    // 4. Clear state
+    setActiveDomeChallenge(null)
+    setShowNsRating(false)
+    localStorage.removeItem(getWeekKey())
+    setWeeklyExp(null)
+
+    // Update dome count
+    setDomeCount(prev => prev + 1)
   }
 
   if (loading) return <div className="dt-loading">Loading...</div>
 
   return (
     <div className="discover-tab">
-      {/* Experience to try this week — top of tab, same pattern as WeeklyFocus */}
+      {/* Experience to try this week */}
       {domeCount > 0 && (
         <div className="dt-weekly-card">
           <div className="dt-weekly-header">
             <span className="dt-weekly-label">Experience to try this week</span>
-            {weeklyExp && (
-              <button className="dt-weekly-change" onClick={() => { setWeeklyExp(null); localStorage.removeItem(getWeekKey()) }}>
-                Change
-              </button>
-            )}
           </div>
-          {weeklyExp ? (
-            <div className="dt-weekly-focus">
-              <div className="dt-weekly-focus-text">{weeklyExp.nodeId.replace(/_/g, ' ')}</div>
-              <button className="dt-weekly-done" onClick={() => navigate('/experience-game')}>
-                Rate it
-              </button>
-            </div>
+          {(activeDomeChallenge || weeklyExp) ? (
+            showNsRating ? (
+              <div className="dt-weekly-ns">
+                <p className="dt-weekly-ns-prompt">How did it feel?</p>
+                <div className="dt-weekly-ns-buttons">
+                  {[
+                    { id: 'vibe_rise', label: 'Vibe Rise', color: '#E9A23B', icon: '✦' },
+                    { id: 'fun', label: 'Fun', color: '#10b981', icon: '○' },
+                    { id: 'pressure', label: 'Stressful', color: '#ef4444', icon: '◇' },
+                    { id: 'bored', label: 'Bored', color: '#6b7280', icon: '—' },
+                  ].map(ns => (
+                    <button
+                      key={ns.id}
+                      className="dt-weekly-ns-btn"
+                      style={{ borderColor: ns.color, color: ns.color }}
+                      onClick={() => handleDomeComplete(ns.id)}
+                    >
+                      <span>{ns.icon}</span>
+                      <span>{ns.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="dt-weekly-focus">
+                <div className="dt-weekly-focus-text">
+                  {activeDomeChallenge?.title || weeklyExp?.nodeLabel || weeklyExp?.nodeId}
+                </div>
+                <div className="dt-weekly-focus-branch">
+                  {activeDomeChallenge?.source_label || ''}
+                </div>
+                <button className="dt-weekly-done" onClick={() => setShowNsRating(true)}>
+                  I did it!
+                </button>
+              </div>
+            )
           ) : (
             <>
               <p className="dt-weekly-hint">Pick something you haven't tried yet.</p>
