@@ -1,8 +1,13 @@
 # Experience Dome — Full System Reference
 
+> Single source of truth for the three-phase product architecture.
+> Last updated: Aug 29, 2026 (Phase 2 restructure session).
+
 ## The Game
 
 Life is the most magical game in the world. The purpose of the game is to have experiences you love. We believe there is a life path that is uniquely yours. This app turns finding that path into a game.
+
+**Enlightenment insight**: A full Vibe Rise dome = complete nervous system mastery. Nothing triggers you, nothing bores you, everything is alive. The dome is a consciousness map.
 
 ## The Measurement
 
@@ -13,7 +18,7 @@ The nervous system is the scorecard. Not salary, title, or company logo. Four st
 | ✦ | Vibe Rise | "I feel ALIVE doing this" |
 | ○ | Fun | "Yeah, that was good" |
 | ◇ | Stressful | "I can do it but it costs me" |
-| — | Uninterested | "Not for me" |
+| — | Bored | "Not for me" |
 
 ## The Three Phases
 
@@ -22,7 +27,7 @@ See `docs/features/three-phase-journey.md` for the full breakdown.
 | Phase | Question | Courage | Product |
 |---|---|---|---|
 | 1: Discovery | "What lights me up?" | Trying something new | Free (Experience Game) |
-| 2: Expansion | "How far can I take it?" | Expanding dimensions (people, money, location) | Find My Flow (paid) |
+| 2: Expansion | "How far can I take it?" | Expanding dimensions (craft + scale) | Find My Flow (paid) |
 | 3: Build | "How do I live from it?" | Systematizing, scaling, leading | Scale Portal ($499+$99/mo) |
 
 ---
@@ -30,24 +35,127 @@ See `docs/features/three-phase-journey.md` for the full breakdown.
 ## Phase 1: The Experience Dome
 
 ### What it is
-A map of ~380 human experiences across 12 primal branches. 54 core nodes for onboarding. Users tick what they've experienced, rate each with NS state, and see their unique dome shape emerge.
+A **decision tool for the Phase 1→2 bridge**, not an ongoing dashboard. 56 core nodes across 12 primal branches. Users tick what they've experienced, rate each with NS state per branch, and see their dome shape emerge. Once they've decided which life paths to pursue, the dome's job is done.
 
-### The 12 Primal Branches (alphabetical)
-Bonds, Fire, Healing, Movement, Nourishment, Play, Shelter, Sleep, Status, Story, Threat, Tools
+### Flow (updated Aug 29)
+Per-branch flow: tick experiences → rate with NS state → see dome update → next branch.
+Branches ordered common → uncommon (Movement, Play, Bonds... → Fire, Sleep, Threat).
 
-### Core Nodes: 54
-See `experienceDomeConfig.js` CORE_IDS for the full list. Key changes from original 58:
-- Dropped: Buying insurance, Using a smartphone, Privacy tools, Sleep tracking (utilities, not experiences)
-- Dropped: Cacao + breathwork ceremony (redundant with Healing), Firelight/candlelight (ambient), Fire pit gathering (merged with campfire)
-- Split: Professional sports → Playing team sport + Watching live sport. YouTube → Creating YouTube videos (watching dropped)
-- Added: Live music / concerts, Journaling / writing, Cooking for others, Watching live sport
-- Renamed: Video calling → Virtual hangouts, Airbnb → Unique stays, Using social media → dropped
+### The 12 Primal Branches (ordered common → uncommon)
+Movement, Play, Bonds, Story, Nourishment, Status, Healing, Tools, Shelter, Fire, Sleep, Threat
+
+### Core Nodes: 56
+See `experienceDomeConfig.js` CORE_IDS for the full list.
+
+### Dome Visualization: Safety Dome
+- User's hero avatar at the center
+- 12 branches arranged radially (radar chart)
+- **Distance from center = NS state**: Vibe Rise = closest (safe zone), Fun = mid, Stressful = outer, Bored = edge
+- Four coloured concentric bands: gold (Vibe Rise) → green (Fun) → red (Stressful) → grey (Bored)
+- Nodes physically move inward as experiences become Vibe Rise
+- Full dome = enlightenment
 
 ### Data
-- Table: `experience_dome_ratings` (user_id, node_id, ns_state, updated_at)
+- Table: `experience_dome_ratings` (user_id, node_id, ns_state, rated_at)
 - Hook: `useDomeData.js` — `bulkSetStates({ nodeId: nsState, ... })`
 - Config: `experienceDomeConfig.js` — core IDs, labels, pruning
 - Descriptions: `EXPERIENCE_DESC` map in `ExperienceGameFlow.jsx`
+
+---
+
+## Phase 1→2 Bridge
+
+**User-declared, not app-triggered.** "Ready to go deeper on a life path?" CTA on Discover tab.
+
+When tapped → Life Paths flow, pre-populated with Vibe Rise data from both Life Map clusters AND dome nodes. User confirms which to pursue → creates quests → activates Quests tab.
+
+No formula needed at this bridge. Just: "which Vibe Rise experiences do you want to go deeper on?"
+
+---
+
+## Phase 2: Expansion
+
+### Tab Structure
+Discover | Quests | Tune | Progress
+
+| Tab | Role | What lives here |
+|-----|------|-----------------|
+| Discover | Phase 1 ongoing | Experience Dome, Essence Mirror, Life Map. "Experience to try this week" + bridge CTA |
+| Quests | Phase 2 action | Quest board, WeeklyFocus (one courage challenge/week), courage challenges |
+| Tune | All phases | Daily practices, drains. NS maintenance is phase-agnostic |
+| Progress | All phases | Hero journey (movie refs + next step), zone matrix X/Y graph, stats, expansion dimensions |
+
+### Expansion Dimensions (replaces domain labels)
+Each courage challenge tags which capacities are being stretched (multi-select):
+
+**Craft dimensions (primary):**
+1. Duration, 2. Frequency, 3. Medium, 4. People
+
+**Scale dimensions (secondary, grow organically through craft):**
+5. Money, 6. Location, 7. Independence
+
+Phase 2 = "Can I?" (courage). Phase 3 = "How do I systematize it?" (strategy).
+"I charged someone" = Phase 2 courage challenge. "I need to optimize my pricing tiers" = Phase 3.
+
+### Zone Matrix (simplified)
+Four boolean rules, not percentage-based:
+
+| Quadrant | Rule |
+|----------|------|
+| Unfulfilment (bottom-left) | No Life Map AND no Dome done |
+| Misguided (top-left) | Life Map + Dome done, but no Life Paths committed |
+| Head Full of Dreams (bottom-right) | Life Paths done, but no courage action in last 7 days |
+| Self-Actualisation (top-right) | All discovery done + courage challenge in last 7 days |
+
+### Self-Knowledge Layer
+- **PlaySkill Wheel** (10 skills): storytelling, teaching, coaching, performing, creating, building, designing, leading, connecting, speaking_up
+- **Essence Archetype** (12 archetypes): who am I at my core?
+- **Protective Patterns** (5 voices): Ghost, Controller, Perfectionist, Performer, People Pleaser
+- **Skills**: collected in background via `increment_skill_xp` RPC. Hidden from UI to keep things simple. Available for Phase 3 when needed.
+
+### Phase 2 outcome
+"I know I want to do this, and I've shown up enough to prove it, to myself." Self-declared readiness, not a threshold the app decides.
+
+---
+
+## Phase 2→3 Bridge: Direction Layer
+
+The direction layer emerges organically during Phase 2 through courage challenges. Phase 3 systematizes what Phase 2 revealed.
+
+- **Phase 2 discovery:** "I noticed burnt-out professionals keep coming to my breathwork sessions"
+- **Phase 3 systematization:** "How do I build a funnel for burnt-out professionals?"
+
+### Multiplication Screen (NOT BUILT)
+`Skill × Problem = Career direction`, `Dome = Sustainability check`.
+Belongs at the Phase 2→3 bridge. By this point, the user has built skill through courage challenges and knows their craft. The multiplication reveals: "Who do you serve? What problem do you solve for them?" Problem derived from Life Map data, not asked cold.
+
+### Career Clarity
+Hidden until Phase 2→3 bridge (hero stage 10+). Redundant for new users since dome + life paths does the same job better.
+
+### Direction components
+- **Persona Segments** (12 types): who do I serve?
+- **Problem Taxonomy** (12 problems): what are they suffering from?
+- **Industry Coverage**: where do solutions live?
+- **Buyer Types**: Individual (Consumer/Participant/Community/Practitioner), Venue/Platform, Business/Corporate, Government, Nonprofit, Education
+
+---
+
+## Phase 3: Build
+
+### Business Layer
+- **Product Types** (18): Service → Productized → Product
+- **Hormozi Offer Stack** (5 layers): Lead Magnet → Attraction → Core → Upsell → Continuity
+- **Business Accelerator** (Stages 0-8)
+- **Scale Portal**: separate app at `create.nichuzz.com` ($499 setup + $99/mo)
+
+### Courage at this phase
+Systematizing, scaling, leading. Building the machine that lets you do what you love full-time. Showing up publicly as an authority in your domain.
+
+### Earnings Data
+- `blsWageData.json` — 992 occupations, BLS May 2025 (95% confidence)
+- `independentEarningsData.json` — 5 experiential roles (30-80% confidence)
+- `businessModelEarnings.json` — 8 business models, domain-agnostic (70% confidence)
+- Key insight: earnings driven by business model choice, not experience domain
 
 ---
 
@@ -57,7 +165,6 @@ See `experienceDomeConfig.js` CORE_IDS for the full list. Key changes from origi
 - **Dome = fuel** (what recharges you). Perpendicular to problems.
 - **Problem = direction** (what drives you). Perpendicular to dome.
 - They don't map to each other. They multiply.
-- A person who cares about kids_deserved_better + dome lights up on Movement + Play = PE teacher, youth sports coach. Same problem + different dome = completely different career.
 
 ### The Revised Formula
 ```
@@ -66,10 +173,9 @@ Dome = Sustainability check (will you burn out doing this?)
 Product Type = Revenue model
 ```
 
-The dome does NOT determine the career. It constrains the career to a domain where you won't hollow out. Someone who loves breathwork but whose skill is building might create a breathwork app, not facilitate sessions.
+> **[UNCERTAIN]** Does this formula still hold exactly as written, or has the emphasis shifted toward dome-first discovery with skill/problem emerging later through Phase 2 courage challenges? The formula is correct but the TIMING may have changed — it fires at Phase 2→3 bridge, not during onboarding.
 
 ### PlaySkill Bridges Consuming and Creating
-The PlaySkill IS the bridge between enjoying an experience and delivering it professionally. No separate "consuming vs creating" tag needed.
 ```
 Dome says:    "I love breathwork" (domain interest)
 Skill says:   "I'm a natural coach" (delivery capability)
@@ -78,7 +184,6 @@ Different skill: breathwork × building = breathwork app
 ```
 
 ### Problem ←→ Desire Poles
-Each of the 12 felt problems has a positive pole. The problem is WHY someone starts seeking. The desire is WHAT they want instead. Same axis, different entry point. Show aspiration publicly, pain internally.
 
 | Problem (pain) | Desire (aspiration) |
 |---|---|
@@ -95,40 +200,13 @@ Each of the 12 felt problems has a positive pole. The problem is WHY someone sta
 | world_losing | Stewardship |
 | locked_out | Access |
 
-Derive the user's problem from Life Map data, don't ask cold. "Based on your life map, you've experienced voice_taken and work_hollows. Which would you want to help others with?"
+Derive the user's problem from Life Map data, don't ask cold.
 
 ### Personas = Customers, Not Identity
-The 12 personas (seekers, builders, healers...) are CUSTOMER segments. "I SERVE healers" not "I AM a healer." The persona tells you who writes the cheque, the problem tells you what they're buying.
+The 12 personas are CUSTOMER segments. "I SERVE healers" not "I AM a healer."
 
 ### Learning Is Play (MasterMind Council ruling)
-Learning is meta to all branches, not its own primal. Philosophy nights = Story × Bonds (or Play × Bonds). The Play primal may need to expand beyond physical games to include intellectual play. See Obsidian: `Insights/Learning Is Play.md`.
-
----
-
-## Phase 2 & 3 Systems (existing app)
-
-### Self-Knowledge Layer (Phase 2)
-- **PlaySkill Wheel** (10 skills): storytelling, teaching, coaching, performing, creating, building, designing, leading, connecting, speaking_up
-- **Essence Archetype** (12 archetypes): who am I at my core?
-- **Protective Patterns** (5 voices): Ghost, Controller, Perfectionist, Performer, People Pleaser
-
-### Direction Layer (Phase 2→3 bridge)
-- **Persona Segments** (12 types): who do I serve?
-- **Problem Taxonomy** (12 problems): what are they suffering from?
-- **Industry Coverage**: where do solutions live?
-- **Buyer Types**: Individual (Consumer/Participant/Community/Practitioner), Venue/Platform, Business/Corporate, Government, Nonprofit, Education
-
-### Business Layer (Phase 3)
-- **Product Types** (18): Service → Productized → Product
-- **Hormozi Offer Stack** (5 layers): Lead Magnet → Attraction → Core → Upsell → Continuity
-- **Business Accelerator** (Stages 0-8)
-- **Quest Board + Courage Challenges**
-
-### Earnings Data
-- `blsWageData.json` — 992 occupations, BLS May 2025 (95% confidence)
-- `independentEarningsData.json` — 5 experiential roles (30-80% confidence)
-- `businessModelEarnings.json` — 8 business models, domain-agnostic (70% confidence)
-- Key insight: earnings driven by business model choice, not experience domain
+Learning is meta to all branches, not its own primal.
 
 ---
 
@@ -137,63 +215,71 @@ Learning is meta to all branches, not its own primal. Philosophy nights = Story 
 ### Dome ←→ Skills
 - 211 dome nodes have PlaySkill inference signals (`domeSkillInference.json`)
 - Strong signal: doing the experience IS practicing the skill
-- Weak signal: consuming suggests interest
+
+> **[UNCERTAIN]** With skills hidden from UI, is this connection still prioritized? Data exists but may be V2/V3.
 
 ### Dome ←→ Roles
 - 10 role fingerprints mapped via O*NET bridge (`roleExperienceFingerprints.json`)
 - Matching: dome ratings × role fingerprints = % career match
 
+> **[UNCERTAIN]** Role matching is Phase 2→3 bridge territory. Not needed for V1 dome.
+
 ### Dome ←→ Product Types
 - 18 product types mapped to dome signals + skills (`productTypeMapping.json`)
 
+> **[UNCERTAIN]** Product type recommendation is Phase 3. Not needed until Scale Portal.
+
 ### Dome ←→ Courage Challenges
 - 98% of real courage challenges map to dome primal intersections (validated against 52 challenges)
-- Courage challenges are NOT 1:1 with nodes. They sit at primal INTERSECTIONS (e.g. sales call = Story × Bonds × Threat)
+- Courage challenges sit at primal INTERSECTIONS (e.g. sales call = Story × Bonds × Threat)
 
 ---
 
 ## Data Files
 
-| File | Contents | Confidence |
-|------|----------|-----------|
-| `experienceDomeConfig.js` | ~380 nodes, 54 core, pruning, labels | 95% |
-| `domeSkillInference.json` | 211 nodes → PlaySkill signals | 85% |
-| `roleExperienceFingerprints.json` | 10 roles, O*NET API-validated + BLS wages | 90% |
-| `onetDomeBridge.json` | 41 activities → dome nodes by industry | 85% |
-| `blsWageData.json` | 992 occupations, BLS May 2025 | 95% |
-| `businessModelEarnings.json` | 8 models, domain-agnostic ranges | 70% |
-| `independentEarningsData.json` | 5 experiential roles, sourced | 30-80% |
-| `productTypeMapping.json` | 18 product types → skills + dome signals | 88% |
-| `experienceIndustryMap.json` | 54 nodes → industries + revenue models | 80% |
-| `playSkillTaxonomyV2.json` | 10 skills with placemakes | 95% |
-| `problemTaxonomyV2.json` | 12 problems | 95% |
+| File | Contents | Confidence | Phase |
+|------|----------|-----------|-------|
+| `experienceDomeConfig.js` | ~380 nodes, 56 core, pruning, labels | 95% | 1 |
+| `domeSkillInference.json` | 211 nodes → PlaySkill signals | 85% | 2→3 |
+| `roleExperienceFingerprints.json` | 10 roles, O*NET API-validated + BLS wages | 90% | 2→3 |
+| `onetDomeBridge.json` | 41 activities → dome nodes by industry | 85% | 2→3 |
+| `blsWageData.json` | 992 occupations, BLS May 2025 | 95% | 3 |
+| `businessModelEarnings.json` | 8 models, domain-agnostic ranges | 70% | 3 |
+| `independentEarningsData.json` | 5 experiential roles, sourced | 30-80% | 3 |
+| `productTypeMapping.json` | 18 product types → skills + dome signals | 88% | 3 |
+| `experienceIndustryMap.json` | 54 nodes → industries + revenue models | 80% | 3 |
+| `playSkillTaxonomyV2.json` | 10 skills with placemakes | 95% | 2 |
+| `problemTaxonomyV2.json` | 12 problems | 95% | 2→3 |
 
 ---
 
 ## What's Built vs What's Missing
 
-| Component | Status |
-|-----------|--------|
-| Experience Game intro + tick + dome popup | Built (Phase 1) |
-| Experience Game sort (NS rating) | Built (Phase 1) |
-| Experience Game insight + CTAs | Built (Phase 1) |
-| Dome viz (mini dome, full RuleBreakTree) | Built |
-| Dome Supabase persistence | Built |
-| PlaySkill identification | Live |
-| O*NET bridge + role fingerprints + BLS wages | Built |
-| Business model earnings data | Built |
-| Problem ←→ Desire poles | Documented |
-| Persona ←→ Problem mapping | Documented |
-| Problem ←→ Industry mapping | Documented |
-| Three-phase journey doc | Written |
-| Quest board + courage challenges | Live (Phase 2) |
-| Scale Portal | Live (Phase 3) |
-| **Experience Game UX polish (dome viz sizing, labels)** | **IN PROGRESS** |
-| **Multiplication screen (career reveal)** | **NOT BUILT** |
-| **Role model matching (creators)** | **NOT BUILT** |
-| **Growth edge → quest pipeline** | **NOT BUILT** |
-| **Dome → skill inference wiring** | **NOT BUILT** |
-| **Problem → Industry → Buyer recommender** | **NOT BUILT** |
+| Component | Status | Phase |
+|-----------|--------|-------|
+| Experience Game (tick → rate → dome per branch) | **Built** (rewritten Aug 29) | 1 |
+| Dome viz (NS-state Y-axis, coloured bands) | **Built** (Aug 29) | 1 |
+| Dome Supabase persistence | Built | 1 |
+| Discover tab (Essence Mirror, Life Map, Dome, bridge CTA) | **Built** (Aug 29) | 1 |
+| "Experience to try this week" on Discover | **Built** (Aug 29) | 1 |
+| Life Paths flow ingests dome + Life Map Vibe Rise data | **Built** (Aug 29) | 1→2 |
+| Tab restructure (Discover/Quests/Tune/Progress) | **Built** (Aug 29) | 1-2 |
+| WeeklyFocus (courage merged into Quests) | **Built** (Aug 28) | 2 |
+| Expansion dimensions on courage challenges | **Built** (Aug 29) | 2 |
+| ProgressTab (hero journey, zone matrix, dimensions) | **Built** (Aug 29) | 2 |
+| Zone matrix (simplified 4-rule model) | **Built** (Aug 29) | 2 |
+| Game language onboarding slides | **Built** (Aug 29) | 1 |
+| PlaySkill identification | Live | 2 |
+| Quest board + courage challenges | Live | 2 |
+| Scale Portal | Live | 3 |
+| O*NET bridge + role fingerprints + BLS wages | Built (data only) | 2→3 |
+| Business model earnings data | Built (data only) | 3 |
+| Problem ←→ Desire poles | Documented | 2→3 |
+| Persona ←→ Problem mapping | Documented | 2→3 |
+| **Multiplication screen (career reveal)** | **NOT BUILT** | 2→3 |
+| **Role model matching (creators)** | **NOT BUILT** | 2→3 |
+| **Dome → skill inference wiring** | **NOT BUILT** | 2→3 |
+| **Problem → Industry → Buyer recommender** | **NOT BUILT** | 3 |
 
 ---
 
@@ -205,6 +291,18 @@ Learning is meta to all branches, not its own primal. Philosophy nights = Story 
 4. Feedback loops are aspirational — courage completion doesn't auto-update dome.
 5. 33 creator profiles only validate wellness industry.
 6. Tools (1 node) and Threat (1 node) branches are thin. May need expanding after user testing.
+7. Core nodes changed from 54 to 56 — doc previously said 54, config has 56. Need to reconcile.
+
+---
+
+## V2 Ideas (not V1 scope)
+
+- **Re-rating experiences**: how do users update NS ratings after their state changes?
+- **Daily experience logging**: log what you did today + NS state, building a record over time
+- **Experiences spanning branches**: e.g. "silent disco" = Movement + Play + Bonds
+- **Discover tab post-bridge**: what does it look like after Phase 2 begins?
+- **Dome viz polish**: ring labels, node icons vs dots, animations on state change
+- **Dome as consciousness map**: track % Vibe Rise over time as a meta-score
 
 ---
 
@@ -220,7 +318,7 @@ Learning is meta to all branches, not its own primal. Philosophy nights = Story 
 
 ## Appendix A: Feedback Loops
 
-> Note: These are aspirational — not yet wired in code. Kept for design reference.
+> Note: Aspirational — not yet wired in code.
 
 ```
 Courage completion → skill XP → dome lights up → new career matches emerge
@@ -230,19 +328,17 @@ Customer feedback → offer refinement → business growth → new quests
 
 ---
 
-## Appendix B: The Clean Map (original multiplication diagram)
+## Appendix B: The Clean Map (multiplication diagram)
 
-> Note: The formula has been revised. Skill × Problem = Career direction, Dome = Fuel. This diagram shows the ORIGINAL framing where Experience × Skill was the primary multiplication. Kept for reference as the visual structure is still useful even though the inputs changed.
-
-The whole system reduces to **2 user inputs → everything else derived**:
+> Note: This fires at the Phase 2→3 bridge, not during onboarding.
 
 ```
-INPUT 1: Rate experiences (dome onboarding)
+INPUT 1: Rate experiences (dome, Phase 1)
   → gives: Experience profile
-  → infers: Skills (via domeSkillInference)
-  → suggests: Product Types (via productTypeMapping)
+  → infers: Skills (via domeSkillInference, background)
+  → suggests: Product Types (via productTypeMapping, Phase 3)
 
-INPUT 2: Derive problem from Life Map data (not asked cold)
+INPUT 2: Derive problem from Life Map data (Phase 2→3 bridge, not asked cold)
   → gives: Problem / Desire pole
   → implies: Persona segments you'd serve
   → maps to: Industries where solutions live
@@ -250,6 +346,7 @@ INPUT 2: Derive problem from Life Map data (not asked cold)
 
 ```
 WHO AM I?                    WHO DO I SERVE?              HOW DO I BUILD IT?
+(Phase 1)                    (Phase 2→3 bridge)           (Phase 3)
 ┌─────────┐                  ┌─────────┐                  ┌─────────┐
 │Experience│                  │ Persona │                  │ Product │
 │  Dome    │                  │(customer│                  │  Type   │
@@ -264,46 +361,29 @@ WHO AM I?                    WHO DO I SERVE?              HOW DO I BUILD IT?
 └────┬─────┘                  └────┴────┘                  └────┬────┘
      │                             │                            │
      = WHAT YOU OFFER              = WHY THEY PAY               = HOW YOU EARN
-     │                             │                            │
-     └─────────────┬───────────────┘                            │
-                   │                                            │
-                   ×────────────────────────────────────────────┘
-                   │
-                   = YOUR CAREER MAP
 ```
-
-### The User Story (original)
-
-A corporate worker in midlife crisis:
-1. Rates experiences → discovers Movement + Healing + Bonds light them up
-2. Life Map reveals work_hollows as their problem → desire pole: Meaningful Work
-3. System multiplies: skill (coaching) × problem (work_hollows) = burnout coach. Dome (breathwork) = what keeps them alive doing it.
-4. Earnings: employed $47K (BLS), independent $60-150K, portfolio career $100-120K
-5. Growth edge nodes → first courage challenge: "Facilitate a breathwork session for 3 friends"
 
 ---
 
 ## Appendix C: Supabase Tables
 
-> Note: These are the tables referenced throughout this doc. See CLAUDE.md Database Schema section for the full schema.
-
 | Table | What it stores |
 |-------|---------------|
-| `experience_dome_ratings` | User's dome node NS ratings (node_id, ns_state) |
-| `user_skill_progress` | Skill XP and levels (skill_id, xp, level) |
+| `experience_dome_ratings` | Dome node NS ratings (node_id, ns_state, rated_at) |
+| `user_skill_progress` | Skill XP and levels (skill_id, xp, level) — background collection |
 | `quests` | Active life paths (skill_tags, branch) |
 | `quest_completions` | Courage challenge results (reflection_text) |
+| `groan_challenges` | Courage challenges (status, depth_level, expansion_dimensions, wahoo_category) |
 | `nikigai_clusters` | Life map clusters (resonance_state, behavioral_evidence) |
 | `life_path_sessions` | Career NS ratings (careers JSON, stuck_points JSON) |
 | `founder_dna_results` | Play Profile results |
-| `groan_challenges` | Courage challenges (status, depth_level, wahoo_category) |
 | `healing_intentions` | Per-task healing flow data (pattern, fear, origin, insight, rewire) |
 
 ---
 
 ## Appendix D: Detailed Persona → Problem → Industry → Buyer Chain
 
-> Note: This was the original detailed mapping. The main doc now references this by framework name. Kept for when you need the specific pairings.
+> Phase 3 reference. Not needed until Scale Portal work.
 
 ### Persona → Problem Mapping
 
@@ -324,11 +404,7 @@ A corporate worker in midlife crisis:
 
 ### Industry Coverage
 
-Problem-facing industries (people pay BECAUSE they're suffering):
-- Consulting (8/12 problems), Education (6/12), Healthcare (6/12), Government (5/12), Tech (5/12), Law (4/12), Nonprofit (4/12), Arts (4/12), Media (4/12), Wellness (3/12), Finance (3/12), HR (3/12)
-
-Infrastructure industries (people pay for utility):
-- Retail, Manufacturing, Automotive, Energy — correctly sparse, not problem-facing
+Problem-facing industries: Consulting (8/12), Education (6/12), Healthcare (6/12), Government (5/12), Tech (5/12), Law (4/12), Nonprofit (4/12), Arts (4/12), Media (4/12), Wellness (3/12), Finance (3/12), HR (3/12)
 
 ### Buyer Types
 
@@ -348,8 +424,6 @@ Infrastructure industries (people pay for utility):
 
 ## Appendix E: Detailed Connections
 
-> Note: These connection mappings were in the original doc. The main doc now summarises them. Kept for reference when building the multiplication engine.
-
 ### Desires ←→ Dome Primals
 - Belonging → Bonds, Play
 - Sovereignty → Threat, Shelter, Movement
@@ -365,7 +439,7 @@ Infrastructure industries (people pay for utility):
 - Access → Tools, Bonds
 
 ### Persona Clusters
-- **Access cluster** (Builders, Connectors, Teachers): shared pain around feeling_stupid + locked_out
-- **Hollow work cluster** (Achievers, Seekers, Explorers, Challengers): shared pain around work_hollows — primary app audience
+- **Access cluster** (Builders, Connectors, Teachers): feeling_stupid + locked_out
+- **Hollow work cluster** (Achievers, Seekers, Explorers, Challengers): work_hollows — primary app audience
 - **Expression cluster** (Creators, Healers): voice_taken + pain_not_believed
 - **Justice cluster** (Protectors, Nurturers, Visionaries): systemic failures
