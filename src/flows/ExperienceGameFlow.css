@@ -297,58 +297,67 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* ── Sort phase ── */
+/* ── Rate phase (name + labeled buttons) ── */
 
-.exp-game-sort-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 12px;
+.exp-game-rate-card {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
+  padding: 14px 14px 12px;
 }
 
-.exp-game-sort-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
+.exp-game-rate-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a0b3d;
+  margin-bottom: 10px;
+}
+
+.exp-game-rate-options {
+  display: flex;
+  gap: 6px;
+}
+
+.exp-game-rate-btn {
   flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.exp-game-rate-btn:active {
+  transform: scale(0.95);
+}
+
+.exp-game-rate-btn.active {
+  border-color: transparent;
+}
+
+.exp-game-rate-icon {
+  font-size: 16px;
+}
+
+.exp-game-rate-label {
+  font-size: 10px;
+  font-weight: 700;
   white-space: nowrap;
 }
 
-.exp-game-sort-buttons {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.exp-game-sort-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  background: #fff;
-  font: inherit;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.exp-game-sort-btn:active {
-  transform: scale(0.92);
-}
-
-.exp-game-sort-btn.active {
-  border-color: transparent;
+/* Legacy sort styles kept for backward compat */
+.exp-game-sort-item { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #fff; border-radius: 12px; }
+.exp-game-sort-label { font-size: 14px; font-weight: 500; color: #333; flex: 1; }
+.exp-game-sort-buttons { display: flex; gap: 6px; }
+.exp-game-sort-btn { width: 34px; height: 34px; border-radius: 8px; border: 2px solid #e0e0e0; background: #fff; font: inherit; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+.exp-game-sort-btn:active { transform: scale(0.92); }
+.exp-game-sort-btn.active { border-color: transparent;
   transform: scale(1.05);
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }

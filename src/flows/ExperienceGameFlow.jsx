@@ -394,26 +394,27 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
             )
           })
         ) : (
-          // Rate mode — NS state buttons per ticked item
+          // Rate mode — name on own line, labeled NS buttons below
           branchCheckedNodes.map(node => {
             const currentState = ratings[node.id]
             return (
-              <div key={node.id} className="exp-game-sort-item">
-                <span className="exp-game-sort-label">{node.label}</span>
-                <div className="exp-game-sort-buttons">
+              <div key={node.id} className="exp-game-rate-card">
+                <span className="exp-game-rate-name">{node.label}</span>
+                <div className="exp-game-rate-options">
                   {NS_STATES.map(ns => (
                     <button
                       key={ns.id}
-                      className={`exp-game-sort-btn ${currentState === ns.id ? 'active' : ''}`}
+                      className={`exp-game-rate-btn ${currentState === ns.id ? 'active' : ''}`}
                       style={{
-                        background: currentState === ns.id ? ns.color : undefined,
+                        '--ns-color': ns.color,
+                        borderColor: currentState === ns.id ? ns.color : 'rgba(0,0,0,0.08)',
+                        background: currentState === ns.id ? ns.color : 'transparent',
                         color: currentState === ns.id ? '#fff' : ns.color,
-                        borderColor: currentState === ns.id ? ns.color : '#e0e0e0',
                       }}
                       onClick={() => { hapticLight(); onRate(node.id, ns.id) }}
-                      title={ns.label}
                     >
-                      {ns.icon}
+                      <span className="exp-game-rate-icon">{ns.icon}</span>
+                      <span className="exp-game-rate-label">{ns.label}</span>
                     </button>
                   ))}
                 </div>
