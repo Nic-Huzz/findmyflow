@@ -13,6 +13,15 @@ const NS_GLOW = {
   bored: 0,
 }
 
+// NS state → distance from center (0 = center, 1 = edge)
+// Vibe Rise = closest (safe zone), Unrated = furthest (unknown)
+const NS_RADIUS = {
+  vibe_rise: 0.15,
+  fun: 0.4,
+  pressure: 0.7,
+  bored: 0.9,
+}
+
 /**
  * MiniDome — simplified version of the Rule Break Tree dome viz.
  * Shows 58 core experience nodes in a radial layout, grouped by primal.
@@ -22,9 +31,9 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
   const layout = useMemo(() => {
     const cx = size / 2
     const cy = size / 2
-    const primalR = size * 0.12       // primal label ring
-    const nodeStartR = size * 0.18    // inner node ring
-    const nodeEndR = size * 0.34      // outer node ring
+    const labelR = size * 0.42        // primal label ring
+    const maxNodeR = size * 0.36      // furthest node distance (unrated/bored)
+    const minNodeR = size * 0.08      // closest node distance (vibe rise)
 
     // Get core nodes grouped by primal
     const primalNodes = {}
@@ -50,23 +59,37 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
       const pNodes = primalNodes[primal.id]
 
       // Primal label position
-      const lx = cx + Math.cos(baseAngle) * (nodeEndR + size * 0.08)
-      const ly = cy + Math.sin(baseAngle) * (nodeEndR + size * 0.08)
+      const lx = cx + Math.cos(baseAngle) * labelR
+      const ly = cy + Math.sin(baseAngle) * labelR
       primalLabels.push({ id: primal.id, label: primal.label, x: lx, y: ly, color, angle: baseAngle })
 
       // Spread nodes within this primal's angular sector
-      const sectorWidth = step * 0.75 // use 75% of sector, leave gap
+      const sectorWidth = step * 0.75
       const startA = baseAngle - sectorWidth / 2
       const nodeCount = pNodes.length
 
       pNodes.forEach((n, ni) => {
-        // Distribute radially and angularly
         const angleOffset = nodeCount > 1
           ? startA + (ni / (nodeCount - 1)) * sectorWidth
           : baseAngle
-        // Alternate between inner and outer rings for visual spread
-        const ringT = nodeCount > 1 ? (ni % 3) / 2 : 0.5
-        const r = nodeStartR + ringT * (nodeEndR - nodeStartR)
+
+        // NS-state based radius: Vibe Rise = closest, unrated = edge
+        const nsState = ratings[n.id]
+        const isChecked = !!checked[n.id]
+        let radiusT
+        if (nsState && NS_RADIUS[nsState] !== undefined) {
+          // Rated — position by NS state
+          radiusT = NS_RADIUS[nsState]
+        } else if (isChecked) {
+          // Checked but not rated — mid-range
+          radiusT = 0.55
+        } else {
+          // Unrated/unchecked — outer edge
+          radiusT = 0.95
+        }
+        // Add slight jitter so same-state nodes don't overlap perfectly
+        const jitter = nodeCount > 1 ? (ni % 3 - 1) * 0.06 : 0
+        const r = minNodeR + (radiusT + jitter) * (maxNodeR - minNodeR)
 
         const x = cx + Math.cos(angleOffset) * r
         const y = cy + Math.sin(angleOffset) * r
@@ -81,18 +104,29 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
       })
     })
 
-    return { cx, cy, primalR, nodeStartR, nodeEndR, nodes, primalLabels }
-  }, [size])
+    // Ring guides for NS state zones
+    const rings = [
+      { r: minNodeR + NS_RADIUS.vibe_rise * (maxNodeR - minNodeR), label: 'Vibe Rise' },
+      { r: minNodeR + NS_RADIUS.fun * (maxNodeR - minNodeR), label: 'Fun' },
+      { r: minNodeR + NS_RADIUS.pressure * (maxNodeR - minNodeR), label: 'Stressful' },
+    ]
+
+    return { cx, cy, minNodeR, maxNodeR, labelR, nodes, primalLabels, rings }
+  }, [size, ratings, checked])
 
   const totalChecked = layout.nodes.filter(n => checked[n.id]).length
 
   return (
     <div className={`dome-mini ${onClose ? 'dome-mini-popup' : ''}`} style={{ fontSize: size * 0.08 }}>
       <svg width={size} height={size} viewBox={`${-size * 0.12} ${-size * 0.06} ${size * 1.24} ${size * 1.12}`}>
-        {/* Background rings */}
-        <circle cx={layout.cx} cy={layout.cy} r={layout.nodeStartR} fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5} />
-        <circle cx={layout.cx} cy={layout.cy} r={layout.nodeEndR} fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5} />
-        <circle cx={layout.cx} cy={layout.cy} r={layout.primalR} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={0.5} />
+        {/* NS state zone rings */}
+        {layout.rings.map((ring, i) => (
+          <circle key={i} cx={layout.cx} cy={layout.cy} r={ring.r}
+            fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5}
+            strokeDasharray={i === 0 ? 'none' : '2,3'} />
+        ))}
+        <circle cx={layout.cx} cy={layout.cy} r={layout.maxNodeR}
+          fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5} />
 
         {/* Sector lines (subtle) */}
         {layout.primalLabels.map(p => (
@@ -100,8 +134,8 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
             key={`line-${p.id}`}
             x1={layout.cx}
             y1={layout.cy}
-            x2={layout.cx + Math.cos(p.angle) * layout.nodeEndR}
-            y2={layout.cy + Math.sin(p.angle) * layout.nodeEndR}
+            x2={layout.cx + Math.cos(p.angle) * layout.maxNodeR}
+            y2={layout.cy + Math.sin(p.angle) * layout.maxNodeR}
             stroke="rgba(0,0,0,0.03)"
             strokeWidth={0.5}
           />
