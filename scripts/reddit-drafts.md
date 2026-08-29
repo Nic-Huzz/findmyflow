@@ -1,4 +1,4 @@
-# Reddit Comment Drafts — 2026-08-29 (scan 96)
+# Reddit Comment Drafts — 2026-08-29 (scan 97)
 
 *Review, edit in your voice, then approve for posting. Max 2 per day.*
 
@@ -9,10 +9,10 @@
 **Reason:** Reddit is still blocked by this environment's network policy.
 
 All access methods remain blocked:
-- `curl` to `www.reddit.com` — proxy returns 403 Forbidden on CONNECT tunnel
+- `curl` to `www.reddit.com` — proxy returns empty response (connection blocked)
 - `WebSearch` to `www.reddit.com` — error: "The following domains are not accessible to our user agent"
 
-This has been the case across all scans (1 through 96), starting at least 2026-07-09.
+This has been the case across all scans (1 through 97), starting at least 2026-07-09.
 
 **To fix this:** Add `reddit.com` to the allowed domains in the Claude Code on the web environment settings: https://code.claude.com/docs/en/claude-code-on-the-web
 
