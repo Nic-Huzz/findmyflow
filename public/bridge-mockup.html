@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Bridge Mockup — Dome → Life Paths</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a2e; min-height: 100dvh; }
+  .app { max-width: 480px; margin: 0 auto; min-height: 100dvh; }
+
+  .screen { display: none; flex-direction: column; min-height: 100dvh; padding: 20px 20px 120px; }
+  .screen.active { display: flex; }
+
+  /* ── Intro ── */
+  .intro { align-items: center; justify-content: center; text-align: center; gap: 16px; padding: 40px 24px; }
+  .intro-dome { width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, rgba(233,162,59,0.15), rgba(94,23,235,0.08) 70%, transparent); display: flex; align-items: center; justify-content: center; font-size: 56px; margin-bottom: 8px; border: 2px solid rgba(233,162,59,0.2); }
+  .intro h1 { font-size: 26px; font-weight: 800; line-height: 1.2; }
+  .intro h1 span { background: linear-gradient(135deg, #5e17eb, #E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .intro p { font-size: 15px; color: rgba(0,0,0,0.5); line-height: 1.6; max-width: 300px; }
+  .intro .step-row { display: flex; gap: 0; margin: 20px 0; width: 100%; max-width: 340px; }
+  .intro .step { flex: 1; text-align: center; padding: 12px 8px; position: relative; }
+  .intro .step::after { content: '→'; position: absolute; right: -4px; top: 50%; transform: translateY(-50%); color: rgba(0,0,0,0.15); font-size: 14px; }
+  .intro .step:last-child::after { display: none; }
+  .intro .step-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(94,23,235,0.08); color: #5e17eb; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; }
+  .intro .step-text { font-size: 11px; color: rgba(0,0,0,0.4); line-height: 1.3; }
+
+  /* ── Select experiences ── */
+  .select-header { text-align: center; margin-bottom: 16px; }
+  .select-header h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .select-header p { font-size: 13px; color: rgba(0,0,0,0.4); }
+  .select-count { font-size: 13px; color: #5e17eb; font-weight: 600; text-align: center; margin-bottom: 12px; }
+
+  .primal-name { font-size: 10px; color: rgba(0,0,0,0.3); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 6px 4px; }
+  .primal-name:first-of-type { margin-top: 8px; }
+
+  .exp-item { display: flex; align-items: center; gap: 12px; padding: 14px 14px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; margin-bottom: 6px; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .exp-item:active { transform: scale(0.98); }
+  .exp-item.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); }
+  .exp-item .check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; transition: all 0.15s; color: transparent; }
+  .exp-item.selected .check { background: #E9A23B; border-color: #E9A23B; color: white; }
+  .exp-name { font-size: 14px; font-weight: 500; flex: 1; }
+  .exp-ns { font-size: 16px; flex-shrink: 0; }
+
+  .section-divider { display: flex; align-items: center; gap: 10px; margin: 20px 0 12px; }
+  .section-divider span { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.25); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .section-divider hr { flex: 1; border: none; border-top: 1px solid rgba(0,0,0,0.06); }
+
+  .fun-toggle { text-align: center; margin: 8px 0 4px; }
+  .fun-toggle button { background: none; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; padding: 8px 20px; font-size: 12px; color: rgba(0,0,0,0.4); cursor: pointer; font-family: inherit; }
+  .fun-section { display: none; }
+  .fun-section.visible { display: block; }
+
+  /* ── Processing ── */
+  .processing { align-items: center; justify-content: center; text-align: center; gap: 20px; }
+  .spinner { width: 48px; height: 48px; border: 3px solid rgba(94,23,235,0.1); border-top-color: #5e17eb; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing h2 { font-size: 20px; font-weight: 700; }
+  .processing p { font-size: 14px; color: rgba(0,0,0,0.4); max-width: 280px; }
+  .selected-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 320px; margin-top: 8px; }
+  .selected-tag { font-size: 11px; padding: 4px 10px; border-radius: 8px; background: rgba(233,162,59,0.1); color: #b8860b; font-weight: 500; }
+
+  /* ── Path cards ── */
+  .paths-header { text-align: center; margin-bottom: 20px; }
+  .paths-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .paths-header p { font-size: 13px; color: rgba(0,0,0,0.4); }
+
+  .path-card { padding: 18px; border-radius: 16px; border: 1.5px solid rgba(0,0,0,0.06); background: white; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .path-card:active { transform: scale(0.98); }
+  .path-card.selected { border-color: #5e17eb; background: rgba(94,23,235,0.03); }
+  .path-top { display: flex; align-items: flex-start; gap: 12px; }
+  .path-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 2px; color: transparent; transition: all 0.15s; }
+  .path-card.selected .path-check { background: #5e17eb; border-color: #5e17eb; color: white; }
+  .path-info { flex: 1; }
+  .path-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .path-desc { font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.5; }
+  .path-sources { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .path-source { font-size: 10px; padding: 2px 8px; border-radius: 6px; background: rgba(94,23,235,0.06); color: #5e17eb; font-weight: 500; }
+  .path-match { font-size: 11px; color: #E9A23B; font-weight: 600; margin-top: 6px; }
+
+  /* ── Done ── */
+  .done { align-items: center; justify-content: center; text-align: center; gap: 16px; }
+  .done-check { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B); display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; }
+  .done h2 { font-size: 24px; font-weight: 700; }
+  .done p { font-size: 14px; color: rgba(0,0,0,0.45); max-width: 280px; line-height: 1.5; }
+  .done-quests { width: 100%; max-width: 360px; }
+  .done-quest { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: white; border-radius: 14px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 8px; }
+  .done-dot { width: 10px; height: 10px; border-radius: 50%; background: #5e17eb; flex-shrink: 0; }
+  .done-name { font-size: 14px; font-weight: 600; flex: 1; }
+
+  /* ── Fixed bottom ── */
+  .fixed-bottom { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 16px 20px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, #f5f5f0 30%); }
+  .cta { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .cta:active { transform: scale(0.98); }
+  .cta-gold { background: linear-gradient(135deg, #5e17eb, #E9A23B); color: white; }
+  .cta-gold:disabled { opacity: 0.3; }
+  .cta-secondary { background: white; color: #5e17eb; border: 1.5px solid rgba(94,23,235,0.15); margin-top: 8px; font-size: 14px; padding: 12px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ════════ SCREEN 1: INTRO ════════ -->
+  <div class="screen intro active" id="s-intro">
+    <div class="intro-dome">🎯</div>
+    <h1>Your dome knows<br/><span>what lights you up</span></h1>
+    <p>Let's turn those experiences into life paths you can actually pursue.</p>
+    <div class="step-row">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Pick experiences you want more of</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">We suggest life paths</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Choose your quests</div>
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <button class="cta cta-gold" onclick="go('s-select')">Let's go →</button>
+    </div>
+  </div>
+
+  <!-- ════════ SCREEN 2: SELECT EXPERIENCES ════════ -->
+  <div class="screen" id="s-select">
+    <div class="select-header">
+      <h2>Which of these do you want<br/>more of in your life?</h2>
+      <p>Pick the experiences that made you feel most alive.</p>
+    </div>
+    <div class="select-count" id="sel-count">0 selected</div>
+
+    <div class="section-divider"><span>✦ Vibe Rise</span><hr/></div>
+
+    <div class="primal-name">Movement</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">International travel / backpacking</span><span class="exp-ns">✦</span></div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Ecstatic dance</span><span class="exp-ns">✦</span></div>
+
+    <div class="primal-name">Story</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Public speaking / presenting</span><span class="exp-ns">✦</span></div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Live music / concerts / festivals</span><span class="exp-ns">✦</span></div>
+
+    <div class="primal-name">Bonds</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Adventure retreat</span><span class="exp-ns">✦</span></div>
+
+    <div class="primal-name">Shelter</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Living abroad</span><span class="exp-ns">✦</span></div>
+
+    <div class="primal-name">Play</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Playing team sport</span><span class="exp-ns">✦</span></div>
+
+    <div class="primal-name">Status</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Choosing your style</span><span class="exp-ns">✦</span></div>
+
+    <div class="primal-name">Fire</div>
+    <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Fire ceremony / fire walking</span><span class="exp-ns">✦</span></div>
+
+    <!-- Fun toggle -->
+    <div class="fun-toggle">
+      <button onclick="document.getElementById('fun-sec').classList.toggle('visible'); this.textContent = this.textContent.includes('Show') ? 'Hide Fun experiences ▴' : 'Also show Fun experiences ▾'">Also show Fun experiences ▾</button>
+    </div>
+
+    <div class="fun-section" id="fun-sec">
+      <div class="section-divider"><span>○ Fun</span><hr/></div>
+
+      <div class="primal-name">Movement</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Road trips</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Running / jogging</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">CrossFit / functional fitness</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Hiking / nature walk</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Cold plunge / ice bath</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">BJJ / MMA</span><span class="exp-ns">○</span></div>
+
+      <div class="primal-name">Story</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Coaching / mentoring someone</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Selling / pitching</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Creating YouTube videos</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Journaling / writing</span><span class="exp-ns">○</span></div>
+
+      <div class="primal-name">Bonds</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Drinks with friends</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Vulnerable conversation</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Volunteering / giving back</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Mastermind group</span><span class="exp-ns">○</span></div>
+
+      <div class="primal-name">Play</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Board games</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Watching live sport</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Adrenaline / thrill ride</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">LEGO / construction toys</span><span class="exp-ns">○</span></div>
+
+      <div class="primal-name">Healing</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Sound bath</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Mindfulness meditation</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Plant medicine</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Sauna / deliberate heat</span><span class="exp-ns">○</span></div>
+
+      <div class="primal-name">Fire</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Campfire / fire pit</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Candle ritual / hygge</span><span class="exp-ns">○</span></div>
+
+      <div class="primal-name">Shelter</div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Hosting people in your home</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Decorating your space</span><span class="exp-ns">○</span></div>
+      <div class="exp-item" onclick="sel(this)"><div class="check">✓</div><span class="exp-name">Van life</span><span class="exp-ns">○</span></div>
+    </div>
+
+    <div class="fixed-bottom">
+      <button class="cta cta-gold" id="sel-cta" disabled onclick="showProcessing()">Select at least 1 →</button>
+    </div>
+  </div>
+
+  <!-- ════════ SCREEN 3: PROCESSING ════════ -->
+  <div class="screen processing" id="s-processing">
+    <div class="spinner"></div>
+    <h2>Finding your life paths...</h2>
+    <p>Based on what makes you feel alive, here's what you could pursue.</p>
+    <div class="selected-tags" id="sel-tags"></div>
+  </div>
+
+  <!-- ════════ SCREEN 4: PICK PATHS ════════ -->
+  <div class="screen" id="s-paths">
+    <div class="paths-header">
+      <h2>Life paths for you</h2>
+      <p>Based on what lights you up. Pick 1-3 to pursue as quests.</p>
+    </div>
+
+    <div class="path-card" onclick="pickPath(this)" data-name="Festival & Event Creator">
+      <div class="path-top">
+        <div class="path-check">✓</div>
+        <div class="path-info">
+          <div class="path-name">Festival & Event Creator</div>
+          <div class="path-desc">Design and host transformational festivals, dance events, and fire ceremonies that make hundreds of people feel alive.</div>
+          <div class="path-sources">
+            <span class="path-source">ecstatic dance</span>
+            <span class="path-source">live music</span>
+            <span class="path-source">fire ceremony</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card" onclick="pickPath(this)" data-name="Adventure Retreat Host">
+      <div class="path-top">
+        <div class="path-check">✓</div>
+        <div class="path-info">
+          <div class="path-name">Adventure Retreat Host</div>
+          <div class="path-desc">Run multi-day retreats in incredible locations, combining adventure challenges with deep connection and personal breakthroughs.</div>
+          <div class="path-sources">
+            <span class="path-source">adventure retreat</span>
+            <span class="path-source">international travel</span>
+            <span class="path-source">living abroad</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card" onclick="pickPath(this)" data-name="Keynote Speaker & Workshop Host">
+      <div class="path-top">
+        <div class="path-check">✓</div>
+        <div class="path-info">
+          <div class="path-name">Keynote Speaker & Workshop Host</div>
+          <div class="path-desc">Take the stage at conferences and companies, running high-energy workshops that shift how people think about their careers.</div>
+          <div class="path-sources">
+            <span class="path-source">public speaking</span>
+            <span class="path-source">ecstatic dance</span>
+            <span class="path-source">team sport</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card" onclick="pickPath(this)" data-name="Travel Experience Designer">
+      <div class="path-top">
+        <div class="path-check">✓</div>
+        <div class="path-info">
+          <div class="path-name">Travel Experience Designer</div>
+          <div class="path-desc">Create unique travel tournaments and adventure games in different countries, turning travel into competitive play for groups.</div>
+          <div class="path-sources">
+            <span class="path-source">international travel</span>
+            <span class="path-source">team sport</span>
+            <span class="path-source">adventure retreat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card" onclick="pickPath(this)" data-name="Dance Movement Facilitator">
+      <div class="path-top">
+        <div class="path-check">✓</div>
+        <div class="path-info">
+          <div class="path-name">Dance Movement Facilitator</div>
+          <div class="path-desc">Host weekly conscious dance sessions, morning raves, and movement experiences that help people reconnect with their bodies.</div>
+          <div class="path-sources">
+            <span class="path-source">ecstatic dance</span>
+            <span class="path-source">live music</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card" onclick="pickPath(this)" data-name="Nervous System Coach for Athletes">
+      <div class="path-top">
+        <div class="path-check">✓</div>
+        <div class="path-info">
+          <div class="path-name">Nervous System Coach for Athletes</div>
+          <div class="path-desc">Work with sports teams and individual athletes on nervous system regulation, combining cold exposure, breathwork, and performance psychology.</div>
+          <div class="path-sources">
+            <span class="path-source">team sport</span>
+            <span class="path-source">public speaking</span>
+            <span class="path-source">fire ceremony</span>
+          </div>
+          <div class="path-match">Wild card</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin: 16px 0 8px;">
+      <button style="background: none; border: none; color: rgba(0,0,0,0.3); font-size: 13px; cursor: pointer; font-family: inherit; text-decoration: underline;" onclick="alert('Would let you type a custom path')">+ Add your own path</button>
+    </div>
+
+    <div class="fixed-bottom">
+      <button class="cta cta-gold" id="path-cta" disabled onclick="showDone()">Select at least 1 →</button>
+    </div>
+  </div>
+
+  <!-- ════════ SCREEN 5: DONE ════════ -->
+  <div class="screen done" id="s-done">
+    <div class="done-check">✓</div>
+    <h2>Quests created</h2>
+    <p>These are now your active quests. Head to your Quests tab to add your first courage challenge.</p>
+    <div class="done-quests" id="done-list"></div>
+    <div class="fixed-bottom">
+      <button class="cta cta-gold" onclick="alert('→ /7-day-challenge?tab=Quests')">Go to my quests →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const selected = new Set()
+  const selectedPaths = new Set()
+
+  function go(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+    document.getElementById(id).classList.add('active')
+    window.scrollTo(0, 0)
+  }
+
+  function sel(el) {
+    el.classList.toggle('selected')
+    const name = el.querySelector('.exp-name').textContent
+    if (el.classList.contains('selected')) selected.add(name)
+    else selected.delete(name)
+    const n = selected.size
+    const cta = document.getElementById('sel-cta')
+    document.getElementById('sel-count').textContent = n === 0 ? '0 selected' : `${n} selected`
+    cta.disabled = n === 0
+    cta.textContent = n === 0 ? 'Select at least 1 →' : `Show me life paths →`
+  }
+
+  function showProcessing() {
+    go('s-processing')
+    const tags = document.getElementById('sel-tags')
+    tags.innerHTML = [...selected].map(s => `<span class="selected-tag">${s}</span>`).join('')
+    setTimeout(() => go('s-paths'), 2500)
+  }
+
+  function pickPath(el) {
+    el.classList.toggle('selected')
+    const name = el.dataset.name
+    if (el.classList.contains('selected')) selectedPaths.add(name)
+    else selectedPaths.delete(name)
+    const n = selectedPaths.size
+    const cta = document.getElementById('path-cta')
+    cta.disabled = n === 0
+    cta.textContent = n === 0 ? 'Select at least 1 →' : n === 1 ? 'Create 1 quest →' : `Create ${n} quests →`
+  }
+
+  function showDone() {
+    const list = document.getElementById('done-list')
+    list.innerHTML = [...selectedPaths].map(name =>
+      `<div class="done-quest"><div class="done-dot"></div><div class="done-name">${name}</div></div>`
+    ).join('')
+    go('s-done')
+  }
+</script>
+
+</body>
+</html>

@@ -503,7 +503,7 @@ const EXPERIENCE_LABELS = {
   'sub-ritual-fire-1885': 'Central heating',
   'sub-ritual-fire-2000': 'Fire pit gathering',
   'sub-ritual-fire-2016': 'Hygge / candle culture',
-  'sub-ritual-fire-2015b': 'Fire ceremony / fire walking',
+  'sub-ritual-fire-2015b': 'Fire ceremony',
 
   // Story sub-branches
   'sub-oral-1400': 'Campfire storytelling',

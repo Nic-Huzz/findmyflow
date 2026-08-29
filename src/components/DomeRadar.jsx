@@ -39,7 +39,8 @@ const NS_RADIUS = {
  * Shows 58 core experience nodes in a radial layout, grouped by primal.
  * Nodes light up when checked/rated.
  */
-export default function DomeRadar({ checked = {}, ratings = {}, size = 280, showLabels = true, onClose }) {
+export default function DomeRadar({ checked = {}, ratings = {}, size = 280, showLabels = true, onClose, interactive = false }) {
+  const [tappedNode, setTappedNode] = React.useState(null)
   const layout = useMemo(() => {
     const cx = size / 2
     const cy = size / 2
@@ -146,7 +147,7 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
           return (
             <circle key={i} cx={layout.cx} cy={layout.cy} r={midR}
               fill="none" stroke={band.color} strokeWidth={bandWidth}
-              opacity={0.06} />
+              opacity={0.15} />
           )
         })}
 
@@ -172,7 +173,10 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
           const nodeR = size * 0.018
 
           return (
-            <g key={n.id}>
+            <g key={n.id}
+              onClick={interactive ? (e) => { e.stopPropagation(); setTappedNode(tappedNode === n.id ? null : n.id) } : undefined}
+              style={interactive ? { cursor: 'pointer' } : undefined}
+            >
               {/* Glow */}
               {glowLevel > 0 && (
                 <circle
@@ -188,10 +192,10 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
               <circle
                 cx={n.x}
                 cy={n.y}
-                r={nodeR}
+                r={interactive ? nodeR * 1.3 : nodeR}
                 fill={isDark ? '#e0e0dc' : n.color}
-                stroke={isDark ? '#d0d0cc' : n.color}
-                strokeWidth={isDark ? 1 : 1.5}
+                stroke={tappedNode === n.id ? '#1a1a1a' : (isDark ? '#d0d0cc' : n.color)}
+                strokeWidth={tappedNode === n.id ? 2 : (isDark ? 1 : 1.5)}
                 opacity={isDark ? 0.7 : 1}
                 style={{ transition: 'all 0.4s ease' }}
               />
@@ -205,6 +209,32 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
                   opacity={glowLevel > 0.5 ? 0.9 : 0.6}
                   style={{ transition: 'all 0.4s ease' }}
                 />
+              )}
+              {/* Label on tap */}
+              {interactive && tappedNode === n.id && (
+                <g>
+                  <rect
+                    x={n.x - size * 0.18}
+                    y={n.y - nodeR - size * 0.055}
+                    width={size * 0.36}
+                    height={size * 0.04}
+                    rx={8}
+                    fill="#fff"
+                    stroke="#e0e0e0"
+                    strokeWidth={1}
+                  />
+                  <text
+                    x={n.x}
+                    y={n.y - nodeR - size * 0.032}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={size * 0.025}
+                    fontWeight="600"
+                    fill={n.color}
+                  >
+                    {n.label}
+                  </text>
+                </g>
               )}
             </g>
           )
@@ -233,10 +263,18 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
         })}
       </svg>
 
-      {/* Stat below dome (not overlapping) */}
+      {/* Stat below dome */}
       <div className="dome-mini-stat" style={{ fontSize: size * 0.06 }}>
         <span className="dome-mini-num">{totalChecked}</span>
         <span className="dome-mini-label">{'\u00A0'}experienced</span>
+      </div>
+
+      {/* NS state legend */}
+      <div className="dome-mini-legend">
+        <span className="dome-mini-legend-item"><span className="dome-mini-legend-dot" style={{ background: '#E9A23B' }} />Vibe Rise</span>
+        <span className="dome-mini-legend-item"><span className="dome-mini-legend-dot" style={{ background: '#10b981' }} />Fun</span>
+        <span className="dome-mini-legend-item"><span className="dome-mini-legend-dot" style={{ background: '#ef4444' }} />Stressful</span>
+        <span className="dome-mini-legend-item"><span className="dome-mini-legend-dot" style={{ background: '#6b7280' }} />Bored</span>
       </div>
 
       {onClose && (

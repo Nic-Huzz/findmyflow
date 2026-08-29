@@ -30,6 +30,7 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
   const [unratedNodes, setUnratedNodes] = useState([])
   const [weeklyExp, setWeeklyExp] = useState(null) // localStorage: { nodeId, picked }
   const [loading, setLoading] = useState(true)
+  const [domeExpanded, setDomeExpanded] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -133,21 +134,7 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
         <span className="dt-card-arrow">→</span>
       </button>
 
-      {/* Step 2: Life Map */}
-      <button className="dt-card" onClick={() => navigate('/life-map')}>
-        <div className="dt-card-header">
-          <span className="dt-card-icon">{lifeMapDone ? '✅' : '🗺'}</span>
-          <span className="dt-card-title">{lifeMapDone ? 'Your Life Map' : 'Map Your Life Story'}</span>
-        </div>
-        <p className="dt-card-desc">
-          {lifeMapDone
-            ? 'Revisit your life chapters and clusters.'
-            : 'What experiences have you already had? Tell your story.'}
-        </p>
-        <span className="dt-card-arrow">→</span>
-      </button>
-
-      {/* Step 3: Experience Dome */}
+      {/* Step 2: Experience Dome */}
       <button className="dt-card" onClick={() => navigate('/experience-game')}>
         <div className="dt-card-header">
           <span className="dt-card-icon">🎮</span>
@@ -160,29 +147,56 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
         <span className="dt-card-arrow">→</span>
       </button>
 
-      {/* Dome Radar (mini viz when data exists) */}
+      {/* Dome Radar (mini viz when data exists) — tap to expand */}
       {domeCount > 0 && (
-        <div className="dt-dome-viz">
+        <div
+          className="dt-dome-viz"
+          onClick={() => setDomeExpanded(true)}
+          style={{ cursor: 'pointer' }}
+          role="button"
+          aria-label="Tap to explore your dome"
+        >
           <DomeRadar checked={domeChecked} ratings={domeRatings} size={260} showLabels={true} />
+          <span className="dt-dome-tap-hint">Tap to explore</span>
+        </div>
+      )}
+
+      {/* Expanded dome overlay */}
+      {domeExpanded && (
+        <div className="dt-dome-overlay" onClick={() => setDomeExpanded(false)}>
+          <div className="dt-dome-overlay-content" onClick={e => e.stopPropagation()}>
+            <DomeRadar
+              checked={domeChecked}
+              ratings={domeRatings}
+              size={Math.min(window.innerWidth - 32, 520)}
+              showLabels={true}
+              interactive={true}
+            />
+            <button className="dt-dome-overlay-close" onClick={() => setDomeExpanded(false)}>
+              Close
+            </button>
+          </div>
         </div>
       )}
 
       {/* Weekly experience section moved to top of tab */}
 
       {/* Phase 1→2 Bridge CTA */}
-      <button
-        className="dt-bridge-cta"
-        onClick={() => {
-          onUnlockTab?.('Quests')
-          navigate('/life-paths')
-        }}
-      >
-        <div className="dt-bridge-text">
-          <span className="dt-bridge-title">Ready to go deeper on a life path?</span>
-          <span className="dt-bridge-sub">Choose which experiences to pursue as quests.</span>
-        </div>
-        <span className="dt-bridge-arrow">→</span>
-      </button>
+      {domeCount > 0 && (
+        <button
+          className="dt-bridge-cta"
+          onClick={() => {
+            onUnlockTab?.('Quests')
+            navigate('/choose-quests')
+          }}
+        >
+          <div className="dt-bridge-text">
+            <span className="dt-bridge-title">Ready to go deeper on a life path?</span>
+            <span className="dt-bridge-sub">Turn what lights you up into quests you can pursue.</span>
+          </div>
+          <span className="dt-bridge-arrow">→</span>
+        </button>
+      )}
     </div>
   )
 }

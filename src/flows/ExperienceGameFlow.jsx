@@ -75,7 +75,7 @@ const EXPERIENCE_DESC = {
   'sub-toy-1932': 'LEGO, model kits, hands-on building',
   'sub-combustion-1400': 'Campfire stories, fire pit gatherings',
   'sub-combustion-2019': 'Fire dancing, fire spinning, burn events',
-  'sub-solar-2016': 'Solar energy, off-grid living, sustainability',
+  // sub-solar-2016 removed (not a core experience node)
   'sub-breathwork-2015': 'Holotropic breathwork, pranayama, Wim Hof breathing',
   'sub-psychedelic-2018': 'Plant medicine ceremonies, psychedelic therapy',
   'sub-somatic-2010': 'Somatic experiencing, body-based healing',
@@ -503,9 +503,140 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
   )
 }
 
+// ─── Challenge Picker CTA ───
+
+function ChallengePickerCTA({ branches, ratings, recommended, totalNodes, totalRated, onExplore, onRerate }) {
+  const [selectedId, setSelectedId] = useState(recommended?.id || '')
+  const [showMore, setShowMore] = useState(false)
+  const [selectedBranch, setSelectedBranch] = useState(null)
+
+  // Top 3 recommended (unticked from branches with vibe_rise items)
+  const topPicks = useMemo(() => {
+    const picks = []
+    branches.forEach(b => {
+      const hasVibeRise = b.nodes.some(n => ratings[n.id] === 'vibe_rise')
+      if (!hasVibeRise) return
+      b.nodes.forEach(n => {
+        if (!ratings[n.id] && picks.length < 3) {
+          picks.push({ id: n.id, label: n.label, branch: b.label, branchColor: b.color })
+        }
+      })
+    })
+    // Fill remaining slots from any branch
+    if (picks.length < 3) {
+      branches.forEach(b => {
+        b.nodes.forEach(n => {
+          if (!ratings[n.id] && picks.length < 3 && !picks.find(p => p.id === n.id)) {
+            picks.push({ id: n.id, label: n.label, branch: b.label, branchColor: b.color })
+          }
+        })
+      })
+    }
+    return picks
+  }, [branches, ratings])
+
+  // All unticked grouped by branch (for "See more")
+  const untickedByBranch = useMemo(() => {
+    const grouped = {}
+    branches.forEach(b => {
+      const items = b.nodes.filter(n => !ratings[n.id])
+      if (items.length > 0) {
+        grouped[b.id] = { label: b.label, color: b.color, items: items.map(n => ({ id: n.id, label: n.label, branch: b.label, branchColor: b.color })) }
+      }
+    })
+    return grouped
+  }, [branches, ratings])
+
+  const handleSelect = useCallback((id) => {
+    hapticLight()
+    setSelectedId(id)
+    setShowMore(false)
+    setSelectedBranch(null)
+  }, [])
+
+  return (
+    <div className="exp-game-insight-ctas">
+      <div className="exp-game-rec">
+        <span className="exp-game-rec-label">Pick your courage challenge this week</span>
+
+        {/* Top 3 picks */}
+        <div className="exp-game-rec-list">
+          {topPicks.map(n => (
+            <button
+              key={n.id}
+              className={`exp-game-rec-option ${n.id === selectedId ? 'selected' : ''}`}
+              onClick={() => handleSelect(n.id)}
+            >
+              <span className="exp-game-rec-option-name">{n.label}</span>
+              <span className="exp-game-rec-option-branch" style={{ color: n.branchColor }}>{n.branch}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* See more */}
+        {!showMore ? (
+          <button className="exp-game-rec-see-more" onClick={() => setShowMore(true)}>
+            See more experiences →
+          </button>
+        ) : (
+          <div className="exp-game-rec-more">
+            {/* Branch selector */}
+            {!selectedBranch ? (
+              <div className="exp-game-rec-branches">
+                {Object.entries(untickedByBranch).map(([id, b]) => (
+                  <button
+                    key={id}
+                    className="exp-game-rec-branch-btn"
+                    onClick={() => setSelectedBranch(id)}
+                    style={{ color: b.color }}
+                  >
+                    {b.label} ({b.items.length})
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="exp-game-rec-branch-list">
+                <button className="exp-game-rec-back" onClick={() => setSelectedBranch(null)}>
+                  ← Back to branches
+                </button>
+                {untickedByBranch[selectedBranch]?.items.map(n => (
+                  <button
+                    key={n.id}
+                    className={`exp-game-rec-option ${n.id === selectedId ? 'selected' : ''}`}
+                    onClick={() => handleSelect(n.id)}
+                  >
+                    <span className="exp-game-rec-option-name">{n.label}</span>
+                    <span className="exp-game-rec-option-branch" style={{ color: n.branchColor }}>{n.branch}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <button
+        className="exp-game-cta-primary"
+        onClick={() => onExplore(selectedId)}
+        disabled={!selectedId}
+      >
+        {selectedId ? 'Confirm this week\'s challenge →' : 'Select an experience above'}
+      </button>
+
+      <p className="exp-game-cta-footer">
+        {Math.max(0, totalNodes - totalRated)} experiences left to discover
+      </p>
+
+      <button className="exp-game-rerate" onClick={onRerate}>
+        Re-rate experiences →
+      </button>
+    </div>
+  )
+}
+
 // ─── Insight Screen ───
 
-function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onBridge }) {
+function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onRerate }) {
   const [revealed, setRevealed] = useState(1)
   const { insights, recommended, unexploredCount } = useMemo(
     () => generateInsights(branches, ratings),
@@ -513,8 +644,21 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onBr
   )
 
   const allRevealed = revealed >= insights.length
-  const totalRated = Object.keys(ratings).length
-  const vibeCount = Object.values(ratings).filter(r => r === 'vibe_rise').length
+  // Only count core experience nodes, not all innovation nodes from Supabase
+  const coreNodeIds = useMemo(() => {
+    const ids = new Set()
+    branches.forEach(b => b.nodes.forEach(n => ids.add(n.id)))
+    return ids
+  }, [branches])
+  const coreRatings = useMemo(() => {
+    const filtered = {}
+    Object.entries(ratings).forEach(([id, state]) => {
+      if (coreNodeIds.has(id)) filtered[id] = state
+    })
+    return filtered
+  }, [ratings, coreNodeIds])
+  const totalRated = Object.keys(coreRatings).length
+  const vibeCount = Object.values(coreRatings).filter(r => r === 'vibe_rise').length
 
   const handleTap = useCallback(() => {
     if (allRevealed) return
@@ -529,10 +673,6 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onBr
       </div>
 
       <div className="exp-game-insight-stats">
-        <div className="exp-game-stat">
-          <span className="exp-game-stat-num">{totalRated}</span>
-          <span className="exp-game-stat-label">experienced</span>
-        </div>
         <div className="exp-game-stat">
           <span className="exp-game-stat-num" style={{ color: '#E9A23B' }}>{vibeCount}</span>
           <span className="exp-game-stat-label">Vibe Rise</span>
@@ -560,25 +700,15 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onBr
       )}
 
       {allRevealed && (
-        <div className="exp-game-insight-ctas">
-          {recommended && (
-            <div className="exp-game-rec">
-              <span className="exp-game-rec-label">Your next experience</span>
-              <span className="exp-game-rec-name" style={{ color: recommended.branchColor }}>
-                {recommended.label}
-              </span>
-              <span className="exp-game-rec-branch">{recommended.branch}</span>
-            </div>
-          )}
-
-          <button className="exp-game-cta-primary" onClick={onExplore}>
-            Pick your courage challenge this week →
-          </button>
-
-          <p className="exp-game-cta-footer">
-            {Math.max(0, totalNodes - totalRated)} experiences left to discover
-          </p>
-        </div>
+        <ChallengePickerCTA
+          branches={branches}
+          ratings={ratings}
+          recommended={recommended}
+          totalNodes={totalNodes}
+          totalRated={totalRated}
+          onExplore={onExplore}
+          onRerate={onRerate}
+        />
       )}
     </div>
   )
@@ -686,9 +816,6 @@ export default function ExperienceGameFlow() {
     navigate('/7-day-challenge?tab=discover')
   }, [navigate])
 
-  const handleBridge = useCallback(() => {
-    navigate('/life-paths')
-  }, [navigate])
 
   if (phase === 'intro') {
     return (
@@ -721,7 +848,7 @@ export default function ExperienceGameFlow() {
         ratings={ratings}
         totalNodes={branches.reduce((sum, b) => sum + b.nodes.length, 0)}
         onExplore={handleExplore}
-        onBridge={handleBridge}
+        onRerate={() => { setPhase('play'); setHydrated(true) }}
       />
     </div>
   )
