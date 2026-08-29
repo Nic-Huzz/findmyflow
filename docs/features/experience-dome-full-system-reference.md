@@ -28,7 +28,7 @@ See `docs/features/three-phase-journey.md` for the full breakdown.
 |---|---|---|---|
 | 1: Discovery | "What lights me up?" | Trying something new | Free (Experience Game) |
 | 2: Expansion | "How far can I take it?" | Expanding dimensions (craft + scale) | Find My Flow (paid) |
-| 3: Build | "How do I live from it?" | Systematizing, scaling, leading | Scale Portal ($499+$99/mo) |
+| 3: Build | "What category am I creating?" | Systematizing, scaling, leading | Scale Portal ($499+$99/mo) |
 
 ---
 
@@ -140,9 +140,20 @@ Hidden until Phase 2→3 bridge (hero stage 10+). Redundant for new users since 
 
 ---
 
-## Phase 3: Build
+## Phase 3: Build — "What category are you creating?"
 
-### Business Layer
+### The Question
+Not "how do I make a living?" but **"What category are you creating?"** This positions the user as a category creator, not just a business builder.
+
+"I facilitate breathwork retreats" is a business. "I created a new way to process grief through movement + breathwork + music" is a category.
+
+### Two steps
+1. **"What category are you creating?"** → Rule Break Tree + Remarkable Results reveals the answer. The innovation sits at a branch intersection. Scale Score's 10 branches are category dimensions.
+2. **"What's the engine to make it livable?"** → Business model selection (Product Types, Offer Stack, Pricing). The category IS the positioning. The engine IS the monetization.
+
+> **[UNCERTAIN]:** Does the Multiplication Screen (Skill x Problem = Career direction) fire BEFORE the category question, or does the category question REPLACE it? The multiplication tells you WHAT you offer. The category tells you HOW you're different offering it. They might be sequential: multiplication first (what), category second (how different). Decision deferred.
+
+### Business Model Engine
 - **Product Types** (18): Service → Productized → Product
 - **Hormozi Offer Stack** (5 layers): Lead Magnet → Attraction → Core → Upsell → Continuity
 - **Business Accelerator** (Stages 0-8)
