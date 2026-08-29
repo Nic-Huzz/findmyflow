@@ -210,9 +210,40 @@ The dome is a **decision tool for the Phase 1→2 bridge**, not an ongoing dashb
 
 ---
 
+## Post-Sprint Refinements (approved)
+
+### 1. Tab unlock progression (12-year-old test)
+New users see only Discover unlocked. Others unlock progressively:
+- Discover: always open (Phase 1 home)
+- Quests: unlocks after first life path created (bridge CTA)
+- Tune: unlocks after first courage challenge completed
+- Progress: always visible but sparse until data exists
+
+### 2. "Experience to try this week" on Discover tab
+Same WeeklyFocus pattern but for Phase 1. User picks a dome node they haven't tried yet.
+Core Phase 1 loop: pick experience → try in real life → come back and rate with NS state.
+
+### 3. Skill level labels
+Remove old domain labels ("Lteaching", "Lpractising") from skill display.
+Show: skill name, L1-L4 (XP-based), XP count. No domain reference.
+
+### 4. Action Score review
+Currently mixes courage challenge outcomes + daily check-in states + task signals.
+Daily check-ins dilute the score because they outnumber courage challenges.
+Needs design decision: should Action Score only count courage-related actions?
+
+### 5. ProgressTab missing features from JourneyTab
+Hero stage needs: movie references per stage, "next step" CTA, stage-specific guidance.
+Also lost: protective voices tracker, life paths summary, stuck detection, streak milestone,
+clarity nudge, figurine display, orphaned wahoo linker, completed quests list.
+Decision needed on each: bring back into Progress, move to Discover, or drop.
+
+---
+
 ## Not Yet Decided
 
-- Exact UI of the "Ready to go deeper?" CTA — sketch using brand guide
 - Dome viz details: how many rings? Labels on rings or clean? Nodes as dots or icons?
 - How to handle experiences that span multiple branches (e.g. "silent disco" = Movement + Play + Bonds)
-- What does the Discover tab look like AFTER the user has bridged to Phase 2? Mostly static/archival, or does it evolve?
+- What does the Discover tab look like AFTER the user has bridged to Phase 2?
+- Should Action Score only count courage-related actions (not daily check-ins)?
+- Which JourneyTab features to bring back vs drop (user reviewing the list above)

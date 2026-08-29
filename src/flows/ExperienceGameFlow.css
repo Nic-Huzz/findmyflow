@@ -119,7 +119,7 @@
 
 .exp-game-tick-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  background: #5e17eb;
   transition: width 0.4s ease;
   border-radius: 0 2px 2px 0;
 }
@@ -182,8 +182,8 @@
 }
 
 .exp-game-tick-item.checked {
-  border-color: var(--branch-color, #5e17eb);
-  background: color-mix(in srgb, var(--branch-color, #5e17eb) 6%, #fff);
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.04);
 }
 
 .exp-game-tick-check {
@@ -201,8 +201,8 @@
 }
 
 .exp-game-tick-item.checked .exp-game-tick-check {
-  border-color: var(--branch-color, #5e17eb);
-  background: var(--branch-color, #5e17eb);
+  border-color: #5e17eb;
+  background: #5e17eb;
   color: #fff;
 }
 

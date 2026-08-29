@@ -10,24 +10,25 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import SweetSpotGraph from './level/SweetSpotGraph'
 import CapacityCard from './level/CapacityCard'
 import './ProgressTab.css'
 
-// Hero stage names (Campbell)
+// Hero stage names (Campbell) + movie refs + next step guidance
 const HERO_STAGES = [
-  { stage: 0, name: 'Ordinary World' },
-  { stage: 1, name: 'Ordinary World' },
-  { stage: 2, name: 'Call to Adventure' },
-  { stage: 3, name: 'Refusal of the Call' },
-  { stage: 4, name: 'Meeting the Mentor' },
-  { stage: 5, name: 'Crossing the Threshold' },
-  { stage: 6, name: 'Tests, Allies, Enemies' },
-  { stage: 7, name: 'Approach to the Inmost Cave' },
-  { stage: 8, name: 'The Ordeal' },
-  { stage: 9, name: 'Reward' },
-  { stage: 10, name: 'The Road Back' },
-  { stage: 11, name: 'Resurrection' },
-  { stage: 12, name: 'Return with the Elixir' },
+  { stage: 0, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], next: 'Start exploring the Discover tab to begin your journey.' },
+  { stage: 1, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], next: 'Start exploring the Discover tab to begin your journey.' },
+  { stage: 2, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], next: 'Complete the Experience Dome. Discover what lights you up.' },
+  { stage: 3, name: 'Refusal of the Call', refs: ['Simba running away to the jungle.', 'Miles Morales saying "I can\'t do this."', 'Frodo saying "I wish the ring had never come to me."'], next: 'Create your hero avatar. Go to the Essence Mirror.' },
+  { stage: 4, name: 'Meeting the Mentor', refs: ['Aladdin meeting the Genie.', 'Tony Stark building the first suit in the cave.', 'Luke meeting Yoda on Dagobah.'], next: 'Complete a courage challenge. Any feeling counts.' },
+  { stage: 5, name: 'Crossing the Threshold', refs: ['Jasmine and Aladdin on the magic carpet for the first time.', 'Spider-Man\'s first swing through New York.', 'Neo dodging bullets for the first time.'], next: 'Focus your courage challenges on one life path. Go deeper.' },
+  { stage: 6, name: 'Tests, Allies, Enemies', refs: ['Mulan training with the army.', 'The Avengers learning to fight together.', 'Rocky running up the stairs.'], next: 'After a courage challenge, tap "Feeling stuck?" to start a healing flow.' },
+  { stage: 7, name: 'Approach to the Inmost Cave', refs: ['Simba returning to the Pride Lands to face Scar.', 'Doctor Strange facing Dormammu.', 'Luke entering the cave on Dagobah.'], next: 'Keep stretching your expansion dimensions. Push into the ones you avoid.' },
+  { stage: 8, name: 'The Ordeal', refs: ['Mufasa\'s death breaking Simba open.', 'Tony Stark snapping the Infinity Gauntlet.', 'Neo dying and coming back as The One.'], next: 'You\'re in the deep work. Complete healing flows and keep showing up.' },
+  { stage: 9, name: 'Reward', refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.', 'Frodo holding the ring at Mount Doom.'], next: 'Reflect on how far you\'ve come. Your Flow Statement is forming.' },
+  { stage: 10, name: 'The Road Back', refs: ['Woody choosing to leave Andy.', 'Spider-Man returning to Queens.', 'Bilbo writing his book.'], next: 'You\'re ready to share what you\'ve learned. Consider the Scale Portal.' },
+  { stage: 11, name: 'Resurrection', refs: ['Simba defeating Scar.', 'Tony Stark saying "I am Iron Man."', 'Neo stopping bullets with his hand.'], next: 'Build your offer. Who do you serve? What problem do you solve?' },
+  { stage: 12, name: 'Return with the Elixir', refs: ['Simba standing on Pride Rock as king.', 'The Avengers saving the universe.', 'Frodo sailing to the Undying Lands.'], next: 'Your first graduate. Someone\'s life shifted because you showed up.' },
 ]
 
 const DIMENSION_META = {
@@ -93,16 +94,12 @@ export default function ProgressTab({ userId }) {
       setLoading(false)
     })
 
-    // Zone Matrix (Action Score + Clarity)
+    // Zone Matrix (new simplified model)
     let mounted = true
     import('../lib/scoreUtilities').then(async (m) => {
-      const [actionResult, clarityPct] = await Promise.all([
-        m.calculateActionScore(userId),
-        m.calculateClarityScore(userId),
-      ])
+      const result = await m.calculateZoneMatrix(userId)
       if (!mounted) return
-      const zone = m.getZone(actionResult.score, clarityPct)
-      setMatrixData({ actionScore: actionResult.score, clarityPct, zone, total: actionResult.total, aligned: actionResult.aligned })
+      setMatrixData(result)
     }).catch(err => console.warn('Matrix load error:', err))
 
     return () => { mounted = false }
@@ -126,6 +123,20 @@ export default function ProgressTab({ userId }) {
           <span>The Crack</span>
           <span>Self-Actualisation</span>
         </div>
+        {stageInfo.refs && (
+          <div className="pt-hero-refs">
+            <span className="pt-hero-refs-label">Think:</span>
+            {stageInfo.refs.map((ref, i) => (
+              <span key={i} className="pt-hero-ref">{ref}</span>
+            ))}
+          </div>
+        )}
+        {stageInfo.next && (
+          <div className="pt-hero-next">
+            <span className="pt-hero-next-label">Next step</span>
+            <span className="pt-hero-next-text">{stageInfo.next}</span>
+          </div>
+        )}
       </div>
 
       {/* Stats row */}
@@ -147,11 +158,26 @@ export default function ProgressTab({ userId }) {
       {/* Zone Matrix */}
       {matrixData && (
         <div className="pt-section">
-          <div className="pt-section-title">Zone Matrix</div>
-          <div className="pt-matrix-scores">
-            <span>Clarity: {matrixData.clarityPct}%</span>
-            <span>Action: {matrixData.actionScore}%</span>
-            <span className="pt-zone-badge">{matrixData.zone}</span>
+          <div className="pt-section-title">Where you are</div>
+          <div className="pt-zone-display">
+            <span className={`pt-zone-badge pt-zone-${matrixData.zone === 'Self-Actualisation' ? 'sa' : matrixData.zone === 'Head Full of Dreams' ? 'hfd' : matrixData.zone === 'Misguided Zone' ? 'mg' : 'uf'}`}>
+              {matrixData.zone}
+            </span>
+          </div>
+          <div className="pt-zone-checklist">
+            <div className={`pt-zone-check ${matrixData.hasLifeMap ? 'done' : ''}`}>
+              {matrixData.hasLifeMap ? '✅' : '○'} Life Map
+            </div>
+            <div className={`pt-zone-check ${matrixData.hasDome ? 'done' : ''}`}>
+              {matrixData.hasDome ? '✅' : '○'} Experience Dome
+            </div>
+            <div className={`pt-zone-check ${matrixData.hasLifePaths ? 'done' : ''}`}>
+              {matrixData.hasLifePaths ? '✅' : '○'} Life Paths committed
+            </div>
+            <div className={`pt-zone-check ${matrixData.hasCourageThisWeek ? 'done' : ''}`}>
+              {matrixData.hasCourageThisWeek ? '✅' : '○'} Courage action this week
+              {matrixData.courageThisWeek > 0 && ` (${matrixData.courageThisWeek})`}
+            </div>
           </div>
         </div>
       )}
@@ -183,13 +209,17 @@ export default function ProgressTab({ userId }) {
         <div className="pt-section">
           <div className="pt-section-title">Skills</div>
           <div className="pt-skills-grid">
-            {skills.filter(s => s.xp > 0).sort((a, b) => b.xp - a.xp).map(s => (
+            {skills.filter(s => s.xp > 0).sort((a, b) => b.xp - a.xp).map(s => {
+              // Convert XP to clean level number (L0=0, L1=3, L2=8, L3=15, L4=25)
+              const lvl = s.xp >= 25 ? 4 : s.xp >= 15 ? 3 : s.xp >= 8 ? 2 : s.xp >= 3 ? 1 : 0
+              return (
               <div key={s.skill_id} className="pt-skill-item">
-                <span className="pt-skill-name">{s.skill_id}</span>
-                <span className="pt-skill-level">L{s.level}</span>
+                <span className="pt-skill-name">{s.skill_id.replace(/_/g, ' ')}</span>
+                <span className="pt-skill-level">L{lvl}</span>
                 <span className="pt-skill-xp">{s.xp} XP</span>
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}

@@ -382,7 +382,7 @@ function Challenge() {
   // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Tune', 'Progress']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Progress']))
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
   const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
@@ -438,7 +438,8 @@ function Challenge() {
           : Promise.resolve({ data: [] }),
       ]).then(([wahoos, skills, lifePaths]) => {
         const unlocks = []
-        if (lifePaths.data?.length > 0) unlocks.push('Quests')
+        if (wahoos.data?.length > 0) unlocks.push('Tune') // first courage challenge unlocks Tune
+        if (lifePaths.data?.length > 0) unlocks.push('Quests') // life paths unlock Quests
         if (unlocks.length > 0) {
           setUnlockedTabs(prev => new Set([...prev, ...unlocks]))
         }
@@ -1702,7 +1703,7 @@ function Challenge() {
           />
         )}
 
-        {/* Discover Tab — Phase 1 discovery */}
+        {/* Journey Tab — hero stage, voice progress, thresholds */}
         {activeCategory === 'Discover' && (
           <DiscoverTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
         )}

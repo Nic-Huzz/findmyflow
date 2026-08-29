@@ -21,7 +21,6 @@
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(94, 23, 235, 0.06);
   cursor: pointer;
   text-align: left;
   font-family: inherit;
@@ -29,9 +28,7 @@
   border: none;
 }
 
-.dt-card:active {
-  background: #fafafa;
-}
+.dt-card:active { background: #fafafa; }
 
 .dt-card-header {
   display: flex;
@@ -82,6 +79,86 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: center;
+}
+
+/* Weekly experience card — mirrors WeeklyFocus pattern */
+.dt-weekly-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 16px;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.08);
+}
+
+.dt-weekly-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.dt-weekly-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a0b3d;
+}
+
+.dt-weekly-focus {
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.dt-weekly-focus-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a0b3d;
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+
+.dt-weekly-done {
+  width: 100%;
+  padding: 12px;
+  background: #5e17eb;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.dt-weekly-change {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.dt-weekly-hint {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0 0 10px;
+}
+
+.dt-weekly-cta {
+  width: 100%;
+  padding: 10px;
+  background: rgba(94, 23, 235, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.12);
+  border-radius: 12px;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 /* Bridge CTA */

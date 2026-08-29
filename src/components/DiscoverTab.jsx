@@ -2,27 +2,43 @@
  * DiscoverTab.jsx — Phase 1 "What lights me up?" tab
  *
  * Contains: Essence Mirror status, Life Map entry, Dome entry/viz,
- * and the "Ready to go deeper?" Phase 1→2 bridge CTA.
+ * "Experience to try this week" picker, and "Ready to go deeper?" bridge CTA.
  */
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { getWeekStartLocal } from '../lib/dateUtils'
+import { hapticLight } from '../lib/haptics'
+import { isCoreNode } from '../lib/experienceDomeConfig'
 import DomeRadar from './DomeRadar'
 import './DiscoverTab.css'
+
+const WEEK_KEY = 'weekly_experience_focus_'
+
+function getWeekKey() {
+  return WEEK_KEY + getWeekStartLocal()
+}
 
 export default function DiscoverTab({ userId, onUnlockTab }) {
   const navigate = useNavigate()
   const [essenceDone, setEssenceDone] = useState(false)
   const [lifeMapDone, setLifeMapDone] = useState(false)
   const [domeCount, setDomeCount] = useState(0)
-  const [hasQuests, setHasQuests] = useState(false)
   const [domeRatings, setDomeRatings] = useState({})
   const [domeChecked, setDomeChecked] = useState({})
+  const [unratedNodes, setUnratedNodes] = useState([])
+  const [weeklyExp, setWeeklyExp] = useState(null) // localStorage: { nodeId, picked }
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!userId) return
+
+    // Load weekly experience from localStorage
+    const stored = localStorage.getItem(getWeekKey())
+    if (stored) {
+      try { setWeeklyExp(JSON.parse(stored)) } catch {}
+    }
 
     Promise.all([
       supabase.from('user_stage_progress')
@@ -34,25 +50,28 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       supabase.from('experience_dome_ratings')
         .select('node_id, ns_state')
         .eq('user_id', userId),
-      supabase.from('quests')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId).eq('status', 'active'),
-    ]).then(([essenceRes, lifeMapRes, domeRes, questsRes]) => {
+    ]).then(([essenceRes, lifeMapRes, domeRes]) => {
       setEssenceDone(!!essenceRes.data?.essence_mirror_completed)
       setLifeMapDone((lifeMapRes.count || 0) > 0)
 
-      // Build dome data maps
       const ratings = {}
       const checked = {}
+      let coreCount = 0
       ;(domeRes.data || []).forEach(r => {
         if (r.ns_state) ratings[r.node_id] = r.ns_state
         checked[r.node_id] = true
+        if (isCoreNode(r.node_id)) coreCount++
       })
       setDomeRatings(ratings)
       setDomeChecked(checked)
-      setDomeCount(Object.keys(checked).length)
+      setDomeCount(coreCount)
 
-      setHasQuests((questsRes.count || 0) > 0)
+      // Build list of unrated nodes for "experience to try" picker
+      // We'd need the full dome config to know ALL nodes, but for now
+      // show nodes that have been checked but not rated with NS state
+      const unrated = (domeRes.data || []).filter(r => !r.ns_state).map(r => r.node_id)
+      setUnratedNodes(unrated)
+
       setLoading(false)
     }).catch(err => {
       console.error('DiscoverTab load error:', err)
@@ -60,10 +79,46 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
     })
   }, [userId])
 
+  const pickExperience = (nodeId) => {
+    const data = { nodeId, picked: true }
+    localStorage.setItem(getWeekKey(), JSON.stringify(data))
+    setWeeklyExp(data)
+    hapticLight()
+  }
+
   if (loading) return <div className="dt-loading">Loading...</div>
 
   return (
     <div className="discover-tab">
+      {/* Experience to try this week — top of tab, same pattern as WeeklyFocus */}
+      {domeCount > 0 && (
+        <div className="dt-weekly-card">
+          <div className="dt-weekly-header">
+            <span className="dt-weekly-label">Experience to try this week</span>
+            {weeklyExp && (
+              <button className="dt-weekly-change" onClick={() => { setWeeklyExp(null); localStorage.removeItem(getWeekKey()) }}>
+                Change
+              </button>
+            )}
+          </div>
+          {weeklyExp ? (
+            <div className="dt-weekly-focus">
+              <div className="dt-weekly-focus-text">{weeklyExp.nodeId.replace(/_/g, ' ')}</div>
+              <button className="dt-weekly-done" onClick={() => navigate('/experience-game')}>
+                Rate it
+              </button>
+            </div>
+          ) : (
+            <>
+              <p className="dt-weekly-hint">Pick something you haven't tried yet.</p>
+              <button className="dt-weekly-cta" onClick={() => navigate('/experience-game')}>
+                Browse experiences →
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Step 1: Essence Mirror */}
       <button className="dt-card" onClick={() => navigate('/essence-mirror')}>
         <div className="dt-card-header">
@@ -111,6 +166,8 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
           <DomeRadar checked={domeChecked} ratings={domeRatings} size={260} showLabels={true} />
         </div>
       )}
+
+      {/* Weekly experience section moved to top of tab */}
 
       {/* Phase 1→2 Bridge CTA */}
       <button

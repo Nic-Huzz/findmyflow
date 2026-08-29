@@ -59,6 +59,54 @@
   font-weight: 500;
 }
 
+/* Hero refs + next step */
+.pt-hero-refs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.pt-hero-refs-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pt-hero-ref {
+  font-size: 13px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.pt-hero-next {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 10px;
+}
+
+.pt-hero-next-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #5e17eb;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pt-hero-next-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0b3d;
+}
+
 /* Stats row */
 .pt-stats-row {
   display: flex;
@@ -102,24 +150,39 @@
   margin-bottom: 10px;
 }
 
-/* Zone matrix */
-.pt-matrix-scores {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: #6c757d;
+/* Zone display */
+.pt-zone-display {
+  margin-bottom: 12px;
 }
 
 .pt-zone-badge {
-  background: rgba(94, 23, 235, 0.08);
-  color: #5e17eb;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  margin-left: auto;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.pt-zone-sa { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.pt-zone-hfd { background: rgba(94, 23, 235, 0.08); color: #5e17eb; }
+.pt-zone-mg { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.pt-zone-uf { background: rgba(107, 114, 128, 0.08); color: #6b7280; }
+
+.pt-zone-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pt-zone-check {
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.pt-zone-check.done {
+  color: #1a0b3d;
+  font-weight: 600;
 }
 
 /* Dimensions grid */

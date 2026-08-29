@@ -583,33 +583,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         )}
         <div className="quest-recommend">We recommend focusing on 1-3 quests at a time</div>
 
-        {/* Zone Matrix — Action × Clarity */}
-        {matrixData && (matrixData.actionScore != null || matrixData.clarityPct != null) && (
-          <div className="lt-matrix-card">
-            <div className="lt-matrix-title">Last 7 days</div>
-            <div className="lt-matrix-grid">
-              <div className="lt-matrix-label lt-matrix-y-high">Aligned action</div>
-              <div className="lt-matrix-label lt-matrix-y-low">Low action</div>
-              <div className="lt-matrix-label lt-matrix-x-high">High clarity</div>
-              <div className="lt-matrix-quadrant lt-q-tl">Misguided Zone</div>
-              <div className="lt-matrix-quadrant lt-q-tr">Self-Actualisation</div>
-              <div className="lt-matrix-quadrant lt-q-bl">Unfulfilment</div>
-              <div className="lt-matrix-quadrant lt-q-br">Head Full of Dreams</div>
-              {matrixData.actionScore != null && matrixData.clarityPct != null && (
-                <div className="lt-matrix-dot" style={{
-                  left: `${Math.max(10, Math.min(90, matrixData.clarityPct))}%`,
-                  bottom: `${Math.max(10, Math.min(90, matrixData.actionScore))}%`,
-                }} />
-              )}
-            </div>
-            <div className="lt-matrix-zone">
-              {matrixData.total < 5
-                ? `Keep going (${matrixData.total}/5 actions)`
-                : matrixData.zone || 'Rate your clusters for Clarity'
-              }
-            </div>
-          </div>
-        )}
+        {/* Zone Matrix moved to Progress tab */}
       </div>
 
       {/* Struggle Pills */}
@@ -668,7 +642,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question">Name experiences you'd love to have that scare you a little. Host a silent disco. Post a vulnerable video. Cold-call a stranger.</p>
             <p className="quest-modal-question">Each one is a rep in the gym, training your system that expressing yourself this way is safe.</p>
             <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Quests') }}>
-              Open Quests Tab →
+              Open Courage Tab →
             </button>
           </div>
         </div>
@@ -686,7 +660,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
             <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
             <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Quests') }}>
-              Open Quests Tab →
+              Open Courage Tab →
             </button>
           </div>
         </div>
