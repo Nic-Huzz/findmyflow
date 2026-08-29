@@ -7,25 +7,26 @@
  */
 
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import './ProgressTab.css'
 
 // Hero stage names (Campbell) + movie refs + next step guidance
 // Triggers: see docs/features/experience-dome-full-system-reference.md
 const HERO_STAGES = [
-  { stage: 0, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], next: 'Start exploring the Discover tab to begin your journey.' },
-  { stage: 1, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], next: 'Start exploring the Discover tab to begin your journey.' },
-  { stage: 2, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], next: 'Complete the Experience Dome. Tick 10+ experiences to discover what lights you up.' },
-  { stage: 3, name: 'Refusal of the Call', refs: ['Simba running away to the jungle.', 'Miles Morales saying "I can\'t do this."', 'Frodo saying "I wish the ring had never come to me."'], next: 'Go to the Essence Mirror. Meet the version of you that was always there.' },
-  { stage: 4, name: 'Meeting the Mentor', refs: ['Aladdin meeting the Genie.', 'Tony Stark building the first suit in the cave.', 'Luke meeting Yoda on Dagobah.'], next: 'Choose your life paths. What do you want to pursue?' },
-  { stage: 5, name: 'Crossing the Threshold', refs: ['Jasmine and Aladdin on the magic carpet for the first time.', 'Spider-Man\'s first swing through New York.', 'Neo dodging bullets for the first time.'], next: 'Complete 5 courage challenges. Each one trains your nervous system.' },
-  { stage: 6, name: 'Tests, Allies, Enemies', refs: ['Mulan training with the army.', 'The Avengers learning to fight together.', 'Rocky running up the stairs.'], next: 'Tap "Feeling stuck?" on a courage challenge. Start a healing flow.' },
-  { stage: 7, name: 'Approach to the Inmost Cave', refs: ['Simba returning to the Pride Lands to face Scar.', 'Doctor Strange facing Dormammu.', 'Luke entering the cave on Dagobah.'], next: 'Complete 3 healing flows all the way through, and keep doing courage challenges.' },
-  { stage: 8, name: 'The Ordeal', refs: ['Mufasa\'s death breaking Simba open.', 'Tony Stark snapping the Infinity Gauntlet.', 'Neo dying and coming back as The One.'], next: 'You\'ve done the deep work. Start the Scale Portal to share what you\'ve learned.' },
-  { stage: 9, name: 'Reward', refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.', 'Frodo holding the ring at Mount Doom.'], next: 'You\'re starting to monetise. Build your offer and find your first customers.' },
-  { stage: 10, name: 'The Road Back', refs: ['Woody choosing to leave Andy.', 'Spider-Man returning to Queens.', 'Bilbo writing his book.'], next: 'Consistent income is flowing. Keep showing up and refining your offer.' },
-  { stage: 11, name: 'Resurrection', refs: ['Simba defeating Scar.', 'Tony Stark saying "I am Iron Man."', 'Neo stopping bullets with his hand.'], next: 'Your new life design covers your living expenses. The old career is optional.' },
-  { stage: 12, name: 'Return with the Elixir', refs: ['Simba standing on Pride Rock as king.', 'The Avengers saving the universe.', 'Frodo sailing to the Undying Lands.'], next: 'You\'re free. Earning from play, choosing where you live, on your own terms.' },
+  { stage: 0, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], nextTitle: 'Explore the Experience Dome', nextHow: 'Go to the Discover tab and tap "Experience Dome". Tick experiences that light you up.', route: '/7-day-challenge' },
+  { stage: 1, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], nextTitle: 'Explore the Experience Dome', nextHow: 'Go to the Discover tab and tap "Experience Dome". Tick experiences that light you up.', route: '/7-day-challenge' },
+  { stage: 2, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], nextTitle: 'Tick 10 experiences in the Dome', nextHow: 'Open the Experience Dome on the Discover tab. Rate how each experience makes you feel.', route: '/7-day-challenge' },
+  { stage: 3, name: 'Refusal of the Call', refs: ['Simba running away to the jungle.', 'Miles Morales saying "I can\'t do this."', 'Frodo saying "I wish the ring had never come to me."'], nextTitle: 'Complete the Essence Mirror', nextHow: 'On the Discover tab, tap "Essence Mirror". Swipe through 12 cards, pick what resonates, and meet your archetype.', route: '/essence-mirror' },
+  { stage: 4, name: 'Meeting the Mentor', refs: ['Aladdin meeting the Genie.', 'Tony Stark building the first suit in the cave.', 'Luke meeting Yoda on Dagobah.'], nextTitle: 'Choose your life paths', nextHow: 'Tap "Ready to go deeper?" on the Discover tab. Pick experiences you want to pursue and they become quests.', route: '/choose-quests' },
+  { stage: 5, name: 'Crossing the Threshold', refs: ['Jasmine and Aladdin on the magic carpet for the first time.', 'Spider-Man\'s first swing through New York.', 'Neo dodging bullets for the first time.'], nextTitle: 'Complete 5 courage challenges', nextHow: 'On the Quests tab, open a quest card. Tap the checkbox on any courage challenge (⚡), do the brave thing, then check it off.', route: '/7-day-challenge' },
+  { stage: 6, name: 'Tests, Allies, Enemies', refs: ['Mulan training with the army.', 'The Avengers learning to fight together.', 'Rocky running up the stairs.'], nextTitle: 'Start your first healing flow', nextHow: 'On the Quests tab, tap the ⚡ icon on any undone courage challenge. Walk through all 7 steps to understand what\'s really blocking you.', route: '/7-day-challenge' },
+  { stage: 7, name: 'Approach to the Inmost Cave', refs: ['Simba returning to the Pride Lands to face Scar.', 'Doctor Strange facing Dormammu.', 'Luke entering the cave on Dagobah.'], nextTitle: 'Complete 3 healing flows', nextHow: 'After completing a courage challenge, tap "Dive deeper" to explore why the protective voice you identified exists. Complete all 7 steps, then answer "Did the positive outcome happen?"', route: '/7-day-challenge' },
+  { stage: 8, name: 'The Ordeal', refs: ['Mufasa\'s death breaking Simba open.', 'Tony Stark snapping the Infinity Gauntlet.', 'Neo dying and coming back as The One.'], nextTitle: 'Start the Scale Portal', nextHow: 'You\'ve done the deep work. Go to the Scale Portal and start the "Blow Up Your Brand" flow or take the Scale Score diagnostic.', route: '/create' },
+  { stage: 9, name: 'Reward', refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.', 'Frodo holding the ring at Mount Doom.'], nextTitle: 'Build your offer', nextHow: 'You\'re starting to monetise. Use the Scale Portal to build your offer and find your first customers.', route: '/create' },
+  { stage: 10, name: 'The Road Back', refs: ['Woody choosing to leave Andy.', 'Spider-Man returning to Queens.', 'Bilbo writing his book.'], nextTitle: 'Grow consistent income', nextHow: 'Revenue is starting to flow. Keep showing up, refining your offer, and serving your people.' },
+  { stage: 11, name: 'Resurrection', refs: ['Simba defeating Scar.', 'Tony Stark saying "I am Iron Man."', 'Neo stopping bullets with his hand.'], nextTitle: 'Cover your living expenses', nextHow: 'Your new life design sustains you. The old career is optional now.' },
+  { stage: 12, name: 'Return with the Elixir', refs: ['Simba standing on Pride Rock as king.', 'The Avengers saving the universe.', 'Frodo sailing to the Undying Lands.'], nextTitle: 'You\'re free', nextHow: 'Earning from play, choosing where you live, working with who you want.' },
 ]
 
 const DIMENSION_META = {
@@ -39,6 +40,7 @@ const DIMENSION_META = {
 }
 
 export default function ProgressTab({ userId }) {
+  const navigate = useNavigate()
   const [heroStage, setHeroStage] = useState(0)
   const [matrixData, setMatrixData] = useState(null)
   const [dimensionCounts, setDimensionCounts] = useState({})
@@ -121,10 +123,15 @@ export default function ProgressTab({ userId }) {
             ))}
           </div>
         )}
-        {stageInfo.next && (
-          <div className="pt-hero-next">
+        {stageInfo.nextTitle && (
+          <div
+            className={`pt-hero-next ${stageInfo.route ? 'pt-hero-next-tappable' : ''}`}
+            onClick={() => stageInfo.route && navigate(stageInfo.route)}
+          >
             <span className="pt-hero-next-label">Next step</span>
-            <span className="pt-hero-next-text">{stageInfo.next}</span>
+            <span className="pt-hero-next-title">{stageInfo.nextTitle}</span>
+            <span className="pt-hero-next-how">{stageInfo.nextHow}</span>
+            {stageInfo.route && <span className="pt-hero-next-arrow">Go ›</span>}
           </div>
         )}
       </div>
