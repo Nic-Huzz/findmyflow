@@ -3,10 +3,21 @@ import { postFeedEvent } from './communityFeed'
 
 /**
  * Checks if a user qualifies for a hero stage graduation.
- * Returns { from, to, stageData, dominantVoice } if graduated, or null if no change.
+ * Returns { from, to, stageData } if graduated, or null if no change.
  *
  * Designed to be called on Challenge.jsx mount. Cheap queries (~50ms).
  * Only advances ONE stage per call — subsequent mounts catch further graduations.
+ *
+ * Stage triggers (see docs/features/experience-dome-full-system-reference.md):
+ *   2: First NS check-in
+ *   3: Dome completed (10+ ticks)
+ *   4: Essence Mirror + avatar
+ *   5: Choose Quests completed (1+ quest created)
+ *   6: 5+ courage challenges completed
+ *   7: First healing flow started
+ *   8: 3+ healing outcomes + 20+ courage completed
+ *   9: Scale Portal started (remarkable_angles or scale_diagnostics)
+ *   10-12: Deferred (need income tracking)
  */
 export async function checkHeroGraduation(userId) {
   const { data: stageData } = await supabase
@@ -17,9 +28,8 @@ export async function checkHeroGraduation(userId) {
 
   const currentStage = stageData?.current_journey_level || 0
   let newStage = null
-  let voiceData = null // Declared at function scope (used by 6→7 check AND return)
 
-  // →2: Account exists + first NS check-in
+  // →2: First NS check-in
   if (currentStage < 2) {
     const { count } = await supabase
       .from('nervous_system_checkins')
@@ -28,17 +38,13 @@ export async function checkHeroGraduation(userId) {
     if (count > 0) newStage = 2
   }
 
-  // 2→3: Life Paths exercise completed (life_path_sessions exists)
+  // 2→3: Dome completed (10+ experience ticks)
   if (currentStage === 2) {
-    const { data: userData } = await supabase.auth.getUser()
-    const email = userData?.user?.email
-    if (email) {
-      const { count } = await supabase
-        .from('life_path_sessions')
-        .select('id', { count: 'exact', head: true })
-        .eq('client_email', email)
-      if (count > 0) newStage = 3
-    }
+    const { count } = await supabase
+      .from('experience_checkins')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+    if (count >= 10) newStage = 3
   }
 
   // 3→4: Essence Mirror completed + hero avatar generated
@@ -48,52 +54,70 @@ export async function checkHeroGraduation(userId) {
     }
   }
 
-  // 4→5: First wahoo classified as Vibe Rise
+  // 4→5: Choose Quests completed (1+ quest created)
   if (currentStage === 4) {
-    const { count } = await supabase
-      .from('quest_completions')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('quest_category', 'Groans')
-      .like('reflection_text', '%"wahoo_classification":"vibe",%')
-    if (count > 0) newStage = 5
-  }
-
-  // 5→6: At least one life path at Vibe Rise state + L3 Charging or L4 Teaching depth
-  if (currentStage === 5) {
     const { count } = await supabase
       .from('quests')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
       .eq('status', 'active')
-      .eq('predicted_state', 'vibe')
-      .in('depth_level', ['charging', 'teaching'])
-    if (count > 0) newStage = 6
+    if (count > 0) newStage = 5
   }
 
-  // 6→7: 5+ healing flow protective voice identifications (any voice, total count)
+  // 5→6: 5+ courage challenges completed
+  if (currentStage === 5) {
+    const { count } = await supabase
+      .from('groan_challenges')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+    if (count >= 5) newStage = 6
+  }
+
+  // 6→7: First healing flow started
   if (currentStage === 6) {
-    const [{ data: nsVoices }, { data: hiVoices }] = await Promise.all([
-      supabase
-        .from('nervous_system_checkins')
-        .select('protective_voice')
-        .eq('user_id', userId)
-        .not('protective_voice', 'is', null),
+    const { count } = await supabase
+      .from('healing_intentions')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+    if (count > 0) newStage = 7
+  }
+
+  // 7→8: 3+ healing flows with outcome + 20+ courage completed
+  if (currentStage === 7) {
+    const [{ count: healingCount }, { count: courageCount }] = await Promise.all([
       supabase
         .from('healing_intentions')
-        .select('protective_voice')
+        .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .not('protective_voice', 'is', null),
+        .not('outcome', 'is', null),
+      supabase
+        .from('groan_challenges')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('status', 'completed'),
     ])
-
-    voiceData = [...(nsVoices || []), ...(hiVoices || [])]
-    const totalVoiceCount = voiceData.filter(row => row.protective_voice).length
-    if (totalVoiceCount >= 5) newStage = 7
+    if (healingCount >= 3 && courageCount >= 20) newStage = 8
   }
 
+  // 8→9: Scale Portal started (remarkable_angles or scale_diagnostics exist)
+  if (currentStage === 8) {
+    const [{ count: raCount }, { count: sdCount }] = await Promise.all([
+      supabase
+        .from('remarkable_angles')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId),
+      supabase
+        .from('scale_diagnostics')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId),
+    ])
+    if (raCount > 0 || sdCount > 0) newStage = 9
+  }
+
+  // Stages 10-12: Deferred — need income tracking. Users cap at 9.
+
   // If graduated, update the stage
-  // Use UPDATE (not UPSERT) — row should always exist from PersonaAssessment.
-  // If UPDATE affects 0 rows (edge case: missing row), fall back to INSERT.
   if (newStage !== null && newStage > currentStage) {
     const { count } = await supabase
       .from('user_stage_progress')
@@ -105,7 +129,7 @@ export async function checkHeroGraduation(userId) {
       await supabase
         .from('user_stage_progress')
         .insert({ user_id: userId, current_journey_level: newStage, conversations_logged: 0 })
-        .catch(() => {}) // Silent — if INSERT also fails (constraint), stage just doesn't advance
+        .catch(() => {})
     }
 
     // Auto-post stage graduation to community feed
@@ -116,14 +140,17 @@ export async function checkHeroGraduation(userId) {
       5: 'Crossing the Threshold',
       6: 'Tests, Allies, Enemies',
       7: 'Approach to the Inmost Cave',
+      8: 'The Ordeal',
+      9: 'Reward',
     }
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
     postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`)
 
     // Mystery box: hero stage milestones
-    if (newStage === 4 || newStage === 7) {
+    if (newStage === 4 || newStage === 7 || newStage === 9) {
       import('./mysteryBoxes').then(m => {
-        m.earnMysteryBox(userId, `hero_stage_${newStage}`, newStage === 7 ? 'legendary' : 'gold')
+        const tier = newStage === 9 ? 'legendary' : newStage === 7 ? 'gold' : 'gold'
+        m.earnMysteryBox(userId, `hero_stage_${newStage}`, tier)
       }).catch(() => {})
     }
 
@@ -131,19 +158,8 @@ export async function checkHeroGraduation(userId) {
       from: currentStage,
       to: newStage,
       stageData,
-      dominantVoice: currentStage === 6 ? getDominantVoice(voiceData) : null,
     }
   }
 
   return null
-}
-
-function getDominantVoice(voiceData) {
-  const counts = {}
-  voiceData?.forEach(row => {
-    if (row.protective_voice)
-      counts[row.protective_voice] = (counts[row.protective_voice] || 0) + 1
-  })
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
-  return sorted[0] ? sorted[0][0] : null
 }

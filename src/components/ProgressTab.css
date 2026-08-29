@@ -13,41 +13,59 @@
   font-size: 14px;
 }
 
-/* Hero Journey card */
+/* ── Hero Journey card ── */
 .pt-hero-card {
   background: #fff;
-  border-radius: 16px;
-  padding: 18px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 22px 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gradient accent at top of card */
+.pt-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 20px 20px 0 0;
 }
 
 .pt-hero-stage {
   font-size: 11px;
   font-weight: 700;
-  color: #5e17eb;
+  color: #E9A23B;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
 }
 
 .pt-hero-name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   color: #1a0b3d;
-  margin: 4px 0 12px;
+  margin: 4px 0 14px;
+  letter-spacing: -0.01em;
 }
 
+/* Progress bar */
 .pt-hero-bar {
-  height: 6px;
-  background: rgba(94, 23, 235, 0.08);
-  border-radius: 3px;
+  height: 8px;
+  background: rgba(94, 23, 235, 0.06);
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .pt-hero-fill {
   height: 100%;
   background: linear-gradient(90deg, #5e17eb, #E9A23B);
-  border-radius: 3px;
+  border-radius: 4px;
   transition: width 0.5s ease;
+  box-shadow: 0 1px 4px rgba(94, 23, 235, 0.2);
 }
 
 .pt-hero-endpoints {
@@ -59,88 +77,99 @@
   font-weight: 500;
 }
 
-/* Hero refs + next step */
+/* Movie references */
 .pt-hero-refs {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  gap: 4px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: rgba(233, 162, 59, 0.04);
+  border-radius: 14px;
+  border-left: 3px solid rgba(233, 162, 59, 0.3);
 }
 
 .pt-hero-refs-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: #9ca3af;
+  color: #E9A23B;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
 }
 
 .pt-hero-ref {
-  font-size: 13px;
-  color: #6c757d;
+  font-size: 14px;
+  color: #4a4a5a;
   font-style: italic;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
+/* Next step CTA */
 .pt-hero-next {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-top: 10px;
-  padding: 10px 12px;
-  background: rgba(94, 23, 235, 0.04);
-  border-radius: 10px;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, rgba(233, 162, 59, 0.04) 100%);
+  border-radius: 14px;
+  border: 1.5px solid rgba(94, 23, 235, 0.08);
 }
 
 .pt-hero-next-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: #5e17eb;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .pt-hero-next-text {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   color: #1a0b3d;
+  line-height: 1.4;
 }
 
-/* Stats row */
+/* ── Stats row ── */
 .pt-stats-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .pt-stat {
   flex: 1;
   background: #fff;
-  border-radius: 14px;
-  padding: 14px 12px;
+  border-radius: 16px;
+  padding: 16px 12px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .pt-stat-num {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
-  color: #5e17eb;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .pt-stat-label {
   font-size: 11px;
   font-weight: 600;
-  color: #6c757d;
+  color: #9ca3af;
   margin-top: 2px;
 }
 
-/* Sections */
+/* ── Sections ── */
 .pt-section {
   background: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .pt-section-title {
@@ -152,13 +181,13 @@
   margin-bottom: 10px;
 }
 
-/* Zone Matrix — X/Y graph (matches old LevelTab matrix) */
+/* ── Zone Matrix ── */
 .pt-matrix-grid {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 14px;
   overflow: hidden;
   background: #fafaf8;
 }
@@ -172,7 +201,7 @@
   justify-content: center;
   font-size: 11px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.12);
 }
 
 .pt-q-tl { top: 0; left: 0; }
@@ -184,7 +213,7 @@
   position: absolute;
   font-size: 9px;
   font-weight: 700;
-  color: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.15);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -200,7 +229,9 @@
   border-radius: 50%;
   background: linear-gradient(135deg, #5e17eb, #E9A23B);
   transform: translate(-50%, 50%);
-  box-shadow: 0 0 8px rgba(94, 23, 235, 0.3);
+  box-shadow:
+    0 0 8px rgba(94, 23, 235, 0.25),
+    0 0 16px rgba(94, 23, 235, 0.1);
   transition: all 0.5s ease;
 }
 
@@ -212,7 +243,7 @@
   color: #5e17eb;
 }
 
-/* Dimensions grid */
+/* ── Dimensions grid ── */
 .pt-dim-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -223,10 +254,11 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
   background: rgba(0, 0, 0, 0.02);
-  opacity: 0.4;
+  opacity: 0.35;
+  transition: all 0.2s;
 }
 
 .pt-dim-item.active {
@@ -236,4 +268,4 @@
 
 .pt-dim-icon { font-size: 14px; }
 .pt-dim-label { font-size: 12px; font-weight: 600; color: #1a0b3d; flex: 1; }
-.pt-dim-count { font-size: 13px; font-weight: 800; color: #5e17eb; }
+.pt-dim-count { font-size: 14px; font-weight: 900; color: #E9A23B; }

@@ -454,3 +454,65 @@ Problem-facing industries: Consulting (8/12), Education (6/12), Healthcare (6/12
 - **Hollow work cluster** (Achievers, Seekers, Explorers, Challengers): work_hollows — primary app audience
 - **Expression cluster** (Creators, Healers): voice_taken + pain_not_believed
 - **Justice cluster** (Protectors, Nurturers, Visionaries): systemic failures
+
+---
+
+## Hero Journey Stages (Campbell's 12 Stages)
+
+The user's journey through the app maps to Campbell's Hero's Journey. Stages 2-8 track inner transformation (Phase 1-2). Stages 9-12 track building a life from that transformation (Phase 2-3).
+
+### Stage Definitions + Triggers
+
+| Stage | Campbell Name | User Meaning | Phase | Auto Trigger | DB Source |
+|---|---|---|---|---|---|
+| 0-1 | Call to Adventure | Showed up | — | Account created | `user_stage_progress` exists |
+| 2 | Call to Adventure | First engagement | P1 | First NS check-in | `nervous_system_checkins` count > 0 |
+| 3 | Refusal of the Call | Saw what lights you up | P1 | Dome completed (10+ ticks) | `experience_checkins` count ≥ 10 |
+| 4 | Meeting the Mentor | Met yourself | P1 | Essence Mirror + avatar | `essence_mirror_completed` + `hero_avatar_url` |
+| 5 | Crossing the Threshold | Committed to paths | Bridge | Choose Quests completed (1+ quest created) | `quests` count > 0 |
+| 6 | Tests, Allies, Enemies | Training | P2 | 5+ courage challenges completed | `groan_challenges` status=completed count ≥ 5 |
+| 7 | Approach to the Cave | Looked at the fear | P2 | First healing flow started | `healing_intentions` count > 0 |
+| 8 | The Ordeal | Deep work, not stopping | P2 | 3+ healing outcomes + 20+ courage | `healing_intentions` with outcome ≥ 3 AND `groan_challenges` completed ≥ 20 |
+| 9 | Reward | Starting to monetise | P3 | Scale Portal started | `remarkable_angles` OR `scale_diagnostics` exists |
+| 10 | The Road Back | Consistent income (even small) | P3 | **Deferred**: needs income tracking | Future: self-reported monthly revenue > 0 for 3+ months |
+| 11 | Resurrection | Covers living expenses | P3 | **Deferred**: needs income tracking | Future: self-reported revenue ≥ user-set "living expenses" target |
+| 12 | Return with the Elixir | 100% autonomous, free | P3 | **Deferred**: needs income tracking | Future: self-reported "I'm financially free doing what I love" |
+
+### The Financial Freedom Progression (Stages 9-12)
+
+Stages 9-12 map the journey from inner clarity to financial autonomy:
+
+1. **Starting to monetise** (Stage 9): You know what you offer. You're building the vehicle. First Scale Portal entry.
+2. **Consistent income** (Stage 10): Money is coming in regularly, even if small. You've validated the model.
+3. **Covers living expenses** (Stage 11): Your new life design sustains you. The old career is optional.
+4. **100% autonomous** (Stage 12): You choose where you live, what you do, who you work with. Money comes from play, not pressure.
+
+### Future: Income Tracking for Stages 10-12
+
+To auto-trigger stages 10-12, we need:
+- Monthly revenue self-report (simple number input, once/month prompt)
+- User-set "living expenses" target (onboarding or settings)
+- 3-month consistency check for Stage 10 (revenue > 0 for 3 consecutive months)
+- Revenue ≥ expenses target for Stage 11
+- Stage 12: self-declared milestone ("I'm free") + revenue ≥ 2x expenses for 3+ months
+
+Until income tracking is built, stages 10-12 are defined but unreachable. Users cap at Stage 9.
+
+### Implementation
+
+File: `src/lib/heroStageChecker.js`
+Called on: `Challenge.jsx` mount (cheap queries, ~50ms)
+Advances one stage per call. Subsequent mounts catch further graduations.
+Auto-posts stage graduation to community feed via `postFeedEvent`.
+Mystery boxes awarded at stages 4 (gold) and 7 (legendary).
+
+### Changes from previous triggers (Aug 30 2026)
+
+| Old Trigger | Problem | New Trigger |
+|---|---|---|
+| 2→3: Life Paths exercise | Life Paths moved to Bridge, not Phase 1 | Dome completed (10+ ticks) |
+| 4→5: First Vibe Rise wahoo | Skips Phase 1 flows | Choose Quests (1+ quest created) |
+| 5→6: Vibe Rise + depth L3/L4 | **Uses removed L1-L5 depth system** | 5+ courage completed |
+| 6→7: 5+ protective voices | Too niche | First healing flow started |
+| 7→8: Session with Nic | Not scalable | 3+ healing outcomes + 20+ courage |
+| 8+: Not implemented | Missing | Stages 9-12 defined above |
