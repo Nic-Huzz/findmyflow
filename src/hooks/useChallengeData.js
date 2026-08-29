@@ -43,8 +43,8 @@ const TAB_TO_CATEGORY = {
   'quests': 'Quests',
   'business': 'Quests',      // backward compat
   'create': 'Quests',        // backward compat
-  'groans': 'Courage',       // backward compat
-  'healing': 'Courage',
+  'groans': 'Quests',        // backward compat — courage merged into quests
+  'healing': 'Quests',       // backward compat — courage merged into quests
   'tracker': 'Quests',       // backward compat — courage merged into quests
   'tune': 'Tune',
   'bonus': 'Tune',           // backward compat
