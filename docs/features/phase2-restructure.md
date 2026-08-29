@@ -240,10 +240,10 @@ Decision needed on each: bring back into Progress, move to Discover, or drop.
 
 ---
 
-## Not Yet Decided
+## V2 Ideas (not V1)
 
-- Dome viz details: how many rings? Labels on rings or clean? Nodes as dots or icons?
-- How to handle experiences that span multiple branches (e.g. "silent disco" = Movement + Play + Bonds)
-- What does the Discover tab look like AFTER the user has bridged to Phase 2?
-- Should Action Score only count courage-related actions (not daily check-ins)?
-- Which JourneyTab features to bring back vs drop (user reviewing the list above)
+- **Re-rating experiences**: how do users update NS ratings after their state changes? Re-visit dome? Inline on Discover tab?
+- **Daily experience logging**: log what you did today + NS state, building a record over time. Richer data for the dome.
+- **Experiences spanning branches**: e.g. "silent disco" = Movement + Play + Bonds. Multi-branch tagging.
+- **Discover tab post-bridge**: what does it look like after Phase 2 begins? Mostly archival or evolving?
+- **Dome viz polish**: ring labels, node icons vs dots, animations on state change
