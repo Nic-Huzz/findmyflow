@@ -29,6 +29,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [expanded, setExpanded] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
+  const [showTaskInput, setShowTaskInput] = useState(false)
   const [taskTimeframe, setTaskTimeframe] = useState('week')
   const [isCourage, setIsCourage] = useState(false)
   const [showWahooCreator, setShowWahooCreator] = useState(false)
@@ -601,13 +602,14 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             }}>
               ⚡ Add courage challenge
             </button>
-            <button className="qbc-add-task-btn" onClick={() => inputRef.current?.focus()}>
+            <button className="qbc-add-task-btn" onClick={() => { setShowTaskInput(true); setTimeout(() => inputRef.current?.focus(), 50) }}>
               + Add task
             </button>
           </div>
 
           {/* Inline task input — hidden until "Add task" tapped */}
-          <div className="qbc-add-row" style={{ display: taskInput || document.activeElement === inputRef.current ? 'flex' : 'none' }}>
+          {showTaskInput && (
+          <div className="qbc-add-row">
             <input
               ref={inputRef}
               className="qbc-input"
@@ -621,6 +623,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               Add
             </button>
           </div>
+          )}
 
           {/* Close quest */}
           {!showClose ? (
