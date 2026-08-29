@@ -17,6 +17,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 40px 16px;
   animation: domeMiniEnter 0.4s ease;
 }
 
@@ -39,36 +40,28 @@
   50% { opacity: 0.15; }
 }
 
-/* Center stat overlay */
-.dome-mini-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* Stat below dome */
+.dome-mini-stat {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
+  align-items: baseline;
+  margin-top: 12px;
 }
 
 .dome-mini-num {
   font-weight: 800;
   color: #1a1a1a;
-  line-height: 1;
 }
 
 .dome-mini-label {
-  font-size: 0.5em;
   font-weight: 600;
   color: #bbb;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 2px;
 }
 
-/* Continue button in popup mode */
+/* Continue button — pushed to bottom in popup mode */
 .dome-mini-close {
-  margin-top: 24px;
+  margin-top: auto;
   padding: 14px 40px;
   border: none;
   border-radius: 14px;
@@ -79,6 +72,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.dome-mini-popup .dome-mini-close {
+  margin-bottom: env(safe-area-inset-bottom, 16px);
 }
 
 .dome-mini-close:active {

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
-import { isCoreNode, getExperienceLabel } from '../lib/experienceDomeConfig'
+import { isCoreNode, getExperienceLabel, VIRTUAL_EXPERIENCE_NODES } from '../lib/experienceDomeConfig'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
@@ -25,9 +25,10 @@ const INTRO_LINES = [
 ]
 
 // Branch order: common/relatable first, niche last
+// 10 branches (Threat + Tools dropped — innovation branches, not human experience)
 const BRANCH_ORDER = [
   'movement', 'play', 'bonds', 'story', 'nourishment', 'status',
-  'healing', 'tools', 'shelter', 'fire', 'sleep', 'threat',
+  'healing', 'shelter', 'fire', 'sleep',
 ]
 
 // ─── Experience descriptions (subtext) ───
@@ -42,7 +43,7 @@ const EXPERIENCE_DESC = {
   'car-1886': 'Road trips, scenic drives, cross-country adventures',
   'sub-endurance-1962': 'Jogging, running, marathon training',
   'sub-strength-2000': 'CrossFit, functional fitness, group training',
-  'sub-flexibility-1893': 'Yoga classes, stretching, mind-body flow',
+  'sub-flexibility-1893': 'Yoga, Pilates, barre, group fitness classes',
   'sub-temperature-2018': 'Ice baths, cold plunges, Wim Hof method',
   'sub-outdoor-1907': 'Camping, hiking, scouting, bushcraft',
   'sub-dance-1975': 'Ecstatic dance, 5Rhythms, free movement',
@@ -53,10 +54,10 @@ const EXPERIENCE_DESC = {
   'sub-regen-1971': 'Farm-to-table restaurants, slow food',
   'sub-regen-1994': 'Hosting dinner parties, cooking for friends',
   'ai-2022': 'ChatGPT, Claude, AI assistants, prompt engineering',
-  'fashion-2021': 'Building a personal brand, online presence',
-  'sub-fashion-2007': 'Ethical fashion, conscious clothing choices',
-  'sub-digital-2010b': 'Curating your Instagram, visual identity',
-  'sub-counter-2011': 'Minimalism, decluttering, KonMari method',
+  'exp-choosing-style': 'Getting dressed with intention, expressing who you are through what you wear',
+  'exp-tattoo': 'Tattoos, piercings, body modification, permanent self-expression',
+  'sub-fashion-2007': 'Vintage shopping, thrift stores, ethical brands, conscious choices',
+  'sub-counter-2011': 'Owning less, decluttering, intentional simplicity',
   'property-2008': 'Boutique hotels, Airbnb gems, unique stays',
   'sub-alt-2011': 'Van life, mobile living, nomad culture',
   'sub-proptech-2020': 'Remote work, home office setup',
@@ -85,8 +86,44 @@ const EXPERIENCE_DESC = {
   'sub-sleep-2017': 'Sleep optimization, tracking, wind-down rituals',
   'sub-nap-2019': 'Power naps, rest as practice',
   'sub-martial-1900': 'Self-defense, martial arts, combat sports',
+  // New nodes (Aug 29)
+  'car-1952': 'Backpacking, gap years, living abroad, exploring new countries',
+  'sub-strength-2010': 'Day hikes, nature trails, forest walks, hill walking',
+  'sub-temperature-2019': 'Sauna sessions, steam rooms, hot springs, infrared',
+  'exp-surfing': 'Catching waves, bodyboarding, SUP, ocean sports',
+  'exp-climbing': 'Indoor bouldering, outdoor rock climbing, via ferrata',
+  'exp-gardening': 'Growing herbs, vegetables, flowers, getting hands in soil',
+  'exp-volunteering': 'Charity work, community service, giving your time',
+  'exp-pets': 'Dogs, cats, horses, fish, caring for animals',
+  'exp-public-speaking': 'Talks, presentations, pitches, speaking to a room',
+  'media-1826': 'Taking photos, shooting video, visual storytelling',
+  'media-1954': 'Guitar, piano, drums, singing, making music',
+  'sub-craft-1880': 'Painting, pottery, drawing, life classes, creative workshops',
+  'sub-mental-1964': 'Talk therapy, CBT, counselling, working with a therapist',
+  'sub-safety-1993': 'Brazilian jiu-jitsu, MMA, grappling, combat sports',
+  // Originally missing descriptions
+  'sub-traditional-2023': 'Sacred cacao ceremony, heart-opening ritual',
+  'sub-psychedelic-2016': 'Guided psychedelic experiences, plant medicine journeys',
+  'sub-somatic-1400': 'Breathing techniques, pranayama, breath as medicine',
+  'sub-mindbody-1979': 'Seated meditation, mindfulness apps, Vipassana retreats',
+  'sub-energy-2015': 'Crystal bowls, gong baths, vibrational sound healing',
+  'sub-safety-1400b': 'Karate, taekwondo, kung fu, traditional martial arts',
+  'sub-light-2020': 'Candlelit evenings, hygge rituals, creating cozy atmosphere',
+  'sub-ritual-fire-2015b': 'Fire circles, fire walking, ceremonial fire rituals',
+  'sub-dream-1975': 'Conscious dreaming, dream journaling, lucid dream practice',
+  'sub-rest-1999': 'Deliberate napping, rest as a practice, siesta culture',
+  'sub-states-1954': 'Floating in saltwater, deep sensory stillness, isolation tanks',
+  'exp-selling': 'Pitching an idea, closing a deal, persuading someone',
+  'exp-coaching': 'Guiding someone through a challenge, being their mentor',
   'sub-extreme-2012': 'Extreme sports, high-adrenaline activities',
-  'sub-flexibility-1893': 'Yoga classes, stretching, mind-body flow',
+  'sub-flexibility-1893': 'Yoga, Pilates, barre, group fitness classes',
+}
+
+// Override primal assignment for nodes whose tree branch doesn't match their experiential primal
+const PRIMAL_OVERRIDES = {
+  'sub-safety-1400b': 'movement',  // Martial arts → Movement
+  'sub-safety-1993': 'movement',   // BJJ/MMA → Movement
+  'sub-craft-1880': 'story',       // Art class → Story
 }
 
 // ─── Data helpers ───
@@ -94,17 +131,31 @@ const EXPERIENCE_DESC = {
 function buildBranches() {
   const branchMap = {}
   PRIMALS.forEach(primal => {
+    // Tree nodes
     const nodes = industryNodes
       .filter(n => {
         if (!isCoreNode(n.id)) return false
         const ind = INDUSTRIES[n.branch]
-        return ind && ind.primal === primal.id
+        if (!ind) return false
+        const effectivePrimal = PRIMAL_OVERRIDES[n.id] || ind.primal
+        return effectivePrimal === primal.id
       })
       .map(n => ({
         id: n.id,
         label: getExperienceLabel(n.id, n.label),
         desc: EXPERIENCE_DESC[n.id] || '',
       }))
+
+    // Virtual experience nodes (human experiences not in the innovation tree)
+    VIRTUAL_EXPERIENCE_NODES
+      .filter(v => v.primal === primal.id)
+      .forEach(v => {
+        nodes.push({
+          id: v.id,
+          label: v.label,
+          desc: EXPERIENCE_DESC[v.id] || '',
+        })
+      })
 
     if (nodes.length > 0) {
       branchMap[primal.id] = {
@@ -326,7 +377,7 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
 
   // Dome view between branches
   if (step === 'dome') {
-    const domeSize = Math.min(window.innerWidth - 40, 340)
+    const domeSize = Math.min(window.innerWidth - 32, 420)
     return (
       <DomeRadar
         checked={checked}

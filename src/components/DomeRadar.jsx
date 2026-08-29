@@ -1,10 +1,17 @@
 import React, { useMemo } from 'react'
 import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
-import { isCoreNode } from '../lib/experienceDomeConfig'
+import { isCoreNode, VIRTUAL_EXPERIENCE_NODES } from '../lib/experienceDomeConfig'
 import './DomeRadar.css'
 
 const PRIMAL_COLOR_MAP = Object.fromEntries(PRIMALS.map(p => [p.id, p.color]))
 PRIMAL_COLOR_MAP['fire'] = '#ea580c'
+
+// Override primal assignment for nodes whose tree branch doesn't match their experiential primal
+const PRIMAL_OVERRIDES = {
+  'sub-safety-1400b': 'movement',  // Martial arts: physical discipline, not "threat"
+  'sub-safety-1993': 'movement',   // BJJ/MMA: combat sport, not "threat"
+  'sub-craft-1880': 'story',       // Art class: creative expression, not "status"
+}
 
 const NS_GLOW = {
   vibe_rise: 1.0,
@@ -43,9 +50,16 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
       if (!isCoreNode(n.id)) return
       const ind = INDUSTRIES[n.branch]
       if (!ind) return
-      const primalId = ind.primal
+      const primalId = PRIMAL_OVERRIDES[n.id] || ind.primal
       if (primalNodes[primalId]) {
         primalNodes[primalId].push(n)
+      }
+    })
+
+    // Add virtual experience nodes
+    VIRTUAL_EXPERIENCE_NODES.forEach(v => {
+      if (primalNodes[v.primal]) {
+        primalNodes[v.primal].push({ id: v.id, label: v.label, branch: v.branch })
       }
     })
 
@@ -214,10 +228,10 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
         })}
       </svg>
 
-      {/* Center stat */}
-      <div className="dome-mini-center" style={{ fontSize: size * 0.08 }}>
+      {/* Stat below dome (not overlapping) */}
+      <div className="dome-mini-stat" style={{ fontSize: size * 0.06 }}>
         <span className="dome-mini-num">{totalChecked}</span>
-        <span className="dome-mini-label">experienced</span>
+        <span className="dome-mini-label">{'\u00A0'}experienced</span>
       </div>
 
       {onClose && (
