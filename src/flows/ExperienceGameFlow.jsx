@@ -14,7 +14,7 @@ const NS_STATES = [
   { id: 'vibe_rise', label: 'Vibe Rise', icon: '✦', color: '#E9A23B' },
   { id: 'fun', label: 'Fun', icon: '○', color: '#10b981' },
   { id: 'pressure', label: 'Stressful', icon: '◇', color: '#ef4444' },
-  { id: 'bored', label: 'Uninterested', icon: '—', color: '#6b7280' },
+  { id: 'bored', label: 'Bored', icon: '—', color: '#6b7280' },
 ]
 
 const INTRO_LINES = [

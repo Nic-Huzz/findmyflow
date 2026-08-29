@@ -104,14 +104,15 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
       })
     })
 
-    // Ring guides for NS state zones
-    const rings = [
-      { r: minNodeR + NS_RADIUS.vibe_rise * (maxNodeR - minNodeR), label: 'Vibe Rise' },
-      { r: minNodeR + NS_RADIUS.fun * (maxNodeR - minNodeR), label: 'Fun' },
-      { r: minNodeR + NS_RADIUS.pressure * (maxNodeR - minNodeR), label: 'Stressful' },
+    // NS state zone bands (inner → outer): Vibe Rise, Fun, Stressful, Bored
+    const bands = [
+      { innerR: 0, outerR: minNodeR + (NS_RADIUS.vibe_rise + 0.12) * (maxNodeR - minNodeR), color: '#E9A23B' },
+      { innerR: minNodeR + (NS_RADIUS.vibe_rise + 0.12) * (maxNodeR - minNodeR), outerR: minNodeR + (NS_RADIUS.fun + 0.15) * (maxNodeR - minNodeR), color: '#10b981' },
+      { innerR: minNodeR + (NS_RADIUS.fun + 0.15) * (maxNodeR - minNodeR), outerR: minNodeR + (NS_RADIUS.pressure + 0.1) * (maxNodeR - minNodeR), color: '#ef4444' },
+      { innerR: minNodeR + (NS_RADIUS.pressure + 0.1) * (maxNodeR - minNodeR), outerR: maxNodeR, color: '#6b7280' },
     ]
 
-    return { cx, cy, minNodeR, maxNodeR, labelR, nodes, primalLabels, rings }
+    return { cx, cy, minNodeR, maxNodeR, labelR, nodes, primalLabels, bands }
   }, [size, ratings, checked])
 
   const totalChecked = layout.nodes.filter(n => checked[n.id]).length
@@ -119,14 +120,16 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
   return (
     <div className={`dome-mini ${onClose ? 'dome-mini-popup' : ''}`} style={{ fontSize: size * 0.08 }}>
       <svg width={size} height={size} viewBox={`${-size * 0.12} ${-size * 0.06} ${size * 1.24} ${size * 1.12}`}>
-        {/* NS state zone rings */}
-        {layout.rings.map((ring, i) => (
-          <circle key={i} cx={layout.cx} cy={layout.cy} r={ring.r}
-            fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5}
-            strokeDasharray={i === 0 ? 'none' : '2,3'} />
-        ))}
-        <circle cx={layout.cx} cy={layout.cy} r={layout.maxNodeR}
-          fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth={0.5} />
+        {/* NS state zone bands — coloured rings from center out */}
+        {layout.bands.map((band, i) => {
+          const bandWidth = band.outerR - band.innerR
+          const midR = band.innerR + bandWidth / 2
+          return (
+            <circle key={i} cx={layout.cx} cy={layout.cy} r={midR}
+              fill="none" stroke={band.color} strokeWidth={bandWidth}
+              opacity={0.06} />
+          )
+        })}
 
         {/* Sector lines (subtle) */}
         {layout.primalLabels.map(p => (
