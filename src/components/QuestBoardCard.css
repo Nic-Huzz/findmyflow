@@ -184,6 +184,23 @@
   flex-shrink: 0;
 }
 
+.qbc-stuck-link {
+  display: block;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 0 6px 32px;
+  text-align: left;
+}
+
+.qbc-stuck-link:active {
+  color: #5e17eb;
+}
+
 /* ── Healing prompt (Option C) ── */
 .qbc-healing-prompt {
   background: rgba(94, 23, 235, 0.04);

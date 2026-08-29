@@ -35,31 +35,32 @@ const BRANCH_ORDER = [
 
 const EXPERIENCE_DESC = {
   'sub-ordeal-2015': 'Multi-day outdoor challenges, survival experiences',
-  'intimacy-2012': 'The nerves, the excitement, meeting someone new for the first time',
-  'sub-communal-2017': 'Co-working spaces, living abroad with a community',
+  'intimacy-2012': 'The nerves, the excitement, getting to know someone over dinner or drinks',
+  'sub-communal-2017': 'Moving to another country, expat life, building a life somewhere new',
   'sub-digital-2015': 'Forums, group chats, finding your people online',
   'sub-coaching-1937': 'Small group of peers meeting regularly to grow',
   'car-1886': 'Road trips, scenic drives, cross-country adventures',
   'sub-endurance-1962': 'Jogging, running, marathon training',
   'sub-strength-2000': 'CrossFit, functional fitness, group training',
-  'sub-flexibility-1893': 'Yoga, Pilates, barre, group fitness classes',
+  'sub-flexibility-1893': 'Yoga classes, stretching, mind-body flow',
+  'sub-flexibility-1920': 'Pilates, barre, spin, SoulCycle, Hyrox, any group class',
   'sub-temperature-2018': 'Ice baths, cold plunges, Wim Hof method',
   'sub-outdoor-1907': 'Camping, hiking, scouting, bushcraft',
-  'sub-dance-1975': 'Ecstatic dance, 5Rhythms, free movement',
+  'sub-dance-1975': 'Free-form dancing, movement without choreography',
   'sub-regen-1971': 'Farm-to-table restaurants, slow food, knowing where it came from',
   'sub-regen-1994': 'Hosting dinner parties, cooking a meal for friends',
   'exp-farmers-market': 'Browsing stalls, tasting samples, buying direct from growers',
   'exp-new-cuisine': 'Eating something completely new, food adventures, street food in a new country',
-  'ai-2022': 'ChatGPT, Claude, AI assistants, prompt engineering',
+  // ai-2022 removed (Tools branch dropped)
   'exp-choosing-style': 'Getting dressed with intention, expressing who you are through what you wear',
   'exp-tattoo': 'Tattoos, piercings, body modification, permanent self-expression',
   'sub-fashion-2007': 'Vintage shopping, thrift stores, ethical brands, conscious choices',
-  'sub-counter-2011': 'Owning less, decluttering, intentional simplicity',
-  'property-2008': 'Boutique hotels, Airbnb gems, unique stays',
+  // sub-counter-2011 removed (lifestyle, not experience)
+  // property-2008 removed (travel experience, not shelter)
   'sub-alt-2011': 'Van life, mobile living, nomad culture',
-  'sub-proptech-2020': 'Remote work, home office setup',
-  'sub-sacred-2010': 'Boutique gyms, SoulCycle, wellness studios',
-  'media-2018': 'TikTok, Instagram Reels, short-form video',
+  'sub-proptech-2020': 'Painting walls, rearranging furniture, making a space yours',
+  // sub-sacred-2010 removed (redundant with yoga/pilates)
+  'media-2018': 'Making Reels, TikToks, short videos for social media',
   'sub-oral-1860': 'Stand-up comedy, open mic nights',
   'sub-oral-2015': 'Live music, concerts, music festivals',
   'sub-written-1719': 'Getting lost in a great novel',
@@ -106,14 +107,12 @@ const EXPERIENCE_DESC = {
   'sub-energy-2015': 'Crystal bowls, gong baths, vibrational sound healing',
   'sub-safety-1400b': 'Karate, taekwondo, kung fu, traditional martial arts',
   'sub-light-2020': 'Candlelit evenings, hygge rituals, creating cozy atmosphere',
-  'sub-ritual-fire-2015b': 'Fire circles, fire walking, ceremonial fire rituals',
+  'sub-ritual-fire-2015b': 'Fire circles, fire walking, ritual fire experiences',
   'sub-dream-1975': 'Conscious dreaming, dream journaling, lucid dream practice',
   'sub-rest-1999': 'Deliberate napping, rest as a practice, siesta culture',
   'sub-states-1954': 'Floating in saltwater, deep sensory stillness, isolation tanks',
   'exp-selling': 'Pitching an idea, closing a deal, persuading someone',
   'exp-coaching': 'Guiding someone through a challenge, being their mentor',
-  'sub-extreme-2012': 'Extreme sports, high-adrenaline activities',
-  'sub-flexibility-1893': 'Yoga, Pilates, barre, group fitness classes',
   // MasterMind Council additions (Aug 29)
   'exp-swimming': 'Ocean swimming, lake dips, laps at the pool',
   'exp-club-dancing': 'Nightclubs, DJ sets, dancing with friends after dark',
@@ -125,6 +124,7 @@ const EXPERIENCE_DESC = {
   'exp-spiritual': 'Prayer, church, mosque, temple, nature reverence, connection to something larger',
   'exp-nature-stillness': 'Sitting by a river, watching a sunset, stargazing, walking in the rain',
   'exp-research': 'Deep dives, rabbit holes, investigating something that fascinates you',
+  'exp-hosting-home': 'Having friends or guests stay, hosting dinners at yours, Airbnb hosting',
 }
 
 // Override primal assignment for nodes whose tree branch doesn't match their experiential primal
@@ -133,6 +133,7 @@ const PRIMAL_OVERRIDES = {
   'sub-safety-1993': 'movement',   // BJJ/MMA → Movement
   'sub-craft-1880': 'story',       // Art class → Story
   'sub-temperature-2019': 'healing', // Sauna → Healing (passive recovery)
+  'sub-communal-2017': 'shelter',   // Living abroad → Shelter (where you live)
 }
 
 // ─── Data helpers ───
@@ -504,7 +505,7 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
 
 // ─── Insight Screen ───
 
-function InsightScreen({ branches, checked, ratings, onExplore, onBridge }) {
+function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onBridge }) {
   const [revealed, setRevealed] = useState(1)
   const { insights, recommended, unexploredCount } = useMemo(
     () => generateInsights(branches, ratings),
@@ -571,17 +572,11 @@ function InsightScreen({ branches, checked, ratings, onExplore, onBridge }) {
           )}
 
           <button className="exp-game-cta-primary" onClick={onExplore}>
-            Explore your next experience →
+            Pick your courage challenge this week →
           </button>
 
-          {vibeCount >= 3 && (
-            <button className="exp-game-cta-secondary" onClick={onBridge}>
-              Ready to go deeper on a life path? →
-            </button>
-          )}
-
           <p className="exp-game-cta-footer">
-            {56 - totalRated} experiences left to discover
+            {Math.max(0, totalNodes - totalRated)} experiences left to discover
           </p>
         </div>
       )}
@@ -642,12 +637,27 @@ export default function ExperienceGameFlow() {
   }, [])
 
   const handleFinish = useCallback(() => {
-    if (user?.id) {
-      bulkSetStates(ratings)
+    // Read latest ratings from localStorage to avoid stale closure
+    let latestRatings = ratings
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) latestRatings = JSON.parse(stored)
+    } catch {}
+
+    const ratingCount = Object.keys(latestRatings).length
+    console.log('[ExperienceGame] handleFinish — user:', user?.id, 'ratings:', ratingCount)
+
+    if (user?.id && ratingCount > 0) {
+      console.log('[ExperienceGame] Saving to Supabase:', ratingCount, 'ratings')
+      bulkSetStates(latestRatings)
       try {
         localStorage.removeItem(STORAGE_KEY)
         localStorage.removeItem(CHECKED_KEY)
       } catch {}
+    } else if (ratingCount > 0) {
+      console.log('[ExperienceGame] Not logged in — ratings saved in localStorage only')
+    } else {
+      console.log('[ExperienceGame] No ratings to save')
     }
     setPhase('insight')
   }, [user, ratings, bulkSetStates])
@@ -689,6 +699,7 @@ export default function ExperienceGameFlow() {
         branches={branches}
         checked={checked}
         ratings={ratings}
+        totalNodes={branches.reduce((sum, b) => sum + b.nodes.length, 0)}
         onExplore={handleExplore}
         onBridge={handleBridge}
       />

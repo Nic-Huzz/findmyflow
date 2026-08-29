@@ -392,6 +392,15 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
                       {task.is_courage_challenge && <span className="qbc-courage-badge">⚡</span>}
                       {healingIntentions[task.id] && <span className="qbc-healing-badge" title="Healing flow">💚</span>}
                     </div>
+                    {task.is_courage_challenge && !task.done && (
+                      <button className="qbc-stuck-link" onClick={() => {
+                        setHealingTaskId(task.id)
+                        setHealingTaskText(task.text || '')
+                        setHealingExistingData(healingIntentions[task.id] || null)
+                      }}>
+                        Feeling stuck? Explore what's blocking you
+                      </button>
+                    )}
                     {signalTaskId === task.id && (
                       <div className="qbc-signal-row">
                         <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}>🔥 Lit me up</button>
