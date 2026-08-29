@@ -58,10 +58,11 @@ ${skillsSection}
 ${problemsSection}
 ${filterNote}
 GUIDELINES:
-- Each path should be a specific career direction that clearly says what the person DOES. Not a poetic title.
-- Name them in plain language a 12-year-old would understand. Say what the job is, not what it sounds like.
+- Each path should be a specific life direction that clearly says what the person DOES. Not a poetic title.
+- Name them in plain language a 12-year-old would understand. Say what the role is, not what it sounds like.
   * GOOD: "Festival Creator", "Adventure Retreat Host", "Dance Event Organiser", "Travel Game Designer"
   * BAD: "The Possibility Cartographer", "Consciousness Systems Designer", "Holistic Transformation Architect"
+- Focus on DELIVERING experiences, not owning assets. "Retreat Host" not "Retreat Center Owner". "Adventure Guide" not "Travel Company Owner". The person wants to DO the thing, not manage a business around it.
 - ONLY reference experiences from their data. Do NOT invent activities, modalities, or audiences they haven't mentioned. If breathwork isn't in their data, don't mention breathwork.
 - If Experience Dome data exists, prioritise it. SELECTED experiences are the primary signal. Combine dome experiences into career directions that let this person do MORE of what lights them up.
 - Growth edge experiences (stressful) are interesting stretch paths. At least one suggestion should lean into a growth edge.
@@ -71,6 +72,8 @@ GUIDELINES:
 - Include a mix: some that feel safe/obvious, some that feel exciting but stretchy, and one wild card they haven't considered. Label the wild card.
 - Keep descriptions to 1-2 sentences: what this path looks like day-to-day.
 - The person will see these as tappable options. Make them want to tap.
+- NEVER use em dashes (— or --) anywhere in your response. Use commas, full stops, or rephrase instead.
+- BANNED phrases in descriptions: "nervous system journey", "curated experience", "transformational space", "holding space", "intentional community". Write like a friend explaining the job, not a wellness brochure.
 
 Respond ONLY as JSON:
 {"paths": [{"name": "...", "description": "...", "draws_from": "brief note on which experiences or data sources"}]}`

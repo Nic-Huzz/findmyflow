@@ -30,6 +30,12 @@ export default function ChooseQuestsFlow() {
   const { domeStates, loading: domeLoading } = useDomeData(user?.id)
   const spNextId = useRef(1)
 
+  // Hide bottom toolbar
+  useEffect(() => {
+    document.body.classList.add('hide-toolbar')
+    return () => document.body.classList.remove('hide-toolbar')
+  }, [])
+
   const [step, setStep] = useState(STEPS.INTRO)
   const [essenceArchetype, setEssenceArchetype] = useState(null)
 
@@ -46,8 +52,7 @@ export default function ChooseQuestsFlow() {
 
   // Stuck points step
   const [stuckPoints, setStuckPoints] = useState([])
-  const [stuckInput, setStuckInput] = useState('')
-  const [currentPathIdx, setCurrentPathIdx] = useState(null)
+  const [stuckInputs, setStuckInputs] = useState({}) // { [pathIdx]: 'text' }
   const [activeSpId, setActiveSpId] = useState(null)
   const stuckInputRef = useRef(null)
 
@@ -148,20 +153,20 @@ export default function ChooseQuestsFlow() {
 
   // ── Stuck points ──
   const addStuckPoint = useCallback((pathIdx) => {
-    if (!stuckInput.trim()) return
+    const text = (stuckInputs[pathIdx] || '').trim()
+    if (!text) return
     const sp = {
       id: 'sp' + spNextId.current++,
       pathIdx,
-      text: stuckInput.trim(),
+      text,
       depthLevel: null,
       wahooCategory: null,
       protectiveVoice: null,
     }
     setStuckPoints(prev => [...prev, sp])
-    setStuckInput('')
+    setStuckInputs(prev => ({ ...prev, [pathIdx]: '' }))
     setActiveSpId(sp.id)
-    setTimeout(() => stuckInputRef.current?.focus(), 50)
-  }, [stuckInput])
+  }, [stuckInputs])
 
   const updateStuckField = useCallback((spId, field, value) => {
     setStuckPoints(prev => prev.map(sp => sp.id === spId ? { ...sp, [field]: value } : sp))
@@ -398,7 +403,7 @@ export default function ChooseQuestsFlow() {
         <div className="cqf-container">
           <div className="cqf-paths-header">
             <h2>Life paths for you</h2>
-            <p>Based on what lights you up. Pick 1-3 to pursue as quests.</p>
+            <p>Pick 1-3 experiences that sound super exciting to you.</p>
           </div>
 
           {aiError && (
@@ -417,10 +422,15 @@ export default function ChooseQuestsFlow() {
                   <div className="cqf-path-desc">{path.description}</div>
                   {path.draws_from && !path.isCustom && (
                     <div className="cqf-path-sources">
-                      {path.draws_from.split(/[,+]/).map((s, j) => {
-                        const trimmed = s.trim().replace(/^(and|or)\s+/i, '')
-                        return trimmed ? <span key={j} className="cqf-path-source">{trimmed}</span> : null
-                      })}
+                      {path.draws_from
+                        .split(/[,+.]/)
+                        .map(s => s.trim()
+                          .replace(/^(and|or|SELECTED:|Vibe Rise:|Fun:|Growth edge:)\s*/gi, '')
+                          .replace(/^\(.*?\)\s*/, '')
+                        )
+                        .filter(s => s.length > 1 && !s.toLowerCase().includes('wild card'))
+                        .map((s, j) => <span key={j} className="cqf-path-source">{s}</span>)
+                      }
                     </div>
                   )}
                   {path.draws_from?.toLowerCase().includes('wild card') && (
@@ -448,7 +458,7 @@ export default function ChooseQuestsFlow() {
             <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => goTo(STEPS.STUCK)}>
               {n === 0 ? 'Select at least 1 →' : 'Continue →'}
             </button>
-            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPaths([]); setSelectedPaths(new Set()); setStuckPoints([]); goTo(STEPS.SELECT) }}>← Change experiences</button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPaths([]); setSelectedPaths(new Set()); setStuckPoints([]); setStuckInputs({}); goTo(STEPS.SELECT) }}>← Change experiences</button>
           </div>
         </div>
       </div>
@@ -461,8 +471,8 @@ export default function ChooseQuestsFlow() {
       <div className="cqf">
         <div className="cqf-container">
           <div className="cqf-stuck-header">
-            <h2>What have you been putting off?</h2>
-            <p>For each path, add the things you've wanted to do but haven't yet. These become your courage challenges.</p>
+            <h2>What's your first step?</h2>
+            <p>For each path, what's the smallest thing you could do this week to take a step towards making it real?</p>
           </div>
 
           {chosenPaths.map((path, displayIdx) => {
@@ -481,52 +491,42 @@ export default function ChooseQuestsFlow() {
                       <span className="cqf-stuck-item-text">{sp.text}</span>
                       <span className="cqf-stuck-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
                     </div>
-                    {activeSpId === sp.id && (
-                      <div className="cqf-stuck-selects">
-                        <select value={sp.depthLevel || ''} onChange={e => updateStuckField(sp.id, 'depthLevel', e.target.value || null)}>
-                          <option value="">Where are you with this?</option>
-                          <option value="education">Still learning about it</option>
-                          <option value="testing">Starting to test it</option>
-                          <option value="practising">Practising it</option>
-                          <option value="charging">Getting paid for it</option>
-                          <option value="teaching">Teaching others</option>
-                        </select>
-                        <select value={sp.wahooCategory || ''} onChange={e => updateStuckField(sp.id, 'wahooCategory', e.target.value || null)}>
-                          <option value="">What part pushes your boundary?</option>
-                          <option value="screen">Sharing it online</option>
-                          <option value="live">Doing it in front of people</option>
-                          <option value="money">Asking for money</option>
-                          <option value="vulnerable">Being emotionally open about it</option>
-                          <option value="authority">Claiming expertise</option>
-                        </select>
-                        <select value={sp.protectiveVoice || ''} onChange={e => updateStuckField(sp.id, 'protectiveVoice', e.target.value || null)}>
-                          <option value="">What voice tries to stop you?</option>
-                          <option value="controller">Controller (pushes too hard)</option>
-                          <option value="ghost">Ghost (disappears, avoids)</option>
-                          <option value="people-pleaser">People Pleaser (says yes when you mean no)</option>
-                          <option value="auto-pilot">Auto-Pilot (goes through the motions)</option>
-                          <option value="perfectionist">Perfectionist (won't start until it's perfect)</option>
-                        </select>
+                    {activeSpId === sp.id && !sp.protectiveVoice && (
+                      <div className="cqf-voice-picker">
+                        <div className="cqf-voice-q">Which voice tries to stop you?</div>
+                        <div className="cqf-voice-options">
+                          {[
+                            { id: 'perfectionist', icon: '🎯', label: 'Perfectionist', sub: "Won't start until it's perfect" },
+                            { id: 'ghost', icon: '👻', label: 'Ghost', sub: 'Disappears, avoids, goes quiet' },
+                            { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser', sub: 'Says yes when you mean no' },
+                            { id: 'controller', icon: '🧱', label: 'Controller', sub: 'Needs to control every variable' },
+                            { id: 'auto-pilot', icon: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
+                          ].map(v => (
+                            <button key={v.id} className="cqf-voice-btn"
+                              onClick={() => { updateStuckField(sp.id, 'protectiveVoice', v.id); setActiveSpId(null); hapticLight() }}>
+                              <span className="cqf-voice-icon">{v.icon}</span>
+                              <span className="cqf-voice-label">{v.label}</span>
+                            </button>
+                          ))}
+                          <button className="cqf-voice-skip" onClick={() => setActiveSpId(null)}>Skip</button>
+                        </div>
                       </div>
                     )}
-                    {activeSpId !== sp.id && sp.depthLevel && (
+                    {sp.protectiveVoice && (
                       <div className="cqf-stuck-badges">
-                        {sp.depthLevel && <span className="cqf-stuck-badge depth">{sp.depthLevel}</span>}
-                        {sp.wahooCategory && <span className="cqf-stuck-badge wahoo">{sp.wahooCategory}</span>}
-                        {sp.protectiveVoice && <span className="cqf-stuck-badge voice">{sp.protectiveVoice}</span>}
+                        <span className="cqf-stuck-badge voice">{sp.protectiveVoice}</span>
                       </div>
                     )}
                   </div>
                 ))}
 
                 <div className="cqf-stuck-input">
-                  <input type="text" ref={currentPathIdx === pathIdx ? stuckInputRef : undefined}
-                    value={currentPathIdx === pathIdx ? stuckInput : ''}
-                    onFocus={() => setCurrentPathIdx(pathIdx)}
-                    onChange={e => { setCurrentPathIdx(pathIdx); setStuckInput(e.target.value) }}
-                    onKeyDown={e => { if (e.key === 'Enter' && stuckInput.trim()) addStuckPoint(pathIdx) }}
-                    placeholder="Something you've been putting off..." />
-                  <button onClick={() => addStuckPoint(pathIdx)} disabled={currentPathIdx !== pathIdx || !stuckInput.trim()}>Add</button>
+                  <input type="text"
+                    value={stuckInputs[pathIdx] || ''}
+                    onChange={e => setStuckInputs(prev => ({ ...prev, [pathIdx]: e.target.value }))}
+                    onKeyDown={e => { if (e.key === 'Enter' && (stuckInputs[pathIdx] || '').trim()) addStuckPoint(pathIdx) }}
+                    placeholder="The smallest possible step..." />
+                  <button onClick={() => addStuckPoint(pathIdx)} disabled={!(stuckInputs[pathIdx] || '').trim()}>Add</button>
                 </div>
               </div>
             )
@@ -534,7 +534,7 @@ export default function ChooseQuestsFlow() {
 
           <div className="cqf-fixed">
             <button className="cqf-cta cqf-cta-gold" onClick={saveQuests}>
-              {stuckPoints.length > 0 ? 'Create my quests →' : 'Create quests (no challenges yet) →'}
+              {stuckPoints.length > 0 ? 'Create my quests →' : 'Skip for now, create quests →'}
             </button>
             <button className="cqf-cta cqf-cta-secondary" onClick={() => goTo(STEPS.PATHS)}>← Change paths</button>
           </div>

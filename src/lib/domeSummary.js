@@ -63,6 +63,7 @@ export function getDomeExperiencesForBridge(domeStates) {
 
 // Primal display order (common → uncommon)
 const PRIMAL_ORDER = ['movement', 'play', 'bonds', 'story', 'nourishment', 'status', 'healing', 'shelter', 'fire', 'sleep']
+const PRIMAL_LABELS = { movement: 'Movement', play: 'Play', bonds: 'Bonds', story: 'Story', nourishment: 'Nourishment', status: 'Style', healing: 'Healing', shelter: 'Shelter', fire: 'Fire', sleep: 'Sleep' }
 
 /**
  * Groups an array of { id, label, primal } items by primal in display order.
@@ -78,7 +79,7 @@ export function groupByPrimal(items) {
     .filter(p => map[p]?.length)
     .map(p => ({
       primal: p,
-      label: p.charAt(0).toUpperCase() + p.slice(1),
+      label: PRIMAL_LABELS[p] || p.charAt(0).toUpperCase() + p.slice(1),
       items: map[p],
     }))
 }
