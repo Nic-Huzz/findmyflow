@@ -10,7 +10,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
-import SweetSpotGraph from './level/SweetSpotGraph'
 import CapacityCard from './level/CapacityCard'
 import './ProgressTab.css'
 
