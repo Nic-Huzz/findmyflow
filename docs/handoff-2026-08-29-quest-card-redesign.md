@@ -3,6 +3,7 @@
 **Date:** Aug 29, 2026
 **Branch:** `feature/phase2-restructure`
 **Previous agent session:** 12+ hours, massive Phase 2 restructure
+**Start by:** Reading `CLAUDE.md` and this handoff. Then `npm run dev` and open `http://localhost:5173/7-day-challenge` (Quests tab) AND `http://localhost:5173/mockups/quest-card-redesign.html` (target mockup) side by side.
 
 ---
 
@@ -92,3 +93,44 @@ Quest card receives:
 - `onUpdate` callback
 
 Expansion dimensions on courage challenges: `groan_challenges.expansion_dimensions text[]` — values: duration, frequency, medium, people, money, location, independence. Currently saved but NOT displayed on the card. The mockup shows them as coloured pills under each task.
+
+To fetch dimensions for display, you need to join through `quest_tasks.groan_challenge_id` → `groan_challenges.expansion_dimensions`. The tasks array doesn't include dimensions directly.
+
+---
+
+## Known Issues in Current Code
+
+1. `VOICE_META` constant in WahooCreator.jsx is dead code (no longer used in render). Can remove.
+2. `QuestBoardCard.onWahooAccepted` callback receives `(null, voiceId)` — the `healingTask` arg is always null now. Dead code at lines 703-707 checks `if (healingTask?.id)` which never fires.
+3. `showAssignTasks` state and "Assign" button for unassigned tasks — decide if keeping or removing.
+4. `showMapCompleted` state and "Map XX unmapped" button — probably remove (internal tool).
+5. Color picker for quest dot color — decide if keeping or removing.
+
+---
+
+## Hierarchy to Maintain
+
+```
+Life Path (quest)          e.g. "Vibe Rise"
+├── Experience (product)   e.g. "Monument Disco Tour" [Vibe Rise]
+│   ├── Courage challenge  e.g. "Rome Flash Mob" [People, Location] ⚡💚
+│   │   └── "Feeling stuck? Explore what's blocking you"
+│   └── Courage challenge  e.g. "Eiffel Tower Rave" [People, Duration, Location] ⚡
+│       └── "Feeling stuck? Explore what's blocking you"
+├── Experience (product)   e.g. "Made life feel like a game" [Fun]
+│   └── Task               e.g. "Message quit-job people"
+└── [Add courage challenge]  [+ Add task]
+```
+
+---
+
+## Acceptance Criteria
+
+1. Side-by-side with mockup, the card looks comparable in quality and spacing
+2. Dimension pills show on courage challenges (fetch from groan_challenges)
+3. Experiences collapse/expand on tap
+4. "Add courage challenge" opens WahooCreator popup
+5. "Add task" shows inline input
+6. No clutter: removed + Add experience, Map unmapped, experience pills, courage checkbox, timeframe picker
+7. Build passes (`npm run build`)
+8. Existing functionality preserved: checkbox completion, GroanCompletionModal, HealingFlowModal
