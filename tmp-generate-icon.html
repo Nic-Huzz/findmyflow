@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Find My Flow Icon Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    body { background: #111; display: flex; gap: 40px; padding: 40px; flex-wrap: wrap; font-family: sans-serif; color: white; }
+    .preview { text-align: center; }
+    canvas { border-radius: 16px; }
+    button { margin-top: 12px; padding: 10px 24px; background: #5e17eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="preview">
+    <h3>1024 &times; 1024</h3>
+    <canvas id="c1024" width="1024" height="1024" style="width:480px;height:480px"></canvas>
+    <br><button onclick="dl('c1024','AppIcon-512@2x.png')">Download 1024</button>
+  </div>
+  <div class="preview">
+    <h3>512 &times; 512</h3>
+    <canvas id="c512" width="512" height="512"></canvas>
+    <br><button onclick="dl('c512','icon-512.png')">Download 512</button>
+  </div>
+  <div class="preview">
+    <h3>192 &times; 192</h3>
+    <canvas id="c192" width="192" height="192"></canvas>
+    <br><button onclick="dl('c192','icon-192.png')">Download 192</button>
+  </div>
+
+<script>
+function drawIcon(canvas) {
+  const ctx = canvas.getContext('2d');
+  const s = canvas.width;
+
+  // =========================================================
+  // 1. RICH PURPLE BACKGROUND — layered gradients for depth
+  // =========================================================
+
+  // Base: deep diagonal
+  const base = ctx.createLinearGradient(0, 0, s, s);
+  base.addColorStop(0, '#1a0040');
+  base.addColorStop(0.5, '#5e17eb');
+  base.addColorStop(1, '#8b5cf6');
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, s, s);
+
+  // Radial glow — warm center bloom
+  const bloom = ctx.createRadialGradient(s * 0.55, s * 0.45, 0, s * 0.5, s * 0.5, s * 0.65);
+  bloom.addColorStop(0, 'rgba(147, 81, 255, 0.5)');
+  bloom.addColorStop(0.5, 'rgba(110, 40, 230, 0.25)');
+  bloom.addColorStop(1, 'rgba(30, 5, 80, 0)');
+  ctx.fillStyle = bloom;
+  ctx.fillRect(0, 0, s, s);
+
+  // Top-left highlight — gives the "shiny" diagonal feel
+  const shine = ctx.createLinearGradient(0, 0, s * 0.6, s * 0.6);
+  shine.addColorStop(0, 'rgba(180, 130, 255, 0.25)');
+  shine.addColorStop(0.4, 'rgba(120, 60, 240, 0.08)');
+  shine.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = shine;
+  ctx.fillRect(0, 0, s, s);
+
+  // Bottom edge subtle brightening
+  const bottomGlow = ctx.createLinearGradient(0, s * 0.7, 0, s);
+  bottomGlow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+  bottomGlow.addColorStop(1, 'rgba(139, 92, 246, 0.15)');
+  ctx.fillStyle = bottomGlow;
+  ctx.fillRect(0, 0, s, s);
+
+  // =========================================================
+  // 2. GOLD TEXT — multi-layer rendering for metallic depth
+  // =========================================================
+  const scale = s / 1024;
+  const fontSize = Math.round(240 * scale);
+  const font = `900 ${fontSize}px Inter, "Arial Black", Impact, sans-serif`;
+  ctx.font = font;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  const lines = ['FIND', 'MY', 'FLOW'];
+  const lineHeight = fontSize * 1.08;
+  const totalHeight = lineHeight * lines.length;
+  const startY = (s - totalHeight) / 2 + fontSize * 0.48;
+
+  lines.forEach((text, i) => {
+    const y = startY + i * lineHeight;
+    const x = s / 2;
+
+    // --- Layer 1: Deep shadow (gives depth/lift off background) ---
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 12 * scale;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 6 * scale;
+    ctx.fillStyle = 'rgba(0,0,0,0)';
+    ctx.fillText(text, x, y);
+    ctx.restore();
+
+    // --- Layer 2: Main gold gradient fill ---
+    const mainGold = ctx.createLinearGradient(0, y - fontSize * 0.5, 0, y + fontSize * 0.5);
+    mainGold.addColorStop(0,    '#D4882A');  // deep warm gold (top)
+    mainGold.addColorStop(0.25, '#E9A23B');  // brand gold
+    mainGold.addColorStop(0.5,  '#F0B84E');  // bright gold (middle)
+    mainGold.addColorStop(0.75, '#F5C95E');  // warm highlight
+    mainGold.addColorStop(1,    '#FFDB73');  // brightest (bottom — lit from below)
+    ctx.fillStyle = mainGold;
+    ctx.fillText(text, x, y);
+
+    // --- Layer 3: Top highlight stroke (metallic edge catch) ---
+    const highlightGrad = ctx.createLinearGradient(0, y - fontSize * 0.5, 0, y + fontSize * 0.1);
+    highlightGrad.addColorStop(0, 'rgba(255, 230, 160, 0.5)');
+    highlightGrad.addColorStop(0.5, 'rgba(255, 220, 130, 0.15)');
+    highlightGrad.addColorStop(1, 'rgba(255, 200, 100, 0)');
+    ctx.strokeStyle = highlightGrad;
+    ctx.lineWidth = 1.5 * scale;
+    ctx.strokeText(text, x, y);
+
+    // --- Layer 4: Subtle inner glow on bottom half ---
+    const innerGlow = ctx.createLinearGradient(0, y, 0, y + fontSize * 0.5);
+    innerGlow.addColorStop(0, 'rgba(255, 225, 140, 0)');
+    innerGlow.addColorStop(1, 'rgba(255, 235, 170, 0.2)');
+    ctx.fillStyle = innerGlow;
+    ctx.fillText(text, x, y);
+  });
+
+  // =========================================================
+  // 3. GLOSSY OVERLAY — subtle top sheen across whole icon
+  // =========================================================
+  const gloss = ctx.createLinearGradient(0, 0, 0, s * 0.55);
+  gloss.addColorStop(0, 'rgba(255, 255, 255, 0.06)');
+  gloss.addColorStop(0.5, 'rgba(255, 255, 255, 0.02)');
+  gloss.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = gloss;
+  ctx.fillRect(0, 0, s, s);
+}
+
+function dl(id, name) {
+  document.getElementById(id).toBlob(b => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = name;
+    a.click();
+  });
+}
+
+document.fonts.ready.then(() => setTimeout(() => {
+  drawIcon(document.getElementById('c1024'));
+  drawIcon(document.getElementById('c512'));
+  drawIcon(document.getElementById('c192'));
+}, 600));
+</script>
+</body>
+</html>

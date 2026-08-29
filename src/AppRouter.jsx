@@ -475,6 +475,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/pre-launch' ||
                         location.pathname.startsWith('/facilitate/') ||
                         location.pathname === '/life-paths' ||
+                        location.pathname === '/experience-game' ||
+                        location.pathname === '/dome-onboarding' ||
                         location.pathname === '/community' ||
                         (location.pathname.startsWith('/create/') &&
                          location.pathname !== '/create/' &&

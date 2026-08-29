@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5C563"/>
+      <stop offset="50%" stop-color="#E9A23B"/>
+      <stop offset="100%" stop-color="#D4882A"/>
+    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&amp;display=swap');
+    </style>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- Option B: "FIND" / "MY" / "FLOW" — 3 lines -->
+  <text x="512" y="340" text-anchor="middle" font-family="Inter, Arial Black, sans-serif" font-weight="900" font-size="230" fill="url(#gold)" letter-spacing="-5">FIND</text>
+  <text x="512" y="570" text-anchor="middle" font-family="Inter, Arial Black, sans-serif" font-weight="900" font-size="230" fill="url(#gold)" letter-spacing="-5">MY</text>
+  <text x="512" y="800" text-anchor="middle" font-family="Inter, Arial Black, sans-serif" font-weight="900" font-size="230" fill="url(#gold)" letter-spacing="-5">FLOW</text>
+</svg>

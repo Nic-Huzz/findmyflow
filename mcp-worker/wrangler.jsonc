@@ -1,0 +1,34 @@
+{
+  "name": "viberise-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-10",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "durable_objects": {
+    "bindings": [
+      { "name": "MCP_OBJECT", "class_name": "VibeRiseMCP" }
+    ]
+  },
+
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["VibeRiseMCP"] }
+  ],
+
+  // Create with: npx wrangler kv namespace create OAUTH_KV
+  "kv_namespaces": [
+    { "binding": "OAUTH_KV", "id": "6e81136f59a74c78b154d362d05a6907" }
+  ],
+
+  // Set with:
+  //   npx wrangler secret put SUPABASE_URL
+  //   npx wrangler secret put SUPABASE_ANON_KEY
+  //   npx wrangler secret put COOKIE_ENCRYPTION_KEY
+
+  "observability": {
+    "enabled": true
+  },
+
+  "dev": {
+    "port": 8789
+  }
+}

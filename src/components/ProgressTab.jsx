@@ -1,17 +1,13 @@
 /**
  * ProgressTab.jsx — "How far have I come?" reporting tab
  *
- * Shows: Hero journey stage, Zone Matrix, Capacity Score, streak,
- * skill XP summary, expansion dimensions breakdown.
- *
- * Start as a dumping ground for all reporting, refine later.
+ * Shows: Hero journey stage (with movie refs + next step),
+ * Zone Matrix (X/Y graph), stats, expansion dimensions.
+ * Skills collected in background but hidden from UI.
  */
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { getWeekStartLocal } from '../lib/dateUtils'
-import SweetSpotGraph from './level/SweetSpotGraph'
-import CapacityCard from './level/CapacityCard'
 import './ProgressTab.css'
 
 // Hero stage names (Campbell) + movie refs + next step guidance
@@ -44,9 +40,7 @@ const DIMENSION_META = {
 export default function ProgressTab({ userId }) {
   const [heroStage, setHeroStage] = useState(0)
   const [matrixData, setMatrixData] = useState(null)
-  const [skills, setSkills] = useState([])
   const [dimensionCounts, setDimensionCounts] = useState({})
-  const [streak, setStreak] = useState(0)
   const [totalCourage, setTotalCourage] = useState(0)
   const [totalRP, setTotalRP] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -55,32 +49,23 @@ export default function ProgressTab({ userId }) {
     if (!userId) return
 
     Promise.all([
-      // Hero stage
       supabase.from('user_stage_progress')
         .select('current_journey_level')
         .eq('user_id', userId).maybeSingle(),
-      // Skills
-      supabase.from('user_skill_progress')
-        .select('skill_id, xp, level')
-        .eq('user_id', userId),
-      // Courage count
       supabase.from('groan_challenges')
         .select('id, expansion_dimensions', { count: 'exact' })
         .eq('user_id', userId)
         .eq('status', 'completed'),
-      // Lifetime RP
       supabase.from('user_lifetime_scores')
         .select('lifetime_total_score')
         .eq('user_id', userId)
         .is('project_id', null)
         .maybeSingle(),
-    ]).then(([stageRes, skillsRes, courageRes, rpRes]) => {
+    ]).then(([stageRes, courageRes, rpRes]) => {
       setHeroStage(stageRes.data?.current_journey_level || 0)
-      setSkills(skillsRes.data || [])
       setTotalCourage(courageRes.count || 0)
       setTotalRP(rpRes.data?.lifetime_total_score || 0)
 
-      // Count dimension usage across completed challenges
       const dims = {}
       ;(courageRes.data || []).forEach(c => {
         ;(c.expansion_dimensions || []).forEach(d => {
@@ -94,7 +79,7 @@ export default function ProgressTab({ userId }) {
       setLoading(false)
     })
 
-    // Zone Matrix (new simplified model)
+    // Zone Matrix
     let mounted = true
     import('../lib/scoreUtilities').then(async (m) => {
       const result = await m.calculateZoneMatrix(userId)
@@ -109,6 +94,10 @@ export default function ProgressTab({ userId }) {
   const totalDimUsage = Object.values(dimensionCounts).reduce((s, c) => s + c, 0)
 
   if (loading) return <div className="pt-loading">Loading...</div>
+
+  // Zone matrix dot position
+  const dotX = matrixData ? (matrixData.hasLifePaths ? 80 : matrixData.hasLifeMap || matrixData.hasDome ? 50 : 15) : 15
+  const dotY = matrixData?.hasCourageThisWeek ? 80 : 15
 
   return (
     <div className="progress-tab">
@@ -149,41 +138,25 @@ export default function ProgressTab({ userId }) {
           <div className="pt-stat-num">{totalRP.toLocaleString()}</div>
           <div className="pt-stat-label">RP</div>
         </div>
-        <div className="pt-stat">
-          <div className="pt-stat-num">{skills.filter(s => s.level > 0).length}</div>
-          <div className="pt-stat-label">Skills</div>
-        </div>
       </div>
 
-      {/* Zone Matrix */}
+      {/* Zone Matrix — X/Y graph */}
       {matrixData && (
         <div className="pt-section">
-          <div className="pt-section-title">Where you are</div>
-          <div className="pt-zone-display">
-            <span className={`pt-zone-badge pt-zone-${matrixData.zone === 'Self-Actualisation' ? 'sa' : matrixData.zone === 'Head Full of Dreams' ? 'hfd' : matrixData.zone === 'Misguided Zone' ? 'mg' : 'uf'}`}>
-              {matrixData.zone}
-            </span>
+          <div className="pt-section-title">Last 7 days</div>
+          <div className="pt-matrix-grid">
+            <div className="pt-matrix-label pt-matrix-y-high">Aligned action</div>
+            <div className="pt-matrix-label pt-matrix-y-low">Low action</div>
+            <div className="pt-matrix-label pt-matrix-x-high">High clarity</div>
+            <div className="pt-matrix-quadrant pt-q-tl">Misguided Zone</div>
+            <div className="pt-matrix-quadrant pt-q-tr">Self-Actualisation</div>
+            <div className="pt-matrix-quadrant pt-q-bl">Unfulfilment</div>
+            <div className="pt-matrix-quadrant pt-q-br">Head Full of Dreams</div>
+            <div className="pt-matrix-dot" style={{ left: `${dotX}%`, bottom: `${dotY}%` }} />
           </div>
-          <div className="pt-zone-checklist">
-            <div className={`pt-zone-check ${matrixData.hasLifeMap ? 'done' : ''}`}>
-              {matrixData.hasLifeMap ? '✅' : '○'} Life Map
-            </div>
-            <div className={`pt-zone-check ${matrixData.hasDome ? 'done' : ''}`}>
-              {matrixData.hasDome ? '✅' : '○'} Experience Dome
-            </div>
-            <div className={`pt-zone-check ${matrixData.hasLifePaths ? 'done' : ''}`}>
-              {matrixData.hasLifePaths ? '✅' : '○'} Life Paths committed
-            </div>
-            <div className={`pt-zone-check ${matrixData.hasCourageThisWeek ? 'done' : ''}`}>
-              {matrixData.hasCourageThisWeek ? '✅' : '○'} Courage action this week
-              {matrixData.courageThisWeek > 0 && ` (${matrixData.courageThisWeek})`}
-            </div>
-          </div>
+          <div className="pt-matrix-zone">{matrixData.zone}</div>
         </div>
       )}
-
-      {/* Capacity Score */}
-      <CapacityCard userId={userId} />
 
       {/* Expansion Dimensions */}
       {totalDimUsage > 0 && (
@@ -198,26 +171,6 @@ export default function ProgressTab({ userId }) {
                   <span className="pt-dim-label">{meta.label}</span>
                   <span className="pt-dim-count">{count}</span>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Skills */}
-      {skills.length > 0 && (
-        <div className="pt-section">
-          <div className="pt-section-title">Skills</div>
-          <div className="pt-skills-grid">
-            {skills.filter(s => s.xp > 0).sort((a, b) => b.xp - a.xp).map(s => {
-              // Convert XP to clean level number (L0=0, L1=3, L2=8, L3=15, L4=25)
-              const lvl = s.xp >= 25 ? 4 : s.xp >= 15 ? 3 : s.xp >= 8 ? 2 : s.xp >= 3 ? 1 : 0
-              return (
-              <div key={s.skill_id} className="pt-skill-item">
-                <span className="pt-skill-name">{s.skill_id.replace(/_/g, ' ')}</span>
-                <span className="pt-skill-level">L{lvl}</span>
-                <span className="pt-skill-xp">{s.xp} XP</span>
-              </div>
               )
             })}
           </div>

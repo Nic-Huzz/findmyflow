@@ -144,45 +144,72 @@
 }
 
 .pt-section-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: #1a0b3d;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin-bottom: 10px;
 }
 
-/* Zone display */
-.pt-zone-display {
-  margin-bottom: 12px;
+/* Zone Matrix — X/Y graph (matches old LevelTab matrix) */
+.pt-matrix-grid {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fafaf8;
 }
 
-.pt-zone-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 10px;
+.pt-matrix-quadrant {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.pt-q-tl { top: 0; left: 0; }
+.pt-q-tr { top: 0; right: 0; background: rgba(16, 185, 129, 0.03); }
+.pt-q-bl { bottom: 0; left: 0; }
+.pt-q-br { bottom: 0; right: 0; background: rgba(94, 23, 235, 0.02); }
+
+.pt-matrix-label {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pt-matrix-y-high { top: 6px; left: 6px; }
+.pt-matrix-y-low { bottom: 6px; left: 6px; }
+.pt-matrix-x-high { bottom: 6px; right: 6px; }
+
+.pt-matrix-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  transform: translate(-50%, 50%);
+  box-shadow: 0 0 8px rgba(94, 23, 235, 0.3);
+  transition: all 0.5s ease;
+}
+
+.pt-matrix-zone {
+  text-align: center;
+  margin-top: 10px;
   font-size: 14px;
   font-weight: 800;
-}
-
-.pt-zone-sa { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-.pt-zone-hfd { background: rgba(94, 23, 235, 0.08); color: #5e17eb; }
-.pt-zone-mg { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.pt-zone-uf { background: rgba(107, 114, 128, 0.08); color: #6b7280; }
-
-.pt-zone-checklist {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.pt-zone-check {
-  font-size: 13px;
-  font-weight: 500;
-  color: #9ca3af;
-}
-
-.pt-zone-check.done {
-  color: #1a0b3d;
-  font-weight: 600;
+  color: #5e17eb;
 }
 
 /* Dimensions grid */
@@ -210,39 +237,3 @@
 .pt-dim-icon { font-size: 14px; }
 .pt-dim-label { font-size: 12px; font-weight: 600; color: #1a0b3d; flex: 1; }
 .pt-dim-count { font-size: 13px; font-weight: 800; color: #5e17eb; }
-
-/* Skills grid */
-.pt-skills-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.pt-skill-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: rgba(94, 23, 235, 0.03);
-}
-
-.pt-skill-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a0b3d;
-  flex: 1;
-  text-transform: capitalize;
-}
-
-.pt-skill-level {
-  font-size: 12px;
-  font-weight: 800;
-  color: #5e17eb;
-}
-
-.pt-skill-xp {
-  font-size: 11px;
-  font-weight: 500;
-  color: #9ca3af;
-}
