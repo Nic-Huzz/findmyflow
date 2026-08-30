@@ -1,5 +1,8 @@
 # Capacity Score v4 — Simplified Zone Model
 
+**Status: SHIPPED** (2026-08-30)
+Files: `src/hooks/useCapacityScore.js`, `src/components/level/CapacityCard.jsx`, `src/components/level/CapacityCard.css`
+
 ## Problem
 
 The current capacity score (Safety × Expression × Maintenance multiplier) produces unintuitive results. A user doing courage challenges, logging practices, and maintaining daily habits can still show as "Wired" or "Stuck" because one axis (usually Safety) is low. The multiplication means one weak axis drags everything down.
@@ -103,5 +106,8 @@ Same Supabase queries, same quest_ids. The data collection doesn't change — on
 ## Open Questions
 
 1. Should dome courage challenges (challenge_source='dome') count toward Expression axis? Currently only completed groan_challenges are counted as wahoos.
-2. Should the pillar thresholds be configurable or hardcoded?
-3. Should we show which pillars are active/inactive so the user knows what to do? ("Safety: inactive — try adding meditation this week")
+2. Should the pillar thresholds be configurable or hardcoded? → **Hardcoded for now.**
+
+## Next: Pillar Nudges (approved, not yet built)
+
+Show a hint below inactive pillar pills recommending what to focus on to grow the score. The `pillars` object already returns active/inactive state per pillar. Example: "Maintenance is inactive — try logging sleep and exercise to reach Vibe Rise."
