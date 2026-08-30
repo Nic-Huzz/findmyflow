@@ -1,43 +1,38 @@
 /**
- * useCapacityScore.js
+ * useCapacityScore.js — v4 Pillar Model
  *
- * Vibe Rise Score = Safety × Expression (each 0-10, product 0-100).
+ * Zone = how many of 3 pillars are active in a 7-day window:
+ *   0 active → Stuck (0-25)
+ *   1 active → Wired (25-50)
+ *   2 active → Grounded (50-75)
+ *   3 active → Vibe Rise (75-100)
  *
- * Everything measured in Wahoo-equivalents:
- *   practice = 1pt, daily healing = 1pt, weekly healing = 3pt,
- *   wahoo = 5pt, stall = -1pt, drain = -1pt
+ * Position within zone = average strength of active pillars.
  *
- * Score = min(10, BASELINE + net_points / DIVISOR)
- * Baseline 3 = "you're a human with a nervous system, that's not zero"
- * Divisor 5 = calibrated so beginners ≈ 25 (Wired), month 2 ≈ 85+ (Vibe Rise)
- *
- * Display multiplier: points shown in app are ×2 for bigger dopamine.
- * Internal math uses ×1. Displayed via DISPLAY_MULTIPLIER constant.
+ * Pillar thresholds (7-day window):
+ *   Safety:      3+ practices (meditation, breathwork, prayer, healing, self-compassion, savouring, connect)
+ *   Expression:  3+ practices OR 1+ completed courage challenge
+ *   Maintenance: 50%+ of daily items logged (sleep, exercise, sunlight, meals)
  *
  * Zones: 0-25 Stuck, 25-50 Wired, 50-75 Grounded, 75-100 Vibe Rise
- * Rolling 7-day window. First 7 days: projected by days elapsed.
+ * Rolling 7-day window.
  *
- * Maintenance: separate rolling 7-day % (sleep, exercise, eating, sunlight)
- *
- * Rewritten: 2026-05-14
+ * Rewritten: 2026-08-30 (v4)
  */
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { getWeekStartLocal, formatLocalDate } from '../lib/dateUtils'
+import { formatLocalDate } from '../lib/dateUtils'
 
-// Internal point values for capacity scoring (wahoo = reference unit)
-const POINTS = {
-  practice: 1,
-  dailyHealing: 1,
-  weeklyHealing: 3,
-  wahoo: 5,
-  stall: -1,
-  drain: -1,
-}
+// Pillar activation thresholds
+const SAFETY_THRESHOLD = 3       // 3+ safety practices in 7 days
+const EXPRESSION_THRESHOLD = 3   // 3+ expression practices OR 1+ wahoo
+const MAINTENANCE_THRESHOLD = 50 // 50%+ of daily items logged
 
-const BASELINE = 3
-const DIVISOR = 5
+// Max strength per pillar (for normalising to 0-1)
+const SAFETY_MAX = 15    // ~2/day of 5 possible items
+const EXPRESSION_MAX = 15
+const MAINTENANCE_MAX = 100 // percentage
 
 // Quest IDs by category
 const MAINTENANCE_IDS = ['practice_sleep', 'practice_exercise', 'practice_sunlight', 'meal_breakfast', 'meal_lunch', 'meal_dinner']
@@ -51,23 +46,9 @@ function getZone(score) {
   return 'stuck'
 }
 
-function getDaysInWindow(completions, checkins, wahoos) {
-  const dates = new Set()
-  ;[...completions, ...checkins].forEach(c => {
-    const ts = c.completed_at || c.created_at
-    if (ts) dates.add(formatLocalDate(new Date(ts)))
-  })
-  wahoos.forEach(w => {
-    if (w.completed_at) dates.add(formatLocalDate(new Date(w.completed_at)))
-  })
-  return Math.max(1, dates.size)
-}
-
-function computeAxes(completions, checkins, wahoos, daysElapsed) {
-  // --- Count inputs ---
+function computeAxes(completions, checkins, wahoos) {
+  // --- Count Safety inputs ---
   const safetyPractices = completions.filter(c => SAFETY_IDS.includes(c.quest_id)).length
-  const exprPractices = completions.filter(c => EXPRESSION_IDS.includes(c.quest_id)).length
-
   const dailyHealing = completions.filter(c =>
     c.quest_category === 'Healing' && !c.quest_id?.startsWith('reconnect_weekly')
     && c.quest_id !== 'reconnect_remove_negative' && c.quest_id !== 'session_with_huzz'
@@ -79,39 +60,15 @@ function computeAxes(completions, checkins, wahoos, daysElapsed) {
       c.quest_id === 'session_with_huzz'
     )
   ).length
+  const safetyCount = safetyPractices + dailyHealing + weeklyHealing
 
+  // --- Count Expression inputs ---
+  const exprPractices = completions.filter(c => EXPRESSION_IDS.includes(c.quest_id)).length
   const embodyEssence = completions.filter(c => c.quest_id === 'rewire_behavior_change').length
   const wahooCount = wahoos.length
-  const stalls = checkins.filter(c => c.checkin_type === 'stall').length
-  const drains = checkins.filter(c => c.checkin_type === 'drain').length
+  const exprCount = exprPractices + embodyEssence + wahooCount
 
-  // --- Safety score ---
-  const safetyPositive = safetyPractices * POINTS.practice
-    + dailyHealing * POINTS.dailyHealing
-    + weeklyHealing * POINTS.weeklyHealing
-  const safetyNegative = stalls * Math.abs(POINTS.stall)
-  const safetyNet = safetyPositive - safetyNegative
-
-  // --- Expression score ---
-  const exprPositive = exprPractices * POINTS.practice
-    + wahooCount * POINTS.wahoo
-    + embodyEssence * POINTS.practice
-  const exprNegative = drains * Math.abs(POINTS.drain)
-  const exprNet = exprPositive - exprNegative
-
-  // --- Project to 7 days if in first week ---
-  const projectionFactor = daysElapsed < 7 ? (7 / daysElapsed) : 1
-  const safetyProjected = safetyNet * projectionFactor
-  const exprProjected = exprNet * projectionFactor
-
-  // --- Compute scores ---
-  const safety = Math.min(10, Math.max(0, BASELINE + safetyProjected / DIVISOR))
-  const expression = Math.min(10, Math.max(0, BASELINE + exprProjected / DIVISOR))
-  const safetyRounded = Math.round(safety * 10) / 10
-  const expressionRounded = Math.round(expression * 10) / 10
-  const rawCapacity = Math.round(safetyRounded * expressionRounded)
-
-  // --- Maintenance ---
+  // --- Maintenance (rolling 7-day %) ---
   const maintenanceCompletions = completions.filter(c => MAINTENANCE_IDS.includes(c.quest_id))
   const dayMap = {}
   maintenanceCompletions.forEach(c => {
@@ -141,19 +98,49 @@ function computeAxes(completions, checkins, wahoos, daysElapsed) {
   const totalMaintDone = maintenanceDays.reduce((sum, d) => sum + d.done, 0)
   const maintenancePct = totalMaintPossible > 0 ? Math.round((totalMaintDone / totalMaintPossible) * 100) : 0
 
-  // --- Apply maintenance as dampened multiplier ---
-  // (Safety × Expression) × (0.5 + Maintenance% × 0.5)
-  // 100% maintenance = full score, 0% maintenance = half score
-  const maintMultiplier = 0.5 + (maintenancePct / 100) * 0.5
-  const capacity = Math.round(rawCapacity * maintMultiplier)
+  // --- Pillar activation ---
+  const safetyActive = safetyCount >= SAFETY_THRESHOLD
+  const expressionActive = exprCount >= EXPRESSION_THRESHOLD || wahooCount >= 1
+  const maintenanceActive = maintenancePct >= MAINTENANCE_THRESHOLD
+
+  const activePillars = [safetyActive, expressionActive, maintenanceActive].filter(Boolean).length
+
+  // --- Pillar strengths (0-1 each) ---
+  const safetyStrength = Math.min(1, safetyCount / SAFETY_MAX)
+  const expressionStrength = Math.min(1, exprCount / EXPRESSION_MAX)
+  const maintenanceStrength = Math.min(1, maintenancePct / MAINTENANCE_MAX)
+
+  // Average strength of ACTIVE pillars determines position within zone
+  const activeStrengths = []
+  if (safetyActive) activeStrengths.push(safetyStrength)
+  if (expressionActive) activeStrengths.push(expressionStrength)
+  if (maintenanceActive) activeStrengths.push(maintenanceStrength)
+  const avgStrength = activeStrengths.length > 0
+    ? activeStrengths.reduce((a, b) => a + b, 0) / activeStrengths.length
+    : 0
+
+  // --- Compute capacity score ---
+  const ZONE_BASE = { 0: 0, 1: 25, 2: 50, 3: 75 }
+  const ZONE_RANGE = 25
+  const capacity = Math.round(ZONE_BASE[activePillars] + avgStrength * (ZONE_RANGE - 1))
+
+  // Back-compat: safety/expression as 0-10 values from strength
+  const safety = Math.round(safetyStrength * 10 * 10) / 10
+  const expression = Math.round(expressionStrength * 10 * 10) / 10
 
   return {
-    safety: safetyRounded,
-    expression: expressionRounded,
+    safety,
+    expression,
     capacity,
     zone: getZone(capacity),
     maintenancePct,
     maintenanceDays,
+    pillars: {
+      safety: { active: safetyActive, count: safetyCount, strength: safetyStrength },
+      expression: { active: expressionActive, count: exprCount, strength: expressionStrength },
+      maintenance: { active: maintenanceActive, pct: maintenancePct, strength: maintenanceStrength },
+    },
+    activePillars,
   }
 }
 
@@ -168,6 +155,8 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
     expressionTrend: null,
     maintenancePct: 0,
     maintenanceDays: [],
+    pillars: null,
+    activePillars: 0,
     dataPoints: 0,
     loading: true,
   })
@@ -184,7 +173,6 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
 
     const thisStart = formatLocalDate(sevenDaysAgo)
     const lastStart = formatLocalDate(fourteenDaysAgo)
-    const thisEnd = formatLocalDate(now)
 
     // 3 queries covering 14 days, split client-side (halves API calls)
     Promise.all([
@@ -219,9 +207,8 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
       const tw = wahoos.filter(w => w.completed_at >= thisStart)
       const lw = wahoos.filter(w => w.completed_at < thisStart)
 
-      const daysElapsed = getDaysInWindow(tc, tch, tw)
-      const thisWeek = computeAxes(tc, tch, tw, daysElapsed)
-      const lastWeek = computeAxes(lc, lch, lw, 7)
+      const thisWeek = computeAxes(tc, tch, tw)
+      const lastWeek = computeAxes(lc, lch, lw)
 
       const trend = thisWeek.capacity !== null && lastWeek.capacity !== null
         ? thisWeek.capacity - lastWeek.capacity : 0
@@ -245,6 +232,8 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
         expressionTrend: getTrend(thisWeek.expression, lastWeek.expression),
         maintenancePct: thisWeek.maintenancePct,
         maintenanceDays: thisWeek.maintenanceDays,
+        pillars: thisWeek.pillars,
+        activePillars: thisWeek.activePillars,
         dataPoints: totalInputs,
         loading: false,
       })
