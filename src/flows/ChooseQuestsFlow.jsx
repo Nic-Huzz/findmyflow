@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getDomeExperiencesForBridge, groupByPrimal, formatDomeForPrompt } from '../lib/domeSummary'
+import { hasSubNodes, getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { getWeekStartLocal } from '../lib/dateUtils'
@@ -17,6 +18,7 @@ import './ChooseQuestsFlow.css'
 const STEPS = {
   INTRO: 'intro',
   SELECT: 'select',
+  DEEP_DIVE: 'deep_dive',
   PROCESSING: 'processing',
   PATHS: 'paths',
   STUCK: 'stuck',
@@ -42,6 +44,10 @@ export default function ChooseQuestsFlow() {
   // Select step
   const [selectedIds, setSelectedIds] = useState(new Set())
   const [showFun, setShowFun] = useState(false)
+
+  // Deep dive step — { [nodeId]: { formats: Set, vectors: Set } }
+  const [deepDive, setDeepDive] = useState({})
+  const [ddIndex, setDdIndex] = useState(0) // current node index in deep dive
 
   // Paths step
   const [paths, setPaths] = useState([])
@@ -107,7 +113,7 @@ export default function ChooseQuestsFlow() {
 
     const allExps = [...vibeRise, ...fun]
     const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
-    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype)
+    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDive, allExps)
 
     try {
       const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
@@ -126,7 +132,7 @@ export default function ChooseQuestsFlow() {
       setAiError(err.message)
       goTo(STEPS.PATHS)
     }
-  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, deepDive, goTo])
 
   // ── Path selection ──
   const togglePath = useCallback((idx) => {
@@ -261,15 +267,8 @@ export default function ChooseQuestsFlow() {
                   sort_order: pathStuck.indexOf(sp),
                 }).select('id').single()
 
-                if (taskRow?.id && sp.protectiveVoice) {
-                  await supabase.from('healing_intentions').upsert({
-                    quest_task_id: taskRow.id,
-                    user_id: user.id,
-                    pattern: sp.protectiveVoice,
-                    protective_voice: sp.protectiveVoice,
-                    healing_stage: 'in_progress',
-                  }, { onConflict: 'quest_task_id' })
-                }
+                // protectiveVoice stored on groan_challenges; healing_intention
+                // created only when user chooses to dive deeper via HealingFlowModal
               } catch {}
             }
           }
@@ -375,9 +374,119 @@ export default function ChooseQuestsFlow() {
           )}
 
           <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={callAI}>
-              {n === 0 ? 'Select at least 1 →' : 'Show me life paths →'}
+            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => { setDdIndex(0); goTo(STEPS.DEEP_DIVE) }}>
+              {n === 0 ? 'Select at least 1 →' : 'Tell us more →'}
             </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── DEEP DIVE ──
+  if (step === STEPS.DEEP_DIVE) {
+    const allExps = [...vibeRise, ...fun]
+    const selectedExps = allExps.filter(e => selectedIds.has(e.id))
+    const currentExp = selectedExps[ddIndex]
+
+    if (!currentExp) {
+      // All nodes done, proceed to AI
+      callAI()
+      return null
+    }
+
+    const nodeId = currentExp.id
+    const subNodes = getSubNodes(nodeId)
+    const hasFormats = subNodes.length > 0
+    const dd = deepDive[nodeId] || { formats: new Set(), vectors: new Set() }
+
+    const toggleFormat = (fmtId) => {
+      hapticLight()
+      setDeepDive(prev => {
+        const existing = prev[nodeId] || { formats: new Set(), vectors: new Set() }
+        const next = new Set(existing.formats)
+        if (next.has(fmtId)) next.delete(fmtId)
+        else next.add(fmtId)
+        return { ...prev, [nodeId]: { ...existing, formats: next } }
+      })
+    }
+
+    const toggleVector = (vecId) => {
+      hapticLight()
+      setDeepDive(prev => {
+        const existing = prev[nodeId] || { formats: new Set(), vectors: new Set() }
+        const next = new Set(existing.vectors)
+        if (next.has(vecId)) next.delete(vecId)
+        else next.add(vecId)
+        return { ...prev, [nodeId]: { ...existing, vectors: next } }
+      })
+    }
+
+    const canProceed = dd.vectors.size > 0
+    const isLast = ddIndex === selectedExps.length - 1
+
+    const goNext = () => {
+      if (isLast) {
+        callAI()
+      } else {
+        setDdIndex(ddIndex + 1)
+        window.scrollTo(0, 0)
+      }
+    }
+
+    return (
+      <div className="cqf">
+        <div className="cqf-container">
+          <div className="cqf-dd-progress">
+            {ddIndex + 1} of {selectedExps.length}
+          </div>
+
+          <div className="cqf-dd-header">
+            <h2>{currentExp.label}</h2>
+          </div>
+
+          {hasFormats && (
+            <div className="cqf-dd-section">
+              <div className="cqf-dd-q">Which formats specifically?</div>
+              <div className="cqf-dd-options">
+                {subNodes.map(sub => (
+                  <div key={sub.id}
+                    className={`cqf-dd-chip ${dd.formats.has(sub.id) ? 'selected' : ''}`}
+                    onClick={() => toggleFormat(sub.id)}>
+                    <div className="cqf-dd-chip-check">✓</div>
+                    <span>{sub.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="cqf-dd-section">
+            <div className="cqf-dd-q">When you imagine doing more of this, what excites you?</div>
+            <div className="cqf-dd-vectors">
+              {CAREER_VECTORS.map(vec => (
+                <div key={vec.id}
+                  className={`cqf-dd-vector ${dd.vectors.has(vec.id) ? 'selected' : ''}`}
+                  onClick={() => toggleVector(vec.id)}>
+                  <div className="cqf-dd-vector-check">✓</div>
+                  <div>
+                    <div className="cqf-dd-vector-label">{vec.label}</div>
+                    <div className="cqf-dd-vector-sub">{vec.subtitle}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="cqf-fixed">
+            <button className="cqf-cta cqf-cta-gold" disabled={!canProceed} onClick={goNext}>
+              {!canProceed ? 'Pick at least one role' : isLast ? 'Show me life paths →' : 'Next →'}
+            </button>
+            {ddIndex > 0 && (
+              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setDdIndex(ddIndex - 1); window.scrollTo(0, 0) }}>
+                ← Back
+              </button>
+            )}
           </div>
         </div>
       </div>

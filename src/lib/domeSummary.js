@@ -6,6 +6,7 @@
  */
 import { VIRTUAL_EXPERIENCE_NODES, getExperienceLabel, isCoreNode } from './experienceDomeConfig'
 import { INDUSTRIES, industryNodes } from './ruleBreakTreeData'
+import { getSubNodes as getSubNodesFromConfig } from '../data/experienceDomeSubNodes'
 
 // Same overrides as DomeRadar + ExperienceGameFlow
 const PRIMAL_OVERRIDES = {
@@ -89,9 +90,11 @@ export function groupByPrimal(items) {
  * @param {string[]} selectedLabels - labels the user picked ("Ecstatic dance", etc.)
  * @param {Object} domeStates - full dome map { [nodeId]: nsState }
  * @param {string|null} essenceArchetype - e.g. "Playful Alchemist"
+ * @param {Object} [deepDive] - { [nodeId]: { formats: Set<string>, vectors: Set<string> } }
+ * @param {Array} [allExps] - full list of { id, label } experience items
  * @returns {Object|null} domeProfile payload, or null if no data
  */
-export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype) {
+export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDive, allExps) {
   if (!domeStates || Object.keys(domeStates).length === 0) return null
 
   const lookup = getNodeLookup()
@@ -105,8 +108,36 @@ export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype
     if (buckets[state]) buckets[state].push(info.label)
   })
 
+  // Build enriched selected array if deep dive data is available
+  let selected = selectedLabels
+  if (deepDive && allExps && Object.keys(deepDive).length > 0) {
+    selected = allExps
+      .filter(e => selectedLabels.includes(e.label))
+      .map(e => {
+        const dd = deepDive[e.id]
+        if (!dd) return { nodeId: e.id, label: e.label, formats: null, vectors: null }
+
+        // Resolve format IDs to labels
+        const formatLabels = dd.formats?.size
+          ? getSubNodesFromConfig(e.id).filter(s => dd.formats.has(s.id)).map(s => s.label)
+          : null
+
+        // Convert vector Set to array, filter out hobby-only for AI
+        const vectors = dd.vectors?.size ? [...dd.vectors] : null
+        const nonHobbyVectors = vectors?.filter(v => v !== 'hobby')
+
+        return {
+          nodeId: e.id,
+          label: e.label,
+          formats: formatLabels?.length ? formatLabels : null,
+          vectors: vectors,
+          excludeFromAI: nonHobbyVectors?.length === 0, // hobby-only
+        }
+      })
+  }
+
   return {
-    selected: selectedLabels,
+    selected,
     vibeRise: buckets.vibe_rise,
     fun: buckets.fun,
     pressure: buckets.pressure,
