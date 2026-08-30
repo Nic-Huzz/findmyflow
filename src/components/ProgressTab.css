@@ -269,6 +269,57 @@
   color: #5e17eb;
 }
 
+/* ── Life Fuel Diamond ── */
+.pt-fuel-diamond {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+
+.pt-fuel-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pt-fuel-label {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a0b3d;
+  white-space: nowrap;
+}
+
+.pt-fuel-label span {
+  font-weight: 900;
+  margin-left: 4px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pt-fuel-top {
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+}
+
+.pt-fuel-right {
+  top: 50%; right: 0;
+  transform: translateY(-50%);
+}
+
+.pt-fuel-bottom {
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+}
+
+.pt-fuel-left {
+  top: 50%; left: 0;
+  transform: translateY(-50%);
+}
+
 /* ── Dimensions grid ── */
 .pt-dim-grid {
   display: grid;

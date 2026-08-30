@@ -12,6 +12,7 @@ import { postFeedEvent } from '../lib/communityFeed'
 import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
 import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import { detectShift } from '../lib/shiftDetection'
+import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -33,7 +34,7 @@ const WAHOO_RP = {
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -90,6 +91,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         setPreviousStatements(sorted)
       })
   }, [userId])
+
+  // Life Fuel channels
+  const [lifeFuel, setLifeFuel] = useState({ choice: false, connection: false, mastery: false, meaning: false })
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
@@ -171,6 +175,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
           expectation_result: expectationResult,
           reflection,
+          life_fuel: lifeFuel,
         }),
       })
       if (questError) throw questError
@@ -642,6 +647,37 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                   </div>
                 </div>
               )}
+            </div>
+
+            {error && <p className="gcm-error">{error}</p>}
+
+            <button className="gcm-gold-btn" onClick={() => setStep('life_fuel')}>
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 'life_fuel' && (
+          <>
+            <h2 className="gcm-title">Life Fuel</h2>
+            <p className="gcm-subtitle">Which of these were true during this?</p>
+
+            <div className="gcm-fuel-checks">
+              {CHANNEL_IDS.map(id => {
+                const ch = LIFE_FUEL_CHANNELS[id]
+                return (
+                  <button
+                    key={id}
+                    className={`gcm-fuel-btn ${lifeFuel[id] ? 'selected' : ''}`}
+                    style={lifeFuel[id] ? { borderColor: ch.color, background: `${ch.color}12` } : undefined}
+                    onClick={() => setLifeFuel(prev => ({ ...prev, [id]: !prev[id] }))}
+                  >
+                    <span className="gcm-fuel-emoji">{ch.emoji}</span>
+                    <span className="gcm-fuel-label">{ch.checkbox}</span>
+                    {lifeFuel[id] && <span className="gcm-fuel-check">✓</span>}
+                  </button>
+                )
+              })}
             </div>
 
             {error && <p className="gcm-error">{error}</p>}

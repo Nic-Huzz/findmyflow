@@ -53,6 +53,30 @@
 .gcm-toggle.active.yes { background: #d1fae5; border-color: #34d399; color: #059669; }
 .gcm-toggle.active.no { background: #fce7f3; border-color: #f472b6; color: #db2777; }
 
+/* ── Life Fuel channel checkboxes ── */
+.gcm-fuel-checks {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 16px;
+}
+.gcm-fuel-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; width: 100%;
+  border: 2px solid #eef0f3; border-radius: 12px;
+  background: #f8f8fa; color: #1a1a2e;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+  text-align: left; font-family: inherit;
+  line-height: 1.3;
+}
+.gcm-fuel-btn:active { transform: scale(0.98); }
+.gcm-fuel-btn.selected { font-weight: 600; }
+.gcm-fuel-emoji { font-size: 18px; flex-shrink: 0; }
+.gcm-fuel-label { flex: 1; }
+.gcm-fuel-check {
+  font-size: 16px; font-weight: 700;
+  flex-shrink: 0;
+}
+
 /* ── Cross-pollination quest picker ── */
 .gcm-cross-quests {
   display: flex; flex-direction: column; gap: 8px;

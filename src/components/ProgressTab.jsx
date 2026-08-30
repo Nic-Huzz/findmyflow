@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { LIFE_FUEL_CHANNELS, calculateLifeFuel } from '../data/channelMapping'
 import './ProgressTab.css'
 
 // Hero stage names (Campbell) + movie refs + next step guidance
@@ -46,6 +47,7 @@ export default function ProgressTab({ userId }) {
   const [dimensionCounts, setDimensionCounts] = useState({})
   const [totalCourage, setTotalCourage] = useState(0)
   const [totalRP, setTotalRP] = useState(0)
+  const [lifeFuel, setLifeFuel] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -89,6 +91,24 @@ export default function ProgressTab({ userId }) {
       if (!mounted) return
       setMatrixData(result)
     }).catch(err => console.warn('Matrix load error:', err))
+
+    // Life Fuel — parse from quest_completions reflection_text
+    supabase.from('quest_completions')
+      .select('reflection_text')
+      .eq('user_id', userId)
+      .eq('quest_category', 'Groans')
+      .not('reflection_text', 'is', null)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (!mounted || !data) return
+        const entries = data.map(row => {
+          try {
+            const parsed = JSON.parse(row.reflection_text)
+            return parsed?.life_fuel || null
+          } catch { return null }
+        }).filter(Boolean)
+        if (entries.length > 0) setLifeFuel(calculateLifeFuel(entries))
+      }).catch(() => {})
 
     return () => { mounted = false }
   }, [userId])
@@ -163,6 +183,52 @@ export default function ProgressTab({ userId }) {
             <div className="pt-matrix-dot" style={{ left: `${dotX}%`, bottom: `${dotY}%` }} />
           </div>
           <div className="pt-matrix-zone">{matrixData.zone}</div>
+        </div>
+      )}
+
+      {/* Life Fuel Diamond */}
+      {lifeFuel && (
+        <div className="pt-section">
+          <div className="pt-section-title">Life Fuel</div>
+          <div className="pt-fuel-diamond">
+            <svg viewBox="0 0 200 200" className="pt-fuel-svg">
+              {/* Grid lines */}
+              {[25, 50, 75, 100].map(pct => {
+                const s = pct / 100
+                return (
+                  <polygon key={pct}
+                    points={`100,${100 - 80 * s} ${100 + 80 * s},100 100,${100 + 80 * s} ${100 - 80 * s},100`}
+                    fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth="1"
+                  />
+                )
+              })}
+              {/* Axis lines */}
+              <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
+              <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
+              {/* Data shape */}
+              <polygon
+                points={`100,${100 - (lifeFuel.mastery / 100) * 80} ${100 + (lifeFuel.meaning / 100) * 80},100 100,${100 + (lifeFuel.connection / 100) * 80} ${100 - (lifeFuel.choice / 100) * 80},100`}
+                fill="url(#fuelGradient)" fillOpacity="0.2"
+                stroke="url(#fuelGradient)" strokeWidth="2"
+              />
+              {/* Dots at data points */}
+              <circle cx="100" cy={100 - (lifeFuel.mastery / 100) * 80} r="4" fill={LIFE_FUEL_CHANNELS.mastery.color} />
+              <circle cx={100 + (lifeFuel.meaning / 100) * 80} cy="100" r="4" fill={LIFE_FUEL_CHANNELS.meaning.color} />
+              <circle cx="100" cy={100 + (lifeFuel.connection / 100) * 80} r="4" fill={LIFE_FUEL_CHANNELS.connection.color} />
+              <circle cx={100 - (lifeFuel.choice / 100) * 80} cy="100" r="4" fill={LIFE_FUEL_CHANNELS.choice.color} />
+              <defs>
+                <linearGradient id="fuelGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#5e17eb" />
+                  <stop offset="100%" stopColor="#E9A23B" />
+                </linearGradient>
+              </defs>
+            </svg>
+            {/* Labels */}
+            <div className="pt-fuel-label pt-fuel-top">{LIFE_FUEL_CHANNELS.mastery.emoji} Mastery <span>{lifeFuel.mastery}%</span></div>
+            <div className="pt-fuel-label pt-fuel-right">{LIFE_FUEL_CHANNELS.meaning.emoji} Meaning <span>{lifeFuel.meaning}%</span></div>
+            <div className="pt-fuel-label pt-fuel-bottom">{LIFE_FUEL_CHANNELS.connection.emoji} Connection <span>{lifeFuel.connection}%</span></div>
+            <div className="pt-fuel-label pt-fuel-left">{LIFE_FUEL_CHANNELS.choice.emoji} Choice <span>{lifeFuel.choice}%</span></div>
+          </div>
         </div>
       )}
 
