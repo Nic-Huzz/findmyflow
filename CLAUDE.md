@@ -210,7 +210,7 @@ Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `p
 
 **Scoring**: RP (Rise Points). State values: dorsal=-2, sympathetic=-1, ventral=+1, vibe_rise=+2. Levels: Getting Started (0) → Habit Builder (100) → Strong Foundation (500) → Vibe Rise (1250) → Flow Finder (2750) → Movement Maker (5750). Forgiving streak (1 day miss allowed).
 
-**Post-courage flow**: 4-state NS classification (Vibe Rise/Fun/Pressure/Uninterested) → identity statement ("I am someone who...") → 3% reflection. Saves to `quest_completions.reflection_text` JSON. Also increments `behavioral_evidence` on matching clusters + awards skill XP.
+**Post-courage flow**: 4-state NS classification (Vibe Rise/Fun/Stressed/Bored) → identity statement ("I am someone who...") → 3% reflection. Saves to `quest_completions.reflection_text` JSON. Also increments `behavioral_evidence` on matching clusters + awards skill XP.
 
 **Weekly Review**: Triggers Sunday/Monday, 3 questions: (1) "Old me would have ___. Instead I ___." (2) "Did procrastination stop you?" (yes/no + what) (3) "What brave thing are you most proud of?" 15 RP + 5 for sharing. Shareable canvas card.
 
@@ -222,7 +222,7 @@ Key docs: `docs/frameworks/vibe-rise-ecosystem-architecture.md`, `docs/features/
 
 2D matrix: User skills × 5 visibility layers (Screen→Live→Money→Vulnerable→Authority). User-facing name: "Wahoo Map". Internal code: `GroanMatrix.jsx`.
 
-Workflow: generated → accepted → completed. Post-completion: "I Did It!" → 4-state NS check-in → "How did that feel?" (4-state: Vibe Rise/Fun/Pressure/Uninterested) → Identity statement → 3% reflection → Share. Completed cells show "Done ×N" badge.
+Workflow: generated → accepted → completed. Post-completion: "I Did It!" → 4-state NS check-in → "How did that feel?" (4-state: Vibe Rise/Fun/Stressed/Bored) → Identity statement → 3% reflection → Share. Completed cells show "Done ×N" badge.
 
 ### 8. Play Profile (Founder DNA)
 
