@@ -151,7 +151,7 @@ export default function AlivenessQuiz() {
   const containerRef = useRef(null)
 
   useEffect(() => {
-    if (['calculating', 'results'].includes(stage)) return
+    if (['calculating', 'results', 'leverage'].includes(stage)) return
     saveProgress(stage, answers)
   }, [stage, answers])
 
@@ -496,7 +496,10 @@ export default function AlivenessQuiz() {
 
             <div className="aq-cta-section">
               <p className="aq-cta-line">The vessel doesn't fill with motivation.<br />It fills when you reopen what closed.</p>
-              <a href="/get-started" className="primary-button glow-button" onClick={saveLeverage}>Start reopening</a>
+              <button className="primary-button glow-button" onClick={async () => {
+                await saveLeverage()
+                window.location.href = '/get-started'
+              }}>Start reopening</button>
               <button className="go-back-link" onClick={() => setStage('results')}>&larr; Back to results</button>
             </div>
           </div>
