@@ -1,8 +1,8 @@
 /**
  * CapacityCard.css
- * Vibe Rise Score card: equation + zone bar + maintenance dots.
+ * Vibe Rise Score card: pillar pills + zone bar + maintenance dots.
  * CSS prefix: cc-
- * Created: 2026-05-14
+ * Created: 2026-05-14, v4: 2026-08-30
  */
 
 /* === CARD === */
@@ -36,17 +36,15 @@
 .cc-trend-down { color: #ef4444; }
 .cc-trend-flat { color: #adb5bd; }
 
-/* === EQUATION ROW === */
-.cc-equation {
+/* === PILLAR PILLS === */
+.cc-pillars {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 6px;
   margin-bottom: 14px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.cc-eq-pill {
+.cc-pillar-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -54,43 +52,18 @@
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
+  transition: background 0.3s, color 0.3s, opacity 0.3s;
 }
 
-.cc-eq-safety {
-  background: rgba(94, 23, 235, 0.08);
+.cc-pillar-active {
+  background: rgba(94, 23, 235, 0.10);
   color: #5e17eb;
 }
 
-.cc-eq-expression {
-  background: rgba(233, 162, 59, 0.08);
-  color: #c88520;
+.cc-pillar-inactive {
+  background: rgba(0, 0, 0, 0.04);
+  color: #ccc;
 }
-
-.cc-eq-arrow {
-  font-size: 10px;
-  margin-left: 2px;
-}
-.cc-eq-arrow-up { color: #10b981; }
-.cc-eq-arrow-down { color: #ef4444; }
-.cc-eq-arrow-flat { color: #adb5bd; }
-
-.cc-eq-op {
-  font-size: 13px;
-  font-weight: 800;
-  color: #adb5bd;
-}
-
-.cc-eq-result {
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  color: #1a1a2e;
-}
-
-.cc-zone-stuck { color: #ef4444; }
-.cc-zone-wired { color: #f97316; }
-.cc-zone-grounded { color: #5e17eb; }
-.cc-zone-vibe-rise { color: #E9A23B; }
 
 /* === ZONE BAR === */
 .cc-bar-wrap {

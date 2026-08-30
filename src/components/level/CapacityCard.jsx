@@ -1,13 +1,13 @@
 /**
  * CapacityCard.jsx
  *
- * Vibe Rise Score = Safety × Expression, displayed as:
- *   1. Equation row with trend arrows
+ * Vibe Rise Score v4 — 3-pillar zone model:
+ *   1. Pillar status row (Safety / Expression / Maintenance)
  *   2. Zone bar (Stuck / Wired / Grounded / Vibe Rise)
- *   3. Maintenance rolling 7-day % with streak dots
+ *   3. Maintenance rolling 7-day streak dots
  *
  * CSS prefix: cc- (scoped under .tune-tab or .level-tab)
- * Rewritten: 2026-05-14
+ * Rewritten: 2026-08-30 (v4)
  */
 
 import useCapacityScore from '../../hooks/useCapacityScore'
@@ -20,14 +20,18 @@ const ZONE_LABELS = [
   { id: 'vibe-rise', label: 'Vibe Rise' },
 ]
 
-const TREND_ARROWS = { up: '↑', down: '↓', flat: '→' }
+const PILLAR_CONFIG = [
+  { key: 'safety', label: 'Safety', icon: '🛡️' },
+  { key: 'expression', label: 'Expression', icon: '🔥' },
+  { key: 'maintenance', label: 'Maintenance', icon: '⚡' },
+]
 
 export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, onNavigate, hideMaintenance }) {
   const hookData = useCapacityScore(scoreData ? null : userId, refreshTrigger)
   const {
-    safety, expression, capacity, zone,
-    trend, safetyTrend, expressionTrend,
+    capacity, zone, trend,
     maintenancePct, maintenanceDays,
+    pillars, activePillars,
     dataPoints, loading,
   } = scoreData || hookData
 
@@ -59,19 +63,22 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
         )}
       </div>
 
-      {/* Equation: Safety × Expression = Score */}
-      <div className="cc-equation">
-        <span className="cc-eq-pill cc-eq-safety">
-          🛡️ Safety {safety}
-          {safetyTrend && <span className={`cc-eq-arrow cc-eq-arrow-${safetyTrend}`}>{TREND_ARROWS[safetyTrend]}</span>}
-        </span>
-        <span className="cc-eq-op">×</span>
-        <span className="cc-eq-pill cc-eq-expression">
-          🔥 Expression {expression}
-          {expressionTrend && <span className={`cc-eq-arrow cc-eq-arrow-${expressionTrend}`}>{TREND_ARROWS[expressionTrend]}</span>}
-        </span>
-        <span className="cc-eq-op">=</span>
-      </div>
+      {/* Pillar status: 3 pills showing active/inactive */}
+      {pillars && (
+        <div className="cc-pillars">
+          {PILLAR_CONFIG.map(p => {
+            const pillar = pillars[p.key]
+            return (
+              <span
+                key={p.key}
+                className={`cc-pillar-pill ${pillar.active ? 'cc-pillar-active' : 'cc-pillar-inactive'}`}
+              >
+                {p.icon} {p.label}
+              </span>
+            )
+          })}
+        </div>
+      )}
 
       {/* Zone bar */}
       <div className="cc-bar-wrap">
@@ -90,7 +97,7 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
         ))}
       </div>
 
-      {/* Maintenance */}
+      {/* Maintenance streak dots */}
       {!hideMaintenance && (
         <div className="cc-maint">
           <div className="cc-maint-header">
