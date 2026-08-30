@@ -48,6 +48,8 @@ export default function ChooseQuestsFlow() {
   // Deep dive step — { [nodeId]: { formats: Set, vectors: Set } }
   const [deepDive, setDeepDive] = useState({})
   const [ddIndex, setDdIndex] = useState(0) // current node index in deep dive
+  const deepDiveRef = useRef(deepDive)
+  useEffect(() => { deepDiveRef.current = deepDive }, [deepDive])
 
   // Paths step
   const [paths, setPaths] = useState([])
@@ -113,7 +115,7 @@ export default function ChooseQuestsFlow() {
 
     const allExps = [...vibeRise, ...fun]
     const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
-    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDive, allExps)
+    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDiveRef.current, allExps)
 
     try {
       const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
@@ -132,7 +134,7 @@ export default function ChooseQuestsFlow() {
       setAiError(err.message)
       goTo(STEPS.PATHS)
     }
-  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, deepDive, goTo])
+  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
 
   // ── Path selection ──
   const togglePath = useCallback((idx) => {
@@ -383,16 +385,21 @@ export default function ChooseQuestsFlow() {
     )
   }
 
+  // ── DEEP DIVE: auto-advance if index out of bounds ──
+  const allExpsForDD = step === STEPS.DEEP_DIVE ? [...vibeRise, ...fun].filter(e => selectedIds.has(e.id)) : []
+  const ddAutoAdvance = step === STEPS.DEEP_DIVE && allExpsForDD.length > 0 && ddIndex >= allExpsForDD.length
+  useEffect(() => {
+    if (ddAutoAdvance) callAI()
+  }, [ddAutoAdvance, callAI])
+
   // ── DEEP DIVE ──
   if (step === STEPS.DEEP_DIVE) {
-    const allExps = [...vibeRise, ...fun]
-    const selectedExps = allExps.filter(e => selectedIds.has(e.id))
+    const selectedExps = allExpsForDD
     const currentExp = selectedExps[ddIndex]
 
     if (!currentExp) {
-      // All nodes done, proceed to AI
-      callAI()
-      return null
+      // Waiting for useEffect to fire callAI
+      return <div className="cqf"><div className="cqf-container"><div className="cqf-processing"><div className="cqf-spinner" /></div></div></div>
     }
 
     const nodeId = currentExp.id
