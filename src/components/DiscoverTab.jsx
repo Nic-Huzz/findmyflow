@@ -99,7 +99,7 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
     if (!activeDomeChallenge || !userId) return
     hapticSuccess()
 
-    const nsMap = { vibe_rise: 10, fun: 7, pressure: 5, bored: 0 }
+    const nsMap = { vibe_rise: 10, fun: 7, pressure: 10, bored: 5 }
     const rp = nsMap[nsState] || 0
 
     // 1. Mark challenge completed

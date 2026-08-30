@@ -276,13 +276,22 @@ export default function ChooseQuestsFlow() {
         }
       }
 
+      // Write life_path_sessions row so Quests tab auto-unlocks
+      await supabase.from('life_path_sessions').insert({
+        client_name: user.email || user.id,
+        client_email: user.email || null,
+        careers: chosenPaths.map((p, i) => ({ id: `dome-${i}`, label: p.name, predictedState: 'vibe_rise' })),
+        stuck_points: stuckPoints.map(sp => ({ id: sp.id, careerId: sp.pathIdx, text: sp.text, protectiveVoice: sp.protectiveVoice })),
+        step: 'complete',
+      }).then(() => {}).catch(() => {}) // non-blocking
+
       hapticSuccess()
       goTo(STEPS.DONE)
     } catch (err) {
       console.error('Quest creation failed:', err)
       goTo(STEPS.STUCK)
     }
-  }, [user, paths, selectedPaths, stuckPoints, goTo])
+  }, [user, paths, selectedPaths, stuckPoints, chosenPaths, goTo])
 
   // ── Loading ──
   if (domeLoading) {

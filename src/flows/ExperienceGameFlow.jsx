@@ -797,19 +797,31 @@ export default function ExperienceGameFlow() {
     } catch {}
 
     const ratingCount = Object.keys(latestRatings).length
-    console.log('[ExperienceGame] handleFinish — user:', user?.id, 'ratings:', ratingCount)
 
     if (user?.id && ratingCount > 0) {
-      console.log('[ExperienceGame] Saving to Supabase:', ratingCount, 'ratings')
       bulkSetStates(latestRatings)
+
+      // Award 3 RP per experience rated
+      const totalRP = ratingCount * 3
+      supabase.from('quest_completions').insert({
+        user_id: user.id,
+        quest_id: 'dome_rating_' + getWeekStartLocal(),
+        quest_category: 'Groans',
+        quest_type: 'Rewire',
+        points_earned: totalRP,
+        reflection_text: JSON.stringify({
+          source: 'dome_rating',
+          count: ratingCount,
+          rp_per: 3,
+        }),
+      })
+
       try {
         localStorage.removeItem(STORAGE_KEY)
         localStorage.removeItem(CHECKED_KEY)
       } catch {}
     } else if (ratingCount > 0) {
-      console.log('[ExperienceGame] Not logged in — ratings saved in localStorage only')
-    } else {
-      console.log('[ExperienceGame] No ratings to save')
+      // Not logged in — ratings saved in localStorage only
     }
     setPhase('insight')
   }, [user, ratings, bulkSetStates])
