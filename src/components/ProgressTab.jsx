@@ -48,6 +48,7 @@ export default function ProgressTab({ userId }) {
   const [totalCourage, setTotalCourage] = useState(0)
   const [totalRP, setTotalRP] = useState(0)
   const [lifeFuel, setLifeFuel] = useState(null)
+  const [lifeFuelBaseline, setLifeFuelBaseline] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function ProgressTab({ userId }) {
 
     Promise.all([
       supabase.from('user_stage_progress')
-        .select('current_journey_level')
+        .select('current_journey_level, life_fuel_quiz')
         .eq('user_id', userId).maybeSingle(),
       supabase.from('groan_challenges')
         .select('id, expansion_dimensions', { count: 'exact' })
@@ -70,6 +71,17 @@ export default function ProgressTab({ userId }) {
       setHeroStage(stageRes.data?.current_journey_level || 0)
       setTotalCourage(courageRes.count || 0)
       setTotalRP(rpRes.data?.lifetime_total_score || 0)
+
+      // Quiz baseline for Life Fuel diamond (fallback when no courage data)
+      const quizData = stageRes.data?.life_fuel_quiz
+      if (quizData && typeof quizData.choice === 'number') {
+        setLifeFuelBaseline({
+          choice: Math.round((quizData.choice / 3) * 100),
+          connection: Math.round((quizData.connection / 3) * 100),
+          mastery: Math.round((quizData.mastery / 3) * 100),
+          meaning: Math.round((quizData.meaning / 3) * 100),
+        })
+      }
 
       const dims = {}
       ;(courageRes.data || []).forEach(c => {
@@ -186,10 +198,13 @@ export default function ProgressTab({ userId }) {
         </div>
       )}
 
-      {/* Life Fuel Diamond */}
-      {lifeFuel && (
+      {/* Life Fuel Diamond — courage data, or quiz baseline as fallback */}
+      {(lifeFuel || lifeFuelBaseline) && (() => {
+        const fuel = lifeFuel || lifeFuelBaseline
+        const isBaseline = !lifeFuel && !!lifeFuelBaseline
+        return (
         <div className="pt-section">
-          <div className="pt-section-title">Life Fuel</div>
+          <div className="pt-section-title">Life Fuel{isBaseline ? ' (from quiz)' : ''}</div>
           <div className="pt-fuel-diamond">
             <svg viewBox="0 0 200 200" className="pt-fuel-svg">
               {/* Grid lines */}
@@ -207,15 +222,15 @@ export default function ProgressTab({ userId }) {
               <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
               {/* Data shape */}
               <polygon
-                points={`100,${100 - (lifeFuel.mastery / 100) * 80} ${100 + (lifeFuel.meaning / 100) * 80},100 100,${100 + (lifeFuel.connection / 100) * 80} ${100 - (lifeFuel.choice / 100) * 80},100`}
+                points={`100,${100 - (fuel.mastery / 100) * 80} ${100 + (fuel.meaning / 100) * 80},100 100,${100 + (fuel.connection / 100) * 80} ${100 - (fuel.choice / 100) * 80},100`}
                 fill="url(#fuelGradient)" fillOpacity="0.2"
                 stroke="url(#fuelGradient)" strokeWidth="2"
               />
               {/* Dots at data points */}
-              <circle cx="100" cy={100 - (lifeFuel.mastery / 100) * 80} r="4" fill={LIFE_FUEL_CHANNELS.mastery.color} />
-              <circle cx={100 + (lifeFuel.meaning / 100) * 80} cy="100" r="4" fill={LIFE_FUEL_CHANNELS.meaning.color} />
-              <circle cx="100" cy={100 + (lifeFuel.connection / 100) * 80} r="4" fill={LIFE_FUEL_CHANNELS.connection.color} />
-              <circle cx={100 - (lifeFuel.choice / 100) * 80} cy="100" r="4" fill={LIFE_FUEL_CHANNELS.choice.color} />
+              <circle cx="100" cy={100 - (fuel.mastery / 100) * 80} r="4" fill={LIFE_FUEL_CHANNELS.mastery.color} />
+              <circle cx={100 + (fuel.meaning / 100) * 80} cy="100" r="4" fill={LIFE_FUEL_CHANNELS.meaning.color} />
+              <circle cx="100" cy={100 + (fuel.connection / 100) * 80} r="4" fill={LIFE_FUEL_CHANNELS.connection.color} />
+              <circle cx={100 - (fuel.choice / 100) * 80} cy="100" r="4" fill={LIFE_FUEL_CHANNELS.choice.color} />
               <defs>
                 <linearGradient id="fuelGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#5e17eb" />
@@ -224,13 +239,14 @@ export default function ProgressTab({ userId }) {
               </defs>
             </svg>
             {/* Labels */}
-            <div className="pt-fuel-label pt-fuel-top">{LIFE_FUEL_CHANNELS.mastery.emoji} Mastery <span>{lifeFuel.mastery}%</span></div>
-            <div className="pt-fuel-label pt-fuel-right">{LIFE_FUEL_CHANNELS.meaning.emoji} Meaning <span>{lifeFuel.meaning}%</span></div>
-            <div className="pt-fuel-label pt-fuel-bottom">{LIFE_FUEL_CHANNELS.connection.emoji} Connection <span>{lifeFuel.connection}%</span></div>
-            <div className="pt-fuel-label pt-fuel-left">{LIFE_FUEL_CHANNELS.choice.emoji} Choice <span>{lifeFuel.choice}%</span></div>
+            <div className="pt-fuel-label pt-fuel-top">{LIFE_FUEL_CHANNELS.mastery.emoji} Mastery <span>{fuel.mastery}%</span></div>
+            <div className="pt-fuel-label pt-fuel-right">{LIFE_FUEL_CHANNELS.meaning.emoji} Meaning <span>{fuel.meaning}%</span></div>
+            <div className="pt-fuel-label pt-fuel-bottom">{LIFE_FUEL_CHANNELS.connection.emoji} Connection <span>{fuel.connection}%</span></div>
+            <div className="pt-fuel-label pt-fuel-left">{LIFE_FUEL_CHANNELS.choice.emoji} Choice <span>{fuel.choice}%</span></div>
           </div>
         </div>
-      )}
+        )
+      })()}
 
       {/* Expansion Dimensions */}
       {totalDimUsage > 0 && (

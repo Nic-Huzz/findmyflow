@@ -52,6 +52,20 @@ export const AuthProvider = ({ children }) => {
                   personalization_tokens: { name }
                 }
               }).catch(err => console.warn('Welcome email enrollment failed:', err))
+
+              // Claim aliveness quiz results from public_leads (if they took the quiz before signup)
+              supabase.from('public_leads')
+                .select('flow_results')
+                .eq('email', userEmail)
+                .eq('source_flow', 'aliveness_quiz')
+                .maybeSingle()
+                .then(({ data }) => {
+                  if (!data?.flow_results) return
+                  supabase.from('user_stage_progress').upsert({
+                    user_id: session.user.id,
+                    life_fuel_quiz: data.flow_results,
+                  }, { onConflict: 'user_id', ignoreDuplicates: false }).catch(() => {})
+                }).catch(() => {})
             }
           }
         }
