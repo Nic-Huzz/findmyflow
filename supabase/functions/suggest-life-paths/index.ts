@@ -38,8 +38,58 @@ serve(async (req) => {
     // Experience Dome section (Phase 1→2 bridge)
     let domeSection = 'No experience dome data available.'
     if (domeProfile) {
-      const lines = []
-      if (domeProfile.selected?.length) lines.push(`SELECTED (experiences they want MORE of): ${domeProfile.selected.join(', ')}`)
+      const lines: string[] = []
+
+      // Handle enriched selected array (objects with formats/vectors) or flat string array
+      if (domeProfile.selected?.length) {
+        const first = domeProfile.selected[0]
+        if (typeof first === 'string') {
+          // Legacy flat format
+          lines.push(`SELECTED (experiences they want MORE of): ${domeProfile.selected.join(', ')}`)
+        } else {
+          // Enriched format with deep dive data
+          const enrichedLines: string[] = []
+          const hobbyOnly: string[] = []
+
+          for (const item of domeProfile.selected) {
+            if (item.excludeFromAI) {
+              hobbyOnly.push(item.label)
+              continue
+            }
+
+            let line = `- ${item.label}`
+
+            // Add format specifics
+            if (item.formats?.length) {
+              line += ` (specifically: ${item.formats.join(', ')})`
+            }
+
+            // Add career vector
+            if (item.vectors?.length) {
+              const vectorLabels: Record<string, string> = {
+                do_it: 'wants to DO this as their career',
+                guide_it: 'wants to GUIDE others through it (teach, facilitate, coach)',
+                build_around: 'wants to BUILD around it (platform, brand, space, content)',
+                hobby: 'keeping as a hobby',
+              }
+              const nonHobby = item.vectors.filter((v: string) => v !== 'hobby')
+              if (nonHobby.length) {
+                line += ` → ${nonHobby.map((v: string) => vectorLabels[v] || v).join(' + ')}`
+              }
+            }
+
+            enrichedLines.push(line)
+          }
+
+          if (enrichedLines.length) {
+            lines.push(`SELECTED (experiences they want MORE of, with their preferred role):\n${enrichedLines.join('\n')}`)
+          }
+          if (hobbyOnly.length) {
+            lines.push(`HOBBY ONLY (they love these but do NOT want them as career paths, do not suggest paths based on these): ${hobbyOnly.join(', ')}`)
+          }
+        }
+      }
+
       if (domeProfile.vibeRise?.length) lines.push(`Full Vibe Rise profile: ${domeProfile.vibeRise.join(', ')}`)
       if (domeProfile.fun?.length) lines.push(`Fun (enjoys but less intense): ${domeProfile.fun.join(', ')}`)
       if (domeProfile.pressure?.length) lines.push(`Growth edges (stressful but has done): ${domeProfile.pressure.join(', ')}`)
@@ -65,6 +115,9 @@ GUIDELINES:
 - Focus on DELIVERING experiences, not owning assets. "Retreat Host" not "Retreat Center Owner". "Adventure Guide" not "Travel Company Owner". The person wants to DO the thing, not manage a business around it.
 - ONLY reference experiences from their data. Do NOT invent activities, modalities, or audiences they haven't mentioned. If breathwork isn't in their data, don't mention breathwork.
 - If Experience Dome data exists, prioritise it. SELECTED experiences are the primary signal. Combine dome experiences into career directions that let this person do MORE of what lights them up.
+- CRITICAL: If a selected experience includes a career vector (DO/GUIDE/BUILD), respect it. If they said "wants to DO this", suggest paths where they perform the activity professionally. If they said "wants to GUIDE others", suggest facilitation/teaching paths. If they said "wants to BUILD around it", suggest platform/brand/content paths. Never suggest facilitation for someone who wants to DO, or vice versa.
+- If specific formats are listed (e.g. "specifically: silent disco, morning dance"), the path should reference those formats, not the generic experience.
+- HOBBY ONLY items must be completely excluded from path suggestions. Do not suggest career paths based on hobby items.
 - Growth edge experiences (stressful) are interesting stretch paths. At least one suggestion should lean into a growth edge.
 - Fun experiences add texture but are weaker signal than Vibe Rise.
 - The essence archetype shapes HOW they'd do it, not WHAT they do.
