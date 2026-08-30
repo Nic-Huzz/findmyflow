@@ -104,7 +104,7 @@ src/
 │   ├── zarlo/               # zarloEngine.js, zarloPageContent.js
 │   ├── crm/                 # 20+ CRM services
 │   └── wheelTaxonomy.js     # Skill/problem/persona taxonomy lookups
-├── data/           # Static config (archetypes, taxonomy JSON, founderDna)
+├── data/           # Static config (archetypes, taxonomy JSON, founderDna, experienceDomeSubNodes)
 └── styles/         # flow-base.css (shared flow styles)
 
 supabase/functions/ # Edge functions (classify-quest-skills, regenerate-cluster, suggest-life-paths, etc.)
@@ -449,6 +449,7 @@ When working on features, strategy, or content, read the relevant section of the
 - `docs/frameworks/root-and-reach-framework.md` - **Vibe Rise / River System** (Original IP)
 - `docs/frameworks/root-and-reach-overview-prompt.md` - Shareable framework overview
 - `docs/features/matching-dna/feature-brief-experience-creator-matching.md` - Experience Creator Matching brief
+- `docs/features/experience-dome-deep-dive.md` - Experience Dome Layer 1 (format variations) + Layer 2 (career vectors) spec
 - `docs/INDEX.md` - **Thematic index of all living docs**
 - `docs/architecture/scoring-system-refactor.md` - Points/scoring architecture
 - `docs/architecture/PUSH_NOTIFICATIONS.md` - Push notification setup
