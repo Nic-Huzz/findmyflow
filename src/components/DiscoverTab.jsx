@@ -117,19 +117,10 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       }, { onConflict: 'user_id,node_id' })
     }
 
-    // 3. Insert quest completion for RP
-    await supabase.from('quest_completions').insert({
-      user_id: userId,
-      quest_id: 'dome_challenge_' + activeDomeChallenge.id,
-      quest_category: 'Groans',
-      quest_type: 'Rewire',
-      points_earned: rp,
-      reflection_text: JSON.stringify({
-        challenge_id: activeDomeChallenge.id,
-        ns_state: nsState,
-        source: 'dome',
-      }),
-    })
+    // 3. Award RP via increment_scores
+    await supabase.rpc('increment_scores', {
+      p_user_id: userId, p_project_id: null, p_category: 'courage', p_points: rp,
+    }).catch(() => {})
 
     // 4. Clear state
     setActiveDomeChallenge(null)

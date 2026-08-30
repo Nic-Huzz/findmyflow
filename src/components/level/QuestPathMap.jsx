@@ -883,18 +883,10 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
           sort_order: tasks.length,
         }).select('id').single()
 
-        // Award 2 RP for adding a task
-        try {
-          await supabase.from('quest_completions').insert({
-            user_id: userId,
-            quest_id: `quest_created_${Date.now()}`,
-            quest_category: 'Quests',
-            quest_type: 'Practice',
-            points_earned: 2,
-            challenge_day: 0,
-            project_id: null,
-          })
-        } catch (e) { /* non-blocking */ }
+        // Award 2 RP for adding a courage step
+        await supabase.rpc('increment_scores', {
+          p_user_id: userId, p_project_id: null, p_category: 'courage', p_points: 2,
+        }).catch(() => {})
 
         const savedText = taskInput.trim()
         setTaskInput('')

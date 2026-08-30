@@ -108,15 +108,9 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
       if (error) console.error('Add task error:', error)
       else {
         setTaskInput('')
-        await supabase.from('quest_completions').insert({
-          user_id: userId,
-          quest_id: `quest_created_${Date.now()}`,
-          quest_category: 'Quests',
-          quest_type: 'Practice',
-          points_earned: 2,
-          challenge_day: 0,
-          project_id: null,
-        }).then(() => {}).catch(() => {})
+        await supabase.rpc('increment_scores', {
+          p_user_id: userId, p_project_id: null, p_category: 'courage', p_points: 2,
+        }).catch(() => {})
         onUpdate?.()
       }
     } catch (e) { console.error('Add task error:', e) }
@@ -159,21 +153,14 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     }
 
     if (newDone && !task.is_courage_challenge) {
-      supabase.from('quest_completions').insert({
-        user_id: userId,
-        quest_id: `quest_task_${task.id}`,
-        quest_category: 'Quests',
-        quest_type: 'Practice',
-        points_earned: 3,
-        challenge_day: 0,
-        project_id: null,
-      }).then(() => {}).catch(() => {})
+      supabase.rpc('increment_scores', {
+        p_user_id: userId, p_project_id: null, p_category: 'courage', p_points: 3,
+      }).catch(() => {})
     }
     if (!newDone && !task.is_courage_challenge) {
-      supabase.from('quest_completions').delete()
-        .eq('user_id', userId)
-        .eq('quest_id', `quest_task_${task.id}`)
-        .catch(() => {})
+      supabase.rpc('increment_scores', {
+        p_user_id: userId, p_project_id: null, p_category: 'courage', p_points: -3,
+      }).catch(() => {})
     }
 
     const hi = healingIntentions[task.id]
@@ -193,14 +180,8 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     await supabase.from('healing_intentions')
       .update({ outcome, updated_at: new Date().toISOString() })
       .eq('quest_task_id', taskId)
-    supabase.from('quest_completions').insert({
-      user_id: userId,
-      quest_id: `healing_outcome_${taskId}`,
-      quest_category: 'Healing',
-      quest_type: 'Practice',
-      points_earned: 2,
-      challenge_day: 0,
-      project_id: null,
+    supabase.rpc('increment_scores', {
+      p_user_id: userId, p_project_id: null, p_category: 'healing', p_points: 2,
     }).catch(() => {})
     setOutcomeTaskId(null)
     onUpdate?.()
@@ -220,15 +201,9 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     if (error) console.error('Close quest error:', error)
     else {
       if (reason === 'achieved') {
-        supabase.from('quest_completions').insert({
-          user_id: userId,
-          quest_id: `quest_achieved_${quest.id}`,
-          quest_category: 'Quests',
-          quest_type: 'Practice',
-          points_earned: 10,
-          challenge_day: 0,
-          project_id: null,
-        }).then(() => {}).catch(() => {})
+        supabase.rpc('increment_scores', {
+          p_user_id: userId, p_project_id: null, p_category: 'courage', p_points: 10,
+        }).catch(() => {})
 
         supabase.from('quests')
           .select('id', { count: 'exact', head: true })
