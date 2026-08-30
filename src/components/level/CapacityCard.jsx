@@ -21,10 +21,12 @@ const ZONE_LABELS = [
 ]
 
 const PILLAR_CONFIG = [
-  { key: 'safety', label: 'Safety', icon: '🛡️' },
-  { key: 'expression', label: 'Expression', icon: '🔥' },
-  { key: 'maintenance', label: 'Maintenance', icon: '⚡' },
+  { key: 'safety', label: 'Safety', icon: '🛡️', nudge: 'Try meditation or breathwork this week' },
+  { key: 'expression', label: 'Expression', icon: '🔥', nudge: 'Complete a courage challenge or practice visibility' },
+  { key: 'maintenance', label: 'Maintenance', icon: '⚡', nudge: 'Log sleep, exercise and meals to level up' },
 ]
+
+const NEXT_ZONE = { 'stuck': 'Wired', 'wired': 'Grounded', 'grounded': 'Vibe Rise' }
 
 export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, onNavigate, hideMaintenance }) {
   const hookData = useCapacityScore(scoreData ? null : userId, refreshTrigger)
@@ -65,19 +67,30 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
 
       {/* Pillar status: 3 pills showing active/inactive */}
       {pillars && (
-        <div className="cc-pillars">
-          {PILLAR_CONFIG.map(p => {
-            const pillar = pillars[p.key]
+        <>
+          <div className="cc-pillars">
+            {PILLAR_CONFIG.map(p => {
+              const pillar = pillars[p.key]
+              return (
+                <span
+                  key={p.key}
+                  className={`cc-pillar-pill ${pillar.active ? 'cc-pillar-active' : 'cc-pillar-inactive'}`}
+                >
+                  {p.icon} {p.label}
+                </span>
+              )
+            })}
+          </div>
+          {zone !== 'vibe-rise' && (() => {
+            const inactive = PILLAR_CONFIG.find(p => !pillars[p.key].active)
+            if (!inactive) return null
             return (
-              <span
-                key={p.key}
-                className={`cc-pillar-pill ${pillar.active ? 'cc-pillar-active' : 'cc-pillar-inactive'}`}
-              >
-                {p.icon} {p.label}
-              </span>
+              <p className="cc-nudge">
+                {inactive.nudge} to reach <strong>{NEXT_ZONE[zone]}</strong>
+              </p>
             )
-          })}
-        </div>
+          })()}
+        </>
       )}
 
       {/* Zone bar */}
