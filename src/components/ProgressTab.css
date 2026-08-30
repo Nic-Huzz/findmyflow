@@ -275,7 +275,7 @@
   width: 100%;
   max-width: 280px;
   margin: 0 auto;
-  aspect-ratio: 1;
+  padding: 28px 60px;
 }
 
 .pt-fuel-svg {
@@ -301,7 +301,7 @@
 }
 
 .pt-fuel-top {
-  top: 0; left: 50%;
+  top: 2px; left: 50%;
   transform: translateX(-50%);
 }
 
@@ -311,7 +311,7 @@
 }
 
 .pt-fuel-bottom {
-  bottom: 0; left: 50%;
+  bottom: 2px; left: 50%;
   transform: translateX(-50%);
 }
 
