@@ -34,7 +34,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-road-motorcycle', label: 'Motorcycle trip' },
     { id: 'fmt-road-campervan', label: 'Campervan / RV trip' },
     { id: 'fmt-road-rally', label: 'Rally / track day / driving experience' },
-    { id: 'fmt-road-solo', label: 'Solo driving — music, thinking, freedom' },
+    { id: 'fmt-road-solo', label: 'Solo driving (music, thinking, freedom)' },
   ],
 
   'car-1952': [
@@ -334,8 +334,8 @@ export const DOME_SUB_NODES = {
     // Mastermind / group growth — structure varies
     { id: 'fmt-mm-peer', label: 'Peer mastermind (small, equal)' },
     { id: 'fmt-mm-paid', label: 'Paid mastermind (expert-led)' },
-    { id: 'fmt-mm-accountability', label: 'Accountability partner (1:1)' },
-    { id: 'fmt-mm-group-coaching', label: 'Group coaching program' },
+    { id: 'fmt-mm-accountability', label: 'Accountability partner (being held accountable)' },
+    { id: 'fmt-mm-group-program', label: 'Group program (as a participant)' },
     { id: 'fmt-mm-advisory', label: 'Advisory board / personal board' },
     { id: 'fmt-mm-exec', label: 'Executive coaching (1:1)' },
     { id: 'fmt-mm-mens-womens', label: "Men's / women's circle" },
@@ -495,7 +495,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-read-nonfiction', label: 'Non-fiction (ideas, science, history)' },
     { id: 'fmt-read-biography', label: 'Biography / memoir' },
     { id: 'fmt-read-self-help', label: 'Self-help / personal development' },
-    { id: 'fmt-read-poetry', label: 'Poetry' },
+    { id: 'fmt-read-poetry', label: 'Poetry collections' },
     { id: 'fmt-read-short', label: 'Short stories / essays' },
     { id: 'fmt-read-book-club', label: 'Book club (reading + discussing)' },
   ],
