@@ -270,12 +270,19 @@
 }
 
 /* ── Life Fuel Diamond ── */
+.pt-fuel-section {
+  overflow: hidden;
+}
+
+.pt-fuel-section::before {
+  background: linear-gradient(90deg, #5e17eb, #E9A23B) !important;
+}
+
 .pt-fuel-diamond {
   position: relative;
-  width: 100%;
-  max-width: 280px;
+  width: 220px;
+  height: 220px;
   margin: 0 auto;
-  padding: 28px 60px;
 }
 
 .pt-fuel-svg {
@@ -283,41 +290,60 @@
   height: 100%;
 }
 
+/* Labels */
 .pt-fuel-label {
   position: absolute;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1a0b3d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
   white-space: nowrap;
 }
 
-.pt-fuel-label span {
+.pt-fuel-pct {
+  font-size: 18px;
   font-weight: 900;
-  margin-left: 4px;
   background: linear-gradient(135deg, #5e17eb, #E9A23B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  line-height: 1.2;
+}
+
+.pt-fuel-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .pt-fuel-top {
-  top: 2px; left: 50%;
+  bottom: 100%;
+  left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 6px;
 }
 
 .pt-fuel-right {
-  top: 50%; right: 0;
+  left: 100%;
+  top: 50%;
   transform: translateY(-50%);
+  margin-left: 10px;
 }
 
 .pt-fuel-bottom {
-  bottom: 2px; left: 50%;
+  top: 100%;
+  left: 50%;
   transform: translateX(-50%);
+  margin-top: 6px;
 }
 
 .pt-fuel-left {
-  top: 50%; left: 0;
+  right: 100%;
+  top: 50%;
   transform: translateY(-50%);
+  margin-right: 10px;
 }
 
 /* ── Dimensions grid ── */
