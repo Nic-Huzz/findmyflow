@@ -864,13 +864,13 @@ export const DOME_SUB_NODES = {
 export const CAREER_VECTORS = [
   {
     id: 'do_it',
-    label: 'Doing it',
-    subtitle: 'This becomes my work',
+    label: 'Doing it myself',
+    subtitle: 'I want this to be my career',
   },
   {
     id: 'guide_it',
-    label: 'Guiding others through it',
-    subtitle: 'Teaching, facilitating, coaching',
+    label: 'Guiding others to do it',
+    subtitle: 'Teaching, facilitating, coaching others',
   },
   {
     id: 'build_around',

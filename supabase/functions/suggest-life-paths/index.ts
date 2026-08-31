@@ -49,14 +49,8 @@ serve(async (req) => {
         } else {
           // Enriched format with deep dive data
           const enrichedLines: string[] = []
-          const hobbyOnly: string[] = []
 
           for (const item of domeProfile.selected) {
-            if (item.excludeFromAI) {
-              hobbyOnly.push(item.label)
-              continue
-            }
-
             let line = `- ${item.label}`
 
             // Add format specifics
@@ -83,9 +77,6 @@ serve(async (req) => {
 
           if (enrichedLines.length) {
             lines.push(`SELECTED (experiences they want MORE of, with their preferred role):\n${enrichedLines.join('\n')}`)
-          }
-          if (hobbyOnly.length) {
-            lines.push(`HOBBY ONLY (they love these but do NOT want them as career paths, do not suggest paths based on these): ${hobbyOnly.join(', ')}`)
           }
         }
       }
@@ -117,7 +108,7 @@ GUIDELINES:
 - If Experience Dome data exists, prioritise it. SELECTED experiences are the primary signal. Combine dome experiences into career directions that let this person do MORE of what lights them up.
 - CRITICAL: If a selected experience includes a career vector (DO/GUIDE/BUILD), respect it. If they said "wants to DO this", suggest paths where they perform the activity professionally. If they said "wants to GUIDE others", suggest facilitation/teaching paths. If they said "wants to BUILD around it", suggest platform/brand/content paths. Never suggest facilitation for someone who wants to DO, or vice versa.
 - If specific formats are listed (e.g. "specifically: silent disco, morning dance"), the path should reference those formats, not the generic experience.
-- HOBBY ONLY items must be completely excluded from path suggestions. Do not suggest career paths based on hobby items.
+- Hobby items have already been removed from the data. Only suggest paths based on the experiences listed above.
 - Growth edge experiences (stressful) are interesting stretch paths. At least one suggestion should lean into a growth edge.
 - Fun experiences add texture but are weaker signal than Vibe Rise.
 - The essence archetype shapes HOW they'd do it, not WHAT they do.

@@ -117,23 +117,26 @@ export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype
         const dd = deepDive[e.id]
         if (!dd) return { nodeId: e.id, label: e.label, formats: null, vectors: null }
 
+        // Convert vector Set to array
+        const vectors = dd.vectors?.size ? [...dd.vectors] : null
+        const nonHobbyVectors = vectors?.filter(v => v !== 'hobby')
+
+        // Hobby-only: exclude entirely from AI payload
+        if (!nonHobbyVectors?.length) return null
+
         // Resolve format IDs to labels
         const formatLabels = dd.formats?.size
           ? getSubNodesFromConfig(e.id).filter(s => dd.formats.has(s.id)).map(s => s.label)
           : null
 
-        // Convert vector Set to array, filter out hobby-only for AI
-        const vectors = dd.vectors?.size ? [...dd.vectors] : null
-        const nonHobbyVectors = vectors?.filter(v => v !== 'hobby')
-
         return {
           nodeId: e.id,
           label: e.label,
           formats: formatLabels?.length ? formatLabels : null,
-          vectors: vectors,
-          excludeFromAI: nonHobbyVectors?.length === 0, // hobby-only
+          vectors: nonHobbyVectors,
         }
       })
+      .filter(Boolean) // Remove hobby-only nulls
   }
 
   return {
