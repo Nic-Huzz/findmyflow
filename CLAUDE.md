@@ -100,7 +100,7 @@ src/
 │   ├── scoreUtilities.js    # Shared Clarity + Action Score + Zone detection
 │   ├── skillProgress.js     # Skill XP (atomic RPC)
 │   ├── questSkillTagger.js  # Quest → skill_tags (edge function)
-│   ├── clusterQuestLinker.js # Cluster ↔ quest linking (Sprint 15, not yet built)
+│   ├── clusterQuestLinker.js # Cluster ↔ quest linking (Sprint 15)
 │   ├── zarlo/               # zarloEngine.js, zarloPageContent.js
 │   ├── crm/                 # 20+ CRM services
 │   └── wheelTaxonomy.js     # Skill/problem/persona taxonomy lookups
@@ -136,15 +136,15 @@ docs/               # Specs, handoffs, research
 
 **Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`, `/try/experience-game`, `/try/essence-mirror`, `/try/ai-diagnostic`, `/try/life-paths`, `/try/life-paths-test`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
 
-**Self-Knowledge Flows**: `/curiosity-map` (curiosity mapping → clusters), `/life-paths` (career tagging → quest + courage challenge creation), `/career-alignment` (career alignment check), `/life-map` (life story chapters)
+**Self-Knowledge Flows**: `/curiosity-map` (curiosity mapping → clusters), `/life-paths` (career tagging → quest + courage challenge creation), `/career-alignment` (career alignment check), `/life-map` (life story chapters), `/choose-quests` (dome → AI life paths → quest creation bridge, AuthGate), `/quest-map` (quest map chronological view, AuthGate), `/facilitate/life-paths` (facilitator-led life paths session)
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share), `/dome-onboarding` (Experience Dome intro), `/experience-game` (Experience Game flow), `/rule-break-tree` (rule break exploration), `/shift-scorecard` (Shift Scorecard), `/voice-training`
 
-**CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
+**CRM** (`/crm/*`): Dashboard | ceo (CEO Dashboard) | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
 **Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/scale-diagnostic` → `/create/scale-diagnostic`
 
@@ -387,6 +387,8 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 ### Fantasy League
 `fantasy_leagues` | `fantasy_teams` | `fantasy_team_members` | `fantasy_matchups` | `league_content_submissions` | `league_content_reactions` | `league_signups`
 
+**Ghost Self League** (replaces PvP infrastructure): `ghost_weekly_results` (user_id, week_start, ghost_daily_scores, user_daily_scores, category scores, result ENUM pending/win/loss/draw) | `ghost_streaks` (user_id, current_streak, longest_streak, consecutive_losses, totals, PBs) | `ghost_content_submissions` (user_id, week_start, content_type, points_value, link_url, description)
+
 ### Play Profile
 `founder_dna_results` | `founder_dna_sessions`
 
@@ -394,7 +396,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `experience_checkins` | `weekly_reviews` (3 questions: narrative_revision, identity_did, compounding_text) | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
 
 ### Interior Scoreboard
-`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
+`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool, `quest_ids` uuid[] (linked quests, Sprint 15) | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
 
 RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidence(p_cluster_id)`
 
@@ -410,7 +412,7 @@ RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidenc
 RPCs: `get_user_id_by_email(lookup_email)` (SECURITY DEFINER, used by webhook for email-based user matching)
 
 ### Other
-`push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
+`push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences` | `quest_context_mappings` (user_id, quest_id, context_type, context_identifier — maps Claude Code/Desktop directories to quests for session sync)
 
 ENUMs: `groan_visibility_layer` (screen/live/money/vulnerable/authority), `groan_source_type` (skill/problem/persona), `groan_challenge_status` (active/completed/skipped), `groan_outcome_type`
 
