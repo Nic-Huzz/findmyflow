@@ -312,6 +312,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-retreat-wilderness', label: 'Multi-day wilderness expedition' },
     { id: 'fmt-retreat-weekend', label: 'Weekend challenge retreat' },
     { id: 'fmt-retreat-wellness', label: 'Wellness retreat (yoga, spa, reset)' },
+    { id: 'fmt-retreat-healing', label: 'Healing retreat (breathwork, ceremony, inner work)' },
     { id: 'fmt-retreat-obstacle', label: 'Obstacle course (Tough Mudder, Spartan)' },
     { id: 'fmt-retreat-cold', label: 'Cold exposure / Wim Hof retreat' },
     { id: 'fmt-retreat-silence', label: 'Silence + adventure combo' },
