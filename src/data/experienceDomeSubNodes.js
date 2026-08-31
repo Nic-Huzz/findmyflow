@@ -114,7 +114,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-cold-cryo', label: 'Cryotherapy chamber' },
     { id: 'fmt-cold-wim-hof', label: 'Wim Hof ice bath / cold protocol' },
     { id: 'fmt-cold-event', label: 'Group ice bath event' },
-    { id: 'fmt-cold-contrast', label: 'Contrast therapy (hot + cold)' },
+    { id: 'fmt-cold-river', label: 'Cold river / lake dip' },
   ],
 
   'sub-outdoor-1907': [
@@ -136,7 +136,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-dance-morning', label: 'Morning sober dance (Daybreaker, Morning Gloryville)' },
     { id: 'fmt-dance-contact', label: 'Contact improvisation' },
     { id: 'fmt-dance-burning-man', label: 'Burning Man / art festival' },
-    { id: 'fmt-dance-rave', label: 'Rave / electronic event' },
+    { id: 'fmt-dance-rave', label: 'Rave / warehouse party' },
     { id: 'fmt-dance-tribal', label: 'Tribal / ceremonial dance' },
     { id: 'fmt-dance-social', label: 'Partner dance class (swing, salsa, bachata)' },
     { id: 'fmt-dance-freeform', label: 'Freeform / no instruction, just move' },
@@ -207,7 +207,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-club-hiphop', label: 'Hip-hop / R&B night' },
     { id: 'fmt-club-bar', label: 'Bar dancing (spontaneous)' },
     { id: 'fmt-club-festival', label: 'Festival after-party / warehouse' },
-    { id: 'fmt-club-private', label: 'House party / private party' },
+    { id: 'fmt-club-private', label: 'Private party / after-party' },
     { id: 'fmt-club-rooftop', label: 'Rooftop / beach club' },
   ],
 
@@ -222,7 +222,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-ftable-wine', label: 'Wine tasting / vineyard visit' },
     { id: 'fmt-ftable-market', label: 'Food market / food hall' },
     { id: 'fmt-ftable-festival', label: 'Food festival' },
-    { id: 'fmt-ftable-supper', label: 'Pop-up supper club' },
+    { id: 'fmt-ftable-chefs-table', label: "Chef's table / private dining" },
     { id: 'fmt-ftable-foraging', label: 'Foraging experience' },
   ],
 
@@ -336,11 +336,11 @@ export const DOME_SUB_NODES = {
     // Mastermind / group growth — structure varies
     { id: 'fmt-mm-peer', label: 'Peer mastermind (small, equal)' },
     { id: 'fmt-mm-paid', label: 'Paid mastermind (expert-led)' },
-    { id: 'fmt-mm-accountability', label: 'Accountability partner (being held accountable)' },
+    { id: 'fmt-mm-hot-seat', label: 'Hot seat (focused group feedback)' },
     { id: 'fmt-mm-group-program', label: 'Group program (as a participant)' },
     { id: 'fmt-mm-advisory', label: 'Advisory board / personal board' },
     { id: 'fmt-mm-exec', label: 'Executive coaching (1:1)' },
-    { id: 'fmt-mm-mens-womens', label: "Men's / women's circle" },
+    { id: 'fmt-mm-retreat', label: 'Mastermind retreat (in-person intensive)' },
   ],
 
   'exp-volunteering': [
@@ -389,7 +389,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-space-room', label: 'Room makeover / redecorate' },
     { id: 'fmt-space-reno', label: 'Full renovation' },
     { id: 'fmt-space-style', label: 'Interior styling / feng shui' },
-    { id: 'fmt-space-furniture', label: 'Furniture building / restoration' },
+    { id: 'fmt-space-furniture', label: 'Furniture upcycling / painting' },
     { id: 'fmt-space-garden', label: 'Garden / outdoor space design' },
     { id: 'fmt-space-smart', label: 'Smart home setup' },
     { id: 'fmt-space-studio', label: 'Studio / workspace design' },
