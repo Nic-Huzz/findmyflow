@@ -322,7 +322,7 @@ const EXPERIENCE_LABELS = {
   'sub-ordeal-1775': 'Military bonding / service',
   'sub-ordeal-1863': 'Team sports',
   'sub-ordeal-2000': 'CrossFit / group fitness ordeal',
-  'sub-ordeal-2015': 'Adventure retreat',
+  'sub-ordeal-2015': 'Retreat',
 
   'sub-digital-1979': 'BBS / online forum',
   'sub-digital-2005': 'Reddit / forums',
@@ -640,7 +640,7 @@ const CORE_NODE_IDS = new Set([
 
   // Bonds (8) — Living abroad moved to Shelter, Unique stays dropped
   'intimacy-2012',           // Going on a date
-  'sub-ordeal-2015',         // Adventure retreat
+  'sub-ordeal-2015',         // Retreat
   'sub-digital-2015',        // Being part of an online community
   'sub-coaching-1937',       // Mastermind group
   'exp-volunteering',        // Volunteering / giving back

@@ -489,11 +489,12 @@ export default function ChooseQuestsFlow() {
             <button className="cqf-cta cqf-cta-gold" disabled={!canProceed} onClick={goNext}>
               {!canProceed ? 'Pick at least one role' : isLast ? 'Show me life paths →' : 'Next →'}
             </button>
-            {ddIndex > 0 && (
-              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setDdIndex(ddIndex - 1); window.scrollTo(0, 0) }}>
-                ← Back
-              </button>
-            )}
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => {
+              if (ddIndex > 0) { setDdIndex(ddIndex - 1); window.scrollTo(0, 0) }
+              else goTo(STEPS.SELECT)
+            }}>
+              ← Back
+            </button>
           </div>
         </div>
       </div>
