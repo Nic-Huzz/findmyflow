@@ -255,17 +255,17 @@ export default function AlivenessQuiz() {
   const saveLeverage = async () => {
     if (!email || !Object.keys(leverageAnswers).length) return
     try {
-      const { data } = await supabase
-        .from('public_leads')
-        .select('flow_results')
-        .eq('email', email)
-        .single()
-
-      if (data) {
-        await supabase.from('public_leads').update({
-          flow_results: { ...data.flow_results, leverage: leverageAnswers },
-        }).eq('email', email)
-      }
+      await supabase.from('public_leads').update({
+        flow_results: {
+          choice: answers.choice,
+          connection: answers.connection,
+          mastery: answers.mastery,
+          meaning: answers.meaning,
+          verdict: Object.keys(answers).length === 4 ? getVerdict(answers).state : 'incomplete',
+          leverage: leverageAnswers,
+          ...utmParams,
+        },
+      }).eq('email', email)
     } catch (err) {
       console.error('Error saving leverage:', err)
     }
