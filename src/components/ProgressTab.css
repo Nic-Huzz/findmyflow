@@ -270,19 +270,11 @@
 }
 
 /* ── Life Fuel Diamond ── */
-.pt-fuel-section {
-  overflow: hidden;
-}
-
-.pt-fuel-section::before {
-  background: linear-gradient(90deg, #5e17eb, #E9A23B) !important;
-}
-
 .pt-fuel-diamond {
   position: relative;
-  width: 220px;
-  height: 220px;
-  margin: 0 auto;
+  width: 160px;
+  height: 160px;
+  margin: 40px auto;
 }
 
 .pt-fuel-svg {
@@ -301,12 +293,9 @@
 }
 
 .pt-fuel-pct {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 900;
-  background: linear-gradient(135deg, #5e17eb, #E9A23B);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #5e17eb;
   line-height: 1.2;
 }
 

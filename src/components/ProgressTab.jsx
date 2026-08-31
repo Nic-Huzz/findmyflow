@@ -225,13 +225,9 @@ export default function ProgressTab({ userId }) {
             </div>
             <svg viewBox="0 0 200 200" className="pt-fuel-svg">
               <defs>
-                <linearGradient id="fuelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#5e17eb" />
-                  <stop offset="100%" stopColor="#E9A23B" />
-                </linearGradient>
                 <linearGradient id="fuelFill" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#5e17eb" stopOpacity="0.15" />
-                  <stop offset="100%" stopColor="#E9A23B" stopOpacity="0.15" />
+                  <stop offset="0%" stopColor="#5e17eb" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.12" />
                 </linearGradient>
               </defs>
               {/* Grid diamonds */}
@@ -251,13 +247,13 @@ export default function ProgressTab({ userId }) {
               <polygon
                 points={`100,${100 - (fuel.mastery / 100) * 70} ${100 + (fuel.meaning / 100) * 70},100 100,${100 + (fuel.connection / 100) * 70} ${100 - (fuel.choice / 100) * 70},100`}
                 fill="url(#fuelFill)"
-                stroke="url(#fuelGrad)" strokeWidth="2.5" strokeLinejoin="round"
+                stroke="#5e17eb" strokeWidth="2" strokeLinejoin="round"
               />
               {/* Dots */}
-              <circle cx="100" cy={100 - (fuel.mastery / 100) * 70} r="5" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
-              <circle cx={100 + (fuel.meaning / 100) * 70} cy="100" r="5" fill="#E9A23B" stroke="#fff" strokeWidth="2" />
-              <circle cx="100" cy={100 + (fuel.connection / 100) * 70} r="5" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
-              <circle cx={100 - (fuel.choice / 100) * 70} cy="100" r="5" fill="#E9A23B" stroke="#fff" strokeWidth="2" />
+              <circle cx="100" cy={100 - (fuel.mastery / 100) * 70} r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
+              <circle cx={100 + (fuel.meaning / 100) * 70} cy="100" r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
+              <circle cx="100" cy={100 + (fuel.connection / 100) * 70} r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
+              <circle cx={100 - (fuel.choice / 100) * 70} cy="100" r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
             </svg>
           </div>
         </div>
