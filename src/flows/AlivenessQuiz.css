@@ -70,7 +70,11 @@
   font-size: 18px;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 12px;
+  margin: 0 0 16px;
+}
+
+.aliveness-quiz .aq-hook-lines p:last-child {
+  margin-top: 8px;
 }
 
 /* ============ PROGRESS DOTS ============ */
@@ -115,6 +119,7 @@
   flex: 1;
   width: 100%;
   text-align: center;
+  padding-top: 20px;
 }
 
 .aliveness-quiz .aq-category-badge {
@@ -334,7 +339,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  padding: 2px 10px;
+  padding: 3px 12px;
   border-radius: 12px;
 }
 
@@ -358,7 +363,13 @@
 .aliveness-quiz .aq-bar-fill {
   height: 100%;
   border-radius: 4px;
-  transition: width 1s ease-out;
+  animation: aqBarGrow 1s ease-out forwards;
+  transform-origin: left;
+}
+
+@keyframes aqBarGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 .aliveness-quiz .aq-bar-fill.high {
@@ -473,6 +484,10 @@
 
 /* CTA section */
 .aliveness-quiz .aq-cta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   text-align: center;
   margin-top: 16px;
   padding-bottom: 40px;
@@ -533,7 +548,9 @@
 }
 
 .aliveness-quiz .aq-leverage-block {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .aliveness-quiz .aq-leverage-block:last-child {
