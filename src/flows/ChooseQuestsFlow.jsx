@@ -136,6 +136,13 @@ export default function ChooseQuestsFlow() {
     }
   }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
 
+  // Auto-advance past deep dive if ddIndex exceeds selected count
+  const allExpsForDD = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+  const ddAutoAdvance = step === STEPS.DEEP_DIVE && allExpsForDD.length > 0 && ddIndex >= allExpsForDD.length
+  useEffect(() => {
+    if (ddAutoAdvance) callAI()
+  }, [ddAutoAdvance]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Path selection ──
   const togglePath = useCallback((idx) => {
     hapticLight()
@@ -384,13 +391,6 @@ export default function ChooseQuestsFlow() {
       </div>
     )
   }
-
-  // ── DEEP DIVE: auto-advance if index out of bounds ──
-  const allExpsForDD = step === STEPS.DEEP_DIVE ? [...vibeRise, ...fun].filter(e => selectedIds.has(e.id)) : []
-  const ddAutoAdvance = step === STEPS.DEEP_DIVE && allExpsForDD.length > 0 && ddIndex >= allExpsForDD.length
-  useEffect(() => {
-    if (ddAutoAdvance) callAI()
-  }, [ddAutoAdvance, callAI])
 
   // ── DEEP DIVE ──
   if (step === STEPS.DEEP_DIVE) {
