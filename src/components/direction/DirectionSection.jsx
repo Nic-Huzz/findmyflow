@@ -43,8 +43,10 @@ export default function DirectionSection({ userId, onUpdate }) {
   const isComplete = (id) => status[id]
   const completedCount = CARDS.filter(c => isComplete(c.id)).length
 
-  // Find next unlocked card (first incomplete)
-  const nextCardId = CARDS.find(c => !isComplete(c.id))?.id || null
+  // Find next unlocked card (first incomplete in cards 1-3, card 4 is always accessible after 1-3)
+  const coreComplete = isComplete('lifeMapReview') && isComplete('problemMotivation') && isComplete('multiplication')
+  const nextCardId = CARDS.slice(0, 3).find(c => !isComplete(c.id))?.id
+    || (coreComplete && !isComplete('firstIncome') ? 'firstIncome' : null)
 
   const handleCardDone = () => {
     setActiveCard(null)
@@ -60,7 +62,7 @@ export default function DirectionSection({ userId, onUpdate }) {
     return <ProblemMotivation userId={userId} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />
   }
   if (activeCard === 'multiplication') {
-    return <MultiplicationReveal userId={userId} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />
+    return <MultiplicationReveal userId={userId} problemSelections={status.problemSelections} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />
   }
   if (activeCard === 'firstIncome') {
     return <IncomePrompt userId={userId} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />

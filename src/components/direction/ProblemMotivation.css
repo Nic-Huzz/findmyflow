@@ -1,6 +1,6 @@
 /* ProblemMotivation — Card 2: What drives you */
 
-.pm-container {
+.pmot-container {
   min-height: 100vh;
   background: #f5f5f0;
   padding: 20px;
@@ -8,7 +8,7 @@
   position: relative;
 }
 
-.pm-close {
+.pmot-close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -25,64 +25,64 @@
   color: #666;
 }
 
-.pm-loading {
+.pmot-loading {
   text-align: center;
   padding: 60px 20px;
   color: #999;
   font-size: 15px;
 }
 
-.pm-empty {
+.pmot-empty {
   text-align: center;
   padding: 60px 20px;
 }
 
-.pm-empty h2 {
+.pmot-empty h2 {
   font-size: 20px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0 0 8px;
 }
 
-.pm-empty p {
+.pmot-empty p {
   font-size: 14px;
   color: #888;
   line-height: 1.5;
 }
 
-.pm-header {
+.pmot-header {
   padding-top: 20px;
   margin-bottom: 24px;
 }
 
-.pm-title {
+.pmot-title {
   font-size: 24px;
   font-weight: 800;
   color: #1a1a1a;
   margin: 0 0 8px;
 }
 
-.pm-subtitle {
+.pmot-subtitle {
   font-size: 15px;
   color: #555;
   margin: 0 0 4px;
   line-height: 1.5;
 }
 
-.pm-hint {
+.pmot-hint {
   font-size: 13px;
   color: #999;
   margin: 0;
 }
 
-.pm-categories {
+.pmot-categories {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 24px;
 }
 
-.pm-cat {
+.pmot-cat {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -96,41 +96,41 @@
   font-family: inherit;
 }
 
-.pm-cat:active {
+.pmot-cat:active {
   transform: scale(0.98);
 }
 
-.pm-cat.selected {
+.pmot-cat.selected {
   border-color: #5e17eb;
   background: rgba(94, 23, 235, 0.03);
   box-shadow: 0 2px 8px rgba(94, 23, 235, 0.08);
 }
 
-.pm-cat-top {
+.pmot-cat-top {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.pm-cat-check {
+.pmot-cat-check {
   font-size: 16px;
   color: #ccc;
   width: 20px;
   flex-shrink: 0;
 }
 
-.pm-cat.selected .pm-cat-check {
+.pmot-cat.selected .pmot-cat-check {
   color: #5e17eb;
 }
 
-.pm-cat-name {
+.pmot-cat-name {
   flex: 1;
   font-weight: 600;
   font-size: 15px;
   color: #1a1a1a;
 }
 
-.pm-cat-count {
+.pmot-cat-count {
   font-size: 12px;
   color: #999;
   background: #f0f0ec;
@@ -139,19 +139,19 @@
   font-weight: 600;
 }
 
-.pm-cat.selected .pm-cat-count {
+.pmot-cat.selected .pmot-cat-count {
   background: rgba(94, 23, 235, 0.08);
   color: #5e17eb;
 }
 
-.pm-cat-tagline {
+.pmot-cat-tagline {
   font-size: 13px;
   color: #888;
   line-height: 1.4;
   padding-left: 30px;
 }
 
-.pm-fixed {
+.pmot-fixed {
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -162,7 +162,7 @@
   background: linear-gradient(transparent, #f5f5f0 20%);
 }
 
-.pm-cta {
+.pmot-cta {
   width: 100%;
   padding: 16px;
   border-radius: 14px;
@@ -175,7 +175,7 @@
   font-family: inherit;
 }
 
-.pm-cta:disabled {
+.pmot-cta:disabled {
   opacity: 0.5;
   background: #ccc;
 }

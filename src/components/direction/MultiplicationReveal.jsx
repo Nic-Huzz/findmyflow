@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import { getTopSkills, getDomeFuel, getDirectionStatus } from '../../lib/directionEngine'
+import { getTopSkills, getDomeFuel } from '../../lib/directionEngine'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import problemTaxonomy from '../../../public/data/problemTaxonomyV2.json'
@@ -34,7 +34,7 @@ const SKILL_VERBS = {
   speaking_up: 'speak up',
 }
 
-export default function MultiplicationReveal({ userId, onComplete, onClose }) {
+export default function MultiplicationReveal({ userId, problemSelections = [], onComplete, onClose }) {
   const [beat, setBeat] = useState(0) // 0 = loading, 1-4 = reveal beats, 5 = final
   const [skills, setSkills] = useState([])
   const [problems, setProblems] = useState([])
@@ -47,14 +47,12 @@ export default function MultiplicationReveal({ userId, onComplete, onClose }) {
     Promise.all([
       getTopSkills(userId, 2),
       getDomeFuel(userId, 3),
-      getDirectionStatus(userId),
-    ]).then(([skillData, fuelData, status]) => {
+    ]).then(([skillData, fuelData]) => {
       setSkills(skillData)
       setFuel(fuelData)
 
-      // Get selected problems from Card 2
-      const selectedIds = status.problemSelections || []
-      const problemData = selectedIds
+      // Use problem selections passed from DirectionSection (avoids re-fetch race)
+      const problemData = problemSelections
         .map(id => CATEGORY_META[id])
         .filter(Boolean)
       setProblems(problemData)

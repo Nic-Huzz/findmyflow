@@ -99,25 +99,25 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
 
   if (loading) {
     return (
-      <div className="pm-container">
-        <div className="pm-loading">Looking at your story...</div>
+      <div className="pmot-container">
+        <div className="pmot-loading">Looking at your story...</div>
       </div>
     )
   }
 
   if (triggeredClassify && (!profile || profile.length === 0)) {
     return (
-      <div className="pm-container">
-        <div className="pm-loading">Processing your story...</div>
+      <div className="pmot-container">
+        <div className="pmot-loading">Processing your story...</div>
       </div>
     )
   }
 
   if (!profile || profile.length === 0) {
     return (
-      <div className="pm-container">
-        <button className="pm-close" onClick={onClose}>&times;</button>
-        <div className="pm-empty">
+      <div className="pmot-container">
+        <button className="pmot-close" onClick={onClose}>&times;</button>
+        <div className="pmot-empty">
           <h2>No problem data yet</h2>
           <p>Complete the Life Map first so we can find the problems that drive you.</p>
         </div>
@@ -126,18 +126,18 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
   }
 
   return (
-    <div className="pm-container">
-      <button className="pm-close" onClick={onClose}>&times;</button>
+    <div className="pmot-container">
+      <button className="pmot-close" onClick={onClose}>&times;</button>
 
-      <div className="pm-header">
-        <h2 className="pm-title">What drives you</h2>
-        <p className="pm-subtitle">
+      <div className="pmot-header">
+        <h2 className="pmot-title">What drives you</h2>
+        <p className="pmot-subtitle">
           Which of these do you feel like the experiences you love are motivated by?
         </p>
-        <p className="pm-hint">Select 1-3</p>
+        <p className="pmot-hint">Select 1-3</p>
       </div>
 
-      <div className="pm-categories">
+      <div className="pmot-categories">
         {profile.map(({ id, count }) => {
           const meta = CATEGORY_META[id]
           if (!meta) return null
@@ -146,23 +146,23 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
           return (
             <button
               key={id}
-              className={`pm-cat ${isSelected ? 'selected' : ''}`}
+              className={`pmot-cat ${isSelected ? 'selected' : ''}`}
               onClick={() => toggleCategory(id)}
             >
-              <div className="pm-cat-top">
-                <span className="pm-cat-check">{isSelected ? '●' : '○'}</span>
-                <span className="pm-cat-name">{meta.displayName}</span>
-                <span className="pm-cat-count">{count}</span>
+              <div className="pmot-cat-top">
+                <span className="pmot-cat-check">{isSelected ? '●' : '○'}</span>
+                <span className="pmot-cat-name">{meta.displayName}</span>
+                <span className="pmot-cat-count">{count}</span>
               </div>
-              <div className="pm-cat-tagline">{meta.tagline}</div>
+              <div className="pmot-cat-tagline">{meta.tagline}</div>
             </button>
           )
         })}
       </div>
 
-      <div className="pm-fixed">
+      <div className="pmot-fixed">
         <button
-          className="pm-cta"
+          className="pmot-cta"
           disabled={selected.size === 0 || saving}
           onClick={handleSave}
         >
