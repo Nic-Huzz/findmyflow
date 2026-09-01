@@ -1,0 +1,210 @@
+/* IncomePrompt — Card 4: The First Dollar */
+
+.ip-container {
+  min-height: 100vh;
+  background: #f5f5f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  position: relative;
+}
+
+.ip-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.ip-content {
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+}
+
+.ip-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 16px;
+}
+
+.ip-quote {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+  margin: 0 0 32px;
+}
+
+.ip-question {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+}
+
+.ip-hint {
+  font-size: 13px;
+  color: #999;
+  margin: 0 0 24px;
+  line-height: 1.4;
+}
+
+.ip-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.ip-btn {
+  padding: 14px 28px;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s ease;
+}
+
+.ip-btn:active {
+  transform: scale(0.96);
+}
+
+.ip-btn-yes {
+  background: #E9A23B;
+  color: white;
+}
+
+.ip-btn-no {
+  background: white;
+  color: #666;
+  border: 1.5px solid #e8e8e4;
+}
+
+/* Amount input section */
+.ip-amount-section {
+  margin-top: 24px;
+}
+
+.ip-amount-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+.ip-amount-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.ip-currency-picker {
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1.5px solid #e8e8e4;
+  background: white;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.ip-amount-input {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #e8e8e4;
+  background: white;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  width: 140px;
+  text-align: center;
+  font-family: inherit;
+}
+
+.ip-amount-input::placeholder {
+  color: #ccc;
+}
+
+.ip-save-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: #5e17eb;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ip-save-btn:disabled {
+  opacity: 0.5;
+  background: #ccc;
+}
+
+/* Not yet state */
+.ip-not-yet {
+  margin-top: 24px;
+}
+
+.ip-not-yet-text {
+  font-size: 15px;
+  color: #888;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.ip-not-yet-btn {
+  padding: 14px 32px;
+  border-radius: 14px;
+  border: 1.5px solid #e8e8e4;
+  background: white;
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Celebration */
+.ip-celebration {
+  text-align: center;
+}
+
+.ip-celebration-emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.ip-celebration-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #E9A23B;
+  margin: 0 0 8px;
+}
+
+.ip-celebration-sub {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.5;
+  margin: 0;
+}

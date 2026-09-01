@@ -19,11 +19,21 @@ import confetti from 'canvas-confetti'
 import WeeklyReviewCard from './WeeklyReviewCard'
 import './WeeklyReview.css'
 
-export default function WeeklyReview({ userId, weekStart, onComplete, onClose }) {
+const CURRENCIES = [
+  { code: 'USD', symbol: '$' },
+  { code: 'AUD', symbol: 'A$' },
+  { code: 'GBP', symbol: '£' },
+  { code: 'EUR', symbol: '€' },
+  { code: 'IDR', symbol: 'Rp' },
+]
+
+export default function WeeklyReview({ userId, weekStart, heroStage = 0, onComplete, onClose }) {
   const [narrativeRevision, setNarrativeRevision] = useState('')
   const [identityDid, setIdentityDid] = useState(null)
   const [identityText, setIdentityText] = useState('')
   const [compoundingText, setCompoundingText] = useState('')
+  const [incomeAmount, setIncomeAmount] = useState('')
+  const [incomeCurrency, setIncomeCurrency] = useState('USD')
   const [saving, setSaving] = useState(false)
   const [savedReview, setSavedReview] = useState(null)
 
@@ -54,6 +64,21 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
         p_points: 15,
         p_week_start: getWeekStartLocal(),
       })
+
+      // Save weekly income if entered (aggregates into monthly via upsert)
+      const incomeNum = parseFloat(incomeAmount)
+      if (incomeNum > 0) {
+        const now = new Date()
+        const monthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+        // Upsert: if already reported this month, update amount
+        await supabase.from('income_self_reports').upsert({
+          user_id: userId,
+          month_year: monthYear,
+          amount_cents: Math.round(incomeNum * 100),
+          currency: incomeCurrency,
+          source: 'self_report',
+        }, { onConflict: 'user_id,month_year' }).catch(() => {})
+      }
 
       hapticSuccess()
       confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } })
@@ -203,6 +228,37 @@ export default function WeeklyReview({ userId, weekStart, onComplete, onClose })
               maxLength={200}
             />
           </div>
+
+          {/* Q4: Weekly income (stage 8+ only) */}
+          {heroStage >= 8 && (
+            <div className="wr-question">
+              <div className="wr-question-top">
+                <span className="wr-question-icon">💰</span>
+                <span className="wr-question-label">Income</span>
+              </div>
+              <p className="wr-question-text">Did you earn anything from your experiences this week?</p>
+              <div className="wr-income-row">
+                <select
+                  className="wr-income-currency"
+                  value={incomeCurrency}
+                  onChange={e => setIncomeCurrency(e.target.value)}
+                >
+                  {CURRENCIES.map(c => (
+                    <option key={c.code} value={c.code}>{c.symbol} {c.code}</option>
+                  ))}
+                </select>
+                <input
+                  className="wr-income-input"
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="0"
+                  value={incomeAmount}
+                  onChange={e => setIncomeAmount(e.target.value)}
+                />
+              </div>
+              <p className="wr-income-hint">Leave blank if nothing this week. No pressure.</p>
+            </div>
+          )}
 
         </div>
 

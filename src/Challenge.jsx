@@ -1526,6 +1526,7 @@ function Challenge() {
         <WeeklyReview
           userId={user.id}
           weekStart={reviewWeekStart}
+          heroStage={currentJourneyLevel}
           onComplete={() => { setShowWeeklyReview(false); setWeeklyReviewNeeded(false) }}
           onClose={() => setShowWeeklyReview(false)}
         />
