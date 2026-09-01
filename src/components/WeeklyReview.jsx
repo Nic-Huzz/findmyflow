@@ -65,16 +65,23 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
         p_week_start: getWeekStartLocal(),
       })
 
-      // Save weekly income if entered (aggregates into monthly via upsert)
+      // Save weekly income if entered (accumulates into monthly total)
       const incomeNum = parseFloat(incomeAmount)
       if (incomeNum > 0) {
         const now = new Date()
         const monthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-        // Upsert: if already reported this month, update amount
+        const weekCents = Math.round(incomeNum * 100)
+
+        // Read existing month total, then add this week's amount
+        const { data: existing } = await supabase.from('income_self_reports')
+          .select('amount_cents').eq('user_id', userId).eq('month_year', monthYear).maybeSingle()
+
+        const newTotal = (existing?.amount_cents || 0) + weekCents
+
         await supabase.from('income_self_reports').upsert({
           user_id: userId,
           month_year: monthYear,
-          amount_cents: Math.round(incomeNum * 100),
+          amount_cents: newTotal,
           currency: incomeCurrency,
           source: 'self_report',
         }, { onConflict: 'user_id,month_year' }).catch(() => {})

@@ -122,7 +122,7 @@ export async function checkHeroGraduation(userId) {
     if (count >= 3) newStage = 10
   }
 
-  // 10→11: Income >= expenses target
+  // 10→11: Income >= expenses target (expenses_target_cents UI deferred to stage 10 scope)
   if (currentStage === 10) {
     const [{ data: latest }, { data: stage }] = await Promise.all([
       supabase.from('income_self_reports')
@@ -139,20 +139,16 @@ export async function checkHeroGraduation(userId) {
 
   // Stage 12: Self-declared + threshold (deferred)
 
-  // If graduated, update the stage
+  // If graduated, update the stage (upsert to handle missing rows)
   if (newStage !== null && newStage > currentStage) {
-    const { count } = await supabase
+    await supabase
       .from('user_stage_progress')
-      .update({ current_journey_level: newStage })
-      .eq('user_id', userId)
-
-    // Fallback: if no row existed, create minimal one
-    if (count === 0) {
-      await supabase
-        .from('user_stage_progress')
-        .insert({ user_id: userId, current_journey_level: newStage, conversations_logged: 0 })
-        .catch(() => {})
-    }
+      .upsert({
+        user_id: userId,
+        current_journey_level: newStage,
+        conversations_logged: stageData?.conversations_logged || 0,
+      }, { onConflict: 'user_id' })
+      .catch(() => {})
 
     // Auto-post stage graduation to community feed
     const STAGE_NAMES = {

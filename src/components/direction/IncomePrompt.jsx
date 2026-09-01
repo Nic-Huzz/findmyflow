@@ -8,7 +8,7 @@
  * After first report, income question moves to Weekly Review.
  */
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import './IncomePrompt.css'
@@ -32,6 +32,9 @@ export default function IncomePrompt({ userId, onComplete, onClose }) {
   const [currency, setCurrency] = useState('USD')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const timerRef = useRef(null)
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current) }, [])
 
   const handleYes = () => {
     hapticLight()
@@ -61,7 +64,7 @@ export default function IncomePrompt({ userId, onComplete, onClose }) {
     }, { onConflict: 'user_id,month_year' })
 
     setSaved(true)
-    setTimeout(() => onComplete?.(), 2000)
+    timerRef.current = setTimeout(() => onComplete?.(), 2000)
   }
 
   // Saved celebration
