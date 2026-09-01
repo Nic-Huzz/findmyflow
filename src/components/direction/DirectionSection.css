@@ -1,0 +1,113 @@
+/* DirectionSection — Phase 2→3 bridge card container */
+
+.dir-section {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.dir-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.dir-header-icon {
+  font-size: 20px;
+}
+
+.dir-header-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.dir-header-count {
+  font-size: 13px;
+  color: #999;
+  font-weight: 600;
+}
+
+.dir-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dir-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #e8e8e4;
+  background: #fafaf8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.dir-card:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.dir-card.done {
+  border-color: #d4edda;
+  background: #f0faf2;
+}
+
+.dir-card.next {
+  border-color: #5e17eb;
+  background: white;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.08);
+}
+
+.dir-card.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dir-card-status {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.dir-card.done .dir-card-status {
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dir-card-label {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+
+.dir-card.done .dir-card-label {
+  color: #666;
+}
+
+.dir-card.next .dir-card-label {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.dir-card-arrow {
+  font-size: 18px;
+  color: #5e17eb;
+  font-weight: 700;
+}

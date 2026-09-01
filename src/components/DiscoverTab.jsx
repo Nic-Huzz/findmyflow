@@ -12,6 +12,7 @@ import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { isCoreNode } from '../lib/experienceDomeConfig'
 import DomeRadar from './DomeRadar'
+import DirectionSection from './direction/DirectionSection'
 import './DiscoverTab.css'
 
 const WEEK_KEY = 'weekly_experience_focus_'
@@ -20,7 +21,7 @@ function getWeekKey() {
   return WEEK_KEY + getWeekStartLocal()
 }
 
-export default function DiscoverTab({ userId, onUnlockTab }) {
+export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpdate }) {
   const navigate = useNavigate()
   const [essenceDone, setEssenceDone] = useState(false)
   const [domeCount, setDomeCount] = useState(0)
@@ -136,6 +137,16 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
 
   return (
     <div className="discover-tab">
+      {/* Phase 2→3 Direction Bridge (hero stage 8+) */}
+      {heroStage >= 8 && (
+        <DirectionSection userId={userId} onUpdate={onUpdate} />
+      )}
+
+      {/* Phase 1 content */}
+      {heroStage >= 8 && (
+        <div className="dt-revisit-label">Revisit</div>
+      )}
+
       {/* Experience to try this week */}
       {domeCount > 0 && (
         <div className="dt-weekly-card">

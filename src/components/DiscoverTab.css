@@ -13,6 +13,16 @@
   font-size: 14px;
 }
 
+/* Revisit label (when direction section is shown) */
+.dt-revisit-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #999;
+  margin-top: 8px;
+}
+
 /* Discovery cards */
 .dt-card {
   display: flex;

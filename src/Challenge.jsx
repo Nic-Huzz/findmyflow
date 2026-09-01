@@ -1705,7 +1705,7 @@ function Challenge() {
 
         {/* Journey Tab — hero stage, voice progress, thresholds */}
         {activeCategory === 'Discover' && (
-          <DiscoverTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
+          <DiscoverTab userId={user?.id} heroStage={currentJourneyLevel} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} onUpdate={() => { loadStageProgress(); loadUserScores() }} />
         )}
 
         {/* Level Tab */}
