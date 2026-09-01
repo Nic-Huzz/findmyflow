@@ -556,8 +556,8 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
 
             // Problem clusters: also classify into 12 problem taxonomy categories
             if (row.cluster_type === 'problems') {
-              supabase.functions.invoke('classify-problem-domains', {
-                body: { label: row.cluster_label },
+              supabase.functions.invoke('classify-quest-skills', {
+                body: { label: row.cluster_label, mode: 'problems' },
               }).then(({ data: tagData }) => {
                 if (tagData?.problem_tags?.length) {
                   supabase.from('nikigai_clusters')

@@ -35,7 +35,7 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
 
   useEffect(() => { loadProfile() }, [userId])
 
-  // If no tagged problems, trigger classify-problem-domains for untagged clusters
+  // If no tagged problems, trigger classify-quest-skills in problems mode for untagged clusters
   useEffect(() => {
     if (loading || triggeredClassify) return
     if (profile && profile.length === 0) {
@@ -53,8 +53,8 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
           // Classify in parallel (cap at 10 to avoid rate limits)
           const batch = untagged.slice(0, 10)
           await Promise.all(batch.map(async (row) => {
-            const { data: tagData } = await supabase.functions.invoke('classify-problem-domains', {
-              body: { label: row.cluster_label, insight: row.insight },
+            const { data: tagData } = await supabase.functions.invoke('classify-quest-skills', {
+              body: { label: row.cluster_label, insight: row.insight, mode: 'problems' },
             })
             if (tagData?.problem_tags?.length) {
               await supabase.from('nikigai_clusters')
