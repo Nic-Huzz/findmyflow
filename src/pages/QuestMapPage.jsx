@@ -45,22 +45,10 @@ export default function QuestMapPage() {
           .in('quest_id', activeQuests.map(q => q.id))
           .order('sort_order')
 
-        // Fetch depth_level from groan_challenges (no FK, separate query)
-        const groanIds = (allTasks || []).filter(t => t.groan_challenge_id).map(t => t.groan_challenge_id)
-        let depthMap = {}
-        if (groanIds.length > 0) {
-          const { data: depths } = await supabase
-            .from('groan_challenges')
-            .select('id, depth_level')
-            .in('id', groanIds)
-          depths?.forEach(d => { depthMap[d.id] = d.depth_level })
-        }
-
         const taskMap = {}
         ;(allTasks || []).forEach(t => {
-          const task = { ...t, depth_level: depthMap[t.groan_challenge_id] || null }
-          if (!taskMap[task.quest_id]) taskMap[task.quest_id] = []
-          taskMap[task.quest_id].push(task)
+          if (!taskMap[t.quest_id]) taskMap[t.quest_id] = []
+          taskMap[t.quest_id].push(t)
         })
         setQuestTasks(taskMap)
       }

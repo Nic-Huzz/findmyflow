@@ -41,7 +41,7 @@ export async function checkHeroGraduation(userId) {
   // 2→3: Dome completed (10+ experience ticks)
   if (currentStage === 2) {
     const { count } = await supabase
-      .from('experience_checkins')
+      .from('experience_dome_ratings')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
     if (count >= 10) newStage = 3

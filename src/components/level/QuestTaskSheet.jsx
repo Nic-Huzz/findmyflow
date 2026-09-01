@@ -11,8 +11,8 @@ import './QuestTaskSheet.css'
 const WAHOO_LABELS = {
   vibe: { emoji: '🔥', label: 'Vibe Rise', color: '#c084fc' },
   peace: { emoji: '😌', label: 'Fun', color: '#10b981' },
-  anxious: { emoji: '😰', label: 'Pressure', color: '#f59e0b' },
-  shutdown: { emoji: '😶', label: 'Uninterested', color: '#ef4444' },
+  anxious: { emoji: '😰', label: 'Stressful', color: '#f59e0b' },
+  shutdown: { emoji: '😶', label: 'Bored', color: '#ef4444' },
 }
 
 const EXPECT_LABELS = {

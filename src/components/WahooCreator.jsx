@@ -101,25 +101,6 @@ export default function WahooCreator({
         } catch (e) { /* non-blocking */ }
       }
 
-      // Save healing intention if protective voice was identified
-      if (protectiveVoice && linkedQuestId) {
-        const { data: taskRow } = await supabase
-          .from('quest_tasks')
-          .select('id')
-          .eq('groan_challenge_id', dbRecord.id)
-          .maybeSingle()
-        if (taskRow) {
-          await supabase.from('healing_intentions').upsert({
-            quest_task_id: taskRow.id,
-            user_id: userId,
-            protective_voice: protectiveVoice,
-            pattern: protectiveVoice,
-            healing_stage: 'pending',
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'quest_task_id' }).then(() => {}).catch(() => {})
-        }
-      }
-
       hapticSuccess()
       onWahooAccepted?.(null, protectiveVoice || null)
       setStep('success')

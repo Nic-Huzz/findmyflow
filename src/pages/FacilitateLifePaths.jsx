@@ -766,8 +766,8 @@ export default function FacilitateLifePaths() {
             <div className="flp-shortcut-row"><span>Advance step</span><span className="flp-shortcut-key">→</span></div>
             <div className="flp-shortcut-row"><span>Tag: Vibe Rise</span><span className="flp-shortcut-key">1</span></div>
             <div className="flp-shortcut-row"><span>Tag: Fun</span><span className="flp-shortcut-key">2</span></div>
-            <div className="flp-shortcut-row"><span>Tag: Pressure</span><span className="flp-shortcut-key">3</span></div>
-            <div className="flp-shortcut-row"><span>Tag: Uninterested</span><span className="flp-shortcut-key">4</span></div>
+            <div className="flp-shortcut-row"><span>Tag: Stressful</span><span className="flp-shortcut-key">3</span></div>
+            <div className="flp-shortcut-row"><span>Tag: Bored</span><span className="flp-shortcut-key">4</span></div>
             <div className="flp-shortcut-row"><span>Toggle panel</span><span className="flp-shortcut-key">H</span></div>
             <div className="flp-shortcut-row"><span>Reset</span><span className="flp-shortcut-key">Shift+R</span></div>
             <div className="flp-shortcut-row"><span>This overlay</span><span className="flp-shortcut-key">?</span></div>

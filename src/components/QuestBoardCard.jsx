@@ -25,8 +25,8 @@ const DIMENSION_META = {
 const STATE_LABELS = {
   vibe_rise: 'Vibe Rise',
   fun: 'Fun',
-  pressure: 'Pressure',
-  uninterested: 'Not for me',
+  pressure: 'Stressful',
+  uninterested: 'Bored',
 }
 
 const STATE_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', uninterested: '😐' }

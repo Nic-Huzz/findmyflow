@@ -461,7 +461,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 style={wahooClassification === 'anxious' ? { borderColor: '#ef4444', background: 'rgba(239,68,68,0.06)', color: '#ef4444' } : undefined}
               >
                 <span className="gcm-wahoo-emoji">😰</span>
-                <span className="gcm-wahoo-label">Pressure</span>
+                <span className="gcm-wahoo-label">Stressful</span>
               </button>
               <button
                 className={`gcm-wahoo-btn ${wahooClassification === 'shutdown' ? 'selected' : ''}`}
@@ -469,7 +469,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 style={wahooClassification === 'shutdown' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
               >
                 <span className="gcm-wahoo-emoji">😶</span>
-                <span className="gcm-wahoo-label">Uninterested</span>
+                <span className="gcm-wahoo-label">Bored</span>
               </button>
             </div>
             {/* Per-state response copy (Hades inversion: every state gets a meaningful response) */}

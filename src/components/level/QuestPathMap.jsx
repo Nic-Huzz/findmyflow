@@ -707,7 +707,7 @@ function FocusFooter({ quest, tasks, healingIntentions, trunkState, userId, onUp
   const activeHealing = Object.values(healingIntentions).find(h =>
     tasks.some(t => t.id === h.quest_task_id) && !h.outcome && h.healing_stage
   )
-  const destColour = SAFE_COLOURS[quest.predicted_state] || '#c084fc'
+  const destColour = quest.color || SAFE_COLOURS[quest.predicted_state] || '#c084fc'
 
   return (
     <>
