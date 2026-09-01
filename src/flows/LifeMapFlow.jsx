@@ -542,7 +542,7 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
           setProblemsClusters(prev => attachId(prev, 'problems'))
           setPersonasClusters(prev => attachId(prev, 'persona'))
 
-          // Auto-tag each cluster with skill_tags (non-blocking)
+          // Auto-tag each cluster with skill_tags + problem_tags (non-blocking)
           for (const row of inserted) {
             supabase.functions.invoke('classify-quest-skills', {
               body: { label: row.cluster_label },
@@ -552,7 +552,20 @@ Write exactly 3-4 paragraphs connecting the dots across their life. Rules:
                   .update({ skill_tags: tagData.skill_tags })
                   .eq('id', row.id).then(() => {})
               }
-            }).catch(() => {}) // non-critical
+            }).catch(() => {})
+
+            // Problem clusters: also classify into 12 problem taxonomy categories
+            if (row.cluster_type === 'problems') {
+              supabase.functions.invoke('classify-problem-domains', {
+                body: { label: row.cluster_label },
+              }).then(({ data: tagData }) => {
+                if (tagData?.problem_tags?.length) {
+                  supabase.from('nikigai_clusters')
+                    .update({ problem_tags: tagData.problem_tags })
+                    .eq('id', row.id).then(() => {})
+                }
+              }).catch(() => {})
+            }
           }
         }
       }
