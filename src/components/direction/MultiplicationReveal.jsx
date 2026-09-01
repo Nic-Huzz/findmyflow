@@ -69,7 +69,7 @@ export default function MultiplicationReveal({ userId, problemSelections = [], o
 
       setBeat(1)
     })
-  }, [userId])
+  }, [userId, problemSelections])
 
   const advance = () => {
     hapticLight()
