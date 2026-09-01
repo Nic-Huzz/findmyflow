@@ -62,7 +62,7 @@ export default function LifeMapReview({ userId, onComplete, onClose }) {
   }
 
   const handleAddMore = () => {
-    navigate('/life-map?append=true')
+    navigate('/life-map')
   }
 
   if (loading) {

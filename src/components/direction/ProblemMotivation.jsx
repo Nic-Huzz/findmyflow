@@ -27,6 +27,7 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
   const [triggeredClassify, setTriggeredClassify] = useState(false)
 
   const loadProfile = async () => {
+    setLoading(true)
     const data = await getProblemProfile(userId)
     setProfile(data)
     setLoading(false)
@@ -45,12 +46,12 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
         .select('id, cluster_label, insight')
         .eq('user_id', userId)
         .eq('cluster_type', 'problems')
-        .or('problem_tags.is.null,problem_tags.eq.{}')
+        .is('problem_tags', null)
         .is('is_removed', null)
         .then(async ({ data: untagged }) => {
           if (!untagged?.length) return
-          // Classify in parallel (max 5 concurrent)
-          const batch = untagged.slice(0, 20)
+          // Classify in parallel (cap at 10 to avoid rate limits)
+          const batch = untagged.slice(0, 10)
           await Promise.all(batch.map(async (row) => {
             const { data: tagData } = await supabase.functions.invoke('classify-problem-domains', {
               body: { label: row.cluster_label, insight: row.insight },

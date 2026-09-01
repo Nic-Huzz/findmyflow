@@ -11,6 +11,7 @@
 
 import { supabase } from './supabaseClient'
 import { findSkillSegment } from './wheelTaxonomy'
+import { VIRTUAL_EXPERIENCE_NODES } from './experienceDomeConfig'
 
 // ── Top skills by XP ──────────────────────────────────────────────────────────
 
@@ -74,6 +75,7 @@ export async function getProblemProfile(userId) {
 // Inline mapping: node_id prefix → primal branch
 // Derived from ruleBreakTreeData.js INDUSTRIES but simplified for this use case
 const PREFIX_TO_PRIMAL = {
+  'cars': 'Movement',
   'move': 'Movement', 'sub-endurance': 'Movement', 'sub-strength': 'Movement',
   'sub-flexibility': 'Movement', 'sub-temperature': 'Movement', 'sub-outdoor': 'Movement',
   'sub-dance': 'Movement',
@@ -115,8 +117,15 @@ const PRIMAL_OVERRIDES = {
   'sub-communal-2017': 'Shelter',  // Living abroad
 }
 
+// Build lookup for virtual experience nodes (exp-*)
+const VIRTUAL_PRIMAL = {}
+;(VIRTUAL_EXPERIENCE_NODES || []).forEach(n => {
+  if (n.id && n.primal) VIRTUAL_PRIMAL[n.id] = n.primal.charAt(0).toUpperCase() + n.primal.slice(1)
+})
+
 function getNodePrimal(nodeId) {
   if (PRIMAL_OVERRIDES[nodeId]) return PRIMAL_OVERRIDES[nodeId]
+  if (VIRTUAL_PRIMAL[nodeId]) return VIRTUAL_PRIMAL[nodeId]
 
   // Try increasingly shorter prefixes: "sub-dance-1900" → "sub-dance" → "sub"
   const parts = nodeId.split('-')
