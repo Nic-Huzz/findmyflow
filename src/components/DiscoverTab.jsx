@@ -254,10 +254,7 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       {domeCount > 0 && (
         <button
           className="dt-bridge-cta"
-          onClick={() => {
-            onUnlockTab?.('Quests')
-            navigate('/choose-quests')
-          }}
+          onClick={() => navigate('/choose-quests')}
         >
           <div className="dt-bridge-text">
             <span className="dt-bridge-title">Ready to go deeper on a life path?</span>
