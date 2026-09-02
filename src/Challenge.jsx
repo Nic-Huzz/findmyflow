@@ -382,7 +382,7 @@ function Challenge() {
   // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Progress']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Tune', 'Progress']))
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
   const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
@@ -426,24 +426,20 @@ function Challenge() {
         }
       }
 
-      // 4. Tab unlock logic — runs at ALL levels (not just level 0)
+      // 4. Tab unlock logic — Quests unlocks after /choose-quests completion
       const email = (await supabase.auth.getUser()).data?.user?.email
-      Promise.all([
-        supabase.from('groan_challenges')
-          .select('id').eq('user_id', user.id).in('status', ['active', 'completed']).limit(1),
-        supabase.from('nikigai_clusters')
-          .select('id').eq('user_id', user.id).eq('cluster_type', 'skills').eq('step_id', 'get_started').limit(1),
-        email
-          ? supabase.from('life_path_sessions').select('id').eq('client_email', email).limit(1)
-          : Promise.resolve({ data: [] }),
-      ]).then(([wahoos, skills, lifePaths]) => {
-        const unlocks = []
-        if (wahoos.data?.length > 0) unlocks.push('Tune') // first courage challenge unlocks Tune
-        if (lifePaths.data?.length > 0) unlocks.push('Quests') // life paths unlock Quests
-        if (unlocks.length > 0) {
-          setUnlockedTabs(prev => new Set([...prev, ...unlocks]))
-        }
-      })
+      if (email) {
+        supabase.from('life_path_sessions')
+          .select('id')
+          .eq('client_email', email)
+          .eq('step', 'complete')
+          .limit(1)
+          .then(({ data }) => {
+            if (data?.length > 0) {
+              setUnlockedTabs(prev => new Set([...prev, 'Quests']))
+            }
+          })
+      }
     }
 
     loadStageAndCheckGraduation()
