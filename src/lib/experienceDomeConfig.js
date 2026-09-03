@@ -638,6 +638,9 @@ const CORE_NODE_IDS = new Set([
   'exp-tattoo',              // Tattoo / body art / piercings
   'sub-fashion-2007',        // Slow fashion / thrifting
 
+  // Tools (1) — extending capability
+  'exp-coding',              // Coding / building software
+
   // Bonds (8) — Living abroad moved to Shelter, Unique stays dropped
   'intimacy-2012',           // Going on a date
   'sub-ordeal-2015',         // Retreat
@@ -730,6 +733,7 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-hosting-home', label: 'Hosting people in your home', branch: 'shelter-sacred', primal: 'shelter' },
   { id: 'exp-farmers-market', label: 'Visiting a farmers market', branch: 'food-regen', primal: 'nourishment' },
   { id: 'exp-new-cuisine', label: 'Trying a cuisine you\'ve never had', branch: 'food-regen', primal: 'nourishment' },
+  { id: 'exp-coding', label: 'Coding / building software', branch: 'tech', primal: 'tools' },
 ]
 
 // ── NS State colors ──
