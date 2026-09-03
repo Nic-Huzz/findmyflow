@@ -1,0 +1,374 @@
+/**
+ * experiencePricing.js — Domain-specific deal sizes for experience creators
+ *
+ * Maps dome node IDs to typical pricing across money model levels.
+ * Keyed by experienceIndustryMap node label (since users see labels, not IDs).
+ * Falls back to universal pricing from moneyModelLadder.js if no match.
+ *
+ * Confidence: high = published surveys/data, medium = multiple sources agree, low = estimated
+ * Sources researched Aug-Sep 2026. Prices in USD unless noted.
+ */
+
+export const EXPERIENCE_PRICING = {
+  // ── MOVEMENT ──────────────────────────────────────────────────────────────
+  'Yoga practice': {
+    employed: '$25-35/hr',
+    per_session: '$15-25/person (group), $75-150 (private)',
+    group_program: '$150-300/person (8 sessions)',
+    workshop_retreat: '$500-2,000/person (weekend retreat)',
+    confidence: 'high',
+  },
+  'CrossFit / functional fitness': {
+    employed: '$19-35/hr',
+    per_session: '$150-250/month (unlimited), $50-100 (PT)',
+    group_program: '$200-350/person (6-week challenge)',
+    workshop_retreat: '$150-300/person (seminar day)',
+    confidence: 'high',
+  },
+  'Jogging / recreational running': {
+    employed: '$20-35/hr',
+    per_session: '$100-300/month (1:1 online)',
+    group_program: '$200-1,200/person (race training)',
+    workshop_retreat: '$1,000-3,000/person (running retreat)',
+    confidence: 'medium',
+  },
+  'Cold plunge / ice bath': {
+    employed: '$25-50/hr',
+    per_session: '$65-111/person (group session)',
+    group_program: '$300-600/person (4-week course)',
+    workshop_retreat: '$1,200/person (week-long retreat)',
+    confidence: 'medium',
+  },
+  'Ecstatic dance / 5Rhythms': {
+    employed: '$25-40/hr',
+    per_session: '$15-28/person (30-80 attendees)',
+    group_program: '$80-200/person (4-session series)',
+    workshop_retreat: '$500-2,500/person (5-day retreat)',
+    confidence: 'low',
+  },
+  'Martial arts': {
+    employed: '$21-32/hr',
+    per_session: '$10-20/person (group), $30-150 (private)',
+    group_program: '$100-200/month (membership)',
+    workshop_retreat: '$100-300/person (day seminar)',
+    confidence: 'high',
+  },
+
+  // ── HEALING ───────────────────────────────────────────────────────────────
+  'Pranayama / breathwork': {
+    employed: '$25-50/hr',
+    per_session: '$25-90/person (group), $90-250 (private)',
+    group_program: '$300-600/person (6-week course)',
+    workshop_retreat: '$9,600-43,200 gross (weekend retreat)',
+    confidence: 'medium',
+  },
+  'Mindfulness meditation (MBSR)': {
+    employed: '$20-31/hr',
+    per_session: '$20-50/person (group), $50-150 (private)',
+    group_program: '$300-850/person (8-week MBSR)',
+    workshop_retreat: '$3,000-15,000 (corporate program)',
+    confidence: 'high',
+  },
+  'Sound bath (attending)': {
+    employed: '$25-50/hr',
+    per_session: '$25-75/person (group), $120-300 (private)',
+    group_program: '$200-500/person (6-week series)',
+    workshop_retreat: '$500-1,000 (corporate event)',
+    confidence: 'medium',
+  },
+  'CBT (cognitive behavioral therapy)': {
+    employed: '$30-60/hr',
+    per_session: '$100-250/person (therapy session)',
+    group_program: '$500-1,500/person (8-week CBT group)',
+    workshop_retreat: '$3,000-10,000 (corporate wellness)',
+    confidence: 'high',
+  },
+  'Psilocybin therapy': {
+    employed: '$30-50/hr (emerging)',
+    per_session: '$1,000-3,500/session (guided)',
+    group_program: '$2,000-5,000/person (multi-session)',
+    workshop_retreat: '$2,000-8,000/person (retreat)',
+    confidence: 'medium',
+  },
+  'Cacao + breathwork ceremony': {
+    employed: 'Rare (independent)',
+    per_session: '$45-111/person (ceremony)',
+    group_program: '$200-500/person (4-week series)',
+    workshop_retreat: '$495-3,995/person (retreat)',
+    confidence: 'medium',
+  },
+  'Cacao ceremony': {
+    employed: 'Rare (independent)',
+    per_session: '$45-111/person (ceremony)',
+    group_program: '$200-500/person (4-week series)',
+    workshop_retreat: '$495-3,995/person (retreat)',
+    confidence: 'medium',
+  },
+
+  // ── SLEEP ─────────────────────────────────────────────────────────────────
+  'Sleep tracking (wearable)': {
+    employed: '$18-45/hr',
+    per_session: '$100-300/person (consultation)',
+    group_program: '$350-1,500/person (4-8 weeks)',
+    workshop_retreat: '$3,500-5,000 (intensive program)',
+    confidence: 'high',
+  },
+  'Float tank / sensory deprivation': {
+    employed: '$15-22/hr',
+    per_session: '$60-90/person (60-min float)',
+    group_program: '$150-300 (3-pack membership)',
+    workshop_retreat: 'Venue model ($100k+/yr revenue)',
+    confidence: 'medium',
+  },
+  'Lucid dreaming': {
+    employed: 'N/A',
+    per_session: '$80-100/person (1:1 session)',
+    group_program: '$200-700/person (online course)',
+    workshop_retreat: '$695-1,750/person (retreat)',
+    confidence: 'medium',
+  },
+
+  // ── STORY ─────────────────────────────────────────────────────────────────
+  'Stand-up comedy': {
+    employed: 'Gig-based',
+    per_session: '$100-500 (headliner set)',
+    group_program: '$200-1,000/person (comedy course)',
+    workshop_retreat: '$1,500-25,000 (corporate event)',
+    confidence: 'high',
+  },
+  'Listening to podcasts': {
+    employed: '$25-45/hr (producer)',
+    per_session: '$500-2,000/episode (full production)',
+    group_program: '$500-2,000/person (podcast launch course)',
+    workshop_retreat: '$1,000-5,000/month (retainer)',
+    confidence: 'high',
+  },
+  'YouTube creator / watching': {
+    employed: '$29-50/hr (strategist)',
+    per_session: '$150-500/hr (consultation)',
+    group_program: '$500-3,000/person (growth course)',
+    workshop_retreat: '$1,500-10,000/month (channel retainer)',
+    confidence: 'medium',
+  },
+  'Short-form video (TikTok)': {
+    employed: '$20-40/hr (in-house)',
+    per_session: '$150-800/video (UGC deliverable)',
+    group_program: '$500-2,000/person (creation course)',
+    workshop_retreat: '$2,000-10,000/day (brand content day)',
+    confidence: 'high',
+  },
+  'Reading a novel': {
+    employed: '$18-30/hr (bookstore events)',
+    per_session: '$15-50/person (book club session)',
+    group_program: '$169-199/person (writing workshop)',
+    workshop_retreat: '$1,000-5,000 gross (author event)',
+    confidence: 'medium',
+  },
+
+  // ── BONDS ─────────────────────────────────────────────────────────────────
+  'Mastermind group': {
+    employed: 'N/A',
+    per_session: '$500-2,500/month per member',
+    group_program: '$5,000-50,000/year per member',
+    workshop_retreat: '$2,000-10,000/person (retreat day)',
+    confidence: 'high',
+  },
+  'Discord community': {
+    employed: '$28-45/hr (community manager)',
+    per_session: '$5-50/month per member',
+    group_program: '$99-500/person (cohort program)',
+    workshop_retreat: '$2,000-10,000+/month gross (paid community)',
+    confidence: 'high',
+  },
+  'Scouting / camping': {
+    employed: '$22-31/hr (outdoor educator)',
+    per_session: '$50-150/person/day',
+    group_program: '$200-800/person (week-long camp)',
+    workshop_retreat: '$1,000-3,000/person (multi-week)',
+    confidence: 'high',
+  },
+  'Dating apps': {
+    employed: 'N/A',
+    per_session: '$75-350/hr (dating coach)',
+    group_program: '$1,500-10,000/person (transformation)',
+    workshop_retreat: '$500-2,000/person (weekend workshop)',
+    confidence: 'high',
+  },
+  'Staying in an Airbnb': {
+    employed: 'N/A',
+    per_session: '$30-80/person (Airbnb Experience)',
+    group_program: 'Private experiences $200-500',
+    workshop_retreat: '$2,000-10,000+/month gross',
+    confidence: 'high',
+  },
+
+  // ── STATUS ────────────────────────────────────────────────────────────────
+  'Building a personal brand': {
+    employed: 'N/A',
+    per_session: '$150-500/hr (coaching)',
+    group_program: '$500-2,000/person (group program)',
+    workshop_retreat: '$1,000-5,000/person (intensive)',
+    confidence: 'medium',
+  },
+  'Using social media': {
+    employed: '$20-35/hr (in-house)',
+    per_session: '$60-110/hr (freelance)',
+    group_program: '$500-2,000/person (coaching program)',
+    workshop_retreat: '$750-7,000/month (retainer)',
+    confidence: 'high',
+  },
+  'Slow fashion / ethical fashion': {
+    employed: '$15-25/hr',
+    per_session: '$50-150/person (upcycling workshop)',
+    group_program: '$200-600/person (multi-session)',
+    workshop_retreat: '$1,500-4,000 gross (corporate event)',
+    confidence: 'medium',
+  },
+  'Minimalism / KonMari': {
+    employed: '$15-25/hr',
+    per_session: '$40-150/hr (organising session)',
+    group_program: '$200-600/person (virtual course)',
+    workshop_retreat: '$500-2,500 (full-home project)',
+    confidence: 'medium',
+  },
+
+  // ── NOURISHMENT ───────────────────────────────────────────────────────────
+  'Kombucha / cultured foods': {
+    employed: '$15-25/hr',
+    per_session: '$40-150/person (workshop)',
+    group_program: '$150-400/person (fermentation series)',
+    workshop_retreat: '$500-2,000/day (corporate/private)',
+    confidence: 'medium',
+  },
+  'Paleo / primal eating': {
+    employed: '$15-28/hr',
+    per_session: '$75-200/person (consultation)',
+    group_program: '$300-1,500/person (6-8 week coaching)',
+    workshop_retreat: '$2,000-5,000/day (corporate wellness)',
+    confidence: 'high',
+  },
+  'Farm-to-table dining': {
+    employed: '$18-35/hr (chef)',
+    per_session: '$89-195/person (supper club dinner)',
+    group_program: '$400-800/person (cooking series)',
+    workshop_retreat: '$3,000-15,000 gross (farm dinner event)',
+    confidence: 'high',
+  },
+  'Eating organic / Farmers market': {
+    employed: '$18-24/hr',
+    per_session: '$150-600/day gross (market day)',
+    group_program: '$200-500/person (CSA/farm education)',
+    workshop_retreat: '$1,000-5,000/day (farm-to-fork event)',
+    confidence: 'medium',
+  },
+  'Intermittent fasting': {
+    employed: '$20-30/hr',
+    per_session: '$75-200/person (consultation)',
+    group_program: '$200-500/person (6-8 week challenge)',
+    workshop_retreat: '$1,500-5,000 gross (day workshop)',
+    confidence: 'medium',
+  },
+
+  // ── TOOLS ─────────────────────────────────────────────────────────────────
+  'Using AI tools (ChatGPT, Claude)': {
+    employed: '$54/hr ($90-130k/yr)',
+    per_session: '$150-500/hr (consulting)',
+    group_program: '$500-3,000/person (workshop series)',
+    workshop_retreat: '$5,000-50,000+ (project engagement)',
+    confidence: 'high',
+  },
+
+  // ── PLAY ──────────────────────────────────────────────────────────────────
+  'Playing video games': {
+    employed: '$15-50/hr (esports coach)',
+    per_session: '$25-100/hr (coaching session)',
+    group_program: '$200-1,000/person (competitive bootcamp)',
+    workshop_retreat: '$5,000-25,000 gross (tournament/camp)',
+    confidence: 'medium',
+  },
+  'Eurogames (Catan)': {
+    employed: '$12-18/hr (cafe staff)',
+    per_session: '$5-10/person (table fee)',
+    group_program: '$300-700 (corporate team-building event)',
+    workshop_retreat: 'Venue: $200-600k/yr revenue',
+    confidence: 'medium',
+  },
+  'Poker': {
+    employed: 'N/A',
+    per_session: '$50-500/hr (1:1 coaching)',
+    group_program: '$99-699/person (online course/lab)',
+    workshop_retreat: '$2,000-10,000 gross (bootcamp)',
+    confidence: 'medium',
+  },
+
+  // ── SHELTER ───────────────────────────────────────────────────────────────
+  'Van life': {
+    employed: 'N/A',
+    per_session: '$2-10/1,000 views (content)',
+    group_program: '$200-2,000/person (van life course)',
+    workshop_retreat: '$500-50,000 (brand sponsorship)',
+    confidence: 'low',
+  },
+  'Digital nomad hub': {
+    employed: 'N/A',
+    per_session: '$500-1,500/month/person (co-living)',
+    group_program: '$1,050-3,500/month/person (curated program)',
+    workshop_retreat: '$15,000-50,000+/month gross (10-20 pax)',
+    confidence: 'medium',
+  },
+  'Wellness studio (SoulCycle)': {
+    employed: '$20-43/hr (instructor)',
+    per_session: '$25-40/person per class',
+    group_program: '$110-360/month (unlimited membership)',
+    workshop_retreat: '$10,000-50,000+/month gross (studio)',
+    confidence: 'high',
+  },
+
+  // ── FIRE ──────────────────────────────────────────────────────────────────
+  'Campfire / gathering around fire': {
+    employed: '$15-22/hr',
+    per_session: '$80-400/night (glamping site)',
+    group_program: 'N/A (venue model)',
+    workshop_retreat: '$3,000-15,000 gross (weekend event)',
+    confidence: 'medium',
+  },
+  'Fire ceremony / cacao circle': {
+    employed: '$20-40/hr',
+    per_session: '$30-80/person (group ceremony)',
+    group_program: '$300-1,000/person (facilitator training)',
+    workshop_retreat: '$2,000-8,000 gross (weekend retreat)',
+    confidence: 'low',
+  },
+  'Candle ritual / hygge': {
+    employed: '$14-20/hr',
+    per_session: '$35-60/person (candle workshop)',
+    group_program: '$150-300/person (craft series)',
+    workshop_retreat: '$1,000-3,000 gross (private event)',
+    confidence: 'high',
+  },
+
+  // ── THREAT ────────────────────────────────────────────────────────────────
+  'Privacy tools (Signal, VPN)': {
+    employed: '$50-90/hr ($100-175k/yr)',
+    per_session: '$100-400/hr (consulting)',
+    group_program: '$2,000-5,000/person (training)',
+    workshop_retreat: '$5,000-25,000 gross (corporate day)',
+    confidence: 'high',
+  },
+
+  // ── MISC (from dome but not in industry map) ──────────────────────────────
+  'Driving / Road trips': {
+    employed: '$21/hr (driving instructor)',
+    per_session: '$50-150/hr (lesson) or $100-375/person (tour)',
+    group_program: '$500-1,500/person (multi-day tour)',
+    workshop_retreat: '$2,500-6,000 gross/day (group tour)',
+    confidence: 'medium',
+  },
+  'Insurance': {
+    employed: '$25-45/hr ($50-85k base)',
+    per_session: 'Commission: 4-20% per policy',
+    group_program: 'N/A (commission model)',
+    workshop_retreat: 'Top brokers: $150-500k+/yr',
+    confidence: 'high',
+  },
+}
