@@ -62,6 +62,7 @@ export default function CurrentJobFlow() {
 
   // Save everything
   const handleSave = async () => {
+    if (saving) return
     setSaving(true)
     try {
       // Dominant NS state
@@ -125,6 +126,19 @@ export default function CurrentJobFlow() {
   }
 
   if (domeLoading) return <div className="cjf"><div className="cjf-container" style={{ textAlign: 'center', paddingTop: 60, color: 'rgba(0,0,0,0.3)' }}>Loading...</div></div>
+
+  if (!domeLoading && allItems.length === 0) return (
+    <div className="cjf"><div className="cjf-container">
+      <div className="cjf-done">
+        <div className="cjf-done-icon">🎯</div>
+        <h2>Rate some experiences first</h2>
+        <p>Complete the Experience Dome on the Discover tab so we know what experiences to show here.</p>
+        <div className="cjf-fixed">
+          <button onClick={() => navigate('/7-day-challenge')}>Go to Discover</button>
+        </div>
+      </div>
+    </div></div>
+  )
 
   const canProceedStep1 = jobTitle.trim().length > 0 && selectedIds.size >= 3
 
