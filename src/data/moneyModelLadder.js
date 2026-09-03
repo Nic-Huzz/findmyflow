@@ -10,6 +10,20 @@
 
 export const MONEY_MODEL_LADDER = [
   {
+    level: 0,
+    id: 'employed',
+    label: 'Work for Someone',
+    dealSize: '$20-50/hour',
+    description: 'Get paid hourly or casual to do your craft for someone else\'s business.',
+    strategies: [
+      'Apply to studios, gyms, retreat centres, or schools that need facilitators.',
+      'Offer to assist an experienced practitioner for free, then take paid shifts.',
+      'Check job boards for part-time roles in your experience domain.',
+    ],
+    courageChallenge: 'Get a paid shift doing what you love for someone else\'s business.',
+    icon: '🏢',
+  },
+  {
     level: 1,
     id: 'per_session',
     label: 'Per Session',

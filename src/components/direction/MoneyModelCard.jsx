@@ -13,7 +13,7 @@ import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import './MoneyModelCard.css'
 
 export default function MoneyModelCard({ userId, onComplete, onClose }) {
-  const [expanded, setExpanded] = useState(new Set([1])) // Level 1 auto-expanded
+  const [expanded, setExpanded] = useState(new Set([0])) // Level 0 auto-expanded
   const [saving, setSaving] = useState(false)
 
   const toggleLevel = (level) => {
