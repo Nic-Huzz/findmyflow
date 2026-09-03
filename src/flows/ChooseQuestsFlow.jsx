@@ -201,6 +201,36 @@ export default function ChooseQuestsFlow() {
         const path = paths[pathIdx]
         if (!path) continue
 
+        // Resolve career vector + format picks from deep dive data
+        // Match by checking which selected experiences the path draws from
+        const dd = deepDiveRef.current || {}
+        const allExps = [...vibeRise, ...fun]
+        const drawsFrom = (path.draws_from || '').toLowerCase()
+        let questVector = null
+        const questFormats = []
+
+        for (const exp of allExps) {
+          if (!selectedIds.has(exp.id)) continue
+          const expDd = dd[exp.id]
+          if (!expDd) continue
+
+          // Check if this path references this experience
+          if (drawsFrom.includes(exp.label.toLowerCase()) || path.name.toLowerCase().includes(exp.label.toLowerCase().split(' ')[0])) {
+            // Take the first non-hobby vector found
+            if (!questVector && expDd.vectors?.size) {
+              const vecs = [...expDd.vectors].filter(v => v !== 'hobby')
+              if (vecs.length) questVector = vecs[0]
+            }
+            // Collect format labels
+            if (expDd.formats?.size) {
+              const subNodes = getSubNodes(exp.id)
+              subNodes.filter(s => expDd.formats.has(s.id)).forEach(s => {
+                if (!questFormats.includes(s.label)) questFormats.push(s.label)
+              })
+            }
+          }
+        }
+
         // Create quest
         const { data: newQuest } = await supabase.from('quests').insert({
           user_id: user.id,
@@ -208,6 +238,8 @@ export default function ChooseQuestsFlow() {
           career_id: `dome-bridge-${Date.now()}-${pathIdx}`,
           predicted_state: 'vibe_rise',
           status: 'active',
+          career_vector: questVector,
+          format_picks: questFormats.length ? questFormats : null,
         }).select('id').single()
 
         const questId = newQuest?.id

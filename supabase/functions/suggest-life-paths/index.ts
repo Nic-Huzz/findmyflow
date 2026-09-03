@@ -81,8 +81,14 @@ serve(async (req) => {
         }
       }
 
-      if (domeProfile.vibeRise?.length) lines.push(`Full Vibe Rise profile: ${domeProfile.vibeRise.join(', ')}`)
-      if (domeProfile.fun?.length) lines.push(`Fun (enjoys but less intense): ${domeProfile.fun.join(', ')}`)
+      // Only include full dome lists in legacy mode (flat string selected).
+      // In enriched mode, the SELECTED section has all the signal the AI needs.
+      // Including the full lists causes the AI to draw from hobby/unselected items.
+      const isEnriched = domeProfile.selected?.length && typeof domeProfile.selected[0] !== 'string'
+      if (!isEnriched) {
+        if (domeProfile.vibeRise?.length) lines.push(`Full Vibe Rise profile: ${domeProfile.vibeRise.join(', ')}`)
+        if (domeProfile.fun?.length) lines.push(`Fun (enjoys but less intense): ${domeProfile.fun.join(', ')}`)
+      }
       if (domeProfile.pressure?.length) lines.push(`Growth edges (stressful but has done): ${domeProfile.pressure.join(', ')}`)
       if (domeProfile.essence) lines.push(`Essence archetype: ${domeProfile.essence}`)
       domeSection = `EXPERIENCE DOME (what their nervous system says about real-world experiences they've had):\n${lines.join('\n')}`
