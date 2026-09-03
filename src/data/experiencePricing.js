@@ -6,6 +6,7 @@
  * Falls back to universal pricing from moneyModelLadder.js if no match.
  *
  * Confidence: high = published surveys/data, medium = multiple sources agree, low = estimated
+ * confidencePct: 0-100 numeric confidence in the pricing accuracy. Update as real data comes in.
  * Sources researched Aug-Sep 2026. Prices in USD unless noted.
  */
 
@@ -17,6 +18,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$150-300/person (8 sessions)',
     workshop_retreat: '$500-2,000/person (weekend retreat)',
     confidence: 'high',
+    confidencePct: 90,
   },
   'CrossFit / functional fitness': {
     employed: '$19-35/hr',
@@ -24,6 +26,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-350/person (6-week challenge)',
     workshop_retreat: '$150-300/person (seminar day)',
     confidence: 'high',
+    confidencePct: 90,
   },
   'Jogging / recreational running': {
     employed: '$20-35/hr',
@@ -31,6 +34,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-1,200/person (race training)',
     workshop_retreat: '$1,000-3,000/person (running retreat)',
     confidence: 'medium',
+    confidencePct: 70,
   },
   'Cold plunge / ice bath': {
     employed: '$25-50/hr',
@@ -38,6 +42,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$300-600/person (4-week course)',
     workshop_retreat: '$1,200/person (week-long retreat)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Ecstatic dance / 5Rhythms': {
     employed: '$25-40/hr',
@@ -45,6 +50,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$80-200/person (4-session series)',
     workshop_retreat: '$500-2,500/person (5-day retreat)',
     confidence: 'low',
+    confidencePct: 35,
   },
   'Martial arts': {
     employed: '$21-32/hr',
@@ -52,6 +58,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$100-200/month (membership)',
     workshop_retreat: '$100-300/person (day seminar)',
     confidence: 'high',
+    confidencePct: 90,
   },
 
   // ── HEALING ───────────────────────────────────────────────────────────────
@@ -61,6 +68,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$300-600/person (6-week course)',
     workshop_retreat: '$9,600-43,200 gross (weekend retreat)',
     confidence: 'medium',
+    confidencePct: 70,
   },
   'Mindfulness meditation (MBSR)': {
     employed: '$20-31/hr',
@@ -68,6 +76,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$300-850/person (8-week MBSR)',
     workshop_retreat: '$3,000-15,000 (corporate program)',
     confidence: 'high',
+    confidencePct: 90,
   },
   'Sound bath (attending)': {
     employed: '$25-50/hr',
@@ -75,6 +84,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-500/person (6-week series)',
     workshop_retreat: '$500-1,000 (corporate event)',
     confidence: 'medium',
+    confidencePct: 65,
   },
   'CBT (cognitive behavioral therapy)': {
     employed: '$30-60/hr',
@@ -82,6 +92,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-1,500/person (8-week CBT group)',
     workshop_retreat: '$3,000-10,000 (corporate wellness)',
     confidence: 'high',
+    confidencePct: 90,
   },
   'Psilocybin therapy': {
     employed: '$30-50/hr (emerging)',
@@ -89,6 +100,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$2,000-5,000/person (multi-session)',
     workshop_retreat: '$2,000-8,000/person (retreat)',
     confidence: 'medium',
+    confidencePct: 55,
   },
   'Cacao + breathwork ceremony': {
     employed: 'Rare (independent)',
@@ -96,6 +108,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-500/person (4-week series)',
     workshop_retreat: '$495-3,995/person (retreat)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Cacao ceremony': {
     employed: 'Rare (independent)',
@@ -103,6 +116,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-500/person (4-week series)',
     workshop_retreat: '$495-3,995/person (retreat)',
     confidence: 'medium',
+    confidencePct: 60,
   },
 
   // ── SLEEP ─────────────────────────────────────────────────────────────────
@@ -112,6 +126,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$350-1,500/person (4-8 weeks)',
     workshop_retreat: '$3,500-5,000 (intensive program)',
     confidence: 'high',
+    confidencePct: 85,
   },
   'Float tank / sensory deprivation': {
     employed: '$15-22/hr',
@@ -119,6 +134,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$150-300 (3-pack membership)',
     workshop_retreat: 'Venue model ($100k+/yr revenue)',
     confidence: 'medium',
+    confidencePct: 65,
   },
   'Lucid dreaming': {
     employed: 'N/A',
@@ -126,6 +142,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-700/person (online course)',
     workshop_retreat: '$695-1,750/person (retreat)',
     confidence: 'medium',
+    confidencePct: 55,
   },
 
   // ── STORY ─────────────────────────────────────────────────────────────────
@@ -135,6 +152,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-1,000/person (comedy course)',
     workshop_retreat: '$1,500-25,000 (corporate event)',
     confidence: 'high',
+    confidencePct: 85,
   },
   'Listening to podcasts': {
     employed: '$25-45/hr (producer)',
@@ -142,6 +160,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-2,000/person (podcast launch course)',
     workshop_retreat: '$1,000-5,000/month (retainer)',
     confidence: 'high',
+    confidencePct: 85,
   },
   'YouTube creator / watching': {
     employed: '$29-50/hr (strategist)',
@@ -149,6 +168,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-3,000/person (growth course)',
     workshop_retreat: '$1,500-10,000/month (channel retainer)',
     confidence: 'medium',
+    confidencePct: 65,
   },
   'Short-form video (TikTok)': {
     employed: '$20-40/hr (in-house)',
@@ -156,6 +176,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-2,000/person (creation course)',
     workshop_retreat: '$2,000-10,000/day (brand content day)',
     confidence: 'high',
+    confidencePct: 85,
   },
   'Reading a novel': {
     employed: '$18-30/hr (bookstore events)',
@@ -163,6 +184,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$169-199/person (writing workshop)',
     workshop_retreat: '$1,000-5,000 gross (author event)',
     confidence: 'medium',
+    confidencePct: 55,
   },
 
   // ── BONDS ─────────────────────────────────────────────────────────────────
@@ -172,6 +194,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$5,000-50,000/year per member',
     workshop_retreat: '$2,000-10,000/person (retreat day)',
     confidence: 'high',
+    confidencePct: 80,
   },
   'Discord community': {
     employed: '$28-45/hr (community manager)',
@@ -179,6 +202,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$99-500/person (cohort program)',
     workshop_retreat: '$2,000-10,000+/month gross (paid community)',
     confidence: 'high',
+    confidencePct: 80,
   },
   'Scouting / camping': {
     employed: '$22-31/hr (outdoor educator)',
@@ -186,6 +210,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-800/person (week-long camp)',
     workshop_retreat: '$1,000-3,000/person (multi-week)',
     confidence: 'high',
+    confidencePct: 85,
   },
   'Dating apps': {
     employed: 'N/A',
@@ -193,6 +218,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$1,500-10,000/person (transformation)',
     workshop_retreat: '$500-2,000/person (weekend workshop)',
     confidence: 'high',
+    confidencePct: 80,
   },
   'Staying in an Airbnb': {
     employed: 'N/A',
@@ -200,6 +226,7 @@ export const EXPERIENCE_PRICING = {
     group_program: 'Private experiences $200-500',
     workshop_retreat: '$2,000-10,000+/month gross',
     confidence: 'high',
+    confidencePct: 85,
   },
 
   // ── STATUS ────────────────────────────────────────────────────────────────
@@ -209,6 +236,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-2,000/person (group program)',
     workshop_retreat: '$1,000-5,000/person (intensive)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Using social media': {
     employed: '$20-35/hr (in-house)',
@@ -216,6 +244,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-2,000/person (coaching program)',
     workshop_retreat: '$750-7,000/month (retainer)',
     confidence: 'high',
+    confidencePct: 85,
   },
   'Slow fashion / ethical fashion': {
     employed: '$15-25/hr',
@@ -223,6 +252,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-600/person (multi-session)',
     workshop_retreat: '$1,500-4,000 gross (corporate event)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Minimalism / KonMari': {
     employed: '$15-25/hr',
@@ -230,6 +260,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-600/person (virtual course)',
     workshop_retreat: '$500-2,500 (full-home project)',
     confidence: 'medium',
+    confidencePct: 65,
   },
 
   // ── NOURISHMENT ───────────────────────────────────────────────────────────
@@ -239,6 +270,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$150-400/person (fermentation series)',
     workshop_retreat: '$500-2,000/day (corporate/private)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Paleo / primal eating': {
     employed: '$15-28/hr',
@@ -246,6 +278,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$300-1,500/person (6-8 week coaching)',
     workshop_retreat: '$2,000-5,000/day (corporate wellness)',
     confidence: 'high',
+    confidencePct: 80,
   },
   'Farm-to-table dining': {
     employed: '$18-35/hr (chef)',
@@ -253,6 +286,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$400-800/person (cooking series)',
     workshop_retreat: '$3,000-15,000 gross (farm dinner event)',
     confidence: 'high',
+    confidencePct: 80,
   },
   'Eating organic / Farmers market': {
     employed: '$18-24/hr',
@@ -260,6 +294,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-500/person (CSA/farm education)',
     workshop_retreat: '$1,000-5,000/day (farm-to-fork event)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Intermittent fasting': {
     employed: '$20-30/hr',
@@ -267,6 +302,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-500/person (6-8 week challenge)',
     workshop_retreat: '$1,500-5,000 gross (day workshop)',
     confidence: 'medium',
+    confidencePct: 55,
   },
 
   // ── TOOLS ─────────────────────────────────────────────────────────────────
@@ -276,6 +312,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-3,000/person (workshop series)',
     workshop_retreat: '$5,000-50,000+ (project engagement)',
     confidence: 'high',
+    confidencePct: 85,
   },
 
   // ── PLAY ──────────────────────────────────────────────────────────────────
@@ -285,6 +322,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-1,000/person (competitive bootcamp)',
     workshop_retreat: '$5,000-25,000 gross (tournament/camp)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Eurogames (Catan)': {
     employed: '$12-18/hr (cafe staff)',
@@ -292,6 +330,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$300-700 (corporate team-building event)',
     workshop_retreat: 'Venue: $200-600k/yr revenue',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Poker': {
     employed: 'N/A',
@@ -299,6 +338,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$99-699/person (online course/lab)',
     workshop_retreat: '$2,000-10,000 gross (bootcamp)',
     confidence: 'medium',
+    confidencePct: 60,
   },
 
   // ── SHELTER ───────────────────────────────────────────────────────────────
@@ -308,6 +348,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-2,000/person (van life course)',
     workshop_retreat: '$500-50,000 (brand sponsorship)',
     confidence: 'low',
+    confidencePct: 30,
   },
   'Digital nomad hub': {
     employed: 'N/A',
@@ -315,6 +356,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$1,050-3,500/month/person (curated program)',
     workshop_retreat: '$15,000-50,000+/month gross (10-20 pax)',
     confidence: 'medium',
+    confidencePct: 65,
   },
   'Wellness studio (SoulCycle)': {
     employed: '$20-43/hr (instructor)',
@@ -322,6 +364,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$110-360/month (unlimited membership)',
     workshop_retreat: '$10,000-50,000+/month gross (studio)',
     confidence: 'high',
+    confidencePct: 85,
   },
 
   // ── FIRE ──────────────────────────────────────────────────────────────────
@@ -331,6 +374,7 @@ export const EXPERIENCE_PRICING = {
     group_program: 'N/A (venue model)',
     workshop_retreat: '$3,000-15,000 gross (weekend event)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Fire ceremony / cacao circle': {
     employed: '$20-40/hr',
@@ -338,6 +382,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$300-1,000/person (facilitator training)',
     workshop_retreat: '$2,000-8,000 gross (weekend retreat)',
     confidence: 'low',
+    confidencePct: 25,
   },
   'Candle ritual / hygge': {
     employed: '$14-20/hr',
@@ -345,6 +390,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$150-300/person (craft series)',
     workshop_retreat: '$1,000-3,000 gross (private event)',
     confidence: 'high',
+    confidencePct: 85,
   },
 
   // ── THREAT ────────────────────────────────────────────────────────────────
@@ -354,6 +400,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$2,000-5,000/person (training)',
     workshop_retreat: '$5,000-25,000 gross (corporate day)',
     confidence: 'high',
+    confidencePct: 85,
   },
 
   // ── MISC (from dome but not in industry map) ──────────────────────────────
@@ -363,6 +410,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-1,500/person (multi-day tour)',
     workshop_retreat: '$2,500-6,000 gross/day (group tour)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Buying insurance': {
     employed: '$25-45/hr ($50-85k base)',
@@ -370,6 +418,7 @@ export const EXPERIENCE_PRICING = {
     group_program: 'N/A (commission model)',
     workshop_retreat: 'Top brokers: $150-500k+/yr',
     confidence: 'high',
+    confidencePct: 85,
   },
   'Instagram identity curation': {
     employed: '$20-35/hr (in-house)',
@@ -377,6 +426,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-2,000/person (personal brand course)',
     workshop_retreat: '$1,500-5,000/month (done-for-you)',
     confidence: 'medium',
+    confidencePct: 55,
   },
   'Adventure retreat': {
     employed: 'Rare (independent operator)',
@@ -384,6 +434,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-4,000/person (3-7 day retreat)',
     workshop_retreat: '$10,000-50,000 gross (10-20 pax)',
     confidence: 'medium',
+    confidencePct: 60,
   },
   'Professional sports (watching/playing)': {
     employed: '$15-50/hr (esports/sports coach)',
@@ -391,6 +442,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$200-1,000/person (training camp)',
     workshop_retreat: '$5,000-25,000 gross (sports event)',
     confidence: 'medium',
+    confidencePct: 55,
   },
   'LEGO / construction toys': {
     employed: '$22-38/hr (builder/designer)',
@@ -398,6 +450,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$500-2,000/person (Serious Play program)',
     workshop_retreat: '$3,000-10,000 gross (corporate event)',
     confidence: 'medium',
+    confidencePct: 55,
   },
   'Firelight / candlelight ambiance': {
     employed: '$14-20/hr',
@@ -405,6 +458,7 @@ export const EXPERIENCE_PRICING = {
     group_program: '$150-300/person (ritual craft series)',
     workshop_retreat: '$1,000-3,000 gross (event design)',
     confidence: 'medium',
+    confidencePct: 55,
   },
   'Fire pit gathering': {
     employed: '$15-22/hr (hospitality)',
@@ -412,5 +466,6 @@ export const EXPERIENCE_PRICING = {
     group_program: 'N/A (venue/event model)',
     workshop_retreat: '$3,000-15,000 gross (weekend gathering)',
     confidence: 'medium',
+    confidencePct: 60,
   },
 }
