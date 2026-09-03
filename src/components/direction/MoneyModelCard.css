@@ -1,0 +1,210 @@
+/* MoneyModelCard — Direction Card 5: Money model ladder */
+
+.mmc-container {
+  min-height: 100vh;
+  background: #f5f5f0;
+  padding: 20px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  position: relative;
+}
+
+.mmc-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.mmc-header {
+  padding-top: 20px;
+  margin-bottom: 24px;
+}
+
+.mmc-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 6px;
+}
+
+.mmc-subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.mmc-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.mmc-level {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px solid #e8e8e4;
+  transition: border-color 0.2s;
+}
+
+.mmc-level.open {
+  border-color: #5e17eb;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.06);
+}
+
+.mmc-level-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.mmc-level-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f0f0ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.mmc-level.open .mmc-level-num {
+  background: #5e17eb;
+  color: white;
+}
+
+.mmc-level-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mmc-level-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.mmc-level-deal {
+  font-size: 13px;
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+.mmc-level-chevron {
+  color: #999;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.mmc-level-body {
+  padding: 0 16px 16px;
+}
+
+.mmc-level-desc {
+  font-size: 14px;
+  color: #555;
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.mmc-strategies {
+  margin-bottom: 14px;
+}
+
+.mmc-strategies-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+.mmc-strategy {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+  padding: 3px 0;
+}
+
+.mmc-strategy-dot {
+  color: #5e17eb;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mmc-courage {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(233, 162, 59, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(233, 162, 59, 0.15);
+}
+
+.mmc-courage-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.mmc-courage-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8B6914;
+  line-height: 1.4;
+}
+
+.mmc-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 480px;
+  width: 100%;
+  padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, #f5f5f0 20%);
+}
+
+.mmc-cta {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: #5e17eb;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.mmc-cta:disabled {
+  opacity: 0.6;
+}

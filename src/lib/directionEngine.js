@@ -185,6 +185,7 @@ export async function getDirectionStatus(userId) {
     lifeMapReview: !!revealMap.life_map_review,
     problemMotivation: !!revealMap.problem_motivation,
     multiplication: !!revealMap.multiplication,
+    moneyModel: !!revealMap.money_model,
     firstIncome: (income?.length || 0) > 0,
     problemSelections: revealMap.problem_motivation?.reveal_data?.selected || [],
     multiplicationData: revealMap.multiplication?.reveal_data || null,

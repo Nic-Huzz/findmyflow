@@ -2,11 +2,12 @@
  * DirectionSection.jsx — Phase 2→3 bridge card container
  *
  * Shows on Discover tab when hero stage >= 8.
- * 4 bite-size cards, completed one at a time:
+ * 5 bite-size cards, completed one at a time:
  * 1. Life Map Review
  * 2. Problem Motivation
  * 3. Multiplication Reveal
  * 4. First Income
+ * 5. Money Model
  */
 
 import { useState, useEffect } from 'react'
@@ -15,12 +16,14 @@ import LifeMapReview from './LifeMapReview'
 import ProblemMotivation from './ProblemMotivation'
 import MultiplicationReveal from './MultiplicationReveal'
 import IncomePrompt from './IncomePrompt'
+import MoneyModelCard from './MoneyModelCard'
 import './DirectionSection.css'
 
 const CARDS = [
   { id: 'lifeMapReview', label: 'Review your life story', icon: '📖' },
   { id: 'problemMotivation', label: 'What drives you', icon: '🔥' },
   { id: 'multiplication', label: 'Your direction', icon: '✦' },
+  { id: 'moneyModel', label: 'How to earn from this', icon: '📈' },
   { id: 'firstIncome', label: 'The first dollar', icon: '💰' },
 ]
 
@@ -43,10 +46,11 @@ export default function DirectionSection({ userId, onUpdate }) {
   const isComplete = (id) => status[id]
   const completedCount = CARDS.filter(c => isComplete(c.id)).length
 
-  // Find next unlocked card (first incomplete in cards 1-3, card 4 is always accessible after 1-3)
+  // Find next unlocked card (1-3 sequential, 4-5 accessible after 1-3 done)
   const coreComplete = isComplete('lifeMapReview') && isComplete('problemMotivation') && isComplete('multiplication')
   const nextCardId = CARDS.slice(0, 3).find(c => !isComplete(c.id))?.id
-    || (coreComplete && !isComplete('firstIncome') ? 'firstIncome' : null)
+    || (coreComplete && !isComplete('moneyModel') ? 'moneyModel' : null)
+    || (coreComplete && isComplete('moneyModel') && !isComplete('firstIncome') ? 'firstIncome' : null)
 
   const handleCardDone = () => {
     setActiveCard(null)
@@ -63,6 +67,9 @@ export default function DirectionSection({ userId, onUpdate }) {
   }
   if (activeCard === 'multiplication') {
     return <MultiplicationReveal userId={userId} problemSelections={status.problemSelections} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />
+  }
+  if (activeCard === 'moneyModel') {
+    return <MoneyModelCard userId={userId} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />
   }
   if (activeCard === 'firstIncome') {
     return <IncomePrompt userId={userId} onComplete={handleCardDone} onClose={() => setActiveCard(null)} />
