@@ -197,37 +197,41 @@ export default function ChooseQuestsFlow() {
     goTo(STEPS.SAVING)
 
     try {
+      const dd = deepDiveRef.current || {}
+      const allExps = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+
       for (const pathIdx of selectedPaths) {
         const path = paths[pathIdx]
         if (!path) continue
 
         // Resolve career vector + format picks from deep dive data
         // Match by checking which selected experiences the path draws from
-        const dd = deepDiveRef.current || {}
-        const allExps = [...vibeRise, ...fun]
         const drawsFrom = (path.draws_from || '').toLowerCase()
+        const pathName = (path.name || '').toLowerCase()
         let questVector = null
         const questFormats = []
 
         for (const exp of allExps) {
-          if (!selectedIds.has(exp.id)) continue
           const expDd = dd[exp.id]
           if (!expDd) continue
 
-          // Check if this path references this experience
-          if (drawsFrom.includes(exp.label.toLowerCase()) || path.name.toLowerCase().includes(exp.label.toLowerCase().split(' ')[0])) {
-            // Take the first non-hobby vector found
-            if (!questVector && expDd.vectors?.size) {
-              const vecs = [...expDd.vectors].filter(v => v !== 'hobby')
-              if (vecs.length) questVector = vecs[0]
-            }
-            // Collect format labels
-            if (expDd.formats?.size) {
-              const subNodes = getSubNodes(exp.id)
-              subNodes.filter(s => expDd.formats.has(s.id)).forEach(s => {
-                if (!questFormats.includes(s.label)) questFormats.push(s.label)
-              })
-            }
+          // Check if this path references this experience (full label match only)
+          const expLabel = exp.label.toLowerCase()
+          if (!drawsFrom.includes(expLabel) && !pathName.includes(expLabel)) continue
+
+          // Take the first non-hobby vector found
+          const vecs = expDd.vectors instanceof Set ? [...expDd.vectors] : (expDd.vectors || [])
+          if (!questVector) {
+            const nonHobby = vecs.filter(v => v !== 'hobby')
+            if (nonHobby.length) questVector = nonHobby[0]
+          }
+          // Collect format labels
+          const fmts = expDd.formats instanceof Set ? expDd.formats : new Set(expDd.formats || [])
+          if (fmts.size) {
+            const subNodes = getSubNodes(exp.id)
+            subNodes.filter(s => fmts.has(s.id)).forEach(s => {
+              if (!questFormats.includes(s.label)) questFormats.push(s.label)
+            })
           }
         }
 
