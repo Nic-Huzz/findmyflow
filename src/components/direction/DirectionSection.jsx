@@ -6,8 +6,8 @@
  * 1. Life Map Review
  * 2. Problem Motivation
  * 3. Multiplication Reveal
- * 4. First Income
- * 5. Money Model
+ * 4. Money Model
+ * 5. First Income
  */
 
 import { useState, useEffect } from 'react'
