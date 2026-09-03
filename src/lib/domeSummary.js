@@ -62,6 +62,32 @@ export function getDomeExperiencesForBridge(domeStates) {
   return { vibeRise, fun }
 }
 
+/**
+ * Returns ALL rated dome experiences across all NS states.
+ * Used by CurrentJobFlow to let users pick which experiences are part of their work.
+ * @param {Object} domeStates - { [nodeId]: nsState }
+ * @returns {{ vibeRise: Array, fun: Array, stressed: Array, bored: Array }}
+ */
+export function getAllDomeExperiences(domeStates) {
+  const lookup = getNodeLookup()
+  const buckets = { vibeRise: [], fun: [], stressed: [], bored: [] }
+
+  Object.entries(domeStates).forEach(([nodeId, nsState]) => {
+    if (!isCoreNode(nodeId)) return
+    const info = lookup.get(nodeId)
+    if (!info) return
+    const item = { id: nodeId, label: info.label, primal: info.primal, nsState }
+    if (nsState === 'vibe_rise') buckets.vibeRise.push(item)
+    else if (nsState === 'fun') buckets.fun.push(item)
+    else if (nsState === 'pressure' || nsState === 'growth_edge') buckets.stressed.push(item)
+    else if (nsState === 'bored' || nsState === 'uninterested') buckets.bored.push(item)
+  })
+
+  const sort = (a, b) => a.primal.localeCompare(b.primal) || a.label.localeCompare(b.label)
+  Object.values(buckets).forEach(arr => arr.sort(sort))
+  return buckets
+}
+
 // Primal display order (common → uncommon)
 const PRIMAL_ORDER = ['movement', 'play', 'bonds', 'story', 'nourishment', 'status', 'healing', 'shelter', 'fire', 'sleep']
 const PRIMAL_LABELS = { movement: 'Movement', play: 'Play', bonds: 'Bonds', story: 'Story', nourishment: 'Nourishment', status: 'Style', healing: 'Healing', shelter: 'Shelter', fire: 'Fire', sleep: 'Sleep' }

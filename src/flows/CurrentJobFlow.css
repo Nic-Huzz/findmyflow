@@ -1,0 +1,125 @@
+/* CurrentJobFlow.css — /add-current-job */
+
+.cjf { min-height: 100dvh; background: #f5f5f0; color: #1a1a2e; }
+.cjf-container { max-width: 480px; margin: 0 auto; padding: 20px 20px 120px; }
+
+/* ── Header ── */
+.cjf-header { text-align: center; margin-bottom: 20px; }
+.cjf-header h2 { font-size: 22px; font-weight: 800; margin: 0 0 4px; }
+.cjf-header p { font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.5; }
+.cjf-step-label { font-size: 11px; font-weight: 700; color: #5e17eb; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+
+/* ── Text input ── */
+.cjf-input {
+  width: 100%; padding: 14px 16px;
+  border: 1.5px solid rgba(0,0,0,0.08); border-radius: 14px;
+  background: white; font-size: 16px; font-family: inherit;
+  color: #1a1a2e; box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.cjf-input:focus { outline: none; border-color: #5e17eb; }
+.cjf-input::placeholder { color: rgba(0,0,0,0.25); }
+
+/* ── Experience picker (reuses cqf-exp pattern) ── */
+.cjf-primal { font-size: 10px; color: rgba(0,0,0,0.3); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 14px 0 6px 4px; }
+
+.cjf-exp { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; margin-bottom: 6px; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; }
+.cjf-exp:active { transform: scale(0.98); }
+.cjf-exp.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); }
+.cjf-exp-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; transition: all 0.15s; color: transparent; }
+.cjf-exp.selected .cjf-exp-check { background: #E9A23B; border-color: #E9A23B; color: white; }
+.cjf-exp-name { font-size: 14px; font-weight: 500; flex: 1; }
+.cjf-exp-ns { font-size: 16px; flex-shrink: 0; }
+
+.cjf-ns-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; }
+.cjf-ns-divider span { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+.cjf-ns-divider.vibe span { color: #E9A23B; }
+.cjf-ns-divider.fun span { color: #10b981; }
+.cjf-ns-divider.stressed span { color: #ef4444; }
+.cjf-ns-divider.bored span { color: #9ca3af; }
+.cjf-ns-divider hr { flex: 1; border: none; border-top: 1px solid rgba(0,0,0,0.06); }
+
+.cjf-count { font-size: 13px; color: #5e17eb; font-weight: 600; text-align: center; margin: 12px 0; }
+
+/* ── Dimension picker ── */
+.cjf-dim-section { margin-bottom: 16px; }
+.cjf-dim-label { font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 8px; }
+.cjf-dim-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.cjf-dim-pill {
+  padding: 8px 14px; border-radius: 10px;
+  border: 1.5px solid rgba(0,0,0,0.06); background: white;
+  font-size: 13px; font-weight: 500; color: #1a1a2e;
+  cursor: pointer; transition: all 0.15s; user-select: none;
+  -webkit-tap-highlight-color: transparent; font-family: inherit;
+}
+.cjf-dim-pill:active { transform: scale(0.97); }
+.cjf-dim-pill.selected { border-color: #5e17eb; background: rgba(94,23,235,0.04); color: #5e17eb; font-weight: 600; }
+
+/* ── Life Fuel checkboxes ── */
+.cjf-fuel-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.06); }
+.cjf-fuel-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.cjf-fuel-sub { font-size: 12px; color: rgba(0,0,0,0.4); margin-bottom: 12px; }
+.cjf-fuel-checks { display: flex; flex-direction: column; gap: 6px; }
+.cjf-fuel-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: 12px;
+  border: 1.5px solid rgba(0,0,0,0.06); background: white;
+  font-size: 13px; font-weight: 500; color: #1a1a2e;
+  cursor: pointer; transition: all 0.15s; text-align: left;
+  font-family: inherit; -webkit-tap-highlight-color: transparent;
+}
+.cjf-fuel-btn:active { transform: scale(0.98); }
+.cjf-fuel-btn.selected { border-color: #5e17eb; background: rgba(94,23,235,0.04); }
+.cjf-fuel-emoji { font-size: 16px; flex-shrink: 0; }
+.cjf-fuel-text { flex: 1; line-height: 1.3; }
+.cjf-fuel-tick { font-size: 14px; color: #5e17eb; font-weight: 700; flex-shrink: 0; }
+
+/* ── Courage challenges (screen 3) ── */
+.cjf-challenge-card {
+  padding: 16px; border-radius: 14px;
+  border: 1.5px solid rgba(0,0,0,0.06); background: white;
+  margin-bottom: 10px;
+}
+.cjf-challenge-exp { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.cjf-challenge-hint { font-size: 12px; color: rgba(0,0,0,0.4); line-height: 1.5; margin-bottom: 10px; }
+.cjf-challenge-input {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid rgba(0,0,0,0.08); border-radius: 10px;
+  font-size: 14px; font-family: inherit; color: #1a1a2e;
+  box-sizing: border-box; resize: none;
+}
+.cjf-challenge-input:focus { outline: none; border-color: #5e17eb; }
+.cjf-challenge-input::placeholder { color: rgba(0,0,0,0.25); }
+
+.cjf-alive-section { margin-bottom: 20px; }
+.cjf-alive-label { font-size: 11px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.cjf-costing-label { font-size: 11px; font-weight: 700; color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.cjf-alive-item { font-size: 13px; color: rgba(0,0,0,0.6); padding: 4px 0; }
+
+/* ── Fixed bottom CTA ── */
+.cjf-fixed {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  max-width: 480px; width: 100%; padding: 16px 20px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, #f5f5f0 80%, transparent);
+  z-index: 10;
+}
+.cjf-fixed button {
+  width: 100%; padding: 16px;
+  border: none; border-radius: 14px;
+  background: #5e17eb; color: white;
+  font-size: 16px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: opacity 0.15s;
+}
+.cjf-fixed button:disabled { opacity: 0.4; cursor: default; }
+.cjf-fixed button:active:not(:disabled) { opacity: 0.85; }
+
+/* ── Done ── */
+.cjf-done { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70dvh; text-align: center; gap: 16px; }
+.cjf-done-icon { font-size: 48px; }
+.cjf-done h2 { font-size: 22px; font-weight: 800; }
+.cjf-done p { font-size: 14px; color: rgba(0,0,0,0.5); max-width: 300px; line-height: 1.5; }
+
+/* ── Back link ── */
+.cjf-back { background: none; border: none; color: rgba(0,0,0,0.3); font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 0; font-family: inherit; margin-bottom: 12px; }

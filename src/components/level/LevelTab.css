@@ -746,6 +746,23 @@
   margin: 0 4px;
 }
 
+.quest-current-job-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px dashed rgba(94, 23, 235, 0.15);
+  border-radius: 14px;
+  background: rgba(94, 23, 235, 0.02);
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 12px;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.quest-current-job-cta:active { transform: scale(0.98); }
+
 .quest-section-header {
   display: flex;
   align-items: center;

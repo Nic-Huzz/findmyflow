@@ -71,6 +71,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [addQuestCustom, setAddQuestCustom] = useState(false) // true = typing new path, false = picked from dropdown
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
   const [matrixData, setMatrixData] = useState(null) // { actionScore, clarityPct, zone, total }
+  const [hasCurrentJob, setHasCurrentJob] = useState(false)
 
   // Load matrix data (Action Score + Clarity)
   useEffect(() => {
@@ -112,6 +113,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .order('sort_order', { ascending: true })
     if (questData) {
       setQuests(questData)
+      setHasCurrentJob(questData.some(q => q.is_current_job))
       // Load tasks + experiences for all quests
       const questIds = questData.map(q => q.id)
       // Fetch courage count in parallel with tasks
@@ -486,6 +488,17 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           loadQuests()
         }}
       />
+
+      {!hasCurrentJob && (
+        <button className="quest-current-job-cta" onClick={() => navigate('/add-current-job')}>
+          <span style={{ fontSize: 20 }}>💼</span>
+          <div style={{ flex: 1, textAlign: 'left' }}>
+            <div style={{ fontSize: 14, fontWeight: 600 }}>Add your current work</div>
+            <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.4)', marginTop: 2 }}>Find what's already alive in your job</div>
+          </div>
+          <span style={{ color: 'rgba(0,0,0,0.2)' }}>→</span>
+        </button>
+      )}
 
       <div className="quest-section">
         <div className="quest-section-header">

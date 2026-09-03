@@ -199,6 +199,8 @@ const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLand
 const BreathworkLanding = lazyRetry(() => import('./pages/BreathworkLanding'))
 const WhyICreatedThis = lazyRetry(() => import('./pages/WhyICreatedThis'))
 
+const CurrentJobFlow = lazyRetry(() => import('./flows/CurrentJobFlow'))
+
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
 const CustomerSegmentsFlow = lazyRetry(() => import('./flows/CustomerSegmentsFlow'))
@@ -756,6 +758,7 @@ function AppRouter() {
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
             <Route path="/choose-quests" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><ChooseQuestsFlow /></Suspense></AuthGate>} />
+            <Route path="/add-current-job" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><CurrentJobFlow /></Suspense></AuthGate>} />
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
