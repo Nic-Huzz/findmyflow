@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dome of Safety - Draft 2: Force Field</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f5f0; font-family: Inter, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 24px; min-height: 100vh; }
+  h2 { font-size: 18px; color: #1a1a1a; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
+  .dome-container { position: relative; width: 340px; height: 340px; }
+  svg { width: 100%; height: 100%; }
+  .center-score { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .center-number { font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #5e17eb, #E9A23B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .center-label { font-size: 10px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+  .dims-list { margin-top: 24px; width: 320px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .dim-item { background: white; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .dim-icon { font-size: 16px; }
+  .dim-info { flex: 1; }
+  .dim-name { font-size: 11px; font-weight: 600; color: #1a1a1a; }
+  .dim-bar { height: 4px; background: #eee; border-radius: 2px; margin-top: 3px; overflow: hidden; }
+  .dim-fill { height: 100%; border-radius: 2px; }
+  .dim-val { font-size: 10px; font-weight: 700; color: #5e17eb; }
+  .growth-section { margin-top: 28px; width: 320px; }
+  .growth-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+  .growth-card { background: white; border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 3px solid #E9A23B; }
+  .growth-model { font-size: 12px; font-weight: 600; color: #E9A23B; margin-bottom: 4px; }
+  .growth-gap { font-size: 11px; color: #666; line-height: 1.5; }
+  .growth-gap strong { color: #5e17eb; }
+</style>
+</head>
+<body>
+
+<h2>Your Dome of Safety</h2>
+<p class="subtitle">Where you can operate while staying regulated</p>
+
+<div class="dome-container">
+  <svg viewBox="0 0 340 340" id="dome"></svg>
+  <div class="center-score">
+    <div class="center-number">4.5</div>
+    <div class="center-label">Courage Score</div>
+  </div>
+</div>
+
+<div class="dims-list" id="dimsList"></div>
+
+<div class="growth-section">
+  <div class="growth-title">Next business model unlock</div>
+  <div class="growth-card">
+    <div class="growth-model">Retreat</div>
+    <div class="growth-gap">
+      Your dome covers 6/8 dimensions.<br>
+      Expand <strong>Money</strong> (currently $50, needs $500) and <strong>Business Commitment</strong> (currently repeatable, needs full-time) to unlock.
+    </div>
+  </div>
+</div>
+
+<script>
+const CX = 170, CY = 170, MAX_R = 115, GLOW_R = 130;
+const DIMS = [
+  { id: 'people',     label: 'People',         icon: '👥', max: 12, dome: 6,  edge: 8  },
+  { id: 'money',      label: 'Money',          icon: '💰', max: 11, dome: 3,  edge: 3  },
+  { id: 'vulnerability', label: 'Vulnerability', icon: '💜', max: 5,  dome: 4,  edge: 5  },
+  { id: 'stakes',     label: 'Stakes',         icon: '⚖️', max: 4,  dome: 3,  edge: 4  },
+  { id: 'rarity',     label: 'Rarity',         icon: '✦',  max: 5,  dome: 4,  edge: 5  },
+  { id: 'identity',   label: 'Identity',       icon: '🪞', max: 5,  dome: 3,  edge: 5  },
+  { id: 'context',    label: 'Context',        icon: '🧭', max: 5,  dome: 3,  edge: 5  },
+  { id: 'bizcommit',  label: 'Business',       icon: '📈', max: 5,  dome: 3,  edge: 4  },
+];
+
+const N = DIMS.length;
+const angleStep = (2 * Math.PI) / N;
+
+function polar(cx, cy, i, r) {
+  const a = angleStep * i - Math.PI / 2;
+  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+}
+
+function polyPoints(field, r) {
+  return DIMS.map((d, i) => {
+    const v = d[field] / d.max;
+    const p = polar(CX, CY, i, v * r);
+    return `${p.x},${p.y}`;
+  }).join(' ');
+}
+
+const svg = document.getElementById('dome');
+let html = '';
+
+// Defs for glow
+html += `<defs>
+  <radialGradient id="domeGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.08"/>
+    <stop offset="70%" stop-color="#5e17eb" stop-opacity="0.04"/>
+    <stop offset="100%" stop-color="#5e17eb" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="4" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <linearGradient id="domeFill" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#5e17eb" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.08"/>
+  </linearGradient>
+</defs>`;
+
+// Background glow circle
+html += `<circle cx="${CX}" cy="${CY}" r="${GLOW_R}" fill="url(#domeGlow)"/>`;
+
+// Subtle concentric circles (not polygons — more organic dome feel)
+for (let ring = 1; ring <= 4; ring++) {
+  const r = MAX_R * (ring / 4);
+  html += `<circle cx="${CX}" cy="${CY}" r="${r}" fill="none" stroke="rgba(94,23,235,0.06)" stroke-width="0.5"/>`;
+}
+
+// Spokes (very subtle)
+DIMS.forEach((_, i) => {
+  const p = polar(CX, CY, i, MAX_R + 5);
+  html += `<line x1="${CX}" y1="${CY}" x2="${p.x}" y2="${p.y}" stroke="rgba(94,23,235,0.08)" stroke-width="0.5"/>`;
+});
+
+// Edge zone
+html += `<polygon points="${polyPoints('edge', MAX_R)}" fill="rgba(233,162,59,0.04)" stroke="#E9A23B" stroke-width="1" stroke-dasharray="3 3"/>`;
+
+// Dome with glow
+html += `<polygon points="${polyPoints('dome', MAX_R)}" fill="url(#domeFill)" stroke="#5e17eb" stroke-width="2" filter="url(#glow)"/>`;
+
+// Pulse dots at dome vertices
+DIMS.forEach((d, i) => {
+  const v = d.dome / d.max;
+  const p = polar(CX, CY, i, v * MAX_R);
+  html += `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#5e17eb" opacity="0.9"/>`;
+  html += `<circle cx="${p.x}" cy="${p.y}" r="7" fill="none" stroke="#5e17eb" stroke-width="0.5" opacity="0.3">
+    <animate attributeName="r" values="4;10;4" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite"/>
+  </circle>`;
+});
+
+// Dimension labels around outside
+DIMS.forEach((d, i) => {
+  const p = polar(CX, CY, i, MAX_R + 20);
+  const anchor = p.x < CX - 20 ? 'end' : p.x > CX + 20 ? 'start' : 'middle';
+  html += `<text x="${p.x}" y="${p.y}" text-anchor="${anchor}" dominant-baseline="central" font-size="10" fill="#777" font-family="Inter, sans-serif">${d.icon}</text>`;
+});
+
+svg.innerHTML = html;
+
+// Dimension list below
+const list = document.getElementById('dimsList');
+DIMS.forEach(d => {
+  const pct = Math.round((d.dome / d.max) * 100);
+  const edgePct = Math.round((d.edge / d.max) * 100);
+  const isAtEdge = d.edge > d.dome;
+  const gradient = isAtEdge
+    ? `linear-gradient(90deg, #5e17eb ${pct}%, #E9A23B ${pct}%, #E9A23B ${edgePct}%, #eee ${edgePct}%)`
+    : `linear-gradient(90deg, #5e17eb ${pct}%, #eee ${pct}%)`;
+
+  list.innerHTML += `
+    <div class="dim-item">
+      <span class="dim-icon">${d.icon}</span>
+      <div class="dim-info">
+        <div class="dim-name">${d.label}</div>
+        <div class="dim-bar"><div class="dim-fill" style="width: ${edgePct}%; background: ${gradient};"></div></div>
+      </div>
+      <span class="dim-val">${d.dome}/${d.max}</span>
+    </div>`;
+});
+</script>
+</body>
+</html>

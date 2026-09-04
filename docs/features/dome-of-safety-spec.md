@@ -283,6 +283,58 @@ Barry's universal ladder (Time for Money → Own Service → Productised Service
 
 ---
 
+## Courage Score
+
+### Per-Challenge Score
+
+Each tagged dimension contributes its level as a fraction of that dimension's max. Sum the fractions. Untagged dimensions don't count.
+
+```
+Courage Score = (level₁ / max₁) + (level₂ / max₂) + ...
+
+Each dimension contributes 0 to 1.0
+Max possible = 8.0 (all 8 tagged and maxed)
+Untagged dimensions are excluded entirely
+```
+
+**Dimension max levels for scoring:**
+
+| Dimension | Max Level |
+|-----------|-----------|
+| People | 12 (reference markers: 1→5→10→20→50→100→250→500→1K→5K→10K→100K) |
+| Money | 11 (reference markers: $0→$10→$20→$50→$100→$200→$500→$1K→$2K→$5K→$10K) |
+| Vulnerability | 5 |
+| Stakes | 4 |
+| Rarity | 5 |
+| Identity | 5 |
+| Context | 5 |
+| Business Commitment | 5 |
+
+**Examples:**
+
+Shirt rip at Harvard (tagged: People, Vulnerability, Rarity, Identity, Context):
+`(6/12) + (5/5) + (5/5) + (5/5) + (5/5) = 0.5 + 1 + 1 + 1 + 1 = 4.5`
+
+Cold messaging (tagged: Vulnerability, Stakes, Identity):
+`(2/5) + (1/4) + (2/5) = 0.4 + 0.25 + 0.4 = 1.05`
+
+A 12-year-old gets it: each edge you push gives you up to 1 point.
+
+### Aggregate Scores
+
+- **Total Courage Score**: lifetime sum of all per-challenge scores
+- **Average per challenge**: are your challenges getting braver over time?
+- **This week's courage**: momentum metric
+
+### Visual Mockups
+
+Three draft visualizations at:
+- `public/dome-draft-1-radar.html` — Classic spider chart with dual polygon (dome + edge)
+- `public/dome-draft-2-glow.html` — Force field style with glowing dome, pulsing vertices, business model unlock card
+- `public/dome-draft-3-petals.html` — Petal/flower shape where each dimension grows as a separate organic petal, business model pills
+
+---
+
 ## Data Model
 
 ### New: `dimension_values` on courage challenges
