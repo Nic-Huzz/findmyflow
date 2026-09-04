@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getAllDomeExperiences, groupByPrimal } from '../lib/domeSummary'
-import { DIMENSION_OPTIONS, DIMENSION_IDS, DIMENSION_LABELS, getContextHint } from '../lib/currentJobChallenges'
+import { DIMENSION_OPTIONS, DIMENSION_IDS, DIMENSION_LABELS, DIMENSION_ICONS, getContextHint } from '../lib/currentJobChallenges'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { supabase } from '../lib/supabaseClient'
@@ -211,7 +211,7 @@ export default function CurrentJobFlow() {
 
             {DIMENSION_IDS.map(dimId => (
               <div key={dimId} className="cjf-dim-section">
-                <div className="cjf-dim-label">{DIMENSION_LABELS[dimId]}</div>
+                <div className="cjf-dim-label">{DIMENSION_ICONS[dimId]} {DIMENSION_LABELS[dimId]}</div>
                 <div className="cjf-dim-options">
                   {DIMENSION_OPTIONS[dimId].map(opt => (
                     <button
