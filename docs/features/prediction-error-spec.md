@@ -1,0 +1,162 @@
+# Prediction Error (Gap Measurement) — Feature Spec
+
+> Add this section to `dome-of-safety-spec.md` before "## Data Model" when ready.
+
+## Concept
+
+Fear doesn't reduce through habituation ("do it enough and it fades"). It reduces through **expectancy violation**: the user predicts catastrophe, reality delivers something manageable, and the nervous system's prediction model updates. This is the inhibitory learning model (Craske et al., 2014). The size of the gap between predicted and experienced difficulty predicts how durable the learning is, better than how much fear dropped during the event.
+
+The Dome of Safety measures WHERE you can operate regulated (dimensions). Prediction Error measures HOW MUCH you're learning per rep (gap). They're complementary.
+
+---
+
+## Three Data Points Per Challenge
+
+1. **Planning prediction** (at creation in WahooCreator, write-once): "How does your body feel thinking about this?" — the rational, planning self
+2. **Pre-action prediction** (retroactive at completion): "You predicted [X]. Right before you did it, what was your body doing?" — the anticipation self. Acknowledged as memory-contaminated (the user knows the outcome) but captures a different signal: planning-self vs moment-self comparison.
+3. **Experienced difficulty** (at completion): "And how was it actually?" — reality.
+
+---
+
+## Body-Based Scale (1-5)
+
+Somatic anchors, not abstract scariness. A racing heart is a racing heart in month 1 and month 12. Mitigates scale drift.
+
+| Level | Label | Description | Icon |
+|-------|-------|-------------|------|
+| 1 | Relaxed | Nothing changes in my body | 😌 |
+| 2 | Alert | I notice something but it's manageable | 👀 |
+| 3 | Butterflies | My stomach or chest tightens | 🦋 |
+| 4 | Racing | Heart rate up, hard to think straight | 💓 |
+| 5 | Frozen | I want to run or shut down | 🥶 |
+
+Defined in `src/data/domeDimensions.js` as `DIFFICULTY_SCALE`.
+
+---
+
+## Two Gaps + One Insight
+
+- **Planning gap**: creation prediction vs experienced. How well does your rational self predict?
+- **Anticipation gap**: pre-action prediction vs experienced. How well does your in-the-moment self predict?
+- **Amplification insight**: creation prediction vs pre-action prediction. Does your fear build or calm as the event approaches? Some people's anxiety escalates, others settle. This is NS personality data.
+
+### Gap Formula
+
+```
+Gap = max(0, predicted - experienced)
+```
+
+- Positive gap = action was easier than predicted = learning happened (strong rep)
+- Zero = accurate prediction (no surprise, modest learning)
+- Negative = harder than expected (clamped to 0, dome doesn't expand from this)
+
+---
+
+## Courage Score vs Gap (Separate Metrics)
+
+These measure different things and are NEVER combined into one formula:
+
+- **Courage Score** = what you did (objective, from dimensions): `sum(level/max per tagged dimension)`, max 8.0
+- **Gap** = what you learned (subjective, from prediction error): `max(0, predicted - experienced)`, max 4
+
+A challenge where predicted=3, experienced=3 required the same COURAGE as predicted=5, experienced=2. The user just predicted more accurately in the first case. Don't penalize accurate self-awareness.
+
+---
+
+## What to Celebrate
+
+- **Large gaps** — big surprise = strong rep. "Predicted Racing, experienced Alert. Your nervous system just learned something."
+- **Rising entry level** — choosing harder things over time (average predicted_difficulty trending up)
+- **Falling anticipation within a fixed tier** — average predicted_difficulty for tier-3 challenges drops over time = capacity growth
+
+## What NOT to Celebrate
+
+- Low predicted difficulty on its own (not brave, just easy)
+- Streaks alone
+- Completion count alone
+
+---
+
+## Pitfalls to Design Against
+
+### Difficulty drift
+Anticipation falls automatically if someone keeps doing the same easy thing. Without tier normalization, the winning strategy is to stop challenging yourself. All anticipation metrics must be scoped to a dimension tier or they're meaningless.
+
+### Scale drift
+A user's "Butterflies" in month one might not be their "Butterflies" in month six. Partial mitigation: somatic anchors are more stable than abstract numbers, and the RELATIVE gap (predicted - experienced) stays meaningful even if both drift equally.
+
+### The armour signature (Sprint D)
+If `experienced_difficulty` keeps coming in low but `predicted_difficulty` never falls, evidence is arriving but nothing is updating. Usually because the user is dissociating during the action. Surface this pattern (show the two flat lines), don't diagnose it in copy.
+
+### Repetition bias
+Identical repeated challenges give the cleanest data but the weakest learning. Variability across context and intensity produces more durable results. Don't let the metric design quietly push users toward repetition because it's easier to chart.
+
+---
+
+## Database Fields
+
+All on `groan_challenges` table (no separate table needed):
+
+```sql
+predicted_difficulty   smallint CHECK (BETWEEN 1 AND 5)  -- write-once, set at creation
+predicted_at           timestamptz                        -- when prediction was made
+preaction_difficulty   smallint CHECK (BETWEEN 1 AND 5)  -- set at completion (retroactive)
+experienced_difficulty smallint CHECK (BETWEEN 1 AND 5)  -- set at completion
+experienced_at         timestamptz                        -- when experience was recorded
+```
+
+Write-once enforced by DB trigger on `predicted_difficulty`:
+```sql
+CREATE OR REPLACE FUNCTION prevent_prediction_update()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.predicted_difficulty IS NOT NULL
+     AND NEW.predicted_difficulty IS DISTINCT FROM OLD.predicted_difficulty THEN
+    RAISE EXCEPTION 'predicted_difficulty is write-once';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+---
+
+## Capture Flow
+
+### At creation (WahooCreator, Sprint A1)
+After dimension tags + level pickers, on the same consolidated screen:
+- "How does your body feel thinking about this?"
+- 5 body pills, one tap, captures `predicted_difficulty`
+- Write-once: locked after creation
+
+### At completion (GroanCompletionModal, Sprint A2)
+New `gap_check` step after existing `wahoo_check` (after after_state is set):
+1. "You predicted [Butterflies]. Right before you did it, what was your body doing?" → 5 body pills → `preaction_difficulty`
+2. "And how was it actually?" → 5 body pills → `experienced_difficulty`
+3. Inline feedback: "Predicted Butterflies, experienced Alert. Strong rep!"
+- Only shows for challenges with `predicted_difficulty` (skips legacy)
+- All existing completion steps unchanged after this
+
+---
+
+## Display (Sprint B+D)
+
+### Sprint B: inline on dome view
+- Average gap stat shown below dome radar
+- Per-challenge: gap shown on challenge cards ("Predicted 🦋 → Experienced 👀")
+
+### Sprint D: trend lines (deferred)
+- Two converging lines over time: predicted vs experienced
+- The closing gap is the story
+- Anticipation trend within dimension tiers
+- Armour signature detection and surfacing
+
+---
+
+## Visual Direction (confirmed from mockups)
+
+Hybrid of Draft A + Draft B:
+- **Dome**: Draft A radar spider chart (purple fill + gold dashed edge ring)
+- **Dimension bars**: Draft B grid layout (icon + label + level/max + purple/gold split bar showing dome vs edge)
+- **Challenge cards**: Draft A style (title, dimension pills with values, courage score in gold, NS state transition)
+- **Business model unlock**: Draft B card style (gold left border, model name in gold, gap description with bold purple dimension names)

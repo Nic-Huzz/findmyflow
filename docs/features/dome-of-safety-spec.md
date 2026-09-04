@@ -335,6 +335,81 @@ Three draft visualizations at:
 
 ---
 
+## Prediction Error (Gap Measurement)
+
+### Concept
+
+Fear reduces through expectancy violation (Craske et al., 2014), not habituation. The gap between predicted and experienced difficulty is the learning signal. Bigger surprise = stronger rep = more durable NS update.
+
+### Three Data Points Per Challenge
+
+1. **Planning prediction** (at creation in WahooCreator, write-once): "How does your body feel thinking about this?"
+2. **Pre-action prediction** (retroactive at completion): "You predicted [X]. Right before you did it, what was your body doing?" — acknowledged as memory-contaminated but captures planning-self vs moment-self comparison
+3. **Experienced difficulty** (at completion): "And how was it actually?"
+
+### Body-Based Scale (1-5)
+
+| Level | Label | Description | Icon |
+|-------|-------|-------------|------|
+| 1 | Relaxed | Nothing changes in my body | 😌 |
+| 2 | Alert | I notice something but it's manageable | 👀 |
+| 3 | Butterflies | My stomach or chest tightens | 🦋 |
+| 4 | Racing | Heart rate up, hard to think straight | 💓 |
+| 5 | Frozen | I want to run or shut down | 🥶 |
+
+Somatic anchors, not abstract scariness. A racing heart is a racing heart in month 1 and month 12. Mitigates scale drift.
+
+### Two Gaps
+
+- **Planning gap**: creation prediction vs reality. How well does your rational self predict?
+- **Anticipation gap**: pre-action vs reality. How well does your in-the-moment self predict?
+- **Amplification insight**: creation vs pre-action. Does your fear build or calm as the event approaches?
+
+### Gap Formula
+
+```
+Gap = max(0, predicted - experienced)
+```
+
+Positive gap = action was easier than predicted = learning happened.
+Zero = accurate prediction (no surprise, modest learning).
+Negative = harder than expected (clamped to 0, dome doesn't expand).
+
+### Courage Score vs Gap (Separate Metrics)
+
+- **Courage Score** = what you did (dimension complexity): `sum(level/max per tagged dimension)`, max 8.0
+- **Gap** = what you learned (prediction error): `max(0, predicted - experienced)`
+- These are complementary, never combined into one formula. Courage measures the challenge. Gap measures the learning.
+
+### What to Celebrate
+
+- Large gaps (big surprise = strong rep)
+- Rising entry level (choosing harder things over time)
+- Falling anticipation within a fixed tier (capacity growth)
+
+### What NOT to Celebrate
+
+- Low predicted difficulty on its own (not brave, just easy)
+- Streaks alone
+- Completion count alone
+
+### Pitfalls
+
+- **Difficulty drift**: anticipation falls if someone keeps doing easy things. All metrics scoped to dimension tiers.
+- **Scale drift**: mitigated by somatic anchors (body sensations don't recalibrate as fast as abstract numbers).
+- **Armour signature** (Sprint D detection): predicted stays high, experienced stays low, but predicted never falls. Evidence arriving, nothing updating. Usually dissociation. Surface the pattern, don't diagnose.
+- **Repetition bias**: identical repeated challenges give clean data but weak learning. Variability produces more durable results.
+
+### Database Fields (on groan_challenges)
+
+- `predicted_difficulty` smallint (1-5), write-once (DB trigger enforced), set at creation
+- `predicted_at` timestamptz
+- `preaction_difficulty` smallint (1-5), set at completion
+- `experienced_difficulty` smallint (1-5), set at completion
+- `experienced_at` timestamptz
+
+---
+
 ## Data Model
 
 ### New: `dimension_values` on courage challenges
@@ -388,6 +463,14 @@ SVG radar chart (similar to `CreatorRadarChart.jsx`):
 - Tap a spoke → detail view of challenges on that dimension
 
 Design: Purple (#5e17eb) dome fill, gold (#E9A23B) edge ring. Light theme. Mobile-first (280px). Animate dome expansion on new data.
+
+### Visual Direction (confirmed)
+
+Hybrid of Draft A + Draft B:
+- **Dome**: Draft A radar spider chart (purple fill + gold dashed edge)
+- **Dimension bars**: Draft B grid layout (icon + label + level/max + purple/gold split bar)
+- **Challenge cards**: Draft A style (title, dimension pills with values, courage score, NS transition)
+- **Business model unlock**: Draft B card style (gold left border, model name, gap description)
 
 ### 2. DimensionPicker (update WahooCreator.jsx)
 
