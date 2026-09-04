@@ -1,6 +1,6 @@
 # Dome of Safety — Feature Spec
 
-> **Status:** Dimension alignment in progress. Sections marked ✅ are locked in. Sections marked 🔄 still need alignment.
+> **Status:** All 8 dimensions aligned ✅. Ready for pressure testing.
 
 ## Concept
 
@@ -19,30 +19,34 @@ Every courage challenge pushes one or more dimensions. The user's NS state respo
 
 ---
 
-## The 9 Dimensions
+## The 8 Dimensions
 
-### Why these 9
+### Why these 8
 
 The original 7 dimensions (duration, frequency, medium, people, money, location, independence) were a mix of logistics and genuine NS edges. Through alignment we:
 
 - **Dropped** Duration, Frequency, Medium — these are experience parameters (how long, how often, what format), not nervous system triggers. They stay as tags on experiences (V2 ambitions roadmap) but don't belong as dome spokes.
+- **Dropped** Independence — solo vs co-led is already captured by Vulnerability (fewer shields), Stakes (more risk when alone), and Rarity (pioneering = unheard of). Not a unique NS edge.
+- **Dropped** Location — geographic stretch is captured by Context (how familiar the conditions are), Stakes (logistics risk), and Rarity. Not a standalone NS trigger.
 - **Added** Vulnerability, Stakes, Rarity, Identity — the biggest NS triggers that were missing.
+- **Added** Context — merges location + independence into one dimension about how familiar the operating conditions are. The primal NS response to unfamiliar territory/support.
+- **Added** Business Commitment — how deep you are in building a business. Not WHICH model (those are parallel shapes, not a ladder), but how much of your life depends on it.
 - **Reframed** Money from "financial exposure" to specifically "what you charge" (investing falls under Stakes).
-- **Added** Business Model as its own dimension — the progression from employment to certification IS a comfort zone edge, not just a mapping table.
+
+Business model types (Per Session, Group Program, Content, Membership, etc.) are NOT a dimension. They're the **mapping system** — each model has dome minimums, and the dome tells you which models your NS can handle. Models are an output of the dome, not a spoke.
 
 ### Dimension Summary
 
-| # | Dimension | Framing Question | Type | Icon | Levels | Status |
-|---|-----------|-----------------|------|------|--------|--------|
-| 1 | **People** | "How many people were involved or watching?" | Numeric | 👥 | 1 → 100,000+ | ✅ |
-| 2 | **Money** | "How much did you ask someone to pay?" | Numeric | 💰 | $0 → $10,000+ | ✅ |
-| 3 | **Vulnerability** | "How much could you hide?" | Qualitative (5) | 💜 | Shields removed | ✅ |
-| 4 | **Stakes** | "What was at risk?" | Qualitative (4) | ⚖️ | Nothing → Major bet | ✅ |
-| 5 | **Rarity** | "How normal is this in the world?" | Qualitative (5) | ✦ | Everyone does this → Unheard of | ✅ |
-| 6 | **Identity** | "How much does this feel like you?" | Qualitative (5) | 🪞 | Nobody blinks → You become the story | ✅ |
-| 7 | **Independence** | ? | Qualitative | 🚀 | ? | 🔄 |
-| 8 | **Location** | ? | Qualitative | 📍 | ? | 🔄 |
-| 9 | **Business Model** | ? | Qualitative (7) | 📈 | Work for Someone → Certification | 🔄 |
+| # | Dimension | Framing Question | Type | Icon | Levels |
+|---|-----------|-----------------|------|------|--------|
+| 1 | **People** | "How many people were involved or watching?" | Numeric | 👥 | 1 → 100,000+ |
+| 2 | **Money** | "How much did you ask someone to pay?" | Numeric | 💰 | $0 → $10,000+ |
+| 3 | **Vulnerability** | "How much could you hide?" | Qualitative (5) | 💜 | Fully shielded → Unmasked |
+| 4 | **Stakes** | "What was at risk?" | Qualitative (4) | ⚖️ | Nothing to lose → Major bet |
+| 5 | **Rarity** | "How normal is this in the world?" | Qualitative (5) | ✦ | Everyone does this → Unheard of |
+| 6 | **Identity** | "How much does this feel like you?" | Qualitative (5) | 🪞 | Nobody blinks → You become the story |
+| 7 | **Context** | "How familiar were the conditions?" | Qualitative (5) | 🧭 | Home turf → Nothing familiar |
+| 8 | **Business Commitment** | "How deep are you in building a business?" | Qualitative (5) | 📈 | Hobby → Team/scale |
 
 ---
 
@@ -148,35 +152,47 @@ The NS trigger with identity is external: it's scary because of how others perce
 
 **Key insight:** The dome captures identity integration over time. What was a 5 when you first did it can become a 1 as your identity absorbs the new behavior.
 
----
+### Context (5 levels — contextual familiarity)
 
-## 🔄 Dimensions Still Needing Alignment
+**Question:** "How familiar were the conditions?"
 
-### Independence
+Merges the old Independence and Location dimensions into one spoke. The NS trigger: your nervous system is wired to feel safer in familiar conditions. Unfamiliar territory (geographic, social, structural) removes the primal sense of knowing where the exits are.
 
-Current WahooCreator scale: Assisted → Co-led → Solo with support → Fully solo → Leading others → Pioneering
+| Level | Label | Description |
+|-------|-------|-------------|
+| 1 | Home turf | Your space, your people, your routine |
+| 2 | Mostly familiar | Known environment, one new variable |
+| 3 | Mixed | Some things familiar, some not (e.g. same format, new city) |
+| 4 | Mostly foreign | Multiple unfamiliar factors stacking |
+| 5 | Nothing familiar | Different place, different people, different norms, no safety net |
 
-Needs review: is this the right framing and are these the right levels?
+**Examples from Huzz's challenges:**
+- Monument Rave in Bali (home base) = 1 (home turf)
+- Bounce around Berlin = 3 (same format, new city)
+- Monument Rave Copenhagen = 3 (known format, unfamiliar city + people)
+- Test travel tournament with random people = 4 (new format + new people + new city)
+- First-ever flash mob in Times Square = 5 (nothing familiar — new country, new format, unknown crowd reaction)
 
-### Location
+### Business Commitment (5 levels — depth of business building)
 
-Current idea: Home/private → Familiar venue → New city → Different country → Completely foreign
+**Question:** "How deep are you in building a business?"
 
-Needs review: is geographic comfort zone genuinely an NS edge, or is it better captured by Novelty (unfamiliarity) + Stakes (logistics risk)?
+Not WHICH business model (those are parallel shapes, not a ladder), but how much of your life depends on the business. Each step requires more NS capacity because there's more at stake, more complexity, more people relying on you.
 
-### Business Model
+| Level | Label | Description |
+|-------|-------|-------------|
+| 1 | Hobby / side thing | No real business structure, doing it for fun or exploration |
+| 2 | First revenue | You've charged someone, at least once |
+| 3 | Repeatable income | Regular clients or customers, it works and keeps working |
+| 4 | Full-time | This is your livelihood, you've quit the other thing |
+| 5 | Team / scale | Other people depend on this business (employees, trainees, partners) |
 
-From existing `MONEY_MODEL_LADDER` + the user's ladder image:
-
-1. Work for Someone
-2. Per Session ($20-50/person)
-3. Group Program ($97-497/person)
-4. Content ($0, builds trust + reach)
-5. Digital Product ($27-197/product)
-6. Membership ($27-97/month)
-7. Certification ($2,000-5,000/trainee)
-
-Needs review: is this the right order? Content at level 4 feels odd — it requires a massive People dome but zero Money dome. Might be a parallel track rather than a rung.
+**Examples from Huzz's challenges:**
+- "Experiment with trial reel viral content" = 1 (exploring, no revenue tied to it)
+- "Run one paid session" = 2 (first revenue)
+- Monument Raves as regular events = 3 (repeatable, regular income)
+- Scale Portal launch = 4-5 (building the platform others will use)
+- "Acquisition partner for events" = 5 (other people's livelihoods involved)
 
 ---
 
@@ -233,27 +249,27 @@ If a user completes a challenge and reports Bored, that dimension wasn't the rea
 
 Your dome of safety determines which business models you can comfortably operate. The dome literally maps your business model readiness.
 
-### Business Model as a Dimension
+### Business Models as Dome Output (Not a Dimension)
 
-Business Model is a spoke on the dome, not a mapping table. "What level of business model are you comfortable operating at?" is a nervous system question. Someone comfortable at Per Session might be terrified of Group Program. That's an edge.
-
-The 7-level ladder (Work for Someone → Per Session → Group Program → Content → Digital Product → Membership → Certification) becomes the scale for this spoke.
+Business model types (Per Session, Group Program, Content, Membership, etc.) are parallel shapes, not a linear ladder. A content creator isn't "below" a membership builder — they have completely different dome requirements. The Business Commitment spoke tracks how deep you are; the mapping table below tracks which models your dome can support.
 
 ### Dome Minimums per Business Model
 
-ADDITIONALLY, each business model has minimum requirements across OTHER dimensions. When the user's dome meets those minimums, the model is achievable from a regulated nervous system.
+Each business model has minimum requirements across dome dimensions. When the user's dome meets those minimums, the model is achievable from a regulated nervous system.
 
-Minimums are thresholds (>=), not ranges. User's dome edge must meet or exceed each value.
+Minimums are thresholds (>=). User's dome edge must meet or exceed each value.
 
-| Business Model | People >= | Money >= | Vulnerability >= | Stakes >= | Rarity >= | Identity >= | Independence >= |
-|----------------|-----------|----------|------------------|-----------|-----------|-------------|-----------------|
-| Work for Someone | — | — | 1 | 1 | 1 | 1 | 1 |
-| Per Session | 5 | $20 | 2 | 2 | 1 | 1 | 3 |
-| Group Program | 8 | $100 | 3 | 3 | 2 | 2 | 3 |
-| Content | 100 | $0 | 3 | 2 | 2 | 3 | 3 |
-| Digital Product | — | $27 | 2 | 2 | 1 | 2 | 4 |
-| Membership | 10 | $27 | 3 | 3 | 2 | 2 | 4 |
-| Certification | 3 | $2,000 | 4 | 4 | 3 | 4 | 5 |
+| Business Model | People >= | Money >= | Vulnerability >= | Stakes >= | Rarity >= | Identity >= | Context >= | Biz Commitment >= |
+|----------------|-----------|----------|------------------|-----------|-----------|-------------|-----------|-------------------|
+| 1:1 Sessions | 1 | $20 | 2 | 1 | 1 | 1 | 1 | 2 |
+| Per Session | 5 | $20 | 2 | 2 | 1 | 1 | 1 | 2 |
+| Group Program | 8 | $100 | 3 | 3 | 2 | 2 | 2 | 3 |
+| Content | 100 | $0 | 3 | 2 | 2 | 3 | 1 | 2 |
+| Digital Product | — | $27 | 2 | 2 | 1 | 2 | 1 | 3 |
+| Membership | 10 | $27 | 3 | 3 | 2 | 2 | 2 | 3 |
+| Live Events | 20 | $50 | 3 | 3 | 2 | 2 | 3 | 3 |
+| Retreat | 10 | $500 | 4 | 4 | 3 | 3 | 4 | 4 |
+| Certification | 3 | $2,000 | 4 | 4 | 3 | 4 | 3 | 5 |
 
 ### Courage Challenge Suggestions
 
@@ -311,7 +327,7 @@ CREATE TABLE dome_snapshots (
 
 SVG radar chart (similar to `CreatorRadarChart.jsx`):
 
-- 9 spokes (one per dimension)
+- 8 spokes (one per dimension)
 - **Inner dome** (solid purple fill, 20% opacity): integrated capacity
 - **Edge ring** (dashed gold line): stressed-state maximum
 - **Ambition dots** (gold circles outside dome): experience targets
@@ -323,7 +339,7 @@ Design: Purple (#5e17eb) dome fill, gold (#E9A23B) edge ring. Light theme. Mobil
 
 ### 2. DimensionPicker (update WahooCreator.jsx)
 
-Replace current 7-dimension grid with 9-dimension model. After selecting dimensions, show level/value picker per selected dimension:
+Replace current 7-dimension grid with 8-dimension model. After selecting dimensions, show level/value picker per selected dimension:
 - Numeric: number input with smart defaults
 - Qualitative: horizontal pill picker with level labels
 
@@ -341,7 +357,7 @@ Small inline dome (no labels, just the shape) as visual anchor. Tappable to expa
 
 ### Sprint A: Data + Dimensions
 1. Add `dimension_values` JSONB column to `groan_challenges`
-2. Update `WahooCreator.jsx` with 9 dimensions + level pickers
+2. Update `WahooCreator.jsx` with 8 dimensions + level pickers
 3. Update `DIMENSION_META` in `QuestBoardCard.jsx`
 4. Update `ProgressTab.jsx` dimension aggregation
 
