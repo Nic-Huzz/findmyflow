@@ -48,7 +48,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Cooking for others / hosting dinner':      ['session_fees', 'ticket_sales'],
   'Gardening / growing food':                 ['session_fees', 'product_sales'],
   'Visiting a farmers market':                ['product_sales', 'venue_revenue'],
-  'Trying a cuisine you\'ve never had':       ['session_fees', 'ticket_sales'],
+  'Trying a cuisine you\'ve never had':       ['ticket_sales', 'membership'],
   'Baking':                                   ['session_fees', 'product_sales'],
 
   // ── STYLE ─────────────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Creating short-form video (Reels, TikTok)': ['ad_sponsorship', 'project_fees'],
   'Stand-up comedy':                          ['ticket_sales', 'session_fees'],
   'Live music / concerts / festivals':        ['ticket_sales', 'commission', 'venue_revenue'],
-  'Reading a novel':                          ['product_sales', 'session_fees'],
+  'Reading a novel':                          ['product_sales', 'membership'],
   'Journaling / writing':                     ['coaching_packages', 'product_sales'],
   'Listening to podcasts':                    ['ad_sponsorship', 'project_fees'],
   'Creating / editing video':                 ['project_fees', 'wage', 'ad_sponsorship'],
@@ -102,7 +102,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Public speaking / presenting':             ['session_fees', 'coaching_packages'],
   'Selling / pitching':                       ['coaching_packages', 'wage'],
   'Coaching / mentoring someone':             ['coaching_packages', 'session_fees'],
-  'Going to the cinema / watching a great film': ['ticket_sales', 'session_fees'],
+  'Going to the cinema / watching a great film': ['ticket_sales', 'membership'],
   'Researching / going down rabbit holes':    ['project_fees', 'wage'],
 
   // ── PLAY ──────────────────────────────────────────────────────────────────
@@ -134,7 +134,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
 
   // ── SLEEP ─────────────────────────────────────────────────────────────────
   'Lucid dreaming':                           ['coaching_packages', 'product_sales'],
-  'Intentional napping':                      ['session_fees', 'coaching_packages'],
+  'Intentional napping':                      ['coaching_packages', 'product_sales'],
   'Float tank / sensory deprivation':         ['venue_revenue', 'membership'],
   'Being in nature without an activity':      ['session_fees', 'ticket_sales'],
 }
@@ -181,7 +181,7 @@ export const CONTENT_MULTIPLIER_EXPERIENCES = [
  * UI logic: if a user's dome is heavy on these AND they don't have any
  * CONTENT_MULTIPLIER_EXPERIENCES as Vibe Rise, surface:
  * "The experiences you love are things you enjoy doing. To earn from them,
- * you'd either run events around them, teach others, or make content about them."
+ * you'd either curate events, build communities, or make content about them."
  */
 export const CONSUMER_PRIMARY_EXPERIENCES = [
   'Going to the cinema / watching a great film',
