@@ -183,6 +183,35 @@ This turns the negative gap into a diagnostic tool: the gap REVEALS hidden voice
 
 The healing flow is the mechanism that converts negative gaps into future positive gaps.
 
+### Pattern-Triggered Healing (replaces voluntary "Feeling stuck?")
+
+The existing "Feeling stuck?" prompt has low engagement because it requires the user to self-identify as stuck. Pattern-triggered healing replaces this with evidence-backed popups.
+
+**Trigger:** 3+ challenges with the same `gap_voice` on overlapping dimensions.
+
+**Popup:** "We noticed something. [Voice] has shown up every time you push [Dimension]. Want to explore what's behind it?"
+Opens HealingFlowModal with voice pre-selected and dimension context pre-loaded.
+
+**Why this works better:**
+- Evidence-backed, not voluntary admission of weakness
+- Specific to a dimension, not generic "feeling stuck"
+- Only fires when the pattern is statistically real (3+ data points)
+- The user said they always skip the voluntary prompt but would engage with a pattern-triggered one
+
+**Data needed:**
+- `gap_voice` on `groan_challenges` (already added)
+- Query: group completed challenges by gap_voice, check for 3+ occurrences with overlapping dimension_values keys
+- One-time popup per voice-dimension pattern (track shown patterns to avoid repeat prompts)
+
+### Values as Foundation
+
+The healing flow reveals that values are the key differentiator between "installed fear" and "current truth." All three test patterns resolved to values:
+- Ghost: "I'm conscious of my values and the choices they guide"
+- Controller: "I care more about who I'm becoming than FOMO"
+- Perfectionist: "I want to believe I'm enough without accolades"
+
+A values/story flow should be explored as a foundation that the healing flow references: "What do you value now that you didn't value then?" This is a stronger reframe than "What's true now?" because it connects the rewire to identity, not just circumstances.
+
 ---
 
 ## Display (Sprint B+D)
