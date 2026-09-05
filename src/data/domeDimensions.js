@@ -88,11 +88,11 @@ export const DOME_DIMENSIONS = [
     type: 'qualitative',
     maxLevel: 5,
     levels: [
-      { level: 1, label: 'Nobody blinks', description: 'This is obviously you, no one questions it' },
-      { level: 2, label: 'Raised eyebrows', description: 'People notice, it\'s slightly unexpected' },
-      { level: 3, label: '"That\'s not like you"', description: 'People close to you call it out' },
-      { level: 4, label: '"What happened to you?"', description: 'People genuinely don\'t recognise this version' },
-      { level: 5, label: 'You become the story', description: 'People talk about it when you\'re not in the room' },
+      { level: 1, label: 'Done this many times', description: 'This is part of who you are now' },
+      { level: 2, label: 'Similar but a twist', description: 'Done something like this before, but this version is new' },
+      { level: 3, label: 'First time publicly', description: 'First time doing this where people can see' },
+      { level: 4, label: 'First time ever', description: 'First time doing anything like this' },
+      { level: 5, label: 'Contradicts who I am', description: 'This goes against something fundamental about how people see you' },
     ],
   },
   {
@@ -102,10 +102,12 @@ export const DOME_DIMENSIONS = [
     question: 'How familiar were the conditions?',
     type: 'qualitative',
     maxLevel: 5,
+    // Context = ALL surrounding conditions: physical place, platform, format, support structure, delivery method.
+    // NOT just geography. A new platform or format counts as unfamiliar context.
     levels: [
-      { level: 1, label: 'Home turf', description: 'Your space, your people, your routine' },
-      { level: 2, label: 'Mostly familiar', description: 'Known environment, one new variable' },
-      { level: 3, label: 'Mixed', description: 'Some things familiar, some not' },
+      { level: 1, label: 'Home turf', description: 'Your space, your people, your platform, your routine' },
+      { level: 2, label: 'Mostly familiar', description: 'Known setup, one new variable (new format, new venue, or solo for the first time)' },
+      { level: 3, label: 'Mixed', description: 'Some things familiar, some not (known format + new city, or new platform + familiar audience)' },
       { level: 4, label: 'Mostly foreign', description: 'Multiple unfamiliar factors stacking' },
       { level: 5, label: 'Nothing familiar', description: 'Different place, people, norms, no safety net' },
     ],

@@ -139,6 +139,52 @@ New `gap_check` step after existing `wahoo_check` (after after_state is set):
 
 ---
 
+## Gap as Diagnostic: Two Entry Points to Healing
+
+The prediction gap and the existing healing flow are looking at the same underlying system (installed protective patterns) from different angles.
+
+### Positive gap (predicted hard, experienced easy)
+
+Two possible sources:
+- **Known conditioning**: A protective voice you're aware of (you picked it in WahooCreator) predicted threat. Reality was fine. The gap confirms the voice was lying. The healing flow already addressed this voice — the positive gap is evidence it's working.
+- **No data**: You've never done this, so your NS defaulted to threat. No wound, just no reference point. The gap gives it one.
+
+**Response**: Celebration + reinforcement. "The voice said [X]. Reality said otherwise."
+
+### Negative gap (predicted easy, experienced hard)
+
+Two possible sources:
+- **Hidden conditioning**: Something triggered a protective voice you didn't know was there. The dimension where the gap appeared points toward which voice activated.
+- **Dissociation at prediction**: You couldn't feel your body when predicting. You said "relaxed" but you were numb, not calm (armour signature).
+
+**Response**: Discovery prompt. "Your body reacted more than you expected. Which voice showed up?"
+
+### The two entry points
+
+| Entry Point | Trigger | When | Purpose |
+|-------------|---------|------|---------|
+| **Healing Flow** (existing) | "Feeling stuck?" — user can't start | Pre-action | Explore the voice you KNOW about |
+| **Post-Gap Discovery** (new) | Negative gap detected at completion | Post-action | Discover a voice you DIDN'T know about |
+
+### Post-Gap Discovery Flow (Sprint D)
+
+When `experienced_difficulty > predicted_difficulty` (negative gap), after the gap_check step:
+
+1. "Your body reacted more than you expected. Which voice showed up?" → show 5 protective voice options (Ghost, Perfectionist, People Pleaser, Controller, Auto-Pilot)
+2. Selected voice is saved alongside the gap data
+3. This voice becomes a suggested entry point for the healing flow next time: "Last time [dimension] triggered your [voice]. Want to explore that before this challenge?"
+
+This turns the negative gap into a diagnostic tool: the gap REVEALS hidden voices, and the healing flow PROCESSES them. The two systems feed each other.
+
+### Connection to Dome
+
+- Protective voices you're AWARE of → over-predict → positive gap → dome expands (voice was wrong, NS updated)
+- Protective voices you're UNAWARE of → under-predict → negative gap → dome doesn't expand → voice discovered → healing flow → next attempt has better prediction → eventually positive gap → dome expands
+
+The healing flow is the mechanism that converts negative gaps into future positive gaps.
+
+---
+
 ## Display (Sprint B+D)
 
 ### Sprint B: inline on dome view

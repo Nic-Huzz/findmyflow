@@ -5,6 +5,7 @@ import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { awardMovementXP } from '../lib/movementXP'
 import { DIFFICULTY_SCALE, getDifficultyLabel, calculateGap } from '../data/domeDimensions'
+import { hapticLight } from '../lib/haptics'
 import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
@@ -99,6 +100,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Prediction error (gap measurement)
   const [preactionDifficulty, setPreactionDifficulty] = useState(null)
   const [experiencedDifficulty, setExperiencedDifficulty] = useState(null)
+  const [gapVoice, setGapVoice] = useState(null)
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
@@ -161,6 +163,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             preaction_difficulty: preactionDifficulty,
             experienced_difficulty: experiencedDifficulty,
             experienced_at: new Date().toISOString(),
+            ...(gapVoice ? { gap_voice: gapVoice } : {}),
           }).eq('id', challenge.id)
         } catch (e) {
           console.warn('Gap data save error:', e)
@@ -586,7 +589,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                     <button
                       key={ds.level}
                       className={`gcm-gap-pill ${preactionDifficulty === ds.level ? 'selected' : ''}`}
-                      onClick={() => setPreactionDifficulty(ds.level)}
+                      onClick={() => { hapticLight(); setPreactionDifficulty(ds.level) }}
                       title={ds.description}
                     >
                       <span className="gcm-gap-pill-icon">{ds.icon}</span>
@@ -604,7 +607,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                       <button
                         key={ds.level}
                         className={`gcm-gap-pill ${experiencedDifficulty === ds.level ? 'selected' : ''}`}
-                        onClick={() => setExperiencedDifficulty(ds.level)}
+                        onClick={() => { hapticLight(); setExperiencedDifficulty(ds.level) }}
                         title={ds.description}
                       >
                         <span className="gcm-gap-pill-icon">{ds.icon}</span>
@@ -628,6 +631,31 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               {planningGap != null && planningGap === 0 && (anticipationGap == null || anticipationGap === 0) && (
                 <div className="gcm-gap-result">
                   Your prediction matched reality. Your self-awareness is sharp.
+                </div>
+              )}
+
+              {/* Negative gap: voice discovery */}
+              {experiencedDifficulty && preactionDifficulty && experiencedDifficulty > challenge.predicted_difficulty && (
+                <div className="gcm-gap-section">
+                  <p className="gcm-gap-q">Your body reacted more than you expected. Which voice showed up?</p>
+                  <div className="gcm-gap-pills">
+                    {[
+                      { id: 'ghost', icon: '👻', label: 'Ghost' },
+                      { id: 'perfectionist', icon: '🎯', label: 'Perfectionist' },
+                      { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser' },
+                      { id: 'controller', icon: '🎮', label: 'Controller' },
+                      { id: 'auto-pilot', icon: '🛋️', label: 'Auto-Pilot' },
+                    ].map(v => (
+                      <button
+                        key={v.id}
+                        className={`gcm-gap-pill ${gapVoice === v.id ? 'selected' : ''}`}
+                        onClick={() => { hapticLight(); setGapVoice(v.id) }}
+                      >
+                        <span className="gcm-gap-pill-icon">{v.icon}</span>
+                        <span className="gcm-gap-pill-label">{v.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
