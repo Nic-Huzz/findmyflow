@@ -35,7 +35,7 @@ src/
 ├── components/     # UI (crm/, CreatorHome/, level/, Zarlo/, PlayProfile/, DomeOfSafety, QuestBoardCard, etc.)
 ├── pages/          # Route pages
 ├── lib/            # Utilities (scoreUtilities, skillProgress, wheelTaxonomy, voicePatternDetector, zarlo/, crm/)
-├── data/           # Static config (domeDimensions.js, archetypes, taxonomy JSON, founderDna)
+├── data/           # Static config (domeDimensions.js, precursorDefaults.js, experienceDomeSubNodes.js, channelMapping.js, archetypes, taxonomy JSON, founderDna)
 └── styles/         # flow-base.css (shared flow styles)
 supabase/functions/ # Edge functions
 docs/               # Specs, handoffs, research
@@ -96,6 +96,10 @@ Key files: `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`. DB: `ques
 ### 4. 7-Day Challenge System (Maintenance Engine)
 
 **Tabs**: Discover → Paths → Tune → Progress. Paths tab unlocks when current job flow OR choose-quests completed.
+
+**Choose Quests Bridge** (`/choose-quests`, `ChooseQuestsFlow.jsx`): Phase 1→2 bridge. Intro → Select dome experiences → Deep Dive (Layer 1 format sub-nodes + Layer 2 career vectors per node) → AI suggests paths (`suggest-life-paths` edge function) → Pick paths → Path Definition (3 screens per path) → Save. Deep dive data: `src/data/experienceDomeSubNodes.js` (511 format sub-nodes), career vectors (Do/Guide/Build/Hobby). Path Definition screens: Screen 1 Setup (precursor + 3 dome dimensions + dream levels + radar gap), Screen 2a Framing (Life Fuel contrast + buts + "and" reframe), Screen 2b Commitment (smallest step + fear question + identity declaration + protective voice). All sections required. Spec: `docs/features/experience-dome-deep-dive.md`.
+
+**Life Fuels** (`src/data/channelMapping.js`): 4 channels (Choice, Connection, Mastery, Meaning). Tracked via checkboxes after courage challenges. Shift-context labels for path definition in `SHIFT_FUELS` constant in `ChooseQuestsFlow.jsx`.
 
 **Paths tab** (`LevelTab.jsx`): Active quests with QuestBoardCards, mini dome, zone matrix (Action x Clarity). **Tune tab**: Daily practices, drains, experience check-ins. **Courage** (`PlayListTab.jsx`): Active courage challenges, WahooCreator, identity statements. **Healing** (`HealingFlowModal.jsx`): 7-step per-task flow (Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best).
 
@@ -180,7 +184,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)
 
 ### Quests + Courage
-`quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
+`quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
 
 ### Clusters + Skills
 `nikigai_clusters` (resonance_state, behavioral_evidence, skill_tags, problem_tags) | `user_skill_progress` (user_id, skill_id, xp, level) | `curiosity_clusters`
@@ -213,6 +217,8 @@ npm run build:creator  # Production build (creator)
 - `docs/features/dome-of-safety-spec.md` — **Dome of Safety full spec**
 - `docs/features/prediction-error-spec.md` — **Prediction error + gap measurement**
 - `docs/frameworks/zone-calibration-framework.md` — Zone Calibration (Original IP)
+- `docs/features/experience-dome-deep-dive.md` — Deep dive Layer 1 (format sub-nodes) + Layer 2 (career vectors)
+- `docs/features/try-ambition-radar-spec.md` — Ambition Radar lead magnet spec
 - `docs/INDEX.md` — Thematic index of all living docs
 
 ## MCP Session Sync
