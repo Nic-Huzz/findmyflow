@@ -4,6 +4,7 @@ import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { awardMovementXP } from '../lib/movementXP'
+import { DIFFICULTY_SCALE, getDifficultyLabel, calculateGap } from '../data/domeDimensions'
 import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
@@ -34,7 +35,7 @@ const WAHOO_RP = {
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'gap_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -95,6 +96,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Life Fuel channels
   const [lifeFuel, setLifeFuel] = useState({ choice: false, connection: false, mastery: false, meaning: false })
 
+  // Prediction error (gap measurement)
+  const [preactionDifficulty, setPreactionDifficulty] = useState(null)
+  const [experiencedDifficulty, setExperiencedDifficulty] = useState(null)
+
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
 
@@ -148,6 +153,19 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         reflectionText,
       })
       if (groanError) throw groanError
+
+      // 1b. Save prediction error data (if gap_check was completed)
+      if (preactionDifficulty || experiencedDifficulty) {
+        try {
+          await supabase.from('groan_challenges').update({
+            preaction_difficulty: preactionDifficulty,
+            experienced_difficulty: experiencedDifficulty,
+            experienced_at: new Date().toISOString(),
+          }).eq('id', challenge.id)
+        } catch (e) {
+          console.warn('Gap data save error:', e)
+        }
+      }
 
       // 2. Upsert quest_completions record (delete old first to prevent RP farming)
       const questId = `play_list_challenge_${challenge.id}`
@@ -536,12 +554,83 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <button
               className="gcm-gold-btn"
               disabled={!wahooClassification}
-              onClick={() => setStep('expectation')}
+              onClick={() => setStep(challenge.predicted_difficulty ? 'gap_check' : 'expectation')}
             >
               Continue
             </button>
           </>
         )}
+
+        {step === 'gap_check' && (() => {
+          const predicted = getDifficultyLabel(challenge.predicted_difficulty)
+          const gap = (preactionDifficulty && experiencedDifficulty)
+            ? calculateGap(challenge.predicted_difficulty, experiencedDifficulty)
+            : null
+
+          return (
+            <>
+              <h2 className="gcm-title">Body Check</h2>
+
+              <div className="gcm-gap-section">
+                <p className="gcm-gap-q">
+                  You predicted <span className="gcm-gap-highlight">{predicted?.icon} {predicted?.label}</span>.
+                  Right before you did it, what was your body doing?
+                </p>
+                <div className="gcm-gap-pills">
+                  {DIFFICULTY_SCALE.map(ds => (
+                    <button
+                      key={ds.level}
+                      className={`gcm-gap-pill ${preactionDifficulty === ds.level ? 'selected' : ''}`}
+                      onClick={() => setPreactionDifficulty(ds.level)}
+                      title={ds.description}
+                    >
+                      <span className="gcm-gap-pill-icon">{ds.icon}</span>
+                      <span className="gcm-gap-pill-label">{ds.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {preactionDifficulty && (
+                <div className="gcm-gap-section">
+                  <p className="gcm-gap-q">And how was it actually?</p>
+                  <div className="gcm-gap-pills">
+                    {DIFFICULTY_SCALE.map(ds => (
+                      <button
+                        key={ds.level}
+                        className={`gcm-gap-pill ${experiencedDifficulty === ds.level ? 'selected' : ''}`}
+                        onClick={() => setExperiencedDifficulty(ds.level)}
+                        title={ds.description}
+                      >
+                        <span className="gcm-gap-pill-icon">{ds.icon}</span>
+                        <span className="gcm-gap-pill-label">{ds.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {gap != null && gap > 0 && (
+                <div className="gcm-gap-result gcm-gap-positive">
+                  When you created this, you expected {predicted?.icon} {predicted?.label}. Reality was {getDifficultyLabel(experiencedDifficulty)?.icon} {getDifficultyLabel(experiencedDifficulty)?.label}. Your nervous system just learned something.
+                </div>
+              )}
+              {gap != null && gap === 0 && (
+                <div className="gcm-gap-result">
+                  Your prediction matched reality. Your self-awareness is sharp.
+                </div>
+              )}
+
+              <button
+                className="gcm-gold-btn"
+                disabled={!preactionDifficulty || !experiencedDifficulty}
+                onClick={() => setStep('expectation')}
+              >
+                Continue
+              </button>
+            </>
+          )
+        })()}
 
         {step === 'expectation' && (
           <>

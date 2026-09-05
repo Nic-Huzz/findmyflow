@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
+import { DOME_DIMENSIONS, DIFFICULTY_SCALE, calculateCourageScore } from '../data/domeDimensions'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import QuestSelector from './QuestSelector'
@@ -24,15 +25,17 @@ const VOICE_META = {
   'auto-pilot': { name: 'Auto-Pilot', icon: '🤖', desc: 'Goes through the motions, checks out' },
 }
 
-const EXPANSION_DIMENSIONS = [
-  { id: 'duration', label: 'Duration', sub: 'Doing it for longer', icon: '⏱', group: 'craft' },
-  { id: 'frequency', label: 'Frequency', sub: 'Doing it more often', icon: '🔁', group: 'craft' },
-  { id: 'medium', label: 'Medium', sub: 'Trying a new format', icon: '📡', group: 'craft' },
-  { id: 'people', label: 'People', sub: 'More people watching or involved', icon: '👥', group: 'craft' },
-  { id: 'money', label: 'Money', sub: 'Charging or investing money', icon: '💰', group: 'scale' },
-  { id: 'location', label: 'Location', sub: 'Somewhere new or public', icon: '📍', group: 'scale' },
-  { id: 'independence', label: 'Independence', sub: 'Doing it on your own terms', icon: '🚀', group: 'scale' },
-]
+// Dimension sub-descriptions for the tag grid
+const DIM_SUBS = {
+  people: 'More people watching or involved',
+  money: 'Charging or asking for money',
+  vulnerability: 'Removing shields, being seen',
+  stakes: 'More at risk if it goes wrong',
+  rarity: 'Doing something uncommon',
+  identity: 'Surprising the people who know you',
+  context: 'Unfamiliar territory or conditions',
+  business_commitment: 'Going deeper into your business',
+}
 
 export default function WahooCreator({
   userId,
@@ -50,6 +53,8 @@ export default function WahooCreator({
   const [error, setError] = useState(null)
   const [protectiveVoice, setProtectiveVoice] = useState(null)
   const [expansionDims, setExpansionDims] = useState([])
+  const [dimensionValues, setDimensionValues] = useState({})
+  const [predictedDifficulty, setPredictedDifficulty] = useState(null)
   const successTimerRef = useRef(null)
 
   useEffect(() => {
@@ -80,6 +85,8 @@ export default function WahooCreator({
         visibilityLayers: [],
         questId: linkedQuestId || null,
         expansionDimensions: expansionDims,
+        dimensionValues,
+        predictedDifficulty,
       })
       if (saveError || !dbRecord) throw saveError || new Error('Challenge was not saved')
 
@@ -216,33 +223,118 @@ export default function WahooCreator({
           )}
         </div>
 
-        {/* Step 2: What capacity are you building? */}
+        {/* Step 2: Capacity — dims + levels + body prediction (one scrollable step) */}
         {freeText.trim() && linkedQuestId && (
           <div className="wc-step">
             <div className="wc-step-q">What capacity are you building?</div>
             <div className="wc-dim-grid">
-              {EXPANSION_DIMENSIONS.map(d => {
+              {DOME_DIMENSIONS.map(d => {
                 const active = expansionDims.includes(d.id)
                 return (
                   <button
                     key={d.id}
-                    className={`wc-dim-option ${active ? (d.group === 'scale' ? 'scale-active' : 'active') : ''}`}
+                    className={`wc-dim-option ${active ? 'active' : ''}`}
                     onClick={() => {
                       hapticLight()
-                      setExpansionDims(prev =>
-                        active ? prev.filter(x => x !== d.id) : [...prev, d.id]
-                      )
+                      if (active) {
+                        setExpansionDims(prev => prev.filter(x => x !== d.id))
+                        setDimensionValues(prev => { const n = { ...prev }; delete n[d.id]; return n })
+                      } else {
+                        setExpansionDims(prev => [...prev, d.id])
+                      }
                     }}
                   >
                     <span className="wc-dim-icon">{d.icon}</span>
                     <span className="wc-dim-text">
                       <span className="wc-dim-name">{d.label}</span>
-                      <span className="wc-dim-sub">{d.sub}</span>
+                      <span className="wc-dim-sub">{DIM_SUBS[d.id]}</span>
                     </span>
                   </button>
                 )
               })}
             </div>
+
+            {/* Inline level pickers for selected dimensions */}
+            {expansionDims.length > 0 && (
+              <div className="wc-level-pickers">
+                {expansionDims.map(dimId => {
+                  const dim = DOME_DIMENSIONS.find(d => d.id === dimId)
+                  if (!dim) return null
+                  const curVal = dimensionValues[dimId]
+
+                  if (dim.type === 'numeric') {
+                    return (
+                      <div key={dimId} className="wc-level-row">
+                        <div className="wc-level-label">{dim.icon} {dim.label}</div>
+                        <input
+                          className="wc-level-input"
+                          type="number"
+                          inputMode="numeric"
+                          min="0"
+                          placeholder={dim.placeholder}
+                          value={curVal ?? ''}
+                          onChange={e => {
+                            const raw = e.target.value
+                            if (raw === '') {
+                              setDimensionValues(prev => { const n = { ...prev }; delete n[dimId]; return n })
+                            } else {
+                              setDimensionValues(prev => ({ ...prev, [dimId]: Number(raw) }))
+                            }
+                          }}
+                        />
+                      </div>
+                    )
+                  }
+
+                  // Qualitative: horizontal pill picker
+                  return (
+                    <div key={dimId} className="wc-level-row">
+                      <div className="wc-level-label">{dim.icon} {dim.question}</div>
+                      <div className="wc-level-pills">
+                        {dim.levels.map(lv => (
+                          <button
+                            key={lv.level}
+                            className={`wc-level-pill ${curVal === lv.level ? 'selected' : ''}`}
+                            onClick={() => {
+                              hapticLight()
+                              setDimensionValues(prev => ({ ...prev, [dimId]: lv.level }))
+                            }}
+                            title={lv.description}
+                          >
+                            {lv.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
+
+                {/* Body prediction */}
+                <div className="wc-level-row">
+                  <div className="wc-level-label">How does your body feel thinking about this?</div>
+                  <div className="wc-level-pills">
+                    {DIFFICULTY_SCALE.map(ds => (
+                      <button
+                        key={ds.level}
+                        className={`wc-level-pill wc-body-pill ${predictedDifficulty === ds.level ? 'selected' : ''}`}
+                        onClick={() => { hapticLight(); setPredictedDifficulty(ds.level) }}
+                        title={ds.description}
+                      >
+                        <span>{ds.icon}</span>
+                        <span>{ds.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Courage score preview */}
+                {Object.keys(dimensionValues).length > 0 && (
+                  <div className="wc-courage-preview">
+                    Courage score: {calculateCourageScore(dimensionValues).toFixed(1)}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 

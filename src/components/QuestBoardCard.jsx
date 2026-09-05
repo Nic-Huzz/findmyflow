@@ -7,20 +7,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
+import { getDimensionById } from '../data/domeDimensions'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import './QuestBoardCard.css'
-
-const DIMENSION_META = {
-  duration: { label: 'Duration', scale: false },
-  frequency: { label: 'Frequency', scale: false },
-  medium: { label: 'Medium', scale: false },
-  people: { label: 'People', scale: false },
-  money: { label: 'Money', scale: true },
-  location: { label: 'Location', scale: true },
-  independence: { label: 'Independence', scale: true },
-}
 
 const STATE_LABELS = {
   vibe_rise: 'Vibe Rise',
@@ -50,6 +41,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [signalTaskId, setSignalTaskId] = useState(null)
   const [collapsedExps, setCollapsedExps] = useState(new Set())
   const [challengeDims, setChallengeDims] = useState({})
+  const [challengeDimValues, setChallengeDimValues] = useState({})
   const [reRatingExpId, setReRatingExpId] = useState(null)
   const inputRef = useRef(null)
 
@@ -81,13 +73,18 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     if (!groanIds.length) return
     supabase
       .from('groan_challenges')
-      .select('id, expansion_dimensions')
+      .select('id, expansion_dimensions, dimension_values')
       .in('id', groanIds)
       .then(({ data }) => {
         if (data) {
           const dims = {}
-          data.forEach(g => { dims[g.id] = g.expansion_dimensions || [] })
+          const vals = {}
+          data.forEach(g => {
+            dims[g.id] = g.expansion_dimensions || []
+            vals[g.id] = g.dimension_values || {}
+          })
           setChallengeDims(dims)
+          setChallengeDimValues(vals)
         }
       })
   }, [taskIdKey])
@@ -247,6 +244,10 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     if (!task.groan_challenge_id) return []
     return challengeDims[task.groan_challenge_id] || []
   }
+  const getDimVals = (task) => {
+    if (!task.groan_challenge_id) return {}
+    return challengeDimValues[task.groan_challenge_id] || {}
+  }
 
   const renderTaskRow = (task) => (
     <div key={task.id}>
@@ -257,9 +258,10 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
           {getDims(task).length > 0 && (
             <div className="qbc-dims">
               {getDims(task).map(d => {
-                const meta = DIMENSION_META[d]
-                if (!meta) return null
-                return <span key={d} className={`qbc-dim ${meta.scale ? 'qbc-dim--scale' : ''}`}>{meta.label}</span>
+                const dim = getDimensionById(d)
+                if (!dim) return null
+                const val = getDimVals(task)[d]
+                return <span key={d} className="qbc-dim">{dim.icon} {val != null ? val : dim.label}</span>
               })}
             </div>
           )}

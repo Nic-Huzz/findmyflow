@@ -1,0 +1,121 @@
+/* DomeOfSafety — scoped under .dos- prefix */
+
+.dos-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dos-svg {
+  display: block;
+}
+
+/* Concentric rings */
+.dos-ring {
+  fill: none;
+  stroke: #e9ecef;
+  stroke-width: 0.8;
+}
+
+.dos-ring-outer {
+  stroke: #d4d4d4;
+}
+
+/* Spoke lines */
+.dos-spoke {
+  stroke: #e9ecef;
+  stroke-width: 0.6;
+}
+
+/* Inner dome — purple fill (integrated capacity) */
+.dos-dome-fill {
+  fill: rgba(94, 23, 235, 0.15);
+  stroke: #5e17eb;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+/* Edge ring — gold dashed (growth zone) */
+.dos-edge-fill {
+  fill: rgba(233, 162, 59, 0.08);
+  stroke: #E9A23B;
+  stroke-width: 1.2;
+  stroke-dasharray: 4 3;
+  stroke-linejoin: round;
+}
+
+/* Dome vertices */
+.dos-vertex {
+  fill: #5e17eb;
+}
+
+/* Labels */
+.dos-label-icon {
+  font-size: 14px;
+}
+
+.dos-label-name {
+  font-size: 9px;
+  font-weight: 700;
+  fill: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Stats row */
+.dos-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.dos-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dos-stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #5e17eb;
+}
+
+.dos-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Empty state */
+.dos-empty {
+  text-align: center;
+  font-size: 13px;
+  color: #9a9daa;
+  padding: 8px 16px;
+  line-height: 1.5;
+}
+
+/* Mini mode */
+.dos-mini {
+  cursor: pointer;
+}
+
+.dos-mini .dos-dome-fill {
+  stroke-width: 1;
+}
+
+.dos-mini .dos-edge-fill {
+  stroke-width: 0.8;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .dos-dome-fill,
+  .dos-edge-fill {
+    transition: none;
+  }
+}

@@ -111,6 +111,8 @@ export async function createGroanChallenge(challengeData) {
     visibilityLayers = [],
     questId = null,
     expansionDimensions = [],
+    dimensionValues = {},
+    predictedDifficulty = null,
   } = challengeData
 
   const { data, error } = await supabase
@@ -130,6 +132,9 @@ export async function createGroanChallenge(challengeData) {
       visibility_layers: visibilityLayers,
       quest_id: questId,
       expansion_dimensions: expansionDimensions.length > 0 ? expansionDimensions : null,
+      dimension_values: Object.keys(dimensionValues).length > 0 ? dimensionValues : null,
+      predicted_difficulty: predictedDifficulty || null,
+      predicted_at: predictedDifficulty ? new Date().toISOString() : null,
       status: GROAN_CHALLENGE_STATUS.GENERATED
     })
     .select()

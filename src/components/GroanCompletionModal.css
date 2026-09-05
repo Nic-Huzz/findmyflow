@@ -326,3 +326,88 @@
   color: #6c757d;
   margin-left: auto;
 }
+
+/* ── Gap check (prediction error) ── */
+.gcm-gap-section {
+  margin-bottom: 16px;
+  animation: gcmFadeIn 0.25s ease;
+}
+
+@keyframes gcmFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gcm-gap-q {
+  font-size: 14px;
+  color: #1a1a2e;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.gcm-gap-highlight {
+  font-weight: 800;
+  color: #5e17eb;
+}
+
+.gcm-gap-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.gcm-gap-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 10px;
+  min-width: 58px;
+  border-radius: 14px;
+  border: 2px solid #e9ecef;
+  background: #f8f9fa;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.gcm-gap-pill:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.gcm-gap-pill.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+}
+
+.gcm-gap-pill-icon {
+  font-size: 20px;
+}
+
+.gcm-gap-pill-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6c757d;
+}
+
+.gcm-gap-pill.selected .gcm-gap-pill-label {
+  color: #5e17eb;
+}
+
+.gcm-gap-result {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f8f9fa;
+  margin-bottom: 12px;
+  animation: gcmFadeIn 0.3s ease;
+}
+
+.gcm-gap-result.gcm-gap-positive {
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.08);
+  border: 1px solid rgba(233, 162, 59, 0.2);
+}

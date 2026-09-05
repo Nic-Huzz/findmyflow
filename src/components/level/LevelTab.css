@@ -1436,3 +1436,10 @@
   border-radius: 10px; font-size: 13px; color: #6b7280; cursor: pointer;
   font-family: inherit;
 }
+
+/* Mini Dome of Safety teaser */
+.quest-mini-dome {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 16px;
+}

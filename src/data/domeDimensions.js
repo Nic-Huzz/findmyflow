@@ -158,6 +158,7 @@ export function getDimensionById(id) {
 export function getNumericTier(dimensionId, rawValue) {
   const dim = getDimensionById(dimensionId)
   if (!dim || dim.type !== 'numeric' || rawValue == null) return 0
+  if (rawValue <= 0) return 0
   for (let i = dim.tiers.length - 1; i >= 0; i--) {
     if (rawValue >= dim.tiers[i]) return i + 1
   }

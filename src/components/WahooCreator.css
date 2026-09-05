@@ -633,3 +633,95 @@
   border-color: #5e17eb;
   background: rgba(94, 23, 235, 0.04);
 }
+
+/* ── Level pickers (dome dimensions) ── */
+.wc-level-pickers {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wc-level-row {
+  animation: wcStepIn 0.25s ease;
+}
+
+.wc-level-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.wc-level-input {
+  box-sizing: border-box;
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #1a1a2e;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.wc-level-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: #ffffff;
+}
+
+.wc-level-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wc-level-pill {
+  padding: 6px 10px;
+  border-radius: 16px;
+  border: 1.5px solid #e9ecef;
+  background: #f8f9fa;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.wc-level-pill:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.wc-level-pill.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.08);
+  color: #5e17eb;
+}
+
+/* Body prediction pills — wider, icon + label stacked */
+.wc-body-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 10px;
+  min-width: 56px;
+  text-align: center;
+}
+
+.wc-body-pill span:first-child {
+  font-size: 18px;
+}
+
+/* Courage score preview */
+.wc-courage-preview {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5e17eb;
+  padding: 8px 0 0;
+}

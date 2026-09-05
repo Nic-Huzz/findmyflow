@@ -10,8 +10,8 @@
  * Position within zone = average strength of active pillars.
  *
  * Pillar thresholds (7-day window):
- *   Safety:      3+ practices (meditation, breathwork, prayer, healing, self-compassion, savouring, connect)
- *   Expression:  3+ practices OR 1+ completed courage challenge
+ *   Safety:      4+ practices (meditation, breathwork, prayer, healing, self-compassion, savouring, connect)
+ *   Expression:  3+ tune practices AND 1+ completed courage challenge
  *   Maintenance: 50%+ of daily items logged (sleep, exercise, sunlight, meals)
  *
  * Zones: 0-25 Stuck, 25-50 Wired, 50-75 Grounded, 75-100 Vibe Rise
@@ -25,8 +25,8 @@ import { supabase } from '../lib/supabaseClient'
 import { formatLocalDate } from '../lib/dateUtils'
 
 // Pillar activation thresholds
-const SAFETY_THRESHOLD = 3       // 3+ safety practices in 7 days
-const EXPRESSION_THRESHOLD = 3   // 3+ expression practices OR 1+ wahoo
+const SAFETY_THRESHOLD = 4       // 4+ safety practices in 7 days
+const EXPRESSION_PRACTICE_THRESHOLD = 3  // 3+ expression tune practices AND 1+ wahoo
 const MAINTENANCE_THRESHOLD = 50 // 50%+ of daily items logged
 
 // Max strength per pillar (for normalising to 0-1)
@@ -100,7 +100,8 @@ function computeAxes(completions, checkins, wahoos) {
 
   // --- Pillar activation ---
   const safetyActive = safetyCount >= SAFETY_THRESHOLD
-  const expressionActive = exprCount >= EXPRESSION_THRESHOLD || wahooCount >= 1
+  const exprTuneCount = exprPractices + embodyEssence
+  const expressionActive = exprTuneCount >= EXPRESSION_PRACTICE_THRESHOLD && wahooCount >= 1
   const maintenanceActive = maintenancePct >= MAINTENANCE_THRESHOLD
 
   const activePillars = [safetyActive, expressionActive, maintenanceActive].filter(Boolean).length

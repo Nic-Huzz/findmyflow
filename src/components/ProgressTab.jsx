@@ -9,6 +9,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { DOME_DIMENSIONS } from '../data/domeDimensions'
+import useSafetyDome from '../hooks/useSafetyDome'
+import DomeOfSafety from './DomeOfSafety'
 import { LIFE_FUEL_CHANNELS, calculateLifeFuel } from '../data/channelMapping'
 import './ProgressTab.css'
 
@@ -30,15 +33,7 @@ const HERO_STAGES = [
   { stage: 12, name: 'Return with the Elixir', refs: ['Simba standing on Pride Rock as king.', 'The Avengers saving the universe.', 'Frodo sailing to the Undying Lands.'], nextTitle: 'You\'re free', nextHow: 'Earning from play, choosing where you live, working with who you want.' },
 ]
 
-const DIMENSION_META = {
-  duration: { label: 'Duration', icon: '⏱' },
-  frequency: { label: 'Frequency', icon: '🔁' },
-  medium: { label: 'Medium', icon: '📡' },
-  people: { label: 'People', icon: '👥' },
-  money: { label: 'Money', icon: '💰' },
-  location: { label: 'Location', icon: '📍' },
-  independence: { label: 'Independence', icon: '🚀' },
-}
+// Dimension metadata now sourced from domeDimensions.js (DOME_DIMENSIONS)
 
 export default function ProgressTab({ userId }) {
   const navigate = useNavigate()
@@ -50,6 +45,7 @@ export default function ProgressTab({ userId }) {
   const [lifeFuel, setLifeFuel] = useState(null)
   const [lifeFuelBaseline, setLifeFuelBaseline] = useState(null)
   const [loading, setLoading] = useState(true)
+  const dome = useSafetyDome(userId)
 
   useEffect(() => {
     if (!userId) return
@@ -260,17 +256,29 @@ export default function ProgressTab({ userId }) {
         )
       })()}
 
+      {/* Dome of Safety */}
+      {!dome.loading && (Object.keys(dome.domeEdges).length > 0 || Object.keys(dome.edgeZone).length > 0) && (
+        <div className="pt-section">
+          <div className="pt-section-title">Your Dome of Safety</div>
+          <DomeOfSafety
+            domeEdges={dome.domeEdges}
+            edgeZone={dome.edgeZone}
+            gapMetrics={dome.gapMetrics}
+          />
+        </div>
+      )}
+
       {/* Expansion Dimensions */}
       {totalDimUsage > 0 && (
         <div className="pt-section">
           <div className="pt-section-title">What you've been stretching</div>
           <div className="pt-dim-grid">
-            {Object.entries(DIMENSION_META).map(([id, meta]) => {
-              const count = dimensionCounts[id] || 0
+            {DOME_DIMENSIONS.map(dim => {
+              const count = dimensionCounts[dim.id] || 0
               return (
-                <div key={id} className={`pt-dim-item ${count > 0 ? 'active' : ''}`}>
-                  <span className="pt-dim-icon">{meta.icon}</span>
-                  <span className="pt-dim-label">{meta.label}</span>
+                <div key={dim.id} className={`pt-dim-item ${count > 0 ? 'active' : ''}`}>
+                  <span className="pt-dim-icon">{dim.icon}</span>
+                  <span className="pt-dim-label">{dim.label}</span>
                   <span className="pt-dim-count">{count}</span>
                 </div>
               )

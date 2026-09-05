@@ -14,6 +14,8 @@ import { useState, useEffect } from 'react'
 import { MONEY_MODEL_LADDER } from '../../data/moneyModelLadder'
 import { BUSINESS_STAGES } from '../../data/businessStages'
 import { EXPERIENCE_PRICING } from '../../data/experiencePricing'
+import { getModelReadiness } from '../../data/domeBusinessModels'
+import useSafetyDome from '../../hooks/useSafetyDome'
 import { getDomeFuel } from '../../lib/directionEngine'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
@@ -46,6 +48,7 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
   const [showFullPath, setShowFullPath] = useState(false)
   const [saving, setSaving] = useState(false)
   const [topExperiences, setTopExperiences] = useState([]) // labels of top dome experiences
+  const dome = useSafetyDome(userId)
 
   // Load user's top Vibe Rise experiences for domain-specific pricing
   useEffect(() => {
@@ -122,6 +125,7 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
     if (!model) return null
     const isOpen = expanded.has(modelId)
     const dealSize = getDealSize(modelId)
+    const { ready } = getModelReadiness(dome.domeEdges, modelId)
 
     return (
       <div key={modelId} className={`mmc-level ${isOpen ? 'open' : ''} ${type === 'next' ? 'mmc-next' : ''}`}>
@@ -129,6 +133,7 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
           <span className="mmc-level-num">{type === 'next' ? '→' : model.level}</span>
           <div className="mmc-level-info">
             <span className="mmc-level-label">{model.icon} {model.label}</span>
+            {ready && <span className="mmc-ready-badge">Ready ✓</span>}
             <span className="mmc-level-deal">{dealSize}</span>
           </div>
           <span className="mmc-level-chevron">{isOpen ? '▾' : '▸'}</span>
