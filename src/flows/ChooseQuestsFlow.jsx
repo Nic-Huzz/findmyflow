@@ -2,7 +2,8 @@
  * ChooseQuestsFlow.jsx — /choose-quests
  *
  * Phase 1→2 bridge: Dome experiences → AI life path suggestions → quest creation.
- * Flow: Intro → Select Experiences → Processing → Pick Paths → Stuck Points → Done
+ * Flow: Intro → Select → Deep Dive → Processing → Paths → Path Definition (2 screens per path) → Done
+ * Path Definition: Screen 1 (precursor + dream dimensions + radar), Screen 2 (buts + reframe + next step + voice)
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +11,9 @@ import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getDomeExperiencesForBridge, groupByPrimal, formatDomeForPrompt } from '../lib/domeSummary'
 import { hasSubNodes, getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
+import { DOME_DIMENSIONS } from '../data/domeDimensions'
+import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
+import DomeOfSafety from '../components/DomeOfSafety'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { getWeekStartLocal } from '../lib/dateUtils'
@@ -21,17 +25,23 @@ const STEPS = {
   DEEP_DIVE: 'deep_dive',
   PROCESSING: 'processing',
   PATHS: 'paths',
-  STUCK: 'stuck',
+  PATH_DEF: 'path_def',
   SAVING: 'saving',
   DONE: 'done',
 }
+
+const VOICES = [
+  { id: 'perfectionist', icon: '🎯', label: 'Perfectionist', sub: "Won't start until it's perfect" },
+  { id: 'ghost', icon: '👻', label: 'Ghost', sub: 'Disappears, avoids, goes quiet' },
+  { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser', sub: 'Says yes when you mean no' },
+  { id: 'controller', icon: '🧱', label: 'Controller', sub: 'Needs to control every variable' },
+  { id: 'auto-pilot', icon: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
+]
 
 export default function ChooseQuestsFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { domeStates, loading: domeLoading } = useDomeData(user?.id)
-  const spNextId = useRef(1)
-
   // Hide bottom toolbar
   useEffect(() => {
     document.body.classList.add('hide-toolbar')
@@ -58,11 +68,18 @@ export default function ChooseQuestsFlow() {
   const [showCustom, setShowCustom] = useState(false)
   const [aiError, setAiError] = useState(null)
 
-  // Stuck points step
-  const [stuckPoints, setStuckPoints] = useState([])
-  const [stuckInputs, setStuckInputs] = useState({}) // { [pathIdx]: 'text' }
-  const [activeSpId, setActiveSpId] = useState(null)
-  const stuckInputRef = useRef(null)
+  // Path definition step (replaces old stuck points)
+  const [pdPathIndex, setPdPathIndex] = useState(0)
+  const [pdScreen, setPdScreen] = useState(0) // 0 = setup, 1 = buts+step+voice
+  const [precursorLevels, setPrecursorLevels] = useState({})       // { [pathIdx]: 'not_yet' }
+  const [selectedDims, setSelectedDims] = useState({})              // { [pathIdx]: Set('people','money',...) }
+  const [dreamDimensions, setDreamDimensions] = useState({})        // { [pathIdx]: { people: 5, ... } }
+  const [currentDimensions, setCurrentDimensions] = useState({})    // { [pathIdx]: { people: 1, ... } }
+  const [butTexts, setButTexts] = useState({})                      // { [pathIdx]: ['text1', ...] }
+  const [butInput, setButInput] = useState('')
+  const [showReframe, setShowReframe] = useState({})                // { [pathIdx]: boolean }
+  const [nextStepTexts, setNextStepTexts] = useState({})            // { [pathIdx]: 'text' }
+  const [protectiveVoices, setProtectiveVoices] = useState({})
 
   // Load essence archetype
   useEffect(() => {
@@ -166,29 +183,13 @@ export default function ChooseQuestsFlow() {
     hapticLight()
   }, [customInput])
 
-  // ── Stuck points ──
-  const addStuckPoint = useCallback((pathIdx) => {
-    const text = (stuckInputs[pathIdx] || '').trim()
-    if (!text) return
-    const sp = {
-      id: 'sp' + spNextId.current++,
-      pathIdx,
-      text,
-      depthLevel: null,
-      wahooCategory: null,
-      protectiveVoice: null,
+  // ── Path definition helpers ──
+  const getDimTiers = useCallback((dim) => {
+    if (dim.type === 'numeric') {
+      // For numeric, show representative tier labels
+      return dim.tiers.map((t, i) => ({ level: i + 1, label: t >= 1000 ? `${t / 1000}K` : String(t) }))
     }
-    setStuckPoints(prev => [...prev, sp])
-    setStuckInputs(prev => ({ ...prev, [pathIdx]: '' }))
-    setActiveSpId(sp.id)
-  }, [stuckInputs])
-
-  const updateStuckField = useCallback((spId, field, value) => {
-    setStuckPoints(prev => prev.map(sp => sp.id === spId ? { ...sp, [field]: value } : sp))
-  }, [])
-
-  const removeStuckPoint = useCallback((spId) => {
-    setStuckPoints(prev => prev.filter(sp => sp.id !== spId))
+    return dim.levels
   }, [])
 
   // ── Save quests + courage challenges ──
@@ -205,7 +206,6 @@ export default function ChooseQuestsFlow() {
         if (!path) continue
 
         // Resolve career vector + format picks from deep dive data
-        // Match by checking which selected experiences the path draws from
         const drawsFrom = (path.draws_from || '').toLowerCase()
         const pathName = (path.name || '').toLowerCase()
         let questVector = null
@@ -214,28 +214,22 @@ export default function ChooseQuestsFlow() {
         for (const exp of allExps) {
           const expDd = dd[exp.id]
           if (!expDd) continue
-
-          // Check if this path references this experience (full label match only)
           const expLabel = exp.label.toLowerCase()
           if (!drawsFrom.includes(expLabel) && !pathName.includes(expLabel)) continue
-
-          // Take the first non-hobby vector found
           const vecs = expDd.vectors instanceof Set ? [...expDd.vectors] : (expDd.vectors || [])
           if (!questVector) {
             const nonHobby = vecs.filter(v => v !== 'hobby')
             if (nonHobby.length) questVector = nonHobby[0]
           }
-          // Collect format labels
           const fmts = expDd.formats instanceof Set ? expDd.formats : new Set(expDd.formats || [])
           if (fmts.size) {
-            const subNodes = getSubNodes(exp.id)
-            subNodes.filter(s => fmts.has(s.id)).forEach(s => {
+            getSubNodes(exp.id).filter(s => fmts.has(s.id)).forEach(s => {
               if (!questFormats.includes(s.label)) questFormats.push(s.label)
             })
           }
         }
 
-        // Create quest
+        // Create quest with path definition data
         const { data: newQuest } = await supabase.from('quests').insert({
           user_id: user.id,
           label: path.name,
@@ -244,6 +238,11 @@ export default function ChooseQuestsFlow() {
           status: 'active',
           career_vector: questVector,
           format_picks: questFormats.length ? questFormats : null,
+          precursor_level: precursorLevels[pathIdx] || null,
+          current_dimensions: currentDimensions[pathIdx] || null,
+          dream_dimensions: dreamDimensions[pathIdx] || null,
+          protective_voice: protectiveVoices[pathIdx] || null,
+          buts: butTexts[pathIdx]?.length ? butTexts[pathIdx] : null,
         }).select('id').single()
 
         const questId = newQuest?.id
@@ -259,28 +258,26 @@ export default function ChooseQuestsFlow() {
           }
         }).catch(() => {})
 
-        // Create courage challenges from stuck points
-        const pathStuck = stuckPoints.filter(sp => sp.pathIdx === pathIdx)
-        for (const sp of pathStuck) {
+        // Create courage challenge from next step
+        const stepText = (nextStepTexts[pathIdx] || '').trim()
+        if (stepText) {
           const { data: existingGroan } = await supabase.from('groan_challenges')
-            .select('id').eq('user_id', user.id).eq('title', sp.text).limit(1)
+            .select('id').eq('user_id', user.id).eq('title', stepText).limit(1)
           let groanId = existingGroan?.[0]?.id
 
           if (!groanId) {
             const { data: newGroan } = await supabase.from('groan_challenges').insert({
               user_id: user.id,
-              title: sp.text,
-              challenge_text: sp.text,
+              title: stepText,
+              challenge_text: stepText,
               status: 'active',
               source_type: 'skill',
               challenge_source: 'dome_bridge',
               source_label: path.name,
               scary_score: 5,
               wahoo_score: 5,
-              depth_level: sp.depthLevel || null,
-              wahoo_category: sp.wahooCategory || null,
-              visibility_layer: sp.wahooCategory || 'screen',
-              visibility_layers: sp.wahooCategory ? [sp.wahooCategory] : [],
+              visibility_layer: 'screen',
+              visibility_layers: [],
               accepted_at: new Date().toISOString(),
             }).select('id').single()
 
@@ -292,7 +289,7 @@ export default function ChooseQuestsFlow() {
                   week_start_date: getWeekStartLocal(),
                   pick_type: 'groan',
                   reference_id: groanId,
-                  display_name: sp.text,
+                  display_name: stepText,
                 }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
               } catch {}
             }
@@ -300,42 +297,49 @@ export default function ChooseQuestsFlow() {
 
           if (groanId) {
             const { data: existingTask } = await supabase.from('quest_tasks')
-              .select('id').eq('quest_id', questId).eq('text', sp.text).limit(1)
+              .select('id').eq('quest_id', questId).eq('text', stepText).limit(1)
             if (!existingTask?.length) {
               try {
-                const { data: taskRow } = await supabase.from('quest_tasks').insert({
+                await supabase.from('quest_tasks').insert({
                   quest_id: questId,
                   user_id: user.id,
-                  text: sp.text,
+                  text: stepText,
                   is_courage_challenge: true,
                   groan_challenge_id: groanId,
-                  sort_order: pathStuck.indexOf(sp),
+                  sort_order: 0,
                 }).select('id').single()
-
-                // protectiveVoice stored on groan_challenges; healing_intention
-                // created only when user chooses to dive deeper via HealingFlowModal
               } catch {}
             }
           }
         }
       }
 
-      // Write life_path_sessions row so Quests tab auto-unlocks
+      // Write life_path_sessions row so Paths tab auto-unlocks
+      const stuckSummary = chosenPaths.map((p, i) => {
+        const pathIdx = paths.indexOf(p)
+        return {
+          id: `pd-${i}`, careerId: pathIdx,
+          text: nextStepTexts[pathIdx] || '',
+          protectiveVoice: protectiveVoices[pathIdx] || null,
+          buts: butTexts[pathIdx] || [],
+        }
+      })
       await supabase.from('life_path_sessions').insert({
         client_name: user.email || user.id,
         client_email: user.email || null,
         careers: chosenPaths.map((p, i) => ({ id: `dome-${i}`, label: p.name, predictedState: 'vibe_rise' })),
-        stuck_points: stuckPoints.map(sp => ({ id: sp.id, careerId: sp.pathIdx, text: sp.text, protectiveVoice: sp.protectiveVoice })),
+        stuck_points: stuckSummary,
         step: 'complete',
-      }).then(() => {}).catch(() => {}) // non-blocking
+      }).then(() => {}).catch(() => {})
 
       hapticSuccess()
       goTo(STEPS.DONE)
     } catch (err) {
       console.error('Quest creation failed:', err)
-      goTo(STEPS.STUCK)
+      goTo(STEPS.PATH_DEF)
     }
-  }, [user, paths, selectedPaths, stuckPoints, chosenPaths, goTo])
+  }, [user, paths, selectedPaths, chosenPaths, goTo, vibeRise, fun, selectedIds,
+    precursorLevels, currentDimensions, dreamDimensions, protectiveVoices, butTexts, nextStepTexts])
 
   // ── Loading ──
   if (domeLoading) {
@@ -617,92 +621,271 @@ export default function ChooseQuestsFlow() {
           </div>
 
           <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => goTo(STEPS.STUCK)}>
+            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => { setPdPathIndex(0); setPdScreen(0); goTo(STEPS.PATH_DEF) }}>
               {n === 0 ? 'Select at least 1 →' : 'Continue →'}
             </button>
-            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPaths([]); setSelectedPaths(new Set()); setStuckPoints([]); setStuckInputs({}); goTo(STEPS.SELECT) }}>← Change experiences</button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPaths([]); setSelectedPaths(new Set()); goTo(STEPS.SELECT) }}>← Change experiences</button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ── STUCK POINTS ──
-  if (step === STEPS.STUCK) {
-    return (
-      <div className="cqf">
-        <div className="cqf-container">
-          <div className="cqf-stuck-header">
-            <h2>What's your first step?</h2>
-            <p>For each path, what's the smallest thing you could do this week to take a step towards making it real?</p>
-          </div>
+  // ── PATH DEFINITION (2 screens per path) ──
+  if (step === STEPS.PATH_DEF) {
+    const chosenArr = [...selectedPaths].map(i => ({ idx: i, path: paths[i] })).filter(p => p.path)
+    const currentPath = chosenArr[pdPathIndex]
+    if (!currentPath) { saveQuests(); return <div className="cqf"><div className="cqf-container"><div className="cqf-processing"><div className="cqf-spinner" /></div></div></div> }
 
-          {chosenPaths.map((path, displayIdx) => {
-            const pathIdx = paths.indexOf(path)
-            const pStuck = stuckPoints.filter(sp => sp.pathIdx === pathIdx)
-            return (
-              <div key={pathIdx} className="cqf-stuck-group">
-                <div className="cqf-stuck-group-name">
-                  <div className="cqf-stuck-group-dot" />
-                  {path.name}
-                </div>
+    const { idx: pathIdx, path } = currentPath
+    const isLastPath = pdPathIndex === chosenArr.length - 1
+    const precursor = precursorLevels[pathIdx]
+    const dims = selectedDims[pathIdx] || new Set()
+    const dreams = dreamDimensions[pathIdx] || {}
+    const currDims = currentDimensions[pathIdx] || {}
+    const buts = butTexts[pathIdx] || []
+    const reframeShown = showReframe[pathIdx]
 
-                {pStuck.map(sp => (
-                  <div key={sp.id} className="cqf-stuck-item">
-                    <div className="cqf-stuck-item-row">
-                      <span className="cqf-stuck-item-text">{sp.text}</span>
-                      <span className="cqf-stuck-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
-                    </div>
-                    {activeSpId === sp.id && !sp.protectiveVoice && (
-                      <div className="cqf-voice-picker">
-                        <div className="cqf-voice-q">Which voice tries to stop you?</div>
-                        <div className="cqf-voice-options">
-                          {[
-                            { id: 'perfectionist', icon: '🎯', label: 'Perfectionist', sub: "Won't start until it's perfect" },
-                            { id: 'ghost', icon: '👻', label: 'Ghost', sub: 'Disappears, avoids, goes quiet' },
-                            { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser', sub: 'Says yes when you mean no' },
-                            { id: 'controller', icon: '🧱', label: 'Controller', sub: 'Needs to control every variable' },
-                            { id: 'auto-pilot', icon: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
-                          ].map(v => (
-                            <button key={v.id} className="cqf-voice-btn"
-                              onClick={() => { updateStuckField(sp.id, 'protectiveVoice', v.id); setActiveSpId(null); hapticLight() }}>
-                              <span className="cqf-voice-icon">{v.icon}</span>
-                              <span className="cqf-voice-label">{v.label}</span>
-                            </button>
-                          ))}
-                          <button className="cqf-voice-skip" onClick={() => setActiveSpId(null)}>Skip</button>
-                        </div>
-                      </div>
-                    )}
-                    {sp.protectiveVoice && (
-                      <div className="cqf-stuck-badges">
-                        <span className="cqf-stuck-badge voice">{sp.protectiveVoice}</span>
-                      </div>
-                    )}
+    // Screen 0: PATH SETUP (precursor + dimensions + radar)
+    if (pdScreen === 0) {
+      const dimsReady = dims.size >= 3 && [...dims].every(d => dreams[d] != null)
+
+      return (
+        <div className="cqf">
+          <div className="cqf-container">
+            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · Setup</div>
+            <div className="cqf-pd-path-name">{path.name}</div>
+
+            {/* Precursor */}
+            <div className="cqf-pd-section">
+              <div className="cqf-pd-q">Have you taken any steps on this path already?</div>
+              <div className="cqf-pd-precursor">
+                {PRECURSOR_LEVELS.map(lvl => (
+                  <div key={lvl.id}
+                    className={`cqf-pd-pre-card ${precursor === lvl.id ? 'selected' : ''}`}
+                    onClick={() => {
+                      hapticLight()
+                      setPrecursorLevels(prev => ({ ...prev, [pathIdx]: lvl.id }))
+                      setCurrentDimensions(prev => ({ ...prev, [pathIdx]: { ...PRECURSOR_DEFAULTS[lvl.id] } }))
+                    }}>
+                    <div className="cqf-pd-pre-label">{lvl.label}</div>
+                    <div className="cqf-pd-pre-desc">{lvl.description}</div>
                   </div>
                 ))}
-
-                <div className="cqf-stuck-input">
-                  <input type="text"
-                    value={stuckInputs[pathIdx] || ''}
-                    onChange={e => setStuckInputs(prev => ({ ...prev, [pathIdx]: e.target.value }))}
-                    onKeyDown={e => { if (e.key === 'Enter' && (stuckInputs[pathIdx] || '').trim()) addStuckPoint(pathIdx) }}
-                    placeholder="The smallest possible step..." />
-                  <button onClick={() => addStuckPoint(pathIdx)} disabled={!(stuckInputs[pathIdx] || '').trim()}>Add</button>
-                </div>
               </div>
-            )
-          })}
+            </div>
 
-          <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" onClick={saveQuests}>
-              {stuckPoints.length > 0 ? 'Create my quests →' : 'Skip for now, create quests →'}
-            </button>
-            <button className="cqf-cta cqf-cta-secondary" onClick={() => goTo(STEPS.PATHS)}>← Change paths</button>
+            {/* Dimensions (show after precursor selected) */}
+            {precursor && (
+              <div className="cqf-pd-section">
+                <div className="cqf-pd-q">Pick the 3 that matter most to you</div>
+                <div className="cqf-pd-dim-chips">
+                  {DOME_DIMENSIONS.map(dim => {
+                    const isSelected = dims.has(dim.id)
+                    const canAdd = dims.size < 3 || isSelected
+                    return (
+                      <div key={dim.id}
+                        className={`cqf-pd-dim-chip ${isSelected ? 'selected' : ''} ${!canAdd ? 'disabled' : ''}`}
+                        onClick={() => {
+                          if (!canAdd) return
+                          hapticLight()
+                          setSelectedDims(prev => {
+                            const next = new Set(prev[pathIdx] || [])
+                            if (next.has(dim.id)) { next.delete(dim.id); setDreamDimensions(d => { const n = { ...d[pathIdx] }; delete n[dim.id]; return { ...d, [pathIdx]: n } }) }
+                            else next.add(dim.id)
+                            return { ...prev, [pathIdx]: next }
+                          })
+                        }}>
+                        <span className="cqf-pd-dim-icon">{dim.icon}</span>
+                        <span>{dim.label}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Tier pickers for selected dimensions */}
+                {[...dims].map(dimId => {
+                  const dim = DOME_DIMENSIONS.find(d => d.id === dimId)
+                  if (!dim) return null
+                  const tiers = getDimTiers(dim)
+                  const currentLevel = currDims[dimId] || 1
+                  const dreamLevel = dreams[dimId]
+
+                  return (
+                    <div key={dimId} className="cqf-pd-dim-picker">
+                      <div className="cqf-pd-dim-q">{dim.icon} {dim.dreamQuestion}</div>
+                      <div className="cqf-pd-tiers">
+                        {tiers.map(tier => (
+                          <div key={tier.level}
+                            className={`cqf-pd-tier ${dreamLevel === tier.level ? 'dream' : ''} ${tier.level === currentLevel ? 'current' : ''}`}
+                            onClick={() => {
+                              hapticLight()
+                              setDreamDimensions(prev => ({
+                                ...prev,
+                                [pathIdx]: { ...(prev[pathIdx] || {}), [dimId]: tier.level }
+                              }))
+                            }}>
+                            <div className="cqf-pd-tier-level">{tier.label}</div>
+                            {tier.description && <div className="cqf-pd-tier-desc">{tier.description}</div>}
+                            {tier.level === currentLevel && <div className="cqf-pd-tier-you">you</div>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
+
+                {/* Mini radar when 3 dimensions have dream levels */}
+                {dimsReady && (
+                  <div className="cqf-pd-radar">
+                    <DomeOfSafety
+                      domeEdges={currDims}
+                      edgeZone={dreams}
+                      gapMetrics={{}}
+                      mini
+                    />
+                    <div className="cqf-pd-radar-legend">
+                      <span className="cqf-pd-legend-now">● Now</span>
+                      <span className="cqf-pd-legend-dream">● Dream</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="cqf-fixed">
+              <button className="cqf-cta cqf-cta-gold"
+                disabled={!precursor || !dimsReady}
+                onClick={() => { setPdScreen(1); window.scrollTo(0, 0) }}>
+                {!precursor ? 'Pick where you are' : !dimsReady ? 'Pick 3 dimensions + dream levels' : 'Next →'}
+              </button>
+              <button className="cqf-cta cqf-cta-secondary" onClick={() => {
+                if (pdPathIndex > 0) { setPdPathIndex(pdPathIndex - 1); setPdScreen(1); window.scrollTo(0, 0) }
+                else goTo(STEPS.PATHS)
+              }}>← Back</button>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
+
+    // Screen 1: BUTS + NEXT STEP + VOICE
+    if (pdScreen === 1) {
+      const stepText = nextStepTexts[pathIdx] || ''
+      const voice = protectiveVoices[pathIdx]
+
+      const advancePath = () => {
+        if (isLastPath) {
+          saveQuests()
+        } else {
+          setPdPathIndex(pdPathIndex + 1)
+          setPdScreen(0)
+          setButInput('')
+          window.scrollTo(0, 0)
+        }
+      }
+
+      return (
+        <div className="cqf">
+          <div className="cqf-container">
+            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · Your blocks</div>
+            <div className="cqf-pd-path-name">{path.name}</div>
+
+            {/* Buts */}
+            <div className="cqf-pd-section">
+              <div className="cqf-pd-q">I want to pursue {path.name}, but...</div>
+              <div className="cqf-pd-but-input">
+                <input type="text" value={butInput}
+                  onChange={e => setButInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && butInput.trim()) {
+                      setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
+                      setButInput('')
+                    }
+                  }}
+                  placeholder="What's stopping you?" />
+                <button disabled={!butInput.trim()} onClick={() => {
+                  setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
+                  setButInput('')
+                }}>Add</button>
+              </div>
+
+              {buts.length > 0 && (
+                <div className="cqf-pd-buts-list">
+                  {buts.map((b, i) => (
+                    <div key={i} className={`cqf-pd-but-item ${reframeShown ? 'reframed' : ''}`}>
+                      <div className="cqf-pd-but-text">
+                        {reframeShown
+                          ? <>I want to pursue {path.name}, <span className="cqf-pd-and">and</span> {b.toLowerCase()}</>
+                          : <>...{b}</>
+                        }
+                      </div>
+                      {!reframeShown && (
+                        <span className="cqf-pd-but-remove" onClick={() => {
+                          setButTexts(prev => ({ ...prev, [pathIdx]: buts.filter((_, j) => j !== i) }))
+                        }}>✕</span>
+                      )}
+                    </div>
+                  ))}
+
+                  {!reframeShown && (
+                    <button className="cqf-pd-reframe-btn" onClick={() => {
+                      hapticLight()
+                      setShowReframe(prev => ({ ...prev, [pathIdx]: true }))
+                    }}>See the reframe →</button>
+                  )}
+
+                  {reframeShown && (
+                    <div className="cqf-pd-reframe-note">
+                      Saying "and" turns a block into a fact you're choosing to work with.
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Next step */}
+            <div className="cqf-pd-section">
+              <div className="cqf-pd-q">Despite that, what's the smallest step this week?</div>
+              <div className="cqf-pd-step-hint">Think really small. Not "build a website". More like "google how to set up a free one".</div>
+              <input className="cqf-pd-step-input" type="text"
+                value={stepText}
+                onChange={e => setNextStepTexts(prev => ({ ...prev, [pathIdx]: e.target.value }))}
+                placeholder="The tiniest possible step..." />
+            </div>
+
+            {/* Protective voice (shows when next step has text) */}
+            {stepText.trim() && (
+              <div className="cqf-pd-section">
+                <div className="cqf-pd-q">Which voice tries to stop you from doing that?</div>
+                <div className="cqf-pd-step-quote">"{stepText.trim()}"</div>
+                <div className="cqf-pd-voices">
+                  {VOICES.map(v => (
+                    <div key={v.id}
+                      className={`cqf-dd-vector ${voice === v.id ? 'selected' : ''}`}
+                      onClick={() => { hapticLight(); setProtectiveVoices(prev => ({ ...prev, [pathIdx]: v.id })) }}>
+                      <div className="cqf-dd-vector-check">✓</div>
+                      <div>
+                        <div className="cqf-dd-vector-label">{v.icon} {v.label}</div>
+                        <div className="cqf-dd-vector-sub">{v.sub}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="cqf-pd-skip" onClick={() => setProtectiveVoices(prev => ({ ...prev, [pathIdx]: null }))}>Skip</button>
+              </div>
+            )}
+
+            <div className="cqf-fixed">
+              <button className="cqf-cta cqf-cta-gold" onClick={advancePath}>
+                {isLastPath ? 'Create my paths →' : 'Next path →'}
+              </button>
+              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPdScreen(0); window.scrollTo(0, 0) }}>← Back to setup</button>
+            </div>
+          </div>
+        </div>
+      )
+    }
   }
 
   // ── SAVING ──

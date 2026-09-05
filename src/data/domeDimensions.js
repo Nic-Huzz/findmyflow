@@ -19,6 +19,7 @@ export const DOME_DIMENSIONS = [
     label: 'People',
     icon: '👥',
     question: 'How many people were involved or watching?',
+    dreamQuestion: 'How many people do you want to reach?',
     type: 'numeric',
     tiers: [1, 5, 10, 20, 50, 100, 250, 500, 1000, 5000, 10000, 100000],
     maxLevel: 12,
@@ -30,6 +31,7 @@ export const DOME_DIMENSIONS = [
     label: 'Money',
     icon: '💰',
     question: 'How much did you ask someone to pay?',
+    dreamQuestion: 'How much do you want to earn from this?',
     type: 'numeric',
     tiers: [0, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
     maxLevel: 11,
@@ -41,6 +43,7 @@ export const DOME_DIMENSIONS = [
     label: 'Vulnerability',
     icon: '💜',
     question: 'How much could you hide?',
+    dreamQuestion: 'How visible do you want to be?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -56,6 +59,7 @@ export const DOME_DIMENSIONS = [
     label: 'Stakes',
     icon: '⚖️',
     question: 'What was at risk?',
+    dreamQuestion: 'What are you willing to put on the line?',
     type: 'qualitative',
     maxLevel: 4,
     levels: [
@@ -70,6 +74,7 @@ export const DOME_DIMENSIONS = [
     label: 'Rarity',
     icon: '✦',
     question: 'How normal is this in the world?',
+    dreamQuestion: 'How original do you want this to be?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -85,6 +90,7 @@ export const DOME_DIMENSIONS = [
     label: 'Identity',
     icon: '🪞',
     question: 'How much does this feel like you?',
+    dreamQuestion: 'How much of a stretch is this?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -100,6 +106,7 @@ export const DOME_DIMENSIONS = [
     label: 'Context',
     icon: '🧭',
     question: 'How familiar were the conditions?',
+    dreamQuestion: 'How far outside your comfort zone do you want to operate?',
     type: 'qualitative',
     maxLevel: 5,
     // Context = ALL surrounding conditions: physical place, platform, format, support structure, delivery method.
@@ -117,6 +124,7 @@ export const DOME_DIMENSIONS = [
     label: 'Business',
     icon: '📈',
     question: 'How deep are you in building a business?',
+    dreamQuestion: 'How far do you want to build this?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -128,6 +136,40 @@ export const DOME_DIMENSIONS = [
     ],
   },
 ]
+
+// ── Dimension → Value Inference (Values Assist in Healing Flow Step 5) ────
+
+export const DIMENSION_VALUES = {
+  people: { value: 'Connection', description: 'Impact, being heard, reaching people' },
+  money: { value: 'Building', description: 'Investing in yourself and what you\'re creating' },
+  vulnerability: { value: 'Authenticity', description: 'Being seen as you really are' },
+  stakes: { value: 'Commitment', description: 'Betting on yourself, putting skin in the game' },
+  rarity: { value: 'Originality', description: 'Creating your own path, not following the script' },
+  identity: { value: 'Becoming', description: 'Growing into someone new, reinventing yourself' },
+  context: { value: 'Adventure', description: 'Expanding your world, leaving the familiar' },
+  business_commitment: { value: 'Purpose', description: 'Making it real, building something that matters' },
+}
+
+/**
+ * Infer top values from a user's dome data.
+ * Looks at which dimensions the user pushes most frequently.
+ *
+ * @param {Object} dimensionCounts - { dimId: count } from completed challenges
+ * @param {number} topN - how many values to return (default 3)
+ * @returns {{ value: string, description: string, dimension: string, count: number }[]}
+ */
+export function inferValues(dimensionCounts, topN = 3) {
+  if (!dimensionCounts) return []
+  return Object.entries(dimensionCounts)
+    .filter(([dimId]) => DIMENSION_VALUES[dimId])
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, topN)
+    .map(([dimId, count]) => ({
+      ...DIMENSION_VALUES[dimId],
+      dimension: dimId,
+      count,
+    }))
+}
 
 // ── Body-Based Difficulty Scale (Prediction Error) ──────────────────
 
