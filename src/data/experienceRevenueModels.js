@@ -171,3 +171,31 @@ export const CONTENT_MULTIPLIER_EXPERIENCES = [
   'Journaling / writing',
   'Public speaking / presenting',
 ]
+
+/**
+ * Experiences that are primarily CONSUMED, not created/delivered.
+ * These have viable but less obvious monetisation paths (events, coaching, curating).
+ * The most natural first-dollar path for these is often making CONTENT about
+ * the experience, not delivering the experience itself.
+ *
+ * UI logic: if a user's dome is heavy on these AND they don't have any
+ * CONTENT_MULTIPLIER_EXPERIENCES as Vibe Rise, surface:
+ * "The experiences you love are things you enjoy doing. To earn from them,
+ * you'd either run events around them, teach others, or make content about them."
+ */
+export const CONSUMER_PRIMARY_EXPERIENCES = [
+  'Going to the cinema / watching a great film',
+  'Watching live sport',
+  'Listening to podcasts',
+  'Reading a novel',
+  'Playing video games',
+  'Going out dancing / clubbing',
+  'Drinks with friends / hanging out',
+  'Trying a cuisine you\'ve never had',
+  'Being in nature without an activity',
+  'Intentional napping',
+  'Going on a date',
+  'Being part of an online community',
+  'Visiting a farmers market',
+  'Live music / concerts / festivals',
+]
