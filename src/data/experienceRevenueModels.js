@@ -1,20 +1,24 @@
 /**
  * experienceRevenueModels.js — How each dome experience makes money
  *
- * Tags each experience with 1-3 revenue models (primary first).
- * Used by MoneyModelCard to show relevant money-making paths.
+ * Tags each experience with INTRINSIC revenue models only (primary first).
+ * ad_sponsorship is NOT tagged on individual experiences (unless the experience
+ * IS content creation). Instead, content creation acts as a MULTIPLIER:
+ * if the user's dome has content creation experiences rated Vibe Rise,
+ * ad_sponsorship unlocks for ALL their other experiences.
  *
  * Revenue model tags:
  * - session_fees: people pay per class/session/lesson
  * - project_fees: clients pay per project/gig/deliverable
  * - wage: employed salary/hourly
- * - ad_sponsorship: audience → brand deals/ads/sponsorships
+ * - ad_sponsorship: (only on content creation experiences) audience → brand deals/ads
  * - ticket_sales: people buy tickets to your event/show
  * - venue_revenue: you own the space, revenue from occupancy/bookings
  * - product_sales: you make/sell a physical or digital product
  * - coaching_packages: clients buy transformation/outcome packages
  * - membership: monthly recurring from community/subscription
  * - commission: % of a transaction, door revenue, referral fees
+ * - returns_capital: you earn from the activity itself (investing, poker)
  */
 
 export const EXPERIENCE_REVENUE_MODELS = {
@@ -56,13 +60,13 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Coding / building software':               ['wage', 'project_fees'],
   'Product design':                           ['wage', 'project_fees'],
   'Graphic design':                           ['wage', 'project_fees'],
-  'Investing / trading':                      ['wage', 'coaching_packages', 'project_fees'],
+  'Investing / trading':                      ['returns_capital', 'wage', 'coaching_packages'],
   'Spreadsheets / data':                      ['wage', 'project_fees'],
 
   // ── BONDS ─────────────────────────────────────────────────────────────────
   'Going on a date':                          ['coaching_packages', 'ticket_sales'],
   'Retreat':                                  ['ticket_sales', 'coaching_packages'],
-  'Being part of an online community':        ['membership', 'ad_sponsorship'],
+  'Being part of an online community':        ['membership', 'coaching_packages'],
   'Mastermind group':                         ['membership', 'coaching_packages'],
   'Volunteering / giving back':               ['coaching_packages', 'session_fees'],
   'Pet ownership / caring for animals':       ['session_fees', 'coaching_packages'],
@@ -71,45 +75,45 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Caring for kids':                          ['session_fees', 'wage'],
 
   // ── SHELTER ───────────────────────────────────────────────────────────────
-  'Van life':                                 ['ad_sponsorship', 'product_sales'],
+  'Van life':                                 ['product_sales', 'project_fees'],
   'Renovating / building':                    ['project_fees', 'wage'],
-  'Living abroad':                            ['coaching_packages', 'ad_sponsorship', 'project_fees'],
+  'Living abroad':                            ['coaching_packages', 'project_fees'],
   'Making something with your hands':         ['product_sales', 'session_fees'],
   'Hosting people in your home':              ['venue_revenue', 'session_fees'],
   'Interior / spatial design':                ['project_fees', 'wage'],
 
   // ── STORY ─────────────────────────────────────────────────────────────────
-  'Photography / videography':                ['project_fees', 'session_fees'],
+  'Photography / videography':                ['project_fees', 'session_fees', 'ad_sponsorship'],
   'Playing a musical instrument':             ['session_fees', 'ticket_sales'],
   'Singing':                                  ['session_fees', 'ticket_sales'],
-  'Rapping / freestyle':                      ['ticket_sales', 'ad_sponsorship', 'product_sales'],
+  'Rapping / freestyle':                      ['ticket_sales', 'product_sales'],
   'Teaching / facilitating a workshop':       ['session_fees', 'coaching_packages'],
   'Dancing (creative / performance)':         ['session_fees', 'ticket_sales'],
   'Acting / improv / theatre':                ['session_fees', 'ticket_sales', 'wage'],
   'Creative writing':                         ['product_sales', 'ad_sponsorship', 'project_fees'],
   'Creating short-form video (Reels, TikTok)': ['ad_sponsorship', 'project_fees'],
-  'Stand-up comedy':                          ['ticket_sales', 'ad_sponsorship'],
+  'Stand-up comedy':                          ['ticket_sales', 'session_fees'],
   'Live music / concerts / festivals':        ['ticket_sales', 'commission', 'venue_revenue'],
-  'Reading a novel':                          ['product_sales', 'session_fees', 'ad_sponsorship'],
+  'Reading a novel':                          ['product_sales', 'session_fees'],
   'Journaling / writing':                     ['coaching_packages', 'product_sales'],
   'Listening to podcasts':                    ['ad_sponsorship', 'project_fees'],
-  'Creating / editing video':                 ['project_fees', 'wage'],
+  'Creating / editing video':                 ['project_fees', 'wage', 'ad_sponsorship'],
   'Art class / painting / pottery':           ['session_fees', 'product_sales'],
   'Public speaking / presenting':             ['session_fees', 'coaching_packages'],
   'Selling / pitching':                       ['coaching_packages', 'wage'],
   'Coaching / mentoring someone':             ['coaching_packages', 'session_fees'],
-  'Going to the cinema / watching a great film': ['ticket_sales', 'ad_sponsorship'],
-  'Researching / going down rabbit holes':    ['project_fees', 'wage', 'ad_sponsorship'],
+  'Going to the cinema / watching a great film': ['ticket_sales', 'venue_revenue'],
+  'Researching / going down rabbit holes':    ['project_fees', 'wage'],
 
   // ── PLAY ──────────────────────────────────────────────────────────────────
-  'Playing video games':                      ['ad_sponsorship', 'coaching_packages', 'ticket_sales'],
+  'Playing video games':                      ['coaching_packages', 'ticket_sales', 'wage'],
   'Board games / Games night':                ['ticket_sales', 'venue_revenue'],
   'Playing team sport':                       ['session_fees', 'coaching_packages'],
-  'Watching live sport':                      ['ticket_sales', 'venue_revenue', 'ad_sponsorship'],
-  'Poker':                                    ['coaching_packages', 'ticket_sales'],
+  'Watching live sport':                      ['ticket_sales', 'venue_revenue', 'commission'],
+  'Poker':                                    ['returns_capital', 'coaching_packages', 'ticket_sales'],
   'LEGO / construction toys':                 ['session_fees', 'project_fees'],
   'DJing / playing a set for a crowd':        ['session_fees', 'ticket_sales'],
-  'Travel / exploring a new place':           ['session_fees', 'ad_sponsorship', 'ticket_sales'],
+  'Travel / exploring a new place':           ['session_fees', 'ticket_sales'],
   'Puzzles / escape rooms':                   ['venue_revenue', 'ticket_sales'],
   'Adrenaline / thrill ride':                 ['session_fees', 'ticket_sales'],
 
@@ -147,4 +151,23 @@ export const REVENUE_MODEL_META = {
   coaching_packages: { label: 'Coaching packages', icon: '🎯', description: 'Clients buy transformation packages' },
   membership:        { label: 'Membership / subscription', icon: '🔄', description: 'Monthly recurring from your community' },
   commission:        { label: 'Commission / referrals', icon: '🤝', description: 'You earn a % of each transaction' },
+  returns_capital:   { label: 'Returns / capital gains', icon: '📈', description: 'You earn from the activity itself (investing, playing)' },
 }
+
+/**
+ * Content creation experiences that act as a MULTIPLIER.
+ * If ANY of these are Vibe Rise in the user's dome, ad_sponsorship
+ * unlocks for ALL their other experiences.
+ *
+ * Logic: "You also love making content. That means everything you do
+ * can also earn through brand deals and sponsorships."
+ */
+export const CONTENT_MULTIPLIER_EXPERIENCES = [
+  'Creating short-form video (Reels, TikTok)',
+  'Creating / editing video',
+  'Photography / videography',
+  'Listening to podcasts',
+  'Creative writing',
+  'Journaling / writing',
+  'Public speaking / presenting',
+]
