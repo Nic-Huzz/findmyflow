@@ -726,8 +726,8 @@ export default function ChooseQuestsFlow() {
         <div className="cqf-container">
           <div className="cqf-done">
             <div className="cqf-done-check">✓</div>
-            <h2>Quests created</h2>
-            <p>Head to your Quests tab to see your active quests and start your first courage challenge.</p>
+            <h2>Paths created</h2>
+            <p>Head to your Paths tab to see your active paths and start your first courage challenge.</p>
             <div className="cqf-done-list">
               {chosenPaths.map((path, i) => (
                 <div key={i} className="cqf-done-quest">
@@ -737,8 +737,8 @@ export default function ChooseQuestsFlow() {
               ))}
             </div>
             <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Quests')}>
-                Go to my quests →
+              <button className="cqf-cta cqf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
+                Go to my paths →
               </button>
             </div>
           </div>
