@@ -86,20 +86,26 @@ export async function checkHeroGraduation(userId) {
   }
 
   // 7→8: 3+ healing flows with outcome + 20+ courage completed
+  // Healing = per-task healing_intentions + pattern-level voice healing
   if (currentStage === 7) {
-    const [{ count: healingCount }, { count: courageCount }] = await Promise.all([
+    const [{ count: healingCount }, { count: patternCount }, { count: courageCount }] = await Promise.all([
       supabase
         .from('healing_intentions')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .not('outcome', 'is', null),
       supabase
+        .from('pattern_healing_responses')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('healing_stage', 'recognised'),
+      supabase
         .from('groan_challenges')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .eq('status', 'completed'),
     ])
-    if (healingCount >= 3 && courageCount >= 20) newStage = 8
+    if ((healingCount + patternCount) >= 3 && courageCount >= 20) newStage = 8
   }
 
   // 8→9: First income reported > 0

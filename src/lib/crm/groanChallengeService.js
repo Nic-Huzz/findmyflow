@@ -113,6 +113,7 @@ export async function createGroanChallenge(challengeData) {
     expansionDimensions = [],
     dimensionValues = {},
     predictedDifficulty = null,
+    predictedVoice = null,
   } = challengeData
 
   const { data, error } = await supabase
@@ -135,6 +136,7 @@ export async function createGroanChallenge(challengeData) {
       dimension_values: Object.keys(dimensionValues).length > 0 ? dimensionValues : null,
       predicted_difficulty: predictedDifficulty || null,
       predicted_at: predictedDifficulty ? new Date().toISOString() : null,
+      predicted_voice: predictedVoice || null,
       status: GROAN_CHALLENGE_STATUS.GENERATED
     })
     .select()

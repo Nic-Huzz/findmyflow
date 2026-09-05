@@ -87,6 +87,7 @@ export default function WahooCreator({
         expansionDimensions: expansionDims,
         dimensionValues,
         predictedDifficulty,
+        predictedVoice: protectiveVoice || null,
       })
       if (saveError || !dbRecord) throw saveError || new Error('Challenge was not saved')
 
