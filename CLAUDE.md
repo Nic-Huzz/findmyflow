@@ -119,11 +119,19 @@ Key files: `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`. DB: `ques
 
 Key files: `scoreUtilities.js`, `MirrorPage.jsx`.
 
-### 7. Business Model Readiness (Direction Pipeline)
+### 7. Phase 2→3 Direction Bridge
 
-5-card direction sequence on Discover tab (stage 8+): Life Map Review → Problem Motivation → Multiplication Reveal → Money Model → First Income. Money Model card shows dome readiness per business model (unlocked/locked based on dome edges).
+5-card sequence on Discover tab (stage 8+), completed one at a time. Transforms unconscious action into conscious career direction.
 
-Key files: `DirectionSection.jsx`, `MoneyModelCard.jsx`, `moneyModelLadder.js`, `domeBusinessModels.js`.
+**Cards**: (1) Life Map Review (era summary + append), (2) Problem Motivation (taxonomy categories ranked by frequency, multi-select 1-3), (3) Multiplication Reveal (progressive 4-beat: Skill → Problem → turnsInto → Dome fuel), (4) Money Model (business stage filter → relevant models with strategies + domain-specific pricing + revenue model insights), (5) First Income (celebration-framed, currency picker, triggers stage 9).
+
+**Money Model system**: User picks business stage (Hobby → First Revenue → Repeatable → Full-time → Team/Scale). Shows models for that stage with strategies + courage challenges. Deal sizes personalised from user's Vibe Rise dome experiences via `experiencePricing.js`. Revenue model tags from `experienceRevenueModels.js` (11 tags: session_fees, project_fees, wage, ad_sponsorship, ticket_sales, venue_revenue, product_sales, coaching_packages, membership, commission, returns_capital). Content creation acts as a multiplier (if Vibe Rise, unlocks ad_sponsorship for all experiences). 14 consumer-primary experiences flagged for contextual guidance.
+
+**Hero stage triggers (revised)**: 8→9: first income > 0 (`income_self_reports`). 9→10: 3+ months income > 0. 10→11: income >= expenses target (UI deferred). Income reported weekly via Weekly Review (stage 8+), accumulates into monthly total.
+
+Key files: `DirectionSection.jsx`, `MoneyModelCard.jsx`, `moneyModelLadder.js`, `businessStages.js`, `experiencePricing.js`, `experienceRevenueModels.js`, `directionEngine.js`, `heroStageChecker.js`.
+
+Key data: `experienceRevenueModels.js` (94 experiences tagged with revenue models + content multiplier list + consumer-primary list). `experiencePricing.js` (94 experiences with domain-specific deal sizes, 25-90% confidence). DB: `direction_reveals` (card completion tracking), `income_self_reports` (monthly income, feeds stages 9-12).
 
 ### 8. Creator Playbook Pipeline
 
@@ -195,6 +203,9 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 
 ### Life Paths
 `life_path_sessions` (careers JSON, stuck_points JSON) | `curiosity_inputs`
+
+### Direction Bridge
+`direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
 
 ### Other
 `nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
