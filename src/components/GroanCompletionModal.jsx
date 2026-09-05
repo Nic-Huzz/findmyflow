@@ -14,6 +14,7 @@ import { postFeedEvent } from '../lib/communityFeed'
 import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
 import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import { detectShift } from '../lib/shiftDetection'
+import { detectNewPattern, markPatternShown, buildPatternMessage } from '../lib/voicePatternDetector'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import './GroanCompletionModal.css'
 
@@ -101,6 +102,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [preactionDifficulty, setPreactionDifficulty] = useState(null)
   const [experiencedDifficulty, setExperiencedDifficulty] = useState(null)
   const [gapVoice, setGapVoice] = useState(null)
+  const [patternDiscovered, setPatternDiscovered] = useState(null) // { voice, dimensions, count, message }
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
@@ -662,13 +664,55 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               <button
                 className="gcm-gold-btn"
                 disabled={!preactionDifficulty || !experiencedDifficulty}
-                onClick={() => setStep('expectation')}
+                onClick={async () => {
+                  // Check for voice-dimension pattern after gap data is complete
+                  if (gapVoice) {
+                    const pattern = await detectNewPattern(userId)
+                    if (pattern) {
+                      setPatternDiscovered({
+                        ...pattern,
+                        message: buildPatternMessage(pattern.voice, pattern.dimensions),
+                      })
+                      await markPatternShown(userId, pattern.voice, pattern.dimensions)
+                      setStep('pattern_discovered')
+                      return
+                    }
+                  }
+                  setStep('expectation')
+                }}
               >
                 Continue
               </button>
             </>
           )
         })()}
+
+        {step === 'pattern_discovered' && patternDiscovered && (
+          <>
+            <h2 className="gcm-title">We noticed something</h2>
+            <div className="gcm-gap-section">
+              <p className="gcm-gap-q">{patternDiscovered.message}</p>
+              <p className="gcm-gap-sub">This voice has appeared {patternDiscovered.count} times on these challenges.</p>
+            </div>
+            <button
+              className="gcm-gold-btn"
+              onClick={() => {
+                hapticLight()
+                // TODO: open HealingFlowModal with voice pre-selected
+                // For now, continue to expectation
+                setStep('expectation')
+              }}
+            >
+              Explore this pattern
+            </button>
+            <button
+              className="gcm-text-btn"
+              onClick={() => setStep('expectation')}
+            >
+              Not now
+            </button>
+          </>
+        )}
 
         {step === 'expectation' && (
           <>
