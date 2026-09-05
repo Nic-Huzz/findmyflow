@@ -332,12 +332,12 @@ export const EXPERIENCE_PRICING = {
 
   'Going on a date': {
     employed: '$18-30/hr',
-    per_session: '$30-60/event (speed dating)',
-    group_program: '$500-2,000 8-week dating coaching',
+    per_session: '$30-60/event (speed dating), $75-350/hr (dating coach)',
+    group_program: '$500-2,000/person 8-week dating coaching',
     workshop_retreat: '$300-800/weekend workshop',
     confidence: 'medium',
     confidencePct: 50,
-    bucket: 'venue',
+    bucket: 'practitioner',
   },
   'Retreat': {
     employed: '$25-50/hr',
@@ -871,13 +871,13 @@ export const EXPERIENCE_PRICING = {
     bucket: 'practitioner',
   },
   'Intentional napping': {
-    employed: 'N/A',
-    per_session: 'N/A',
-    group_program: 'N/A',
-    workshop_retreat: 'N/A',
+    employed: '$25-45/hr (sleep coach)',
+    per_session: '$100-250/person (rest consultation)',
+    group_program: '$200-500/person (6wk rest programme)',
+    workshop_retreat: '$300-1,000/day (corporate rest workshop)',
     confidence: 'low',
-    confidencePct: 25,
-    bucket: 'hobby',
+    confidencePct: 30,
+    bucket: 'practitioner',
   },
   'Float tank / sensory deprivation': {
     employed: '$15-22/hr',
