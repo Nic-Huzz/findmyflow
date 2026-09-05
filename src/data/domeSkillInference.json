@@ -34,6 +34,88 @@
         "creating": "moderate"
       }
     },
+    "exp-singing": {
+      "label": "Singing",
+      "skills": {
+        "performing": "strong",
+        "connecting": "moderate"
+      }
+    },
+    "exp-rapping": {
+      "label": "Rapping / freestyle",
+      "skills": {
+        "performing": "strong",
+        "storytelling": "strong",
+        "creating": "moderate"
+      }
+    },
+    "exp-teaching": {
+      "label": "Teaching / facilitating a workshop",
+      "skills": {
+        "teaching": "strong",
+        "storytelling": "moderate",
+        "leading": "moderate"
+      }
+    },
+    "exp-djing-live": {
+      "label": "DJing / playing a set for a crowd",
+      "skills": {
+        "performing": "strong",
+        "connecting": "moderate"
+      }
+    },
+    "exp-dance-expression": {
+      "label": "Dancing (creative / performance)",
+      "skills": {
+        "performing": "strong",
+        "creating": "moderate"
+      }
+    },
+    "exp-designing": {
+      "label": "Designing",
+      "skills": {
+        "designing": "strong",
+        "creating": "strong"
+      }
+    },
+    "exp-investing": {
+      "label": "Investing / trading",
+      "skills": {
+        "building": "moderate"
+      }
+    },
+    "exp-spreadsheets": {
+      "label": "Spreadsheets / data",
+      "skills": {
+        "building": "moderate",
+        "designing": "moderate"
+      }
+    },
+    "exp-caring-kids": {
+      "label": "Caring for kids",
+      "skills": {
+        "coaching": "moderate",
+        "connecting": "strong"
+      }
+    },
+    "exp-baking": {
+      "label": "Baking",
+      "skills": {
+        "creating": "moderate"
+      }
+    },
+    "exp-travel": {
+      "label": "Travel / exploring a new place",
+      "skills": {
+        "connecting": "moderate"
+      }
+    },
+    "exp-puzzles": {
+      "label": "Puzzles / escape rooms",
+      "skills": {
+        "building": "moderate"
+      }
+    },
     "media-1991": {
       "label": "Publishing online (blog/website)",
       "skills": {

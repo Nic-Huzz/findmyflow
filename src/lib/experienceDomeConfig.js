@@ -133,6 +133,18 @@ const EXPERIENCE_LABELS = {
   'media-1920': 'Listening to radio',
   'media-1948': 'Watching television',
   'media-1954': 'Playing a musical instrument',
+  'exp-singing': 'Singing',
+  'exp-rapping': 'Rapping / freestyle',
+  'exp-teaching': 'Teaching / facilitating a workshop',
+  'exp-djing-live': 'DJing / playing a set for a crowd',
+  'exp-dance-expression': 'Dancing (creative / performance)',
+  'exp-designing': 'Designing',
+  'exp-investing': 'Investing / trading',
+  'exp-spreadsheets': 'Spreadsheets / data',
+  'exp-caring-kids': 'Caring for kids',
+  'exp-baking': 'Baking',
+  'exp-travel': 'Travel / exploring a new place',
+  'exp-puzzles': 'Puzzles / escape rooms',
   'media-1991': 'Publishing online (blog/website)',
   'media-2004': 'Posting on social media',
   'media-2007': 'Streaming (Netflix, etc.)',
@@ -609,7 +621,7 @@ export const EXPERIENCE_DUPLICATES = {
 const CORE_NODE_IDS = new Set([
   // Movement (15)
   'car-1886',                // Driving / road trips
-  'car-1952',                // International travel / backpacking
+  // car-1952 (backpacking) moved to sub-node of exp-travel
   'sub-endurance-1962',      // Jogging / running
   'sub-strength-2000',       // CrossFit / functional fitness
   'sub-strength-2010',       // Hiking / nature walk
@@ -632,14 +644,18 @@ const CORE_NODE_IDS = new Set([
   'exp-gardening',           // Gardening / growing food
   'exp-farmers-market',      // Visiting a farmers market
   'exp-new-cuisine',         // Trying a cuisine you've never had
+  'exp-baking',              // Baking
 
   // Style (3) — how you present yourself to the world
   'exp-choosing-style',      // Choosing your style
   'exp-tattoo',              // Tattoo / body art / piercings
   'sub-fashion-2007',        // Slow fashion / thrifting
 
-  // Tools (1) — extending capability
+  // Tools (4) — extending capability
   'exp-coding',              // Coding / building software
+  'exp-designing',           // Designing
+  'exp-investing',           // Investing / trading
+  'exp-spreadsheets',        // Spreadsheets / data
 
   // Bonds (8) — Living abroad moved to Shelter, Unique stays dropped
   'intimacy-2012',           // Going on a date
@@ -650,6 +666,7 @@ const CORE_NODE_IDS = new Set([
   'exp-pets',                // Pet ownership / caring for animals
   'exp-drinks-friends',      // Drinks with friends / hanging out
   'exp-vulnerable-convo',    // Vulnerable conversation / clearing the air
+  'exp-caring-kids',         // Caring for kids
 
   // Shelter (5) — how you shape your environment
   'sub-alt-2011',            // Van life
@@ -661,6 +678,10 @@ const CORE_NODE_IDS = new Set([
   // Story (15) — creative expression, narrative, performance.
   'media-1826',              // Photography / videography
   'media-1954',              // Playing a musical instrument
+  'exp-singing',             // Singing
+  'exp-rapping',             // Rapping / freestyle
+  'exp-teaching',            // Teaching / facilitating a workshop
+  'exp-dance-expression',    // Dancing (creative / performance)
   'media-2018',              // Short-form video (TikTok)
   'sub-oral-1860',           // Stand-up comedy
   'sub-oral-2015',           // Live music / concerts / festivals
@@ -682,6 +703,9 @@ const CORE_NODE_IDS = new Set([
   'sub-sport-1936',          // Watching live sport
   'sub-chance-2003',         // Poker
   'sub-toy-1932',            // LEGO / construction toys
+  'exp-djing-live',          // DJing / playing a set for a crowd
+  'exp-travel',              // Travel / exploring a new place
+  'exp-puzzles',             // Puzzles / escape rooms
   'exp-thrill',              // Adrenaline / thrill ride (skydiving, bungee, roller coaster)
 
   // Fire (3)
@@ -734,6 +758,18 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-farmers-market', label: 'Visiting a farmers market', branch: 'food-regen', primal: 'nourishment' },
   { id: 'exp-new-cuisine', label: 'Trying a cuisine you\'ve never had', branch: 'food-regen', primal: 'nourishment' },
   { id: 'exp-coding', label: 'Coding / building software', branch: 'tech', primal: 'tools' },
+  { id: 'exp-singing', label: 'Singing', branch: 'story-oral', primal: 'story' },
+  { id: 'exp-rapping', label: 'Rapping / freestyle', branch: 'story-oral', primal: 'story' },
+  { id: 'exp-teaching', label: 'Teaching / facilitating a workshop', branch: 'story-oral', primal: 'story' },
+  { id: 'exp-djing-live', label: 'DJing / playing a set for a crowd', branch: 'play-sport', primal: 'play' },
+  { id: 'exp-dance-expression', label: 'Dancing (creative / performance)', branch: 'story-immersive', primal: 'story' },
+  { id: 'exp-designing', label: 'Designing', branch: 'tech', primal: 'tools' },
+  { id: 'exp-investing', label: 'Investing / trading', branch: 'tech', primal: 'tools' },
+  { id: 'exp-spreadsheets', label: 'Spreadsheets / data', branch: 'tech', primal: 'tools' },
+  { id: 'exp-caring-kids', label: 'Caring for kids', branch: 'bonds-communal', primal: 'bonds' },
+  { id: 'exp-baking', label: 'Baking', branch: 'food-regen', primal: 'nourishment' },
+  { id: 'exp-travel', label: 'Travel / exploring a new place', branch: 'play-sport', primal: 'play' },
+  { id: 'exp-puzzles', label: 'Puzzles / escape rooms', branch: 'play-sport', primal: 'play' },
 ]
 
 // ── NS State colors ──

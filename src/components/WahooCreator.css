@@ -679,17 +679,19 @@
 }
 
 .wc-level-pill {
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 16px;
   border: 1.5px solid #e9ecef;
   background: #f8f9fa;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   color: #6c757d;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s;
-  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+  text-align: center;
 }
 
 .wc-level-pill:hover {

@@ -133,6 +133,16 @@ export default function DomeOfSafety({ domeEdges = {}, edgeZone = {}, gapMetrics
         ))}
       </svg>
 
+      {/* Legend (full mode) */}
+      {!mini && hasData && (
+        <div className="dos-legend">
+          <span className="dos-legend-item"><span className="dos-legend-dot dos-legend-safe" />Safe</span>
+          {Object.keys(mergedEdge).length > 0 && (
+            <span className="dos-legend-item"><span className="dos-legend-dot dos-legend-growing" />Growing</span>
+          )}
+        </div>
+      )}
+
       {/* Stats (full mode) */}
       {!mini && hasData && gapMetrics && (
         <div className="dos-stats">

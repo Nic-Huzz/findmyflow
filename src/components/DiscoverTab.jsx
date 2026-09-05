@@ -33,6 +33,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
   const [showNsRating, setShowNsRating] = useState(false)
   const [loading, setLoading] = useState(true)
   const [domeExpanded, setDomeExpanded] = useState(false)
+  const [hasCurrentJob, setHasCurrentJob] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -87,6 +88,10 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       console.error('DiscoverTab load error:', err)
       setLoading(false)
     })
+
+    // Check for current job quest
+    supabase.from('quests').select('id').eq('user_id', userId).eq('is_current_job', true).limit(1)
+      .then(({ data }) => { if (data?.length > 0) setHasCurrentJob(true) })
   }, [userId])
 
   const pickExperience = (nodeId, nodeLabel) => {
@@ -261,6 +266,20 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
 
       {/* Weekly experience section moved to top of tab */}
 
+      {/* Current Job CTA */}
+      {domeCount > 0 && !hasCurrentJob && (
+        <button className="dt-card" onClick={() => navigate('/add-current-job')}>
+          <div className="dt-card-header">
+            <span className="dt-card-icon">💼</span>
+            <span className="dt-card-title">Map your current work</span>
+          </div>
+          <p className="dt-card-desc">
+            Find what's already alive in your job. Creates your first path.
+          </p>
+          <span className="dt-card-arrow">→</span>
+        </button>
+      )}
+
       {/* Phase 1→2 Bridge CTA */}
       {domeCount > 0 && (
         <button
@@ -269,7 +288,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         >
           <div className="dt-bridge-text">
             <span className="dt-bridge-title">Ready to go deeper on a life path?</span>
-            <span className="dt-bridge-sub">Turn what lights you up into quests you can pursue.</span>
+            <span className="dt-bridge-sub">Turn what lights you up into paths you can pursue.</span>
           </div>
           <span className="dt-bridge-arrow">→</span>
         </button>

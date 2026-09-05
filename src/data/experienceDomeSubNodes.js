@@ -448,11 +448,129 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-music-guitar', label: 'Guitar (acoustic / electric)' },
     { id: 'fmt-music-piano', label: 'Piano / keyboard' },
     { id: 'fmt-music-drums', label: 'Drums / percussion' },
-    { id: 'fmt-music-voice', label: 'Singing / vocals' },
     { id: 'fmt-music-dj', label: 'DJ / electronic production' },
     { id: 'fmt-music-band', label: 'Band / ensemble' },
     { id: 'fmt-music-solo', label: 'Solo acoustic performance' },
     { id: 'fmt-music-production', label: 'Home studio / music production' },
+  ],
+
+  'exp-singing': [
+    // Singing — context and style
+    { id: 'fmt-sing-karaoke', label: 'Karaoke' },
+    { id: 'fmt-sing-choir', label: 'Choir / group singing' },
+    { id: 'fmt-sing-solo', label: 'Solo vocal performance' },
+    { id: 'fmt-sing-open-mic', label: 'Open mic singing' },
+    { id: 'fmt-sing-lessons', label: 'Singing lessons / vocal training' },
+    { id: 'fmt-sing-shower', label: 'Singing in the car / shower (private)' },
+    { id: 'fmt-sing-campfire', label: 'Campfire / group sing-along' },
+  ],
+
+  'exp-rapping': [
+    // Rapping — context and style
+    { id: 'fmt-rap-freestyle', label: 'Freestyle / cypher' },
+    { id: 'fmt-rap-written', label: 'Writing bars / lyrics' },
+    { id: 'fmt-rap-recording', label: 'Recording tracks' },
+    { id: 'fmt-rap-battle', label: 'Battle rap' },
+    { id: 'fmt-rap-open-mic', label: 'Open mic / live performance' },
+    { id: 'fmt-rap-beatmaking', label: 'Beat-making / production' },
+  ],
+
+  'exp-teaching': [
+    // Teaching — context and format
+    { id: 'fmt-teach-workshop', label: 'Running a workshop' },
+    { id: 'fmt-teach-classroom', label: 'Teaching a class / course' },
+    { id: 'fmt-teach-group', label: 'Group facilitation' },
+    { id: 'fmt-teach-kids', label: 'Teaching kids' },
+    { id: 'fmt-teach-online', label: 'Online teaching / webinars' },
+    { id: 'fmt-teach-1on1', label: 'Tutoring / 1-on-1 teaching' },
+  ],
+
+  'exp-djing-live': [
+    // DJing live — venue and context
+    { id: 'fmt-dj-club', label: 'Club DJ set' },
+    { id: 'fmt-dj-festival', label: 'Festival / outdoor set' },
+    { id: 'fmt-dj-house-party', label: 'House party / private event' },
+    { id: 'fmt-dj-wedding', label: 'Wedding / event DJ' },
+    { id: 'fmt-dj-silent-disco', label: 'Silent disco' },
+    { id: 'fmt-dj-radio', label: 'Radio / online set' },
+  ],
+
+  'exp-dance-expression': [
+    // Dance as creative expression — style and context
+    { id: 'fmt-dance-choreo', label: 'Choreography / dance routine' },
+    { id: 'fmt-dance-class', label: 'Dance class (hip-hop, contemporary, ballet)' },
+    { id: 'fmt-dance-improv', label: 'Improvised / freestyle dance' },
+    { id: 'fmt-dance-partner', label: 'Partner dance (salsa, bachata, tango)' },
+    { id: 'fmt-dance-performance', label: 'Dance performance / recital' },
+    { id: 'fmt-dance-battle', label: 'Dance battle / cypher' },
+  ],
+
+  'exp-designing': [
+    // Designing — discipline
+    { id: 'fmt-design-graphic', label: 'Graphic design / visual design' },
+    { id: 'fmt-design-ux', label: 'UX / product design' },
+    { id: 'fmt-design-web', label: 'Web design' },
+    { id: 'fmt-design-interior', label: 'Interior / spatial design' },
+    { id: 'fmt-design-fashion', label: 'Fashion design' },
+    { id: 'fmt-design-brand', label: 'Brand / identity design' },
+  ],
+
+  'exp-investing': [
+    // Investing — asset class and style
+    { id: 'fmt-invest-stocks', label: 'Stock market / equities' },
+    { id: 'fmt-invest-crypto', label: 'Crypto / blockchain' },
+    { id: 'fmt-invest-property', label: 'Property / real estate' },
+    { id: 'fmt-invest-startups', label: 'Angel investing / venture' },
+    { id: 'fmt-invest-trading', label: 'Day trading / active trading' },
+    { id: 'fmt-invest-passive', label: 'Index funds / passive investing' },
+  ],
+
+  'exp-spreadsheets': [
+    // Spreadsheets — what you build
+    { id: 'fmt-sheet-financial', label: 'Financial modelling' },
+    { id: 'fmt-sheet-data', label: 'Data analysis / dashboards' },
+    { id: 'fmt-sheet-tracking', label: 'Tracking systems / personal spreadsheets' },
+    { id: 'fmt-sheet-automation', label: 'Formulas / automation' },
+    { id: 'fmt-sheet-reporting', label: 'Reporting / presentations' },
+  ],
+
+  'exp-caring-kids': [
+    // Caring for kids — context
+    { id: 'fmt-kids-play', label: 'Playing with kids' },
+    { id: 'fmt-kids-teaching', label: 'Teaching / homework help' },
+    { id: 'fmt-kids-bedtime', label: 'Bedtime stories / routines' },
+    { id: 'fmt-kids-sports', label: 'Kids sports / activities' },
+    { id: 'fmt-kids-creative', label: 'Creative activities with kids' },
+    { id: 'fmt-kids-newborn', label: 'Newborn / baby care' },
+  ],
+
+  'exp-baking': [
+    // Baking — what you bake
+    { id: 'fmt-bake-bread', label: 'Bread / sourdough' },
+    { id: 'fmt-bake-pastry', label: 'Pastries / croissants / pies' },
+    { id: 'fmt-bake-cakes', label: 'Cakes / cake decorating' },
+    { id: 'fmt-bake-cookies', label: 'Cookies / biscuits / brownies' },
+    { id: 'fmt-bake-special', label: 'Special occasion baking (birthdays, holidays)' },
+    { id: 'fmt-bake-sharing', label: 'Baking for others / bake sales' },
+  ],
+
+  'exp-travel': [
+    // Travel — style and context
+    { id: 'fmt-travel-city', label: 'City breaks / weekend trips' },
+    { id: 'fmt-travel-backpacking', label: 'Backpacking / gap year' },
+    { id: 'fmt-travel-solo', label: 'Solo travel' },
+    { id: 'fmt-travel-culture', label: 'Cultural immersion / local experiences' },
+    { id: 'fmt-travel-adventure', label: 'Adventure travel / off the beaten path' },
+    { id: 'fmt-travel-food', label: 'Food tourism / eating around the world' },
+  ],
+
+  'exp-puzzles': [
+    // Puzzles — type
+    { id: 'fmt-puzzle-escape', label: 'Escape rooms' },
+    { id: 'fmt-puzzle-jigsaw', label: 'Jigsaw puzzles' },
+    { id: 'fmt-puzzle-crossword', label: 'Crosswords / word puzzles' },
+    { id: 'fmt-puzzle-mystery', label: 'Murder mystery / detective games' },
+    { id: 'fmt-puzzle-brain', label: 'Brain teasers / riddles' },
   ],
 
   'media-2018': [

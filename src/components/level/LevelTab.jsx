@@ -499,32 +499,21 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         </div>
       )}
 
-      {!hasCurrentJob && (
-        <button className="quest-current-job-cta" onClick={() => navigate('/add-current-job')}>
-          <span style={{ fontSize: 20 }}>💼</span>
-          <div style={{ flex: 1, textAlign: 'left' }}>
-            <div style={{ fontSize: 14, fontWeight: 600 }}>Add your current work</div>
-            <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.4)', marginTop: 2 }}>Find what's already alive in your job</div>
-          </div>
-          <span style={{ color: 'rgba(0,0,0,0.2)' }}>→</span>
-        </button>
-      )}
-
       <div className="quest-section">
         <div className="quest-section-header">
           <span className="quest-section-icon">⚔️</span>
-          <span className="quest-section-title">Active Quests</span>
+          <span className="quest-section-title">Active Paths</span>
         </div>
         <p className="quest-section-sub">Life paths you're actively pursuing right now.</p>
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
             <span style={{ fontSize: 20 }}>🔒</span>
-            <p>Map your life paths first, then add quests along them</p>
+            <p>Complete discovery first to unlock your paths</p>
             <a href="/try/life-paths" className="quest-locked-link">Start Life Paths →</a>
           </div>
         )}
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && hasLifePaths && (
-          <div className="quest-empty">No active quests yet. Add one from your life paths below.</div>
+          <div className="quest-empty">No active paths yet. Add one from your life paths below.</div>
         )}
         {!hasLifePaths && quests.length > 0 && (
           <div className="quest-soft-prompt">
@@ -537,8 +526,12 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         }).map(q => (
           <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} experiences={questExperiences[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
         ))}
+        {/* Discovery prompt */}
+        <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Discover')}>
+          Keep completing discovery experiences to identify new paths →
+        </div>
         {hasLifePaths && !showAddQuest && (
-          <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>
+          <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Path</button>
         )}
         {hasLifePaths && showAddQuest && (
           <div className="quest-add-modal">
@@ -623,7 +616,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name experiences you'd love to have that scare you a little. Host a silent disco. Post a vulnerable video. Cold-call a stranger.</p>
             <p className="quest-modal-question">Each one is a rep in the gym, training your system that expressing yourself this way is safe.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Quests') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -641,7 +634,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
             <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Quests') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -778,7 +771,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Quests')}
+                  onClick={() => onNavigateTab?.('Paths')}
                   style={{ cursor: 'pointer' }}
                 >
                   {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
@@ -811,7 +804,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Quests')}
+                  onClick={() => onNavigateTab?.('Paths')}
                   style={{ cursor: 'pointer' }}
                 >
                   {healingDone > 0 ? `${healingDone}/${healingTarget}` : 'Start'}
