@@ -65,20 +65,26 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
 
       if (!data?.length) return
 
-      // Dynamic import to get labels
+      // Build label lookup from all sources
       let nodeLabels
       try {
-        const mod = await import('../../data/experienceIndustryMap.json')
-        const map = mod.default || mod
-        const nodes = map.nodes || map
-
-        // Also need dome config for experience labels
-        const configMod = await import('../../lib/experienceDomeConfig.js')
+        const [indMod, configMod] = await Promise.all([
+          import('../../data/experienceIndustryMap.json'),
+          import('../../lib/experienceDomeConfig.js'),
+        ])
+        const indNodes = (indMod.default || indMod).nodes || (indMod.default || indMod)
         const getLabel = configMod.getExperienceLabel
+        const virtualNodes = configMod.VIRTUAL_EXPERIENCE_NODES || []
+
+        // Build virtual node label lookup (exp-surfing → 'Surfing')
+        const virtualLabels = {}
+        virtualNodes.forEach(n => { if (n.id && n.label) virtualLabels[n.id] = n.label })
 
         nodeLabels = {}
         data.forEach(d => {
-          const label = getLabel?.(d.node_id) || nodes[d.node_id]?.label
+          const label = getLabel?.(d.node_id, indNodes[d.node_id]?.label)
+            || virtualLabels[d.node_id]
+            || indNodes[d.node_id]?.label
           if (label) nodeLabels[d.node_id] = label
         })
       } catch {
