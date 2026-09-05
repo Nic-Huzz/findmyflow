@@ -71,8 +71,29 @@
         "creating": "moderate"
       }
     },
-    "exp-designing": {
-      "label": "Designing",
+    "exp-interior-design": {
+      "label": "Interior / spatial design",
+      "skills": {
+        "designing": "strong",
+        "creating": "moderate"
+      }
+    },
+    "exp-fashion-design": {
+      "label": "Fashion design",
+      "skills": {
+        "designing": "strong",
+        "creating": "strong"
+      }
+    },
+    "exp-product-design": {
+      "label": "Product design",
+      "skills": {
+        "designing": "strong",
+        "building": "moderate"
+      }
+    },
+    "exp-graphic-design": {
+      "label": "Graphic design",
       "skills": {
         "designing": "strong",
         "creating": "strong"
@@ -115,6 +136,37 @@
       "skills": {
         "building": "moderate"
       }
+    },
+    "exp-acting": {
+      "label": "Acting / improv / theatre",
+      "skills": {
+        "performing": "strong",
+        "storytelling": "strong",
+        "connecting": "moderate"
+      }
+    },
+    "exp-creative-writing": {
+      "label": "Creative writing",
+      "skills": {
+        "storytelling": "strong",
+        "creating": "strong"
+      }
+    },
+    "exp-cycling": {
+      "label": "Cycling",
+      "skills": {}
+    },
+    "exp-skiing": {
+      "label": "Skiing / snowboarding",
+      "skills": {}
+    },
+    "exp-fishing": {
+      "label": "Fishing",
+      "skills": {}
+    },
+    "exp-horse-riding": {
+      "label": "Horse riding",
+      "skills": {}
     },
     "media-1991": {
       "label": "Publishing online (blog/website)",

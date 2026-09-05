@@ -257,15 +257,16 @@ export const DOME_SUB_NODES = {
   // ═══════════════════════════════════════════
 
   'exp-choosing-style': [
-    // Personal style — which aesthetic identity
-    { id: 'fmt-style-capsule', label: 'Capsule wardrobe / minimalist' },
+    // Wearing clothes that express who you are — aesthetic + sourcing
     { id: 'fmt-style-streetwear', label: 'Streetwear' },
-    { id: 'fmt-style-vintage', label: 'Vintage / retro' },
+    { id: 'fmt-style-vintage', label: 'Vintage / retro / thrifting' },
     { id: 'fmt-style-high-fashion', label: 'High fashion / designer' },
     { id: 'fmt-style-athletic', label: 'Athleisure / sportswear' },
     { id: 'fmt-style-bohemian', label: 'Bohemian / free-spirited' },
-    { id: 'fmt-style-workwear', label: 'Workwear / utility' },
-    { id: 'fmt-style-androgynous', label: 'Androgynous / gender-fluid' },
+    { id: 'fmt-style-minimal', label: 'Minimalist / capsule wardrobe' },
+    { id: 'fmt-style-sustainable', label: 'Ethical / sustainable brands' },
+    { id: 'fmt-style-custom', label: 'Made-to-order / tailored' },
+    { id: 'fmt-style-upcycle', label: 'Upcycling / mending / DIY' },
   ],
 
   'exp-tattoo': [
@@ -280,16 +281,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-tattoo-stick-poke', label: 'Stick and poke / hand-poked' },
   ],
 
-  'sub-fashion-2007': [
-    // Slow fashion / thrifting — how you shop consciously
-    { id: 'fmt-slow-thrift', label: 'Thrift store / charity shop' },
-    { id: 'fmt-slow-vintage', label: 'Vintage store' },
-    { id: 'fmt-slow-swap', label: 'Clothes swap' },
-    { id: 'fmt-slow-upcycle', label: 'Upcycling / mending / visible repair' },
-    { id: 'fmt-slow-ethical', label: 'Ethical / sustainable brands' },
-    { id: 'fmt-slow-depop', label: 'Secondhand online (Depop, Vinted)' },
-    { id: 'fmt-slow-made-to-order', label: 'Made-to-order / custom' },
-  ],
+  // sub-fashion-2007 merged into exp-choosing-style
 
   // ═══════════════════════════════════════════
   // BONDS
@@ -385,14 +377,13 @@ export const DOME_SUB_NODES = {
   ],
 
   'sub-proptech-2020': [
-    // Designing your space — what kind of design
-    { id: 'fmt-space-room', label: 'Room makeover / redecorate' },
-    { id: 'fmt-space-reno', label: 'Full renovation' },
-    { id: 'fmt-space-style', label: 'Interior styling / feng shui' },
-    { id: 'fmt-space-furniture', label: 'Furniture upcycling / painting' },
-    { id: 'fmt-space-garden', label: 'Garden / outdoor space design' },
-    { id: 'fmt-space-smart', label: 'Smart home setup' },
-    { id: 'fmt-space-studio', label: 'Studio / workspace design' },
+    // Renovating / building — hands-on construction
+    { id: 'fmt-reno-kitchen-bath', label: 'Kitchen / bathroom renovation' },
+    { id: 'fmt-reno-walls', label: 'Knocking down / building walls' },
+    { id: 'fmt-reno-tiling', label: 'Tiling / flooring' },
+    { id: 'fmt-reno-carpentry', label: 'Carpentry / shelving / built-ins' },
+    { id: 'fmt-reno-garden', label: 'Garden / outdoor construction' },
+    { id: 'fmt-reno-smart', label: 'Smart home / electrical setup' },
   ],
 
   'sub-communal-2017': [
@@ -448,7 +439,6 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-music-guitar', label: 'Guitar (acoustic / electric)' },
     { id: 'fmt-music-piano', label: 'Piano / keyboard' },
     { id: 'fmt-music-drums', label: 'Drums / percussion' },
-    { id: 'fmt-music-dj', label: 'DJ / electronic production' },
     { id: 'fmt-music-band', label: 'Band / ensemble' },
     { id: 'fmt-music-solo', label: 'Solo acoustic performance' },
     { id: 'fmt-music-production', label: 'Home studio / music production' },
@@ -458,10 +448,8 @@ export const DOME_SUB_NODES = {
     // Singing — context and style
     { id: 'fmt-sing-karaoke', label: 'Karaoke' },
     { id: 'fmt-sing-choir', label: 'Choir / group singing' },
-    { id: 'fmt-sing-solo', label: 'Solo vocal performance' },
-    { id: 'fmt-sing-open-mic', label: 'Open mic singing' },
+    { id: 'fmt-sing-solo', label: 'Solo performance / open mic' },
     { id: 'fmt-sing-lessons', label: 'Singing lessons / vocal training' },
-    { id: 'fmt-sing-shower', label: 'Singing in the car / shower (private)' },
     { id: 'fmt-sing-campfire', label: 'Campfire / group sing-along' },
   ],
 
@@ -477,9 +465,8 @@ export const DOME_SUB_NODES = {
 
   'exp-teaching': [
     // Teaching — context and format
-    { id: 'fmt-teach-workshop', label: 'Running a workshop' },
+    { id: 'fmt-teach-workshop', label: 'Workshops / group facilitation' },
     { id: 'fmt-teach-classroom', label: 'Teaching a class / course' },
-    { id: 'fmt-teach-group', label: 'Group facilitation' },
     { id: 'fmt-teach-kids', label: 'Teaching kids' },
     { id: 'fmt-teach-online', label: 'Online teaching / webinars' },
     { id: 'fmt-teach-1on1', label: 'Tutoring / 1-on-1 teaching' },
@@ -505,14 +492,37 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-dance-battle', label: 'Dance battle / cypher' },
   ],
 
-  'exp-designing': [
-    // Designing — discipline
-    { id: 'fmt-design-graphic', label: 'Graphic design / visual design' },
-    { id: 'fmt-design-ux', label: 'UX / product design' },
-    { id: 'fmt-design-web', label: 'Web design' },
-    { id: 'fmt-design-interior', label: 'Interior / spatial design' },
-    { id: 'fmt-design-fashion', label: 'Fashion design' },
-    { id: 'fmt-design-brand', label: 'Brand / identity design' },
+  'exp-interior-design': [
+    // Interior design — context
+    { id: 'fmt-interior-residential', label: 'Residential / home design' },
+    { id: 'fmt-interior-commercial', label: 'Commercial / hospitality spaces' },
+    { id: 'fmt-interior-staging', label: 'Styling / staging' },
+    { id: 'fmt-interior-set', label: 'Set design / event spaces' },
+  ],
+
+  'exp-fashion-design': [
+    // Fashion design — discipline
+    { id: 'fmt-fashion-clothing', label: 'Clothing design' },
+    { id: 'fmt-fashion-accessories', label: 'Accessories / jewellery' },
+    { id: 'fmt-fashion-sustainable', label: 'Sustainable / upcycled fashion' },
+    { id: 'fmt-fashion-costume', label: 'Costume / theatrical design' },
+  ],
+
+  'exp-product-design': [
+    // Product design — discipline
+    { id: 'fmt-proddesign-ux', label: 'UX / digital product design' },
+    { id: 'fmt-proddesign-industrial', label: 'Industrial / physical product design' },
+    { id: 'fmt-proddesign-web', label: 'Web design' },
+    { id: 'fmt-proddesign-game', label: 'Game design' },
+  ],
+
+  'exp-graphic-design': [
+    // Graphic design — discipline
+    { id: 'fmt-graphic-brand', label: 'Brand / identity design' },
+    { id: 'fmt-graphic-print', label: 'Print design (posters, packaging)' },
+    { id: 'fmt-graphic-digital', label: 'Digital / social media design' },
+    { id: 'fmt-graphic-illustration', label: 'Illustration' },
+    { id: 'fmt-graphic-typography', label: 'Typography / lettering' },
   ],
 
   'exp-investing': [
@@ -550,8 +560,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-bake-pastry', label: 'Pastries / croissants / pies' },
     { id: 'fmt-bake-cakes', label: 'Cakes / cake decorating' },
     { id: 'fmt-bake-cookies', label: 'Cookies / biscuits / brownies' },
-    { id: 'fmt-bake-special', label: 'Special occasion baking (birthdays, holidays)' },
-    { id: 'fmt-bake-sharing', label: 'Baking for others / bake sales' },
+    { id: 'fmt-bake-sharing', label: 'Baking for others / special occasions' },
   ],
 
   'exp-travel': [
@@ -571,6 +580,64 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-puzzle-crossword', label: 'Crosswords / word puzzles' },
     { id: 'fmt-puzzle-mystery', label: 'Murder mystery / detective games' },
     { id: 'fmt-puzzle-brain', label: 'Brain teasers / riddles' },
+  ],
+
+  'exp-acting': [
+    // Acting — context and style
+    { id: 'fmt-act-improv', label: 'Improv comedy / theatre sports' },
+    { id: 'fmt-act-community', label: 'Community theatre / amateur dramatics' },
+    { id: 'fmt-act-class', label: 'Acting class / scene study' },
+    { id: 'fmt-act-film', label: 'Film / TV acting' },
+    { id: 'fmt-act-sketch', label: 'Sketch comedy / short films' },
+    { id: 'fmt-act-voiceover', label: 'Voice acting / voiceover' },
+  ],
+
+  'exp-creative-writing': [
+    // Creative writing — form
+    { id: 'fmt-write-fiction', label: 'Fiction / novels / short stories' },
+    { id: 'fmt-write-poetry', label: 'Poetry' },
+    { id: 'fmt-write-screenplay', label: 'Screenwriting / playwriting' },
+    { id: 'fmt-write-essays', label: 'Essays / longform non-fiction' },
+    { id: 'fmt-write-songwriting', label: 'Songwriting / lyrics' },
+    { id: 'fmt-write-blogging', label: 'Blogging / newsletter writing' },
+  ],
+
+  'exp-cycling': [
+    // Cycling — discipline
+    { id: 'fmt-cycle-road', label: 'Road cycling' },
+    { id: 'fmt-cycle-mountain', label: 'Mountain biking' },
+    { id: 'fmt-cycle-commute', label: 'Commuter cycling' },
+    { id: 'fmt-cycle-gravel', label: 'Gravel / bikepacking' },
+    { id: 'fmt-cycle-indoor', label: 'Indoor cycling / Peloton' },
+    { id: 'fmt-cycle-bmx', label: 'BMX / track' },
+  ],
+
+  'exp-skiing': [
+    // Skiing / snowboarding — style
+    { id: 'fmt-ski-resort', label: 'Resort skiing / piste' },
+    { id: 'fmt-ski-offpiste', label: 'Off-piste / backcountry' },
+    { id: 'fmt-ski-snowboard', label: 'Snowboarding' },
+    { id: 'fmt-ski-cross-country', label: 'Cross-country skiing' },
+    { id: 'fmt-ski-park', label: 'Terrain park / freestyle' },
+    { id: 'fmt-ski-touring', label: 'Ski touring / splitboarding' },
+  ],
+
+  'exp-fishing': [
+    // Fishing — style
+    { id: 'fmt-fish-fly', label: 'Fly fishing' },
+    { id: 'fmt-fish-sea', label: 'Sea fishing / deep sea' },
+    { id: 'fmt-fish-freshwater', label: 'Freshwater / lake fishing' },
+    { id: 'fmt-fish-shore', label: 'Shore / pier fishing' },
+    { id: 'fmt-fish-spear', label: 'Spearfishing' },
+  ],
+
+  'exp-horse-riding': [
+    // Horse riding — discipline
+    { id: 'fmt-horse-trail', label: 'Trail riding / hacking' },
+    { id: 'fmt-horse-dressage', label: 'Dressage' },
+    { id: 'fmt-horse-jumping', label: 'Show jumping / eventing' },
+    { id: 'fmt-horse-western', label: 'Western riding' },
+    { id: 'fmt-horse-therapy', label: 'Equine therapy' },
   ],
 
   'media-2018': [
