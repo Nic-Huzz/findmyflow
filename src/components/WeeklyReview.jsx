@@ -41,6 +41,38 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
   const [savedReview, setSavedReview] = useState(null)
   const dome = useSafetyDome(userId)
   const [monthlyDims, setMonthlyDims] = useState([]) // dims stretched this month
+  const [aftertasteReviews, setAftertasteReviews] = useState([]) // 'not_sure' challenges from this week
+
+  // Load 'not_sure' aftertaste challenges from previous week (second clock)
+  // The weekly review asks "a week on..." so we look at the PRIOR week, not current
+  useEffect(() => {
+    if (!userId || !weekStart) return
+    let cancelled = false
+    const priorWeekStart = new Date(weekStart + 'T00:00:00')
+    priorWeekStart.setDate(priorWeekStart.getDate() - 7)
+    supabase
+      .from('quest_completions')
+      .select('id, quest_id, reflection_text, aftertaste')
+      .eq('user_id', userId)
+      .eq('quest_category', 'Groans')
+      .eq('aftertaste', 'not_sure')
+      .is('aftertaste_week_later', null)
+      .gte('created_at', priorWeekStart.toISOString())
+      .lt('created_at', weekStart + 'T00:00:00')
+      .then(({ data }) => {
+        if (cancelled || !data) return
+        const reviews = data.map(row => {
+          let title = null
+          try {
+            const parsed = JSON.parse(row.reflection_text)
+            title = parsed?.source_label || parsed?.challenge_id
+          } catch {}
+          return { id: row.id, title: title || 'a courage challenge' }
+        })
+        setAftertasteReviews(reviews)
+      })
+    return () => { cancelled = true }
+  }, [userId, weekStart])
 
   // Compute which dims were stretched in the last 30 days
   useEffect(() => {
@@ -213,6 +245,44 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
               maxLength={300}
             />
           </div>
+
+          {/* Second Clock: aftertaste follow-up for 'not_sure' challenges */}
+          {aftertasteReviews.length > 0 && (
+            <div className="wr-question">
+              <div className="wr-question-top">
+                <span className="wr-question-icon">🔁</span>
+                <span className="wr-question-label">A week on...</span>
+              </div>
+              {aftertasteReviews.map(review => (
+                <div key={review.id} className="wr-aftertaste-item">
+                  <p className="wr-question-text">
+                    You did <strong>{review.title}</strong> and weren't sure if you wanted to do it again. A week later, has that changed?
+                  </p>
+                  <div className="wr-option-row">
+                    {[
+                      { value: 'yes', label: '🔥 Yes, I want to' },
+                      { value: 'no', label: '😶 No, it\'s faded' },
+                      { value: 'still_not_sure', label: '🤷 Still not sure' },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`wr-option-btn ${review.answer === opt.value ? 'selected' : ''}`}
+                        disabled={!!review.answer}
+                        onClick={() => {
+                          hapticLight()
+                          setAftertasteReviews(prev => prev.map(r => r.id === review.id ? { ...r, answer: opt.value } : r))
+                          supabase.from('quest_completions').update({ aftertaste_week_later: opt.value }).eq('id', review.id).then(() => {})
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Q2: Procrastination */}
           <div className="wr-question">

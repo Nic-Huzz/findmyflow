@@ -97,13 +97,17 @@ Key files: `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`. DB: `ques
 
 **Tabs**: Discover → Paths → Tune → Progress. Paths tab unlocks when current job flow OR choose-quests completed.
 
-**Choose Quests Bridge** (`/choose-quests`, `ChooseQuestsFlow.jsx`): Phase 1→2 bridge. Intro → Select dome experiences → Deep Dive (Layer 1 format sub-nodes + Layer 2 career vectors per node) → AI suggests paths (`suggest-life-paths` edge function) → Pick paths → Path Definition (3 screens per path) → Save. Deep dive data: `src/data/experienceDomeSubNodes.js` (511 format sub-nodes), career vectors (Do/Guide/Build/Hobby). Path Definition screens: Screen 1 Setup (precursor + 3 dome dimensions + dream levels + radar gap), Screen 2a Framing (Life Fuel contrast + buts + "and" reframe), Screen 2b Commitment (smallest step + fear question + identity declaration + protective voice). All sections required. Spec: `docs/features/experience-dome-deep-dive.md`.
+**Experience Dome**: ~94 core nodes across 11 primals (Movement 18, Nourishment 6, Style 3, Tools 6, Bonds 9, Shelter 6, Story 21, Play 10, Fire 3, Healing 8, Sleep 4). Each node has format sub-nodes in `experienceDomeSubNodes.js`. Node registry + branch lists + virtual nodes in `experienceDomeConfig.js`. Skill inferences in `domeSkillInference.json`. Dome tick descriptions in `ExperienceGameFlow.jsx`.
+
+**Choose Quests Bridge** (`/choose-quests`, `ChooseQuestsFlow.jsx`): Phase 1→2 bridge. Intro → Select dome experiences → Deep Dive (Layer 1 format sub-nodes + Layer 2 career vectors per node) → AI suggests paths (`suggest-life-paths` edge function) → Pick paths → Path Definition (3 screens per path) → Save. Deep dive data: `src/data/experienceDomeSubNodes.js`, career vectors (Do/Guide/Build/Hobby). Path Definition screens: Screen 1 Setup (precursor + 3 dome dimensions + dream levels + radar gap), Screen 2a Framing (Life Fuel contrast + buts + "and" reframe), Screen 2b Commitment (smallest step + fear question + identity declaration + protective voice). All sections required. Spec: `docs/features/experience-dome-deep-dive.md`.
 
 **Life Fuels** (`src/data/channelMapping.js`): 4 channels (Choice, Connection, Mastery, Meaning). Tracked via checkboxes after courage challenges. Shift-context labels for path definition in `SHIFT_FUELS` constant in `ChooseQuestsFlow.jsx`.
 
 **Paths tab** (`LevelTab.jsx`): Active quests with QuestBoardCards, mini dome, zone matrix (Action x Clarity). **Tune tab**: Daily practices, drains, experience check-ins. **Courage** (`PlayListTab.jsx`): Active courage challenges, WahooCreator, identity statements. **Healing** (`HealingFlowModal.jsx`): 7-step per-task flow (Pattern → Fear → Origin → Insight → Rewire → Go Deeper → Expect the Best).
 
-**Scoring**: RP (Rise Points). Levels: Getting Started (0) → Movement Maker (5750). **Post-courage flow**: NS classification → gap check (if predicted) → identity statement → 3% reflection. **Weekly Review**: Sunday/Monday, 3 questions + dome this month.
+**Scoring**: RP (Rise Points). Levels: Getting Started (0) → Movement Maker (5750). **Post-courage flow**: NS classification → aftertaste ("Do you want to do that again?" yes/not_sure/no) → gap check (if predicted) → expectation → cross-pollination → 3% reflection → life fuel. **Aftertaste** is the essence alignment filter (Groan Zone thesis). "Not sure" responses get a second clock in the weekly review a week later. DB: `quest_completions.aftertaste`, `quest_completions.aftertaste_week_later`. Spec: `docs/specs/aftertaste-essence-filter-spec.md`. Framework: Obsidian `Frameworks/Aftertaste Test.md`.
+
+**Weekly Review**: Sunday/Monday. Second Clock (aftertaste follow-up for prior week's "not sure" challenges, after Q1) → Q1 Identity Shift → Q2 Procrastination → Q3 Courage → Dome this month → Q4 Income (stage 8+).
 
 ### 5. Essence Mirror (Onboarding)
 
@@ -178,7 +182,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 ## Database Schema
 
 ### Core
-`user_stage_progress` | `user_projects` | `flow_sessions` | `flow_entries` | `milestone_completions` | `quest_completions` | `user_level_progress` | `boss_fight_sessions`
+`user_stage_progress` | `user_projects` | `flow_sessions` | `flow_entries` | `milestone_completions` | `quest_completions` (aftertaste text, aftertaste_week_later text) | `user_level_progress` | `boss_fight_sessions`
 
 ### Dome of Safety + Prediction Error
 `groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)

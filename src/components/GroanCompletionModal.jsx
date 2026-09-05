@@ -37,7 +37,7 @@ const WAHOO_RP = {
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'gap_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'aftertaste' | 'gap_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -104,6 +104,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [gapVoice, setGapVoice] = useState(null)
   const [checkingPattern, setCheckingPattern] = useState(false)
   const [patternDiscovered, setPatternDiscovered] = useState(null) // { voice, dimensions, count, message }
+
+  // Aftertaste (essence alignment filter)
+  const [aftertaste, setAftertaste] = useState(null) // 'yes' | 'not_sure' | 'no'
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
@@ -200,7 +203,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           expectation_result: expectationResult,
           reflection,
           life_fuel: lifeFuel,
+          aftertaste,
         }),
+        aftertaste,
       })
       if (questError) throw questError
 
@@ -560,6 +565,45 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <button
               className="gcm-gold-btn"
               disabled={!wahooClassification}
+              onClick={() => setStep('aftertaste')}
+            >
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 'aftertaste' && (
+          <>
+            <h2 className="gcm-title">Do you want to do that again?</h2>
+            <div className="gcm-wahoo-options">
+              <button
+                className={`gcm-wahoo-btn ${aftertaste === 'yes' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setAftertaste('yes') }}
+                style={aftertaste === 'yes' ? { borderColor: '#E9A23B', background: 'rgba(233,162,59,0.06)', color: '#E9A23B' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">🔥</span>
+                <span className="gcm-wahoo-label">Yes</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${aftertaste === 'not_sure' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setAftertaste('not_sure') }}
+                style={aftertaste === 'not_sure' ? { borderColor: '#5e17eb', background: 'rgba(94,23,235,0.06)', color: '#5e17eb' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">🤔</span>
+                <span className="gcm-wahoo-label">Not sure</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${aftertaste === 'no' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setAftertaste('no') }}
+                style={aftertaste === 'no' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">😶</span>
+                <span className="gcm-wahoo-label">No</span>
+              </button>
+            </div>
+            <button
+              className="gcm-gold-btn"
+              disabled={!aftertaste}
               onClick={() => setStep(challenge.predicted_difficulty ? 'gap_check' : 'expectation')}
             >
               Continue
