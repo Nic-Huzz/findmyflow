@@ -392,8 +392,8 @@ function UserSettings() {
                     onChange={() => handlePreferenceChange('questReminders')}
                   />
                   <div className="settings-toggle-info">
-                    <span className="settings-toggle-name">Quest Reminders</span>
-                    <span className="settings-toggle-desc">Morning, midday & evening reminders about your quests</span>
+                    <span className="settings-toggle-name">Path Reminders</span>
+                    <span className="settings-toggle-desc">Morning, midday & evening reminders about your paths</span>
                   </div>
                 </label>
 

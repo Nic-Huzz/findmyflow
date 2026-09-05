@@ -383,9 +383,9 @@ function NotificationSettings() {
                   onChange={() => handlePreferenceChange('questReminders')}
                 />
                 <div className="preference-info">
-                  <span className="preference-name">Quest Reminders</span>
+                  <span className="preference-name">Path Reminders</span>
                   <span className="preference-description">
-                    Get morning, midday & evening reminders about your quests
+                    Get morning, midday & evening reminders about your paths
                   </span>
                 </div>
               </label>

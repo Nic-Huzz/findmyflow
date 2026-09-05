@@ -746,6 +746,19 @@
   margin: 0 4px;
 }
 
+.quest-discover-prompt {
+  text-align: center;
+  font-size: 13px;
+  color: #5e17eb;
+  font-weight: 500;
+  padding: 12px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.quest-discover-prompt:active { opacity: 1; }
+
 .quest-current-job-cta {
   display: flex;
   align-items: center;

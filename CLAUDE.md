@@ -166,7 +166,7 @@ Stage flags: `alwaysAccessible`, `isUserLevel`, `isGroansStage`
 
 The old 9-level sequential system is flattened into a quest board. Quests = life paths being actively pursued (from Life Paths exercise or manually added). Each quest has tasks, some tagged as courage challenges (synced to `groan_challenges`).
 
-**Zone Assessments** (8 levels, browse-at-your-own-pace): Identity (1) → Vulnerability (2) → Direction (3) → Enough (4) → Growth (5) → Execution (6) → Passion-Risk (7) → Play (8). Each has a 2x2 Sweet Spot graph with 3 zones (topLeft/diagonal/bottomRight). Horizontal scroll strip on Quests tab, tap to open modal with graph + diagnosis CTA.
+**Zone Assessments** (8 levels, browse-at-your-own-pace): Identity (1) → Vulnerability (2) → Direction (3) → Enough (4) → Growth (5) → Execution (6) → Passion-Risk (7) → Play (8). Each has a 2x2 Sweet Spot graph with 3 zones (topLeft/diagonal/bottomRight). Horizontal scroll strip on Paths tab, tap to open modal with graph + diagnosis CTA.
 
 **Zone Diagnosis** (`/zone-diagnosis/:levelNumber`): Graph → Zone Explainer → Zone Pick → Protective Voices (conditional) → Boss Reveal. Protective voices: topLeft = Performer/Controller/People Pleaser, bottomRight = Perfectionist/Ghost.
 
@@ -194,13 +194,13 @@ Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `p
 
 ### 6. 7-Day Challenge System (Find My Flow Maintenance Engine)
 
-**Tabs**: Discover → Quests → Tune → Progress. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Discover, Tune, Progress always open. Quests unlocks when life paths completed. Courage merged into Quests via WeeklyFocus component.
+**Tabs**: Discover → Paths → Tune → Progress. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Discover, Tune, Progress always open. Paths tab unlocks when current job flow OR choose-quests completed. User-facing label is "Paths" (internal code still uses `quests` for DB tables and component names). Courage merged into Paths via WeeklyFocus component.
 
 **Three-phase journey**: Phase 1 (Discover tab: Experience Dome + Life Map + Essence Mirror), Phase 2 (Quests + Tune: courage challenges with expansion dimensions, daily practices), Phase 3 (Scale Portal). Bridge CTA on Discover tab: "Ready to go deeper?" → Life Paths flow. See `docs/features/three-phase-journey.md` and `docs/features/phase2-restructure.md`.
 
 **Vibe Rise Equation**: `Sustained Vibe Rise = (Practices + Wahoos + Healing) ÷ (Drains)`. All state data flows through `nervous_system_checkins` table. Capacity Score (0-100) displayed on Level tab.
 
-**Quests tab** (`LevelTab.jsx`): Flat quest board. Sections: Your Journey (onboarding) → Active Quests (`QuestBoardCard` with progress bar, courage trend emoji row, zone of excellence warning, "lit me up" signal on task completion) → Zone Matrix (Action Score x Clarity, 4 quadrants: Self-Actualisation / Head Full of Dreams / Misguided / Unfulfilment) → I need help with... (struggle pills) → Zone Assessments (8 level cards) → Completed. Add Quest: dropdown from life paths or manual + 4-state picker. Quest creation auto-tags skills via `classify-quest-skills` edge function + shows skill level picker (L0-L4). DB: `quests` (skill_tags text[]), `quest_tasks` (task_signal text).
+**Paths tab** (`LevelTab.jsx`): User-facing name is "Paths" (internal code uses `quests`). Flat path board. Sections: Your Journey (onboarding) → Active Paths (`QuestBoardCard` with progress bar, courage trend emoji row, zone of excellence warning, "lit me up" signal on task completion) → "Keep completing discovery experiences to identify new paths" prompt → Zone Matrix (Action Score x Clarity, 4 quadrants) → Zone Assessments (8 level cards) → Completed. Add Path: dropdown from life paths or manual + 4-state picker. Current job quests show "Current" badge. DB: `quests` (skill_tags text[], is_current_job bool, current_dimensions jsonb, life_fuel_baseline jsonb), `quest_tasks` (task_signal text, node_id text).
 
 **Tune tab** (`TuneTab.jsx`): Daily maintenance deposits. 5 sections: Daily Practices (6 items, inline 2-option state check: Safe/Vibe Rise), Reconnect (opens HealingCompletionModal), Rest (inline), Drains (5 categories + note + 2-option: Activated/Shutdown), Experience Check-in (predict activity outcomes, "How did it go?" closure, wahoo conversion). Weekly Focus "Value" category (renamed from "Boundary").
 
@@ -272,13 +272,13 @@ Sequential flow (each unlocks after previous): Remarkable Results → Remarkable
 
 Two consumer metrics measuring self-actualisation progress:
 - **Clarity** (X axis): % of Life Map clusters rated Vibe Rise or Fun (NS state system). Displayed on Journey tab. Rated via `/mirror` page or `rate_mirror` screen after Life Map.
-- **Action Score** (Y axis): aligned_actions / total_actions over rolling 7 days. Minimum 5 actions before showing zone. Displayed as zone matrix on Quests tab.
+- **Action Score** (Y axis): aligned_actions / total_actions over rolling 7 days. Minimum 5 actions before showing zone. Displayed as zone matrix on Paths tab.
 
 **NS state rating system**: Clusters rated with same 4 states as life paths: Vibe Rise ("I would absolutely love this"), Fun ("Yeah, sounds fun"), Stressed ("I could do it but feels stressful"), Bored ("I could but it doesn't excite me", auto-removes). Auto-saves on tap.
 
 **Mirror page** (`/mirror`, hidden): Cluster re-rating, identity statement collection, skill tree (L0-L4 lit segments), re-generation flow (when behavioral_evidence >= 5, AI evolves cluster label), add custom clusters.
 
-**Zone Matrix** (Quests tab): 2x2 graph plotting Action x Clarity. Quadrants: Self-Actualisation, Head Full of Dreams, Misguided Zone, Unfulfilment. Dot shows user position.
+**Zone Matrix** (Paths tab): 2x2 graph plotting Action x Clarity. Quadrants: Self-Actualisation, Head Full of Dreams, Misguided Zone, Unfulfilment. Dot shows user position.
 
 **Behavioral evidence**: On courage completion, clusters sharing skill_tags with the quest get `behavioral_evidence` incremented (atomic RPC). At 5+, re-gen banner shows on Mirror. Push notification via `send-push-notification`.
 
@@ -288,7 +288,13 @@ Key files: `scoreUtilities.js` (shared Action/Clarity/Zone calc), `skillProgress
 
 Key docs: `docs/features/interior-scoreboard-spec.md`, `docs/features/interior-scoreboard-implementation-plan.md`, `docs/features/interior-scoreboard-next-sprint-spec.md`
 
-### 14. Other Features
+### 14. Current Job as Life Path
+
+`/add-current-job` — 3-screen flow mapping current work as a quest. User names their job, picks dome experiences that are part of it (showing existing NS state), sets 8 Dome of Safety dimension baselines (People, Money, Vulnerability, Stakes, Rarity, Identity, Context, Business Commitment), tags Life Fuel for the whole job, then writes courage challenges for stressed/bored experiences. Creates quest with `is_current_job: true`. CTA on Discover tab. Completing it unlocks the Paths tab (alternative to choose-quests).
+
+Key files: `src/flows/CurrentJobFlow.jsx`, `src/lib/currentJobChallenges.js`. Spec: `docs/features/current-job-life-path-spec.md`.
+
+### 15. Other Features
 
 - **Zarlo V2 AI Game Guide**: Floating widget (bottom-right). Streaming chat via `agent-chat` (Haiku). Interior scoreboard rules injected into prompt (Clarity, Action Score, identity repeats, zone warnings). Engine: `zarloEngine.js`.
 - **Figurine Essence Voice Mentor**: Bottom-left FAB. AI mentor, 3 convos/day. Edge function: `agent-chat`. Key: `useFigurine.js`.
