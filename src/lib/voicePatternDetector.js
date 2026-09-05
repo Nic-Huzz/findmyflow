@@ -57,14 +57,19 @@ export async function detectNewPattern(userId) {
 
     if (!candidates.length) return null
 
-    // 4. Check which patterns have already been shown
+    // 4. Check which voice+dimension combos have already been shown
     const { data: shown } = await supabase
       .from('voice_pattern_prompts')
-      .select('voice')
+      .select('voice, primary_dimensions')
       .eq('user_id', userId)
 
-    const shownVoices = new Set((shown || []).map(s => s.voice))
-    const newPattern = candidates.find(c => !shownVoices.has(c.voice))
+    // Build set of "voice:dim1,dim2" keys for shown patterns
+    const shownKeys = new Set((shown || []).map(s =>
+      `${s.voice}:${(s.primary_dimensions || []).sort().join(',')}`
+    ))
+    const newPattern = candidates.find(c =>
+      !shownKeys.has(`${c.voice}:${c.dimensions.sort().join(',')}`)
+    )
 
     return newPattern || null
   } catch (err) {

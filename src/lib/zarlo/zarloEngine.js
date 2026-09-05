@@ -932,7 +932,7 @@ function buildDomeSection(domeSummary) {
   }
   s += '\nDOME RULES:'
   s += '\n- If untouched dimensions exist, gently wonder "I notice you never stretch [dim]. Is that on purpose or are you avoiding it?"'
-  s += '\n- If one dimension dominates (5+ challenges), acknowledge it: "You keep pushing [dim]. That spoke of your dome is huge."'
+  s += '\n- If one dimension dominates (5+ challenges), acknowledge it: "You keep pushing [dim]. That\'s clearly an edge you\'re working."'
   s += '\n- If avg gap is high (>1), celebrate: "Your body keeps being surprised that things go better than you expect."'
   s += '\n- If avg gap is 0, notice: "You predict perfectly. Are you playing it safe or are you genuinely that self-aware?"'
   s += '\n- Never say "dome" to the user. Say "your comfort zone" or "what your body can handle."'

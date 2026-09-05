@@ -26,12 +26,18 @@ export default function useSafetyDome(userId) {
 
     async function compute() {
       // 1. Fetch completed challenges with dimension_values
-      const { data: challenges } = await supabase
+      const { data: challenges, error: challengeErr } = await supabase
         .from('groan_challenges')
         .select('id, dimension_values, predicted_difficulty, experienced_difficulty')
         .eq('user_id', userId)
         .eq('status', 'completed')
         .not('dimension_values', 'is', null)
+
+      if (challengeErr) {
+        console.warn('useSafetyDome: challenges query failed', challengeErr)
+        setLoading(false)
+        return
+      }
 
       if (!challenges?.length) {
         setLoading(false)
