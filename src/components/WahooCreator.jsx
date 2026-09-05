@@ -191,11 +191,11 @@ export default function WahooCreator({
 
   // Voice lies (from protectiveVoices.js)
   const VOICE_LIES = [
-    { voice: 'ghost', icon: '👻', lie: "I don't feel comfortable sharing." },
-    { voice: 'perfectionist', icon: '🎭', lie: "I'm not ready yet." },
-    { voice: 'people-pleaser', icon: '🪞', lie: "As long as everyone's happy, I'm good." },
-    { voice: 'controller', icon: '🎮', lie: "Leaving it to chance isn't an option." },
-    { voice: 'auto-pilot', icon: '🛋️', lie: "I'm fine, just tired." },
+    { voice: 'ghost', icon: '👻', lie: "I want to disappear. Hide. Go quiet." },
+    { voice: 'perfectionist', icon: '🎭', lie: "It's not good enough yet. I need more time." },
+    { voice: 'people-pleaser', icon: '🪞', lie: "I'd rather say yes than deal with their reaction." },
+    { voice: 'controller', icon: '🎮', lie: "I want to know how this ends before I do it." },
+    { voice: 'auto-pilot', icon: '🛋️', lie: "I'm going through the motions. I've checked out." },
   ]
 
   const canSubmit = freeText.trim() && linkedQuestId && expansionDims.length > 0 && predictedDifficulty && !generating
