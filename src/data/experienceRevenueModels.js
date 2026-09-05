@@ -56,7 +56,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Coding / building software':               ['wage', 'project_fees'],
   'Product design':                           ['wage', 'project_fees'],
   'Graphic design':                           ['wage', 'project_fees'],
-  'Investing / trading':                      ['wage', 'coaching_packages', 'ad_sponsorship'],
+  'Investing / trading':                      ['wage', 'coaching_packages', 'project_fees'],
   'Spreadsheets / data':                      ['wage', 'project_fees'],
 
   // ── BONDS ─────────────────────────────────────────────────────────────────
