@@ -68,14 +68,14 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Retreat':                                  ['ticket_sales', 'coaching_packages'],
   'Being part of an online community':        ['membership', 'coaching_packages'],
   'Mastermind group':                         ['membership', 'coaching_packages'],
-  'Volunteering / giving back':               ['coaching_packages', 'session_fees'],
+  'Volunteering / giving back':               ['session_fees', 'coaching_packages'],
   'Pet ownership / caring for animals':       ['session_fees', 'coaching_packages'],
   'Drinks with friends / hanging out':        ['ticket_sales', 'commission', 'venue_revenue'],
   'Vulnerable conversation':                  ['session_fees', 'membership'],
   'Caring for kids':                          ['session_fees', 'wage'],
 
   // ── SHELTER ───────────────────────────────────────────────────────────────
-  'Van life':                                 ['product_sales', 'project_fees'],
+  'Van life':                                 ['coaching_packages', 'project_fees'],
   'Renovating / building':                    ['project_fees', 'wage'],
   'Living abroad':                            ['coaching_packages', 'project_fees'],
   'Making something with your hands':         ['product_sales', 'session_fees'],
@@ -90,7 +90,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Teaching / facilitating a workshop':       ['session_fees', 'coaching_packages'],
   'Dancing (creative / performance)':         ['session_fees', 'ticket_sales'],
   'Acting / improv / theatre':                ['session_fees', 'ticket_sales', 'wage'],
-  'Creative writing':                         ['product_sales', 'ad_sponsorship', 'project_fees'],
+  'Creative writing':                         ['product_sales', 'session_fees', 'ad_sponsorship'],
   'Creating short-form video (Reels, TikTok)': ['ad_sponsorship', 'project_fees'],
   'Stand-up comedy':                          ['ticket_sales', 'session_fees'],
   'Live music / concerts / festivals':        ['ticket_sales', 'commission', 'venue_revenue'],
@@ -102,7 +102,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
   'Public speaking / presenting':             ['session_fees', 'coaching_packages'],
   'Selling / pitching':                       ['coaching_packages', 'wage'],
   'Coaching / mentoring someone':             ['coaching_packages', 'session_fees'],
-  'Going to the cinema / watching a great film': ['ticket_sales', 'venue_revenue'],
+  'Going to the cinema / watching a great film': ['ticket_sales', 'session_fees'],
   'Researching / going down rabbit holes':    ['project_fees', 'wage'],
 
   // ── PLAY ──────────────────────────────────────────────────────────────────
@@ -134,7 +134,7 @@ export const EXPERIENCE_REVENUE_MODELS = {
 
   // ── SLEEP ─────────────────────────────────────────────────────────────────
   'Lucid dreaming':                           ['coaching_packages', 'product_sales'],
-  'Intentional napping':                      ['coaching_packages', 'session_fees'],
+  'Intentional napping':                      ['session_fees', 'coaching_packages'],
   'Float tank / sensory deprivation':         ['venue_revenue', 'membership'],
   'Being in nature without an activity':      ['session_fees', 'ticket_sales'],
 }
