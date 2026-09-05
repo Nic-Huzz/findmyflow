@@ -563,8 +563,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
         {step === 'gap_check' && (() => {
           const predicted = getDifficultyLabel(challenge.predicted_difficulty)
-          const gap = (preactionDifficulty && experiencedDifficulty)
+          const preaction = getDifficultyLabel(preactionDifficulty)
+          const experienced = getDifficultyLabel(experiencedDifficulty)
+          const planningGap = (experiencedDifficulty)
             ? calculateGap(challenge.predicted_difficulty, experiencedDifficulty)
+            : null
+          const anticipationGap = (preactionDifficulty && experiencedDifficulty)
+            ? calculateGap(preactionDifficulty, experiencedDifficulty)
             : null
 
           return (
@@ -610,12 +615,17 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 </div>
               )}
 
-              {gap != null && gap > 0 && (
+              {planningGap != null && planningGap > 0 && (
                 <div className="gcm-gap-result gcm-gap-positive">
-                  When you created this, you expected {predicted?.icon} {predicted?.label}. Reality was {getDifficultyLabel(experiencedDifficulty)?.icon} {getDifficultyLabel(experiencedDifficulty)?.label}. Your nervous system just learned something.
+                  Planning: you expected {predicted?.icon} {predicted?.label}, reality was {experienced?.icon} {experienced?.label}. Your nervous system just learned something.
                 </div>
               )}
-              {gap != null && gap === 0 && (
+              {anticipationGap != null && anticipationGap > 0 && preactionDifficulty !== challenge.predicted_difficulty && (
+                <div className="gcm-gap-result gcm-gap-positive">
+                  Right before: you felt {preaction?.icon} {preaction?.label}, reality was {experienced?.icon} {experienced?.label}.
+                </div>
+              )}
+              {planningGap != null && planningGap === 0 && (anticipationGap == null || anticipationGap === 0) && (
                 <div className="gcm-gap-result">
                   Your prediction matched reality. Your self-awareness is sharp.
                 </div>

@@ -197,7 +197,7 @@ export default function WahooCreator({
     { voice: 'auto-pilot', icon: '🛋️', lie: "I'm fine, just tired." },
   ]
 
-  const canSubmit = freeText.trim() && linkedQuestId && !generating
+  const canSubmit = freeText.trim() && linkedQuestId && expansionDims.length > 0 && predictedDifficulty && !generating
 
   return (
     <div className="wc-container">

@@ -49,6 +49,7 @@ export default function ProgressTab({ userId }) {
 
   useEffect(() => {
     if (!userId) return
+    let mounted = true
 
     Promise.all([
       supabase.from('user_stage_progress')
@@ -64,6 +65,7 @@ export default function ProgressTab({ userId }) {
         .is('project_id', null)
         .maybeSingle(),
     ]).then(([stageRes, courageRes, rpRes]) => {
+      if (!mounted) return
       setHeroStage(stageRes.data?.current_journey_level || 0)
       setTotalCourage(courageRes.count || 0)
       setTotalRP(rpRes.data?.lifetime_total_score || 0)
@@ -89,11 +91,10 @@ export default function ProgressTab({ userId }) {
       setLoading(false)
     }).catch(err => {
       console.error('ProgressTab load error:', err)
-      setLoading(false)
+      if (mounted) setLoading(false)
     })
 
     // Zone Matrix
-    let mounted = true
     import('../lib/scoreUtilities').then(async (m) => {
       const result = await m.calculateZoneMatrix(userId)
       if (!mounted) return

@@ -44,6 +44,7 @@ export default function useSafetyDome(userId) {
         .from('nervous_system_checkins')
         .select('source_challenge_id, after_state')
         .in('source_challenge_id', challengeIds)
+        .not('after_state', 'is', null)
         .order('created_at', { ascending: false })
 
       // Map challenge_id → after_state (most recent check-in wins)
