@@ -102,6 +102,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [preactionDifficulty, setPreactionDifficulty] = useState(null)
   const [experiencedDifficulty, setExperiencedDifficulty] = useState(null)
   const [gapVoice, setGapVoice] = useState(null)
+  const [checkingPattern, setCheckingPattern] = useState(false)
   const [patternDiscovered, setPatternDiscovered] = useState(null) // { voice, dimensions, count, message }
 
   // Expectation check
@@ -663,25 +664,31 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
               <button
                 className="gcm-gold-btn"
-                disabled={!preactionDifficulty || !experiencedDifficulty}
+                disabled={!preactionDifficulty || !experiencedDifficulty || checkingPattern}
                 onClick={async () => {
-                  // Check for voice-dimension pattern after gap data is complete
                   if (gapVoice) {
-                    const pattern = await detectNewPattern(userId)
-                    if (pattern) {
-                      setPatternDiscovered({
-                        ...pattern,
-                        message: buildPatternMessage(pattern.voice, pattern.dimensions),
-                      })
-                      await markPatternShown(userId, pattern.voice, pattern.dimensions)
-                      setStep('pattern_discovered')
-                      return
+                    setCheckingPattern(true)
+                    try {
+                      const pattern = await detectNewPattern(userId)
+                      if (pattern) {
+                        setPatternDiscovered({
+                          ...pattern,
+                          message: buildPatternMessage(pattern.voice, pattern.dimensions),
+                        })
+                        await markPatternShown(userId, pattern.voice, pattern.dimensions)
+                        setCheckingPattern(false)
+                        setStep('pattern_discovered')
+                        return
+                      }
+                    } catch (e) {
+                      console.warn('Pattern detection error:', e)
                     }
+                    setCheckingPattern(false)
                   }
                   setStep('expectation')
                 }}
               >
-                Continue
+                {checkingPattern ? 'Checking...' : 'Continue'}
               </button>
             </>
           )
