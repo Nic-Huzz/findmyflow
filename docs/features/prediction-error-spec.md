@@ -203,14 +203,38 @@ Opens HealingFlowModal with voice pre-selected and dimension context pre-loaded.
 - Query: group completed challenges by gap_voice, check for 3+ occurrences with overlapping dimension_values keys
 - One-time popup per voice-dimension pattern (track shown patterns to avoid repeat prompts)
 
-### Values as Foundation
+### Values Assist (Healing Flow Step 5)
 
-The healing flow reveals that values are the key differentiator between "installed fear" and "current truth." All three test patterns resolved to values:
+The healing flow Step 5 asks "What's true now that wasn't true then?" All three test patterns resolved to values:
 - Ghost: "I'm conscious of my values and the choices they guide"
 - Controller: "I care more about who I'm becoming than FOMO"
 - Perfectionist: "I want to believe I'm enough without accolades"
 
-A values/story flow should be explored as a foundation that the healing flow references: "What do you value now that you didn't value then?" This is a stronger reframe than "What's true now?" because it connects the rewire to identity, not just circumstances.
+**The dome data already contains the user's values.** Courage challenges reveal values through action. No separate questionnaire needed.
+
+**V1: Values Assist (embedded in Step 5)**
+
+When the user struggles with Step 5 (blank for 15s or taps "I'm stuck"):
+
+1. System pulls dimension frequency from completed challenges
+2. Infers values using `inferValues()` from `domeDimensions.js`:
+   - High Vulnerability → Authenticity (being seen as you really are)
+   - High Rarity → Originality (creating your own path)
+   - High People → Connection (impact, being heard)
+   - High Money → Building (investing in yourself)
+   - High Context → Adventure (expanding your world)
+   - High Identity → Becoming (growing into someone new)
+   - High Stakes → Commitment (betting on yourself)
+   - High Business → Purpose (making it real)
+3. Shows top 2-3 inferred values: "Based on what you keep choosing to do despite the fear, it looks like you value: **authenticity, originality, building something meaningful.**"
+4. User confirms, adjusts, or adds their own
+5. Auto-suggests Step 5 answer: "I value [X] now. That wasn't true when [origin] happened."
+
+Not a new flow. A smart assist reading existing dome data, plus free-text for the user to add what the data doesn't capture.
+
+**V2: Guided values discovery questions (deferred)**
+
+For users with insufficient dome data. Structured questions to identify values from scratch. Design TBD.
 
 ---
 
