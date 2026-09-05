@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getDomeExperiencesForBridge, groupByPrimal, formatDomeForPrompt } from '../lib/domeSummary'
-import { hasSubNodes, getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
+import { getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
 import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
 import DomeOfSafety from '../components/DomeOfSafety'
@@ -159,6 +159,13 @@ export default function ChooseQuestsFlow() {
   useEffect(() => {
     if (ddAutoAdvance) callAI()
   }, [ddAutoAdvance]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-advance past path definition if pdPathIndex exceeds chosen paths
+  const chosenArrForPD = [...selectedPaths].map(i => ({ idx: i, path: paths[i] })).filter(p => p.path)
+  const pdAutoAdvance = step === STEPS.PATH_DEF && chosenArrForPD.length > 0 && pdPathIndex >= chosenArrForPD.length
+  useEffect(() => {
+    if (pdAutoAdvance) saveQuests()
+  }, [pdAutoAdvance]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Path selection ──
   const togglePath = useCallback((idx) => {
@@ -633,9 +640,12 @@ export default function ChooseQuestsFlow() {
 
   // ── PATH DEFINITION (2 screens per path) ──
   if (step === STEPS.PATH_DEF) {
-    const chosenArr = [...selectedPaths].map(i => ({ idx: i, path: paths[i] })).filter(p => p.path)
+    const chosenArr = chosenArrForPD
     const currentPath = chosenArr[pdPathIndex]
-    if (!currentPath) { saveQuests(); return <div className="cqf"><div className="cqf-container"><div className="cqf-processing"><div className="cqf-spinner" /></div></div></div> }
+    if (!currentPath) {
+      // Waiting for useEffect to fire saveQuests
+      return <div className="cqf"><div className="cqf-container"><div className="cqf-processing"><div className="cqf-spinner" /></div></div></div>
+    }
 
     const { idx: pathIdx, path } = currentPath
     const isLastPath = pdPathIndex === chosenArr.length - 1
