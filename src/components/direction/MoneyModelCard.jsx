@@ -3,19 +3,23 @@
  *
  * Step 1: "Where are you?" — user picks their business stage
  * Step 2: Shows money models relevant to that stage with strategies
+ *         + personalised revenue model insights from dome data
  *         Expandable to see the full growth path
  *
- * Deal sizes are domain-specific when possible (from experiencePricing.js),
- * averaged across the user's Vibe Rise dome experiences.
- * Falls back to universal pricing from moneyModelLadder.js.
+ * Revenue model tags from experienceRevenueModels.js drive personalisation.
+ * Content multiplier + consumer-primary logic shows contextual insights.
  */
 
 import { useState, useEffect } from 'react'
 import { MONEY_MODEL_LADDER } from '../../data/moneyModelLadder'
 import { BUSINESS_STAGES } from '../../data/businessStages'
 import { EXPERIENCE_PRICING } from '../../data/experiencePricing'
-import { getModelReadiness } from '../../data/domeBusinessModels'
-import useSafetyDome from '../../hooks/useSafetyDome'
+import {
+  EXPERIENCE_REVENUE_MODELS,
+  REVENUE_MODEL_META,
+  CONTENT_MULTIPLIER_EXPERIENCES,
+  CONSUMER_PRIMARY_EXPERIENCES,
+} from '../../data/experienceRevenueModels'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import './MoneyModelCard.css'
@@ -32,9 +36,9 @@ function getDomainDealSize(pricingKey, modelId) {
     employed: 'employed',
     per_session: 'per_session',
     group_program: 'group_program',
-    content: null, // Content is always $0
-    digital_product: 'group_program', // Digital product pricing is similar to group
-    membership: 'per_session', // Membership per-person is similar to session pricing
+    content: null,
+    digital_product: 'group_program',
+    membership: 'per_session',
     certification: 'workshop_retreat',
   }
   const field = fieldMap[modelId]
@@ -42,39 +46,98 @@ function getDomainDealSize(pricingKey, modelId) {
 }
 
 export default function MoneyModelCard({ userId, onComplete, onClose }) {
-  const [stage, setStage] = useState(null) // business stage selection
+  const [stage, setStage] = useState(null)
   const [expanded, setExpanded] = useState(new Set())
   const [showFullPath, setShowFullPath] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [topExperiences, setTopExperiences] = useState([]) // labels of top dome experiences
-  const dome = useSafetyDome(userId)
+  const [topExperiences, setTopExperiences] = useState([])
+  const [revenueInsights, setRevenueInsights] = useState(null)
 
-  // Load user's top Vibe Rise experiences for domain-specific pricing
+  // Load user's Vibe Rise dome experiences + derive revenue insights
   useEffect(() => {
     if (!userId) return
-    supabase
-      .from('experience_dome_ratings')
-      .select('node_id')
-      .eq('user_id', userId)
-      .eq('ns_state', 'vibe_rise')
-      .then(({ data }) => {
-        if (!data?.length) return
-        // Look up labels from experienceIndustryMap (imported inline to avoid circular)
-        import('../../data/experienceIndustryMap.json').then(mod => {
-          const map = (mod.default || mod)
-          const nodes = map.nodes || map
-          const labels = data
-            .map(d => nodes[d.node_id]?.label)
-            .filter(l => l && EXPERIENCE_PRICING[l])
-          setTopExperiences([...new Set(labels)])
-        }).catch(() => {})
+
+    async function loadDomeData() {
+      const { data } = await supabase
+        .from('experience_dome_ratings')
+        .select('node_id, ns_state')
+        .eq('user_id', userId)
+
+      if (!data?.length) return
+
+      // Dynamic import to get labels
+      let nodeLabels
+      try {
+        const mod = await import('../../data/experienceIndustryMap.json')
+        const map = mod.default || mod
+        const nodes = map.nodes || map
+
+        // Also need dome config for experience labels
+        const configMod = await import('../../lib/experienceDomeConfig.js')
+        const getLabel = configMod.getExperienceLabel
+
+        nodeLabels = {}
+        data.forEach(d => {
+          const label = getLabel?.(d.node_id) || nodes[d.node_id]?.label
+          if (label) nodeLabels[d.node_id] = label
+        })
+      } catch {
+        return
+      }
+
+      // Get Vibe Rise experience labels
+      const vibeRiseLabels = data
+        .filter(d => d.ns_state === 'vibe_rise')
+        .map(d => nodeLabels[d.node_id])
+        .filter(Boolean)
+
+      // Domain-specific pricing labels
+      const pricingLabels = vibeRiseLabels.filter(l => EXPERIENCE_PRICING[l])
+      setTopExperiences([...new Set(pricingLabels)])
+
+      // Revenue model tag aggregation
+      const tagCounts = {}
+      vibeRiseLabels.forEach(label => {
+        const tags = EXPERIENCE_REVENUE_MODELS[label]
+        if (tags) tags.forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1 })
       })
+
+      // Sort by frequency
+      const topTags = Object.entries(tagCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(([tag, count]) => ({ tag, count, ...REVENUE_MODEL_META[tag] }))
+
+      // Content multiplier check
+      const hasContentMultiplier = vibeRiseLabels.some(l =>
+        CONTENT_MULTIPLIER_EXPERIENCES.includes(l)
+      )
+      const contentExperiences = vibeRiseLabels.filter(l =>
+        CONTENT_MULTIPLIER_EXPERIENCES.includes(l)
+      )
+
+      // Consumer-primary check
+      const consumerCount = vibeRiseLabels.filter(l =>
+        CONSUMER_PRIMARY_EXPERIENCES.includes(l)
+      ).length
+      const isConsumerHeavy = consumerCount > vibeRiseLabels.length * 0.5
+
+      setRevenueInsights({
+        topTags,
+        hasContentMultiplier,
+        contentExperiences,
+        isConsumerHeavy,
+        consumerCount,
+        totalVibeRise: vibeRiseLabels.length,
+      })
+    }
+
+    loadDomeData()
   }, [userId])
 
   const selectStage = (s) => {
     hapticLight()
     setStage(s)
-    // Auto-expand first current model
     if (s.currentModels.length) {
       setExpanded(new Set([s.currentModels[0]]))
     }
@@ -100,6 +163,8 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
       reveal_type: 'money_model',
       reveal_data: {
         stage: stage?.id,
+        topTags: revenueInsights?.topTags?.map(t => t.tag) || [],
+        hasContentMultiplier: revenueInsights?.hasContentMultiplier || false,
         viewed_at: new Date().toISOString(),
       },
     }, { onConflict: 'user_id,reveal_type' })
@@ -110,7 +175,6 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
   // Get deal size: try domain-specific first, fall back to universal
   const getDealSize = (modelId) => {
     if (topExperiences.length > 0) {
-      // Try first matching experience
       for (const label of topExperiences) {
         const domain = getDomainDealSize(label, modelId)
         if (domain) return domain
@@ -124,7 +188,6 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
     if (!model) return null
     const isOpen = expanded.has(modelId)
     const dealSize = getDealSize(modelId)
-    const { ready } = getModelReadiness(dome.domeEdges, modelId)
 
     return (
       <div key={modelId} className={`mmc-level ${isOpen ? 'open' : ''} ${type === 'next' ? 'mmc-next' : ''}`}>
@@ -132,7 +195,6 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
           <span className="mmc-level-num">{type === 'next' ? '→' : model.level}</span>
           <div className="mmc-level-info">
             <span className="mmc-level-label">{model.icon} {model.label}</span>
-            {ready && <span className="mmc-ready-badge">Ready ✓</span>}
             <span className="mmc-level-deal">{dealSize}</span>
           </div>
           <span className="mmc-level-chevron">{isOpen ? '▾' : '▸'}</span>
@@ -172,6 +234,32 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
           <h2 className="mmc-title">Where are you right now?</h2>
           <p className="mmc-subtitle">Pick the stage that fits best. No wrong answer.</p>
         </div>
+
+        {/* Revenue model insights from dome */}
+        {revenueInsights?.topTags?.length > 0 && (
+          <div className="mmc-insights">
+            <div className="mmc-insights-label">Based on what you love, your top money paths are</div>
+            <div className="mmc-insights-tags">
+              {revenueInsights.topTags.map(t => (
+                <span key={t.tag} className="mmc-insight-tag">
+                  {t.icon} {t.label}
+                </span>
+              ))}
+            </div>
+
+            {revenueInsights.hasContentMultiplier && (
+              <div className="mmc-insight-content">
+                You also love making content. That means everything you do can also earn through brand deals and sponsorships.
+              </div>
+            )}
+
+            {revenueInsights.isConsumerHeavy && !revenueInsights.hasContentMultiplier && (
+              <div className="mmc-insight-consumer">
+                The experiences you love are things you enjoy doing. To earn from them, you'd curate events, build communities, or make content about them.
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="mmc-stages">
           {BUSINESS_STAGES.map((s) => (
@@ -224,6 +312,13 @@ export default function MoneyModelCard({ userId, onComplete, onClose }) {
           <div className="mmc-ladder">
             {stage.nextModels.map(id => renderModel(id, 'next'))}
           </div>
+        </div>
+      )}
+
+      {/* Content multiplier insight */}
+      {revenueInsights?.hasContentMultiplier && (
+        <div className="mmc-insight-content mmc-insight-inline">
+          📢 You love {revenueInsights.contentExperiences.slice(0, 2).join(' and ').toLowerCase()}. Brand deals and sponsorships are available at every stage.
         </div>
       )}
 
