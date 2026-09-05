@@ -11,6 +11,43 @@ import { generateZarloWheelContext, getWheelSummary, analyzeGapsAndOpportunities
 import { computeLevel, SKILL_THRESHOLDS, getNextThreshold, formatSkillsForPrompt } from '../../hooks/useSkills'
 
 // ============================================
+// DOME OF SAFETY — lightweight summary for Zarlo prompt
+// ============================================
+
+const DOME_DIM_NAMES = {
+  people: 'People', money: 'Money', vulnerability: 'Vulnerability',
+  stakes: 'Stakes', rarity: 'Rarity', identity: 'Identity',
+  context: 'Context', business_commitment: 'Business',
+}
+
+function computeDomeSummary(challenges) {
+  if (!challenges?.length) return null
+  // Count dimensions used + total challenges with dome data
+  const dimCounts = {}
+  let totalGap = 0, gapCount = 0
+  for (const c of challenges) {
+    if (c.dimension_values) {
+      for (const dimId of Object.keys(c.dimension_values)) {
+        dimCounts[dimId] = (dimCounts[dimId] || 0) + 1
+      }
+    }
+    if (c.predicted_difficulty && c.experienced_difficulty) {
+      const gap = Math.max(0, c.predicted_difficulty - c.experienced_difficulty)
+      totalGap += gap
+      gapCount++
+    }
+  }
+  const topDims = Object.entries(dimCounts).sort((a, b) => b[1] - a[1]).slice(0, 3)
+  const untouchedDims = Object.keys(DOME_DIM_NAMES).filter(d => !dimCounts[d])
+  return {
+    challengeCount: challenges.length,
+    topDimensions: topDims.map(([id, count]) => ({ name: DOME_DIM_NAMES[id] || id, count })),
+    untouchedDimensions: untouchedDims.map(id => DOME_DIM_NAMES[id] || id),
+    averageGap: gapCount > 0 ? Math.round((totalGap / gapCount) * 10) / 10 : null,
+  }
+}
+
+// ============================================
 // INTAKE FLOW
 // ============================================
 
@@ -409,7 +446,8 @@ export async function getUserContext(userId) {
       { data: ecData },
       { data: nsVoiceData },
       wheelData,
-      { data: briefData }
+      { data: briefData },
+      { data: domeChallenges },
     ] = await Promise.all([
       supabase.from('nervous_system_responses').select('id').eq('user_id', userId).limit(1),
       supabase.from('nikigai_clusters').select('id').eq('user_id', userId).limit(1),
@@ -420,7 +458,9 @@ export async function getUserContext(userId) {
       supabase.from('nervous_system_checkins').select('protective_voice').eq('user_id', userId).not('protective_voice', 'is', null),
       loadWheelData(userId),
       // Load pre-computed Zarlo Brief
-      supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle()
+      supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle(),
+      // Dome of Safety: completed challenges with dimension data
+      supabase.from('groan_challenges').select('id, dimension_values, predicted_difficulty, experienced_difficulty').eq('user_id', userId).eq('status', 'completed').not('dimension_values', 'is', null),
     ])
 
     // Also fetch healing_intentions voices (combined with NS checkins for accurate count)
@@ -474,6 +514,8 @@ export async function getUserContext(userId) {
       essenceName: stageData?.essence_name || null,
       // Pre-computed Zarlo Brief (may be null for new users or if cron hasn't run)
       zarloBrief: briefData?.brief || null,
+      // Dome of Safety summary
+      domeSummary: computeDomeSummary(domeChallenges),
     }
   } catch (err) {
     console.error('Error getting user context:', err)
@@ -875,6 +917,28 @@ function computeOpenLoopHooks(skills) {
  * Compute weekly countdown context for CD6 scarcity.
  * "2 wahoos from completing your week. 18 hours left."
  */
+function buildDomeSection(domeSummary) {
+  if (!domeSummary) return ''
+  let s = '\n\nDOME OF SAFETY:'
+  s += `\n${domeSummary.challengeCount} courage challenges with dimension data.`
+  if (domeSummary.topDimensions.length > 0) {
+    s += `\nMost stretched: ${domeSummary.topDimensions.map(d => `${d.name} (${d.count}x)`).join(', ')}.`
+  }
+  if (domeSummary.untouchedDimensions.length > 0) {
+    s += `\nNever stretched: ${domeSummary.untouchedDimensions.join(', ')}.`
+  }
+  if (domeSummary.averageGap != null) {
+    s += `\nAvg prediction gap: ${domeSummary.averageGap} (higher = their body learns more per challenge).`
+  }
+  s += '\nDOME RULES:'
+  s += '\n- If untouched dimensions exist, gently wonder "I notice you never stretch [dim]. Is that on purpose or are you avoiding it?"'
+  s += '\n- If one dimension dominates (5+ challenges), acknowledge it: "You keep pushing [dim]. That spoke of your dome is huge."'
+  s += '\n- If avg gap is high (>1), celebrate: "Your body keeps being surprised that things go better than you expect."'
+  s += '\n- If avg gap is 0, notice: "You predict perfectly. Are you playing it safe or are you genuinely that self-aware?"'
+  s += '\n- Never say "dome" to the user. Say "your comfort zone" or "what your body can handle."'
+  return s
+}
+
 function computeWeeklyCountdown(recentActions) {
   // Days remaining in the week (Mon-Sun)
   const now = new Date()
@@ -973,6 +1037,7 @@ INTERIOR SCOREBOARD RULES:
 - If zone of excellence warning exists, name it: "You're good at [quest] but your body keeps telling you it's not the thing"
 - Never lecture about scores. Mention them like a friend who noticed something.
 ${scoreboardSection}
+${buildDomeSection(userContext?.domeSummary)}
 
 WHAT YOU KNOW:
 ${briefSection}

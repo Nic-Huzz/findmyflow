@@ -85,9 +85,12 @@ export default function DomeOfSafety({ domeEdges = {}, edgeZone = {}, gapMetrics
     return { ...pos, icon: dim.icon, label: dim.label, level }
   }) : []
 
+  // Key triggers re-animation when dome data changes (sorted for stability)
+  const domeKey = Object.entries(domeEdges).sort().map(([k, v]) => `${k}:${v}`).join(',')
+
   return (
     <div className={`dos-container ${mini ? 'dos-mini' : ''}`}>
-      <svg viewBox={`0 0 ${size} ${size}`} className="dos-svg" style={{ width: size, height: size }}>
+      <svg key={domeKey} viewBox={`0 0 ${size} ${size}`} className="dos-svg" style={{ width: size, height: size }}>
         {/* Background rings */}
         {rings.map((pts, i) => (
           <polygon key={i} points={pts} className={`dos-ring ${i === ringCount - 1 ? 'dos-ring-outer' : ''}`} />

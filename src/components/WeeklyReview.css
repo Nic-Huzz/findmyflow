@@ -486,3 +486,13 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Dome growth summary */
+.wr-dome-growth {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-top: 8px;
+  line-height: 1.5;
+}

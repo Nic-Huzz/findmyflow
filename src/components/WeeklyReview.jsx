@@ -10,12 +10,15 @@
  * Created: 2026-06-14
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { postFeedEvent } from '../lib/communityFeed'
+import { getDimensionById } from '../data/domeDimensions'
 import confetti from 'canvas-confetti'
+import DomeOfSafety from './DomeOfSafety'
+import useSafetyDome from '../hooks/useSafetyDome'
 import WeeklyReviewCard from './WeeklyReviewCard'
 import './WeeklyReview.css'
 
@@ -36,6 +39,31 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
   const [incomeCurrency, setIncomeCurrency] = useState('USD')
   const [saving, setSaving] = useState(false)
   const [savedReview, setSavedReview] = useState(null)
+  const dome = useSafetyDome(userId)
+  const [monthlyDims, setMonthlyDims] = useState([]) // dims stretched this month
+
+  // Compute which dims were stretched in the last 30 days
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    supabase.from('groan_challenges')
+      .select('dimension_values')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .not('dimension_values', 'is', null)
+      .gte('completed_at', thirtyDaysAgo.toISOString())
+      .then(({ data }) => {
+        if (cancelled || !data?.length) return
+        const dims = new Set()
+        data.forEach(c => {
+          if (c.dimension_values) Object.keys(c.dimension_values).forEach(d => dims.add(d))
+        })
+        setMonthlyDims([...dims])
+      })
+    return () => { cancelled = true }
+  }, [userId])
 
   const isValid = narrativeRevision.trim().length > 0 && compoundingText.trim().length > 0
 
@@ -235,6 +263,27 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
               maxLength={200}
             />
           </div>
+
+          {/* Dome this month — only if user has dome data */}
+          {!dome.loading && Object.keys(dome.domeEdges).length > 0 && (
+            <div className="wr-question">
+              <div className="wr-question-top">
+                <span className="wr-question-icon">🫧</span>
+                <span className="wr-question-label">Your comfort zone this month</span>
+              </div>
+              <DomeOfSafety
+                domeEdges={dome.domeEdges}
+                edgeZone={dome.edgeZone}
+                gapMetrics={dome.gapMetrics}
+                size={200}
+              />
+              {monthlyDims.length > 0 && (
+                <p className="wr-dome-growth">
+                  This month you stretched {monthlyDims.map(d => getDimensionById(d)?.label).filter(Boolean).join(', ')}.
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Q4: Weekly income (stage 8+ only) */}
           {heroStage >= 8 && (
