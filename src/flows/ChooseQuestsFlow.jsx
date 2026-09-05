@@ -2,8 +2,8 @@
  * ChooseQuestsFlow.jsx — /choose-quests
  *
  * Phase 1→2 bridge: Dome experiences → AI life path suggestions → quest creation.
- * Flow: Intro → Select → Deep Dive → Processing → Paths → Path Definition (2 screens per path) → Done
- * Path Definition: Screen 1 (precursor + dream dimensions + radar), Screen 2 (buts + reframe + next step + voice)
+ * Flow: Intro → Select → Deep Dive → Processing → Paths → Path Definition (3 screens per path) → Done
+ * Path Definition: Screen 1 (setup), Screen 2a (framing: fuels + buts), Screen 2b (commitment: step + fear + identity + voice)
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -38,6 +38,19 @@ const VOICES = [
   { id: 'auto-pilot', icon: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
 ]
 
+const SHIFT_FUELS = [
+  { id: 'choice', icon: '🔓', label: 'I get to choose how I spend my time' },
+  { id: 'connection', icon: '🤝', label: 'I connect with people who get me' },
+  { id: 'mastery', icon: '📈', label: 'I grow at something that excites me' },
+  { id: 'meaning', icon: '✨', label: 'This serves something I care about' },
+]
+
+const IDENTITY_EXAMPLES = [
+  '...starts before they\'re ready',
+  '...chooses courage over comfort',
+  '...proves it\'s never too late',
+]
+
 export default function ChooseQuestsFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -68,17 +81,21 @@ export default function ChooseQuestsFlow() {
   const [showCustom, setShowCustom] = useState(false)
   const [aiError, setAiError] = useState(null)
 
-  // Path definition step (replaces old stuck points)
+  // Path definition step (3 screens per path)
   const [pdPathIndex, setPdPathIndex] = useState(0)
-  const [pdScreen, setPdScreen] = useState(0) // 0 = setup, 1 = buts+step+voice
-  const [precursorLevels, setPrecursorLevels] = useState({})       // { [pathIdx]: 'not_yet' }
-  const [selectedDims, setSelectedDims] = useState({})              // { [pathIdx]: Set('people','money',...) }
-  const [dreamDimensions, setDreamDimensions] = useState({})        // { [pathIdx]: { people: 5, ... } }
-  const [currentDimensions, setCurrentDimensions] = useState({})    // { [pathIdx]: { people: 1, ... } }
-  const [butTexts, setButTexts] = useState({})                      // { [pathIdx]: ['text1', ...] }
+  const [pdScreen, setPdScreen] = useState(0) // 0=setup, 1=framing, 2=commitment
+  const [precursorLevels, setPrecursorLevels] = useState({})
+  const [selectedDims, setSelectedDims] = useState({})
+  const [dreamDimensions, setDreamDimensions] = useState({})
+  const [currentDimensions, setCurrentDimensions] = useState({})
+  const [stayingFuels, setStayingFuels] = useState({})              // { [pathIdx]: Set('choice') }
+  const [pathFuels, setPathFuels] = useState({})                    // { [pathIdx]: Set('mastery') }
+  const [butTexts, setButTexts] = useState({})
   const [butInput, setButInput] = useState('')
-  const [showReframe, setShowReframe] = useState({})                // { [pathIdx]: boolean }
-  const [nextStepTexts, setNextStepTexts] = useState({})            // { [pathIdx]: 'text' }
+  const [showReframe, setShowReframe] = useState({})
+  const [nextStepTexts, setNextStepTexts] = useState({})
+  const [fearOutcomes, setFearOutcomes] = useState({})              // { [pathIdx]: 'text' }
+  const [identityDeclarations, setIdentityDeclarations] = useState({}) // { [pathIdx]: 'text' }
   const [protectiveVoices, setProtectiveVoices] = useState({})
 
   // Load essence archetype
@@ -248,8 +265,12 @@ export default function ChooseQuestsFlow() {
           precursor_level: precursorLevels[pathIdx] || null,
           current_dimensions: currentDimensions[pathIdx] || null,
           dream_dimensions: dreamDimensions[pathIdx] || null,
-          protective_voice: protectiveVoices[pathIdx] || null,
+          staying_fuels: stayingFuels[pathIdx]?.size ? [...stayingFuels[pathIdx]] : null,
+          path_fuels: pathFuels[pathIdx]?.size ? [...pathFuels[pathIdx]] : null,
           buts: butTexts[pathIdx]?.length ? butTexts[pathIdx] : null,
+          fear_outcome: fearOutcomes[pathIdx] || null,
+          identity_declaration: identityDeclarations[pathIdx] || null,
+          protective_voice: protectiveVoices[pathIdx] || null,
         }).select('id').single()
 
         const questId = newQuest?.id
@@ -346,7 +367,8 @@ export default function ChooseQuestsFlow() {
       goTo(STEPS.PATH_DEF)
     }
   }, [user, paths, selectedPaths, chosenPaths, goTo, vibeRise, fun, selectedIds,
-    precursorLevels, currentDimensions, dreamDimensions, protectiveVoices, butTexts, nextStepTexts])
+    precursorLevels, currentDimensions, dreamDimensions, stayingFuels, pathFuels,
+    butTexts, nextStepTexts, fearOutcomes, identityDeclarations, protectiveVoices])
 
   // ── Loading ──
   if (domeLoading) {
@@ -770,7 +792,7 @@ export default function ChooseQuestsFlow() {
                 {!precursor ? 'Pick where you are' : !dimsReady ? 'Pick 3 dimensions + dream levels' : 'Next →'}
               </button>
               <button className="cqf-cta cqf-cta-secondary" onClick={() => {
-                if (pdPathIndex > 0) { setPdPathIndex(pdPathIndex - 1); setPdScreen(1); window.scrollTo(0, 0) }
+                if (pdPathIndex > 0) { setPdPathIndex(pdPathIndex - 1); setPdScreen(2); window.scrollTo(0, 0) }
                 else goTo(STEPS.PATHS)
               }}>← Back</button>
             </div>
@@ -779,10 +801,145 @@ export default function ChooseQuestsFlow() {
       )
     }
 
-    // Screen 1: BUTS + NEXT STEP + VOICE
+    // Screen 2a: THE FRAMING (fuels + buts + reframe)
     if (pdScreen === 1) {
+      const sf = stayingFuels[pathIdx] || new Set()
+      const pf = pathFuels[pathIdx] || new Set()
+      const bothFuelsPicked = sf.size > 0 && pf.size > 0
+      const canAdvance = bothFuelsPicked && buts.length > 0 && reframeShown
+
+      const toggleFuel = (which, fuelId) => {
+        hapticLight()
+        const setter = which === 'staying' ? setStayingFuels : setPathFuels
+        setter(prev => {
+          const existing = prev[pathIdx] || new Set()
+          const next = new Set(existing)
+          if (next.has(fuelId)) next.delete(fuelId)
+          else next.add(fuelId)
+          return { ...prev, [pathIdx]: next }
+        })
+      }
+
+      return (
+        <div className="cqf">
+          <div className="cqf-container">
+            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · What's at stake</div>
+            <div className="cqf-pd-path-name">{path.name}</div>
+
+            {/* Staying fuels */}
+            <div className="cqf-pd-section">
+              <div className="cqf-pd-q">What does your current life give you?</div>
+              <div className="cqf-pd-fuel-chips">
+                {SHIFT_FUELS.map(f => (
+                  <div key={f.id}
+                    className={`cqf-pd-fuel-chip ${sf.has(f.id) ? 'selected' : ''}`}
+                    onClick={() => toggleFuel('staying', f.id)}>
+                    <span className="cqf-pd-fuel-icon">{f.icon}</span>
+                    <span>{f.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Path fuels */}
+            <div className="cqf-pd-section">
+              <div className="cqf-pd-q">What does this path give you?</div>
+              <div className="cqf-pd-fuel-chips">
+                {SHIFT_FUELS.map(f => (
+                  <div key={f.id}
+                    className={`cqf-pd-fuel-chip ${pf.has(f.id) ? 'selected' : ''}`}
+                    onClick={() => toggleFuel('path', f.id)}>
+                    <span className="cqf-pd-fuel-icon">{f.icon}</span>
+                    <span>{f.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bridge line */}
+            {bothFuelsPicked && (
+              <div className="cqf-pd-bridge">
+                Your current life gives you {[...sf].map(id => SHIFT_FUELS.find(f => f.id === id)?.icon).join(' ')}.
+                This path gives you {[...pf].map(id => SHIFT_FUELS.find(f => f.id === id)?.icon).join(' ')}.
+                So what's in the way?
+              </div>
+            )}
+
+            {/* Buts */}
+            {bothFuelsPicked && (
+              <div className="cqf-pd-section">
+                <div className="cqf-pd-q">I want to pursue {path.name}, but...</div>
+                <div className="cqf-pd-but-input">
+                  <input type="text" value={butInput}
+                    onChange={e => setButInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && butInput.trim()) {
+                        setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
+                        setButInput('')
+                      }
+                    }}
+                    placeholder="What's stopping you?" />
+                  <button disabled={!butInput.trim()} onClick={() => {
+                    setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
+                    setButInput('')
+                  }}>Add</button>
+                </div>
+
+                {buts.length > 0 && (
+                  <div className="cqf-pd-buts-list">
+                    {buts.map((b, i) => (
+                      <div key={i} className={`cqf-pd-but-item ${reframeShown ? 'reframed' : ''}`}>
+                        <div className="cqf-pd-but-text">
+                          {reframeShown
+                            ? <>I want to pursue {path.name}, <span className="cqf-pd-and">and</span> {b.toLowerCase()}</>
+                            : <>...{b}</>
+                          }
+                        </div>
+                        {!reframeShown && (
+                          <span className="cqf-pd-but-remove" onClick={() => {
+                            setButTexts(prev => ({ ...prev, [pathIdx]: buts.filter((_, j) => j !== i) }))
+                          }}>✕</span>
+                        )}
+                      </div>
+                    ))}
+
+                    {!reframeShown && (
+                      <button className="cqf-pd-reframe-btn" onClick={() => {
+                        hapticLight()
+                        setShowReframe(prev => ({ ...prev, [pathIdx]: true }))
+                      }}>See the reframe →</button>
+                    )}
+
+                    {reframeShown && (
+                      <div className="cqf-pd-reframe-note">
+                        Saying "and" turns a block into a fact you're choosing to work with.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="cqf-fixed">
+              <button className="cqf-cta cqf-cta-gold"
+                disabled={!canAdvance}
+                onClick={() => { setPdScreen(2); window.scrollTo(0, 0) }}>
+                {!bothFuelsPicked ? 'Pick what each gives you' : buts.length === 0 ? 'Add at least one "but"' : !reframeShown ? 'See the reframe first' : 'Next →'}
+              </button>
+              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPdScreen(0); window.scrollTo(0, 0) }}>← Back to setup</button>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    // Screen 2b: THE COMMITMENT (step + fear + identity + voice)
+    if (pdScreen === 2) {
       const stepText = nextStepTexts[pathIdx] || ''
+      const fearText = fearOutcomes[pathIdx] || ''
+      const identityText = identityDeclarations[pathIdx] || ''
       const voice = protectiveVoices[pathIdx]
+      const canAdvance = stepText.trim() && fearText.trim() && identityText.trim() && voice
 
       const advancePath = () => {
         if (isLastPath) {
@@ -798,65 +955,12 @@ export default function ChooseQuestsFlow() {
       return (
         <div className="cqf">
           <div className="cqf-container">
-            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · Your blocks</div>
+            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · Your commitment</div>
             <div className="cqf-pd-path-name">{path.name}</div>
-
-            {/* Buts */}
-            <div className="cqf-pd-section">
-              <div className="cqf-pd-q">I want to pursue {path.name}, but...</div>
-              <div className="cqf-pd-but-input">
-                <input type="text" value={butInput}
-                  onChange={e => setButInput(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && butInput.trim()) {
-                      setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
-                      setButInput('')
-                    }
-                  }}
-                  placeholder="What's stopping you?" />
-                <button disabled={!butInput.trim()} onClick={() => {
-                  setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
-                  setButInput('')
-                }}>Add</button>
-              </div>
-
-              {buts.length > 0 && (
-                <div className="cqf-pd-buts-list">
-                  {buts.map((b, i) => (
-                    <div key={i} className={`cqf-pd-but-item ${reframeShown ? 'reframed' : ''}`}>
-                      <div className="cqf-pd-but-text">
-                        {reframeShown
-                          ? <>I want to pursue {path.name}, <span className="cqf-pd-and">and</span> {b.toLowerCase()}</>
-                          : <>...{b}</>
-                        }
-                      </div>
-                      {!reframeShown && (
-                        <span className="cqf-pd-but-remove" onClick={() => {
-                          setButTexts(prev => ({ ...prev, [pathIdx]: buts.filter((_, j) => j !== i) }))
-                        }}>✕</span>
-                      )}
-                    </div>
-                  ))}
-
-                  {!reframeShown && (
-                    <button className="cqf-pd-reframe-btn" onClick={() => {
-                      hapticLight()
-                      setShowReframe(prev => ({ ...prev, [pathIdx]: true }))
-                    }}>See the reframe →</button>
-                  )}
-
-                  {reframeShown && (
-                    <div className="cqf-pd-reframe-note">
-                      Saying "and" turns a block into a fact you're choosing to work with.
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
 
             {/* Next step */}
             <div className="cqf-pd-section">
-              <div className="cqf-pd-q">Despite that, what's the smallest step this week?</div>
+              <div className="cqf-pd-q">What's the smallest step this week?</div>
               <div className="cqf-pd-step-hint">Think really small. Not "build a website". More like "google how to set up a free one".</div>
               <input className="cqf-pd-step-input" type="text"
                 value={stepText}
@@ -864,11 +968,49 @@ export default function ChooseQuestsFlow() {
                 placeholder="The tiniest possible step..." />
             </div>
 
-            {/* Protective voice (shows when next step has text) */}
+            {/* Fear question (appears after step) */}
             {stepText.trim() && (
               <div className="cqf-pd-section">
-                <div className="cqf-pd-q">Which voice tries to stop you from doing that?</div>
-                <div className="cqf-pd-step-quote">"{stepText.trim()}"</div>
+                {buts.length > 0 && (
+                  <div className="cqf-pd-step-quote">
+                    Your block: "{buts[0]}"
+                  </div>
+                )}
+                <div className="cqf-pd-q">If your "but" wins and you never do this, what are you most afraid happens?</div>
+                <input className="cqf-pd-step-input" type="text"
+                  value={fearText}
+                  onChange={e => setFearOutcomes(prev => ({ ...prev, [pathIdx]: e.target.value }))}
+                  placeholder="What future scares you most?" />
+              </div>
+            )}
+
+            {/* Identity declaration (appears after fear) */}
+            {fearText.trim() && (
+              <div className="cqf-pd-section">
+                <div className="cqf-pd-step-quote">
+                  Your fear: "{fearText.trim()}"
+                </div>
+                <div className="cqf-pd-q">I am someone who...</div>
+                <input className="cqf-pd-step-input cqf-pd-identity-input" type="text"
+                  value={identityText}
+                  onChange={e => setIdentityDeclarations(prev => ({ ...prev, [pathIdx]: e.target.value }))}
+                  placeholder="...finish this sentence" />
+                <div className="cqf-pd-identity-examples">
+                  {IDENTITY_EXAMPLES.map((ex, i) => (
+                    <button key={i} className="cqf-pd-identity-ex" onClick={() => {
+                      hapticLight()
+                      setIdentityDeclarations(prev => ({ ...prev, [pathIdx]: ex }))
+                    }}>{ex}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Protective voice (appears after identity) */}
+            {identityText.trim() && (
+              <div className="cqf-pd-section">
+                <div className="cqf-pd-q">Which voice tries to stop you from being that person?</div>
+                <div className="cqf-pd-step-quote">"I am someone who {identityText.trim()}"</div>
                 <div className="cqf-pd-voices">
                   {VOICES.map(v => (
                     <div key={v.id}
@@ -882,15 +1024,16 @@ export default function ChooseQuestsFlow() {
                     </div>
                   ))}
                 </div>
-                <button className="cqf-pd-skip" onClick={() => setProtectiveVoices(prev => ({ ...prev, [pathIdx]: null }))}>Skip</button>
               </div>
             )}
 
             <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold" onClick={advancePath}>
-                {isLastPath ? 'Create my paths →' : 'Next path →'}
+              <button className="cqf-cta cqf-cta-gold"
+                disabled={!canAdvance}
+                onClick={advancePath}>
+                {!stepText.trim() ? 'Add your first step' : !fearText.trim() ? 'Name your fear' : !identityText.trim() ? 'Claim your identity' : !voice ? 'Pick a voice' : isLastPath ? 'Create my paths →' : 'Next path →'}
               </button>
-              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPdScreen(0); window.scrollTo(0, 0) }}>← Back to setup</button>
+              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPdScreen(1); window.scrollTo(0, 0) }}>← Back to framing</button>
             </div>
           </div>
         </div>
