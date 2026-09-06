@@ -7,6 +7,7 @@ import { useDomeData } from '../hooks/useDomeData'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { createFunnelTracker } from '../lib/funnelTracker'
 import DomeRadar from '../components/DomeRadar'
 import './ExperienceGameFlow.css'
 
@@ -751,6 +752,14 @@ export default function ExperienceGameFlow() {
   const [checked, setChecked] = useState({})
   const [ratings, setRatings] = useState({})
   const [hydrated, setHydrated] = useState(false)
+  const tracker = useRef(createFunnelTracker('experience_game'))
+
+  // Track each phase reached
+  useEffect(() => {
+    const phases = ['intro', 'play', 'insight']
+    const idx = phases.indexOf(phase)
+    if (idx >= 0) tracker.current.step(phase, idx)
+  }, [phase])
 
   // Hydrate from Supabase (authenticated) or localStorage (unauthenticated)
   useEffect(() => {

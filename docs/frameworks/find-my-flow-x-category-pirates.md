@@ -3,6 +3,115 @@
 
 ---
 
+## v3 Update (September 2026)
+
+v2 focused on the Creator Portal and Sessions. v3 adds the **consumer app's three-phase journey** and **lead magnet strategy** — the category design for how people enter Vibe Rise.
+
+### Consumer App: Three-Phase Stacking Model
+
+v2 presented three products as separate categories. v3 recognises they **stack** — users don't leave Phase 1 when they enter Phase 2. The dome keeps expanding, courage challenges keep happening, the NS measurement runs through all three. This means the category design isn't three separate DAMs. It's one category with three entry points.
+
+```
+Phase 1: DISCOVERY (free)          Phase 2: EXPANSION (app)         Phase 3: BUILD (Scale)
+"What lights me up?"               "How far can I take it?"         "How do I live from it?"
+┌─────────────────┐                ┌─────────────────┐              ┌─────────────────┐
+│  Experience      │                │  Quest Board     │              │  Business        │
+│  Dome            │  stacks into → │  Courage         │ stacks into →│  Accelerator     │
+│  54 experiences  │                │  Challenges      │              │  Offer Stack     │
+│  NS rating       │                │  Healing Flows   │              │  CRM + Scale     │
+│  Dome shape      │                │  Zone Matrix     │              │  Score           │
+└─────────────────┘                └─────────────────┘              └─────────────────┘
+     FREE lead magnets              FIND MY FLOW APP                  SCALE PORTAL
+     /try/experience-game           (trial → paid)                   ($499 + $99/mo)
+     /try/aliveness
+     /try/ambition-radar
+```
+
+**Key difference from v2:** Income tracking appears at Phase 2 (hero stage 8+) as a courage milestone, then accumulates as a revenue metric in Phase 3. The weekly review captures both. This is stacking in action.
+
+### Three Lead Magnets, Three DAMs
+
+Each lead magnet intercepts from a different "old category" and redirects to Vibe Rise. They're the top of the funnel for Phase 1.
+
+**Lead Magnet 1: Experience Game** (`/try/experience-game`)
+
+| CP Element | Implementation |
+|---|---|
+| **Old category** | Personality tests, career quizzes (Myers-Briggs, DISC, StrengthsFinder) |
+| **What's wrong (Q2)** | They tell you what you ARE, not what makes you ALIVE. Static labels from answering questions about preferences. No body signal, no experience data, no courage required. |
+| **How we solve it (Q3)** | Tick experiences you've actually done. Rate each with your nervous system. See your dome shape — the unique pattern of what makes YOU come alive. Not a label. A map. |
+| **DAM Statement** | "You think you need a personality test. But a quiz about your preferences can't tell you what makes you alive. What you actually need is to map the experiences your body responds to. That's the dome." |
+| **Entry point** | Phase 1 (Discovery). User ticks ~54 experiences across 10 branches, rates each with NS state, sees their dome shape. |
+| **Conversion path** | Dome shape → "Want to expand this?" → signup → Phase 2 courage challenges |
+
+**Lead Magnet 2: Aliveness Quiz** (`/try/aliveness`)
+
+| CP Element | Implementation |
+|---|---|
+| **Old category** | "Am I on the right path?" quizzes, life satisfaction assessments |
+| **What's wrong (Q2)** | They measure satisfaction or personality type. Neither tracks what your body actually responds to. They diagnose the symptom ("you're unhappy") without naming the mechanism ("your aliveness channels are shut down"). |
+| **How we solve it (Q3)** | Four questions, one per channel: Choice, Connection, Mastery, Meaning. Your body knows which channels closed. The quiz names them. Then gives you one thing to try today for each closed channel. |
+| **DAM Statement** | "You think you need another self-help quiz. But knowing you're 'stressed' or '62% satisfied' doesn't tell you what to do. What you actually need is to see which of your four aliveness channels got shut down, and reopen one today." |
+| **Entry point** | Phase 1 (pre-Discovery). Lighter than the dome — 4 questions, immediate result. |
+| **Conversion path** | Diagnosis → "Want to reopen what closed?" → signup → dome → Phase 2 |
+
+**Lead Magnet 3: Ambition Radar** (`/try/ambition-radar`)
+
+| CP Element | Implementation |
+|---|---|
+| **Old category** | Goal-setting apps, vision boards, "dream big" workshops |
+| **What's wrong (Q2)** | They ask what you WANT but ignore what your body can HANDLE. The gap between ambition and capacity is the real problem. You can visualise your dream life all day — if your nervous system says "not safe" when you try to pursue it, the vision board is decoration. |
+| **How we solve it (Q3)** | Type your dream. See it on a radar across 8 dimensions. Then see where you actually are. The gap between the two shapes IS your comfort zone. The gold ring is your ambition. The purple dome is your current capacity. Vibe Rise closes the gap. |
+| **DAM Statement** | "You think you need a vision board. But you already know what you want. The problem is the gap between what you dream and what your body can handle. What you actually need is to see that gap on a radar and start closing it one courage challenge at a time." |
+| **Entry point** | Phase 1→2 bridge. Uses dome dimensions, so it primes users for the expansion game. |
+| **Conversion path** | Radar gap → "Want help closing this gap?" → signup → choose quests → Phase 2 |
+
+### How the Three Magnets Differ (A/B Test Strategy)
+
+| Dimension | Experience Game | Aliveness Quiz | Ambition Radar |
+|---|---|---|---|
+| **Time to complete** | 5-10 min (54 experiences) | 2-3 min (4 questions) | 3-5 min (dream + 8 dims + precursor) |
+| **Depth** | Deep (real experience data) | Shallow (self-report) | Medium (ambition vs reality) |
+| **Reveal moment** | Dome shape emerging | Channel diagnosis card | Radar gap animation |
+| **Shareability** | Dome image (visual, unique shape) | Verdict headline (text-first) | Radar overlay (visual, gap is the story) |
+| **Emotional hook** | "I didn't know Play was my thing" | "My Connection channel is starved" | "I'm further from my dream than I thought" |
+| **Best for** | Curious explorers who want to play | People in pain who want a quick answer | Ambitious people who feel stuck |
+| **Email gate position** | After dome (earned the data first) | Before results (exchange value) | Before results (exchange value) |
+
+**What to track per magnet:**
+- Step-level drop-off (funnel tracking built, table: `lead_funnel_events`)
+- Email gate conversion (step N-1 → email submitted)
+- Time-on-reveal (did they look at their result?)
+- Share rate (share button taps)
+- 7/14/30 day signup conversion (`public_leads` → `auth.users`)
+
+### Life Fuel: The Motivation Layer
+
+Not in v1 or v2. Life Fuel (Choice, Connection, Mastery, Meaning) captures **why users pursue expansion paths over their current situation**. Tracked via checkboxes after courage challenges. This is the motivational substrate under the NS measurement — the NS tells you HOW your body responds, Life Fuel tells you WHY you're pursuing this path at all.
+
+The four channels map to the aliveness quiz — a user who scores low on Connection in the quiz will likely select Connection as a Life Fuel when defining their expansion paths. The quiz diagnoses, the fuel sustains.
+
+### What Changed From v2
+
+| Element | v2 | v3 |
+|---|---|---|
+| **Product model** | Three separate categories | Three stacking phases, one category |
+| **Lead magnets** | `/try/experience-game` only | Three magnets, each DAMs from a different old category |
+| **Income tracking** | Not addressed in consumer app | Phase 2 courage milestone (first dollar) + Phase 3 revenue metric (weekly accumulation) |
+| **Life Fuel** | Not present | Choice/Connection/Mastery/Meaning as motivational layer |
+| **DAM Statement** | One (brand-level) | One brand-level + three magnet-specific |
+| **Conversion funnel** | Not mapped | Step-level drop-off tracking via `lead_funnel_events` |
+
+### What Still Holds From v2
+
+- Brand-level DAM statement — still the north star
+- Sessions as the product, app as the ledger — still true
+- 3 Movement Questions (Q1/Q2/Q3) — still the core discovery tool
+- "CP is the strategic playbook, FMF is the emotional operating system" — still true
+- All framework-to-framework mappings (Movement = Category POV etc.) — unchanged
+
+---
+
 ## v2 Update (July 2026)
 
 The April 2026 analysis below remains accurate for the framework-to-framework mappings. The following has evolved since then:

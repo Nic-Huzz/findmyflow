@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { createFunnelTracker } from '../lib/funnelTracker'
 import PublicEmailGate from '../components/PublicEmailGate'
 import './AlivenessQuiz.css'
 
@@ -149,11 +150,18 @@ export default function AlivenessQuiz() {
   const [utmParams, setUtmParams] = useState({})
   const [calcStep, setCalcStep] = useState(0)
   const containerRef = useRef(null)
+  const tracker = useRef(createFunnelTracker('aliveness_quiz'))
 
   useEffect(() => {
     if (['calculating', 'results', 'leverage'].includes(stage)) return
     saveProgress(stage, answers)
   }, [stage, answers])
+
+  // Track each step reached
+  useEffect(() => {
+    const idx = STAGE_ORDER.indexOf(stage)
+    if (idx >= 0) tracker.current.step(stage, idx)
+  }, [stage])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)

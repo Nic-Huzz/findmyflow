@@ -41,9 +41,20 @@
 
 .cjf-count { font-size: 13px; color: #5e17eb; font-weight: 600; text-align: center; margin: 12px 0; }
 
+.cjf-search {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid rgba(0,0,0,0.08); border-radius: 12px;
+  background: white; font-size: 15px; font-family: inherit;
+  color: #1a1a2e; box-sizing: border-box;
+  margin-bottom: 8px;
+}
+.cjf-search:focus { outline: none; border-color: #5e17eb; }
+
 /* ── Dimension picker ── */
 .cjf-dim-section { margin-bottom: 16px; }
-.cjf-dim-label { font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 8px; }
+.cjf-dim-label { font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 2px; }
+.cjf-dim-desc { font-size: 12px; color: rgba(0,0,0,0.35); margin-bottom: 8px; line-height: 1.4; }
+.cjf-dim-hint { font-size: 12px; color: #5e17eb; margin-top: 6px; line-height: 1.4; font-style: italic; }
 .cjf-dim-options { display: flex; flex-wrap: wrap; gap: 6px; }
 .cjf-dim-pill {
   padding: 8px 14px; border-radius: 10px;
@@ -120,6 +131,17 @@
 .cjf-done-icon { font-size: 48px; }
 .cjf-done h2 { font-size: 22px; font-weight: 800; }
 .cjf-done p { font-size: 14px; color: rgba(0,0,0,0.5); max-width: 300px; line-height: 1.5; }
+
+.cjf-direction-options { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; }
+.cjf-direction-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  padding: 16px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.08);
+  background: white; cursor: pointer; text-align: left; transition: border-color 0.15s;
+}
+.cjf-direction-btn:active { border-color: #5e17eb; }
+.cjf-direction-emoji { font-size: 24px; }
+.cjf-direction-text { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+.cjf-direction-sub { font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
 
 /* ── Back link ── */
 .cjf-back { background: none; border: none; color: rgba(0,0,0,0.3); font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 0; font-family: inherit; margin-bottom: 12px; }

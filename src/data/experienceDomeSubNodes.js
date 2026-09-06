@@ -267,6 +267,7 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-style-sustainable', label: 'Ethical / sustainable brands' },
     { id: 'fmt-style-custom', label: 'Made-to-order / tailored' },
     { id: 'fmt-style-upcycle', label: 'Upcycling / mending / DIY' },
+    { id: 'fmt-style-colour', label: 'Colours that represent who I am' },
   ],
 
   'exp-tattoo': [
@@ -743,7 +744,6 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-speak-panel', label: 'Panel discussion' },
     { id: 'fmt-speak-mc', label: 'MC / event hosting' },
     { id: 'fmt-speak-pitch', label: 'Pitch / demo day' },
-    { id: 'fmt-speak-toast', label: 'Toast / wedding speech' },
     { id: 'fmt-speak-podcast', label: 'Podcast guesting' },
     { id: 'fmt-speak-tedx', label: 'TEDx / big-stage talk' },
   ],
@@ -1053,9 +1053,9 @@ export const CAREER_VECTORS = [
     subtitle: 'I want this to be my career',
   },
   {
-    id: 'guide_it',
-    label: 'Guiding others to do it',
-    subtitle: 'Teaching, facilitating, coaching others',
+    id: 'facilitate_it',
+    label: 'Facilitating the experience',
+    subtitle: 'I run it, others participate',
   },
   {
     id: 'build_around',

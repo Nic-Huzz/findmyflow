@@ -28,7 +28,7 @@ export const LIFE_FUEL_CHANNELS = {
     emoji: '🤝',
     category: 'Survive',
     color: '#f472b6',
-    checkbox: 'I connected with someone and it made the experience better',
+    checkbox: 'The people around me feel like my tribe',
   },
   mastery: {
     id: 'mastery',

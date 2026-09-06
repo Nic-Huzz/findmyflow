@@ -108,7 +108,7 @@ const EXPERIENCE_LABELS = {
   // Cars
   'car-1886': 'Driving / Road trips',
   'car-1903': 'Flying / Air travel',
-  'car-1952': 'International travel / backpacking',
+  'car-1952': 'International travel',
   'car-1956': 'Long-distance road trip',
   'car-2008': 'Driving an electric vehicle',
   'car-2010': 'Ride-sharing (Uber/Lyft)',

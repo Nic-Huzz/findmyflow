@@ -33,5 +33,11 @@ export const fetchStats = () =>
 export const fetchEngagement = () =>
   adminFetch('get_engagement')
 
+export const fetchLeads = () =>
+  adminFetch('get_leads')
+
+export const fetchFunnelMetrics = () =>
+  adminFetch('get_funnel_metrics')
+
 export const sendNudge = (targetUserId, title, body, url) =>
   adminFetch('send_nudge', { targetUserId, title, body, url })

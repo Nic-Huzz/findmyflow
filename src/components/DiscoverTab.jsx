@@ -232,6 +232,20 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         <span className="dt-card-arrow">→</span>
       </button>
 
+      {/* Current Job CTA — sits under Experience Dome, before the viz */}
+      {domeCount > 0 && !hasCurrentJob && (
+        <button className="dt-card" onClick={() => navigate('/add-current-job')}>
+          <div className="dt-card-header">
+            <span className="dt-card-icon">💼</span>
+            <span className="dt-card-title">Map your current work</span>
+          </div>
+          <p className="dt-card-desc">
+            Find what's already alive in your job. Creates your first path.
+          </p>
+          <span className="dt-card-arrow">→</span>
+        </button>
+      )}
+
       {/* Dome Radar (mini viz when data exists) — tap to expand */}
       {domeCount > 0 && (
         <div
@@ -262,22 +276,6 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
             </button>
           </div>
         </div>
-      )}
-
-      {/* Weekly experience section moved to top of tab */}
-
-      {/* Current Job CTA */}
-      {domeCount > 0 && !hasCurrentJob && (
-        <button className="dt-card" onClick={() => navigate('/add-current-job')}>
-          <div className="dt-card-header">
-            <span className="dt-card-icon">💼</span>
-            <span className="dt-card-title">Map your current work</span>
-          </div>
-          <p className="dt-card-desc">
-            Find what's already alive in your job. Creates your first path.
-          </p>
-          <span className="dt-card-arrow">→</span>
-        </button>
       )}
 
       {/* Phase 1→2 Bridge CTA */}

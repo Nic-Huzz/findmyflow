@@ -70,6 +70,10 @@ serve(async (req) => {
         return await handleGetEngagement(supabase)
       case 'send_nudge':
         return await handleSendNudge(supabase, user.id, body)
+      case 'get_leads':
+        return await handleGetLeads(supabase)
+      case 'get_funnel_metrics':
+        return await handleGetFunnelMetrics(supabase)
       default:
         return jsonResponse({ error: `Unknown action: ${action}` }, 400)
     }
@@ -288,6 +292,162 @@ async function handleGetEngagement(supabase: any) {
     leagueJoins: leagueJoins.count || 0,
     eventCheckins: eventCheckins.count || 0,
   })
+}
+
+// ─── GET LEADS ──────────────────────────────────────────────────────────
+
+async function handleGetLeads(supabase: any) {
+  const now = new Date()
+  const day7 = new Date(now.getTime() - 7 * 86400000).toISOString()
+
+  // Counts by source
+  const [totalResult, week7Result, recentLeads] = await Promise.all([
+    supabase
+      .from('lead_captures')
+      .select('source', { count: 'exact', head: false }),
+    supabase
+      .from('lead_captures')
+      .select('source', { count: 'exact', head: false })
+      .gte('created_at', day7),
+    supabase
+      .from('lead_captures')
+      .select('email, source, scores, metadata, created_at')
+      .order('created_at', { ascending: false })
+      .limit(20),
+  ])
+
+  // Count by source
+  const bySource: Record<string, { total: number; week: number }> = {}
+  for (const row of totalResult.data || []) {
+    const src = row.source || 'unknown'
+    if (!bySource[src]) bySource[src] = { total: 0, week: 0 }
+    bySource[src].total++
+  }
+  for (const row of week7Result.data || []) {
+    const src = row.source || 'unknown'
+    if (!bySource[src]) bySource[src] = { total: 0, week: 0 }
+    bySource[src].week++
+  }
+
+  return jsonResponse({
+    totalLeads: totalResult.data?.length || 0,
+    leadsThisWeek: week7Result.data?.length || 0,
+    bySource,
+    recentLeads: (recentLeads.data || []).map((l: any) => ({
+      email: l.email,
+      source: l.source,
+      name: l.metadata?.name || null,
+      dreamText: l.scores?.dream_text || null,
+      created_at: l.created_at,
+    })),
+  })
+}
+
+// ─── GET FUNNEL METRICS ─────────────────────────────────────────────────
+
+async function handleGetFunnelMetrics(supabase: any) {
+  const now = new Date()
+  const day7 = new Date(now.getTime() - 7 * 86400000).toISOString()
+  const day30 = new Date(now.getTime() - 30 * 86400000).toISOString()
+
+  // Get all funnel events from last 30 days
+  const { data: events } = await supabase
+    .from('lead_funnel_events')
+    .select('session_id, funnel, step, step_index, duration_ms, created_at')
+    .gte('created_at', day30)
+    .order('created_at', { ascending: true })
+
+  if (!events || events.length === 0) {
+    return jsonResponse({ funnels: {}, period: '30d', totalSessions: 0 })
+  }
+
+  // Group by funnel
+  const funnelMap: Record<string, any[]> = {}
+  for (const e of events) {
+    if (!funnelMap[e.funnel]) funnelMap[e.funnel] = []
+    funnelMap[e.funnel].push(e)
+  }
+
+  // For each funnel, calculate step-level drop-off
+  const funnels: Record<string, any> = {}
+
+  for (const [funnelName, funnelEvents] of Object.entries(funnelMap)) {
+    // Get unique sessions
+    const sessions = new Set(funnelEvents.map((e: any) => e.session_id))
+    const totalSessions = sessions.size
+
+    // Recent sessions (7d)
+    const recentEvents = funnelEvents.filter((e: any) => e.created_at >= day7)
+    const recentSessions = new Set(recentEvents.map((e: any) => e.session_id)).size
+
+    // Max step reached per session
+    const sessionMaxStep = new Map<string, number>()
+    const sessionSteps = new Map<string, Set<string>>()
+    for (const e of funnelEvents) {
+      const prev = sessionMaxStep.get(e.session_id) ?? -1
+      if (e.step_index > prev) sessionMaxStep.set(e.session_id, e.step_index)
+      if (!sessionSteps.has(e.session_id)) sessionSteps.set(e.session_id, new Set())
+      sessionSteps.get(e.session_id)!.add(e.step)
+    }
+
+    // Build step-level funnel: how many sessions reached each step
+    const stepCounts: Record<string, number> = {}
+    const stepOrder: { name: string; index: number }[] = []
+
+    // Collect unique steps in order
+    const seenSteps = new Set<string>()
+    const sortedEvents = [...funnelEvents].sort((a: any, b: any) => a.step_index - b.step_index)
+    for (const e of sortedEvents) {
+      if (!seenSteps.has(e.step)) {
+        seenSteps.add(e.step)
+        stepOrder.push({ name: e.step, index: e.step_index })
+      }
+    }
+
+    // Count sessions that reached each step
+    for (const step of stepOrder) {
+      let count = 0
+      for (const [, steps] of sessionSteps) {
+        if (steps.has(step.name)) count++
+      }
+      stepCounts[step.name] = count
+    }
+
+    // Calculate drop-off between consecutive steps
+    const steps = stepOrder.map((step, i) => {
+      const reached = stepCounts[step.name] || 0
+      const prevReached = i === 0 ? totalSessions : (stepCounts[stepOrder[i - 1].name] || totalSessions)
+      const dropOff = prevReached > 0 ? Math.round((1 - reached / prevReached) * 100) : 0
+
+      // Average time on this step (from duration_ms of the NEXT step)
+      const nextStep = stepOrder[i + 1]
+      let avgDuration = null
+      if (nextStep) {
+        const durations = funnelEvents
+          .filter((e: any) => e.step === nextStep.name && e.duration_ms != null)
+          .map((e: any) => e.duration_ms)
+        if (durations.length > 0) {
+          avgDuration = Math.round(durations.reduce((a: number, b: number) => a + b, 0) / durations.length / 1000)
+        }
+      }
+
+      return {
+        name: step.name,
+        index: step.index,
+        reached,
+        dropOff,
+        avgTimeOnStepSec: avgDuration,
+      }
+    })
+
+    funnels[funnelName] = {
+      totalSessions,
+      recentSessions,
+      steps,
+    }
+  }
+
+  return jsonResponse({ funnels, period: '30d', totalSessions: events.length })
 }
 
 // ─── SEND NUDGE ──────────────────────────────────────────────────────────

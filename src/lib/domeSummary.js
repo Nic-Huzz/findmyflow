@@ -123,18 +123,8 @@ export function groupByPrimal(items) {
 export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDive, allExps) {
   if (!domeStates || Object.keys(domeStates).length === 0) return null
 
-  const lookup = getNodeLookup()
-  const buckets = { vibe_rise: [], fun: [], pressure: [] }
-
-  Object.entries(domeStates).forEach(([nodeId, nsState]) => {
-    if (!isCoreNode(nodeId)) return
-    const info = lookup.get(nodeId)
-    if (!info) return
-    const state = nsState === 'growth_edge' ? 'pressure' : nsState
-    if (buckets[state]) buckets[state].push(info.label)
-  })
-
-  // Build enriched selected array if deep dive data is available
+  // Only send the experiences the user explicitly selected + their deep dive data.
+  // No fun, no pressure, no full vibe_rise list. The selection IS the signal.
   let selected = selectedLabels
   if (deepDive && allExps && Object.keys(deepDive).length > 0) {
     selected = allExps
@@ -167,9 +157,6 @@ export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype
 
   return {
     selected,
-    vibeRise: buckets.vibe_rise,
-    fun: buckets.fun,
-    pressure: buckets.pressure,
     essence: essenceArchetype || null,
   }
 }

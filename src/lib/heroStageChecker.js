@@ -147,14 +147,17 @@ export async function checkHeroGraduation(userId) {
 
   // If graduated, update the stage (upsert to handle missing rows)
   if (newStage !== null && newStage > currentStage) {
-    await supabase
-      .from('user_stage_progress')
-      .upsert({
-        user_id: userId,
-        current_journey_level: newStage,
-        conversations_logged: stageData?.conversations_logged || 0,
-      }, { onConflict: 'user_id' })
-      .catch(() => {})
+    try {
+      await supabase
+        .from('user_stage_progress')
+        .upsert({
+          user_id: userId,
+          current_journey_level: newStage,
+          conversations_logged: stageData?.conversations_logged || 0,
+        }, { onConflict: 'user_id' })
+    } catch {
+      // ignore upsert errors
+    }
 
     // Auto-post stage graduation to community feed
     const STAGE_NAMES = {

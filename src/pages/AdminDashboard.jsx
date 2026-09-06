@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
-import { fetchUsers, fetchStats, fetchEngagement } from '../lib/adminService'
+import { fetchUsers, fetchStats, fetchEngagement, fetchLeads, fetchFunnelMetrics } from '../lib/adminService'
 import UserTable from '../components/admin/UserTable'
 import NudgeModal from '../components/admin/NudgeModal'
 import './AdminDashboard.css'
@@ -20,6 +20,8 @@ export default function AdminDashboard() {
   const [toast, setToast] = useState(null)
   const debounceRef = useRef(null)
   const [engagement, setEngagement] = useState(null)
+  const [leads, setLeads] = useState(null)
+  const [funnelMetrics, setFunnelMetrics] = useState(null)
 
   // Initial load — verify admin access and fetch stats
   useEffect(() => {
@@ -63,6 +65,22 @@ export default function AdminDashboard() {
       setEngagement(engData)
     } catch (err) {
       console.warn('Engagement metrics error:', err)
+    }
+
+    // Load lead capture metrics
+    try {
+      const leadsData = await fetchLeads()
+      setLeads(leadsData)
+    } catch (err) {
+      console.warn('Leads metrics error:', err)
+    }
+
+    // Load funnel drop-off metrics
+    try {
+      const funnelData = await fetchFunnelMetrics()
+      setFunnelMetrics(funnelData)
+    } catch (err) {
+      console.warn('Funnel metrics error:', err)
     }
 
     try {
@@ -193,6 +211,92 @@ export default function AdminDashboard() {
               <span className="ad-stat-label">Event Check-ins</span>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Lead Captures */}
+      {leads && (
+        <div className="ad-hero" style={{ marginTop: 12 }}>
+          <span className="ad-hero-label">Lead Magnets</span>
+          <h2 className="ad-hero-title">Lead Captures</h2>
+          <div className="ad-stats-grid">
+            <div className="ad-stat">
+              <span className="ad-stat-value ad-stat-gold">{leads.totalLeads}</span>
+              <span className="ad-stat-label">Total Leads</span>
+            </div>
+            <div className="ad-stat">
+              <span className="ad-stat-value">{leads.leadsThisWeek}</span>
+              <span className="ad-stat-label">This Week</span>
+            </div>
+            {Object.entries(leads.bySource || {}).map(([source, counts]) => (
+              <div className="ad-stat" key={source}>
+                <span className="ad-stat-value">{counts.total}</span>
+                <span className="ad-stat-label">{source}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Recent leads list */}
+          {leads.recentLeads?.length > 0 && (
+            <div className="ad-leads-list">
+              {leads.recentLeads.map((lead, i) => (
+                <div key={i} className="ad-lead-row">
+                  <div className="ad-lead-info">
+                    <span className="ad-lead-name">{lead.name || 'Anonymous'}</span>
+                    <span className="ad-lead-email">{lead.email}</span>
+                  </div>
+                  <div className="ad-lead-meta">
+                    {lead.dreamText && <span className="ad-lead-dream">"{lead.dreamText}"</span>}
+                    <span className="ad-lead-source">{lead.source}</span>
+                    <span className="ad-lead-date">{new Date(lead.created_at).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Funnel Drop-off */}
+      {funnelMetrics && Object.keys(funnelMetrics.funnels || {}).length > 0 && (
+        <div className="ad-hero" style={{ marginTop: 12 }}>
+          <span className="ad-hero-label">Conversion</span>
+          <h2 className="ad-hero-title">Funnel Drop-off (30d)</h2>
+          {Object.entries(funnelMetrics.funnels).map(([funnelName, data]) => (
+            <div key={funnelName} className="ad-funnel-section">
+              <div className="ad-funnel-header">
+                <span className="ad-funnel-name">{funnelName.replace(/_/g, ' ')}</span>
+                <span className="ad-funnel-count">{data.totalSessions} sessions ({data.recentSessions} this week)</span>
+              </div>
+              <div className="ad-funnel-steps">
+                {data.steps.map((step, i) => {
+                  const barWidth = data.steps[0]?.reached > 0
+                    ? Math.max(4, Math.round((step.reached / data.steps[0].reached) * 100))
+                    : 0
+                  return (
+                    <div key={step.name} className="ad-funnel-step">
+                      <div className="ad-funnel-step-label">
+                        <span className="ad-funnel-step-name">{step.name.replace(/_/g, ' ')}</span>
+                        <span className="ad-funnel-step-count">{step.reached}</span>
+                      </div>
+                      <div className="ad-funnel-bar-bg">
+                        <div
+                          className="ad-funnel-bar"
+                          style={{ width: `${barWidth}%` }}
+                        />
+                      </div>
+                      {step.dropOff > 0 && i > 0 && (
+                        <span className="ad-funnel-dropoff">-{step.dropOff}%</span>
+                      )}
+                      {step.avgTimeOnStepSec != null && (
+                        <span className="ad-funnel-time">{step.avgTimeOnStepSec}s avg</span>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

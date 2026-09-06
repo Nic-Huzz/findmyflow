@@ -24,7 +24,9 @@ const STEPS = {
   SELECT: 'select',
   DEEP_DIVE: 'deep_dive',
   PROCESSING: 'processing',
-  PATHS: 'paths',
+  PROJECTS: 'projects',
+  CLUSTERING: 'clustering',
+  PATHS_REVIEW: 'paths_review',
   PATH_DEF: 'path_def',
   SAVING: 'saving',
   DONE: 'done',
@@ -74,12 +76,20 @@ export default function ChooseQuestsFlow() {
   const deepDiveRef = useRef(deepDive)
   useEffect(() => { deepDiveRef.current = deepDive }, [deepDive])
 
-  // Paths step
+  // Projects step (AI-generated project ideas)
+  const [projects, setProjects] = useState([])
+  const [removedProjects, setRemovedProjects] = useState(new Set())
+  const [aiError, setAiError] = useState(null)
+  const [customProjectInput, setCustomProjectInput] = useState('')
+  const [showCustomProject, setShowCustomProject] = useState(false)
+
+  // Paths (either from clustering or 1:1 from projects)
   const [paths, setPaths] = useState([])
   const [selectedPaths, setSelectedPaths] = useState(new Set())
-  const [customInput, setCustomInput] = useState('')
-  const [showCustom, setShowCustom] = useState(false)
-  const [aiError, setAiError] = useState(null)
+  const [clusterLoading, setClusterLoading] = useState(false)
+  const [clusterError, setClusterError] = useState(null)
+  const [movePopover, setMovePopover] = useState(null) // { fromPath, projectIdx }
+  const [shouldSave, setShouldSave] = useState(false)
 
   // Path definition step (3 screens per path)
   const [pdPathIndex, setPdPathIndex] = useState(0)
@@ -143,6 +153,7 @@ export default function ChooseQuestsFlow() {
   }, [])
 
   // ── AI call ──
+  // ── AI call: generate project ideas ──
   const callAI = useCallback(async () => {
     goTo(STEPS.PROCESSING)
     setAiError(null)
@@ -153,22 +164,101 @@ export default function ChooseQuestsFlow() {
 
     try {
       const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
-        body: { domeProfile, curiosityClusters: [], skills: [], problems: [] },
+        body: { domeProfile },
+      })
+      if (error) throw error
+      if (data?.error) throw new Error(data.error)
+      if (data?.projects?.length) {
+        setProjects(data.projects)
+        setRemovedProjects(new Set())
+        goTo(STEPS.PROJECTS)
+      } else {
+        throw new Error('No projects returned')
+      }
+    } catch (err) {
+      console.error('Life path suggestions failed:', err)
+      setAiError(err.message)
+      goTo(STEPS.PROJECTS)
+    }
+  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+
+  // ── Remove/restore a project ──
+  const toggleRemoveProject = useCallback((idx) => {
+    hapticLight()
+    setRemovedProjects(prev => {
+      const next = new Set(prev)
+      if (next.has(idx)) next.delete(idx)
+      else next.add(idx)
+      return next
+    })
+  }, [])
+
+  // ── Get active (non-removed) projects ──
+  const activeProjects = projects.filter((_, i) => !removedProjects.has(i))
+
+  // ── Proceed from projects: 3 or fewer → direct to paths, 4+ → cluster ──
+  const proceedFromProjects = useCallback(async () => {
+    if (activeProjects.length === 0) return
+
+    if (activeProjects.length <= 3) {
+      // Each project becomes its own path — go to review, then save
+      const directPaths = activeProjects.map(p => ({
+        name: p.name,
+        description: p.description,
+        draws_from: p.draws_from,
+        projects: [p],
+      }))
+      setPaths(directPaths)
+      const allSelected = new Set()
+      directPaths.forEach((_, i) => allSelected.add(i))
+      setSelectedPaths(allSelected)
+      goTo(STEPS.PATHS_REVIEW)
+      return
+    }
+
+    // 4+ projects: cluster into paths
+    setClusterLoading(true)
+    setClusterError(null)
+    goTo(STEPS.CLUSTERING)
+
+    const allExps = [...vibeRise, ...fun]
+    const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
+    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDiveRef.current, allExps)
+
+    try {
+      const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
+        body: { mode: 'cluster', selectedProjects: activeProjects, domeProfile },
       })
       if (error) throw error
       if (data?.error) throw new Error(data.error)
       if (data?.paths?.length) {
         setPaths(data.paths)
-        goTo(STEPS.PATHS)
+        const allSelected = new Set()
+        data.paths.forEach((_, i) => allSelected.add(i))
+        setSelectedPaths(allSelected)
+        goTo(STEPS.PATHS_REVIEW)
       } else {
-        throw new Error('No paths returned')
+        throw new Error('No paths returned from clustering')
       }
     } catch (err) {
-      console.error('Life path suggestions failed:', err)
-      setAiError(err.message)
-      goTo(STEPS.PATHS)
+      console.error('Life path clustering failed:', err)
+      setClusterError(err.message)
+    } finally {
+      setClusterLoading(false)
     }
-  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+  }, [activeProjects, selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+
+  // ── Confirm clustered paths → filter to selected, then save ──
+  const confirmPaths = useCallback(() => {
+    // Keep only selected paths, reindex, then save
+    const kept = paths.filter((_, i) => selectedPaths.has(i))
+    setPaths(kept)
+    const newSelected = new Set()
+    kept.forEach((_, i) => newSelected.add(i))
+    setSelectedPaths(newSelected)
+    // saveQuests will be called on next render via effect
+    setShouldSave(true)
+  }, [paths, selectedPaths])
 
   // Auto-advance past deep dive if ddIndex exceeds selected count
   const allExpsForDD = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
@@ -177,35 +267,13 @@ export default function ChooseQuestsFlow() {
     if (ddAutoAdvance) callAI()
   }, [ddAutoAdvance]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-advance past path definition if pdPathIndex exceeds chosen paths
-  const chosenArrForPD = [...selectedPaths].map(i => ({ idx: i, path: paths[i] })).filter(p => p.path)
-  const pdAutoAdvance = step === STEPS.PATH_DEF && chosenArrForPD.length > 0 && pdPathIndex >= chosenArrForPD.length
+  // Save trigger — fires after confirmPaths updates state
   useEffect(() => {
-    if (pdAutoAdvance) saveQuests()
-  }, [pdAutoAdvance]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Path selection ──
-  const togglePath = useCallback((idx) => {
-    hapticLight()
-    setSelectedPaths(prev => {
-      const next = new Set(prev)
-      if (next.has(idx)) next.delete(idx)
-      else next.add(idx)
-      return next
-    })
-  }, [])
-
-  const addCustomPath = useCallback(() => {
-    if (!customInput.trim()) return
-    const newPath = { name: customInput.trim(), description: 'Your own path', draws_from: 'custom', isCustom: true }
-    setPaths(prev => {
-      setSelectedPaths(sel => new Set([...sel, prev.length]))
-      return [...prev, newPath]
-    })
-    setCustomInput('')
-    setShowCustom(false)
-    hapticLight()
-  }, [customInput])
+    if (shouldSave) {
+      setShouldSave(false)
+      saveQuests()
+    }
+  }, [shouldSave]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Path definition helpers ──
   const getDimTiers = useCallback((dim) => {
@@ -224,16 +292,20 @@ export default function ChooseQuestsFlow() {
     try {
       const dd = deepDiveRef.current || {}
       const allExps = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+      const chosenArr = paths.filter((_, i) => selectedPaths.has(i))
 
-      for (const pathIdx of selectedPaths) {
-        const path = paths[pathIdx]
+      for (let idx = 0; idx < chosenArr.length; idx++) {
+        const path = chosenArr[idx]
         if (!path) continue
 
-        // Resolve career vector + format picks from deep dive data
-        const drawsFrom = (path.draws_from || '').toLowerCase()
-        const pathName = (path.name || '').toLowerCase()
-        let questVector = null
+        // Resolve career vector via majority rule from path's projects
+        const vectorCounts = {}
         const questFormats = []
+
+        // Check projects for vectors, fall back to draws_from text matching
+        const projectDraws = (path.projects || []).map(p => (p.draws_from || '').toLowerCase()).join(' ')
+        const drawsFrom = ((path.draws_from || '') + ' ' + projectDraws).toLowerCase()
+        const pathName = (path.name || '').toLowerCase()
 
         for (const exp of allExps) {
           const expDd = dd[exp.id]
@@ -241,10 +313,8 @@ export default function ChooseQuestsFlow() {
           const expLabel = exp.label.toLowerCase()
           if (!drawsFrom.includes(expLabel) && !pathName.includes(expLabel)) continue
           const vecs = expDd.vectors instanceof Set ? [...expDd.vectors] : (expDd.vectors || [])
-          if (!questVector) {
-            const nonHobby = vecs.filter(v => v !== 'hobby')
-            if (nonHobby.length) questVector = nonHobby[0]
-          }
+          const nonHobby = vecs.filter(v => v !== 'hobby')
+          nonHobby.forEach(v => { vectorCounts[v] = (vectorCounts[v] || 0) + 1 })
           const fmts = expDd.formats instanceof Set ? expDd.formats : new Set(expDd.formats || [])
           if (fmts.size) {
             getSubNodes(exp.id).filter(s => fmts.has(s.id)).forEach(s => {
@@ -253,28 +323,35 @@ export default function ChooseQuestsFlow() {
           }
         }
 
-        // Create quest with path definition data
+        // Majority vector
+        const questVector = Object.entries(vectorCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null
+
+        // Create quest (discovery data only, no path definition)
         const { data: newQuest } = await supabase.from('quests').insert({
           user_id: user.id,
           label: path.name,
-          career_id: `dome-bridge-${Date.now()}-${pathIdx}`,
+          career_id: `dome-bridge-${Date.now()}-${idx}`,
           predicted_state: 'vibe_rise',
           status: 'active',
           career_vector: questVector,
           format_picks: questFormats.length ? questFormats : null,
-          precursor_level: precursorLevels[pathIdx] || null,
-          current_dimensions: currentDimensions[pathIdx] || null,
-          dream_dimensions: dreamDimensions[pathIdx] || null,
-          staying_fuels: stayingFuels[pathIdx]?.size ? [...stayingFuels[pathIdx]] : null,
-          path_fuels: pathFuels[pathIdx]?.size ? [...pathFuels[pathIdx]] : null,
-          buts: butTexts[pathIdx]?.length ? butTexts[pathIdx] : null,
-          fear_outcome: fearOutcomes[pathIdx] || null,
-          identity_declaration: identityDeclarations[pathIdx] || null,
-          protective_voice: protectiveVoices[pathIdx] || null,
         }).select('id').single()
 
         const questId = newQuest?.id
         if (!questId) continue
+
+        // Create quest_experiences for each project under the path
+        if (path.projects?.length) {
+          await supabase.from('quest_experiences').insert(
+            path.projects.map((p, j) => ({
+              quest_id: questId,
+              user_id: user.id,
+              label: p.name,
+              status: 'active',
+              sort_order: j,
+            }))
+          )
+        }
 
         // Auto-tag skills (non-blocking)
         import('../lib/questSkillTagger').then(async (m) => {
@@ -285,78 +362,14 @@ export default function ChooseQuestsFlow() {
             ).catch(() => {})
           }
         }).catch(() => {})
-
-        // Create courage challenge from next step
-        const stepText = (nextStepTexts[pathIdx] || '').trim()
-        if (stepText) {
-          const { data: existingGroan } = await supabase.from('groan_challenges')
-            .select('id').eq('user_id', user.id).eq('title', stepText).limit(1)
-          let groanId = existingGroan?.[0]?.id
-
-          if (!groanId) {
-            const { data: newGroan } = await supabase.from('groan_challenges').insert({
-              user_id: user.id,
-              title: stepText,
-              challenge_text: stepText,
-              status: 'active',
-              source_type: 'skill',
-              challenge_source: 'dome_bridge',
-              source_label: path.name,
-              scary_score: 5,
-              wahoo_score: 5,
-              visibility_layer: 'screen',
-              visibility_layers: [],
-              accepted_at: new Date().toISOString(),
-            }).select('id').single()
-
-            if (newGroan?.id) {
-              groanId = newGroan.id
-              try {
-                await supabase.from('priority_weekly_picks').upsert({
-                  user_id: user.id,
-                  week_start_date: getWeekStartLocal(),
-                  pick_type: 'groan',
-                  reference_id: groanId,
-                  display_name: stepText,
-                }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
-              } catch {}
-            }
-          }
-
-          if (groanId) {
-            const { data: existingTask } = await supabase.from('quest_tasks')
-              .select('id').eq('quest_id', questId).eq('text', stepText).limit(1)
-            if (!existingTask?.length) {
-              try {
-                await supabase.from('quest_tasks').insert({
-                  quest_id: questId,
-                  user_id: user.id,
-                  text: stepText,
-                  is_courage_challenge: true,
-                  groan_challenge_id: groanId,
-                  sort_order: 0,
-                }).select('id').single()
-              } catch {}
-            }
-          }
-        }
       }
 
       // Write life_path_sessions row so Paths tab auto-unlocks
-      const stuckSummary = chosenPaths.map((p, i) => {
-        const pathIdx = paths.indexOf(p)
-        return {
-          id: `pd-${i}`, careerId: pathIdx,
-          text: nextStepTexts[pathIdx] || '',
-          protectiveVoice: protectiveVoices[pathIdx] || null,
-          buts: butTexts[pathIdx] || [],
-        }
-      })
       await supabase.from('life_path_sessions').insert({
         client_name: user.email || user.id,
         client_email: user.email || null,
-        careers: chosenPaths.map((p, i) => ({ id: `dome-${i}`, label: p.name, predictedState: 'vibe_rise' })),
-        stuck_points: stuckSummary,
+        careers: chosenArr.map((p, i) => ({ id: `dome-${i}`, label: p.name, predictedState: 'vibe_rise' })),
+        stuck_points: [],
         step: 'complete',
       }).then(() => {}).catch(() => {})
 
@@ -364,11 +377,9 @@ export default function ChooseQuestsFlow() {
       goTo(STEPS.DONE)
     } catch (err) {
       console.error('Quest creation failed:', err)
-      goTo(STEPS.PATH_DEF)
+      goTo(STEPS.PROJECTS)
     }
-  }, [user, paths, selectedPaths, chosenPaths, goTo, vibeRise, fun, selectedIds,
-    precursorLevels, currentDimensions, dreamDimensions, stayingFuels, pathFuels,
-    butTexts, nextStepTexts, fearOutcomes, identityDeclarations, protectiveVoices])
+  }, [user, paths, selectedPaths, goTo, vibeRise, fun, selectedIds])
 
   // ── Loading ──
   if (domeLoading) {
@@ -590,34 +601,34 @@ export default function ChooseQuestsFlow() {
     )
   }
 
-  // ── PICK PATHS ──
-  if (step === STEPS.PATHS) {
-    const n = selectedPaths.size
+  // ── PROJECTS (user removes ones they don't want) ──
+  if (step === STEPS.PROJECTS) {
+    const activeCount = activeProjects.length
     return (
       <div className="cqf">
         <div className="cqf-container">
           <div className="cqf-paths-header">
-            <h2>Life paths for you</h2>
-            <p>Pick 1-3 experiences that sound super exciting to you.</p>
+            <h2>Projects you could pursue</h2>
+            <p>Remove any that don't excite you. Keep the ones that make you think "yes, that."</p>
           </div>
 
           {aiError && (
             <div className="cqf-error">
-              Something went wrong generating paths.
+              Something went wrong generating projects.
               <button onClick={callAI}>Try again</button>
             </div>
           )}
 
-          {paths.map((path, i) => (
-            <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : ''}`} onClick={() => togglePath(i)}>
+          {projects.map((project, i) => (
+            <div key={i} className={`cqf-path ${removedProjects.has(i) ? 'cqf-path-removed' : 'selected'}`} onClick={() => toggleRemoveProject(i)}>
               <div className="cqf-path-top">
-                <div className="cqf-path-check">✓</div>
+                <div className="cqf-path-check">{removedProjects.has(i) ? '✕' : '✓'}</div>
                 <div>
-                  <div className="cqf-path-name">{path.name}</div>
-                  <div className="cqf-path-desc">{path.description}</div>
-                  {path.draws_from && !path.isCustom && (
+                  <div className="cqf-path-name">{project.name}</div>
+                  <div className="cqf-path-desc">{project.description}</div>
+                  {project.draws_from && (
                     <div className="cqf-path-sources">
-                      {path.draws_from
+                      {project.draws_from
                         .split(/[,+.]/)
                         .map(s => s.trim()
                           .replace(/^(and|or|SELECTED:|Vibe Rise:|Fun:|Growth edge:)\s*/gi, '')
@@ -628,7 +639,7 @@ export default function ChooseQuestsFlow() {
                       }
                     </div>
                   )}
-                  {path.draws_from?.toLowerCase().includes('wild card') && (
+                  {project.draws_from?.toLowerCase().includes('wild card') && (
                     <div className="cqf-path-wild">Wild card</div>
                   )}
                 </div>
@@ -637,23 +648,154 @@ export default function ChooseQuestsFlow() {
           ))}
 
           <div className="cqf-add-own">
-            {!showCustom ? (
-              <button onClick={() => setShowCustom(true)}>+ Add your own path</button>
+            {!showCustomProject ? (
+              <button onClick={() => setShowCustomProject(true)}>+ Add your own project</button>
             ) : (
               <div className="cqf-custom-input">
-                <input type="text" value={customInput} onChange={e => setCustomInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && addCustomPath()}
-                  placeholder="Type your own life path..." autoFocus />
-                <button onClick={addCustomPath} disabled={!customInput.trim()}>Add</button>
+                <input type="text" value={customProjectInput} onChange={e => setCustomProjectInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && customProjectInput.trim()) {
+                      setProjects(prev => [...prev, { name: customProjectInput.trim(), description: 'Your own project idea', draws_from: 'custom' }])
+                      setCustomProjectInput('')
+                      setShowCustomProject(false)
+                      hapticLight()
+                    }
+                  }}
+                  placeholder="Type your project idea..." autoFocus />
+                <button disabled={!customProjectInput.trim()} onClick={() => {
+                  if (!customProjectInput.trim()) return
+                  setProjects(prev => [...prev, { name: customProjectInput.trim(), description: 'Your own project idea', draws_from: 'custom' }])
+                  setCustomProjectInput('')
+                  setShowCustomProject(false)
+                  hapticLight()
+                }}>Add</button>
               </div>
             )}
           </div>
 
           <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => { setPdPathIndex(0); setPdScreen(0); goTo(STEPS.PATH_DEF) }}>
-              {n === 0 ? 'Select at least 1 →' : 'Continue →'}
+            <button className="cqf-cta cqf-cta-gold" disabled={activeCount === 0} onClick={proceedFromProjects}>
+              {activeCount === 0 ? 'Keep at least 1 →' : activeCount <= 3 ? `Continue with ${activeCount} →` : `Group ${activeCount} into paths →`}
             </button>
-            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPaths([]); setSelectedPaths(new Set()); goTo(STEPS.SELECT) }}>← Change experiences</button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setProjects([]); setRemovedProjects(new Set()); goTo(STEPS.SELECT) }}>← Change experiences</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── CLUSTERING (loading state while AI groups projects into paths) ──
+  if (step === STEPS.CLUSTERING) {
+    return (
+      <div className="cqf">
+        <div className="cqf-container">
+          <div className="cqf-processing">
+            <div className="cqf-spinner" />
+            <h2>Grouping your projects into life paths...</h2>
+            <p>Finding the distinct directions in what you've chosen.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── PATHS REVIEW (after clustering — user confirms/edits) ──
+  if (step === STEPS.PATHS_REVIEW) {
+    const updatePathName = (idx, newName) => {
+      setPaths(prev => prev.map((p, i) => i === idx ? { ...p, name: newName } : p))
+    }
+    const togglePathSelection = (idx) => {
+      hapticLight()
+      setSelectedPaths(prev => {
+        const next = new Set(prev)
+        if (next.has(idx)) next.delete(idx)
+        else next.add(idx)
+        return next
+      })
+    }
+    const moveProject = (fromPathIdx, projectIdx, toPathIdx) => {
+      hapticLight()
+      setPaths(prev => {
+        const next = prev.map(p => ({ ...p, projects: [...(p.projects || [])] }))
+        const [project] = next[fromPathIdx].projects.splice(projectIdx, 1)
+        next[toPathIdx].projects.push(project)
+        return next
+      })
+      setMovePopover(null)
+    }
+    const activePaths = paths.filter((_, i) => selectedPaths.has(i))
+    return (
+      <div className="cqf">
+        <div className="cqf-container">
+          <div className="cqf-paths-header">
+            <h2>Your life paths</h2>
+            <p>Rename paths, move projects between them, or remove a path.</p>
+          </div>
+
+          {clusterError && (
+            <div className="cqf-error">
+              Something went wrong grouping projects.
+              <button onClick={proceedFromProjects}>Try again</button>
+            </div>
+          )}
+
+          {paths.map((path, i) => (
+            <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
+              <div className="cqf-path-top">
+                <div className="cqf-path-check" onClick={() => togglePathSelection(i)}>
+                  {selectedPaths.has(i) ? '✓' : '✕'}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <input
+                    className="cqf-path-name-edit"
+                    value={path.name}
+                    onChange={e => updatePathName(i, e.target.value)}
+                  />
+                  <div className="cqf-path-desc">{path.description}</div>
+                  {path.projects?.length > 0 && (
+                    <div className="cqf-projects-section">
+                      <div className="cqf-projects-label">Projects:</div>
+                      <div className="cqf-projects-hint">Tap to move between paths</div>
+                      <div className="cqf-projects-list">
+                        {path.projects.map((p, j) => (
+                          <div key={j} className="cqf-project-wrap">
+                            <span className="cqf-project-tag" onClick={(e) => {
+                              e.stopPropagation()
+                              const isOpen = movePopover?.fromPath === i && movePopover?.projectIdx === j
+                              setMovePopover(isOpen ? null : { fromPath: i, projectIdx: j })
+                            }}>
+                              {p.name} ↕
+                            </span>
+                            {movePopover?.fromPath === i && movePopover?.projectIdx === j && (
+                              <div className="cqf-move-popover">
+                                <div className="cqf-move-label">Move to:</div>
+                                {paths.map((op, oi) => oi !== i && (
+                                  <button key={oi} className="cqf-move-option" onClick={(e) => {
+                                    e.stopPropagation()
+                                    moveProject(i, j, oi)
+                                  }}>
+                                    {op.name}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div className="cqf-fixed">
+            <button className="cqf-cta cqf-cta-gold" disabled={activePaths.length === 0} onClick={confirmPaths}>
+              {activePaths.length === 0 ? 'Select at least 1 →' : 'These look right →'}
+            </button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => goTo(STEPS.PROJECTS)}>
+              ← Go back and change projects
+            </button>
           </div>
         </div>
       </div>
@@ -793,7 +935,7 @@ export default function ChooseQuestsFlow() {
               </button>
               <button className="cqf-cta cqf-cta-secondary" onClick={() => {
                 if (pdPathIndex > 0) { setPdPathIndex(pdPathIndex - 1); setPdScreen(2); window.scrollTo(0, 0) }
-                else goTo(STEPS.PATHS)
+                else goTo(paths.length > 1 ? STEPS.PATHS_REVIEW : STEPS.PROJECTS)
               }}>← Back</button>
             </div>
           </div>

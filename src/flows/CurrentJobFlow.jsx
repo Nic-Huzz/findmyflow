@@ -8,31 +8,26 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getAllDomeExperiences, groupByPrimal } from '../lib/domeSummary'
-import { DIMENSION_OPTIONS, DIMENSION_IDS, DIMENSION_LABELS, DIMENSION_ICONS, getContextHint } from '../lib/currentJobChallenges'
+import { DIMENSION_OPTIONS, DIMENSION_IDS, DIMENSION_LABELS, DIMENSION_ICONS, DIMENSION_DESCRIPTIONS, OPTION_HINTS } from '../lib/currentJobChallenges'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
-import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import './CurrentJobFlow.css'
 
 const NS_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', growth_edge: '😰', bored: '😐', uninterested: '😐' }
 
-function isStressedOrBored(ns) {
-  return ['pressure', 'growth_edge', 'bored', 'uninterested'].includes(ns)
-}
-
 export default function CurrentJobFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { domeStates, loading: domeLoading } = useDomeData(user?.id)
 
-  const [step, setStep] = useState('name_and_pick') // name_and_pick | dimensions | challenges | saving | done
+  const [step, setStep] = useState('name_and_pick') // name_and_pick | dimensions | direction | no_path
   const [jobTitle, setJobTitle] = useState('')
   const [selectedIds, setSelectedIds] = useState(new Set())
   const [dimensions, setDimensions] = useState({})
   const [lifeFuel, setLifeFuel] = useState({ choice: false, connection: false, mastery: false, meaning: false })
-  const [challengeTexts, setChallengeTexts] = useState({}) // { [nodeId]: text }
   const [saving, setSaving] = useState(false)
+  const [search, setSearch] = useState('')
 
   // Hide toolbar
   useEffect(() => {
@@ -57,10 +52,8 @@ export default function CurrentJobFlow() {
   }
 
   const selectedExps = allItems.filter(e => selectedIds.has(e.id))
-  const stressedBored = selectedExps.filter(e => isStressedOrBored(e.nsState))
-  const alive = selectedExps.filter(e => !isStressedOrBored(e.nsState))
 
-  // Save everything
+  // Save quest (no tasks — tasks are identified later via Paths tab pop-up)
   const handleSave = async () => {
     if (saving) return
     setSaving(true)
@@ -70,8 +63,8 @@ export default function CurrentJobFlow() {
       selectedExps.forEach(e => { const k = e.nsState === 'growth_edge' ? 'pressure' : e.nsState; counts[k] = (counts[k] || 0) + 1 })
       const dominant = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'fun'
 
-      // 1. Create quest
-      const { data: quest, error: questErr } = await supabase.from('quests').insert({
+      // Create quest with selected experiences stored as metadata
+      await supabase.from('quests').insert({
         user_id: user.id,
         label: jobTitle.trim(),
         is_current_job: true,
@@ -79,46 +72,11 @@ export default function CurrentJobFlow() {
         status: 'active',
         current_dimensions: dimensions,
         life_fuel_baseline: lifeFuel,
-      }).select('id').single()
-      if (questErr) throw questErr
-
-      // 2. Create quest_tasks for each experience
-      const taskInserts = selectedExps.map((exp, i) => ({
-        quest_id: quest.id,
-        user_id: user.id,
-        text: exp.label,
-        node_id: exp.id,
-        is_courage_challenge: isStressedOrBored(exp.nsState),
-        sort_order: i,
-      }))
-      await supabase.from('quest_tasks').insert(taskInserts)
-
-      // 3. Create courage challenges from user-written texts
-      for (const exp of stressedBored) {
-        const text = challengeTexts[exp.id]?.trim()
-        if (!text) continue
-
-        const { data: groan } = await createGroanChallenge({
-          userId: user.id,
-          title: text,
-          description: text,
-          visibilityLayer: 'screen',
-          sourceType: 'skill',
-          sourceLabel: jobTitle.trim(),
-          questId: quest.id,
-          expansionDimensions: [],
-        })
-        if (groan?.id) {
-          await acceptGroanChallenge(groan.id)
-          await supabase.from('quest_tasks')
-            .update({ groan_challenge_id: groan.id })
-            .eq('quest_id', quest.id)
-            .eq('node_id', exp.id)
-        }
-      }
+        format_picks: [...selectedIds],
+      })
 
       hapticSuccess()
-      setStep('done')
+      setStep('direction')
     } catch (err) {
       console.error('Error saving current job:', err)
       setSaving(false)
@@ -140,7 +98,7 @@ export default function CurrentJobFlow() {
     </div></div>
   )
 
-  const canProceedStep1 = jobTitle.trim().length > 0 && selectedIds.size >= 3
+  const canProceedStep1 = jobTitle.trim().length > 0 && selectedIds.size >= 1
 
   // ── Render by step ──
 
@@ -152,7 +110,7 @@ export default function CurrentJobFlow() {
         {step === 'name_and_pick' && (
           <>
             <div className="cjf-header">
-              <div className="cjf-step-label">Step 1 of 3</div>
+              <div className="cjf-step-label">Step 1 of 2</div>
               <h2>Map your current work</h2>
               <p>Name your job, then pick the experiences that make up your typical work.</p>
             </div>
@@ -165,7 +123,14 @@ export default function CurrentJobFlow() {
               autoFocus
             />
 
-            <div className="cjf-count">{selectedIds.size} selected (min 3)</div>
+            <div className="cjf-count">{selectedIds.size} selected (min 1)</div>
+
+            <input
+              className="cjf-search"
+              placeholder="Search experiences..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
 
             {/* Grouped by NS state, then by primal within each */}
             {[
@@ -173,7 +138,7 @@ export default function CurrentJobFlow() {
               { key: 'fun', label: 'Fun', items: allExps?.fun || [], cls: 'fun' },
               { key: 'stressed', label: 'Stressed', items: allExps?.stressed || [], cls: 'stressed' },
               { key: 'bored', label: 'Bored', items: allExps?.bored || [], cls: 'bored' },
-            ].filter(g => g.items.length > 0).map(group => (
+            ].map(g => ({ ...g, items: search.trim() ? g.items.filter(exp => exp.label.toLowerCase().includes(search.toLowerCase())) : g.items })).filter(g => g.items.length > 0).map(group => (
               <div key={group.key}>
                 <div className={`cjf-ns-divider ${group.cls}`}>
                   <span>{group.label}</span><hr />
@@ -204,7 +169,7 @@ export default function CurrentJobFlow() {
           <>
             <button className="cjf-back" onClick={() => setStep('name_and_pick')}>&larr; Back</button>
             <div className="cjf-header">
-              <div className="cjf-step-label">Step 2 of 3</div>
+              <div className="cjf-step-label">Step 2 of 2</div>
               <h2>Where are you now?</h2>
               <p>Set your current work dimensions.</p>
             </div>
@@ -212,6 +177,7 @@ export default function CurrentJobFlow() {
             {DIMENSION_IDS.map(dimId => (
               <div key={dimId} className="cjf-dim-section">
                 <div className="cjf-dim-label">{DIMENSION_ICONS[dimId]} {DIMENSION_LABELS[dimId]}</div>
+                <div className="cjf-dim-desc">{DIMENSION_DESCRIPTIONS[dimId]}</div>
                 <div className="cjf-dim-options">
                   {DIMENSION_OPTIONS[dimId].map(opt => (
                     <button
@@ -226,6 +192,9 @@ export default function CurrentJobFlow() {
                     </button>
                   ))}
                 </div>
+                {dimensions[dimId] && OPTION_HINTS[dimId]?.[dimensions[dimId]] && (
+                  <div className="cjf-dim-hint">{OPTION_HINTS[dimId][dimensions[dimId]]}</div>
+                )}
               </div>
             ))}
 
@@ -254,65 +223,84 @@ export default function CurrentJobFlow() {
             </div>
 
             <div className="cjf-fixed">
-              <button onClick={() => stressedBored.length > 0 ? setStep('challenges') : handleSave()} disabled={saving}>
-                {saving ? 'Saving...' : stressedBored.length > 0 ? 'Next' : 'Save & start'}
-              </button>
-            </div>
-          </>
-        )}
-
-        {/* STEP 3: Courage Challenges for stressed/bored experiences */}
-        {step === 'challenges' && (
-          <>
-            <button className="cjf-back" onClick={() => setStep('dimensions')}>&larr; Back</button>
-            <div className="cjf-header">
-              <div className="cjf-step-label">Step 3 of 3</div>
-              <h2>Shift what's heavy</h2>
-              <p>For each part of your work that feels stressful or boring, write one small thing you could change.</p>
-            </div>
-
-            {alive.length > 0 && (
-              <div className="cjf-alive-section">
-                <div className="cjf-alive-label">Already alive in your work</div>
-                {alive.map(e => <div key={e.id} className="cjf-alive-item">{NS_EMOJI[e.nsState]} {e.label}</div>)}
-              </div>
-            )}
-
-            {stressedBored.length > 0 && (
-              <>
-                <div className="cjf-costing-label">What could feel better</div>
-                {stressedBored.map(exp => (
-                  <div key={exp.id} className="cjf-challenge-card">
-                    <div className="cjf-challenge-exp">{NS_EMOJI[exp.nsState]} {exp.label}</div>
-                    <div className="cjf-challenge-hint">{getContextHint(exp.nsState)}</div>
-                    <textarea
-                      className="cjf-challenge-input"
-                      placeholder="One thing I could try this week..."
-                      value={challengeTexts[exp.id] || ''}
-                      onChange={e => setChallengeTexts(prev => ({ ...prev, [exp.id]: e.target.value }))}
-                      rows={2}
-                    />
-                  </div>
-                ))}
-              </>
-            )}
-
-            <div className="cjf-fixed">
               <button onClick={handleSave} disabled={saving}>
-                {saving ? 'Saving...' : 'Save & start'}
+                {saving ? 'Saving...' : 'Save'}
               </button>
             </div>
           </>
         )}
 
         {/* DONE */}
-        {step === 'done' && (
+        {step === 'direction' && (
           <div className="cjf-done">
-            <div className="cjf-done-icon">💼</div>
-            <h2>Your work is mapped</h2>
-            <p>Your current job is now a quest. Courage challenges will help you shift the parts that feel heavy.</p>
-            <div className="cjf-fixed">
-              <button onClick={() => navigate('/7-day-challenge')}>Go to Quests</button>
+            <div className="cjf-done-icon">🧭</div>
+            <h2>Do you want to pursue this as a life path?</h2>
+            <p>Is this work something you want to keep building on?</p>
+            <div className="cjf-direction-options">
+              <button
+                className="cjf-direction-btn"
+                onClick={() => {
+                  hapticLight()
+                  navigate('/7-day-challenge')
+                }}
+              >
+                <span className="cjf-direction-emoji">🔥</span>
+                <span className="cjf-direction-text">Yes</span>
+                <span className="cjf-direction-sub">I want to grow this. Take me to my paths.</span>
+              </button>
+              <button
+                className="cjf-direction-btn"
+                onClick={() => {
+                  hapticLight()
+                  navigate('/7-day-challenge')
+                }}
+              >
+                <span className="cjf-direction-emoji">🤔</span>
+                <span className="cjf-direction-text">Maybe</span>
+                <span className="cjf-direction-sub">Not sure yet. I'll figure it out as I go.</span>
+              </button>
+              <button
+                className="cjf-direction-btn"
+                onClick={() => {
+                  hapticLight()
+                  setStep('no_path')
+                }}
+              >
+                <span className="cjf-direction-emoji">🌱</span>
+                <span className="cjf-direction-text">No</span>
+                <span className="cjf-direction-sub">I want to do something different.</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 'no_path' && (
+          <div className="cjf-done">
+            <div className="cjf-done-icon">🌱</div>
+            <h2>Do you know what you actually want to pursue?</h2>
+            <div className="cjf-direction-options">
+              <button
+                className="cjf-direction-btn"
+                onClick={() => {
+                  hapticLight()
+                  navigate('/choose-quests')
+                }}
+              >
+                <span className="cjf-direction-emoji">✨</span>
+                <span className="cjf-direction-text">Yes, I have ideas</span>
+                <span className="cjf-direction-sub">Let's turn your experiences into life paths.</span>
+              </button>
+              <button
+                className="cjf-direction-btn"
+                onClick={() => {
+                  hapticLight()
+                  navigate('/experience-game')
+                }}
+              >
+                <span className="cjf-direction-emoji">🎮</span>
+                <span className="cjf-direction-text">Not yet</span>
+                <span className="cjf-direction-sub">Keep exploring experiences until something clicks.</span>
+              </button>
             </div>
           </div>
         )}

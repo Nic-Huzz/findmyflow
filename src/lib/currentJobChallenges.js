@@ -53,6 +53,7 @@ export const DIMENSION_OPTIONS = {
     { value: '5', label: 'Nothing familiar' },
   ],
   business_commitment: [
+    { value: '0', label: 'Current job' },
     { value: '1', label: 'Hobby / side thing' },
     { value: '2', label: 'First revenue' },
     { value: '3', label: 'Repeatable income' },
@@ -63,7 +64,7 @@ export const DIMENSION_OPTIONS = {
 
 export const DIMENSION_LABELS = {
   people: 'People',
-  money: 'Money',
+  money: 'Money earned outside salary',
   vulnerability: 'Vulnerability',
   stakes: 'Stakes',
   rarity: 'Rarity',
@@ -81,6 +82,76 @@ export const DIMENSION_ICONS = {
   identity: '🪞',
   context: '🧭',
   business_commitment: '📈',
+}
+
+export const DIMENSION_DESCRIPTIONS = {
+  people: 'How many people are involved?',
+  money: 'How much do you earn from this outside of a regular salary?',
+  vulnerability: 'How much could you hide?',
+  stakes: 'What was at risk?',
+  rarity: 'How normal is this in the world?',
+  identity: 'How much does this feel like you?',
+  context: 'How familiar were the conditions?',
+  business_commitment: 'How deep are you in building a business?',
+}
+
+export const OPTION_HINTS = {
+  people: {
+    '1': 'Just you, no audience or team.',
+    '2_5': 'A small team or a few clients.',
+    '6_20': 'A class, workshop, or mid-sized group.',
+    '20_50': 'A large room, event, or department.',
+    '50_plus': 'A crowd, conference, or online audience.',
+  },
+  money: {
+    '0': 'No money from this yet.',
+    '10_50': 'Enough for a coffee or two.',
+    '50_200': 'A nice dinner out.',
+    '200_1000': 'Covers a bill or two.',
+    '1000_plus': 'Real income territory.',
+  },
+  vulnerability: {
+    '1': 'Anonymous, scripted, behind a screen, within a team.',
+    '2': 'Your name attached but behind structure.',
+    '3': 'In person or on camera, within a professional context.',
+    '4': 'Just you, no preparation or role to fall back on.',
+    '5': 'Reveals something normally private (body, raw ability, deep beliefs).',
+  },
+  stakes: {
+    '1': 'Worst case, awkward for a moment.',
+    '2': 'Embarrassment, rejection, small money lost.',
+    '3': 'Reputation, meaningful money, relationship strained.',
+    '4': 'Significant money, career move, hard to undo.',
+  },
+  rarity: {
+    '1': 'Most people do something like this.',
+    '2': 'Peers do it, mainstream wouldn\'t.',
+    '3': 'Some people do it, you\'d have to explain it.',
+    '4': 'Most people have never seen this done.',
+    '5': 'You might be the first.',
+  },
+  identity: {
+    '1': 'Done this many times. This is part of who you are now.',
+    '2': 'Done something like this before, but this version is new.',
+    '3': 'First time doing this where people can see.',
+    '4': 'First time doing anything like this.',
+    '5': 'Goes against something fundamental about how people see you.',
+  },
+  context: {
+    '1': 'Your space, your people, your routine.',
+    '2': 'Known environment, one new variable.',
+    '3': 'Some familiar, some not.',
+    '4': 'Multiple unfamiliar factors stacking.',
+    '5': 'Different place, people, norms, no safety net.',
+  },
+  business_commitment: {
+    '0': 'You work for someone else right now.',
+    '1': 'Something you do for fun on the side.',
+    '2': 'You\'ve made your first dollar from it.',
+    '3': 'Regular income you can count on.',
+    '4': 'This is your livelihood.',
+    '5': 'Other people depend on this.',
+  },
 }
 
 export const DIMENSION_IDS = ['people', 'money', 'vulnerability', 'stakes', 'rarity', 'identity', 'context', 'business_commitment']

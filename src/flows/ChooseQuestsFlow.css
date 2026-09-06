@@ -152,13 +152,28 @@
 .cqf-path { padding: 18px; border-radius: 16px; border: 1.5px solid rgba(0,0,0,0.06); background: white; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; user-select: none; }
 .cqf-path:active { transform: scale(0.98); }
 .cqf-path.selected { border-color: #5e17eb; background: rgba(94,23,235,0.03); }
+.cqf-path.cqf-path-removed { opacity: 0.4; border-color: rgba(0,0,0,0.05); }
+.cqf-path.cqf-path-removed .cqf-path-check { background: rgba(0,0,0,0.15); border-color: rgba(0,0,0,0.15); color: white; }
 .cqf-path-top { display: flex; align-items: flex-start; gap: 12px; }
 .cqf-path-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 2px; color: transparent; transition: all 0.15s; }
 .cqf-path.selected .cqf-path-check { background: #5e17eb; border-color: #5e17eb; color: white; }
 .cqf-path-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.cqf-path-name-edit { font-size: 16px; font-weight: 700; margin-bottom: 4px; border: none; border-bottom: 1.5px dashed rgba(94,23,235,0.3); background: transparent; width: 100%; padding: 0 0 2px; font-family: inherit; outline: none; color: inherit; }
+.cqf-path-name-edit:focus { border-bottom-color: #5e17eb; }
 .cqf-path-desc { font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.5; }
 .cqf-path-sources { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
 .cqf-path-source { font-size: 10px; padding: 2px 8px; border-radius: 6px; background: rgba(94,23,235,0.06); color: #5e17eb; font-weight: 500; }
+.cqf-projects-section { margin-top: 12px; }
+.cqf-projects-label { font-size: 11px; font-weight: 700; color: rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
+.cqf-projects-hint { font-size: 11px; color: rgba(0,0,0,0.3); margin-bottom: 8px; }
+.cqf-projects-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.cqf-project-wrap { position: relative; }
+.cqf-project-tag { display: inline-block; font-size: 13px; padding: 6px 12px; border-radius: 8px; background: rgba(94,23,235,0.06); color: #5e17eb; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.cqf-project-tag:active { background: rgba(94,23,235,0.15); transform: scale(0.95); }
+.cqf-move-popover { position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); padding: 6px; z-index: 10; min-width: 180px; }
+.cqf-move-label { font-size: 10px; color: rgba(0,0,0,0.35); font-weight: 600; padding: 4px 8px 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+.cqf-move-option { display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px; font-size: 13px; font-weight: 600; color: #5e17eb; cursor: pointer; border-radius: 6px; font-family: inherit; }
+.cqf-move-option:active { background: rgba(94,23,235,0.06); }
 .cqf-path-wild { font-size: 11px; color: #E9A23B; font-weight: 600; margin-top: 6px; }
 .cqf-add-own { text-align: center; margin: 16px 0 8px; }
 .cqf-add-own button { background: none; border: none; color: rgba(0,0,0,0.3); font-size: 13px; cursor: pointer; font-family: inherit; text-decoration: underline; }
