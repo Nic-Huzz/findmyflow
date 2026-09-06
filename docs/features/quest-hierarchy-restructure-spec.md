@@ -180,6 +180,31 @@ Voice patterns are per-path, not per-brand. Ghost might live on Dance Events (vu
 
 The brand-level dome reveals which paths contribute which spokes. "Dance gives you Vulnerability. Coding gives you Business Commitment. Together they make a complete dome."
 
+## Pre-Sorted Task Redistribution (Vibe Rise → Life Paths)
+
+61 ungrouped tasks under Vibe Rise quest. Pre-sorted for user confirmation:
+
+### → Dance Events (19 tasks)
+Barcelona Monument Rave, Amsterdam Monument Rave, Eiffel Tower Monument Rave, Monument Rave Copenhagen, Times Square Flash Mob | Silent Disco at Bondi, Silent Disco Opera House, Silent Disco Koh Phangan, Silent Disco KL Airport, First Paid Silent Disco | Seminyak Pop-up, Opera House, First Pump-Up Before Disco, First Celebrate the Day | Host vibe rise fest, Retreat Disco + Breathwork | Dance with Local, Pop-up with Local Indonesians, Film Dance Videos with Randoms
+
+### → Content (10 tasks)
+Yap, Create different video types, Experiment with trial reel viral content | These words HBF promo video, Film & share your hostel mission | Share Paid Workshop on Socials, Share story about fantasy | Time Warp Playlist / First Podcast, Guerilla Marketing | 100 Reach Outs
+
+### → App Building (14 tasks)
+Published an app, Scale Portal, Building Nikigai University, First fantasy test | Built MCP session sync, Built OAuth consent page, Deployed edge function | Designed MCP architecture, Hero stage triggers rewrite, Rebranded app | Progress tab brand polish, Quest card redesign, Quest Map timeline | QA sweep, WahooCreator subtitles, WeeklyFocus polish, Updated tagline
+
+### → Breathwork (3 tasks)
+Healing compass for Krislin retreat, New Coaching Framework, Deliver Teacher Training
+
+### → Business/Sales (5 tasks — path TBD, maybe under Vibe Rise or Financial Security)
+Sales Calls for Sprouter, Shared Sprouter, Two New Programs | Acquisition partner for events, Create a guide for experience creators
+
+### → Unclear (3 tasks — ask user)
+Book flights (Dance? Travel?), Close hostel partner (Dance? Travel?), Sourced backup headsets (should move to Headsets quest)
+
+### → Bounce Series (needs grouping — Dance Events sub-project?)
+Bounce around berlin, Bounce around + connect with wellness communities, Bounce around handing out flyers
+
 ## Open Questions
 
 1. **Fear Challenges disposition** — archive, redistribute, or special collection?
