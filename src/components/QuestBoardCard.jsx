@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
 import { getDimensionById } from '../data/domeDimensions'
@@ -23,6 +24,7 @@ const STATE_LABELS = {
 const STATE_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', uninterested: '😐' }
 
 export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate }) {
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
@@ -318,6 +320,13 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
 
       {expanded && (
         <div className="qbc-body">
+
+          {/* Define path CTA — shows when quest has no current_dimensions */}
+          {!quest.current_dimensions && (
+            <button className="qbc-define-cta" onClick={() => navigate(`/path-definition/${quest.id}`)}>
+              Define this path →
+            </button>
+          )}
 
           {/* Experience sections (collapsible) */}
           {hasExperiences && activeExperiences.map(exp => {

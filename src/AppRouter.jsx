@@ -189,6 +189,7 @@ const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
 const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
 const AlivenessQuiz = lazyRetry(() => import('./flows/AlivenessQuiz'))
 const AmbitionRadar = lazyRetry(() => import('./flows/AmbitionRadar'))
+const PathDefinitionFlow = lazyRetry(() => import('./flows/PathDefinitionFlow'))
 const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
 const TryEssenceMirror = lazyRetry(() => import('./flows/TryEssenceMirror'))
 const ShiftScorecard = lazyRetry(() => import('./flows/ShiftScorecard'))
@@ -760,6 +761,7 @@ function AppRouter() {
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
             <Route path="/choose-quests" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><ChooseQuestsFlow /></Suspense></AuthGate>} />
+            <Route path="/path-definition/:questId" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PathDefinitionFlow /></Suspense></AuthGate>} />
             <Route path="/add-current-job" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><CurrentJobFlow /></Suspense></AuthGate>} />
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
