@@ -10,6 +10,7 @@
  * Rewritten: 2026-08-30 (v4)
  */
 
+import { useState, useEffect } from 'react'
 import useCapacityScore from '../../hooks/useCapacityScore'
 import './CapacityCard.css'
 

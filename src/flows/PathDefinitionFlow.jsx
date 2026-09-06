@@ -218,22 +218,11 @@ export default function PathDefinitionFlow() {
         }
       }
 
-      // Save identity declaration to identity_statements if provided
-      if (identityText.trim()) {
-        try {
-          await supabase.from('identity_statements').upsert({
-            user_id: user.id,
-            statement: `I am someone who ${identityText.trim()}`,
-            source: 'path_definition',
-            quest_id: questId,
-          }, { onConflict: 'user_id,quest_id,source', ignoreDuplicates: true })
-        } catch {}
-      }
-
       hapticSuccess()
       setScreen(3) // done
     } catch (err) {
       console.error('Path definition save failed:', err)
+      setError('Something went wrong saving. Please try again.')
       setSaving(false)
     }
   }, [user, questId, quest, precursor, currentDims, aspirationDims,
@@ -250,6 +239,18 @@ export default function PathDefinitionFlow() {
         <div className="pdf-error">
           {error || 'Path not found.'}
           <button onClick={() => navigate('/7-day-challenge?tab=Paths')}>Go to Paths</button>
+        </div>
+      </div></div>
+    )
+  }
+
+  // ── SAVING (must be before screen guards) ──
+  if (saving) {
+    return (
+      <div className="pdf"><div className="pdf-container">
+        <div className="pdf-saving">
+          <div className="pdf-spinner" />
+          <div>Saving your path definition...</div>
         </div>
       </div></div>
     )
@@ -544,6 +545,13 @@ export default function PathDefinitionFlow() {
           <div className="pdf-progress">Your commitment</div>
           <div className="pdf-path-name">{quest.label}</div>
 
+          {error && (
+            <div className="pdf-error" style={{ marginBottom: 16 }}>
+              {error}
+              <button onClick={() => setError(null)}>Dismiss</button>
+            </div>
+          )}
+
           {/* Smallest step */}
           <div className="pdf-section">
             <div className="pdf-q">What's the smallest step this week?</div>
@@ -654,18 +662,6 @@ export default function PathDefinitionFlow() {
           </div>
         </div>
       </div>
-    )
-  }
-
-  // ── SAVING ──
-  if (saving) {
-    return (
-      <div className="pdf"><div className="pdf-container">
-        <div className="pdf-saving">
-          <div className="pdf-spinner" />
-          <div>Saving your path definition...</div>
-        </div>
-      </div></div>
     )
   }
 

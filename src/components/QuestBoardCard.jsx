@@ -322,7 +322,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
         <div className="qbc-body">
 
           {/* Define path CTA — shows when quest has no current_dimensions */}
-          {!quest.current_dimensions && (
+          {(!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && (
             <button className="qbc-define-cta" onClick={() => navigate(`/path-definition/${quest.id}`)}>
               Define this path →
             </button>
