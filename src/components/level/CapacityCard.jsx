@@ -37,6 +37,14 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
     dataPoints, loading,
   } = scoreData || hookData
 
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    if (capacity === null || loading) return
+    const t = setTimeout(() => setRevealed(true), 100)
+    return () => clearTimeout(t)
+  }, [capacity, loading])
+
   if (loading) return null
   if (capacity === null || dataPoints === 0) {
     return (
@@ -100,7 +108,7 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
             <div key={z.id} className={`cc-bar-zone cc-bz-${z.id} ${zone === z.id ? 'active' : ''}`} />
           ))}
         </div>
-        <div className="cc-marker" style={{ left: `${Math.min(99, Math.max(1, capacity))}%` }} />
+        <div className="cc-marker" style={{ left: revealed ? `${Math.min(99, Math.max(1, capacity))}%` : '0%' }} />
       </div>
       <div className="cc-zone-labels">
         {ZONE_LABELS.map(z => (

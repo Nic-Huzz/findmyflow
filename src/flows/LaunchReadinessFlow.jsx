@@ -179,6 +179,9 @@ function LaunchReadinessFlow() {
   const [launchApproach, setLaunchApproach] = useState('')
   const [launchNotes, setLaunchNotes] = useState('')
 
+  // Staggered reveal for results section
+  const [revealedItems, setRevealedItems] = useState(new Set())
+
   // PRE-ACTION state
   const [preActionFeeling, setPreActionFeeling] = useState(null)
   const [visibilityLayer, setVisibilityLayer] = useState(null)
@@ -204,6 +207,23 @@ function LaunchReadinessFlow() {
       loadExistingData()
     }
   }, [user])
+
+  // Stagger reveal items when entering results stage
+  useEffect(() => {
+    if (stage !== STAGES.RESULTS) {
+      setRevealedItems(new Set())
+      return
+    }
+    const totalItems = 6 // score, approach, strengths, gaps, campaign, nav
+    const timers = []
+    for (let i = 0; i < totalItems; i++) {
+      const timer = setTimeout(() => {
+        setRevealedItems(prev => new Set([...prev, i]))
+      }, i * 800)
+      timers.push(timer)
+    }
+    return () => timers.forEach(t => clearTimeout(t))
+  }, [stage])
 
   // Note: Removed auto-register useEffect that was causing duplicate quest completions
   // Quest completion now only happens once when flow is completed
@@ -1160,6 +1180,12 @@ function LaunchReadinessFlow() {
     const gradeInfo = getScoreGrade(score)
     const selectedApproach = LAUNCH_APPROACHES.find(a => a.id === launchApproach)
 
+    const revealStyle = (index) => ({
+      opacity: revealedItems.has(index) ? 1 : 0,
+      transform: revealedItems.has(index) ? 'translateY(0)' : 'translateY(12px)',
+      transition: 'opacity 0.4s ease, transform 0.4s ease'
+    })
+
     return (
       <div className="launch-readiness-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
@@ -1167,7 +1193,7 @@ function LaunchReadinessFlow() {
         <div className="lr-results">
           <h2>Your Launch Readiness</h2>
 
-          <div className="lr-score-display" style={{ borderColor: gradeInfo.color }}>
+          <div className="lr-score-display" style={{ borderColor: gradeInfo.color, ...revealStyle(0) }}>
             <div className="lr-score-circle" style={{ background: `linear-gradient(135deg, ${gradeInfo.color}40, ${gradeInfo.color}20)` }}>
               <span className="lr-score-number" style={{ color: gradeInfo.color }}>{score}</span>
               <span className="lr-score-max">/100</span>
@@ -1178,14 +1204,14 @@ function LaunchReadinessFlow() {
             <p className="lr-grade-label">{gradeInfo.label}</p>
           </div>
 
-          <div className="lr-approach-summary">
+          <div className="lr-approach-summary" style={revealStyle(1)}>
             <span className="lr-approach-icon">{selectedApproach?.icon}</span>
             <span>Launch Approach: <strong>{selectedApproach?.name}</strong></span>
           </div>
 
           {strengths.length > 0 && (
-            <div className="lr-strengths">
-              <h3>✅ Strengths</h3>
+            <div className="lr-strengths" style={revealStyle(2)}>
+              <h3>Strengths</h3>
               <ul>
                 {strengths.map((s, i) => (
                   <li key={i}>{s}</li>
@@ -1195,8 +1221,8 @@ function LaunchReadinessFlow() {
           )}
 
           {gaps.length > 0 && (
-            <div className="lr-gaps">
-              <h3>⚠️ Gaps to Address</h3>
+            <div className="lr-gaps" style={revealStyle(3)}>
+              <h3>Gaps to Address</h3>
               <ul>
                 {gaps.map((gap, i) => (
                   <li key={i} className={`priority-${gap.priority}`}>
@@ -1208,8 +1234,8 @@ function LaunchReadinessFlow() {
           )}
 
           {/* Campaign Progress Tracker */}
-          <div className="lr-campaign-progress">
-            <h3>📋 Campaign Setup Progress</h3>
+          <div className="lr-campaign-progress" style={revealStyle(4)}>
+            <h3>Campaign Setup Progress</h3>
             <div className="lr-progress-items">
               {Object.entries(campaignProgress).map(([key, item]) => {
                 const statusIcon = item.status.includes('completed') ? '✅' :
@@ -1233,7 +1259,7 @@ function LaunchReadinessFlow() {
 
           {error && <p className="error-message">{error}</p>}
 
-          <div className="nav-buttons">
+          <div className="nav-buttons" style={revealStyle(5)}>
             <button className="secondary-button" onClick={() => setStage(STAGES.LAUNCH_APPROACH)}>Back</button>
             <button
               className="primary-button glow-button"

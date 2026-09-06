@@ -56,12 +56,28 @@ export default function BridgeFlow() {
   const [error, setError] = useState(null)
   const [remarkableAngle, setRemarkableAngle] = useState(null)
   const [existingBridges, setExistingBridges] = useState([])
+  const [revealedItems, setRevealedItems] = useState(-1)
 
   const setStep = (next) => {
     setStepRaw(next)
     setError(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  // Stagger reveal summary items when SUMMARY step is active
+  useEffect(() => {
+    if (step !== STEPS.SUMMARY) { setRevealedItems(-1); return }
+    const total = validPeople.length
+    if (total === 0) return
+    let idx = 0
+    setRevealedItems(-1)
+    const timer = setInterval(() => {
+      setRevealedItems(idx)
+      idx++
+      if (idx >= total) clearInterval(timer)
+    }, 800)
+    return () => clearInterval(timer)
+  }, [step]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load existing bridges + remarkable angle
   useEffect(() => {
@@ -453,7 +469,10 @@ export default function BridgeFlow() {
           </p>
 
           {validPeople.map((person, i) => (
-            <div key={i} className="brg-summary-card">
+            <div
+              key={i}
+              className={`brg-summary-card brg-summary-reveal ${i <= revealedItems ? 'brg-summary-visible' : ''}`}
+            >
               <div className="brg-summary-name">{person.name}</div>
               {person.platform && <div className="brg-summary-platform">{person.platform}</div>}
               {person.value && (

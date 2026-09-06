@@ -247,6 +247,7 @@ function ProductSelectionFlow() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [expandedProduct, setExpandedProduct] = useState(null) // Track which product card is expanded
+  const [revealedItems, setRevealedItems] = useState(-1) // Staggered reveal index for summary
 
   // New: Product specification state
   // { solutionId: { mechanism: '', featureBenefits: [{ feature: '', benefit: '' }] } }
@@ -260,6 +261,27 @@ function ProductSelectionFlow() {
   const [showResumePrompt, setShowResumePrompt] = useState(false)
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('product-selection', user?.id)
+
+  // Stagger reveal for summary items
+  useEffect(() => {
+    if (stage !== STAGES.SUMMARY) {
+      setRevealedItems(-1)
+      return
+    }
+    // Total items: build-first (if present) + comparison (if present) + each product card
+    const hasMultiple = coreProducts.length > 1
+    const totalItems = (hasMultiple ? 2 : 0) + coreProducts.length
+    let current = 0
+    const timer = setInterval(() => {
+      if (current >= totalItems) {
+        clearInterval(timer)
+        return
+      }
+      setRevealedItems(current)
+      current++
+    }, 800)
+    return () => clearInterval(timer)
+  }, [stage, coreProducts.length])
 
   // Existing products from products table (for looking up names)
   const [existingProducts, setExistingProducts] = useState([])
@@ -1442,6 +1464,14 @@ function ProductSelectionFlow() {
   // SUMMARY STAGE
   if (stage === STAGES.SUMMARY) {
     const buildFirstRec = getBuildFirstRecommendation()
+    const hasMultiple = coreProducts.length > 1
+    const cardIndexOffset = hasMultiple ? 2 : 0
+
+    const revealStyle = (idx) => ({
+      opacity: revealedItems >= idx ? 1 : 0,
+      transform: revealedItems >= idx ? 'translateY(0)' : 'translateY(12px)',
+      transition: 'opacity 0.4s ease, transform 0.4s ease'
+    })
 
     return (
       <div className="product-selection-flow">
@@ -1454,7 +1484,7 @@ function ProductSelectionFlow() {
 
           {/* BUILD FIRST RECOMMENDATION - Only show if multiple products */}
           {buildFirstRec && (
-            <div className="build-first-section">
+            <div className="build-first-section" style={revealStyle(0)}>
               <div className="build-first-header">
                 <span className="build-first-badge">🎯 BUILD FIRST</span>
                 <h3>{getProductDisplayLabel(buildFirstRec.recommended)}</h3>
@@ -1471,7 +1501,7 @@ function ProductSelectionFlow() {
 
           {/* COMPARISON VIEW - Only show if multiple products */}
           {coreProducts.length > 1 && (
-            <div className="comparison-section">
+            <div className="comparison-section" style={revealStyle(1)}>
               <h4>📊 Product Comparison</h4>
               <div className="comparison-table">
                 <div className="comparison-header">
@@ -1510,14 +1540,14 @@ function ProductSelectionFlow() {
 
           {/* PRODUCT CARDS WITH DETAILED INSIGHTS */}
           <div className="scores-list">
-            {coreProducts.map((product) => {
+            {coreProducts.map((product, productIdx) => {
               const score = calculateValueScore(product.id)
               const level = getValueLevel(score)
               const ans = answers[product.id]
               const isExpanded = expandedProduct === product.id
 
               return (
-                <div key={product.id} className={`score-card ${isExpanded ? 'expanded' : ''}`}>
+                <div key={product.id} className={`score-card ${isExpanded ? 'expanded' : ''}`} style={revealStyle(cardIndexOffset + productIdx)}>
                   <div className="score-header">
                     <div className="header-left">
                       <span className="level-icon">{level.icon}</span>
