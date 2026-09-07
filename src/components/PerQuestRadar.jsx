@@ -135,9 +135,9 @@ function QuestRadarCard({ quest, actualProgress }) {
             <line key={i} {...s} className="dos-spoke" />
           ))}
 
-          {/* Layer 1: Start (purple dashed, faint) */}
-          {startPolygon && (
-            <polygon points={startPolygon} className="dos-start-fill" />
+          {/* Layer 1: Start (purple dashed, faint) — only when actual progress exists to compare */}
+          {startPolygon && hasActual && (
+            <polygon points={startPolygon} className="pqr-start-fill" />
           )}
 
           {/* Layer 3: Dream (gold dashed) */}
@@ -155,9 +155,9 @@ function QuestRadarCard({ quest, actualProgress }) {
             <polygon points={actualPolygon} className="dos-dome-fill" />
           )}
 
-          {/* If no actual progress yet, show start as solid */}
+          {/* If no actual progress yet, use start polygon as the filled layer */}
           {!hasActual && startPolygon && (
-            <polygon points={startPolygon} className="dos-dome-fill" style={{ opacity: 0.4 }} />
+            <polygon points={startPolygon} className="dos-dome-fill" />
           )}
 
           {/* Gap pulse rings */}
@@ -282,13 +282,12 @@ export default function PerQuestRadar({ userId }) {
 
     cards.forEach(card => observer.observe(card))
     return () => observer.disconnect()
-  }, [quests.length])
+  }, [quests])
 
   const scrollTo = useCallback((idx) => {
     const strip = stripRef.current
     if (!strip) return
-    const card = strip.children[idx]
-    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    strip.scrollTo({ left: idx * strip.clientWidth, behavior: 'smooth' })
   }, [])
 
   if (loading) return null

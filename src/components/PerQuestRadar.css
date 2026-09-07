@@ -143,8 +143,8 @@
   cursor: pointer;
 }
 
-/* SVG additions for start dome */
-.dos-start-fill {
+/* SVG start dome layer */
+.pqr-start-fill {
   fill: rgba(94, 23, 235, 0.06);
   stroke: #5e17eb;
   stroke-width: 1;

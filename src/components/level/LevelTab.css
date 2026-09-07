@@ -1450,9 +1450,3 @@
   font-family: inherit;
 }
 
-/* Mini Dome of Safety teaser */
-.quest-mini-dome {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0 16px;
-}
