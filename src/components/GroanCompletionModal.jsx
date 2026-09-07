@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
@@ -38,12 +38,20 @@ const WAHOO_RP = {
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
   const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'aftertaste' | 'gap_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
+  const savedRef = useRef(false)
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
     document.body.classList.add('modal-active')
     return () => document.body.classList.remove('modal-active')
   }, [])
+
+  // If closed after save happened, still refresh the UI
+  const handleClose = useCallback(() => {
+    if (savedRef.current) onComplete?.()
+    onClose()
+  }, [onComplete, onClose])
+
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [showExplainer, setShowExplainer] = useState(false)
@@ -416,6 +424,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#5e17eb', '#8b5cf6', '#c4b5fd'] })
       }
       // Pressure + Uninterested: no confetti (intentional — the copy IS the response)
+      savedRef.current = true
       setStep('share')
     } catch (err) {
       console.error('Error completing challenge:', err)
@@ -447,9 +456,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
 
   return (
-    <div className="gcm-overlay" onClick={onClose}>
+    <div className="gcm-overlay" onClick={handleClose}>
       <div className="gcm-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="gcm-close" onClick={onClose}>&times;</button>
+        <button className="gcm-close" onClick={handleClose}>&times;</button>
 
         {step === 'state_checkin' && (
           <>
@@ -648,7 +657,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
               {preactionDifficulty && (
                 <div className="gcm-gap-section">
-                  <p className="gcm-gap-q">And how was it actually?</p>
+                  <p className="gcm-gap-q">And while you were doing it?</p>
                   <div className="gcm-gap-pills">
                     {DIFFICULTY_SCALE.map(ds => (
                       <button

@@ -41,6 +41,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [outcomeTaskId, setOutcomeTaskId] = useState(null)
   const [groanModalChallenge, setGroanModalChallenge] = useState(null)
   const [signalTaskId, setSignalTaskId] = useState(null)
+  const [expandedTaskId, setExpandedTaskId] = useState(null)
   const [collapsedExps, setCollapsedExps] = useState(new Set())
   const [challengeDims, setChallengeDims] = useState({})
   const [challengeDimValues, setChallengeDimValues] = useState({})
@@ -251,22 +252,19 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     return challengeDimValues[task.groan_challenge_id] || {}
   }
 
-  const renderTaskRow = (task) => (
+  const renderTaskRow = (task) => {
+    const dims = getDims(task)
+    const hasDims = dims.length > 0
+    const isTaskExpanded = expandedTaskId === task.id
+    return (
     <div key={task.id}>
-      <div className="qbc-task-row">
-        <button className="qbc-check" onClick={() => toggleTask(task)} />
+      <div
+        className={`qbc-task-row ${isTaskExpanded ? 'qbc-task-row--expanded' : ''}`}
+        onClick={hasDims ? () => setExpandedTaskId(isTaskExpanded ? null : task.id) : undefined}
+      >
+        <button className="qbc-check" onClick={(e) => { e.stopPropagation(); toggleTask(task) }} />
         <div className="qbc-task-content">
           <div className="qbc-task-text">{task.text}</div>
-          {getDims(task).length > 0 && (
-            <div className="qbc-dims">
-              {getDims(task).map(d => {
-                const dim = getDimensionById(d)
-                if (!dim) return null
-                const val = getDimVals(task)[d]
-                return <span key={d} className="qbc-dim">{dim.icon} {val != null ? val : dim.label}</span>
-              })}
-            </div>
-          )}
         </div>
         <div className="qbc-task-icons">
           {task.is_courage_challenge && (
@@ -281,8 +279,33 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             </button>
           )}
           {healingIntentions[task.id] && <span className="qbc-icon-heal">💚</span>}
+          {hasDims && <span className="qbc-dim-hint">{isTaskExpanded ? '▴' : '▾'}</span>}
         </div>
       </div>
+      {isTaskExpanded && hasDims && (
+        <div className="qbc-dims">
+          {dims.map(d => {
+            const dim = getDimensionById(d)
+            if (!dim) return null
+            const val = getDimVals(task)[d]
+            let tierLabel = null
+            if (val != null) {
+              if (dim.type === 'numeric') {
+                tierLabel = val
+              } else {
+                const tier = dim.levels?.find(l => l.level === val)
+                tierLabel = tier?.label || `Level ${val}`
+              }
+            }
+            return (
+              <div key={d} className="qbc-dim-row">
+                <span className="qbc-dim-name">{dim.icon} {dim.label}:</span>
+                <span className="qbc-dim-value">{tierLabel || 'Not set'}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
       {signalTaskId === task.id && (
         <div className="qbc-signal-row">
           <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}>🔥 Lit me up</button>
@@ -291,7 +314,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
         </div>
       )}
     </div>
-  )
+  )}
 
   const renderCompletedRow = (task) => (
     <div key={task.id} className="qbc-task-row qbc-task-row--done">

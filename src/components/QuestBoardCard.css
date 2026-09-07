@@ -250,26 +250,47 @@
 .qbc-icon-courage { font-size: 12px; color: #E9A23B; }
 .qbc-icon-heal { font-size: 12px; }
 
-/* ── Dimension pills ── */
+/* ── Dimension pills (expandable) ── */
+.qbc-dim-hint {
+  font-size: 8px;
+  color: rgba(0, 0, 0, 0.25);
+  margin-left: 2px;
+}
+
+.qbc-task-row--expanded {
+  background: rgba(94, 23, 235, 0.02);
+  border-radius: 8px;
+}
+
 .qbc-dims {
   display: flex;
-  gap: 3px;
-  margin-top: 3px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 12px 8px 28px;
+  animation: qbcDimsIn 0.15s ease;
 }
 
-.qbc-dim {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(94, 23, 235, 0.06);
+@keyframes qbcDimsIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qbc-dim-row {
+  display: flex;
+  gap: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.qbc-dim-name {
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.qbc-dim-value {
   color: #5e17eb;
-}
-
-.qbc-dim--scale {
-  background: rgba(233, 162, 59, 0.08);
-  color: #E9A23B;
+  font-weight: 600;
 }
 
 /* ── Signal row (lit me up) ── */
