@@ -1,9 +1,9 @@
 /**
  * ChooseQuestsFlow.jsx — /choose-quests
  *
- * Phase 1→2 bridge: Dome experiences → AI life path suggestions → quest creation.
- * Flow: Intro → Select → Deep Dive → Processing → Paths → Path Definition (3 screens per path) → Done
- * Path Definition: Screen 1 (setup), Screen 2a (framing: fuels + buts), Screen 2b (commitment: step + fear + identity + voice)
+ * Phase 1→2 bridge: Dome experiences → AI project ideas → path creation.
+ * Flow: Intro → Select → Deep Dive → Processing → Projects → (Clustering) → Paths Review → Save → Done
+ * Path definition (dimensions, fuels, commitment) happens separately at /path-definition/:questId.
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,12 +11,8 @@ import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getDomeExperiencesForBridge, groupByPrimal, formatDomeForPrompt } from '../lib/domeSummary'
 import { getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
-import { DOME_DIMENSIONS } from '../data/domeDimensions'
-import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
-import DomeOfSafety from '../components/DomeOfSafety'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
-import { getWeekStartLocal } from '../lib/dateUtils'
 import './ChooseQuestsFlow.css'
 
 const STEPS = {
@@ -27,31 +23,9 @@ const STEPS = {
   PROJECTS: 'projects',
   CLUSTERING: 'clustering',
   PATHS_REVIEW: 'paths_review',
-  PATH_DEF: 'path_def',
   SAVING: 'saving',
   DONE: 'done',
 }
-
-const VOICES = [
-  { id: 'perfectionist', icon: '🎯', label: 'Perfectionist', sub: "Won't start until it's perfect" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', sub: 'Disappears, avoids, goes quiet' },
-  { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser', sub: 'Says yes when you mean no' },
-  { id: 'controller', icon: '🧱', label: 'Controller', sub: 'Needs to control every variable' },
-  { id: 'auto-pilot', icon: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
-]
-
-const SHIFT_FUELS = [
-  { id: 'choice', icon: '🔓', label: 'I get to choose how I spend my time' },
-  { id: 'connection', icon: '🤝', label: 'I connect with people who get me' },
-  { id: 'mastery', icon: '📈', label: 'I grow at something that excites me' },
-  { id: 'meaning', icon: '✨', label: 'This serves something I care about' },
-]
-
-const IDENTITY_EXAMPLES = [
-  '...starts before they\'re ready',
-  '...chooses courage over comfort',
-  '...proves it\'s never too late',
-]
 
 export default function ChooseQuestsFlow() {
   const { user } = useAuth()
@@ -90,23 +64,6 @@ export default function ChooseQuestsFlow() {
   const [clusterError, setClusterError] = useState(null)
   const [movePopover, setMovePopover] = useState(null) // { fromPath, projectIdx }
   const [shouldSave, setShouldSave] = useState(false)
-
-  // Path definition step (3 screens per path)
-  const [pdPathIndex, setPdPathIndex] = useState(0)
-  const [pdScreen, setPdScreen] = useState(0) // 0=setup, 1=framing, 2=commitment
-  const [precursorLevels, setPrecursorLevels] = useState({})
-  const [selectedDims, setSelectedDims] = useState({})
-  const [dreamDimensions, setDreamDimensions] = useState({})
-  const [currentDimensions, setCurrentDimensions] = useState({})
-  const [stayingFuels, setStayingFuels] = useState({})              // { [pathIdx]: Set('choice') }
-  const [pathFuels, setPathFuels] = useState({})                    // { [pathIdx]: Set('mastery') }
-  const [butTexts, setButTexts] = useState({})
-  const [butInput, setButInput] = useState('')
-  const [showReframe, setShowReframe] = useState({})
-  const [nextStepTexts, setNextStepTexts] = useState({})
-  const [fearOutcomes, setFearOutcomes] = useState({})              // { [pathIdx]: 'text' }
-  const [identityDeclarations, setIdentityDeclarations] = useState({}) // { [pathIdx]: 'text' }
-  const [protectiveVoices, setProtectiveVoices] = useState({})
 
   // Load essence archetype
   useEffect(() => {
@@ -275,16 +232,7 @@ export default function ChooseQuestsFlow() {
     }
   }, [shouldSave]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Path definition helpers ──
-  const getDimTiers = useCallback((dim) => {
-    if (dim.type === 'numeric') {
-      // For numeric, show representative tier labels
-      return dim.tiers.map((t, i) => ({ level: i + 1, label: t >= 1000 ? `${t / 1000}K` : String(t) }))
-    }
-    return dim.levels
-  }, [])
-
-  // ── Save quests + courage challenges ──
+  // ── Save quests ──
   const saveQuests = useCallback(async () => {
     if (!user?.id) return
     goTo(STEPS.SAVING)
@@ -800,387 +748,6 @@ export default function ChooseQuestsFlow() {
         </div>
       </div>
     )
-  }
-
-  // ── PATH DEFINITION (2 screens per path) ──
-  if (step === STEPS.PATH_DEF) {
-    const chosenArr = chosenArrForPD
-    const currentPath = chosenArr[pdPathIndex]
-    if (!currentPath) {
-      // Waiting for useEffect to fire saveQuests
-      return <div className="cqf"><div className="cqf-container"><div className="cqf-processing"><div className="cqf-spinner" /></div></div></div>
-    }
-
-    const { idx: pathIdx, path } = currentPath
-    const isLastPath = pdPathIndex === chosenArr.length - 1
-    const precursor = precursorLevels[pathIdx]
-    const dims = selectedDims[pathIdx] || new Set()
-    const dreams = dreamDimensions[pathIdx] || {}
-    const currDims = currentDimensions[pathIdx] || {}
-    const buts = butTexts[pathIdx] || []
-    const reframeShown = showReframe[pathIdx]
-
-    // Screen 0: PATH SETUP (precursor + dimensions + radar)
-    if (pdScreen === 0) {
-      const dimsReady = dims.size >= 3 && [...dims].every(d => dreams[d] != null)
-
-      return (
-        <div className="cqf">
-          <div className="cqf-container">
-            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · Setup</div>
-            <div className="cqf-pd-path-name">{path.name}</div>
-
-            {/* Precursor */}
-            <div className="cqf-pd-section">
-              <div className="cqf-pd-q">Have you taken any steps on this path already?</div>
-              <div className="cqf-pd-precursor">
-                {PRECURSOR_LEVELS.map(lvl => (
-                  <div key={lvl.id}
-                    className={`cqf-pd-pre-card ${precursor === lvl.id ? 'selected' : ''}`}
-                    onClick={() => {
-                      hapticLight()
-                      setPrecursorLevels(prev => ({ ...prev, [pathIdx]: lvl.id }))
-                      setCurrentDimensions(prev => ({ ...prev, [pathIdx]: { ...PRECURSOR_DEFAULTS[lvl.id] } }))
-                    }}>
-                    <div className="cqf-pd-pre-label">{lvl.label}</div>
-                    <div className="cqf-pd-pre-desc">{lvl.description}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Dimensions (show after precursor selected) */}
-            {precursor && (
-              <div className="cqf-pd-section">
-                <div className="cqf-pd-q">Pick the 3 that matter most to you</div>
-                <div className="cqf-pd-dim-chips">
-                  {DOME_DIMENSIONS.map(dim => {
-                    const isSelected = dims.has(dim.id)
-                    const canAdd = dims.size < 3 || isSelected
-                    return (
-                      <div key={dim.id}
-                        className={`cqf-pd-dim-chip ${isSelected ? 'selected' : ''} ${!canAdd ? 'disabled' : ''}`}
-                        onClick={() => {
-                          if (!canAdd) return
-                          hapticLight()
-                          setSelectedDims(prev => {
-                            const next = new Set(prev[pathIdx] || [])
-                            if (next.has(dim.id)) { next.delete(dim.id); setDreamDimensions(d => { const n = { ...d[pathIdx] }; delete n[dim.id]; return { ...d, [pathIdx]: n } }) }
-                            else next.add(dim.id)
-                            return { ...prev, [pathIdx]: next }
-                          })
-                        }}>
-                        <span className="cqf-pd-dim-icon">{dim.icon}</span>
-                        <span>{dim.label}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* Tier pickers for selected dimensions */}
-                {[...dims].map(dimId => {
-                  const dim = DOME_DIMENSIONS.find(d => d.id === dimId)
-                  if (!dim) return null
-                  const tiers = getDimTiers(dim)
-                  const currentLevel = currDims[dimId] || 1
-                  const dreamLevel = dreams[dimId]
-
-                  return (
-                    <div key={dimId} className="cqf-pd-dim-picker">
-                      <div className="cqf-pd-dim-q">{dim.icon} {dim.dreamQuestion}</div>
-                      <div className="cqf-pd-tiers">
-                        {tiers.map(tier => (
-                          <div key={tier.level}
-                            className={`cqf-pd-tier ${dreamLevel === tier.level ? 'dream' : ''} ${tier.level === currentLevel ? 'current' : ''}`}
-                            onClick={() => {
-                              hapticLight()
-                              setDreamDimensions(prev => ({
-                                ...prev,
-                                [pathIdx]: { ...(prev[pathIdx] || {}), [dimId]: tier.level }
-                              }))
-                            }}>
-                            <div className="cqf-pd-tier-level">{tier.label}</div>
-                            {tier.description && <div className="cqf-pd-tier-desc">{tier.description}</div>}
-                            {tier.level === currentLevel && <div className="cqf-pd-tier-you">you</div>}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })}
-
-                {/* Mini radar when 3 dimensions have dream levels */}
-                {dimsReady && (
-                  <div className="cqf-pd-radar">
-                    <DomeOfSafety
-                      domeEdges={currDims}
-                      edgeZone={dreams}
-                      gapMetrics={{}}
-                      mini
-                    />
-                    <div className="cqf-pd-radar-legend">
-                      <span className="cqf-pd-legend-now">● Now</span>
-                      <span className="cqf-pd-legend-dream">● Dream</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold"
-                disabled={!precursor || !dimsReady}
-                onClick={() => { setPdScreen(1); window.scrollTo(0, 0) }}>
-                {!precursor ? 'Pick where you are' : !dimsReady ? 'Pick 3 dimensions + dream levels' : 'Next →'}
-              </button>
-              <button className="cqf-cta cqf-cta-secondary" onClick={() => {
-                if (pdPathIndex > 0) { setPdPathIndex(pdPathIndex - 1); setPdScreen(2); window.scrollTo(0, 0) }
-                else goTo(paths.length > 1 ? STEPS.PATHS_REVIEW : STEPS.PROJECTS)
-              }}>← Back</button>
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    // Screen 2a: THE FRAMING (fuels + buts + reframe)
-    if (pdScreen === 1) {
-      const sf = stayingFuels[pathIdx] || new Set()
-      const pf = pathFuels[pathIdx] || new Set()
-      const bothFuelsPicked = sf.size > 0 && pf.size > 0
-      const canAdvance = bothFuelsPicked && buts.length > 0 && reframeShown
-
-      const toggleFuel = (which, fuelId) => {
-        hapticLight()
-        const setter = which === 'staying' ? setStayingFuels : setPathFuels
-        setter(prev => {
-          const existing = prev[pathIdx] || new Set()
-          const next = new Set(existing)
-          if (next.has(fuelId)) next.delete(fuelId)
-          else next.add(fuelId)
-          return { ...prev, [pathIdx]: next }
-        })
-      }
-
-      return (
-        <div className="cqf">
-          <div className="cqf-container">
-            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · What's at stake</div>
-            <div className="cqf-pd-path-name">{path.name}</div>
-
-            {/* Staying fuels */}
-            <div className="cqf-pd-section">
-              <div className="cqf-pd-q">What does your current life give you?</div>
-              <div className="cqf-pd-fuel-chips">
-                {SHIFT_FUELS.map(f => (
-                  <div key={f.id}
-                    className={`cqf-pd-fuel-chip ${sf.has(f.id) ? 'selected' : ''}`}
-                    onClick={() => toggleFuel('staying', f.id)}>
-                    <span className="cqf-pd-fuel-icon">{f.icon}</span>
-                    <span>{f.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Path fuels */}
-            <div className="cqf-pd-section">
-              <div className="cqf-pd-q">What does this path give you?</div>
-              <div className="cqf-pd-fuel-chips">
-                {SHIFT_FUELS.map(f => (
-                  <div key={f.id}
-                    className={`cqf-pd-fuel-chip ${pf.has(f.id) ? 'selected' : ''}`}
-                    onClick={() => toggleFuel('path', f.id)}>
-                    <span className="cqf-pd-fuel-icon">{f.icon}</span>
-                    <span>{f.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bridge line */}
-            {bothFuelsPicked && (
-              <div className="cqf-pd-bridge">
-                Your current life gives you {[...sf].map(id => SHIFT_FUELS.find(f => f.id === id)?.icon).join(' ')}.
-                This path gives you {[...pf].map(id => SHIFT_FUELS.find(f => f.id === id)?.icon).join(' ')}.
-                So what's in the way?
-              </div>
-            )}
-
-            {/* Buts */}
-            {bothFuelsPicked && (
-              <div className="cqf-pd-section">
-                <div className="cqf-pd-q">I want to pursue {path.name}, but...</div>
-                <div className="cqf-pd-but-input">
-                  <input type="text" value={butInput}
-                    onChange={e => setButInput(e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' && butInput.trim()) {
-                        setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
-                        setButInput('')
-                      }
-                    }}
-                    placeholder="What's stopping you?" />
-                  <button disabled={!butInput.trim()} onClick={() => {
-                    setButTexts(prev => ({ ...prev, [pathIdx]: [...(prev[pathIdx] || []), butInput.trim()] }))
-                    setButInput('')
-                  }}>Add</button>
-                </div>
-
-                {buts.length > 0 && (
-                  <div className="cqf-pd-buts-list">
-                    {buts.map((b, i) => (
-                      <div key={i} className={`cqf-pd-but-item ${reframeShown ? 'reframed' : ''}`}>
-                        <div className="cqf-pd-but-text">
-                          {reframeShown
-                            ? <>I want to pursue {path.name}, <span className="cqf-pd-and">and</span> {b.toLowerCase()}</>
-                            : <>...{b}</>
-                          }
-                        </div>
-                        {!reframeShown && (
-                          <span className="cqf-pd-but-remove" onClick={() => {
-                            setButTexts(prev => ({ ...prev, [pathIdx]: buts.filter((_, j) => j !== i) }))
-                          }}>✕</span>
-                        )}
-                      </div>
-                    ))}
-
-                    {!reframeShown && (
-                      <button className="cqf-pd-reframe-btn" onClick={() => {
-                        hapticLight()
-                        setShowReframe(prev => ({ ...prev, [pathIdx]: true }))
-                      }}>See the reframe →</button>
-                    )}
-
-                    {reframeShown && (
-                      <div className="cqf-pd-reframe-note">
-                        Saying "and" turns a block into a fact you're choosing to work with.
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold"
-                disabled={!canAdvance}
-                onClick={() => { setPdScreen(2); window.scrollTo(0, 0) }}>
-                {!bothFuelsPicked ? 'Pick what each gives you' : buts.length === 0 ? 'Add at least one "but"' : !reframeShown ? 'See the reframe first' : 'Next →'}
-              </button>
-              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPdScreen(0); window.scrollTo(0, 0) }}>← Back to setup</button>
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    // Screen 2b: THE COMMITMENT (step + fear + identity + voice)
-    if (pdScreen === 2) {
-      const stepText = nextStepTexts[pathIdx] || ''
-      const fearText = fearOutcomes[pathIdx] || ''
-      const identityText = identityDeclarations[pathIdx] || ''
-      const voice = protectiveVoices[pathIdx]
-      const canAdvance = stepText.trim() && fearText.trim() && identityText.trim() && voice
-
-      const advancePath = () => {
-        if (isLastPath) {
-          saveQuests()
-        } else {
-          setPdPathIndex(pdPathIndex + 1)
-          setPdScreen(0)
-          setButInput('')
-          window.scrollTo(0, 0)
-        }
-      }
-
-      return (
-        <div className="cqf">
-          <div className="cqf-container">
-            <div className="cqf-pd-progress">Path {pdPathIndex + 1} of {chosenArr.length} · Your commitment</div>
-            <div className="cqf-pd-path-name">{path.name}</div>
-
-            {/* Next step */}
-            <div className="cqf-pd-section">
-              <div className="cqf-pd-q">What's the smallest step this week?</div>
-              <div className="cqf-pd-step-hint">Think really small. Not "build a website". More like "google how to set up a free one".</div>
-              <input className="cqf-pd-step-input" type="text"
-                value={stepText}
-                onChange={e => setNextStepTexts(prev => ({ ...prev, [pathIdx]: e.target.value }))}
-                placeholder="The tiniest possible step..." />
-            </div>
-
-            {/* Fear question (appears after step) */}
-            {stepText.trim() && (
-              <div className="cqf-pd-section">
-                {buts.length > 0 && (
-                  <div className="cqf-pd-step-quote">
-                    Your block: "{buts[0]}"
-                  </div>
-                )}
-                <div className="cqf-pd-q">If your "but" wins and you never do this, what are you most afraid happens?</div>
-                <input className="cqf-pd-step-input" type="text"
-                  value={fearText}
-                  onChange={e => setFearOutcomes(prev => ({ ...prev, [pathIdx]: e.target.value }))}
-                  placeholder="What future scares you most?" />
-              </div>
-            )}
-
-            {/* Identity declaration (appears after fear) */}
-            {fearText.trim() && (
-              <div className="cqf-pd-section">
-                <div className="cqf-pd-step-quote">
-                  Your fear: "{fearText.trim()}"
-                </div>
-                <div className="cqf-pd-q">I am someone who...</div>
-                <input className="cqf-pd-step-input cqf-pd-identity-input" type="text"
-                  value={identityText}
-                  onChange={e => setIdentityDeclarations(prev => ({ ...prev, [pathIdx]: e.target.value }))}
-                  placeholder="...finish this sentence" />
-                <div className="cqf-pd-identity-examples">
-                  {IDENTITY_EXAMPLES.map((ex, i) => (
-                    <button key={i} className="cqf-pd-identity-ex" onClick={() => {
-                      hapticLight()
-                      setIdentityDeclarations(prev => ({ ...prev, [pathIdx]: ex }))
-                    }}>{ex}</button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Protective voice (appears after identity) */}
-            {identityText.trim() && (
-              <div className="cqf-pd-section">
-                <div className="cqf-pd-q">Which voice tries to stop you from being that person?</div>
-                <div className="cqf-pd-step-quote">"I am someone who {identityText.trim()}"</div>
-                <div className="cqf-pd-voices">
-                  {VOICES.map(v => (
-                    <div key={v.id}
-                      className={`cqf-dd-vector ${voice === v.id ? 'selected' : ''}`}
-                      onClick={() => { hapticLight(); setProtectiveVoices(prev => ({ ...prev, [pathIdx]: v.id })) }}>
-                      <div className="cqf-dd-vector-check">✓</div>
-                      <div>
-                        <div className="cqf-dd-vector-label">{v.icon} {v.label}</div>
-                        <div className="cqf-dd-vector-sub">{v.sub}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold"
-                disabled={!canAdvance}
-                onClick={advancePath}>
-                {!stepText.trim() ? 'Add your first step' : !fearText.trim() ? 'Name your fear' : !identityText.trim() ? 'Claim your identity' : !voice ? 'Pick a voice' : isLastPath ? 'Create my paths →' : 'Next path →'}
-              </button>
-              <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPdScreen(1); window.scrollTo(0, 0) }}>← Back to framing</button>
-            </div>
-          </div>
-        </div>
-      )
-    }
   }
 
   // ── SAVING ──
