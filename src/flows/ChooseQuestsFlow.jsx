@@ -690,7 +690,7 @@ export default function ChooseQuestsFlow() {
           )}
 
           {paths.map((path, i) => (
-            <div key={path.name + i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
+            <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
               <div className="cqf-path-top">
                 <div className="cqf-path-check" onClick={() => togglePathSelection(i)}>
                   {selectedPaths.has(i) ? '✓' : '✕'}
@@ -708,7 +708,7 @@ export default function ChooseQuestsFlow() {
                       {canMove && <div className="cqf-projects-hint">Tap to move between paths</div>}
                       <div className="cqf-projects-list">
                         {path.projects.map((p, j) => (
-                          <div key={p.name + j} className="cqf-project-wrap">
+                          <div key={j} className="cqf-project-wrap">
                             <span className="cqf-project-tag" onClick={canMove ? (e) => {
                               e.stopPropagation()
                               const isOpen = movePopover?.fromPath === i && movePopover?.projectIdx === j

@@ -99,7 +99,7 @@
 .cqf-project-wrap { position: relative; }
 .cqf-project-tag { display: inline-block; font-size: 13px; padding: 6px 12px; border-radius: 8px; background: rgba(94,23,235,0.06); color: #5e17eb; font-weight: 500; cursor: pointer; transition: all 0.15s; }
 .cqf-project-tag:active { background: rgba(94,23,235,0.15); transform: scale(0.95); }
-.cqf-move-popover { position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); padding: 6px; z-index: 10; min-width: 180px; }
+.cqf-move-popover { position: absolute; top: 100%; left: 0; margin-top: 4px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); padding: 6px; z-index: 9999; min-width: 180px; }
 .cqf-move-label { font-size: 10px; color: rgba(0,0,0,0.35); font-weight: 600; padding: 4px 8px 2px; text-transform: uppercase; letter-spacing: 0.5px; }
 .cqf-move-option { display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px; font-size: 13px; font-weight: 600; color: #5e17eb; cursor: pointer; border-radius: 6px; font-family: inherit; }
 .cqf-move-option:active { background: rgba(94,23,235,0.06); }
@@ -122,7 +122,8 @@
 .cqf-done-name { font-size: 14px; font-weight: 600; flex: 1; }
 
 /* ── Fixed bottom ── */
-.cqf-fixed { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 16px 20px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, #f5f5f0 30%); }
+.cqf-fixed { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 16px 20px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, #f5f5f0 30%); pointer-events: none; z-index: 100; }
+.cqf-fixed > * { pointer-events: auto; }
 .cqf-cta { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
 .cqf-cta:active { transform: scale(0.98); }
 .cqf-cta-gold { background: linear-gradient(135deg, #5e17eb, #E9A23B); color: white; }
