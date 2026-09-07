@@ -20,11 +20,11 @@ import { getWeekStartLocal } from '../lib/dateUtils'
 import './PathDefinitionFlow.css'
 
 const VOICES = [
-  { id: 'perfectionist', emoji: '🎯', label: 'Perfectionist', sub: "Won't start until it's perfect" },
-  { id: 'ghost', emoji: '👻', label: 'Ghost', sub: 'Disappears, avoids, goes quiet' },
-  { id: 'people-pleaser', emoji: '🪞', label: 'People Pleaser', sub: 'Says yes when you mean no' },
-  { id: 'controller', emoji: '🧱', label: 'Controller', sub: 'Needs to control every variable' },
-  { id: 'auto-pilot', emoji: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
+  { id: 'ghost', emoji: '👻', label: 'Ghost', sub: 'I want to disappear. Hide. Go quiet.' },
+  { id: 'perfectionist', emoji: '🎯', label: 'Perfectionist', sub: "It's not good enough yet. I need more time." },
+  { id: 'people-pleaser', emoji: '🪞', label: 'People Pleaser', sub: "I'd rather say yes than deal with their reaction." },
+  { id: 'controller', emoji: '🧱', label: 'Controller', sub: 'I want to know how this ends before I do it.' },
+  { id: 'auto-pilot', emoji: '🤖', label: 'Auto-Pilot', sub: "I'm going through the motions. I've checked out." },
 ]
 
 const SHIFT_FUELS = [
@@ -219,6 +219,7 @@ export default function PathDefinitionFlow() {
       }
 
       hapticSuccess()
+      setSaving(false)
       setScreen(3) // done
     } catch (err) {
       console.error('Path definition save failed:', err)
