@@ -283,6 +283,33 @@ export const DOME_SUB_NODES = {
 
   // sub-fashion-2007 merged into exp-choosing-style
 
+  // New courage-framed style nodes share the same format sub-nodes
+  'exp-style-turning-heads': [
+    { id: 'fmt-heads-streetwear', label: 'Streetwear' },
+    { id: 'fmt-heads-vintage', label: 'Vintage / retro' },
+    { id: 'fmt-heads-high-fashion', label: 'High fashion / designer' },
+    { id: 'fmt-heads-bold-colour', label: 'Bold colours / patterns' },
+    { id: 'fmt-heads-custom', label: 'Custom / one-of-a-kind pieces' },
+  ],
+
+  'exp-style-scary': [
+    { id: 'fmt-scary-bold', label: 'Something bolder than usual' },
+    { id: 'fmt-scary-revealing', label: 'More revealing than you\'re used to' },
+    { id: 'fmt-scary-different', label: 'A completely different style' },
+    { id: 'fmt-scary-hair', label: 'A new hair colour or cut' },
+    { id: 'fmt-scary-makeup', label: 'Makeup or no makeup (whichever scares you)' },
+  ],
+
+  'exp-style-becoming': [
+    { id: 'fmt-becoming-upgrade', label: 'Upgrading your wardrobe' },
+    { id: 'fmt-becoming-hair', label: 'New hairstyle' },
+    { id: 'fmt-becoming-colours', label: 'New colour palette' },
+    { id: 'fmt-becoming-accessories', label: 'New accessories or jewellery' },
+    { id: 'fmt-becoming-grooming', label: 'New grooming routine' },
+  ],
+
+  // exp-style-comfort: SKIPPED (choosing comfort is the act itself, no meaningful format variations)
+
   // ═══════════════════════════════════════════
   // BONDS
   // ═══════════════════════════════════════════
@@ -1046,7 +1073,7 @@ export const CAREER_VECTORS = [
   {
     id: 'do_it',
     label: 'Doing it myself',
-    subtitle: 'I want this to be my career',
+    subtitle: "I'm the one performing, creating, or delivering it",
   },
   {
     id: 'facilitate_it',
