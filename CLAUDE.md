@@ -118,7 +118,7 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started` (PlaySkills onboarding), `/essence-mirror` (essence archetype discovery), `/essence-identify`, `/protective-identify`
 
-**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow), `/tension-assessment` (tension diagnostic)
+**Journey Levels**: `/zone-diagnosis/:levelNumber` (zone diagnosis flow)
 
 **Create Portal**: `/create` (Creator Portal home), `/create/experience/new`, `/create/experience/:id`, `/create/remarkable` (Remarkable Results), `/create/narrative-builder` (Remarkable Reach), `/create/access-architecture` (Remarkable Growth), `/create/scale-diagnostic` (Scale Score, old `/scale-diagnostic` redirects), `/try/facilitator-score` (Scale Score public lead magnet)
 
@@ -136,13 +136,13 @@ docs/               # Specs, handoffs, research
 
 **Fantasy League**: `/league`, `/league/week`, `/league/matchup`, `/league/submit`, `/league/guide`, `/league/admin`, `/fantasy` (landing)
 
-**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`
+**Public Trials**: `/try/offer/:flowType`, `/try/nervous-system`, `/try/flow-audit`, `/try/earthquake`, `/try/play-profile`, `/try/career-clarity`, `/try/experience-creators`, `/try/essence-mirror`, `/try/ai-diagnostic`, `/try/life-paths`, `/try/experience-game`
 
 **Social**: `/play-list-feed`, `/play-list-feed/:postId`, `/newsfeed`, `/community` (Feed + Tasks tabs, `?tab=tasks` deep link)
 
 **Self-Knowledge Flows**: `/curiosity-map` (curiosity mapping → clusters), `/life-paths` (career tagging → quest + courage challenge creation), `/career-alignment` (career alignment check), `/life-map` (life story chapters)
 
-**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share)
+**Other Flows**: `/nervous-system`, `/healing-compass`, `/curiosity-compass`, `/identify-topics`, `/mind-space`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public share), `/dome-onboarding` (Experience Dome onboarding), `/experience-game` (Experience Game flow), `/shift-scorecard` (Shift Scorecard), `/choose-quests` (quest selection onboarding, AuthGate)
 
 **CRM** (`/crm/*`): Dashboard | Attract, Nurture, Tools (tower hubs) | content-create, content-queue, content-history | marketing, pages, sales, scripts, contacts, email-sequences, warm-outreach | execute, reports, performance | ptuf, ltv, cac | import, tools/systems, tools/expenses | setup, setup/business-baseline, setup/customer-segments, setup/competitor-snapshot | ascension, objections, implementations, assets, alerts, sales-playbook
 
@@ -194,7 +194,7 @@ Key data: `public/data/experienceCreatorDNA.json` (33 DNA profiles, each with `p
 
 ### 6. 7-Day Challenge System (Find My Flow Maintenance Engine)
 
-**Tabs**: Discover → Quests → Tune → Progress. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Discover, Tune, Progress always open. Quests unlocks when life paths completed. Courage merged into Quests via WeeklyFocus component.
+**Tabs**: Discover → Quests → Tune → Progress. Layout: Header (streak + score pills + Rise bar) → Category tabs → Tab content. Tab unlock: Discover, Tune, Progress always open. Quests unlocks when `/choose-quests` flow is completed. Courage merged into Quests via WeeklyFocus component.
 
 **Three-phase journey**: Phase 1 (Discover tab: Experience Dome + Life Map + Essence Mirror), Phase 2 (Quests + Tune: courage challenges with expansion dimensions, daily practices), Phase 3 (Scale Portal). Bridge CTA on Discover tab: "Ready to go deeper?" → Life Paths flow. See `docs/features/three-phase-journey.md` and `docs/features/phase2-restructure.md`.
 
@@ -394,7 +394,7 @@ Must be 3D rendered (NOT 2D/watercolor/flat). End with `"No text or words anywhe
 `experience_checkins` | `weekly_reviews` (3 questions: narrative_revision, identity_did, compounding_text) | `healing_intentions` (quest_task_id FK, pattern, protective_voice, fear_text, origin_text, insight_text, rewire_text, expectation_text, healing_stage, outcome)
 
 ### Interior Scoreboard
-`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
+`user_skill_progress` (user_id, skill_id, xp, level, UNIQUE user_id+skill_id) | `nikigai_clusters` additions: `resonance_state` text, `resonance_rating` int, `resonance_updated_at`, `behavioral_evidence` int, `is_removed` bool, `skill_tags` text[], `problem_tags` text[], `persona_tags` text[], `regen_attempted_at`, `regen_notified` bool | `quests.skill_tags` text[], `quests.branch` text (AI-classified industry branch: healing/movement/bonds/story/tools/status/nourishment/shelter/fire/threat), `quests.depth_level` text (NULL|education|testing|practising|charging|teaching; high-watermark from wahoo depth) | `quest_tasks.task_signal` text | `curiosity_clusters.skills` text[], `.problems` text[]
 
 RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidence(p_cluster_id)`
 
@@ -408,6 +408,15 @@ RPCs: `increment_skill_xp(p_user_id, p_skill_id)`, `increment_behavioral_evidenc
 `user_subscriptions` (user_id, stripe_customer_id, stripe_subscription_id, status, plan_type, current_period_start/end, UNIQUE user_id+plan_type) | `pending_subscriptions` (email UNIQUE, stripe_customer_id, plan_type, status, claimed_by, claimed_at) | `user_integrations` (user_id, platform, status, access_token)
 
 RPCs: `get_user_id_by_email(lookup_email)` (SECURITY DEFINER, used by webhook for email-based user matching)
+
+### Mystery Boxes
+`mystery_boxes` (user_id, box_tier: bronze/silver/gold/legendary, trigger_type, content_type, content, earned_at, opened_at, metadata; UNIQUE user_id+trigger_type to prevent duplicate triggers). AI Mirror insights earned through streaks, zone transitions, and category milestones; content generated on-open via edge function.
+
+### Community Feed
+`community_feed` (user_id, event_type: auto events (stage_graduation/streak_milestone/level_up/first_wahoo/etc.) or opt-in (shared_wahoo/shared_healing/shared_weekly_review), title, subtitle, image_url, metadata) | `community_feed_reactions` (feed_item_id, user_id, reaction_type: cheer/fire/clap/heart; UNIQUE per feed_item+user+reaction)
+
+### Figurine Memory
+`essence_avatar_memory` (user_id, memory_type: pattern/correction/insight/milestone/fear/breakthrough/conversation, content, source: conversation/mystery_box/observation/system, confidence float, superseded_by FK, deleted_at). Per-user long-term memory for Figurine Essence Voice Mentor. Also adds `lead_flow_profiles.custom_essence_figurine` text column.
 
 ### Other
 `push_subscriptions` | `notification_preferences` | `groan_challenges` | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
