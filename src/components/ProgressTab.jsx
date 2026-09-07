@@ -9,7 +9,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
-import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import PerQuestRadar from './PerQuestRadar'
 import { LIFE_FUEL_CHANNELS, calculateLifeFuel } from '../data/channelMapping'
 import './ProgressTab.css'
@@ -38,7 +37,6 @@ export default function ProgressTab({ userId }) {
   const navigate = useNavigate()
   const [heroStage, setHeroStage] = useState(0)
   const [matrixData, setMatrixData] = useState(null)
-  const [dimensionCounts, setDimensionCounts] = useState({})
   const [lifeFuel, setLifeFuel] = useState(null)
   const [lifeFuelBaseline, setLifeFuelBaseline] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -46,15 +44,10 @@ export default function ProgressTab({ userId }) {
     if (!userId) return
     let mounted = true
 
-    Promise.all([
-      supabase.from('user_stage_progress')
-        .select('current_journey_level, life_fuel_quiz')
-        .eq('user_id', userId).maybeSingle(),
-      supabase.from('groan_challenges')
-        .select('id, expansion_dimensions', { count: 'exact' })
-        .eq('user_id', userId)
-        .eq('status', 'completed'),
-    ]).then(([stageRes, courageRes]) => {
+    supabase.from('user_stage_progress')
+      .select('current_journey_level, life_fuel_quiz')
+      .eq('user_id', userId).maybeSingle()
+    .then((stageRes) => {
       if (!mounted) return
       setHeroStage(stageRes.data?.current_journey_level || 0)
 
@@ -69,13 +62,6 @@ export default function ProgressTab({ userId }) {
         })
       }
 
-      const dims = {}
-      ;(courageRes.data || []).forEach(c => {
-        ;(c.expansion_dimensions || []).forEach(d => {
-          dims[d] = (dims[d] || 0) + 1
-        })
-      })
-      setDimensionCounts(dims)
       setLoading(false)
     }).catch(err => {
       console.error('ProgressTab load error:', err)
@@ -111,7 +97,6 @@ export default function ProgressTab({ userId }) {
   }, [userId])
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
-  const totalDimUsage = Object.values(dimensionCounts).reduce((s, c) => s + c, 0)
 
   if (loading) return <div className="pt-loading">Loading...</div>
 
@@ -239,24 +224,6 @@ export default function ProgressTab({ userId }) {
         <PerQuestRadar userId={userId} />
       </div>
 
-      {/* Expansion Dimensions */}
-      {totalDimUsage > 0 && (
-        <div className="pt-section">
-          <div className="pt-section-title">What you've been stretching</div>
-          <div className="pt-dim-grid">
-            {DOME_DIMENSIONS.map(dim => {
-              const count = dimensionCounts[dim.id] || 0
-              return (
-                <div key={dim.id} className={`pt-dim-item ${count > 0 ? 'active' : ''}`}>
-                  <span className="pt-dim-icon">{dim.icon}</span>
-                  <span className="pt-dim-label">{dim.label}</span>
-                  <span className="pt-dim-count">{count}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
