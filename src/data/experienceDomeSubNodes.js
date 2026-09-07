@@ -1073,7 +1073,7 @@ export const CAREER_VECTORS = [
   {
     id: 'do_it',
     label: 'Doing it myself',
-    subtitle: "I'm the one performing, creating, or delivering it",
+    subtitle: "I'm the one doing it. Living it, leading it, making it.",
   },
   {
     id: 'facilitate_it',
