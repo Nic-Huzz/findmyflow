@@ -28,9 +28,9 @@ const NS_GLOW = {
 // NS state visual intensity — Vibe Rise pops, others progressively muted
 const NS_FILL_OPACITY = {
   vibe_rise: 1.0,
-  fun: 0.45,
-  pressure: 0.3,
-  bored: 0.2,
+  fun: 0.65,
+  pressure: 0.55,
+  bored: 0.45,
 }
 
 // NS state → distance from center (0 = center, 1 = edge)
@@ -178,7 +178,7 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
           const nsState = ratings[n.id]
           const glowLevel = nsState ? (NS_GLOW[nsState] || 0) : (isChecked ? 0.3 : 0)
           const isDark = !isChecked
-          const fillOpacity = nsState ? (NS_FILL_OPACITY[nsState] || 0.2) : (isChecked ? 0.25 : 0)
+          const fillOpacity = nsState ? (NS_FILL_OPACITY[nsState] || 0.3) : (isChecked ? 0.4 : 0)
           const isVibeRise = nsState === 'vibe_rise'
           const isStressful = nsState === 'pressure'
           const isBored = nsState === 'bored'
