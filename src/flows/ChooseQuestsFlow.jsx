@@ -655,18 +655,18 @@ export default function ChooseQuestsFlow() {
     }
     const moveProject = (fromPathIdx, projectIdx, toPathIdx) => {
       hapticLight()
+      let sourceEmpty = false
       setPaths(prev => {
         const next = prev.map(p => ({ ...p, projects: [...(p.projects || [])] }))
         const [project] = next[fromPathIdx].projects.splice(projectIdx, 1)
         next[toPathIdx].projects.push(project)
+        sourceEmpty = next[fromPathIdx].projects.length === 0
         return next
       })
-      // Auto-deselect paths that end up empty (after state update)
       setSelectedPaths(prev => {
+        if (!sourceEmpty) return prev
         const next = new Set(prev)
-        paths.forEach((p, i) => {
-          if (i === fromPathIdx && (p.projects?.length || 0) <= 1) next.delete(i)
-        })
+        next.delete(fromPathIdx)
         return next
       })
       setMovePopover(null)
@@ -719,7 +719,7 @@ export default function ChooseQuestsFlow() {
                             {movePopover?.fromPath === i && movePopover?.projectIdx === j && (
                               <div className="cqf-move-popover">
                                 <div className="cqf-move-label">Move to:</div>
-                                {paths.map((op, oi) => oi !== i && (
+                                {paths.map((op, oi) => oi !== i && op.projects?.length > 0 && (
                                   <button key={oi} className="cqf-move-option" onClick={(e) => {
                                     e.stopPropagation()
                                     moveProject(i, j, oi)
