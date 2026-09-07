@@ -28,8 +28,6 @@ import SweetSpotGraph from './SweetSpotGraph'
 import CapacityCard from './CapacityCard'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import WeeklyFocus from './WeeklyFocus'
-import useSafetyDome from '../../hooks/useSafetyDome'
-import DomeOfSafety from '../DomeOfSafety'
 import './WeeklyFocus.css'
 import './LevelTab.css'
 
@@ -48,7 +46,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasLifeMap, setHasLifeMap] = useState(false)
   const [hasCareerClarity, setHasCareerClarity] = useState(false)
   const [showJourney, setShowJourney] = useState(false)
-  const dome = useSafetyDome(userId)
+
   const [hasPeopleMatching, setHasPeopleMatching] = useState(false)
   const [hasHealingCompass, setHasHealingCompass] = useState(false)
   const [hasPlaylistUpdate, setHasPlaylistUpdate] = useState(false)
@@ -491,13 +489,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
           loadQuests()
         }}
       />
-
-      {/* Mini Dome of Safety — tappable teaser */}
-      {!dome.loading && Object.keys(dome.domeEdges).length > 0 && (
-        <div className="quest-mini-dome" onClick={() => onNavigateTab?.('progress')}>
-          <DomeOfSafety domeEdges={dome.domeEdges} edgeZone={dome.edgeZone} mini />
-        </div>
-      )}
 
       <div className="quest-section">
         <div className="quest-section-header">

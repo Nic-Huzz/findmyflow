@@ -1,0 +1,320 @@
+/**
+ * PerQuestRadar — Swipeable per-quest radar cards for Progress tab.
+ *
+ * Each card shows 3 layers for one quest:
+ *   1. Starting point (purple dashed) — current_dimensions from path definition
+ *   2. Actual progress (purple filled) — max dimension levels from completed challenges
+ *   3. Aspiration (gold dashed) — dream_dimensions
+ *
+ * Gap highlighting: top 2 dimensions with biggest aspiration-actual gap get pulse rings.
+ */
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { DOME_DIMENSIONS } from '../data/domeDimensions'
+import { supabase } from '../lib/supabaseClient'
+import './PerQuestRadar.css'
+
+const LABEL_OFFSET = 24
+const RING_COUNT = 5
+
+function polarToXY(cx, cy, angle, radius) {
+  const rad = (angle - 90) * (Math.PI / 180)
+  return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) }
+}
+
+function buildPolygon(cx, cy, maxRadius, values, maxLevels, angleStep) {
+  return DOME_DIMENSIONS.map((dim, i) => {
+    const level = values[dim.id] || 0
+    const max = maxLevels[dim.id] || dim.maxLevel
+    const ratio = max > 0 ? Math.min(level / max, 1) : 0
+    return polarToXY(cx, cy, i * angleStep, Math.max(ratio * maxRadius, 0))
+  }).map(p => `${p.x},${p.y}`).join(' ')
+}
+
+function QuestRadarCard({ quest, actualProgress }) {
+  const navigate = useNavigate()
+  const size = 220
+  const cx = size / 2
+  const cy = size / 2
+  const maxRadius = (size / 2) - LABEL_OFFSET - 10
+  const angleStep = 360 / DOME_DIMENSIONS.length
+
+  const maxLevels = {}
+  DOME_DIMENSIONS.forEach(dim => { maxLevels[dim.id] = dim.maxLevel })
+
+  const start = quest.current_dimensions || {}
+  const dream = quest.dream_dimensions || {}
+  const actual = actualProgress || {}
+
+  const hasDefinition = Object.keys(start).length > 0 || Object.keys(dream).length > 0
+  const hasActual = Object.keys(actual).length > 0
+
+  // Calculate gaps — aspiration minus actual
+  const gaps = DOME_DIMENSIONS
+    .map(dim => ({
+      dim,
+      gap: (dream[dim.id] || 0) - (actual[dim.id] || start[dim.id] || 0),
+    }))
+    .filter(g => g.gap > 0)
+    .sort((a, b) => b.gap - a.gap)
+    .slice(0, 2)
+
+  const topGap = gaps[0]
+  const gapDimIds = new Set(gaps.map(g => g.dim.id))
+
+  // Build polygons
+  const startPolygon = Object.keys(start).length > 0
+    ? buildPolygon(cx, cy, maxRadius, start, maxLevels, angleStep) : null
+  const actualPolygon = hasActual
+    ? buildPolygon(cx, cy, maxRadius, actual, maxLevels, angleStep) : null
+  const dreamPolygon = Object.keys(dream).length > 0
+    ? buildPolygon(cx, cy, maxRadius, dream, maxLevels, angleStep) : null
+
+  // Rings + spokes
+  const rings = Array.from({ length: RING_COUNT }, (_, i) => {
+    const r = maxRadius * ((i + 1) / RING_COUNT)
+    return DOME_DIMENSIONS.map((_, j) => polarToXY(cx, cy, j * angleStep, r))
+      .map(p => `${p.x},${p.y}`).join(' ')
+  })
+  const spokes = DOME_DIMENSIONS.map((_, i) => {
+    const end = polarToXY(cx, cy, i * angleStep, maxRadius)
+    return { x1: cx, y1: cy, x2: end.x, y2: end.y }
+  })
+
+  // Labels
+  const labels = DOME_DIMENSIONS.map((dim, i) => {
+    const pos = polarToXY(cx, cy, i * angleStep, maxRadius + LABEL_OFFSET)
+    return { ...pos, icon: dim.icon, label: dim.label, isGap: gapDimIds.has(dim.id) }
+  })
+
+  // Gap pulse ring positions
+  const gapRings = gaps.map(g => {
+    const i = DOME_DIMENSIONS.findIndex(d => d.id === g.dim.id)
+    const dreamLevel = dream[g.dim.id] || 0
+    const ratio = Math.min(dreamLevel / maxLevels[g.dim.id], 1)
+    return polarToXY(cx, cy, i * angleStep, ratio * maxRadius)
+  })
+
+  const courageCount = quest._courageCount || 0
+
+  if (!hasDefinition) {
+    return (
+      <div className="pqr-card-inner">
+        <div className="pqr-header">
+          <div className="pqr-dot" style={{ background: quest.color || '#5e17eb' }} />
+          <div className="pqr-name">{quest.label}</div>
+        </div>
+        <div className="pqr-empty">
+          Define this path to see your radar.
+          <br />
+          <button className="pqr-define-btn" onClick={() => navigate(`/path-definition/${quest.id}`)}>
+            Define this path →
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="pqr-card-inner">
+      <div className="pqr-header">
+        <div className="pqr-dot" style={{ background: quest.color || '#5e17eb' }} />
+        <div className="pqr-name">{quest.label}</div>
+        {courageCount > 0 && <div className="pqr-badge">{courageCount} courage</div>}
+      </div>
+
+      <div className="pqr-radar">
+        <svg viewBox={`0 0 ${size} ${size}`} style={{ width: size, height: size }}>
+          {/* Rings */}
+          {rings.map((pts, i) => (
+            <polygon key={i} points={pts} className={`dos-ring ${i === RING_COUNT - 1 ? 'dos-ring-outer' : ''}`} />
+          ))}
+
+          {/* Spokes */}
+          {spokes.map((s, i) => (
+            <line key={i} {...s} className="dos-spoke" />
+          ))}
+
+          {/* Layer 1: Start (purple dashed, faint) */}
+          {startPolygon && (
+            <polygon points={startPolygon} className="dos-start-fill" />
+          )}
+
+          {/* Layer 3: Dream (gold dashed) */}
+          {dreamPolygon && (
+            <polygon points={dreamPolygon}
+              fill="rgba(233,162,59,0.04)"
+              stroke="#E9A23B"
+              strokeWidth={1.5}
+              strokeDasharray="6 4"
+            />
+          )}
+
+          {/* Layer 2: Actual progress (purple filled) */}
+          {actualPolygon && (
+            <polygon points={actualPolygon} className="dos-dome-fill" />
+          )}
+
+          {/* If no actual progress yet, show start as solid */}
+          {!hasActual && startPolygon && (
+            <polygon points={startPolygon} className="dos-dome-fill" style={{ opacity: 0.4 }} />
+          )}
+
+          {/* Gap pulse rings */}
+          {gapRings.map((pos, i) => (
+            <circle key={i} cx={pos.x} cy={pos.y} r={5} className="pqr-gap-ring" />
+          ))}
+
+          {/* Labels */}
+          {labels.map((l, i) => (
+            <g key={i}>
+              <text x={l.x} y={l.y - 5} className="dos-label-icon" textAnchor="middle" dominantBaseline="auto">
+                {l.icon}
+              </text>
+              <text x={l.x} y={l.y + 9}
+                className="dos-label-name"
+                textAnchor="middle"
+                dominantBaseline="auto"
+                fill={l.isGap ? '#E9A23B' : '#6c757d'}
+              >
+                {l.label}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+
+      <div className="pqr-legend">
+        <span className="pqr-legend-item"><span className="pqr-legend-line pqr-legend-start" /> Start</span>
+        <span className="pqr-legend-item"><span className="pqr-legend-line pqr-legend-actual" /> Now</span>
+        <span className="pqr-legend-item"><span className="pqr-legend-line pqr-legend-dream" /> Dream</span>
+      </div>
+
+      {topGap && (
+        <div className="pqr-gap">
+          <span className="pqr-gap-icon">{topGap.dim.icon}</span>
+          Biggest growth area: {topGap.dim.label}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default function PerQuestRadar({ userId }) {
+  const [quests, setQuests] = useState([])
+  const [progress, setProgress] = useState({}) // { questId: { dimId: maxLevel } }
+  const [loading, setLoading] = useState(true)
+  const [activeIdx, setActiveIdx] = useState(0)
+  const stripRef = useRef(null)
+
+  // Load active quests with dimensions
+  useEffect(() => {
+    if (!userId) return
+    setLoading(true)
+
+    supabase
+      .from('quests')
+      .select('id, label, color, status, current_dimensions, dream_dimensions, predicted_state')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .then(async ({ data: questData }) => {
+        if (!questData?.length) { setLoading(false); return }
+
+        // Get courage challenge counts per quest
+        const questIds = questData.map(q => q.id)
+        const { data: taskData } = await supabase
+          .from('quest_tasks')
+          .select('quest_id, groan_challenge_id')
+          .in('quest_id', questIds)
+          .eq('is_courage_challenge', true)
+
+        const counts = {}
+        taskData?.forEach(t => { counts[t.quest_id] = (counts[t.quest_id] || 0) + 1 })
+
+        // Get completed challenge dimension values per quest
+        const groanIds = (taskData || []).filter(t => t.groan_challenge_id).map(t => t.groan_challenge_id)
+        const questByGroan = {}
+        taskData?.forEach(t => { if (t.groan_challenge_id) questByGroan[t.groan_challenge_id] = t.quest_id })
+
+        const progressMap = {}
+        if (groanIds.length > 0) {
+          const { data: groanData } = await supabase
+            .from('groan_challenges')
+            .select('id, dimension_values')
+            .in('id', groanIds)
+            .eq('status', 'completed')
+
+          groanData?.forEach(g => {
+            if (!g.dimension_values) return
+            const qId = questByGroan[g.id]
+            if (!qId) return
+            if (!progressMap[qId]) progressMap[qId] = {}
+            for (const [dimId, val] of Object.entries(g.dimension_values)) {
+              progressMap[qId][dimId] = Math.max(progressMap[qId][dimId] || 0, val)
+            }
+          })
+        }
+
+        setQuests(questData.map(q => ({ ...q, _courageCount: counts[q.id] || 0 })))
+        setProgress(progressMap)
+        setLoading(false)
+      })
+  }, [userId])
+
+  // Intersection observer for active dot
+  useEffect(() => {
+    const strip = stripRef.current
+    if (!strip || quests.length <= 1) return
+
+    const cards = strip.querySelectorAll('.pqr-card')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = Array.from(cards).indexOf(entry.target)
+            if (idx >= 0) setActiveIdx(idx)
+          }
+        })
+      },
+      { root: strip, threshold: 0.6 }
+    )
+
+    cards.forEach(card => observer.observe(card))
+    return () => observer.disconnect()
+  }, [quests.length])
+
+  const scrollTo = useCallback((idx) => {
+    const strip = stripRef.current
+    if (!strip) return
+    const card = strip.children[idx]
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [])
+
+  if (loading) return null
+  if (quests.length === 0) return null
+
+  return (
+    <div className="pqr-wrapper">
+      <div className="pqr-strip" ref={stripRef}>
+        {quests.map(quest => (
+          <div key={quest.id} className="pqr-card">
+            <QuestRadarCard quest={quest} actualProgress={progress[quest.id]} />
+          </div>
+        ))}
+      </div>
+
+      {quests.length > 1 && (
+        <div className="pqr-dots">
+          {quests.map((_, i) => (
+            <button
+              key={i}
+              className={`pqr-dot-nav ${i === activeIdx ? 'active' : ''}`}
+              onClick={() => scrollTo(i)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

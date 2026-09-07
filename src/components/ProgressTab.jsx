@@ -10,8 +10,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { DOME_DIMENSIONS } from '../data/domeDimensions'
-import useSafetyDome from '../hooks/useSafetyDome'
-import DomeOfSafety from './DomeOfSafety'
+import PerQuestRadar from './PerQuestRadar'
 import { LIFE_FUEL_CHANNELS, calculateLifeFuel } from '../data/channelMapping'
 import './ProgressTab.css'
 
@@ -45,8 +44,6 @@ export default function ProgressTab({ userId }) {
   const [lifeFuel, setLifeFuel] = useState(null)
   const [lifeFuelBaseline, setLifeFuelBaseline] = useState(null)
   const [loading, setLoading] = useState(true)
-  const dome = useSafetyDome(userId)
-
   useEffect(() => {
     if (!userId) return
     let mounted = true
@@ -257,17 +254,11 @@ export default function ProgressTab({ userId }) {
         )
       })()}
 
-      {/* Dome of Safety */}
-      {!dome.loading && (Object.keys(dome.domeEdges).length > 0 || Object.keys(dome.edgeZone).length > 0) && (
-        <div className="pt-section">
-          <div className="pt-section-title">Your Dome of Safety</div>
-          <DomeOfSafety
-            domeEdges={dome.domeEdges}
-            edgeZone={dome.edgeZone}
-            gapMetrics={dome.gapMetrics}
-          />
-        </div>
-      )}
+      {/* Per-quest radars */}
+      <div className="pt-section">
+        <div className="pt-section-title">Your Paths</div>
+        <PerQuestRadar userId={userId} />
+      </div>
 
       {/* Expansion Dimensions */}
       {totalDimUsage > 0 && (
