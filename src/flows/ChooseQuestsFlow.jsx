@@ -655,29 +655,31 @@ export default function ChooseQuestsFlow() {
     }
     const moveProject = (fromPathIdx, projectIdx, toPathIdx) => {
       hapticLight()
-      let sourceEmpty = false
       setPaths(prev => {
         const next = prev.map(p => ({ ...p, projects: [...(p.projects || [])] }))
         const [project] = next[fromPathIdx].projects.splice(projectIdx, 1)
         next[toPathIdx].projects.push(project)
-        sourceEmpty = next[fromPathIdx].projects.length === 0
-        return next
-      })
-      setSelectedPaths(prev => {
-        if (!sourceEmpty) return prev
-        const next = new Set(prev)
-        next.delete(fromPathIdx)
-        return next
+        // Remove empty paths, rebuild clean
+        const cleaned = next.filter(p => p.projects.length > 0)
+        // Reindex selectedPaths to match cleaned array
+        const newSelected = new Set()
+        cleaned.forEach((_, ci) => newSelected.add(ci))
+        // Use setTimeout to avoid nested setState in updater
+        setTimeout(() => setSelectedPaths(newSelected), 0)
+        return cleaned
       })
       setMovePopover(null)
     }
     const activePaths = paths.filter((_, i) => selectedPaths.has(i))
+
+    // Only show move option when there are 2+ paths
+    const canMove = paths.length >= 2
     return (
       <div className="cqf">
         <div className="cqf-container">
           <div className="cqf-paths-header">
             <h2>Your life paths</h2>
-            <p>Rename paths, move projects between them, or remove a path.</p>
+            <p>{canMove ? 'Rename paths, move projects between them, or remove a path.' : 'All your projects are under one path.'}</p>
           </div>
 
           {clusterError && (
@@ -687,10 +689,8 @@ export default function ChooseQuestsFlow() {
             </div>
           )}
 
-          {paths.map((path, i) => {
-            if (!path.projects?.length) return null
-            return (
-            <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
+          {paths.map((path, i) => (
+            <div key={path.name + i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
               <div className="cqf-path-top">
                 <div className="cqf-path-check" onClick={() => togglePathSelection(i)}>
                   {selectedPaths.has(i) ? '✓' : '✕'}
@@ -705,21 +705,21 @@ export default function ChooseQuestsFlow() {
                   {path.projects?.length > 0 && (
                     <div className="cqf-projects-section">
                       <div className="cqf-projects-label">Projects:</div>
-                      <div className="cqf-projects-hint">Tap to move between paths</div>
+                      {canMove && <div className="cqf-projects-hint">Tap to move between paths</div>}
                       <div className="cqf-projects-list">
                         {path.projects.map((p, j) => (
-                          <div key={j} className="cqf-project-wrap">
-                            <span className="cqf-project-tag" onClick={(e) => {
+                          <div key={p.name + j} className="cqf-project-wrap">
+                            <span className="cqf-project-tag" onClick={canMove ? (e) => {
                               e.stopPropagation()
                               const isOpen = movePopover?.fromPath === i && movePopover?.projectIdx === j
                               setMovePopover(isOpen ? null : { fromPath: i, projectIdx: j })
-                            }}>
-                              {p.name} ↕
+                            } : undefined}>
+                              {p.name}{canMove ? ' ↕' : ''}
                             </span>
-                            {movePopover?.fromPath === i && movePopover?.projectIdx === j && (
+                            {canMove && movePopover?.fromPath === i && movePopover?.projectIdx === j && (
                               <div className="cqf-move-popover">
                                 <div className="cqf-move-label">Move to:</div>
-                                {paths.map((op, oi) => oi !== i && op.projects?.length > 0 && (
+                                {paths.map((op, oi) => oi !== i && (
                                   <button key={oi} className="cqf-move-option" onClick={(e) => {
                                     e.stopPropagation()
                                     moveProject(i, j, oi)
@@ -737,8 +737,7 @@ export default function ChooseQuestsFlow() {
                 </div>
               </div>
             </div>
-            )
-          })}
+          ))}
 
           <div className="cqf-fixed">
             <button className="cqf-cta cqf-cta-gold" disabled={activePaths.length === 0} onClick={confirmPaths}>

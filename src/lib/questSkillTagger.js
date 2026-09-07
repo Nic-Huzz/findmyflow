@@ -17,8 +17,11 @@ export async function tagQuestSkills(questId, label) {
     }
 
     // Save skills + branch to quest
-    const update = { skill_tags: data.skill_tags }
-    if (data.branch) update.branch = data.branch
+    const tags = Array.isArray(data.skill_tags) ? data.skill_tags : [data.skill_tags]
+    const update = { skill_tags: tags }
+    if (data.branch) {
+      update.branch = Array.isArray(data.branch) ? data.branch : [data.branch]
+    }
 
     const { error: updateError } = await supabase
       .from('quests')
