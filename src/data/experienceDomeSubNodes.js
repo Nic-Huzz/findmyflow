@@ -135,7 +135,6 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-dance-silent-disco', label: 'Silent disco' },
     { id: 'fmt-dance-morning', label: 'Morning sober dance (Daybreaker, Morning Gloryville)' },
     { id: 'fmt-dance-contact', label: 'Contact improvisation' },
-    { id: 'fmt-dance-burning-man', label: 'Burning Man / art festival' },
     { id: 'fmt-dance-rave', label: 'Rave / warehouse party' },
     { id: 'fmt-dance-tribal', label: 'Tribal / ceremonial dance' },
     { id: 'fmt-dance-social', label: 'Partner dance class (swing, salsa, bachata)' },
