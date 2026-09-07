@@ -449,7 +449,7 @@ export default function ChooseQuestsFlow() {
       })
     }
 
-    const canProceed = dd.vectors.size > 0
+    const canProceed = dd.vectors.size > 0 && (!hasFormats || dd.formats.size > 0)
     const isLast = ddIndex === selectedExps.length - 1
 
     const goNext = () => {
@@ -507,7 +507,7 @@ export default function ChooseQuestsFlow() {
 
           <div className="cqf-fixed">
             <button className="cqf-cta cqf-cta-gold" disabled={!canProceed} onClick={goNext}>
-              {!canProceed ? 'Pick at least one role' : isLast ? 'Show me life paths →' : 'Next →'}
+              {hasFormats && dd.formats.size === 0 ? 'Pick at least one format' : dd.vectors.size === 0 ? 'Pick at least one role' : isLast ? 'Show me life paths →' : 'Next →'}
             </button>
             <button className="cqf-cta cqf-cta-secondary" onClick={() => {
               if (ddIndex > 0) { setDdIndex(ddIndex - 1); window.scrollTo(0, 0) }
