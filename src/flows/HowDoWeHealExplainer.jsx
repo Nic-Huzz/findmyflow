@@ -150,7 +150,7 @@ export default function HowDoWeHealExplainer() {
       content: (
         <>
           <p><strong>The daily and weekly quests in this challenge are designed around these four R's.</strong></p>
-          <p>Each one is a small step on the path — recognising your patterns, releasing what's stuck, rewiring old stories, and reconnecting with who you really are.</p>
+          <p>Each one is a small step on the path: recognising your patterns, releasing what's stuck, rewiring old stories, and reconnecting with who you really are.</p>
           <div className="emphasis">
             <strong>You don't have to do it all at once. Just one R at a time.</strong>
           </div>

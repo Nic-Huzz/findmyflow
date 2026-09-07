@@ -920,7 +920,7 @@ function LibraryOfAnswers() {
         <div className="subsection">
           <h3>Essence Zones</h3>
           <p className="essence-zones-description">
-            Challenges where both fear and excitement are highest — what terrifies and excites you most. These point toward your true calling.
+            Challenges where both fear and excitement are highest, what terrifies and excites you most. These point toward your true calling.
           </p>
           <ul className="essence-zones-list">
             {essenceZoneChallenges.map(challenge => (

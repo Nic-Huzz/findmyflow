@@ -49,23 +49,23 @@ export async function generateDefaultScript(userId) {
   const guarantee = context?.offer?.guarantee || 'our guarantee'
 
   return {
-    C: `So [Name], tell me — what made you book this call today? What's going on in your ${niche} right now?`,
+    C: `So [Name], tell me, what made you book this call today? What's going on in your ${niche} right now?`,
     L: `So it sounds like you're dealing with ${problem}, and it's been holding you back from where you want to be. Is that right?`,
     O: `Have you tried to solve this before? What did you do? What happened?`,
-    S: `Imagine ${dreamOutcome}. What would that mean for you? Paint me the picture — what does your life look like when this is handled?`,
+    S: `Imagine ${dreamOutcome}. What would that mean for you? Paint me the picture. What does your life look like when this is handled?`,
     E: `What concerns do you have about getting started? Let's talk through them.`,
-    R: `So just to recap — you said [restate their goals]. We've addressed your concerns. And remember, ${guarantee}. What would you like to do?`,
+    R: `So just to recap, you said [restate their goals]. We've addressed your concerns. And remember, ${guarantee}. What would you like to do?`,
   }
 }
 
 export function buildCloserStepPrompt(stepLetter, currentText, context) {
   const stepDescriptions = {
-    C: 'Clarify: Opening the call — ask why they came, discover their situation and motivation',
-    L: 'Label: Name their problem — show deep understanding of their pain point',
+    C: 'Clarify: Opening the call. Ask why they came, discover their situation and motivation',
+    L: 'Label: Name their problem. Show deep understanding of their pain point',
     O: 'Overview: Explore what they\'ve tried before and why it didn\'t work',
-    S: 'Sell the Vacation: Paint the dream outcome (not your process) — vivid, emotional, specific',
+    S: 'Sell the Vacation: Paint the dream outcome (not your process). Vivid, emotional, specific',
     E: 'Explain: Surface and address objections with curiosity, not confrontation',
-    R: 'Reinforce: Summarize and help them decide — restate goals, address concerns, close',
+    R: 'Reinforce: Summarize and help them decide. Restate goals, address concerns, close',
   }
 
   const personaInfo = context?.persona
@@ -82,7 +82,7 @@ Guarantee: ${context.offer.guarantee || 'none specified'}`
 
   return `You are a sales script coach helping someone write their personalized CLOSER framework script.
 
-STEP: ${stepLetter} — ${stepDescriptions[stepLetter]}
+STEP: ${stepLetter}: ${stepDescriptions[stepLetter]}
 
 THEIR BUSINESS CONTEXT:
 ${personaInfo}

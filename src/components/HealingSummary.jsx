@@ -379,7 +379,7 @@ function HealingSummary({ onBack, progress }) {
                       <span className="flow-data-value highlight" style={{ textTransform: 'capitalize' }}>
                         {healingCompassData.primary_need.replace('_', ' ')}
                         {healingCompassData.need_ratings?.[healingCompassData.primary_need] && (
-                          <> — {healingCompassData.need_ratings[healingCompassData.primary_need]}/10</>
+                          <> ({healingCompassData.need_ratings[healingCompassData.primary_need]}/10)</>
                         )}
                       </span>
                     </div>

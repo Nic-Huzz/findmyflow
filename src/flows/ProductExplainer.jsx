@@ -128,7 +128,7 @@ export default function ProductExplainer() {
             "It's not ready yet." "I just need to fix one more thing." Sound familiar?
           </p>
           <p>
-            Perfectionism is procrastination in disguise. Your product doesn't need to be perfect — it needs to be <em>out there</em>.
+            Perfectionism is procrastination in disguise. Your product doesn't need to be perfect. It needs to be <em>out there</em>.
           </p>
           <p className="highlight-box">
             The feedback you get from shipping is <strong>infinitely more valuable</strong> than another round of polishing.

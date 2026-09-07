@@ -71,7 +71,7 @@ export async function getContentRecommendations(userId) {
       recommendations.push({
         triggerId: 'win_streak',
         score: 70 + wonThisMonth * 5,
-        contextMessage: `You have ${wonThisMonth} recent wins — turn them into social proof`,
+        contextMessage: `You have ${wonThisMonth} recent wins. Turn them into social proof`,
       })
     }
 
@@ -79,7 +79,7 @@ export async function getContentRecommendations(userId) {
       recommendations.push({
         triggerId: 'price_objections',
         score: 60 + lostDeals * 5,
-        contextMessage: `${lostDeals} deal${lostDeals > 1 ? 's' : ''} lost — create content that justifies your value`,
+        contextMessage: `${lostDeals} deal${lostDeals > 1 ? 's' : ''} lost. Create content that justifies your value`,
       })
     }
 
@@ -87,7 +87,7 @@ export async function getContentRecommendations(userId) {
       recommendations.push({
         triggerId: 'timing_objections',
         score: 65 + warmLeads.length,
-        contextMessage: `${warmLeads.length} warm leads — create nurture content to stay top of mind`,
+        contextMessage: `${warmLeads.length} warm leads. Create nurture content to stay top of mind`,
       })
     }
 
@@ -95,7 +95,7 @@ export async function getContentRecommendations(userId) {
       recommendations.push({
         triggerId: 'low_lead_to_discovery',
         score: 50,
-        contextMessage: 'No qualifying content recently — attract better-fit leads',
+        contextMessage: 'No qualifying content recently. Attract better-fit leads',
       })
     }
 
@@ -103,7 +103,7 @@ export async function getContentRecommendations(userId) {
       recommendations.push({
         triggerId: 'low_discovery_to_proposal',
         score: 45,
-        contextMessage: 'No trust content recently — help prospects say yes faster',
+        contextMessage: 'No trust content recently. Help prospects say yes faster',
       })
     }
 
@@ -111,7 +111,7 @@ export async function getContentRecommendations(userId) {
       recommendations.push({
         triggerId: 'low_proposal_to_close',
         score: 55 + followUpDeals * 3,
-        contextMessage: `${followUpDeals} deals in follow-up — create objection-handling content`,
+        contextMessage: `${followUpDeals} deals in follow-up. Create objection-handling content`,
       })
     }
 

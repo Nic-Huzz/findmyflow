@@ -127,7 +127,7 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
           {/* First-time tooltip */}
           {showTooltip && (
             <div className="edit-tooltip" onClick={dismissTooltip}>
-              <span>Make it yours — tap to customize</span>
+              <span>Make it yours. Tap to customize</span>
               <span className="edit-tooltip-arrow" />
             </div>
           )}

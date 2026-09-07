@@ -139,7 +139,7 @@ function mirrorPatternFallback(context) {
   let archetype = identifyArchetype(context);
   if (archetype) {
     reflection += `**Your subconscious identity:**\n\n`;
-    reflection += `You're operating from what I call "${archetype}" — a protective identity that once kept you safe, but now limits your expansion.\n\n`;
+    reflection += `You're operating from what I call "${archetype}", a protective identity that once kept you safe, but now limits your expansion.\n\n`;
   }
 
   // ==========================================
@@ -188,11 +188,11 @@ function identifyPattern(context) {
   }
 
   if (triage_self_sabotage === 'yes') {
-    return "Your system is creating resistance as a form of protection. The self-sabotage isn't random — it's trying to keep you safe from something your subconscious perceives as dangerous (often success itself).";
+    return "Your system is creating resistance as a form of protection. The self-sabotage isn't random. It's trying to keep you safe from something your subconscious perceives as dangerous (often success itself).";
   }
 
   // Default
-  return "Your system has identified this level of ambition as outside your current safety zone. This contraction is protective — it's trying to keep you safe from something.";
+  return "Your system has identified this level of ambition as outside your current safety zone. This contraction is protective. It's trying to keep you safe from something.";
 }
 
 /**
@@ -224,7 +224,7 @@ function identifyFear(context) {
   }
 
   if (triage_safe_pursuing === 'no') {
-    return "Fear that pursuing this ambition will require sacrificing something essential — your peace, your relationships, or your authentic self.";
+    return "Fear that pursuing this ambition will require sacrificing something essential: your peace, your relationships, or your authentic self.";
   }
 
   // Default

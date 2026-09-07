@@ -34,13 +34,13 @@ import './NervousSystemHealingCompass.css'
 
 const NEEDS = [
   {
-    key: 'life_design', label: 'Life Design', subtitle: 'Autonomy — freedom to choose', emoji: '🧭',
+    key: 'life_design', label: 'Life Design', subtitle: 'Autonomy: freedom to choose', emoji: '🧭',
     emphasisLines: [3, 4, 5, 9, 11, 16],
     script: [
       "Imagine you're stuck in a life you didn't choose.",
       "A job you don't want. A routine that drains you. A path that was never yours.",
       "But you can't leave. Because the bills are real. The responsibilities are real.",
-      "You're trapped. Not by chains — by circumstances.",
+      "You're trapped. Not by chains, by circumstances.",
       "And the worst part?",
       "You KNOW there's more. You can feel it.",
       "Another version of your life. Another path. The one you were actually made for.",
@@ -57,7 +57,7 @@ const NEEDS = [
     ],
   },
   {
-    key: 'connection', label: 'Connection', subtitle: 'Relatedness — bonds with others', emoji: '🤝',
+    key: 'connection', label: 'Connection', subtitle: 'Relatedness: bonds with others', emoji: '🤝',
     emphasisLines: [2, 7, 9, 11, 13, 18],
     script: [
       "Imagine you're in a room full of people.",
@@ -68,7 +68,7 @@ const NEEDS = [
       "You laugh at the right moments. Say the right things. Wear the right mask.",
       "And sometimes it works. They let you in.",
       "But here's the thing you fear most...",
-      "If they really knew you — the unfiltered, unedited, real you...",
+      "If they really knew you, the unfiltered, unedited, real you...",
       "They wouldn't stay.",
       "So you keep performing. Keep shape-shifting. Keep earning love you never fully trust.",
       "Surrounded by people. Still completely alone.",
@@ -77,12 +77,12 @@ const NEEDS = [
       "So you reach for something that feels like connection. Even if it's not real.",
       "The scroll through social media. The likes. The comments. Someone saw you, even if just for a second.",
       "The text to someone you know you shouldn't text. The sweetness that fills the hole for a moment.",
-      "The saying yes when you mean no — because at least they'll stay if you're useful.",
+      "The saying yes when you mean no, because at least they'll stay if you're useful.",
       "But none of it fills you. Because counterfeit connection can't touch the real ache.",
     ],
   },
   {
-    key: 'mastery', label: 'Mastery', subtitle: 'Competence — ability to grow', emoji: '🎯',
+    key: 'mastery', label: 'Mastery', subtitle: 'Competence: ability to grow', emoji: '🎯',
     emphasisLines: [2, 7, 8, 10, 11, 17],
     script: [
       "Imagine you're giving everything you have.",
@@ -106,7 +106,7 @@ const NEEDS = [
     ],
   },
   {
-    key: 'meaning', label: 'Meaning', subtitle: 'Purpose — mattering beyond yourself', emoji: '💫',
+    key: 'meaning', label: 'Meaning', subtitle: 'Purpose: mattering beyond yourself', emoji: '💫',
     emphasisLines: [2, 7, 8, 11, 13, 15, 20],
     script: [
       "Imagine waking up tomorrow and doing all the things.",
@@ -549,18 +549,18 @@ export default function HealingCompass() {
 
   const getScreenDisplayName = (screen) => {
     const names = {
-      step1_intro: 'Step 1 — The 4 Needs',
-      step2_craving: 'Step 2 — The Craving',
-      step3_life_design: 'Step 3 — Life Design',
-      step4_connection: 'Step 4 — Connection',
-      step5_mastery: 'Step 5 — Mastery',
-      step6_meaning: 'Step 6 — Meaning',
-      step7_action: 'Step 7 — Your Action',
-      step8_pattern: 'Step 8 — Protective Pattern',
-      step9_recap: 'Step 9 — The Recap',
-      step9b_stuck: 'Step 10 — The Stuck',
-      step10_body_scan: 'Step 11 — Body Scan',
-      step11_splinter: 'Step 12 — Your Splinter',
+      step1_intro: 'Step 1: The 4 Needs',
+      step2_craving: 'Step 2: The Craving',
+      step3_life_design: 'Step 3: Life Design',
+      step4_connection: 'Step 4: Connection',
+      step5_mastery: 'Step 5: Mastery',
+      step6_meaning: 'Step 6: Meaning',
+      step7_action: 'Step 7: Your Action',
+      step8_pattern: 'Step 8: Protective Pattern',
+      step9_recap: 'Step 9: The Recap',
+      step9b_stuck: 'Step 10: The Stuck',
+      step10_body_scan: 'Step 11: Body Scan',
+      step11_splinter: 'Step 12: Your Splinter',
     }
     return names[screen] || screen
   }
@@ -626,7 +626,7 @@ export default function HealingCompass() {
             <p><strong>This flow takes about 8-12 minutes</strong></p>
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>6 steps to understand what you need, what's stopping you, and where it lives in your body.</p>
             <p>Find a quiet space where you can be present with yourself.</p>
-            <p><strong>This is deep self-work — be honest, not perfect.</strong></p>
+            <p><strong>This is deep self-work. Be honest, not perfect.</strong></p>
           </div>
 
           <button className="primary-button glow-button" onClick={() => setCurrentScreen('step1_intro')}>
@@ -655,8 +655,8 @@ export default function HealingCompass() {
       </p>
 
       <p className="ns-hc-intro-body">
-        Two of these needs are about survival — making sure you're safe and not alone.
-        <br />Two of these needs are about thriving — becoming more and mattering.
+        Two of these needs are about survival, making sure you're safe and not alone.
+        <br />Two of these needs are about thriving, becoming more and mattering.
       </p>
 
       <div className="hc-needs-table">
@@ -665,12 +665,12 @@ export default function HealingCompass() {
           <div className="hc-needs-table-col">Thrive</div>
         </div>
         <div className="hc-needs-table-row">
-          <div className="hc-needs-table-cell">🧭 Life Design<br /><span className="hc-needs-table-sub">Autonomy — freedom to choose</span></div>
-          <div className="hc-needs-table-cell">🎯 Mastery<br /><span className="hc-needs-table-sub">Competence — ability to grow</span></div>
+          <div className="hc-needs-table-cell">🧭 Life Design<br /><span className="hc-needs-table-sub">Autonomy: freedom to choose</span></div>
+          <div className="hc-needs-table-cell">🎯 Mastery<br /><span className="hc-needs-table-sub">Competence: ability to grow</span></div>
         </div>
         <div className="hc-needs-table-row">
-          <div className="hc-needs-table-cell">🤝 Connection<br /><span className="hc-needs-table-sub">Relatedness — bonds with others</span></div>
-          <div className="hc-needs-table-cell">💫 Meaning<br /><span className="hc-needs-table-sub">Purpose — mattering beyond yourself</span></div>
+          <div className="hc-needs-table-cell">🤝 Connection<br /><span className="hc-needs-table-sub">Relatedness: bonds with others</span></div>
+          <div className="hc-needs-table-cell">💫 Meaning<br /><span className="hc-needs-table-sub">Purpose: mattering beyond yourself</span></div>
         </div>
       </div>
 
@@ -694,7 +694,7 @@ export default function HealingCompass() {
 
         <div className="ns-hc-intro-kicker">
           <p>One of these needs is subconsciously driving your life. One of them you crave more than others.</p>
-          <p><strong>You don't crave what you've always had. You crave what was taken — or never given.</strong></p>
+          <p><strong>You don't crave what you've always had. You crave what was taken, or never given.</strong></p>
         </div>
 
         <p className="ns-hc-intro-body" style={{ marginTop: 16 }}>
@@ -946,7 +946,7 @@ export default function HealingCompass() {
         <p>And you know the pattern that keeps stopping you. <strong>{getPatternLabel(protectivePattern)}</strong>.</p>
         <p>You've probably known this for a while. Maybe years.</p>
         <p>So here's my question...</p>
-        <p>If nothing changes — if this pattern keeps running you for another 5 years... 10 years...</p>
+        <p>If nothing changes, if this pattern keeps running you for another 5 years... 10 years...</p>
       </div>
 
       <p className="hc-script-prompt" style={{ marginTop: 24, marginBottom: 32 }}>

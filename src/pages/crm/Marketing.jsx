@@ -558,7 +558,7 @@ export default function Marketing() {
       <div className="tasks-list">
         {dayTasks.length === 0 ? (
           <div className="empty-day">
-            <p>{selectedDay}'s clear — nice!</p>
+            <p>{selectedDay}'s clear, nice!</p>
           </div>
         ) : (
           dayTasks.map(task => (

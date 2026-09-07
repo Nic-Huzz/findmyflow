@@ -140,7 +140,7 @@ export default function EarthquakeResults({ results, answers, email, onRetake })
           <div className="bridge-item"><span className="bridge-icon">&#10004;</span><span>Face {voice.name} in small, safe challenges</span></div>
           <div className="bridge-item"><span className="bridge-icon">&#10004;</span><span>Expand what feels safe to your nervous system</span></div>
           <div className="bridge-item"><span className="bridge-icon">&#10004;</span><span>Build your unique Flow: Skills &times; Problems &times; People</span></div>
-          <div className="bridge-item"><span className="bridge-icon">&#10004;</span><span>Turn your gifts into service — through play, not force</span></div>
+          <div className="bridge-item"><span className="bridge-icon">&#10004;</span><span>Turn your gifts into service. Through play, not force</span></div>
         </div>
 
         <p className="bridge-pitch">Find My Flow is the training program for exactly this.</p>

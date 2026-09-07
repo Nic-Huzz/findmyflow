@@ -62,7 +62,7 @@ export default function PlayListExplainer() {
           <p className="highlight-box" style={{ fontStyle: 'italic' }}>
             "Do what feels like play to you but looks like work to others."
             <br />
-            <span style={{ fontSize: '13px', opacity: 0.6 }}>— Naval Ravikant</span>
+            <span style={{ fontSize: '13px', opacity: 0.6 }}>Naval Ravikant</span>
           </p>
           <p className="slide-intro">
             Your play-list is your collection of skills that feel like <span className="highlight">play</span>.
@@ -94,7 +94,7 @@ export default function PlayListExplainer() {
             <div className="pillar-card" style={{ border: '1px solid rgba(233, 162, 59, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
               <div className="pillar-icon">😬</div>
               <h3>Groan Zone</h3>
-              <p>Scary + exciting — you groan because you know you should</p>
+              <p>Scary + exciting. You groan because you know you should</p>
             </div>
           </div>
           <p>
@@ -188,7 +188,7 @@ export default function PlayListExplainer() {
               <span className="step-icon">🛡️</span>
               <div className="step-info">
                 <h4>High scary + Low wahoo =<br />Not for you</h4>
-                <p>This doesn't light you up or feel like play — not something to pursue</p>
+                <p>This doesn't light you up or feel like play. Not something to pursue</p>
               </div>
             </div>
             <div className="validation-step">
@@ -242,7 +242,7 @@ export default function PlayListExplainer() {
             </div>
           </div>
           <p className="slide-question">
-            The goal isn't to eliminate fear — it's to act alongside it.
+            The goal isn't to eliminate fear. It's to act alongside it.
           </p>
         </div>
       )

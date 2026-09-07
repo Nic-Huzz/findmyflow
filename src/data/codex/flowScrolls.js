@@ -31,13 +31,13 @@ Every moment, you exist at the intersection of two axes:
 
 These create four directions, each with wisdom:
 
-**North (Ease + Excited)** — You're in Flow. The work feels like play. Time distorts. This is alignment. *Action: Stay here as long as possible. This is where magic happens.*
+**North (Ease + Excited)**: You're in Flow. The work feels like play. Time distorts. This is alignment. *Action: Stay here as long as possible. This is where magic happens.*
 
-**East (Resistance + Excited)** — You're at a growth edge. Something excites you but also scares you. This is expansion territory. *Action: Push through. This resistance is the good kind—the groan before play.*
+**East (Resistance + Excited)**: You're at a growth edge. Something excites you but also scares you. This is expansion territory. *Action: Push through. This resistance is the good kind, the groan before play.*
 
-**West (Ease + Tired)** — You're in recovery. Things feel gentle but you're depleted. This is restoration. *Action: Honor it. Rest now so you can flow later. This isn't laziness—it's refueling.*
+**West (Ease + Tired)**: You're in recovery. Things feel gentle but you're depleted. This is restoration. *Action: Honor it. Rest now so you can flow later. This isn't laziness. It's refueling.*
 
-**South (Resistance + Tired)** — You're depleted AND blocked. This is the danger zone. Pushing here causes damage. *Action: Stop. Full stop. Forcing through South creates burnout. Rest is mandatory, not optional.*
+**South (Resistance + Tired)**: You're depleted AND blocked. This is the danger zone. Pushing here causes damage. *Action: Stop. Full stop. Forcing through South creates burnout. Rest is mandatory, not optional.*
 
 The compass doesn't judge. It observes. Your job is to listen.`,
       },
@@ -50,7 +50,7 @@ One is a growth edge. The other is a warning.
 
 The Four Directions give you language for what your body already knows. When you can name your state, you can respond appropriately instead of defaulting to "just push harder."
 
-Flow isn't about eliminating resistance. It's about knowing which direction you're facing—and acting accordingly.`,
+Flow isn't about eliminating resistance. It's about knowing which direction you're facing, and acting accordingly.`,
       },
 
       practice: {
@@ -88,7 +88,7 @@ The more you check in, the more fluent you become in your own energy language. E
 
 **Flow = Skills × Problems × People**
 
-- **Skills**: What comes naturally to you. Your innate gifts—clarifying, creating, connecting, building. These aren't learned; they're revealed.
+- **Skills**: What comes naturally to you. Your innate gifts: clarifying, creating, connecting, building. These aren't learned; they're revealed.
 
 - **Problems**: What lights you up to solve. The injustices that activate you, the challenges you can't help but address.
 
@@ -112,7 +112,7 @@ This is your competitive advantage disguised as joy.`,
 - Solve problems that pay well, not that light you up
 - Serve whoever will pay, not who you're called to help
 
-The result? You might succeed—but you'll be drained. Successful and exhausted. Accomplished and empty.
+The result? You might succeed, but you'll be drained. Successful and exhausted. Accomplished and empty.
 
 The Flow Equation reveals a different path: instead of forcing yourself into market demand, find where your natural genius intersects with real need. Instead of asking "what should I do?", ask "what am I already wired to do that creates value?"
 
@@ -127,7 +127,7 @@ Your Flow already exists. The Flow Finder just helped you see it.`,
 2. **Problems check**: Does this problem actually light me up, or am I solving it for the wrong reasons?
 3. **People check**: Are these my people, or just available people?
 
-When all three align, you'll feel it. That sense of "this is exactly what I should be doing"—that's the equation balancing.
+When all three align, you'll feel it. That sense of "this is exactly what I should be doing". That's the equation balancing.
 
 When something feels off, one of the three is likely misaligned. Identify which one, and adjust.
 
@@ -153,7 +153,7 @@ When something feels off, one of the three is likely misaligned. Identify which 
         title: 'The Teaching',
         body: `The Groan is not the enemy. It's the doorway.
 
-When you approach something that's authentically YOU—something that would feel like play if you weren't terrified—you feel a specific resistance. That's the Groan.
+When you approach something that's authentically YOU, something that would feel like play if you weren't terrified, you feel a specific resistance. That's the Groan.
 
 It's the sound your Protective Voices make when you approach the thing they've been guarding you from: *being fully yourself in public.*
 
@@ -188,7 +188,7 @@ Understanding the Groan changes everything:
 - Instead of trusting the fear, you question it
 - Instead of staying small, you recognize the Groan as a map to expansion
 
-Your Protective Voices aren't evil—they're outdated. They learned to fear visibility, judgment, and failure in contexts where those fears made sense. But you're not in those contexts anymore.
+Your Protective Voices aren't evil. They're outdated. They learned to fear visibility, judgment, and failure in contexts where those fears made sense. But you're not in those contexts anymore.
 
 The Groan is your compass to growth. Follow it.`,
       },
@@ -203,7 +203,7 @@ The Groan is your compass to growth. Follow it.`,
 4. **Question the narrative**: Is this actually dangerous, or does it just feel that way because of old conditioning?
 5. **Take one small step**: You don't have to do the whole scary thing. Just the next inch.
 
-The Groan gets quieter each time you move through it. Not because you stop caring—but because you prove to your nervous system that the scary thing is actually safe.
+The Groan gets quieter each time you move through it. Not because you stop caring, but because you prove to your nervous system that the scary thing is actually safe.
 
 *"The Groan is the sound of your comfort zone stretching. It means you're growing."*`,
       },
@@ -229,27 +229,27 @@ The Groan gets quieter each time you move through it. Not because you stop carin
 
 Each rung represents a deeper level of owning your identity publicly:
 
-**1. Screen** — Owning your identity behind a screen. Lowest risk—you can edit, delete, hide.
+**1. Screen**: Owning your identity behind a screen. Lowest risk. You can edit, delete, hide.
 *"I post about this topic."*
 
-**2. Live** — Owning your identity in person, in real-time. Can't take it back.
+**2. Live**: Owning your identity in person, in real-time. Can't take it back.
 *"I talk about this in rooms."*
 
-**3. Money** — Claiming your identity is worth paying for. "I'm good enough to charge."
+**3. Money**: Claiming your identity is worth paying for. "I'm good enough to charge."
 *"People pay me to do this."*
 
-**4. Vulnerable** — Owning your identity even when imperfect. Showing the struggle, not just the wins.
+**4. Vulnerable**: Owning your identity even when imperfect. Showing the struggle, not just the wins.
 *"This is me, including the messy parts."*
 
-**5. Authority** — Fully owning: "This is who I am." Complete identity ownership.
+**5. Authority**: Fully owning: "This is who I am." Complete identity ownership.
 *"I am THE person who does this."*
 
-Each rung feels scarier because each rung is a bigger claim. You're not just doing a thing—you're saying "this is me" at increasing volumes.`,
+Each rung feels scarier because each rung is a bigger claim. You're not just doing a thing. You're saying "this is me" at increasing volumes.`,
       },
 
       matters: {
         title: 'Why This Matters',
-        body: `Your Protective Voices don't just fear visibility—they fear specific *levels* of visibility.
+        body: `Your Protective Voices don't just fear visibility. They fear specific *levels* of visibility.
 
 Someone might be fine posting (Screen) but terrified of going live (Live). Another might charge clients (Money) but never share their struggles (Vulnerable).
 
@@ -260,7 +260,7 @@ The goal isn't to rush to the top. It's to:
 2. Understand what's blocking the next rung
 3. Take deliberate steps upward, at your own pace
 
-Each rung you climb doesn't just increase your visibility—it increases your ownership of your identity. You're not just being seen more; you're claiming who you are more fully.`,
+Each rung you climb doesn't just increase your visibility. It increases your ownership of your identity. You're not just being seen more; you're claiming who you are more fully.`,
       },
 
       practice: {
@@ -274,7 +274,7 @@ Each rung you climb doesn't just increase your visibility—it increases your ow
 Then, work one rung at a time:
 - If Screen feels scary, start there
 - If Screen is easy but Live terrifies you, that's your next challenge
-- Don't skip rungs—build evidence at each level
+- Don't skip rungs. Build evidence at each level
 
 The goal: sustainable ascent. Not a sprint to Authority, but a steady climb where each rung becomes solid ground for the next.
 
@@ -310,7 +310,7 @@ The most productive people don't work more hours. They align their energy with t
 
 - **Tired**: Honor it before you hit South. Rest proactively, not reactively. The person who rests at 80% capacity maintains momentum. The person who waits until 10% crashes.
 
-- **South state**: Stop. Completely. No exceptions. Working in South doesn't just produce bad work—it creates debt you'll pay later. Every hour forced in South costs multiple hours of recovery.
+- **South state**: Stop. Completely. No exceptions. Working in South doesn't just produce bad work. It creates debt you'll pay later. Every hour forced in South costs multiple hours of recovery.
 
 **The Alchemy:**
 
@@ -327,7 +327,7 @@ Energy is a renewable but limited resource. Like a battery, it depletes with use
 
 Energy Alchemy means:
 - Your best hours go to your most important work
-- You don't fight your rhythms—you design around them
+- You don't fight your rhythms. You design around them
 - Rest is scheduled, not accidental
 - Burnout becomes preventable, not inevitable
 
@@ -368,7 +368,7 @@ The goal is to become fluent in your own energy language. To know, without check
         title: 'The Teaching',
         body: `Play is not the opposite of work. It's the highest form of it.
 
-The Matrix taught you that play is frivolous—a reward you earn after "real" work is done. That serious people do serious things. That fun and productivity are opposites.
+The Matrix taught you that play is frivolous, a reward you earn after "real" work is done. That serious people do serious things. That fun and productivity are opposites.
 
 This is backwards.
 
@@ -383,7 +383,7 @@ When you're playing, you're not forcing anything. You're in flow. You're experim
 
 **The Play Portal:**
 
-Your essence knows what feels like play. Those activities—the ones that light you up, that you'd do for free, that make time disappear—those aren't distractions from your purpose.
+Your essence knows what feels like play. Those activities, the ones that light you up, that you'd do for free, that make time disappear, those aren't distractions from your purpose.
 
 *They ARE your purpose.*
 
@@ -394,7 +394,7 @@ The play you've been denying yourself? That's the portal to your Flow. The thing
         title: 'Why This Matters',
         body: `Most burnt-out professionals have something in common: they've systematically eliminated play from their lives.
 
-They chose the "responsible" path over the joyful one. They picked careers for practicality, not passion. They scheduled play last—and it never made the list.
+They chose the "responsible" path over the joyful one. They picked careers for practicality, not passion. They scheduled play last, and it never made the list.
 
 The result? They're successful and miserable. Accomplished and drained. They've built lives they don't want to live.
 
@@ -403,7 +403,7 @@ Play as Portal offers a different frame:
 - What if your joy was a compass, not a distraction?
 - What if the thing you'd do for free was also the thing people would pay most for?
 
-Your unique gift lives where play lives. The Playground isn't a detour from your hero's journey—it's the path itself.`,
+Your unique gift lives where play lives. The Playground isn't a detour from your hero's journey. It's the path itself.`,
       },
 
       practice: {
@@ -418,7 +418,7 @@ Your unique gift lives where play lives. The Playground isn't a detour from your
 
 4. **Build from play**. Instead of asking "what should I do?", ask "what would be playful?" Then find a way to create value from that play.
 
-The Playground challenges aren't separate from your business building. They're teaching you to reclaim the play you abandoned—and build something sustainable from it.
+The Playground challenges aren't separate from your business building. They're teaching you to reclaim the play you abandoned, and build something sustainable from it.
 
 *"The master has failed more times than the beginner has tried. And the master was playing the whole time."*`,
       },
@@ -446,34 +446,34 @@ You've found your Flow. You've faced your Protective Voices. You've built someth
 
 **This is not about "giving back":**
 
-The Service Threshold isn't charity or obligation. It's the natural completion of the cycle. You received transformation; now you transmit it. Not because you should, but because that's what transformation wants to do—spread.
+The Service Threshold isn't charity or obligation. It's the natural completion of the cycle. You received transformation; now you transmit it. Not because you should, but because that's what transformation wants to do: spread.
 
 **The three shifts at the threshold:**
 
-1. **From "what do I need?" to "what do they need?"** — Your focus moves from your own journey to enabling others' journeys.
+1. **From "what do I need?" to "what do they need?"**: Your focus moves from your own journey to enabling others' journeys.
 
-2. **From practice to application** — You've been training. Now the training has a target: real humans with real problems you can solve.
+2. **From practice to application**: You've been training. Now the training has a target: real humans with real problems you can solve.
 
-3. **From receiving to giving** — You've been filled. Now you pour.
+3. **From receiving to giving**: You've been filled. Now you pour.
 
 **The paradox of service:**
 
-Service isn't sacrifice. When you serve from your Flow, you're not depleted—you're energized. You're not giving something up; you're expressing something that wants to be expressed. The service IS the gift to you.`,
+Service isn't sacrifice. When you serve from your Flow, you're not depleted. You're energized. You're not giving something up; you're expressing something that wants to be expressed. The service IS the gift to you.`,
       },
 
       matters: {
         title: 'Why This Matters',
-        body: `Many people get stuck in perpetual preparation. They keep learning, keep growing, keep developing—but never actually serve.
+        body: `Many people get stuck in perpetual preparation. They keep learning, keep growing, keep developing, but never actually serve.
 
 This is The Perfectionist wearing a spiritual mask: "I'm not ready to help others yet. I need more healing. More training. More certification."
 
-The Service Threshold says: enough. You have enough. You are enough. Someone out there needs exactly what you have right now—not what you'll have in five years.
+The Service Threshold says: enough. You have enough. You are enough. Someone out there needs exactly what you have right now, not what you'll have in five years.
 
 Crossing the threshold changes everything:
 - Your work gets real feedback, not theoretical scenarios
 - Your growth accelerates because you're applying, not just learning
-- Your purpose becomes tangible—you can see your impact
-- Your income becomes possible—value creates exchange
+- Your purpose becomes tangible. You can see your impact
+- Your income becomes possible. Value creates exchange
 
 Discovery without service is self-indulgence. Service without discovery is burnout. The hero's journey includes both.`,
       },
@@ -484,13 +484,13 @@ Discovery without service is self-indulgence. Service without discovery is burno
 
 1. **You've completed your Flow Finder** and know your unique combination
 2. **You've faced your Protective Voices** in the Playground
-3. **You have something to offer**—even if it feels small or imperfect
+3. **You have something to offer**, even if it feels small or imperfect
 4. **Someone out there would benefit** from what you've learned
 
 How to cross:
 
 1. **Name your offer**: What specific transformation can you help with?
-2. **Identify your first person**: Who specifically needs this? (Not "everyone"—someone.)
+2. **Identify your first person**: Who specifically needs this? (Not "everyone". Someone.)
 3. **Reach out**: Make contact. Offer help. Start a conversation.
 4. **Deliver value**: Actually help them. Serve first, figure out sustainability second.
 5. **Iterate**: Learn from the service. What worked? What didn't? Adjust.
@@ -570,7 +570,7 @@ This isn't weakness. It's evolution. The protection that saved child-you is limi
 
 This isn't a one-time conversation. The Protective Voice has momentum. You'll need to renegotiate many times. But each time, it gets easier. Each time, the voice learns that safety is possible without complete control.
 
-*"The goal isn't to silence the voice. It's to change your relationship with it—from prisoner and guard to adult collaborators."*`,
+*"The goal isn't to silence the voice. It's to change your relationship with it. From prisoner and guard to adult collaborators."*`,
       },
     },
   },

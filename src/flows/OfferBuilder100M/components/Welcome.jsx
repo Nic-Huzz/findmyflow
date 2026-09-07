@@ -18,7 +18,7 @@ function Welcome({ onContinue }) {
           </p>
 
           <p>
-            This is based on Alex Hormozi's <em>$100M Offers</em> framework —
+            This is based on Alex Hormozi's <em>$100M Offers</em> framework,
             the same system used to build multiple 8-figure businesses.
           </p>
 

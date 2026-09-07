@@ -17,7 +17,7 @@ const STRATEGIES = [
   {
     id: 'early_bird',
     name: 'Early Bird Pricing',
-    desc: 'Time-limited discount — creates urgency to book now',
+    desc: 'Time-limited discount. Creates urgency to book now',
     icon: '🐦',
     checklistItems: [
       'Set up early bird pricing (e.g. 20% off)',
@@ -33,7 +33,7 @@ const STRATEGIES = [
   {
     id: 'bring_friend',
     name: 'Bring a Friend',
-    desc: 'Both get a discount — doubles your reach through personal invites',
+    desc: 'Both get a discount. Doubles your reach through personal invites',
     icon: '👯',
     checklistItems: [
       'Set up bring-a-friend discount (e.g. both get 10% off)',
@@ -61,7 +61,7 @@ const STRATEGIES = [
   {
     id: 'vip_addon',
     name: 'VIP Add-on',
-    desc: '"First 5 get a 1:1 session after" — premium upsell',
+    desc: '"First 5 get a 1:1 session after". Premium upsell',
     icon: '👑',
     checklistItems: [
       'Define VIP add-on (1:1 session, front row, private group, etc.)',
@@ -77,7 +77,7 @@ const STRATEGIES = [
   {
     id: 'group_booking',
     name: 'Group Booking',
-    desc: '"Book 3 seats, get 4th free" — great for friend groups',
+    desc: '"Book 3 seats, get 4th free". Great for friend groups',
     icon: '👥',
     checklistItems: [
       'Set up group booking deal',
@@ -92,7 +92,7 @@ const STRATEGIES = [
   {
     id: 'scarcity_cap',
     name: 'Scarcity Cap',
-    desc: '"Only X spots" — forces a decision from people sitting on the fence',
+    desc: '"Only X spots". Forces a decision from people sitting on the fence',
     icon: '🔥',
     checklistItems: [
       'Add "Only X spots" to booking page',
@@ -106,13 +106,13 @@ const STRATEGIES = [
   {
     id: 'community_leader',
     name: 'Community Leader Invite',
-    desc: 'Free ticket + affiliate link — they share with their audience, earn % per sale',
+    desc: 'Free ticket + affiliate link. They share with their audience, earn % per sale',
     icon: '🤝',
     checklistItems: [
       'Identify 3 community leaders with relevant audiences',
       'Create affiliate links / promo codes for each',
       'Send free ticket + affiliate link to each leader',
-      'Follow up after they share — thank + check conversions',
+      'Follow up after they share, thank + check conversions',
     ],
     condition: (answers) => {
       return answers.community_leaders === 'yes'
@@ -121,7 +121,7 @@ const STRATEGIES = [
   {
     id: 'giveaway',
     name: 'Giveaway',
-    desc: 'Win free tickets — drives engagement, captures leads, expands reach',
+    desc: 'Win free tickets. Drives engagement, captures leads, expands reach',
     icon: '🎁',
     checklistItems: [
       'Create giveaway post (win tickets, tag to enter)',

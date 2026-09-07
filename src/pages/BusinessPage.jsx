@@ -486,7 +486,7 @@ export default function BusinessPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>☀️</span>
             <div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>Meet Sol — Your AI Co-Founder</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>Meet Sol, Your AI Co-Founder</div>
               <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '2px' }}>
                 Sol handles your business ops via Telegram so you can focus on your craft.
               </div>

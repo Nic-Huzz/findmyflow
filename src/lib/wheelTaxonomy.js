@@ -577,7 +577,7 @@ export const PERSONA_SEGMENTS = [
     recognitionPhrases: [
       "They have an idea burning inside them",
       "They're ready to create something but need the blueprint",
-      "They don't want to dream about it — they want to build it",
+      "They don't want to dream about it. They want to build it",
     ],
     color: '#FF8E53',
     icon: '🏗️',
@@ -645,7 +645,7 @@ export const PERSONA_SEGMENTS = [
     recognitionPhrases: [
       "They've already had success but want the next level",
       "They're driven, competitive, and impatient",
-      "They don't want encouragement — they want a game plan",
+      "They don't want encouragement. They want a game plan",
     ],
     color: '#9B59B6',
     icon: '🏆',
@@ -696,7 +696,7 @@ export const PERSONA_SEGMENTS = [
     recognitionPhrases: [
       "They worry about what could go wrong",
       "They need to feel safe before they can move forward",
-      "They protect the people they love — sometimes at their own expense",
+      "They protect the people they love, sometimes at their own expense",
     ],
     color: '#00BCD4',
     icon: '🛡️',
@@ -713,7 +713,7 @@ export const PERSONA_SEGMENTS = [
     recognitionPhrases: [
       "They need to express something that's uniquely theirs",
       "They feel suffocated when they can't create",
-      "They don't want to fit in — they want to stand out",
+      "They don't want to fit in. They want to stand out",
     ],
     color: '#F44336',
     icon: '🎨',

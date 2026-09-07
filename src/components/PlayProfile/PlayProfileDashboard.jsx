@@ -93,7 +93,7 @@ export default function PlayProfileDashboard({ userId }) {
           <div className="pp-empty-icon">🧬</div>
           <h2>Discover Your Founder DNA</h2>
           <p className="pp-subtitle" style={{ marginBottom: 24 }}>
-            Find out which famous founder thinks like you — and get personalized challenges based on their playbook.
+            Find out which famous founder thinks like you, and get personalized challenges based on their playbook.
           </p>
           <a href="/play-profile" className="pp-btn-gold" style={{ display: 'block', textDecoration: 'none', textAlign: 'center' }}>
             Take the Quiz

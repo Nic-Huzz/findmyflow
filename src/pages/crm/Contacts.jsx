@@ -458,7 +458,7 @@ export default function Contacts() {
                 <div className="contacts-empty-rich">
                   <div className="empty-icon">👥</div>
                   <h3>Let's build your network</h3>
-                  <p>Track the people in your world — from first touch to loyal customer</p>
+                  <p>Track the people in your world, from first touch to loyal customer</p>
                   <button className="contacts-gold-cta" onClick={handleAddContact}>
                     Add Your First Contact <span>→</span>
                   </button>

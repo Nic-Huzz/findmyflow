@@ -38,7 +38,7 @@ export default function Step1_Writing({ samples, onChangeSamples, onContinue }) 
         <h2>Share your writing</h2>
         <p>
           Paste 3-5 pieces of content you&apos;ve written. Include at least one casual piece
-          (social post, text, email) — that&apos;s where your real voice lives.
+          (social post, text, email). That&apos;s where your real voice lives.
         </p>
       </div>
 

@@ -47,13 +47,13 @@ export default function FantasyLeagueLanding() {
       })
       if (error) {
         console.warn('Signup save failed:', error)
-        alert('Something went wrong — please try again.')
+        alert('Something went wrong. Please try again.')
         setSubmitting(false)
         return
       }
     } catch (err) {
       console.warn('Signup error:', err)
-      alert('Something went wrong — please try again.')
+      alert('Something went wrong. Please try again.')
       setSubmitting(false)
       return
     }
@@ -132,7 +132,7 @@ export default function FantasyLeagueLanding() {
             <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '60ms' }}>In 2020, I realised a corporate job wasn't for me.</p>
             <p className="flp-origin-line flp-origin-bold reveal-slide-left" style={{ transitionDelay: '120ms' }}>Three years later? I was still in the same job.</p>
             <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '180ms' }}>It wasn't from a lack of clarity.</p>
-            <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '240ms' }}>It wasn't from a lack of education &mdash; I'd spent $30,000 on 52 courses.</p>
+            <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '240ms' }}>It wasn't from a lack of education. I'd spent $30,000 on 52 courses.</p>
             <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '300ms' }}>It wasn't from a lack of will.</p>
             <p className="flp-origin-line flp-origin-bold reveal-slide-left" style={{ transitionDelay: '360ms' }}>It was because I didn't feel safe.</p>
             <p className="flp-origin-line flp-origin-muted reveal-slide-left" style={{ transitionDelay: '420ms' }}>Scared of judgement. Scared of failing. Scared I wasn't good enough.</p>
@@ -147,10 +147,10 @@ export default function FantasyLeagueLanding() {
           </div>
           <blockquote className="flp-origin-quote reveal-slide-right" style={{ transitionDelay: '0ms' }}>
             <div className="flp-quote-mark" aria-hidden="true">&ldquo;</div>
-            <p>We don't rise to the level of our ambitions &mdash; we fall to the level of what feels safe.</p>
+            <p>We don't rise to the level of our ambitions. We fall to the level of what feels safe.</p>
           </blockquote>
           <p className="flp-origin-close reveal-blur-up">
-            This game merges business actions with accountability to do things outside your comfort zone &mdash; and the healing work to remove the fear at the source.
+            This game merges business actions with accountability to do things outside your comfort zone, and the healing work to remove the fear at the source.
           </p>
         </div>
       </section>

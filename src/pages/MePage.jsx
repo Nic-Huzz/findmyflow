@@ -378,10 +378,10 @@ export default function MePage() {
     const label = labels[dominant[0]]
 
     if (dominant[0] === 'north') {
-      return `Your river is <strong>running strong</strong> — mostly in ${label}. You're ${flowEntries.length > 5 ? 'building momentum' : 'off to a great start'}.`
+      return `Your river is <strong>running strong</strong>, mostly in ${label}. You're ${flowEntries.length > 5 ? 'building momentum' : 'off to a great start'}.`
     }
     if (dominant[0] === 'south') {
-      return `Your recent pattern shows <strong>${label}</strong> energy. Be gentle — rest is part of the journey, not a detour.`
+      return `Your recent pattern shows <strong>${label}</strong> energy. Be gentle. Rest is part of the journey, not a detour.`
     }
     return `Your recent pattern shows <strong>${label}</strong> energy. Every direction teaches you something.`
   }, [flowEntries])
@@ -443,7 +443,7 @@ export default function MePage() {
         date: sg.graduated_at,
         from_stage: sg.from_stage,
         to_stage: sg.to_stage,
-        stage_name: `Stage ${sg.to_stage} — ${getStageDisplayName(sg.to_stage)}`,
+        stage_name: `Stage ${sg.to_stage}: ${getStageDisplayName(sg.to_stage)}`,
       })
     })
     timeline.sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -575,7 +575,7 @@ export default function MePage() {
             </div>
             <p className="fj-sub">
               {timelineEntries.length > 0
-                ? 'Swipe to explore your river — compass entries and milestones show your journey.'
+                ? 'Swipe to explore your river. Compass entries and milestones show your journey.'
                 : 'Log your first compass check-in to start building your river.'
               }
             </p>

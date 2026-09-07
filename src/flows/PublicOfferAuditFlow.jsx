@@ -974,7 +974,7 @@ export default function PublicOfferAuditFlow() {
               The key to <strong>monetising your mission for location + financial independence</strong> is creating a business model that maximises how much you're paid for doing stuff that lights you up.
             </p>
             <p className="explainer-text">
-              This means building an <strong>offer stack</strong> — a strategic combination of products at different price points that maximises customer value while playing to your strengths.
+              This means building an <strong>offer stack</strong>, a strategic combination of products at different price points that maximises customer value while playing to your strengths.
             </p>
             <p className="explainer-highlight">
               This quick audit will reveal where you are on your journey, which pieces you have in place, and where to focus next.
@@ -1024,7 +1024,7 @@ export default function PublicOfferAuditFlow() {
                 </div>
               </div>
             </div>
-            <p className="welcome-note">Answer honestly based on where your business is today — not where you want it to be.</p>
+            <p className="welcome-note">Answer honestly based on where your business is today, not where you want it to be.</p>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.QUESTIONS)}>
             Let's Audit My Offers
@@ -1113,7 +1113,7 @@ export default function PublicOfferAuditFlow() {
 
             <h2 className="score-interpretation">You're at the Discovery Stage</h2>
             <p className="score-description">
-              You're still exploring what to build — and that's exactly the right place to start.
+              You're still exploring what to build, and that's exactly the right place to start.
               Most entrepreneurs rush into building before they have clarity, which leads to wasted time and frustration.
             </p>
 
@@ -1127,10 +1127,10 @@ export default function PublicOfferAuditFlow() {
                     <h4>Journey Clarity: {LEVELS[categoryLevels.journey].name}</h4>
                     <p>
                       {categoryLevels.journey === 3
-                        ? "You have strong clarity on your direction — you know what excites you and where you want to go."
+                        ? "You have strong clarity on your direction. You know what excites you and where you want to go."
                         : categoryLevels.journey === 2
                         ? "You're building clarity on your path. Some pieces are coming together."
-                        : "You're still figuring out your direction. That's okay — discovery takes time."}
+                        : "You're still figuring out your direction. That's okay, discovery takes time."}
                     </p>
                   </div>
                 </div>
@@ -1173,7 +1173,7 @@ export default function PublicOfferAuditFlow() {
                 <span className="help-icon">🗺️</span>
                 <div className="help-content">
                   <h4 className="help-feature">Clear Roadmap to Follow</h4>
-                  <p className="help-description">A step-by-step journey from discovery to your first paying customers — no guesswork required.</p>
+                  <p className="help-description">A step-by-step journey from discovery to your first paying customers. No guesswork required.</p>
                 </div>
               </div>
             </div>

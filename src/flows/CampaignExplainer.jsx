@@ -81,7 +81,7 @@ export default function CampaignExplainer() {
             There are only four ways to get customers. That's it. Every business in the world uses some combination of these:
           </p>
           <p>
-            <strong>Warm Outreach</strong> — reach out to people you already know. <strong>Cold Outreach</strong> — reach out to people you don't. <strong>Post Free Content</strong> — attract people to you. <strong>Run Paid Ads</strong> — pay to reach them faster.
+            <strong>Warm Outreach</strong>: reach out to people you already know. <strong>Cold Outreach</strong>: reach out to people you don't. <strong>Post Free Content</strong>: attract people to you. <strong>Run Paid Ads</strong>: pay to reach them faster.
           </p>
           <p>
             You don't need all four. You just need to pick the right one for where you are right now.

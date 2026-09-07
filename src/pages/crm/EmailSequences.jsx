@@ -25,7 +25,7 @@ const COLD_OUTREACH_TEMPLATES = [
     step_number: 1,
     delay_days: 0,
     subject: '[Their business] + [your offer]',
-    body: `I saw [reason — something specific about their business that shows you did your homework].
+    body: `I saw [reason, something specific about their business that shows you did your homework].
 
 [One sentence: what you offer and why it fits them].
 
@@ -765,7 +765,7 @@ function EmailStepForm({ step, sequenceId, userId, nextStepNumber, sequenceType,
               value={form.body}
               onChange={e => setForm({ ...form, body: e.target.value })}
               placeholder={isColdOutreach
-                ? "I saw [reason]...\n\n[Value prop — 1 sentence].\n\nCan I send you the pricing sheet?\n\nBest,\n[Name]\nFounder"
+                ? "I saw [reason]...\n\n[Value prop, 1 sentence].\n\nCan I send you the pricing sheet?\n\nBest,\n[Name]\nFounder"
                 : "Write your email content here..."}
               rows={6}
             />

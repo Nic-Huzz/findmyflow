@@ -59,7 +59,7 @@ const WIN_REASONS = [
 const LOSS_REASONS = THREE_DISTORTIONS.layers.flatMap(layer =>
   layer.categories.map(cat => ({
     id: `${layer.id}/${cat.id}`,
-    label: DISTORTION_REASON_LABELS[`${layer.id}/${cat.id}`]?.split(' — ')[0] || cat.name,
+    label: DISTORTION_REASON_LABELS[`${layer.id}/${cat.id}`]?.split(/\s[—–-]\s/)[0] || cat.name,
     description: cat.subtitle?.replace(/"/g, '') || layer.description,
     layer: layer.id,
   }))
@@ -131,7 +131,7 @@ export default function DealOutcomeModal({
           <h3>{isWin ? 'You closed it! 💪' : 'Capture the Learning'}</h3>
           <p className="outcome-subtitle">
             {isWin
-              ? 'Amazing work! Quick question — what made them say yes?'
+              ? 'Amazing work! Quick question: what made them say yes?'
               : 'Understanding why helps you win more. Quick analysis:'}
           </p>
         </div>

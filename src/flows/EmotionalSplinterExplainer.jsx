@@ -56,7 +56,7 @@ export default function EmotionalSplinterExplainer() {
           <div className="emphasis">
             <strong>Trauma is what happens when that energy gets frozen.</strong>
           </div>
-          <p>Imagine pressing pause on a song halfway through — the emotion never finishes playing.</p>
+          <p>Imagine pressing pause on a song halfway through. The emotion never finishes playing.</p>
           <p>There's two things that cause this:</p>
         </>
       )
@@ -189,21 +189,21 @@ export default function EmotionalSplinterExplainer() {
               <div className="item-icon">👻</div>
               <div>
                 <h4>The Ghost</h4>
-                <p className="item-text">— so we don't risk being seen.</p>
+                <p className="item-text">So we don't risk being seen.</p>
               </div>
             </div>
             <div className="step-item">
               <div className="item-icon">🙇</div>
               <div>
                 <h4>The People Pleaser</h4>
-                <p className="item-text">— so no one gets upset.</p>
+                <p className="item-text">So no one gets upset.</p>
               </div>
             </div>
             <div className="step-item">
               <div className="item-icon">🎮</div>
               <div>
                 <h4>The Controller</h4>
-                <p className="item-text">— so nothing can go wrong.</p>
+                <p className="item-text">So nothing can go wrong.</p>
               </div>
             </div>
             <div className="step-item">

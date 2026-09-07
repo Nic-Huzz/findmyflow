@@ -85,7 +85,7 @@ function formatReflectionFromParts(reflection, user_name) {
 
   let formatted = `Here's what I'm noticing, ${user_name}:\n\n`;
   formatted += `**Your Protective Pattern:**\n\n`;
-  formatted += `You're what I call ${archetype_name} — ${archetype_description}\n\n`;
+  formatted += `You're what I call ${archetype_name}. ${archetype_description}\n\n`;
   formatted += `**Safety Edges:**\n\n${safety_edges_summary}\n\n`;
   formatted += `**The Deeper Fear:**\n\n"${core_fear}"\n\n`;
   formatted += `${fear_interpretation}\n\n`;

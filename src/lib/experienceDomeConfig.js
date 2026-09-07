@@ -822,6 +822,20 @@ export function isCoreNode(nodeId) {
   return CORE_NODE_IDS.has(nodeId)
 }
 
+// Node IDs that are core but hidden on the dome radar (Threat primal excluded)
+const DOME_HIDDEN_IDS = new Set(
+  VIRTUAL_EXPERIENCE_NODES
+    .filter(v => v.primal === 'threat')
+    .map(v => v.id)
+)
+
+/**
+ * Check if a node is visible on the dome radar (core AND not in hidden primals)
+ */
+export function isDomeVisibleNode(nodeId) {
+  return CORE_NODE_IDS.has(nodeId) && !DOME_HIDDEN_IDS.has(nodeId)
+}
+
 /**
  * Get the experience label for a node, falling back to its original label
  */

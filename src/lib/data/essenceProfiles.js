@@ -2,22 +2,22 @@
 export const essenceProfiles = {
   "Radiant Rebel": {
     poetic_line:
-      "You are fire with a heartbeat — designed to disrupt what's false and awaken what's real.",
+      "You are fire with a heartbeat. Designed to disrupt what's false and awaken what's real.",
     energetic_transmission:
-      "You electrify the space. Your energy activates boldness — like truth wants to break free through your presence.",
+      "You electrify the space. Your energy activates boldness, like truth wants to break free through your presence.",
     essence: "Disruptive truth-teller with heart.",
     superpower:
       "You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.",
     north_star:
       "Use rebellion to liberate, not just provoke. Let your why guide your wow.",
     poetic_vision:
-      "What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary?\n\nThe world isn't waiting for your perfection. It's starving for your fire.",
+      "What if your truth became a movement? What if your unapologetic expression wasn't risky, but revolutionary?\n\nThe world isn't waiting for your perfection. It's starving for your fire.",
     vision_in_action:
       "You turn chaos into clarity, sparing revolutions with nothing but your voice.",
   },
   "Playful Creator": {
     poetic_line:
-      "You are joy in motion — color that moves, laughter that builds, a spark dressed in creativity.",
+      "You are joy in motion. Color that moves, laughter that builds, a spark dressed in creativity.",
     energetic_transmission:
       "When you're free, joy crackles through the air. You awaken play, laughter, and lightness just by being.",
     essence: "Joy, innovation, curiosity-led action.",
@@ -26,7 +26,7 @@ export const essenceProfiles = {
     north_star:
       "Channel your joy into containers that scale. Play can be the portal to mastery.",
     poetic_vision:
-      "What if your joy was the funnel? What if your weirdness was the strategy?\n\nYou weren't born to fit into boxes — you were born to make confetti out of them.",
+      "What if your joy was the funnel? What if your weirdness was the strategy?\n\nYou weren't born to fit into boxes. You were born to make confetti out of them.",
     vision_in_action:
       "You turn pressure into play and make innovation feel like recess for the soul.",
   },
@@ -47,9 +47,9 @@ export const essenceProfiles = {
   },
   "Wild Alchemist": {
     poetic_line:
-      "You are permission — uncaged, untamed, undeniable. Your truth liberates others from their own.",
+      "You are permission. Uncaged, untamed, undeniable. Your truth liberates others from their own.",
     energetic_transmission:
-      "You pulse with emotional depth. Chaos feels sacred around you — like it's allowed to become something beautiful.",
+      "You pulse with emotional depth. Chaos feels sacred around you, like it's allowed to become something beautiful.",
     essence: "Liberation, emotion, transformation through truth.",
     superpower:
       "You transmute chaos into meaning. You give pain purpose and help people rebirth themselves.",
@@ -57,26 +57,26 @@ export const essenceProfiles = {
     poetic_vision:
       "What if your edges were the medicine? What if your rawness was the portal?\n\nYou're not here to play it safe. You're here to break the rules that never made sense in the first place.",
     vision_in_action:
-        "Where others flinch from fire, you dance in it — turning pain into art and rupture into truth.",
+        "Where others flinch from fire, you dance in it, turning pain into art and rupture into truth.",
   },
   "Heart Holder": {
     poetic_line:
-      "You are the quiet gravity — the heartbeat that steadies the storm.",
+      "You are the quiet gravity. The heartbeat that steadies the storm.",
     energetic_transmission:
-      "A settling wave. Voices soften, hearts unclench, belonging rises — people can be real again.",
+      "A settling wave. Voices soften, hearts unclench, belonging rises. People can be real again.",
     essence: "Steady presence that calms bodies and keeps the field intact.",
     superpower:
       "You co-regulate rooms. With you, breath slows, shoulders drop, and real work can land.",
     north_star:
       "Hold with warmth and boundaries. Care that preserves dignity, not dependency.",
     poetic_vision:
-      "What if safety wasn't a pause but a power? What if your calm made courage possible — not by smothering the fire, but by giving it a hearth?\n\nYou don't fix people. You help their nervous systems remember how to trust.",
+      "What if safety wasn't a pause but a power? What if your calm made courage possible, not by smothering the fire, but by giving it a hearth?\n\nYou don't fix people. You help their nervous systems remember how to trust.",
     vision_in_action:
       "In tense moments you become the calm center; the room syncs, hard conversations land, and people leave more regulated than they arrived.",
   },
   "Cosmic Connector": {
     poetic_line:
-      "You are the thread between worlds — weaving the mystical into the practical, the unseen into form.",
+      "You are the thread between worlds. Weaving the mystical into the practical, the unseen into form.",
     energetic_transmission:
       "You align chaos into coherence. Ideas land. Emotions make sense. The unseen becomes useful.",
     essence: "Multidimensional vision, integration, cross-world translation.",
@@ -85,22 +85,22 @@ export const essenceProfiles = {
     north_star:
       "Don't dilute your range to fit in. Your synthesis is the spell.",
     poetic_vision:
-      "What if your weirdness was the map? What if your role wasn't to choose a lane — but to *bridge* them?\n\nYou're not too much — you're multidimensional.",
+      "What if your weirdness was the map? What if your role wasn't to choose a lane, but to *bridge* them?\n\nYou're not too much. You're multidimensional.",
     vision_in_action:
       "You take quantum truths and translate them into tools, blueprints, and rituals that land.",
   },
   "Compassionate Leader": {
     poetic_line:
-      "You are a walking hearth — steady, warm, and fiercely kind. When you speak, people remember who they are.",
+      "You are a walking hearth. Steady, warm, and fiercely kind. When you speak, people remember who they are.",
     energetic_transmission:
-      "People rise around you — they feel seen, supported, and called into their power. You don't shout to lead. You hold firm, and others remember their strength.",
+      "People rise around you. They feel seen, supported, and called into their power. You don't shout to lead. You hold firm, and others remember their strength.",
     essence: "Grounded authority, trust-building, embodied leadership.",
     superpower:
       "You hold the center when things shake. You make people feel seen, safe, and ready to rise.",
     north_star:
       "Lead from wholeness, not over-responsibility. Trust others can rise too.",
     poetic_vision:
-      "What if your presence alone created breakthroughs? What if your calm leadership became a lighthouse for those lost in the noise?\n\nYour warmth doesn't make you soft — it makes you safe.",
+      "What if your presence alone created breakthroughs? What if your calm leadership became a lighthouse for those lost in the noise?\n\nYour warmth doesn't make you soft. It makes you safe.",
     vision_in_action:
       "Your grounded presence becomes a gravitational field where others remember their power.",
   },
@@ -108,7 +108,7 @@ export const essenceProfiles = {
     poetic_line:
       "You are the sentence that slices through the noise. The call-out and the call-home. Clarity made human.",
     energetic_transmission:
-      "Around you, everything sharpens. Emotional fog lifts. Your presence calls forth honesty — even the kind that trembles.",
+      "Around you, everything sharpens. Emotional fog lifts. Your presence calls forth honesty, even the kind that trembles.",
     essence: "Clarity, boldness, and no-BS simplicity.",
     superpower:
       "You crack illusions with precision. You speak the sharp truth wrapped in unexpected tenderness.",
@@ -117,7 +117,7 @@ export const essenceProfiles = {
     poetic_vision:
         "What if simplicity was the spell? What if calling it like it is *was* your sacred gift?\n\nYou're not here to sugarcoat. You're here to wake people up.",
     vision_in_action:
-        "You speak what no one else will — and somehow it lands like liberation, not attack.",
+        "You speak what no one else will, and somehow it lands like liberation, not attack.",
   },
 }
 

@@ -104,7 +104,7 @@ function SplinterCheckin({ userId, healingCompassId, previousSplinter, onClose }
                     className={`rating-btn ${needIntensity === n ? 'active' : ''} ${n === 7 ? 'disabled-seven' : ''}`}
                     onClick={() => n !== 7 && setNeedIntensity(n)}
                     disabled={n === 7}
-                    title={n === 7 ? 'Commit — high or low' : undefined}
+                    title={n === 7 ? 'Commit, high or low' : undefined}
                   >
                     {n === 7 ? <s>7</s> : n}
                   </button>

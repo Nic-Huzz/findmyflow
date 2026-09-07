@@ -20,7 +20,7 @@ export default function LeagueGuide() {
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Every week, you race your Ghost — last week's version of you.
+            Every week, you race your Ghost, last week's version of you.
           </p>
           <p>
             We don't do leaderboards here. Everyone's walking their own path at their own pace. The only person worth growing past is who you were yesterday.

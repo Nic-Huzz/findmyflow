@@ -607,9 +607,9 @@ export default function NervousSystemFlow() {
         <p>Your nervous system has a boundary around what feels 'safe'.</p>
         <p>Safe to earn. Safe to be seen. Safe to succeed.</p>
         <p>Anything beyond that boundary? <strong>It pulls you back.</strong></p>
-        <p>Not because you lack capability — but because expansion feels dangerous to your system.</p>
+        <p>Not because you lack capability, but because expansion feels dangerous to your system.</p>
         <p>This is why ambitious people self-sabotage. Not because they're broken. Because their nervous system is protecting them from something.</p>
-        <p className="hint-text">Let's discover where your boundaries are — so you can expand them.</p>
+        <p className="hint-text">Let's discover where your boundaries are, so you can expand them.</p>
       </div>
 
       <button className="primary-button glow-button" onClick={() => setCurrentScreen('q1')}>
@@ -690,7 +690,7 @@ export default function NervousSystemFlow() {
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Question 2 of 4</div>
       <h2 className="ns-hc-question-text">What single deal amount would feel like a breakthrough?</h2>
-      <p className="ns-hc-question-subtext">Not annual income — one sale, one client, one deal</p>
+      <p className="ns-hc-question-subtext">Not annual income. One sale, one client, one deal</p>
 
       <div className="ns-hc-horizontal-options">
         {['$500', '$1,000', '$5,000', '$10,000', '$25,000+'].map(option => (
@@ -751,7 +751,7 @@ export default function NervousSystemFlow() {
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Question 4 of 4</div>
       <h2 className="ns-hc-question-text">Where are you struggling most with your ambition at the moment?</h2>
-      <p className="ns-hc-question-subtext">Be honest — this helps us understand your current edge</p>
+      <p className="ns-hc-question-subtext">Be honest. This helps us understand your current edge</p>
 
       <div className="ns-hc-text-input-container">
         <textarea
@@ -780,14 +780,14 @@ export default function NervousSystemFlow() {
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">The Power of Your Subconscious</h1>
       <div className="ns-hc-welcome-message animated-text">
-        <p>Your <strong>conscious mind</strong> is what you're aware of right now — your thoughts, decisions, what you think you believe.</p>
+        <p>Your <strong>conscious mind</strong> is what you're aware of right now: your thoughts, decisions, what you think you believe.</p>
         <p>But your <strong>subconscious mind</strong> runs 95% of your life. It controls your automatic patterns, emotional reactions, and deeply-held beliefs.</p>
         <p>This is why you can <em>want</em> something consciously (more clients, more visibility, more income) but still find yourself pulling back.</p>
         <p><strong>Your subconscious has veto power.</strong></p>
         <p>If it believes that success = danger, it will sabotage you every time.</p>
         <p style={{ marginTop: 24 }}>Muscle testing (the Sway Test) bypasses your conscious mind and lets us ask your <strong>nervous system</strong> directly:</p>
         <p><em>"What do you actually believe is safe?"</em></p>
-        <p>This is how we find your real edges — not what you think they are, but what your body knows them to be.</p>
+        <p>This is how we find your real edges. Not what you think they are, but what your body knows them to be.</p>
       </div>
 
       <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('calibration')}>
@@ -806,7 +806,7 @@ export default function NervousSystemFlow() {
       <div className="ns-hc-welcome-message" style={{ marginTop: 32 }}>
         <p>The Sway Test is simple but powerful.</p>
         <p><strong>Stand up straight</strong> with your feet hip-width apart. Close your eyes if it helps you tune in.</p>
-        <p>Say out loud: <strong>"Show me a YES."</strong> Notice which way your body sways—forward, back, left, or right.</p>
+        <p>Say out loud: <strong>"Show me a YES."</strong> Notice which way your body sways: forward, back, left, or right.</p>
         <p>Say out loud: <strong>"Show me a NO."</strong> Notice the contrast.</p>
         <p>There's no right direction. Your body has its own language. Let it show you.</p>
         <p style={{ marginTop: 24 }}>If you're skeptical, that's okay. Just try it with curiosity.</p>
@@ -925,7 +925,7 @@ export default function NervousSystemFlow() {
     <div className="ns-hc-container ns-hc-question-container">
       <h1 className="ns-hc-welcome-greeting">Let's Find Your Edge</h1>
       <div className="ns-hc-welcome-message animated-text" style={{ textAlign: 'left' }}>
-        <p>Now let's see where your system feels safe — and where it contracts.</p>
+        <p>Now let's see where your system feels safe, and where it contracts.</p>
         <p>I'm going to give you <strong>5 statements to test</strong> using the sway test.</p>
         <p>Say each one out loud, notice your body's response, and let me know: <strong>YES or NO?</strong></p>
       </div>
@@ -1117,7 +1117,7 @@ export default function NervousSystemFlow() {
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">Safety Contracts</h1>
       <div className="ns-hc-welcome-message animated-text">
-        <p>Your nervous system operates on <strong>safety contracts</strong> — subconscious beliefs designed to protect you.</p>
+        <p>Your nervous system operates on <strong>safety contracts</strong>, subconscious beliefs designed to protect you.</p>
         <p>These contracts feel true because they once <em>were</em> true. Something happened that taught your system to believe them.</p>
         <p>Now we'll test <strong>{safetyContracts.length} contracts</strong> to see which ones are still active in your system.</p>
         <p>For each one, use the sway test and notice: <strong>YES (this fear is active) or NO (not a concern)</strong>.</p>
@@ -1157,7 +1157,7 @@ export default function NervousSystemFlow() {
       <h1 className="ns-hc-welcome-greeting">The Mirror</h1>
       <div className="ns-hc-welcome-message animated-text">
         <p>Now let's reflect back what your nervous system just revealed.</p>
-        <p>This isn't judgment — it's <strong>pattern recognition</strong>.</p>
+        <p>This isn't judgment. It's <strong>pattern recognition</strong>.</p>
         <p>Understanding your protective pattern is the first step to expanding beyond it.</p>
       </div>
 
@@ -1203,7 +1203,7 @@ export default function NervousSystemFlow() {
         <div className="ns-hc-result-box">
           <h3>📊 Your Nervous System Edges:</h3>
           <div style={{ marginTop: 12, paddingLeft: 8 }}>
-            <p>{responses.test1_visibility_safe === 'yes' ? '✅' : '🚫'} <strong style={{ color: '#fbbf24' }}>{responses.visibility_action || 'Visibility action'}</strong> — {responses.test1_visibility_safe === 'yes' ? 'feels safe' : 'triggers contraction'}</p>
+            <p>{responses.test1_visibility_safe === 'yes' ? '✅' : '🚫'} <strong style={{ color: '#fbbf24' }}>{responses.visibility_action || 'Visibility action'}</strong>: {responses.test1_visibility_safe === 'yes' ? 'feels safe' : 'triggers contraction'}</p>
             {responses.earning_edge != null && (
               <p>💰 Charging up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)} per deal</strong></p>
             )}

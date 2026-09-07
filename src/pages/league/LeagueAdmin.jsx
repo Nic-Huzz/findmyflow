@@ -460,7 +460,7 @@ export default function LeagueAdmin() {
 
           {calcResult && (
             <div className="la-card">
-              <h3 className="la-card-title">Results — Week {calcWeek}</h3>
+              <h3 className="la-card-title">Results: Week {calcWeek}</h3>
               {calcResult.map(m => (
                 <div key={m.id} className="la-result-item">
                   <div className="la-result-teams">
@@ -471,7 +471,7 @@ export default function LeagueAdmin() {
                     <strong>{getTeamNameById(m.team_b_id)}</strong>
                   </div>
                   <div className="la-result-points">
-                    {m.team_a_match_points} pts — {m.team_b_match_points} pts
+                    {m.team_a_match_points} pts vs {m.team_b_match_points} pts
                   </div>
                   {m.category_results && (
                     <div className="la-result-categories">

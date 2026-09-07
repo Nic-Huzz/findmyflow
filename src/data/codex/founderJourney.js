@@ -27,17 +27,17 @@ export const FOUNDER_JOURNEY = [
         title: 'The Moment',
         body: `I had done everything right.
 
-Final year of university, I'd landed what I thought was my dream job—an adventure capital firm that merged my two passions: education and business. This was the goal. This was what following the path was supposed to deliver.
+Final year of university, I'd landed what I thought was my dream job, an adventure capital firm that merged my two passions: education and business. This was the goal. This was what following the path was supposed to deliver.
 
 When they offered me the full-time role after graduation, I said yes without hesitation. This was the moment I'd been working toward my whole life.
 
 One month in, something was wrong.
 
-I wasn't happy. I wasn't fulfilled. The joy I'd been promised—the joy that was supposed to come from following the rules, getting good grades, landing the good job—it wasn't there.
+I wasn't happy. I wasn't fulfilled. The joy I'd been promised, the joy that was supposed to come from following the rules, getting good grades, landing the good job, it wasn't there.
 
 And then it hit me. Not like a realization. Like an earthquake.
 
-**Every building of understanding I had about how the world worked—crumbled.**
+**Every building of understanding I had about how the world worked... crumbled.**
 
 I'd trusted the process. School → university → internships → good job → happiness. I'd done each step. And now, standing in the rubble of that broken promise, I had nothing but questions:
 
@@ -63,18 +63,18 @@ The earthquake destroyed my trust in the prescribed path. That destruction was n
 - The feeling that "something is wrong" isn't a flaw to fix. It's wisdom to follow.
 - The buildings that fell were supposed to fall. They were blocking my view.
 
-That month of confusion—of having no idea who I was or what I wanted—was the beginning of everything. The earthquake cleared the ground for what came next.`,
+That month of confusion, of having no idea who I was or what I wanted, was the beginning of everything. The earthquake cleared the ground for what came next.`,
       },
 
       forYou: {
         title: 'For Your Journey',
-        body: `If you've felt the earthquake—if everything you believed has started to shake—you're not broken. You're waking up.
+        body: `If you've felt the earthquake, if everything you believed has started to shake, you're not broken. You're waking up.
 
 The disorientation is real. The questions without answers are uncomfortable. The loss of your old story is a kind of grief.
 
 But here's what I want you to know: **the earthquake is the beginning, not the end.**
 
-On the other side of this destruction is a new foundation. One you build yourself, based on what's actually true for you—not what you were told should be true.
+On the other side of this destruction is a new foundation. One you build yourself, based on what's actually true for you, not what you were told should be true.
 
 You're not in crisis. You're in transformation. The difference is perspective.
 
@@ -115,11 +115,11 @@ And at the end of it all, I found myself in the exact same place I started.
 
 Still confused. Still stuck. Still waiting for the knowledge that would finally click.
 
-I had notebooks full of frameworks. Folders full of worksheets. A brain full of concepts. And nothing—*nothing*—in my external reality had changed.
+I had notebooks full of frameworks. Folders full of worksheets. A brain full of concepts. And nothing, *nothing*, in my external reality had changed.
 
 That's when I realized: **the problem wasn't a lack of knowledge. It was a lack of action.**
 
-All those courses taught me what to do. None of them helped me actually do it. I was using learning as a hiding place—a sophisticated form of procrastination that felt productive but produced nothing.`,
+All those courses taught me what to do. None of them helped me actually do it. I was using learning as a hiding place, a sophisticated form of procrastination that felt productive but produced nothing.`,
       },
 
       lesson: {
@@ -134,7 +134,7 @@ The trap is this: there's always more to learn. The goal post always moves. Read
 
 - Knowledge without action is entertainment, not education.
 - The feeling of "learning" can masquerade as progress while nothing actually changes.
-- At some point, the answer isn't in another course—it's in the thing you already know you need to do but haven't done.
+- At some point, the answer isn't in another course. It's in the thing you already know you need to do but haven't done.
 - Action reveals more than theory ever could. You learn by doing, not by preparing to do.
 
 The moment I stopped learning *about* action and started *taking* action, everything shifted. Three years of courses hadn't moved me an inch. Three months of action moved me further than I'd ever been.`,
@@ -142,7 +142,7 @@ The moment I stopped learning *about* action and started *taking* action, everyt
 
       forYou: {
         title: 'For Your Journey',
-        body: `If you're addicted to learning—if you have shelves of books and folders of courses but still feel stuck—you might be in the Knowledge Trap.
+        body: `If you're addicted to learning, if you have shelves of books and folders of courses but still feel stuck, you might be in the Knowledge Trap.
 
 Ask yourself: **Am I learning to grow, or learning to hide?**
 
@@ -152,7 +152,7 @@ You probably already know enough to take the next step. The knowledge isn't what
 
 Here's what finally worked for me: I stopped asking "what do I need to learn?" and started asking "what am I avoiding by learning?"
 
-The answer to that question led to my next action. And action—not knowledge—is where transformation lives.
+The answer to that question led to my next action. And action, not knowledge, is where transformation lives.
 
 *"You don't need another course. You need to do the thing the last course told you to do."*`,
       },
@@ -181,7 +181,7 @@ The answer to that question led to my next action. And action—not knowledge—
 
 I didn't have a plan. I didn't have a framework. I just knew that whatever I'd been doing wasn't working, and fear seemed to be the common thread holding me back.
 
-The first few weeks were small things—speaking up in meetings, sharing opinions I'd normally swallow. Then they got bigger.
+The first few weeks were small things: speaking up in meetings, sharing opinions I'd normally swallow. Then they got bigger.
 
 **Within 4 weeks:** I was working from Bali.
 
@@ -189,7 +189,7 @@ The first few weeks were small things—speaking up in meetings, sharing opinion
 
 **Within 5 months:** I was funding my life traveling Thailand and Bali, hosting silent discos on beaches.
 
-I hadn't planned any of this. I had no strategy for location freedom or entrepreneurship. I was just following the fear—doing the thing that scared me, week after week, and watching what opened up.
+I hadn't planned any of this. I had no strategy for location freedom or entrepreneurship. I was just following the fear, doing the thing that scared me, week after week, and watching what opened up.
 
 That year of fear challenges compressed five years of growth into twelve months. Every terrifying action expanded what my nervous system felt safe doing. And as my comfort zone grew, my life grew with it.`,
       },
@@ -226,7 +226,7 @@ That's your first challenge. Not because you need to be reckless, but because th
 
 Here's the secret: the anticipated fear is almost always worse than the actual experience. You imagine catastrophe; you get discomfort. The imagination is crueler than reality.
 
-And here's the gift: every time you move through fear and survive, your nervous system updates its map. What was terrifying becomes tolerable. What was tolerable becomes comfortable. What was comfortable becomes boring—and you need a new edge to grow against.
+And here's the gift: every time you move through fear and survive, your nervous system updates its map. What was terrifying becomes tolerable. What was tolerable becomes comfortable. What was comfortable becomes boring, and you need a new edge to grow against.
 
 That's the game. That's the Playground. That's how you expand into who you're meant to become.
 
@@ -253,7 +253,7 @@ That's the game. That's the Playground. That's how you expand into who you're me
         title: 'The Moment',
         body: `Somewhere around week 15 of the fear challenge, something strange happened.
 
-I was scheduled to perform a magic show at an open mic. I'd learned a few tricks specifically for this challenge. Standing backstage, I felt the familiar terror—hands shaking, heart racing, voice in my head screaming "don't do this."
+I was scheduled to perform a magic show at an open mic. I'd learned a few tricks specifically for this challenge. Standing backstage, I felt the familiar terror: hands shaking, heart racing, voice in my head screaming "don't do this."
 
 But this time, there was another voice. Louder.
 
@@ -263,7 +263,7 @@ And suddenly, the fear flipped.
 
 **Not doing the scary thing felt scarier than doing it.**
 
-The pain of breaking my streak—of losing my identity as "someone who shows up despite fear"—was worse than the pain of the fear itself.
+The pain of breaking my streak, of losing my identity as "someone who shows up despite fear", was worse than the pain of the fear itself.
 
 I did the magic show. It was awkward and imperfect. But I walked off stage knowing something had fundamentally shifted. I wasn't just doing scary things anymore. I had *become* someone who does scary things. The action had become identity.`,
       },
@@ -274,16 +274,16 @@ I did the magic show. It was awkward and imperfect. But I walked off stage knowi
 
 Before the flip, I was motivated by external goals: quit my job, travel, build freedom. These were nice, but they were distant. They didn't get me out of bed when fear was screaming.
 
-After the flip, I was motivated by who I had become. Every scary thing wasn't just an action—it was evidence. Proof that I was the kind of person who does hard things. And not doing them threatened that proof.
+After the flip, I was motivated by who I had become. Every scary thing wasn't just an action. It was evidence. Proof that I was the kind of person who does hard things. And not doing them threatened that proof.
 
 **What I learned:**
 
 - Action creates identity. Do the thing enough times and you become someone who does that thing.
 - Identity creates action. Once you ARE someone who does that thing, not doing it feels wrong.
-- The goal isn't just to complete challenges—it's to become someone who challenges themselves.
+- The goal isn't just to complete challenges. It's to become someone who challenges themselves.
 - The streak matters because breaking it breaks the story you're telling yourself about who you are.
 
-This is the magic of the Playground. It's not just about facing fears—it's about building an identity as someone who faces fears. And that identity, once formed, makes the scary path feel like the only path.`,
+This is the magic of the Playground. It's not just about facing fears. It's about building an identity as someone who faces fears. And that identity, once formed, makes the scary path feel like the only path.`,
       },
 
       forYou: {
@@ -292,13 +292,13 @@ This is the magic of the Playground. It's not just about facing fears—it's abo
 
 **How to accelerate the flip:**
 
-1. **Track your actions visibly**. The streak isn't vanity—it's evidence. When you can see "I've done 10 scary things," you start to believe you're someone who does scary things.
+1. **Track your actions visibly**. The streak isn't vanity. It's evidence. When you can see "I've done 10 scary things," you start to believe you're someone who does scary things.
 
 2. **Claim the identity early**. Don't wait until you feel ready. Say "I'm someone who does scary things" before it feels fully true. The claim creates pressure to match.
 
 3. **Make it costly to quit**. Tell people about your challenge. Public commitment raises the stakes of stopping.
 
-4. **Notice the dissonance**. When you feel the flip starting—when NOT doing the scary thing feels worse—pay attention. That's the identity forming.
+4. **Notice the dissonance**. When you feel the flip starting, when NOT doing the scary thing feels worse, pay attention. That's the identity forming.
 
 The goal isn't to be fearless. The goal is to become someone for whom action despite fear is simply "what I do." That identity, once established, carries you through challenges you can't yet imagine.
 
@@ -353,7 +353,7 @@ This is a lie that keeps people stuck in jobs they hate, believing that money re
 **What I learned:**
 
 - The things you would do for free are often exactly the things people will pay for.
-- Your joy doesn't reduce the value you create—it often increases it.
+- Your joy doesn't reduce the value you create. It often increases it.
 - Rejecting payment isn't humility. It's a Protective Voice keeping you small.
 - The Money layer of visibility isn't about greed. It's about claiming that your gifts have worth.
 
@@ -364,7 +364,7 @@ The shift wasn't about becoming money-focused. It was about releasing the false 
         title: 'For Your Journey',
         body: `Do you have trouble charging for what you do? Do you discount your rates, give away your work, or feel uncomfortable when payment is offered?
 
-That's The Ghost or The People Pleaser at the Money layer—telling you that visibility at that level is dangerous. That claiming your worth is arrogant. That money and meaning can't mix.
+That's The Ghost or The People Pleaser at the Money layer, telling you that visibility at that level is dangerous. That claiming your worth is arrogant. That money and meaning can't mix.
 
 **Questions to ask yourself:**
 
@@ -372,7 +372,7 @@ That's The Ghost or The People Pleaser at the Money layer—telling you that vis
 - What belief makes me uncomfortable accepting money for my gifts?
 - Who told me that work should be separate from joy?
 
-The Money shift isn't about becoming mercenary. It's about removing false limits. You deserve to be paid for the value you create, even when—*especially when*—creating that value feels like play.
+The Money shift isn't about becoming mercenary. It's about removing false limits. You deserve to be paid for the value you create, even when, *especially when*, creating that value feels like play.
 
 The first time you accept money for something you love, it changes your entire relationship with work. Not because you become greedy, but because you realize: *this can be my life.*
 
@@ -401,17 +401,17 @@ The first time you accept money for something you love, it changes your entire r
 
 After the earthquake, I spent 18 months in what I can only call **purgatory**: a liminal space where I was no longer the old me, but hadn't yet become the new me.
 
-Around new people—in online courses, at events—I could show up as this emerging version of myself. They didn't know the old Nic. They only saw who I was becoming.
+Around new people, in online courses, at events, I could show up as this emerging version of myself. They didn't know the old Nic. They only saw who I was becoming.
 
 But around old friends and family? I became a disaster.
 
 **I was a bad version of my new self AND a bad imposter of my old self.**
 
-With people who knew the old me, I couldn't be fully authentic—it felt too vulnerable, too different from who they expected. But I also couldn't pretend to be the old me anymore. That person was gone.
+With people who knew the old me, I couldn't be fully authentic. It felt too vulnerable, too different from who they expected. But I also couldn't pretend to be the old me anymore. That person was gone.
 
 So I'd show up as this awkward hybrid: half-authentic, half-performing. Satisfying no one, especially myself.
 
-I started avoiding situations with old connections. It was easier to isolate than to navigate the dissonance. For 18 months, I felt profoundly alone—unable to go back, unable to fully step forward.`,
+I started avoiding situations with old connections. It was easier to isolate than to navigate the dissonance. For 18 months, I felt profoundly alone. Unable to go back, unable to fully step forward.`,
       },
 
       lesson: {
@@ -430,12 +430,12 @@ The middle is uncomfortable. You lose your old identity before the new one is st
 - New communities help. Find people who only know the becoming-you.
 - The fear challenges shortened my purgatory. Action accelerates identity formation.
 
-If I hadn't eventually pushed through—through the fear challenges, through the awkwardness—I might have stayed in purgatory forever. Some people do. They get stuck between who they were and who they could be, unable to commit to either.`,
+If I hadn't eventually pushed through, through the fear challenges, through the awkwardness, I might have stayed in purgatory forever. Some people do. They get stuck between who they were and who they could be, unable to commit to either.`,
       },
 
       forYou: {
         title: 'For Your Journey',
-        body: `If you're in the purgatory right now—if you feel caught between versions of yourself, unable to go back but unsure how to go forward—know this:
+        body: `If you're in the purgatory right now, if you feel caught between versions of yourself, unable to go back but unsure how to go forward, know this:
 
 **It's temporary. And it's necessary.**
 

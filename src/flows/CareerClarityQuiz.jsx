@@ -69,7 +69,7 @@ const CareerClarityQuiz = () => {
       },
       question: 'When you think about growth, which of these feels more energizing to you right now?',
       accomplishUnmet: {
-        seen: "You want to get better at things — real skill development, tangible improvement. But you're not being stretched. You're stagnating, and it's killing you slowly.",
+        seen: "You want to get better at things. Real skill development, tangible improvement. But you're not being stretched. You're stagnating, and it's killing you slowly.",
         jobFix: {
           what: "A role with genuine learning curve and skill development",
           how: ["Ask for stretch assignments in your current role", "Negotiate for training/certification budget", "Propose leading a project outside your comfort zone", "Find a mentor who'll push you"],
@@ -77,25 +77,25 @@ const CareerClarityQuiz = () => {
         },
         ownThingFix: {
           why: "Building your own thing is a masterclass in everything. You'll learn more in 6 months than 5 years in a role that's not stretching you.",
-          unlock: "When you build your own thing, every day is a stretch assignment. Marketing, sales, product, operations — you'll develop faster than any job could offer."
+          unlock: "When you build your own thing, every day is a stretch assignment. Marketing, sales, product, operations. You'll develop faster than any job could offer."
         },
         checklistItem: "Offers genuine skill development and learning opportunities"
       },
       connectUnmet: {
-        seen: "You want growth that goes deeper than skills — the kind that shapes who you are as a person. Training programs feel hollow. You're hungry for transformation, not just improvement.",
+        seen: "You want growth that goes deeper than skills, the kind that shapes who you are as a person. Training programs feel hollow. You're hungry for transformation, not just improvement.",
         jobFix: {
           what: "A role where personal growth is part of the culture",
           how: ["Seek companies with strong coaching/development cultures", "Find a role where you can mentor others (teaching transforms you)", "Look for mission-driven organizations where the work itself grows you", "Consider a role change that challenges your identity, not just your skills"],
           where: "Purpose-driven organizations, coaching/consulting roles, leadership positions, social enterprises, or any role where who you become matters as much as what you produce."
         },
         ownThingFix: {
-          why: "Nothing will grow you as a person faster than building something from nothing. Every fear, every limiting belief, every edge you have — you'll meet them all.",
+          why: "Nothing will grow you as a person faster than building something from nothing. Every fear, every limiting belief, every edge you have. You'll meet them all.",
           unlock: "Entrepreneurship is personal development on hard mode. You won't just build a business; you'll build yourself."
         },
         checklistItem: "Supports personal growth, not just professional development"
       },
-      accomplishMet: "Your mastery needs are being fed. You're learning, improving, getting sharper. This is working — protect it.",
-      connectMet: "Your work is growing you as a person. You're becoming more of who you want to be. This is rare — protect it."
+      accomplishMet: "Your mastery needs are being fed. You're learning, improving, getting sharper. This is working. Protect it.",
+      connectMet: "Your work is growing you as a person. You're becoming more of who you want to be. This is rare. Protect it."
     },
     {
       id: 'freedom',
@@ -108,12 +108,12 @@ const CareerClarityQuiz = () => {
       },
       connect: {
         name: 'Life Integration',
-        description: 'Space for your whole self — relationships, health, interests',
+        description: 'Space for your whole self: relationships, health, interests',
         vibe: 'I want work that leaves room for the rest of my life'
       },
       question: 'When you think about freedom, which matters more to you right now?',
       accomplishUnmet: {
-        seen: "You want control over your work — the ability to decide how things get done. But you're micromanaged, over-processed, drowning in approvals. Your judgment isn't trusted, and it's suffocating.",
+        seen: "You want control over your work, the ability to decide how things get done. But you're micromanaged, over-processed, drowning in approvals. Your judgment isn't trusted, and it's suffocating.",
         jobFix: {
           what: "A role with real decision-making authority and minimal oversight",
           how: ["Have a direct conversation with your manager about autonomy", "Document your wins and use them to negotiate more independence", "Propose a trial period of reduced check-ins", "Look for internal moves to less hierarchical teams"],
@@ -121,25 +121,25 @@ const CareerClarityQuiz = () => {
         },
         ownThingFix: {
           why: "You want to make your own calls. In employment, you'll always be operating within someone else's constraints, needing someone else's approval.",
-          unlock: "When you build your own thing, every decision is yours. No approvals, no bureaucracy, no waiting for permission. Just you and the consequences of your choices — which is exactly what you want."
+          unlock: "When you build your own thing, every decision is yours. No approvals, no bureaucracy, no waiting for permission. Just you and the consequences of your choices. Which is exactly what you want."
         },
         checklistItem: "Provides genuine autonomy and decision-making authority"
       },
       connectUnmet: {
-        seen: "Work has consumed your life. It's not about how you work — it's that work leaves no room for anything else. Relationships, health, interests — they're getting squeezed out, and you're losing yourself.",
+        seen: "Work has consumed your life. It's not about how you work. It's that work leaves no room for anything else. Relationships, health, interests, they're getting squeezed out, and you're losing yourself.",
         jobFix: {
           what: "A role with genuine boundaries between work and life",
-          how: ["Set and communicate clear boundaries (and enforce them)", "Negotiate for flexibility — remote days, adjusted hours", "Identify what's truly required vs. self-imposed overwork", "Have an honest conversation about sustainable workload"],
+          how: ["Set and communicate clear boundaries (and enforce them)", "Negotiate for flexibility: remote days, adjusted hours", "Identify what's truly required vs. self-imposed overwork", "Have an honest conversation about sustainable workload"],
           where: "Companies with genuine work-life balance (check Glassdoor reviews), roles with clear scope, European companies, or industries with less 'always-on' culture."
         },
         ownThingFix: {
           why: "Here's the truth: building your own thing can be even more consuming at first. But the difference is you're designing it. You can build a business that serves your life, not the other way around.",
-          unlock: "Ownership means you set the rules. Want to work 4 days a week? Want summers off? Want to travel while you work? You can design that — but only if you own the thing."
+          unlock: "Ownership means you set the rules. Want to work 4 days a week? Want summers off? Want to travel while you work? You can design that, but only if you own the thing."
         },
         checklistItem: "Respects boundaries and allows for a full life outside work"
       },
-      accomplishMet: "You have the independence you need. You control your work, make your own calls. This is valuable — don't trade it away lightly.",
-      connectMet: "Your work makes room for life. You're not sacrificing relationships, health, or yourself. This balance is rare — protect it."
+      accomplishMet: "You have the independence you need. You control your work, make your own calls. This is valuable. Don't trade it away lightly.",
+      connectMet: "Your work makes room for life. You're not sacrificing relationships, health, or yourself. This balance is rare. Protect it."
     },
     {
       id: 'visibility',
@@ -157,15 +157,15 @@ const CareerClarityQuiz = () => {
       },
       question: 'When you think about being seen at work, which resonates more right now?',
       accomplishUnmet: {
-        seen: "You're doing great work, but it's invisible. Credit goes elsewhere, contributions go unnoticed, your impact isn't recognized. You're not asking for a parade — just acknowledgment that your work matters.",
+        seen: "You're doing great work, but it's invisible. Credit goes elsewhere, contributions go unnoticed, your impact isn't recognized. You're not asking for a parade. Just acknowledgment that your work matters.",
         jobFix: {
           what: "A role where contributions are visible and recognized",
-          how: ["Document and communicate your wins more proactively", "Ask your manager how recognition works — literally ask", "Seek projects with higher visibility", "Build relationships with leadership who can see your work"],
+          how: ["Document and communicate your wins more proactively", "Ask your manager how recognition works. Literally ask", "Seek projects with higher visibility", "Build relationships with leadership who can see your work"],
           where: "Smaller companies where individuals stand out, client-facing roles, companies with strong recognition cultures, or roles with clear attribution."
         },
         ownThingFix: {
-          why: "In your own thing, your work IS the thing. There's no middleman taking credit, no invisibility. If it succeeds, it's because of you — and everyone knows it.",
-          unlock: "Ownership means your name is on the door. Every win is visibly yours. Every client knows who built this. Recognition isn't something you wait for — it's built into the structure."
+          why: "In your own thing, your work IS the thing. There's no middleman taking credit, no invisibility. If it succeeds, it's because of you, and everyone knows it.",
+          unlock: "Ownership means your name is on the door. Every win is visibly yours. Every client knows who built this. Recognition isn't something you wait for. It's built into the structure."
         },
         checklistItem: "Has clear recognition and attribution for contributions"
       },
@@ -173,16 +173,16 @@ const CareerClarityQuiz = () => {
         seen: "You're tired of being seen only as a function. People know your output but not you. You're performing a professional role, wearing a mask, hiding the parts of yourself that don't fit the job description. It's exhausting.",
         jobFix: {
           what: "A culture where you can be your whole self",
-          how: ["Test the waters — share something personal and see how it lands", "Find your people within the org — the authentic ones exist", "Seek out employee groups or communities within the company", "Consider whether it's the culture or your own walls holding you back"],
+          how: ["Test the waters. Share something personal and see how it lands", "Find your people within the org. The authentic ones exist", "Seek out employee groups or communities within the company", "Consider whether it's the culture or your own walls holding you back"],
           where: "Values-driven companies, smaller teams, creative industries, companies with strong cultures of psychological safety, or startups where formality is lower."
         },
         ownThingFix: {
-          why: "When you build your own thing, you ARE the brand. There's no mask because you're not fitting into someone else's culture — you're creating your own.",
-          unlock: "Your business can be an expression of who you actually are. Your values, your personality, your quirks — they become features, not bugs."
+          why: "When you build your own thing, you ARE the brand. There's no mask because you're not fitting into someone else's culture. You're creating your own.",
+          unlock: "Your business can be an expression of who you actually are. Your values, your personality, your quirks. They become features, not bugs."
         },
         checklistItem: "Has a culture where you can show up as your authentic self"
       },
-      accomplishMet: "Your work is seen and valued. You get the recognition you deserve. This matters more than people admit — don't let anyone tell you it's vanity.",
+      accomplishMet: "Your work is seen and valued. You get the recognition you deserve. This matters more than people admit. Don't let anyone tell you it's vanity.",
       connectMet: "You can be yourself here. People know you as a person, not just a role. This belonging is precious."
     },
     {
@@ -191,7 +191,7 @@ const CareerClarityQuiz = () => {
       icon: '🚀',
       accomplish: {
         name: 'Career Advancement',
-        description: 'Clear path forward — promotions, titles, expanding scope',
+        description: 'Clear path forward: promotions, titles, expanding scope',
         vibe: 'I want to know I\'m moving up and going somewhere'
       },
       connect: {
@@ -201,10 +201,10 @@ const CareerClarityQuiz = () => {
       },
       question: 'When you think about progress, which feels more important right now?',
       accomplishUnmet: {
-        seen: "You want to advance — next level, bigger scope, more responsibility — but you're stuck. The path forward is unclear or blocked. You're ready for more, and there's nowhere to go.",
+        seen: "You want to advance. Next level, bigger scope, more responsibility. But you're stuck. The path forward is unclear or blocked. You're ready for more, and there's nowhere to go.",
         jobFix: {
           what: "A role with a clear growth trajectory",
-          how: ["Have a direct conversation: 'What would it take for me to get promoted?'", "Get specific blockers identified and addressed", "Explore lateral moves that open new advancement paths", "Set a timeline — if no progress in X months, reassess"],
+          how: ["Have a direct conversation: 'What would it take for me to get promoted?'", "Get specific blockers identified and addressed", "Explore lateral moves that open new advancement paths", "Set a timeline. If no progress in X months, reassess"],
           where: "Growing companies with headcount expansion, industries with clear career ladders, companies where you can see people getting promoted, or roles that build transferable leverage."
         },
         ownThingFix: {
@@ -214,19 +214,19 @@ const CareerClarityQuiz = () => {
         checklistItem: "Offers a clear path for advancement and growing responsibility"
       },
       connectUnmet: {
-        seen: "Another promotion won't help. You're not hungry for titles — you're hungry for impact. You want to see that your work actually helps real people, changes something, matters. Right now, it feels like you're pushing papers for no one.",
+        seen: "Another promotion won't help. You're not hungry for titles. You're hungry for impact. You want to see that your work actually helps real people, changes something, matters. Right now, it feels like you're pushing papers for no one.",
         jobFix: {
           what: "A role with visible, tangible impact on real people",
-          how: ["Request more customer/user exposure — see who you're serving", "Seek roles closer to the end user or customer", "Ask to join customer success calls or site visits", "Look for projects with measurable human outcomes"],
+          how: ["Request more customer/user exposure. See who you're serving", "Seek roles closer to the end user or customer", "Ask to join customer success calls or site visits", "Look for projects with measurable human outcomes"],
           where: "Customer-facing roles, B2C companies, healthcare, education, social impact, consulting (where you see transformation), or any role where you witness the results of your work."
         },
         ownThingFix: {
-          why: "When you build something of your own, you see the impact directly. Every customer, every thank you, every problem solved — it's your impact, unfiltered.",
-          unlock: "Imagine getting messages from people whose lives you've changed. That's not a fantasy — it's what happens when you build something that serves people directly."
+          why: "When you build something of your own, you see the impact directly. Every customer, every thank you, every problem solved. It's your impact, unfiltered.",
+          unlock: "Imagine getting messages from people whose lives you've changed. That's not a fantasy. It's what happens when you build something that serves people directly."
         },
         checklistItem: "Provides visible, tangible impact on real people"
       },
-      accomplishMet: "Your trajectory is clear. You're moving, growing, advancing. This momentum is fuel — use it well.",
+      accomplishMet: "Your trajectory is clear. You're moving, growing, advancing. This momentum is fuel. Use it well.",
       connectMet: "You can see your impact. Real people benefit from your work. This connection to meaning is what most people are searching for."
     },
     {
@@ -245,32 +245,32 @@ const CareerClarityQuiz = () => {
       },
       question: 'When you think about security at work, which feels more essential right now?',
       accomplishUnmet: {
-        seen: "You're underpaid, or financially stressed, or both. Money isn't everything — but financial instability undermines everything else. You can't think about fulfillment when you're worried about rent.",
+        seen: "You're underpaid, or financially stressed, or both. Money isn't everything, but financial instability undermines everything else. You can't think about fulfillment when you're worried about rent.",
         jobFix: {
           what: "A role with compensation that matches your market value",
-          how: ["Research market rates — know your number", "Prepare a clear case and ask directly", "Consider whether it's base, bonus, equity, or benefits that matter most", "Be willing to move for significant increases"],
+          how: ["Research market rates. Know your number", "Prepare a clear case and ask directly", "Consider whether it's base, bonus, equity, or benefits that matter most", "Be willing to move for significant increases"],
           where: "High-paying industries (tech, finance, consulting), companies in growth mode, roles where your specific skills are scarce, or markets with higher compensation norms."
         },
         ownThingFix: {
-          why: "Employment has a ceiling. Your salary is always limited by what someone else decides you're worth. Ownership has no ceiling — but it also has no floor.",
+          why: "Employment has a ceiling. Your salary is always limited by what someone else decides you're worth. Ownership has no ceiling, but it also has no floor.",
           unlock: "Building your own thing means your income is uncapped. But be honest: do you have runway? If you're financially stressed now, stabilize first, then build."
         },
         checklistItem: "Provides compensation that matches market value and supports your goals"
       },
       connectUnmet: {
-        seen: "The paycheck is fine, but something feels compromised. There's a gap between what your company does and what you believe in. You might be making money, but you're losing something else — your integrity, your pride, your sense of being on the right side.",
+        seen: "The paycheck is fine, but something feels compromised. There's a gap between what your company does and what you believe in. You might be making money, but you're losing something else. Your integrity, your pride, your sense of being on the right side.",
         jobFix: {
           what: "An organization whose values and behavior align with yours",
           how: ["Get honest about what specifically bothers you", "Explore whether change is possible from within", "Research companies known for values alignment", "Consider B-corps, non-profits, or mission-driven organizations"],
           where: "B-corporations, social enterprises, non-profits, companies with strong ethical reputations, or industries that inherently align with your values."
         },
         ownThingFix: {
-          why: "In someone else's company, you're always serving someone else's values — or lack thereof. You can try to influence from within, but you don't control it.",
-          unlock: "When you build your own thing, your values ARE the company's values. Every decision reflects what you believe. There's no compromise because there's no one to compromise with."
+          why: "In someone else's company, you're always serving someone else's values, or lack thereof. You can try to influence from within, but you don't control it.",
+          unlock: "When you build your own thing, your values ARE the company's values. Every decision reflects what you believe. There's no compromise, because there's no one to compromise with."
         },
         checklistItem: "Operates in a way that aligns with your personal values"
       },
-      accomplishMet: "Your financial needs are handled. You're compensated fairly. This stability is a foundation — it lets you focus on other things.",
+      accomplishMet: "Your financial needs are handled. You're compensated fairly. This stability is a foundation. It lets you focus on other things.",
       connectMet: "You believe in what you're doing. Your company's behavior aligns with your values. This integrity is more valuable than people realize."
     },
     {
@@ -289,32 +289,32 @@ const CareerClarityQuiz = () => {
       },
       question: 'When you think about what energizes you at work, which matters more right now?',
       accomplishUnmet: {
-        seen: "You're bored. The problems are too easy, too repetitive, or already solved. Your brain is capable of so much more, and it's atrophying. This isn't laziness — it's a mind that needs to be challenged.",
+        seen: "You're bored. The problems are too easy, too repetitive, or already solved. Your brain is capable of so much more, and it's atrophying. This isn't laziness. It's a mind that needs to be challenged.",
         jobFix: {
           what: "A role with genuinely complex, stimulating problems",
           how: ["Seek out the hardest problems in your current org", "Propose new initiatives that don't exist yet", "Move toward R&D, strategy, or innovation functions", "Consider whether you've actually explored what's available"],
           where: "Early-stage companies (where everything is hard), technical roles with depth, consulting (new problems constantly), or industries undergoing transformation."
         },
         ownThingFix: {
-          why: "Building a business is the ultimate intellectual challenge. Marketing, product, sales, operations, finance — it never gets boring because it never stops demanding everything you have.",
+          why: "Building a business is the ultimate intellectual challenge. Marketing, product, sales, operations, finance. It never gets boring because it never stops demanding everything you have.",
           unlock: "You'll use parts of your brain you didn't know existed. Every day is a new problem. If you're bored in employment, you'll never be bored building your own thing."
         },
         checklistItem: "Offers genuinely complex and intellectually stimulating work"
       },
       connectUnmet: {
-        seen: "The work might be fine, but the people aren't. You're surrounded by colleagues you don't connect with, don't respect, or actively drain you. Who you work with shapes your entire experience — and right now, it's shaping it badly.",
+        seen: "The work might be fine, but the people aren't. You're surrounded by colleagues you don't connect with, don't respect, or actively drain you. Who you work with shapes your entire experience, and right now, it's shaping it badly.",
         jobFix: {
           what: "A team of people who inspire and energize you",
           how: ["Identify who in your current org you DO connect with", "Seek opportunities to work more closely with those people", "Consider whether it's the team or the broader culture", "Interview your potential colleagues, not just the role"],
           where: "Companies known for strong culture, smaller teams, industries that attract people like you, or teams where you've met the people and felt the energy."
         },
         ownThingFix: {
-          why: "When you build your own thing, you choose who you work with. Clients, collaborators, employees — they're all your choice.",
-          unlock: "Imagine only working with people you genuinely like and respect. That's not a fantasy when you own the thing — it's a design decision."
+          why: "When you build your own thing, you choose who you work with. Clients, collaborators, employees. They're all your choice.",
+          unlock: "Imagine only working with people you genuinely like and respect. That's not a fantasy when you own the thing. It's a design decision."
         },
         checklistItem: "Has team members and colleagues who inspire and energize you"
       },
-      accomplishMet: "You're mentally engaged. The work challenges you. This stimulation is a genuine form of fulfillment — don't undervalue it.",
+      accomplishMet: "You're mentally engaged. The work challenges you. This stimulation is a genuine form of fulfillment. Don't undervalue it.",
       connectMet: "You've found your people. The relationships energize you. This human element makes everything else sustainable."
     }
   ];
@@ -609,11 +609,11 @@ const CareerClarityQuiz = () => {
       return {
         headline: "Your Path: Build Your Own Thing",
         subhead: isAccomplishOriented 
-          ? "You want to win — and you want to do it on your own terms"
+          ? "You want to win, and you want to do it on your own terms"
           : isConnectOriented
-          ? "You want meaning and impact — and you need to own it"
-          : "You want freedom and ownership — employment will always feel constraining",
-        seenMessage: `You've probably known this for a while, but maybe didn't trust it. The data is clear: your structural preferences point strongly toward ownership and independence. A job — even a great one — is unlikely to give you what you need. This isn't about being unemployable or difficult. It's about being wired for sovereignty.`,
+          ? "You want meaning and impact, and you need to own it"
+          : "You want freedom and ownership. Employment will always feel constraining",
+        seenMessage: `You've probably known this for a while, but maybe didn't trust it. The data is clear: your structural preferences point strongly toward ownership and independence. A job, even a great one, is unlikely to give you what you need. This isn't about being unemployable or difficult. It's about being wired for sovereignty.`,
         validationPoints: [
           "You trust your own judgment more than external validation",
           "Structure feels like friction, not support",
@@ -633,11 +633,11 @@ const CareerClarityQuiz = () => {
       return {
         headline: "Your Path: Find the Right Job",
         subhead: isAccomplishOriented
-          ? "You want mastery, growth, and recognition — inside a structure that supports you"
+          ? "You want mastery, growth, and recognition, inside a structure that supports you"
           : isConnectOriented
-          ? "You want meaning, connection, and impact — inside an organization that shares your values"
-          : "You want fulfillment — and the right job can absolutely provide it",
-        seenMessage: `You don't need to burn it all down. You don't need to "escape the matrix." You need a job that actually delivers what you value. The good news: that job exists. The challenge is knowing exactly what to look for — and now you do.`,
+          ? "You want meaning, connection, and impact, inside an organization that shares your values"
+          : "You want fulfillment, and the right job can absolutely provide it",
+        seenMessage: `You don't need to burn it all down. You don't need to "escape the matrix." You need a job that actually delivers what you value. The good news: that job exists. The challenge is knowing exactly what to look for, and now you do.`,
         validationPoints: [
           "You appreciate external feedback and recognition systems",
           "Structure helps you focus rather than constraining you",
@@ -646,10 +646,10 @@ const CareerClarityQuiz = () => {
           "You can thrive in a role without needing it to be your total self-expression"
         ],
         clarityMessage: unmetNeeds.length > 0
-          ? `You have ${unmetNeeds.length} unmet need${unmetNeeds.length > 1 ? 's' : ''} right now. These are specific, fixable gaps — not reasons to abandon employment entirely. Here's what your next job needs to have:`
-          : "Your needs are mostly met. Your restlessness might be coming from somewhere else — or you might just need minor adjustments rather than a big change.",
+          ? `You have ${unmetNeeds.length} unmet need${unmetNeeds.length > 1 ? 's' : ''} right now. These are specific, fixable gaps, not reasons to abandon employment entirely. Here's what your next job needs to have:`
+          : "Your needs are mostly met. Your restlessness might be coming from somewhere else, or you might just need minor adjustments rather than a big change.",
         ctaHeadline: "Ready to find roles that fit?",
-        ctaBody: "The Flow Finder helps you identify career opportunities that match your specific needs — based on your skills, the problems you want to solve, and the impact you want to have.",
+        ctaBody: "The Flow Finder helps you identify career opportunities that match your specific needs, based on your skills, the problems you want to solve, and the impact you want to have.",
         ctaButton: "Start Flow Finder",
         ctaLink: "/get-started"
       };

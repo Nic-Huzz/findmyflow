@@ -27,7 +27,7 @@ export const PROTECTIVE_VOICES = {
     signs: [
       'Over-planning and micro-managing',
       'Inability to delegate or trust',
-      'Always being "on" — performing, impressing',
+      'Always being "on", performing, impressing',
       'Rest feels like laziness',
       'Worth tied to output and image'
     ],
@@ -49,7 +49,7 @@ export const PROTECTIVE_VOICES = {
       'Leaving situations before they get intense',
       'Discomfort with any spotlight'
     ],
-    playBlocker: 'Stops you from playing publicly — play must stay private or hidden',
+    playBlocker: 'Stops you from playing publicly. Play must stay private or hidden',
     affirmation: 'Thank you for protecting me from danger. Being seen is safe now.'
   },
 
@@ -67,7 +67,7 @@ export const PROTECTIVE_VOICES = {
       'Inability to launch',
       'One more revision syndrome'
     ],
-    playBlocker: 'Stops you from playing until everything is "perfect" — gas and brake at the same time',
+    playBlocker: 'Stops you from playing until everything is "perfect". Gas and brake at the same time',
     affirmation: 'Thank you for protecting me from shame. I can handle imperfection now.'
   },
 
@@ -85,7 +85,7 @@ export const PROTECTIVE_VOICES = {
       'Saying "I\'m fine" on autopilot',
       'No strong feelings about anything'
     ],
-    playBlocker: 'Play requires presence — Auto-Pilot keeps you checked out',
+    playBlocker: 'Play requires presence. Auto-Pilot keeps you checked out',
     affirmation: 'Thank you for protecting me from overwhelm. I can feel things now.'
   },
 
@@ -103,7 +103,7 @@ export const PROTECTIVE_VOICES = {
       'Fear of disappointing others',
       'Changing yourself to fit in'
     ],
-    playBlocker: 'Stops you from playing YOUR way — always adapting to others',
+    playBlocker: 'Stops you from playing YOUR way, always adapting to others',
     affirmation: 'Thank you for protecting me from rejection. I can be myself now.'
   }
 }

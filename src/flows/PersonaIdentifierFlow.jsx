@@ -689,7 +689,7 @@ export default function PersonaIdentifierFlow() {
         <p className="complete-text">
           {viewingResults
             ? `Here are the ${clusters.length} personas we identified from your journey:`
-            : `Based on your journey, we've identified ${clusters.length} personas—former versions of yourself who need what you've learned:`}
+            : `Based on your journey, we've identified ${clusters.length} personas. Former versions of yourself who need what you've learned:`}
         </p>
 
         {/* Persona Wheel Visualization */}
@@ -779,7 +779,7 @@ export default function PersonaIdentifierFlow() {
 
         <GoDeeper
           title="Want to go deeper?"
-          description="The full Flow Finder starts with Problems Discovery—understanding the problems you solve helps identify who you're meant to serve."
+          description="The full Flow Finder starts with Problems Discovery. Understanding the problems you solve helps identify who you're meant to serve."
           buttonText="Start Problems Discovery →"
           route="/nikigai/problems"
         />

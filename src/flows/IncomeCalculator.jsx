@@ -623,7 +623,7 @@ export default function IncomeCalculator() {
         </div>
 
         <div className="ic-visibility-intro">
-          <p>Your {PRODUCT_TYPES[productType]?.label} requires these visibility layers. Rate each one honestly — this helps identify what might hold you back.</p>
+          <p>Your {PRODUCT_TYPES[productType]?.label} requires these visibility layers. Rate each one honestly. This helps identify what might hold you back.</p>
         </div>
 
         <div className="ic-visibility-layers">

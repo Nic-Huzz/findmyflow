@@ -123,7 +123,7 @@ export default function DailyActions({ userId }) {
               type: 'zombie',
               icon: '💀',
               label: `Kill the zombie: ${deal.contact_name}`,
-              detail: `${days}d with no activity — close or move on`,
+              detail: `${days}d with no activity. Close or move on`,
             })
           })
         }

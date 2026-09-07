@@ -57,7 +57,7 @@ function getNextBestAction(userContext) {
   // Priority 1: Nervous System Map - the core differentiator
   if (!hasCompletedNS) {
     return {
-      message: "You haven't mapped your nervous system yet — that's the unlock that makes everything else work.",
+      message: "You haven't mapped your nervous system yet. That's the unlock that makes everything else work.",
       action: { id: 'ns_map', label: 'Map my nervous system', route: '/nervous-system' }
     }
   }
@@ -514,7 +514,7 @@ function ZarloChat({ onClose, challengeTab = null }) {
 
     addMessage('zarlo', `Hey! I'm Zarlo, your co-founder guide.
 
-I'm not here to give you generic advice. I'm here to help you understand what's actually holding you back — and it's probably not what you think.
+I'm not here to give you generic advice. I'm here to help you understand what's actually holding you back. And it's probably not what you think.
 
 Quick question: What's the biggest thing stopping you from building the life and business you want?`)
 
@@ -650,7 +650,7 @@ Did you do it?`)
 
     addMessage('zarlo', `What's one thing you'll commit to doing before we chat again?
 
-Make it specific enough that you'll know if you did it. The groan zone is good — something that stretches you just a bit.`)
+Make it specific enough that you'll know if you did it. The groan zone is good, something that stretches you just a bit.`)
   }
 
   const handleCommitmentSubmit = async () => {
@@ -839,7 +839,7 @@ Ready to try it?`)
         } else if (option.id === 'understand') {
           addMessage('user', option.label)
           setTimeout(() => {
-            addMessage('zarlo', `Resistance isn't weakness — it's information.
+            addMessage('zarlo', `Resistance isn't weakness. It's information.
 
 Your nervous system is trying to keep you safe. The question is: safe from what?
 
@@ -859,7 +859,7 @@ Want to explore what's behind your resistance?`)
           setTimeout(() => {
             addMessage('zarlo', `Smart. Here's something smaller that still moves the needle:
 
-**Log one groan moment** — just notice when you feel resistance today and write it down.
+**Log one groan moment.** Just notice when you feel resistance today and write it down.
 
 That's it. No action required. Just awareness.`)
             setCurrentOptions([

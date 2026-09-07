@@ -202,7 +202,7 @@ export function generateWarningSigns(responses) {
         'Outgrowing your peer group',
         'Lifestyle changes that come with success'
       ],
-      practice: 'You don\'t lose yourself in growth—you become more yourself. The version of you that\'s afraid of change is just one part, not the whole.'
+      practice: 'You don\'t lose yourself in growth. You become more yourself. The version of you that\'s afraid of change is just one part, not the whole.'
     })
   }
 
@@ -277,13 +277,13 @@ export function generateWarningSigns(responses) {
       id: 'not_enough_contract',
       icon: '🕳️',
       title: 'Core Unworthiness Pattern',
-      description: 'Underneath it all, you believe you\'re "not enough." This drives perfectionism, hiding, and never feeling ready—because being seen risks confirming this fear.',
+      description: 'Underneath it all, you believe you\'re "not enough." This drives perfectionism, hiding, and never feeling ready, because being seen risks confirming this fear.',
       triggers: [
         'Any situation requiring vulnerability',
         'Sharing work before it\'s "perfect"',
         'Intimate or authentic conversations'
       ],
-      practice: 'The belief "I\'m not enough" was installed by someone else\'s limitations. It was never true. You were always enough—the wounding made you forget.'
+      practice: 'The belief "I\'m not enough" was installed by someone else\'s limitations. It was never true. You were always enough. The wounding made you forget.'
     })
   }
 
@@ -295,13 +295,13 @@ export function generateWarningSigns(responses) {
       id: 'unsafe_pursuing',
       icon: '🛑',
       title: 'Ambition Feels Dangerous',
-      description: 'Your body signaled that pursuing your stated ambition doesn\'t feel safe. This creates constant internal friction—wanting something your system is actively blocking.',
+      description: 'Your body signaled that pursuing your stated ambition doesn\'t feel safe. This creates constant internal friction, wanting something your system is actively blocking.',
       triggers: [
         'Taking action toward your goals',
         'Making commitments or investments',
         'When things start working'
       ],
-      practice: 'Start smaller. What version of this ambition DOES feel safe? Build from there. You can\'t outrun your nervous system—you have to bring it along.'
+      practice: 'Start smaller. What version of this ambition DOES feel safe? Build from there. You can\'t outrun your nervous system. You have to bring it along.'
     })
   }
 
@@ -313,7 +313,7 @@ export function generateWarningSigns(responses) {
       id: 'vision_unsafe',
       icon: '⚡',
       title: 'Vision Triggers Alarm',
-      description: 'Part of you experiences your own vision as a threat. This isn\'t weakness—it\'s protection from a system that learned big dreams can lead to big pain.',
+      description: 'Part of you experiences your own vision as a threat. This isn\'t weakness. It\'s protection from a system that learned big dreams can lead to big pain.',
       triggers: [
         'Thinking about your full potential',
         'Setting big goals',

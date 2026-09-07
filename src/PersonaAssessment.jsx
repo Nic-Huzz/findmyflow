@@ -550,7 +550,7 @@ function PersonaAssessment() {
               <p>The problem is it can't talk to us directly,<br />so it uses what I like to call:<br /><strong>'Ease and Resistance'</strong>.</p>
               <p><strong>Ease</strong> = when serendipitous moments emerge that make your ambitions possible.</p>
               <p><strong>Resistance</strong> = when no matter what you do you keep hitting road blocks.</p>
-              <p>As an acronym it spells <span className="ear-highlight">'EAR'</span> — coincidence? 🤔</p>
+              <p>As an acronym it spells <span className="ear-highlight">'EAR'</span>. Coincidence? 🤔</p>
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.STORY_TRANSFORM)}>

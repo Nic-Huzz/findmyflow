@@ -133,7 +133,7 @@ export default function FlowFinderExplainer() {
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            Inspired by Ikigai — redesigned for building a business around your passions.
+            Inspired by Ikigai, redesigned for building a business around your passions.
           </p>
           <p>
             When you find the intersection of skills you love, problems you care about, and people you want to serve...
@@ -274,7 +274,7 @@ export default function FlowFinderExplainer() {
               <span>Connectors</span><span>Achievers</span><span>Explorers</span><span>Visionaries</span>
               <span>Protectors</span><span>Creators</span><span>Nurturers</span><span>Challengers</span>
             </div>
-            <p className="segment-why">Not demographics — <em>motivations</em>. Understanding drives creates deeper connection than age or location ever could.</p>
+            <p className="segment-why">Not demographics, <em>motivations</em>. Understanding drives creates deeper connection than age or location ever could.</p>
             <p><strong>3 Rings</strong> = journey stage: Awakening → Struggling → Ready</p>
           </div>
         </div>

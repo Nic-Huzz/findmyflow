@@ -437,7 +437,7 @@ export default function SelfTestFlow() {
                   {feeling}
                   {voice && layer && (
                     <span style={{ marginLeft: '8px', opacity: 0.7 }}>
-                      — {voice.icon} {voice.label} × {layer.icon} {layer.label}
+                      · {voice.icon} {voice.label} × {layer.icon} {layer.label}
                     </span>
                   )}
                 </p>
@@ -514,7 +514,7 @@ export default function SelfTestFlow() {
             <span className="encouragement-icon">{'🔬'}</span>
             <h2>Go Test It!</h2>
             <p className="encouragement-text">
-              You're going to apply <strong>{skillInfo.name}</strong> to <strong>{problemInfo.name}</strong> — on yourself.
+              You're going to apply <strong>{skillInfo.name}</strong> to <strong>{problemInfo.name}</strong>, on yourself.
             </p>
             <p className="encouragement-sub">
               After you've done it, complete the <strong>Play-list Self-Trial Review</strong> quest to reflect and earn bonus points!

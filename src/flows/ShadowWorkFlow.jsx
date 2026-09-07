@@ -114,19 +114,19 @@ const getScreenIndex = (screen) => {
 
 const getScreenDisplayName = (screen) => {
   const names = {
-    teach_what_are_shadows: 'Step 1 — What Are Shadows?',
-    teach_shadows_and_light: 'Step 2 — Shadows & Light',
-    input_shadow_traits: 'Step 3 — Your Shadow Traits',
-    input_what_scares_you: 'Step 4 — What Scares You?',
-    teach_root_emotions: 'Step 5 — Root Emotions',
-    input_label_shadows: 'Step 6 — Label Your Shadows',
-    teach_protective_archetypes: 'Step 7 — Protective Archetypes',
-    input_map_armour: 'Step 8 — Map Your Armour',
-    teach_heartbreaking_truth: 'Step 9 — The Heartbreaking Truth',
-    input_suppressed_essence: 'Step 10 — Suppressed Essence',
-    teach_origin_story: 'Step 11 — Your Origin Story',
-    input_timeline: 'Step 12 — Timeline',
-    connect_the_dots: 'Step 13 — Connect the Dots',
+    teach_what_are_shadows: 'Step 1: What Are Shadows?',
+    teach_shadows_and_light: 'Step 2: Shadows & Light',
+    input_shadow_traits: 'Step 3: Your Shadow Traits',
+    input_what_scares_you: 'Step 4: What Scares You?',
+    teach_root_emotions: 'Step 5: Root Emotions',
+    input_label_shadows: 'Step 6: Label Your Shadows',
+    teach_protective_archetypes: 'Step 7: Protective Archetypes',
+    input_map_armour: 'Step 8: Map Your Armour',
+    teach_heartbreaking_truth: 'Step 9: The Heartbreaking Truth',
+    input_suppressed_essence: 'Step 10: Suppressed Essence',
+    teach_origin_story: 'Step 11: Your Origin Story',
+    input_timeline: 'Step 12: Timeline',
+    connect_the_dots: 'Step 13: Connect the Dots',
   }
   return names[screen] || screen
 }
@@ -493,7 +493,7 @@ export default function ShadowWorkFlow() {
             <p><strong>This flow takes about 15-20 minutes</strong></p>
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>14 steps to uncover the parts of yourself you've been hiding, trace them to their origin, and bring them into the light.</p>
             <p>Find a quiet space where you can be honest with yourself.</p>
-            <p><strong>This is deep self-work — be honest, not perfect.</strong></p>
+            <p><strong>This is deep self-work. Be honest, not perfect.</strong></p>
           </div>
 
           <button className="primary-button glow-button" onClick={() => setCurrentScreen('teach_what_are_shadows')}>
@@ -542,7 +542,7 @@ export default function ShadowWorkFlow() {
       <div className="ns-hc-intro-kicker">
         <p>Fun fact about shadows?</p>
         <p><strong>They can't survive in the light.</strong></p>
-        <p>Throughout this flow, I'll invite you to bring yours into the light — by writing them down, you're already beginning.</p>
+        <p>Throughout this flow, I'll invite you to bring yours into the light. By writing them down, you're already beginning.</p>
       </div>
 
       <div className="ns-hc-sticky-nav">
@@ -559,7 +559,7 @@ export default function ShadowWorkFlow() {
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Step 3 of 14</div>
       <h2 className="ns-hc-question-text">Your Shadow Traits</h2>
-      <p className="ns-hc-question-subtext">Write down up to 5 things you suppress about yourself — interests, desires, thoughts, traits.</p>
+      <p className="ns-hc-question-subtext">Write down up to 5 things you suppress about yourself: interests, desires, thoughts, traits.</p>
 
       <div className="sw-shadow-list">
         {shadows.map((shadow, i) => (
@@ -833,7 +833,7 @@ export default function ShadowWorkFlow() {
 
       <div className="ns-hc-intro-kicker">
         <p>Sometimes <strong>authentic</strong> parts of ourselves become a shadow too.</p>
-        <p>Think about yourself as a kid — things you used to love to do.</p>
+        <p>Think about yourself as a kid. Things you used to love to do.</p>
         <p>Now imagine getting teased, made fun of, or rejected for those things.</p>
         <p>How would that feel?</p>
         <p>Horrible. Shameful. Embarrassing.</p>
@@ -1017,7 +1017,7 @@ export default function ShadowWorkFlow() {
         <p>Your shadows exist because parts of you were made to feel unaccepted.</p>
         <p><strong>All shadows are actually authentic parts of you.</strong></p>
         <p>Now that you've brought them into the light, the healing has already begun.</p>
-        <p>You can come back each week to explore different shadows — building a deeper understanding of yourself over time.</p>
+        <p>You can come back each week to explore different shadows, building a deeper understanding of yourself over time.</p>
       </div>
 
       <FlowFeedback flowType="shadow_work" userId={user?.id} />

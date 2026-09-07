@@ -86,7 +86,7 @@ function OnboardingView({ founderProfile, provisionSol }) {
             <a href="https://console.anthropic.com/account/keys" target="_blank" rel="noopener noreferrer" className="external-link">
               console.anthropic.com
             </a>
-            {' '}— typically $5-20/mo based on usage.
+            {' '}, typically $5-20/mo based on usage.
           </p>
           <input
             type="password"
@@ -206,7 +206,7 @@ function ProvisioningView({ refresh }) {
         <p className="prov-status" key={msgIndex}>{PROVISION_MESSAGES[msgIndex]}</p>
         {elapsed >= 10 && elapsed < 120 && <p className="prov-hint">This usually takes about 30 seconds</p>}
         {elapsed >= 120 && (
-          <p className="prov-hint">Taking longer than expected. Check your Telegram — Sol may already be live.</p>
+          <p className="prov-hint">Taking longer than expected. Check your Telegram. Sol may already be live.</p>
         )}
         {elapsed >= 45 && (
           <button className="btn-gold" onClick={refresh} style={{ maxWidth: '240px' }}>
@@ -365,7 +365,7 @@ function TerminateModal({ manageSol, onClose }) {
         headers: ghHeaders,
         body: JSON.stringify({
           name: repoName,
-          description: 'Sol AI Co-Founder backup — exported from Find My Flow',
+          description: 'Sol AI Co-Founder backup, exported from Find My Flow',
           private: true,
           auto_init: true,
         }),
@@ -418,7 +418,7 @@ function TerminateModal({ manageSol, onClose }) {
             method: 'PUT',
             headers: ghHeaders,
             body: JSON.stringify({
-              message: `Sol backup — ${now}`,
+              message: `Sol backup, ${now}`,
               content: btoa(unescape(encodeURIComponent(file.content))),
               ...(sha ? { sha } : {}),
             }),
@@ -449,8 +449,8 @@ function TerminateModal({ manageSol, onClose }) {
               Shut Down Sol?
             </h2>
             <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 20px', lineHeight: 1.5 }}>
-              This will permanently delete Sol's server. Your CRM data in Find My Flow is safe —
-              only Sol's personality and config will be lost unless you back up.
+              This will permanently delete Sol's server. Your CRM data in Find My Flow is safe.
+              Only Sol's personality and config will be lost unless you back up.
             </p>
             <button className="btn-gold" onClick={() => setStep('github')} style={{ marginBottom: '10px' }}>
               Save to GitHub First
@@ -481,7 +481,7 @@ function TerminateModal({ manageSol, onClose }) {
                 <a href="https://github.com/settings/tokens/new?scopes=repo&description=Sol+Backup" target="_blank" rel="noopener noreferrer" className="external-link">
                   github.com/settings/tokens
                 </a>
-                {' '}— needs "repo" scope.
+                {' '} (needs "repo" scope).
               </p>
               <input
                 type="password"

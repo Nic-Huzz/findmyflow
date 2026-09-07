@@ -271,7 +271,7 @@ function LearnTab({ highlight }) {
                 </div>
                 {layer.categories.map(cat => (
                   <div key={cat.id} className="sp-category">
-                    <div className="sp-category-title">{cat.name} — {cat.subtitle}</div>
+                    <div className="sp-category-title">{cat.name}: {cat.subtitle}</div>
                     {cat.strategies.map(strategy => (
                       <div key={strategy.id} className="sp-strategy">
                         <div className="sp-strategy-header">

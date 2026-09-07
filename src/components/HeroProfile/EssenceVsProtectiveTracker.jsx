@@ -39,7 +39,7 @@ function NsArchetypeCard({ nervousSystemArchetype }) {
       {isIncomplete && (
         <div className="ns-upgrade-nudge" style={{ cursor: 'default' }}>
           <span className="ns-upgrade-nudge-text">
-            A deeper nervous system profile — including your primary limiting belief and rewiring plan — is on the way.
+            A deeper nervous system profile, including your primary limiting belief and rewiring plan, is on the way.
           </span>
           <span className="coming-soon-tag">Coming soon</span>
         </div>

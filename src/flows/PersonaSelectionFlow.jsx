@@ -46,9 +46,9 @@ const PROTECTIVE_VOICES = [
 // Contextual essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {
   const messages = {
-    'perfectionist_screen': 'Your Perfectionist wants the idea to be polished before sharing. But validation IS the polish — real feedback shapes better ideas than isolation ever could.',
-    'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show unfinished work. But asking for feedback isn\'t weakness — it\'s wisdom.',
-    'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But conversations aren\'t performances — they\'re discoveries.',
+    'perfectionist_screen': 'Your Perfectionist wants the idea to be polished before sharing. But validation IS the polish. Real feedback shapes better ideas than isolation ever could.',
+    'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show unfinished work. But asking for feedback isn\'t weakness. It\'s wisdom.',
+    'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But conversations aren\'t performances. They\'re discoveries.',
     'people_pleaser_screen': 'Your People Pleaser worries about being "annoying." But asking for feedback is an invitation, not a burden.',
     'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But most people feel honored to be asked for their perspective.',
     'people_pleaser_live': 'Your People Pleaser fears disappointing someone in the moment. But genuine curiosity is always welcome.',
@@ -58,7 +58,7 @@ const getEssenceMessage = (voice, layer) => {
     'auto_pilot_screen': 'Your Auto-Pilot says it doesn\'t matter. But your curiosity deserves to be followed.',
     'auto_pilot_vulnerable': 'Your Auto-Pilot has stopped caring. But that numbness is protection, not truth.',
     'auto_pilot_live': 'Your Auto-Pilot can\'t find the energy. But one conversation can reignite something.',
-    'ghost_screen': 'Your Ghost wants to stay invisible. But your idea deserves to be seen — and so do you.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your idea deserves to be seen, and so do you.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.'
   }
@@ -453,7 +453,7 @@ function PersonaSelectionFlow() {
             <h1 className="welcome-greeting">Define Your Ideal Customer</h1>
             <div className="welcome-message">
               <p><strong>Before you build your offer, you need to know exactly who it's for.</strong></p>
-              <p>The best offers aren't built for "everyone"—they're laser-focused on a specific person with a specific problem at a specific moment in time.</p>
+              <p>The best offers aren't built for "everyone." They're laser-focused on a specific person with a specific problem at a specific moment in time.</p>
               <p>You'll select 1-3 persona + problem combinations from your Flow Finder clusters, then answer 7 questions for each to build a complete customer profile.</p>
             </div>
           </div>
@@ -652,7 +652,7 @@ function PersonaSelectionFlow() {
           <div className="question-block">
             <div className="question-label">Question 1 of 7</div>
             <h3 className="question-text">How much pain is your target customer experiencing?</h3>
-            <p className="question-subtext">Rate out of 10 — don't choose 7</p>
+            <p className="question-subtext">Rate out of 10, don't choose 7</p>
             <div className="horizontal-options compact">
               {[1, 2, 3, 4, 5, 6, 8, 9, 10].map(num => (
                 <button

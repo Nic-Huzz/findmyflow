@@ -307,7 +307,7 @@ function ValueLadderView({ stats, customers, userLadder, completeness, navigate 
           </div>
           <span className="completeness-text">
             Value Ladder {completeness}% defined
-            {completeness < 50 && ' — Complete Offer Stack Builder to see your offers here'}
+            {completeness < 50 && '. Complete Offer Stack Builder to see your offers here'}
           </span>
         </div>
       )}

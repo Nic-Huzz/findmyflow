@@ -494,7 +494,7 @@ export default function LetsPlayFlow() {
               maxWidth: '400px',
               textAlign: 'center'
             }}>
-              <p style={{ margin: 0 }}><strong>First time?</strong> Try a <Link to="/self-test" style={{ color: '#ffdd27', fontWeight: 600 }}>Self-Trial</Link> first — prove your skill works on yourself before helping someone else.</p>
+              <p style={{ margin: 0 }}><strong>First time?</strong> Try a <Link to="/self-test" style={{ color: '#ffdd27', fontWeight: 600 }}>Self-Trial</Link> first. Prove your skill works on yourself before helping someone else.</p>
             </div>
           )}
           <button className="primary-button" onClick={() => setStep(1)}>

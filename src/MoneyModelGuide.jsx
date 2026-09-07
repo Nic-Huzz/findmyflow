@@ -78,7 +78,7 @@ function MoneyModelGuide() {
             <div className="insight-number">🏆</div>
             <div className="insight-body">
               <h3>$100M Money Model</h3>
-              <p>Makes more profit from <span className="highlight">one customer</span> than it costs to get and service <span className="highlight">many customers</span> — removing cash as a limiter to scaling.</p>
+              <p>Makes more profit from <span className="highlight">one customer</span> than it costs to get and service <span className="highlight">many customers</span>, removing cash as a limiter to scaling.</p>
             </div>
           </div>
           <p className="highlight-box">
@@ -171,7 +171,7 @@ function MoneyModelGuide() {
             <div className="check-item">✓ Simple scales, fancy fails</div>
             <div className="check-item">✓ Affiliate products can fill gaps</div>
             <div className="check-item">✓ Turn attraction offers into continuity with auto-renewal</div>
-            <div className="check-item">✓ Mix and match — e.g., use an attraction offer as an upsell</div>
+            <div className="check-item">✓ Mix and match. For example, use an attraction offer as an upsell</div>
           </div>
           <p className="highlight-box">
             The possibilities are <strong>endless</strong>!<br />
@@ -192,7 +192,7 @@ function MoneyModelGuide() {
             "The knowledge in these bullets brought me more free and profitable customers than I've known what to do with. If executed, they will do the same for you."
           </p>
           <p style={{ fontSize: '13px', fontStyle: 'italic', opacity: 0.7, textAlign: 'center' }}>
-            — Alex Hormozi, $100M Leads
+            – Alex Hormozi, $100M Leads
           </p>
           <p className="slide-intro" style={{ marginTop: '20px' }}>
             Set audacious goals. Keep improving. Learn from failure. Repeat.

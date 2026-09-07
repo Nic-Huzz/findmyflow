@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
-import { isCoreNode } from '../lib/experienceDomeConfig'
+import { isDomeVisibleNode } from '../lib/experienceDomeConfig'
 import DomeRadar from './DomeRadar'
 import DirectionSection from './direction/DirectionSection'
 import './DiscoverTab.css'
@@ -71,7 +71,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       ;(domeRes.data || []).forEach(r => {
         if (r.ns_state) ratings[r.node_id] = r.ns_state
         checked[r.node_id] = true
-        if (isCoreNode(r.node_id)) coreCount++
+        if (isDomeVisibleNode(r.node_id)) coreCount++
       })
       setDomeRatings(ratings)
       setDomeChecked(checked)

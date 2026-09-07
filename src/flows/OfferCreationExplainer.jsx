@@ -61,7 +61,7 @@ export default function OfferCreationExplainer() {
       content: (
         <div className="slide-content">
           <p className="slide-intro">
-            You've got your product suite — attraction, upsell, downsell, continuity. The building blocks are in place.
+            You've got your product suite: attraction, upsell, downsell, continuity. The building blocks are in place.
           </p>
           <p>
             Now it's time to turn them into an offer so good that people feel stupid saying no.
@@ -84,7 +84,7 @@ export default function OfferCreationExplainer() {
             The Grand Slam formula adds four layers on top of your core product: bonuses that increase the value, a guarantee that removes the risk, scarcity that creates urgency, and a name that sticks.
           </p>
           <p className="highlight-box">
-            <strong>When all four come together, your offer stops competing on price — and starts competing on value.</strong>
+            <strong>When all four come together, your offer stops competing on price and starts competing on value.</strong>
           </p>
         </div>
       )
@@ -113,7 +113,7 @@ export default function OfferCreationExplainer() {
               <div className="step-icon">{"\u{1F9F2}"}</div>
               <div className="step-info">
                 <h4>Lead Magnet Selector</h4>
-                <p>Design your lead magnet in detail — format, delivery, and content outline.</p>
+                <p>Design your lead magnet in detail: format, delivery, and content outline.</p>
               </div>
             </div>
           </div>

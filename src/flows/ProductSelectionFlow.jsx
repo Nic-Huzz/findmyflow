@@ -221,7 +221,7 @@ const VALUE_QUESTIONS = [
   {
     id: 'perceived_likelihood',
     question: 'How can you prove it works?',
-    subtext: 'Select all that apply — the more proof, the higher the perceived likelihood of success',
+    subtext: 'Select all that apply. The more proof, the higher the perceived likelihood of success.',
     multiSelect: true,
     options: [
       { value: 'case_studies', label: 'Case Studies', description: 'Detailed success stories with numbers', score: 10 },
@@ -1195,7 +1195,7 @@ function ProductSelectionFlow() {
                 : 'How does this solve their problem?'}
             </h2>
             <p className="question-subtext">
-              Explain the approach or mechanism — what makes this solution work for them?
+              Explain the approach or mechanism. What makes this solution work for them?
             </p>
 
             <textarea

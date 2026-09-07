@@ -41,7 +41,7 @@ const personaProfiles = {
     },
     detailed: {
       description:
-        "You've discovered your calling—now it's time to bring it to life. Validate your idea, create your offer, test it with real customers, and launch.",
+        "You've discovered your calling. Now it's time to bring it to life. Validate your idea, create your offer, test it with real customers, and launch.",
       nextSteps: "Start your $100M Offer Creation flow to build an irresistible offer.",
       image: "/images/personas/vibe-riser.png"
     }
@@ -63,7 +63,7 @@ const personaProfiles = {
     },
     detailed: {
       description:
-        "You've proven your offer works—now it's time to multiply your impact. Design a full money model, create multiple offer types, and build a scalable system.",
+        "You've proven your offer works. Now it's time to multiply your impact. Design a full money model, create multiple offer types, and build a scalable system.",
       nextSteps: "Start your $100M Money Model flow to build a scalable business.",
       image: "/images/personas/movement-maker.png"
     }
@@ -83,7 +83,7 @@ const personaProfiles = {
     summary: "You're connected but wanting to live more in alignment with your essence.",
     detailed: {
       description:
-        "You've discovered your calling—now it's time to bring it to life. Validate your idea, create your offer, test it with real customers, and launch.",
+        "You've discovered your calling. Now it's time to bring it to life. Validate your idea, create your offer, test it with real customers, and launch.",
       nextSteps: "Dive deeper with the Healing Compass flow and begin your 7-day challenge.",
       image: "/images/personas/vibe-riser.png"
     }
@@ -92,7 +92,7 @@ const personaProfiles = {
     summary: "You're living in alignment and ready to create movement in the world.",
     detailed: {
       description:
-        "You've proven your offer works—now it's time to multiply your impact. Design a full money model, create multiple offer types, and build a scalable system.",
+        "You've proven your offer works. Now it's time to multiply your impact. Design a full money model, create multiple offer types, and build a scalable system.",
       nextSteps: "Share your journey and help others discover their archetypes.",
       image: "/images/personas/movement-maker.png"
     }
