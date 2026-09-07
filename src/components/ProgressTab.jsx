@@ -39,8 +39,6 @@ export default function ProgressTab({ userId }) {
   const [heroStage, setHeroStage] = useState(0)
   const [matrixData, setMatrixData] = useState(null)
   const [dimensionCounts, setDimensionCounts] = useState({})
-  const [totalCourage, setTotalCourage] = useState(0)
-  const [totalRP, setTotalRP] = useState(0)
   const [lifeFuel, setLifeFuel] = useState(null)
   const [lifeFuelBaseline, setLifeFuelBaseline] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -56,16 +54,9 @@ export default function ProgressTab({ userId }) {
         .select('id, expansion_dimensions', { count: 'exact' })
         .eq('user_id', userId)
         .eq('status', 'completed'),
-      supabase.from('user_lifetime_scores')
-        .select('lifetime_total_score')
-        .eq('user_id', userId)
-        .is('project_id', null)
-        .maybeSingle(),
-    ]).then(([stageRes, courageRes, rpRes]) => {
+    ]).then(([stageRes, courageRes]) => {
       if (!mounted) return
       setHeroStage(stageRes.data?.current_journey_level || 0)
-      setTotalCourage(courageRes.count || 0)
-      setTotalRP(rpRes.data?.lifetime_total_score || 0)
 
       // Quiz baseline for Life Fuel diamond (fallback when no courage data)
       const quizData = stageRes.data?.life_fuel_quiz
@@ -160,18 +151,6 @@ export default function ProgressTab({ userId }) {
             {stageInfo.route && <span className="pt-hero-next-arrow">Go ›</span>}
           </div>
         )}
-      </div>
-
-      {/* Stats row */}
-      <div className="pt-stats-row">
-        <div className="pt-stat">
-          <div className="pt-stat-num">{totalCourage}</div>
-          <div className="pt-stat-label">Courage</div>
-        </div>
-        <div className="pt-stat">
-          <div className="pt-stat-num">{totalRP.toLocaleString()}</div>
-          <div className="pt-stat-label">RP</div>
-        </div>
       </div>
 
       {/* Zone Matrix — X/Y graph */}
