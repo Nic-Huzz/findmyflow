@@ -24,10 +24,9 @@ function buildExperienceLines(domeProfile: any): string {
       }
       if (item.vectors?.length) {
         const vectorLabels: Record<string, string> = {
-          do_it: 'wants to DO this as their career',
-          facilitate_it: 'wants to FACILITATE this (run the experience, others participate)',
+          do_it: 'wants to DO this personally (they are the performer, practitioner, or creator)',
+          facilitate_it: 'wants to ORGANISE this (they put on the event, hire practitioners, manage it)',
           build_around: 'wants to BUILD around it (platform, brand, space, content)',
-          guide_it: 'wants to FACILITATE this',
         }
         const nonHobby = item.vectors.filter((v: string) => v !== 'hobby')
         if (nonHobby.length) {
@@ -146,10 +145,10 @@ YOUR TASK: Suggest 5-7 exciting project ideas this person could start pursuing. 
 RULES:
 1. ONLY use the selected experiences listed above. Never reference activities not in the data.
 2. RESPECT THE CAREER VECTOR. This is non-negotiable:
-   - DO = they perform the activity professionally. Suggest projects where THEY do the thing.
-   - FACILITATE = they run the experience, others participate. Suggest projects where they host, organise, or lead.
+   - DO = they ARE the practitioner, performer, or creator. They do the thing with their own hands/voice/body.
+   - ORGANISE = they put on the event, manage logistics, hire practitioners. They don't perform, they produce.
    - BUILD = they create platforms, brands, spaces, or content around it.
-   - NEVER cross vectors. A DO person doesn't want to facilitate. A FACILITATE person doesn't want to perform.
+   - NEVER cross vectors. A DO person doesn't want to organise. An ORGANISE person doesn't want to perform.
 3. If specific formats are listed (e.g. "specifically: silent disco, morning dance"), reference those formats in the project name, not the generic experience.
 4. Each project should combine 1-3 selected experiences. Some projects can draw from just one experience if that experience is specific enough.
 5. The essence archetype shapes HOW they'd approach it (their energy/style), not WHAT they do.

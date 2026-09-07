@@ -1077,8 +1077,8 @@ export const CAREER_VECTORS = [
   },
   {
     id: 'facilitate_it',
-    label: 'Facilitating the experience',
-    subtitle: 'I run it, others participate',
+    label: 'Organising the experience',
+    subtitle: 'I put it on. I manage the event, others deliver or participate.',
   },
   {
     id: 'build_around',
