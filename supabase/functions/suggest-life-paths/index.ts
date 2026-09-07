@@ -85,8 +85,8 @@ serve(async (req) => {
 
     // ── MODE: CLUSTER (4+ selected projects → 2-3 paths with projects) ──
     if (mode === 'cluster') {
-      if (!selectedProjects?.length || selectedProjects.length < 4) {
-        throw new Error('Cluster requires 4+ selected projects')
+      if (!selectedProjects?.length || selectedProjects.length < 2) {
+        throw new Error('Cluster requires 2+ selected projects')
       }
 
       const experienceData = buildExperienceLines(domeProfile)
@@ -111,7 +111,7 @@ Step 2: Group projects by domain. Each domain becomes one life path. Projects wi
 Step 3: Name each life path with a clear, simple label that describes the direction.
 
 RULES:
-- Output 2-3 life paths. Each path contains 1+ projects from the selected list.
+- Output 1-3 life paths. Each path contains 1+ projects from the selected list. If all projects belong to the same domain, output 1 path.
 - Every selected project must appear in exactly one path. Don't drop any.
 - Path names should be broad enough to contain their projects but specific enough to be meaningful. "Dance Events" not "Experiences."
 - Keep path descriptions to 1 sentence: the direction this path represents.

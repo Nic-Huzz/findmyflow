@@ -153,27 +153,20 @@ export default function ChooseQuestsFlow() {
   // ── Get active (non-removed) projects ──
   const activeProjects = projects.filter((_, i) => !removedProjects.has(i))
 
-  // ── Proceed from projects: 3 or fewer → direct to paths, 4+ → cluster ──
+  // ── Proceed from projects: 1 → direct path, 2+ → cluster via AI ──
   const proceedFromProjects = useCallback(async () => {
     if (activeProjects.length === 0) return
 
-    if (activeProjects.length <= 3) {
-      // Each project becomes its own path — go to review, then save
-      const directPaths = activeProjects.map(p => ({
-        name: p.name,
-        description: p.description,
-        draws_from: p.draws_from,
-        projects: [p],
-      }))
+    if (activeProjects.length === 1) {
+      // Single project becomes its own path — skip clustering
+      const directPaths = [{ name: activeProjects[0].name, description: activeProjects[0].description, draws_from: activeProjects[0].draws_from, projects: [activeProjects[0]] }]
       setPaths(directPaths)
-      const allSelected = new Set()
-      directPaths.forEach((_, i) => allSelected.add(i))
-      setSelectedPaths(allSelected)
+      setSelectedPaths(new Set([0]))
       goTo(STEPS.PATHS_REVIEW)
       return
     }
 
-    // 4+ projects: cluster into paths
+    // 2+ projects: cluster into paths via AI
     setClusterLoading(true)
     setClusterError(null)
     goTo(STEPS.CLUSTERING)
@@ -623,7 +616,7 @@ export default function ChooseQuestsFlow() {
 
           <div className="cqf-fixed">
             <button className="cqf-cta cqf-cta-gold" disabled={activeCount === 0} onClick={proceedFromProjects}>
-              {activeCount === 0 ? 'Keep at least 1 →' : activeCount <= 3 ? `Continue with ${activeCount} →` : `Group ${activeCount} into paths →`}
+              {activeCount === 0 ? 'Keep at least 1 →' : activeCount === 1 ? 'Continue →' : `Group ${activeCount} into paths →`}
             </button>
             <button className="cqf-cta cqf-cta-secondary" onClick={() => { setProjects([]); setRemovedProjects(new Set()); goTo(STEPS.SELECT) }}>← Change experiences</button>
           </div>
@@ -667,7 +660,14 @@ export default function ChooseQuestsFlow() {
         const next = prev.map(p => ({ ...p, projects: [...(p.projects || [])] }))
         const [project] = next[fromPathIdx].projects.splice(projectIdx, 1)
         next[toPathIdx].projects.push(project)
-        return next
+        // Remove empty paths and reindex selectedPaths
+        const filtered = next.filter(p => p.projects.length > 0)
+        if (filtered.length < next.length) {
+          const newSelected = new Set()
+          filtered.forEach((_, i) => newSelected.add(i))
+          setSelectedPaths(newSelected)
+        }
+        return filtered
       })
       setMovePopover(null)
     }
