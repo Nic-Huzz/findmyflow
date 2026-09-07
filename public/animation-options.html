@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation Options — Choose Your Style</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+<style>
+  :root {
+    --purple: #5e17eb;
+    --gold: #E9A23B;
+    --green: #22c55e;
+    --red: #ef4444;
+    --bg: #f5f5f0;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text);
+    max-width: 480px; margin: 0 auto; padding: 20px 16px 100px;
+  }
+  h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--purple); margin: 40px 0 8px; font-weight: 700; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .conf { font-size: 12px; color: var(--red); font-weight: 700; margin-bottom: 12px; }
+  .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .card {
+    background: white; border-radius: 16px; padding: 20px;
+    margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .option-label {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 6px; margin-bottom: 10px;
+  }
+  .option-label.a { background: rgba(94,23,235,0.08); color: var(--purple); }
+  .option-label.b { background: rgba(233,162,59,0.08); color: #92400e; }
+  .option-label.c { background: rgba(34,197,94,0.08); color: #166534; }
+  button.play {
+    display: block; width: 100%; padding: 11px; border: none; border-radius: 10px;
+    background: var(--purple); color: white; font-size: 13px; font-weight: 700;
+    cursor: pointer; margin-top: 10px; transition: transform 0.15s ease;
+  }
+  button.play:active { transform: scale(0.97); }
+  button.play.gold { background: var(--gold); }
+  button.play.grad { background: linear-gradient(135deg, var(--purple), var(--gold)); }
+  .divider { height: 1px; background: rgba(0,0,0,0.08); margin: 36px 0; }
+  .demo-zone { min-height: 80px; position: relative; padding: 12px 0; }
+
+  /* ── Easing Race ── */
+  .race-track { height: 36px; background: rgba(0,0,0,0.03); border-radius: 8px; margin-bottom: 6px; position: relative; overflow: hidden; }
+  .race-ball { width: 28px; height: 28px; border-radius: 50%; position: absolute; top: 4px; left: 4px; }
+  .race-ball.go { left: calc(100% - 32px); }
+
+  /* Option A: cut — just show the bars instead */
+  .bar-track { height: 14px; background: rgba(0,0,0,0.04); border-radius: 7px; overflow: hidden; margin-bottom: 8px; }
+  .bar-fill { height: 100%; border-radius: 7px; width: 0; transition: width 0.6s ease-out; background: linear-gradient(90deg, var(--purple), var(--gold)); }
+  .bar-fill.go { width: 72%; }
+  .bar-fill.ease-in-go { width: 72%; transition: width 0.6s ease-in; }
+
+  /* Option B: modals */
+  .modal-demo { width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; }
+  .mini-modal { width: 120px; padding: 16px; background: white; border-radius: 12px; text-align: center; font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.12); transform: scale(0); opacity: 0; }
+  .mini-modal.spring-open { animation: springModal 0.3s var(--spring) forwards; }
+  .mini-modal.linear-open { animation: linearModal 0.3s linear forwards; }
+  @keyframes springModal { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes linearModal { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* Option C: dome vertices */
+  .vertex-track { height: 36px; position: relative; background: rgba(0,0,0,0.03); border-radius: 8px; margin-bottom: 6px; }
+  .vertex-dot { width: 12px; height: 12px; border-radius: 50%; position: absolute; top: 12px; left: 12px; }
+  .vertex-dot.expand { transition: left 0.8s ease-out; }
+  .vertex-dot.expand.go { left: calc(100% - 24px); }
+
+  /* ── Score counter ── */
+  .score-big { font-size: 48px; font-weight: 800; text-align: center; font-variant-numeric: tabular-nums; }
+
+  /* ── Colour sequence ── */
+  .seq-row { display: flex; gap: 12px; justify-content: center; align-items: center; margin: 16px 0; }
+  .seq-item { text-align: center; }
+  .seq-dot { width: 40px; height: 40px; border-radius: 50%; opacity: 0; transform: scale(0.5); transition: all 0.4s ease-out; }
+  .seq-dot.show { opacity: 1; transform: scale(1); }
+  .seq-label { font-size: 10px; color: var(--muted); margin-top: 4px; opacity: 0; transition: opacity 0.3s ease; }
+  .seq-label.show { opacity: 1; }
+  .seq-arrow { font-size: 18px; color: var(--muted); opacity: 0; transition: opacity 0.3s ease; }
+  .seq-arrow.show { opacity: 1; }
+
+  /* Option A: mini dome shapes */
+  .mini-dome-wrap { width: 50px; height: 50px; opacity: 0; transform: scale(0.5); transition: all 0.5s ease-out; }
+  .mini-dome-wrap.show { opacity: 1; transform: scale(1); }
+
+  /* Option B: progress bar sequence */
+  .seq-bar-track { height: 20px; background: rgba(0,0,0,0.04); border-radius: 10px; overflow: hidden; margin: 8px 0; }
+  .seq-bar-purple { height: 100%; width: 0; background: var(--purple); border-radius: 10px; transition: width 0.5s ease-out; display: inline-block; float: left; }
+  .seq-bar-gold { height: 100%; width: 0; background: var(--gold); transition: width 0.5s ease-out 0.5s; display: inline-block; float: left; }
+  .seq-check { display: inline-block; font-size: 20px; opacity: 0; transform: scale(0); transition: all 0.3s var(--spring); margin-left: 8px; vertical-align: middle; }
+  .seq-check.show { opacity: 1; transform: scale(1); }
+
+  /* ── Celebration ── */
+  .celeb-zone { text-align: center; padding: 20px 0; min-height: 120px; position: relative; }
+  .float-pt { position: absolute; font-weight: 800; pointer-events: none; opacity: 0; }
+  .float-pt.go { animation: floatUp 1.5s ease-out forwards; }
+  @keyframes floatUp { 0% { opacity:1; transform: translateY(0) scale(1); } 100% { opacity:0; transform: translateY(-60px) scale(0.8); } }
+
+  /* ── Choreography radar ── */
+  .radar-wrap { width: 180px; height: 180px; margin: 0 auto 12px; position: relative; }
+  .radar-svg { width: 100%; height: 100%; }
+  .radar-current { fill: rgba(94,23,235,0.12); stroke: var(--purple); stroke-width: 2; transform-origin: center; transform: scale(0); opacity: 0; }
+  .radar-dream { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 4; transform-origin: center; transform: scale(0); opacity: 0; }
+  .radar-current.anim { animation: radarGrow 0.8s ease-out forwards; }
+  .radar-dream.anim { animation: radarDreamGrow 0.8s ease-out forwards; }
+  @keyframes radarGrow { from { transform: scale(0.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes radarDreamGrow { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1.2); opacity: 1; } }
+  .gap-label { font-size: 11px; color: var(--muted); opacity: 0; transform: translateY(6px); transition: all 0.4s ease; text-align: center; margin-top: 4px; }
+  .gap-label.show { opacity: 1; transform: translateY(0); }
+  .gap-label strong { color: var(--gold); }
+
+  /* ── Courage choreography ── */
+  .courage-mock { background: rgba(94,23,235,0.03); border-radius: 12px; padding: 16px; margin-bottom: 8px; opacity: 0; transform: translateY(8px); transition: all 0.4s ease; }
+  .courage-mock.show { opacity: 1; transform: translateY(0); }
+  .courage-mock .mock-label { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+  .courage-mock .mock-content { font-size: 14px; font-weight: 600; }
+
+  .ns-pills { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+  .ns-pill { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(0,0,0,0.04); }
+  .ns-pill.active-gold { background: rgba(233,162,59,0.12); border: 2px solid var(--gold); }
+</style>
+</head>
+<body>
+
+<h1>Pick Your Style</h1>
+<p class="sub">Tap each option. Pick A, B, or C per section. Tell me your letters.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>1. Easing Race (currently 60%)</h2>
+<h3>Cut, Replace with Modals, or Dome Vertices?</h3>
+<p class="conf">Issue: Abstract balls racing teaches nothing emotionally</p>
+
+<div class="card">
+  <span class="option-label a">Option A — Cut it, keep bars only</span>
+  <p class="desc">The easing bars already teach ease-out vs ease-in. Don't need two demos for the same lesson.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div>
+      <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px">EASE-OUT</div>
+      <div class="bar-track"><div id="barA1" class="bar-fill"></div></div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px">EASE-IN</div>
+      <div class="bar-track"><div id="barA2" class="bar-fill" style="transition-timing-function:ease-in"></div></div>
+    </div>
+  </div>
+  <button class="play" onclick="document.getElementById('barA1').classList.add('go');document.getElementById('barA2').classList.add('go');setTimeout(()=>{document.getElementById('barA1').classList.remove('go');document.getElementById('barA2').classList.remove('go')},1500)">Play bars</button>
+</div>
+
+<div class="card">
+  <span class="option-label b">Option B — Two modals: spring vs linear</span>
+  <p class="desc">Shows the easing through actual UI. You feel the spring overshoot on the left.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div>
+      <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:4px;text-align:center">SPRING</div>
+      <div class="modal-demo" style="background:rgba(0,0,0,0.02);border-radius:12px">
+        <div id="modalB1" class="mini-modal">Level Up!</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:4px;text-align:center">LINEAR</div>
+      <div class="modal-demo" style="background:rgba(0,0,0,0.02);border-radius:12px">
+        <div id="modalB2" class="mini-modal">Level Up!</div>
+      </div>
+    </div>
+  </div>
+  <button class="play" onclick="replayModals()">Pop both modals</button>
+</div>
+
+<div class="card">
+  <span class="option-label c">Option C — Dome vertices expanding along spokes</span>
+  <p class="desc">The easing IS the product metaphor. Dots expand outward from centre like dome vertices.</p>
+  <div class="vertex-track">
+    <div id="vdot1" class="vertex-dot expand" style="background:var(--green);top:12px">
+    </div>
+    <div style="font-size:10px;position:absolute;right:8px;top:13px;color:var(--green)">ease-out</div>
+  </div>
+  <div class="vertex-track">
+    <div id="vdot2" class="vertex-dot" style="background:var(--gold);top:12px;transition:left 0.8s var(--spring)">
+    </div>
+    <div style="font-size:10px;position:absolute;right:8px;top:13px;color:var(--gold)">spring</div>
+  </div>
+  <div class="vertex-track">
+    <div id="vdot3" class="vertex-dot" style="background:var(--muted);top:12px;transition:left 0.8s linear">
+    </div>
+    <div style="font-size:10px;position:absolute;right:8px;top:13px;color:var(--muted)">linear</div>
+  </div>
+  <button class="play" onclick="replayVertices()">Expand vertices</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>2. Score Counter (currently 85%)</h2>
+<h3>What number to count to?</h3>
+<p class="conf">Issue: "560" means nothing without context</p>
+
+<div class="card">
+  <span class="option-label a">Option A — RP total</span>
+  <p class="desc">The number users actually see. "Rise Points" is the currency.</p>
+  <div id="scoreA" class="score-big" style="color:var(--purple)">0</div>
+  <div style="text-align:center;font-size:12px;color:var(--muted)">Rise Points</div>
+  <button class="play" onclick="countTo(1250,'scoreA')">Count to 1,250 RP</button>
+</div>
+
+<div class="card">
+  <span class="option-label b">Option B — Dome experiences</span>
+  <p class="desc">Ties to Phase 1 discovery. "How many experiences have you rated?"</p>
+  <div id="scoreB" class="score-big" style="color:var(--gold)">0</div>
+  <div style="text-align:center;font-size:12px;color:var(--muted)">experiences rated</div>
+  <button class="play" onclick="countTo(42,'scoreB')">Count to 42</button>
+</div>
+
+<div class="card">
+  <span class="option-label c">Option C — Keep 560, label it</span>
+  <p class="desc">Meaningful to you as the builder. Octalysis = the gamification health metric.</p>
+  <div id="scoreC" class="score-big" style="color:var(--purple)">0</div>
+  <div style="text-align:center;font-size:12px;color:var(--muted)">Octalysis Score</div>
+  <button class="play" onclick="countTo(560,'scoreC')">Count to 560</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>3. Colour Sequencing (currently 80%)</h2>
+<h3>Dots, Real UI, or Progress Bar?</h3>
+<p class="conf">Issue: Abstract dots don't feel like the app</p>
+
+<div class="card">
+  <span class="option-label a">Option A — Mini dome shapes</span>
+  <p class="desc">Purple dome outline, then gold edge ring, then green checkmark. The actual UI elements.</p>
+  <div class="seq-row">
+    <div class="seq-item">
+      <div id="domeSeq1" class="mini-dome-wrap">
+        <svg viewBox="0 0 50 50" width="50" height="50">
+          <polygon points="25,5 45,20 42,42 8,42 5,20" fill="rgba(94,23,235,0.15)" stroke="var(--purple)" stroke-width="2"/>
+        </svg>
+      </div>
+      <div id="domeSeqL1" class="seq-label">Your dome</div>
+    </div>
+    <div id="domeArr1" class="seq-arrow">&rarr;</div>
+    <div class="seq-item">
+      <div id="domeSeq2" class="mini-dome-wrap">
+        <svg viewBox="0 0 50 50" width="50" height="50">
+          <polygon points="25,2 48,18 46,46 4,46 2,18" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="4 3"/>
+        </svg>
+      </div>
+      <div id="domeSeqL2" class="seq-label">Your edge</div>
+    </div>
+    <div id="domeArr2" class="seq-arrow">&rarr;</div>
+    <div class="seq-item">
+      <div id="domeSeq3" class="mini-dome-wrap" style="display:flex;align-items:center;justify-content:center">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:800">&#10003;</div>
+      </div>
+      <div id="domeSeqL3" class="seq-label">Complete</div>
+    </div>
+  </div>
+  <button class="play" onclick="replayDomeSeq()">Show sequence</button>
+</div>
+
+<div class="card">
+  <span class="option-label b">Option B — Progress bar that fills in stages</span>
+  <p class="desc">Purple fills first (where you are), gold fills the rest (growth), green check at end.</p>
+  <div style="display:flex;align-items:center;gap:8px;margin:12px 0">
+    <div class="seq-bar-track" style="flex:1">
+      <div id="seqBarP" class="seq-bar-purple"></div>
+      <div id="seqBarG" class="seq-bar-gold"></div>
+    </div>
+    <span id="seqBarCheck" class="seq-check">&#10003;</span>
+  </div>
+  <button class="play gold" onclick="replayBarSeq()">Fill the bar</button>
+</div>
+
+<div class="card">
+  <span class="option-label c">Option C — Keep dots, add app labels</span>
+  <p class="desc">Same circles but with clear labels. Simple, readable.</p>
+  <div class="seq-row">
+    <div class="seq-item">
+      <div id="dotC1" class="seq-dot" style="background:var(--purple)"></div>
+      <div id="dotCL1" class="seq-label">Where you are</div>
+    </div>
+    <div id="dotCA1" class="seq-arrow">&rarr;</div>
+    <div class="seq-item">
+      <div id="dotC2" class="seq-dot" style="background:var(--gold)"></div>
+      <div id="dotCL2" class="seq-label">Where you're growing</div>
+    </div>
+    <div id="dotCA2" class="seq-arrow">&rarr;</div>
+    <div class="seq-item">
+      <div id="dotC3" class="seq-dot" style="background:var(--green)"></div>
+      <div id="dotCL3" class="seq-label">Done</div>
+    </div>
+  </div>
+  <button class="play" onclick="replayDotSeq()">Show sequence</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>4. Celebration Tiers (currently 55%)</h2>
+<h3>Now with real confetti</h3>
+<p class="conf">Issue: Without confetti, major and epic felt identical</p>
+
+<div class="card">
+  <span class="option-label a">Option A — Full confetti differentiation</span>
+  <p class="desc">Each tier feels meaningfully different. Tap all four in order.</p>
+  <div class="celeb-zone" id="celebZone">
+    <div id="celebText" style="font-size:14px;color:var(--muted)">Tap a tier</div>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="play" style="flex:1;min-width:0;font-size:11px;background:var(--muted)" onclick="fireTier('micro')">Micro</button>
+    <button class="play" style="flex:1;min-width:0;font-size:11px" onclick="fireTier('standard')">Standard</button>
+    <button class="play gold" style="flex:1;min-width:0;font-size:11px" onclick="fireTier('major')">Major</button>
+    <button class="play grad" style="flex:1;min-width:0;font-size:11px" onclick="fireTier('epic')">Epic</button>
+  </div>
+</div>
+
+<div class="card">
+  <span class="option-label b">Option B — Same + haptic labels</span>
+  <p class="desc">Shows what haptic fires with each tier (can't play haptics in HTML).</p>
+  <div class="celeb-zone" id="celebZone2">
+    <div id="celebText2" style="font-size:14px;color:var(--muted)">Tap a tier</div>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="play" style="flex:1;min-width:0;font-size:11px;background:var(--muted)" onclick="fireTier2('micro')">Micro</button>
+    <button class="play" style="flex:1;min-width:0;font-size:11px" onclick="fireTier2('standard')">Standard</button>
+    <button class="play gold" style="flex:1;min-width:0;font-size:11px" onclick="fireTier2('major')">Major</button>
+    <button class="play grad" style="flex:1;min-width:0;font-size:11px" onclick="fireTier2('epic')">Epic</button>
+  </div>
+  <div id="hapticLabel" style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px;min-height:16px"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>5. Choreography: Radar (currently 70%)</h2>
+<h3>Cards or Actual Radar?</h3>
+<p class="conf">Issue: Reading about a radar isn't feeling a radar</p>
+
+<div class="card">
+  <span class="option-label a">Option A — Inline SVG radar with 4-beat sequence</span>
+  <p class="desc">The actual reveal: purple dome grows, gold dream expands past it, gap labels arrive, CTA appears.</p>
+  <div class="radar-wrap">
+    <svg class="radar-svg" viewBox="0 0 180 180">
+      <!-- 8 spoke lines -->
+      <g stroke="rgba(0,0,0,0.06)" stroke-width="1">
+        <line x1="90" y1="90" x2="90" y2="15"/>
+        <line x1="90" y1="90" x2="143" y2="37"/>
+        <line x1="90" y1="90" x2="165" y2="90"/>
+        <line x1="90" y1="90" x2="143" y2="143"/>
+        <line x1="90" y1="90" x2="90" y2="165"/>
+        <line x1="90" y1="90" x2="37" y2="143"/>
+        <line x1="90" y1="90" x2="15" y2="90"/>
+        <line x1="90" y1="90" x2="37" y2="37"/>
+      </g>
+      <!-- Current dome (purple) -->
+      <polygon id="radarCurrent" class="radar-current" points="90,45 120,55 135,90 120,125 90,130 60,125 45,90 60,55"/>
+      <!-- Dream dome (gold) -->
+      <polygon id="radarDream" class="radar-dream" points="90,20 155,35 165,90 155,150 90,165 25,150 15,90 25,35"/>
+    </svg>
+  </div>
+  <div id="gapLabel1" class="gap-label">People: <strong>50 → 500</strong></div>
+  <div id="gapLabel2" class="gap-label">Money: <strong>hobby → full-time income</strong></div>
+  <div id="radarCTA" class="gap-label" style="margin-top:12px">
+    <button class="play grad" style="width:auto;display:inline-block;padding:8px 24px;margin:0" disabled>Want help closing this gap?</button>
+  </div>
+  <button class="play" onclick="replayRadar()" style="margin-top:16px">Play full reveal</button>
+</div>
+
+<div class="card">
+  <span class="option-label b">Option B — Radar + explanation cards in sync</span>
+  <p class="desc">Same radar animation above, with beat labels appearing alongside explaining what each step does.</p>
+  <div class="radar-wrap" style="height:120px;width:120px">
+    <svg class="radar-svg" viewBox="0 0 180 180">
+      <g stroke="rgba(0,0,0,0.06)" stroke-width="1">
+        <line x1="90" y1="90" x2="90" y2="15"/><line x1="90" y1="90" x2="143" y2="37"/>
+        <line x1="90" y1="90" x2="165" y2="90"/><line x1="90" y1="90" x2="143" y2="143"/>
+        <line x1="90" y1="90" x2="90" y2="165"/><line x1="90" y1="90" x2="37" y2="143"/>
+        <line x1="90" y1="90" x2="15" y2="90"/><line x1="90" y1="90" x2="37" y2="37"/>
+      </g>
+      <polygon id="radarCurrent2" class="radar-current" points="90,45 120,55 135,90 120,125 90,130 60,125 45,90 60,55"/>
+      <polygon id="radarDream2" class="radar-dream" points="90,20 155,35 165,90 155,150 90,165 25,150 15,90 25,35"/>
+    </svg>
+  </div>
+  <div id="beatCard1" class="courage-mock" style="border-left:3px solid var(--purple)"><div class="mock-label">Beat 1 (0s)</div><div class="mock-content">Purple dome: where you are</div></div>
+  <div id="beatCard2" class="courage-mock" style="border-left:3px solid var(--gold)"><div class="mock-label">Beat 2 (1.3s)</div><div class="mock-content">Gold ring: where you dream</div></div>
+  <div id="beatCard3" class="courage-mock" style="border-left:3px solid var(--muted)"><div class="mock-label">Beat 3 (2.1s)</div><div class="mock-content">Gap labels name what you felt</div></div>
+  <div id="beatCard4" class="courage-mock" style="border-left:3px solid var(--green)"><div class="mock-label">Beat 4 (2.8s)</div><div class="mock-content">CTA: do something with the feeling</div></div>
+  <button class="play" onclick="replayRadar2()">Play with annotations</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>6. Choreography: Courage (currently 80%)</h2>
+<h3>Keep cards or upgrade to mini-modal?</h3>
+<p class="conf">Issue: Cards explain the sequence but don't simulate the flow</p>
+
+<div class="card">
+  <span class="option-label a">Option A — Keep cards (80% is good enough)</span>
+  <p class="desc">The emotional pacing message comes through. "Celebrate AFTER reflection" is clear.</p>
+  <div style="font-size:13px;color:var(--muted);text-align:center;padding:20px 0">Same as current — cards with beat labels. Already at 80%.</div>
+</div>
+
+<div class="card">
+  <span class="option-label b">Option B — Mini completion flow mockup</span>
+  <p class="desc">Simulates the actual post-courage flow. NS picker, gap number, identity input, celebration.</p>
+
+  <div id="courMock1" class="courage-mock" style="border-left:3px solid var(--purple)">
+    <div class="mock-label">How did that feel?</div>
+    <div class="ns-pills">
+      <span class="ns-pill" style="color:var(--gold)">&#10022; Vibe Rise</span>
+      <span class="ns-pill">&#9675; Fun</span>
+      <span class="ns-pill">&#9671; Stressful</span>
+    </div>
+  </div>
+
+  <div id="courMock2" class="courage-mock" style="border-left:3px solid var(--gold)">
+    <div class="mock-label">Was it as scary as you expected?</div>
+    <div class="mock-content" style="display:flex;gap:12px;align-items:baseline;margin-top:8px">
+      <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--purple)">4</div><div style="font-size:10px;color:var(--muted)">predicted</div></div>
+      <div style="font-size:18px;color:var(--muted)">&rarr;</div>
+      <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--green)">2</div><div style="font-size:10px;color:var(--muted)">experienced</div></div>
+      <div style="font-size:12px;color:var(--green);font-weight:700;margin-left:auto">Easier than you thought</div>
+    </div>
+  </div>
+
+  <div id="courMock3" class="courage-mock" style="border-left:3px solid var(--purple)">
+    <div class="mock-label">Who are you now?</div>
+    <div class="mock-content" style="color:var(--purple);font-style:italic">"I'm someone who speaks up even when my voice shakes"</div>
+  </div>
+
+  <div id="courMock4" class="courage-mock" style="border-left:3px solid var(--green);text-align:center">
+    <div style="font-size:28px">&#127881;</div>
+    <div class="mock-content" style="color:var(--gold)">+10 RP</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px">Courage challenge complete</div>
+  </div>
+
+  <button class="play" onclick="replayCourage()">Play the flow</button>
+</div>
+
+<script>
+  // ── Modals ──
+  function replayModals() {
+    const m1 = document.getElementById('modalB1')
+    const m2 = document.getElementById('modalB2')
+    m1.classList.remove('spring-open'); m2.classList.remove('linear-open')
+    m1.style.transform = 'scale(0)'; m1.style.opacity = '0'
+    m2.style.transform = 'scale(0)'; m2.style.opacity = '0'
+    void m1.offsetWidth
+    m1.classList.add('spring-open')
+    m2.classList.add('linear-open')
+  }
+
+  // ── Vertices ──
+  function replayVertices() {
+    ['vdot1','vdot2','vdot3'].forEach(id => {
+      const el = document.getElementById(id)
+      el.style.left = '12px'
+      el.classList.remove('go')
+    })
+    void document.getElementById('vdot1').offsetWidth
+    requestAnimationFrame(() => {
+      ['vdot1','vdot2','vdot3'].forEach(id => {
+        const el = document.getElementById(id)
+        el.style.left = 'calc(100% - 24px)'
+      })
+    })
+  }
+
+  // ── Score counter ──
+  function countTo(target, elId) {
+    const el = document.getElementById(elId)
+    const duration = 800; const start = performance.now()
+    el.textContent = '0'
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1)
+      const e = 1 - Math.pow(1 - p, 3)
+      el.textContent = Math.round(e * target).toLocaleString()
+      if (p < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }
+
+  // ── Dome sequence ──
+  function replayDomeSeq() {
+    const items = [['domeSeq1','domeSeqL1'],['domeSeq2','domeSeqL2'],['domeSeq3','domeSeqL3']]
+    const arrows = ['domeArr1','domeArr2']
+    items.forEach(([a,b]) => { document.getElementById(a).classList.remove('show'); document.getElementById(b).classList.remove('show') })
+    arrows.forEach(a => document.getElementById(a).classList.remove('show'))
+    setTimeout(() => { document.getElementById('domeSeq1').classList.add('show'); document.getElementById('domeSeqL1').classList.add('show') }, 200)
+    setTimeout(() => document.getElementById('domeArr1').classList.add('show'), 700)
+    setTimeout(() => { document.getElementById('domeSeq2').classList.add('show'); document.getElementById('domeSeqL2').classList.add('show') }, 900)
+    setTimeout(() => document.getElementById('domeArr2').classList.add('show'), 1400)
+    setTimeout(() => { document.getElementById('domeSeq3').classList.add('show'); document.getElementById('domeSeqL3').classList.add('show') }, 1600)
+  }
+
+  // ── Bar sequence ──
+  function replayBarSeq() {
+    const p = document.getElementById('seqBarP')
+    const g = document.getElementById('seqBarG')
+    const c = document.getElementById('seqBarCheck')
+    p.style.width = '0'; g.style.width = '0'; c.classList.remove('show')
+    void p.offsetWidth
+    p.style.width = '55%'
+    setTimeout(() => { g.style.width = '30%' }, 600)
+    setTimeout(() => c.classList.add('show'), 1400)
+  }
+
+  // ── Dot sequence ──
+  function replayDotSeq() {
+    const ids = [['dotC1','dotCL1'],['dotC2','dotCL2'],['dotC3','dotCL3']]
+    const arrows = ['dotCA1','dotCA2']
+    ids.forEach(([a,b]) => { document.getElementById(a).classList.remove('show'); document.getElementById(b).classList.remove('show') })
+    arrows.forEach(a => document.getElementById(a).classList.remove('show'))
+    setTimeout(() => { document.getElementById('dotC1').classList.add('show'); document.getElementById('dotCL1').classList.add('show') }, 200)
+    setTimeout(() => document.getElementById('dotCA1').classList.add('show'), 700)
+    setTimeout(() => { document.getElementById('dotC2').classList.add('show'); document.getElementById('dotCL2').classList.add('show') }, 900)
+    setTimeout(() => document.getElementById('dotCA2').classList.add('show'), 1400)
+    setTimeout(() => { document.getElementById('dotC3').classList.add('show'); document.getElementById('dotCL3').classList.add('show') }, 1600)
+  }
+
+  // ── Celebrations with real confetti ──
+  function addFloat(zone, text, x, y, color, size) {
+    const pt = document.createElement('div')
+    pt.className = 'float-pt'
+    pt.textContent = text
+    pt.style.left = x + '%'; pt.style.top = y + '%'
+    pt.style.color = color; pt.style.fontSize = size + 'px'
+    zone.appendChild(pt)
+    requestAnimationFrame(() => pt.classList.add('go'))
+    setTimeout(() => pt.remove(), 1600)
+  }
+
+  function fireTier(tier) {
+    const zone = document.getElementById('celebZone')
+    const text = document.getElementById('celebText')
+
+    if (tier === 'micro') {
+      text.textContent = '+2 RP'
+      text.style.cssText = 'font-size:14px;color:var(--muted)'
+      addFloat(zone, '+2', 50, 20, '#6b7280', 16)
+    } else if (tier === 'standard') {
+      text.textContent = '+7 RP'
+      text.style.cssText = 'font-size:18px;color:var(--purple);font-weight:700'
+      addFloat(zone, '+7', 45, 15, '#5e17eb', 20)
+    } else if (tier === 'major') {
+      text.textContent = '+10 RP'
+      text.style.cssText = 'font-size:22px;color:var(--gold);font-weight:800'
+      addFloat(zone, '+10', 40, 10, '#E9A23B', 22)
+      addFloat(zone, '&#11088;', 55, 20, '#E9A23B', 18)
+      setTimeout(() => {
+        confetti({ particleCount: 50, spread: 60, startVelocity: 25, colors: ['#f97316','#ea580c','#ffdd27'], origin: { y: 0.7 } })
+      }, 200)
+    } else if (tier === 'epic') {
+      text.innerHTML = '&#127881; LEVEL UP'
+      text.style.cssText = 'font-size:24px;color:var(--purple);font-weight:800'
+      addFloat(zone, '+25', 35, 5, '#E9A23B', 24)
+      addFloat(zone, '&#10024;', 55, 15, '#5e17eb', 20)
+      addFloat(zone, '&#9733;', 65, 8, '#E9A23B', 18)
+      setTimeout(() => {
+        confetti({ particleCount: 120, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: ['#5e17eb','#7c3aed','#ffdd27','#22c55e'] })
+        confetti({ particleCount: 120, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: ['#5e17eb','#7c3aed','#ffdd27','#22c55e'] })
+      }, 100)
+    }
+  }
+
+  function fireTier2(tier) {
+    fireTier(tier) // reuse visuals
+    const label = document.getElementById('hapticLabel')
+    const map = { micro: 'hapticLight (soft tap)', standard: 'hapticSuccess (firm tap)', major: 'hapticSuccess + vibrate 100ms', epic: 'hapticSuccess + vibrate 200ms + double pulse' }
+    label.textContent = 'Haptic: ' + map[tier]
+  }
+
+  // ── Radar choreography ──
+  function replayRadar() {
+    const c = document.getElementById('radarCurrent')
+    const d = document.getElementById('radarDream')
+    c.classList.remove('anim'); d.classList.remove('anim')
+    c.style.transform = 'scale(0)'; c.style.opacity = '0'
+    d.style.transform = 'scale(0)'; d.style.opacity = '0'
+    document.getElementById('gapLabel1').classList.remove('show')
+    document.getElementById('gapLabel2').classList.remove('show')
+    document.getElementById('radarCTA').classList.remove('show')
+    void c.offsetWidth
+    c.classList.add('anim')
+    setTimeout(() => d.classList.add('anim'), 1300)
+    setTimeout(() => document.getElementById('gapLabel1').classList.add('show'), 2100)
+    setTimeout(() => document.getElementById('gapLabel2').classList.add('show'), 2400)
+    setTimeout(() => document.getElementById('radarCTA').classList.add('show'), 2800)
+  }
+
+  function replayRadar2() {
+    const c = document.getElementById('radarCurrent2')
+    const d = document.getElementById('radarDream2')
+    const beats = ['beatCard1','beatCard2','beatCard3','beatCard4']
+    c.classList.remove('anim'); d.classList.remove('anim')
+    c.style.transform = 'scale(0)'; c.style.opacity = '0'
+    d.style.transform = 'scale(0)'; d.style.opacity = '0'
+    beats.forEach(id => document.getElementById(id).classList.remove('show'))
+    void c.offsetWidth
+    c.classList.add('anim')
+    setTimeout(() => document.getElementById('beatCard1').classList.add('show'), 0)
+    setTimeout(() => { d.classList.add('anim'); document.getElementById('beatCard2').classList.add('show') }, 1300)
+    setTimeout(() => document.getElementById('beatCard3').classList.add('show'), 2100)
+    setTimeout(() => document.getElementById('beatCard4').classList.add('show'), 2800)
+  }
+
+  // ── Courage choreography ──
+  function replayCourage() {
+    const ids = ['courMock1','courMock2','courMock3','courMock4']
+    ids.forEach(id => document.getElementById(id).classList.remove('show'))
+    setTimeout(() => document.getElementById('courMock1').classList.add('show'), 200)
+    setTimeout(() => document.getElementById('courMock2').classList.add('show'), 1000)
+    setTimeout(() => document.getElementById('courMock3').classList.add('show'), 1800)
+    setTimeout(() => {
+      document.getElementById('courMock4').classList.add('show')
+      confetti({ particleCount: 40, spread: 50, startVelocity: 20, origin: { y: 0.8 }, colors: ['#5e17eb','#E9A23B','#22c55e'] })
+    }, 2600)
+  }
+</script>
+</body>
+</html>

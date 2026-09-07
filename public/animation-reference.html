@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation Brand Guide — FindMyFlow</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+<style>
+  :root {
+    --purple: #5e17eb;
+    --gold: #E9A23B;
+    --green: #22c55e;
+    --red: #ef4444;
+    --bg: #f5f5f0;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text);
+    max-width: 480px; margin: 0 auto; padding: 20px 16px 100px;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--purple); margin: 40px 0 12px; font-weight: 700; }
+  .desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
+  button.play {
+    display: block; width: 100%; padding: 12px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple), var(--gold)); color: white;
+    font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px;
+    transition: transform 0.15s ease;
+  }
+  button.play:active { transform: scale(0.97); }
+  button.tier {
+    display: inline-block; padding: 8px 16px; border: none; border-radius: 8px;
+    color: white; font-size: 12px; font-weight: 600; cursor: pointer; margin: 4px 4px 4px 0;
+    transition: transform 0.15s ease;
+  }
+  button.tier:active { transform: scale(0.97); }
+  .vs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .vs-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; text-align: center; }
+  .vs-label.good { color: var(--green); }
+  .vs-label.bad { color: var(--red); }
+  .divider { height: 1px; background: rgba(0,0,0,0.06); margin: 36px 0; }
+
+  /* ── Bars ── */
+  .bar-track { height: 16px; background: rgba(0,0,0,0.04); border-radius: 8px; overflow: hidden; margin-bottom: 6px; }
+  .bar-fill { height: 100%; border-radius: 8px; width: 0; background: linear-gradient(90deg, var(--purple), var(--gold)); }
+  .bar-fill.ease-out-go { width: 72%; transition: width 0.6s ease-out; }
+  .bar-fill.ease-in-go { width: 72%; transition: width 0.6s ease-in; }
+
+  /* ── Dome ── */
+  .dome-wrap { width: 200px; height: 200px; margin: 0 auto; }
+  .dome-fill { fill: rgba(94,23,235,0.15); stroke: var(--purple); stroke-width: 2; transform-origin: center; }
+  .dome-edge { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 4; transform-origin: center; }
+  .dome-fill.anim { animation: domeGrow 0.8s ease-out forwards; }
+  .dome-edge.anim { animation: domeEdgeGrow 0.8s ease-out 0.5s forwards; }
+  @keyframes domeGrow { from { transform: scale(0.3); opacity: 0.2; } to { transform: scale(1); opacity: 1; } }
+  @keyframes domeEdgeGrow { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1.15); opacity: 1; } }
+
+  /* ── Score ── */
+  .score-big { font-size: 48px; font-weight: 800; text-align: center; font-variant-numeric: tabular-nums; color: var(--purple); }
+
+  /* ── Reveal items ── */
+  .reveal-item {
+    opacity: 0; transform: translateY(12px); transition: all 0.4s ease;
+    padding: 12px 16px; background: rgba(94,23,235,0.04); border-radius: 10px;
+    margin-bottom: 6px; font-size: 14px; font-weight: 600;
+  }
+  .reveal-item.vis { opacity: 1; transform: translateY(0); }
+  .reveal-item .rl { font-size: 11px; color: var(--muted); font-weight: 500; display: block; margin-bottom: 2px; }
+
+  /* ── Colour sequence: mini dome shapes ── */
+  .seq-row { display: flex; gap: 12px; justify-content: center; align-items: center; margin: 16px 0; }
+  .seq-item { text-align: center; }
+  .seq-shape { width: 50px; height: 50px; opacity: 0; transform: scale(0.5); transition: all 0.5s ease-out; }
+  .seq-shape.show { opacity: 1; transform: scale(1); }
+  .seq-lbl { font-size: 10px; color: var(--muted); margin-top: 4px; opacity: 0; transition: opacity 0.3s ease; }
+  .seq-lbl.show { opacity: 1; }
+  .seq-arrow { font-size: 18px; color: var(--muted); opacity: 0; transition: opacity 0.3s ease; }
+  .seq-arrow.show { opacity: 1; }
+
+  /* ── Spring pop ── */
+  .pop-el { display: inline-block; width: 60px; height: 60px; border-radius: 50%; color: white; font-size: 24px; line-height: 60px; text-align: center; transform: scale(0); }
+  .pop-el.spring { animation: popSpring 0.4s var(--spring) forwards; }
+  .pop-el.plain { animation: popPlain 0.4s ease forwards; }
+  @keyframes popSpring { from { transform: scale(0); } to { transform: scale(1); } }
+  @keyframes popPlain { from { transform: scale(0); } to { transform: scale(1); } }
+
+  /* ── Celebrations ── */
+  .celeb-zone { text-align: center; padding: 20px 0; min-height: 100px; position: relative; }
+  .float-pt { position: absolute; font-weight: 800; pointer-events: none; opacity: 0; }
+  .float-pt.go { animation: floatUp 1.5s ease-out forwards; }
+  @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(0.8); } }
+
+  /* ── Radar ── */
+  .radar-wrap { width: 180px; height: 180px; margin: 0 auto 12px; }
+  .r-current { fill: rgba(94,23,235,0.12); stroke: var(--purple); stroke-width: 2; transform-origin: center; transform: scale(0); opacity: 0; }
+  .r-dream { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 6 4; transform-origin: center; transform: scale(0); opacity: 0; }
+  .r-current.anim { animation: rGrow 0.8s ease-out forwards; }
+  .r-dream.anim { animation: rDreamGrow 0.8s ease-out forwards; }
+  @keyframes rGrow { from { transform: scale(0.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes rDreamGrow { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1.2); opacity: 1; } }
+  .gap-lbl { font-size: 11px; color: var(--muted); opacity: 0; transform: translateY(6px); transition: all 0.4s ease; text-align: center; margin-top: 4px; }
+  .gap-lbl.show { opacity: 1; transform: translateY(0); }
+  .gap-lbl strong { color: var(--gold); }
+
+  /* ── Courage mockup ── */
+  .c-mock { background: rgba(94,23,235,0.03); border-radius: 12px; padding: 16px; margin-bottom: 8px; opacity: 0; transform: translateY(8px); transition: all 0.4s ease; }
+  .c-mock.show { opacity: 1; transform: translateY(0); }
+  .c-mock .ml { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+  .c-mock .mc { font-size: 14px; font-weight: 600; }
+  .c-mock.hold { animation: celebHold 1.5s ease-in-out; }
+  @keyframes celebHold { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+  .ns-pills { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+  .ns-pill { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(0,0,0,0.04); }
+
+  /* ── Anti-patterns ── */
+  .anti-box { width: 60px; height: 60px; border-radius: 12px; background: white; border: 2px solid var(--red); margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .anti-box.shaking { animation: shake 0.3s ease infinite; }
+  .anti-box.bouncing { animation: bounce 0.6s ease infinite; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .snap-track { height: 16px; background: rgba(0,0,0,0.04); border-radius: 8px; overflow: hidden; }
+  .snap-fill { height: 100%; border-radius: 8px; width: 0; background: var(--red); }
+  .snap-fill.snapped { width: 72%; transition: width 0.05s linear; }
+
+  /* ── Micro chips ── */
+  .chip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .chip {
+    padding: 10px 8px; border-radius: 10px; background: rgba(0,0,0,0.03); text-align: center;
+    font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+    user-select: none; border: 2px solid transparent;
+  }
+  .chip:active { transform: scale(0.95); }
+  .chip.on { background: rgba(94,23,235,0.08); border-color: var(--purple); color: var(--purple); }
+  .chip.gold-on { background: rgba(233,162,59,0.08); border-color: var(--gold); color: #92400e; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--text); color: white; padding: 12px 20px; border-radius: 12px;
+    font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.3s ease; z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<h1>Animation Reference</h1>
+<p class="sub">The FindMyFlow motion system. Tap each demo to feel it.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>1. Expansion</h2>
+<p class="desc">Things grow outward from centre. The dome expands. Bars fill. Numbers climb. This is the product thesis made visible: your world is getting bigger.</p>
+
+<!-- Dome -->
+<div class="card">
+  <div class="label">Dome Reveal</div>
+  <p class="desc">Purple (where you are) first. Gold edge (where you're growing) 0.5s later. Safety before stretch.</p>
+  <div class="dome-wrap">
+    <svg viewBox="0 0 200 200" width="200" height="200">
+      <polygon id="df" class="dome-fill" points="100,30 160,60 180,120 150,170 50,170 20,120 40,60" style="transform:scale(0.3);opacity:0.2"/>
+      <polygon id="de" class="dome-edge" points="100,20 170,55 195,125 160,180 40,180 5,125 30,55" style="transform:scale(0.5);opacity:0"/>
+    </svg>
+  </div>
+  <button class="play" onclick="replayDome()">Replay dome reveal</button>
+</div>
+
+<!-- Easing comparison -->
+<div class="card">
+  <div class="label">Easing Comparison</div>
+  <p class="desc">Same distance, same duration (0.6s). Ease-out feels like release. Ease-in feels like falling.</p>
+  <div class="vs-row">
+    <div>
+      <div class="vs-label good">ease-out (ours)</div>
+      <div class="bar-track"><div id="bg" class="bar-fill"></div></div>
+      <div style="font-size:11px;color:var(--muted)">Fast start, gentle landing</div>
+    </div>
+    <div>
+      <div class="vs-label bad">ease-in (never)</div>
+      <div class="bar-track"><div id="bb" class="bar-fill"></div></div>
+      <div style="font-size:11px;color:var(--muted)">Slow start, fast end</div>
+    </div>
+  </div>
+  <button class="play" onclick="replayBars()">Compare</button>
+</div>
+
+<!-- Score counter -->
+<div class="card">
+  <div class="label">Score Count-Up</div>
+  <p class="desc">Numbers climb with deceleration. Fast at first, gentle as they land.</p>
+  <div id="sc" class="score-big">0</div>
+  <div style="text-align:center;font-size:12px;color:var(--muted)">Rise Points</div>
+  <button class="play" onclick="countTo(1250,'sc')">Count to 1,250 RP</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>2. Arrival</h2>
+<p class="desc">Something true about you just surfaced. Items arrive one at a time, fading up. Each insight gets space before the next.</p>
+
+<!-- Staggered vs simultaneous -->
+<div class="card">
+  <div class="label">Staggered vs All At Once</div>
+  <div class="vs-row" style="margin-bottom:12px">
+    <div class="vs-label good">Staggered (ours)</div>
+    <div class="vs-label bad">All at once</div>
+  </div>
+  <div class="vs-row">
+    <div>
+      <div id="s1" class="reveal-item"><span class="rl">Your top skill</span>Community Design</div>
+      <div id="s2" class="reveal-item"><span class="rl">Your problem</span>Isolation</div>
+      <div id="s3" class="reveal-item"><span class="rl">Your direction</span>Group Healing</div>
+      <div id="s4" class="reveal-item" style="background:rgba(233,162,59,0.1);border-left:3px solid var(--gold)"><span class="rl" style="color:var(--gold)">Your fuel</span>Play + Movement</div>
+    </div>
+    <div>
+      <div id="a1" class="reveal-item"><span class="rl">Your top skill</span>Community Design</div>
+      <div id="a2" class="reveal-item"><span class="rl">Your problem</span>Isolation</div>
+      <div id="a3" class="reveal-item"><span class="rl">Your direction</span>Group Healing</div>
+      <div id="a4" class="reveal-item" style="background:rgba(233,162,59,0.1);border-left:3px solid var(--gold)"><span class="rl" style="color:var(--gold)">Your fuel</span>Play + Movement</div>
+    </div>
+  </div>
+  <button class="play" onclick="replayReveal()">Compare reveals</button>
+</div>
+
+<!-- Colour sequencing: mini dome shapes -->
+<div class="card">
+  <div class="label">Colour Sequencing</div>
+  <p class="desc">Purple always first (where you are). Gold second (where you're growing). Green last (done).</p>
+  <div class="seq-row">
+    <div class="seq-item">
+      <div id="cs1" class="seq-shape">
+        <svg viewBox="0 0 50 50" width="50" height="50"><polygon points="25,5 45,20 42,42 8,42 5,20" fill="rgba(94,23,235,0.15)" stroke="#5e17eb" stroke-width="2"/></svg>
+      </div>
+      <div id="cl1" class="seq-lbl">Your dome</div>
+    </div>
+    <div id="ca1" class="seq-arrow">&rarr;</div>
+    <div class="seq-item">
+      <div id="cs2" class="seq-shape">
+        <svg viewBox="0 0 50 50" width="50" height="50"><polygon points="25,2 48,18 46,46 4,46 2,18" fill="none" stroke="#E9A23B" stroke-width="2" stroke-dasharray="4 3"/></svg>
+      </div>
+      <div id="cl2" class="seq-lbl">Your edge</div>
+    </div>
+    <div id="ca2" class="seq-arrow">&rarr;</div>
+    <div class="seq-item">
+      <div id="cs3" class="seq-shape" style="display:flex;align-items:center;justify-content:center">
+        <div style="width:36px;height:36px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:800">&#10003;</div>
+      </div>
+      <div id="cl3" class="seq-lbl">Complete</div>
+    </div>
+  </div>
+  <button class="play" onclick="replaySeq()">Show sequence</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>3. Ignition</h2>
+<p class="desc">You did something that mattered. Celebrations scale with significance. Confetti for courage, not compliance.</p>
+
+<!-- Spring pop -->
+<div class="card">
+  <div class="label">Spring Pop vs Plain</div>
+  <p class="desc">The spring overshoots slightly then settles. Like pushing past your edge, then regulating back.</p>
+  <div class="vs-row" style="margin-top:12px">
+    <div style="text-align:center">
+      <div class="vs-label good">Spring (ours)</div>
+      <div style="height:80px;display:flex;align-items:center;justify-content:center">
+        <div id="ps" class="pop-el" style="background:var(--purple)">&#10004;</div>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <div class="vs-label bad">Plain ease</div>
+      <div style="height:80px;display:flex;align-items:center;justify-content:center">
+        <div id="pp" class="pop-el" style="background:var(--muted)">&#10004;</div>
+      </div>
+    </div>
+  </div>
+  <button class="play" onclick="replayPop()">Compare pops</button>
+</div>
+
+<!-- Celebration tiers with real confetti -->
+<div class="card">
+  <div class="label">Celebration Tiers</div>
+  <p class="desc">Tap all four in order to feel the weight difference.</p>
+  <div class="celeb-zone" id="cz">
+    <div id="ct" style="font-size:14px;color:var(--muted)">Tap a tier</div>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="tier" style="flex:1;background:var(--muted)" onclick="fireTier('micro')">Micro</button>
+    <button class="tier" style="flex:1;background:var(--purple)" onclick="fireTier('standard')">Standard</button>
+    <button class="tier" style="flex:1;background:var(--gold)" onclick="fireTier('major')">Major</button>
+    <button class="tier" style="flex:1;background:linear-gradient(135deg,var(--purple),var(--gold))" onclick="fireTier('epic')">Epic</button>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>4. Choreography</h2>
+<p class="desc">Individual motions are notes. Choreography is the melody. How animations chain together within a single flow.</p>
+
+<!-- Radar reveal -->
+<div class="card">
+  <div class="label">Ambition Radar Reveal</div>
+  <p class="desc">The full sequence when your radar result appears.</p>
+  <div class="radar-wrap">
+    <svg viewBox="0 0 180 180" width="180" height="180">
+      <g stroke="rgba(0,0,0,0.06)" stroke-width="1">
+        <line x1="90" y1="90" x2="90" y2="15"/><line x1="90" y1="90" x2="143" y2="37"/>
+        <line x1="90" y1="90" x2="165" y2="90"/><line x1="90" y1="90" x2="143" y2="143"/>
+        <line x1="90" y1="90" x2="90" y2="165"/><line x1="90" y1="90" x2="37" y2="143"/>
+        <line x1="90" y1="90" x2="15" y2="90"/><line x1="90" y1="90" x2="37" y2="37"/>
+      </g>
+      <polygon id="rc" class="r-current" points="90,45 120,55 135,90 120,125 90,130 60,125 45,90 60,55"/>
+      <polygon id="rd" class="r-dream" points="90,20 155,35 165,90 155,150 90,165 25,150 15,90 25,35"/>
+    </svg>
+  </div>
+  <div id="gl1" class="gap-lbl">People: <strong>50 &rarr; 500</strong></div>
+  <div id="gl2" class="gap-lbl">Money: <strong>hobby &rarr; full-time income</strong></div>
+  <div id="gl3" class="gap-lbl" style="margin-top:12px">
+    <span style="display:inline-block;padding:8px 24px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--gold));color:white;font-size:13px;font-weight:700;opacity:0;transition:opacity 0.3s ease" id="radarCta">Want help closing this gap?</span>
+  </div>
+  <button class="play" onclick="replayRadar()">Play full reveal</button>
+</div>
+
+<!-- Courage completion: mini mockup (Option B) -->
+<div class="card">
+  <div class="label">Courage Challenge Complete</div>
+  <p class="desc">The post-courage sequence. Acknowledge, measure, anchor, celebrate.</p>
+
+  <div id="cm1" class="c-mock" style="border-left:3px solid var(--purple)">
+    <div class="ml">How did that feel?</div>
+    <div class="ns-pills">
+      <span class="ns-pill" style="color:var(--gold)">&#10022; Vibe Rise</span>
+      <span class="ns-pill">&#9675; Fun</span>
+      <span class="ns-pill">&#9671; Stressful</span>
+    </div>
+  </div>
+
+  <div id="cm2" class="c-mock" style="border-left:3px solid var(--gold)">
+    <div class="ml">Was it as scary as you expected?</div>
+    <div class="mc" style="display:flex;gap:12px;align-items:baseline;margin-top:8px">
+      <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--purple)">4</div><div style="font-size:10px;color:var(--muted)">predicted</div></div>
+      <div style="font-size:18px;color:var(--muted)">&rarr;</div>
+      <div style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--green)">2</div><div style="font-size:10px;color:var(--muted)">experienced</div></div>
+      <div style="font-size:12px;color:var(--green);font-weight:700;margin-left:auto">Easier than you thought</div>
+    </div>
+  </div>
+
+  <div id="cm3" class="c-mock" style="border-left:3px solid var(--purple)">
+    <div class="ml">Who are you now?</div>
+    <div class="mc" style="color:var(--purple);font-style:italic">"I'm someone who speaks up even when my voice shakes"</div>
+  </div>
+
+  <div id="cm4" class="c-mock" style="border-left:3px solid var(--green);text-align:center">
+    <div style="font-size:28px">&#127881;</div>
+    <div class="mc" style="color:var(--gold)">+10 RP</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px">Courage challenge complete</div>
+  </div>
+
+  <button class="play" onclick="replayCourage()">Play the flow</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>5. Anti-Patterns</h2>
+<p class="desc">Motions we never use. Each one creates the feeling the app is trying to move people away from.</p>
+
+<div class="card">
+  <div class="vs-row">
+    <div style="text-align:center">
+      <div class="vs-label bad">Shake (alarm)</div>
+      <div id="sb" class="anti-box">!</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Sympathetic activation</div>
+    </div>
+    <div style="text-align:center">
+      <div class="vs-label bad">Bounce (nag)</div>
+      <div id="bb2" class="anti-box">&#9650;</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Creates urgency anxiety</div>
+    </div>
+  </div>
+  <button class="play" style="background:var(--red)" onclick="replayAnti()">See why these feel wrong</button>
+</div>
+
+<div class="card">
+  <div class="label">Snap vs Smooth</div>
+  <div class="vs-row">
+    <div>
+      <div class="vs-label good">Smooth (0.6s)</div>
+      <div class="bar-track"><div id="smb" class="bar-fill"></div></div>
+    </div>
+    <div>
+      <div class="vs-label bad">Snap (instant)</div>
+      <div class="snap-track"><div id="snb" class="snap-fill"></div></div>
+    </div>
+  </div>
+  <button class="play" onclick="replaySnap()">Compare</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>6. Micro-Interactions</h2>
+<p class="desc">The smallest motions. Felt, not seen. If someone notices the animation, it's too slow.</p>
+
+<div class="card">
+  <div class="label">Purple Selection (current/safe)</div>
+  <div class="chip-grid">
+    <div class="chip" onclick="this.classList.toggle('on')">Movement</div>
+    <div class="chip" onclick="this.classList.toggle('on')">Healing</div>
+    <div class="chip" onclick="this.classList.toggle('on')">Bonds</div>
+    <div class="chip" onclick="this.classList.toggle('on')">Story</div>
+    <div class="chip" onclick="this.classList.toggle('on')">Play</div>
+    <div class="chip" onclick="this.classList.toggle('on')">Fire</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="label">Gold Selection (dream/growth)</div>
+  <div class="chip-grid">
+    <div class="chip" onclick="this.classList.toggle('gold-on')">People 500</div>
+    <div class="chip" onclick="this.classList.toggle('gold-on')">Money $5K</div>
+    <div class="chip" onclick="this.classList.toggle('gold-on')">Remote</div>
+    <div class="chip" onclick="this.classList.toggle('gold-on')">Full-time</div>
+    <div class="chip" onclick="this.classList.toggle('gold-on')">Weekly</div>
+    <div class="chip" onclick="this.classList.toggle('gold-on')">Online</div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  function replayDome() {
+    const f = document.getElementById('df'), e = document.getElementById('de')
+    f.classList.remove('anim'); e.classList.remove('anim')
+    f.style.transform='scale(0.3)'; f.style.opacity='0.2'
+    e.style.transform='scale(0.5)'; e.style.opacity='0'
+    void f.offsetWidth
+    f.classList.add('anim'); e.classList.add('anim')
+  }
+
+  function replayBars() {
+    const g=document.getElementById('bg'), b=document.getElementById('bb')
+    g.className='bar-fill'; b.className='bar-fill'
+    void g.offsetWidth
+    requestAnimationFrame(()=>{ g.classList.add('ease-out-go'); b.classList.add('ease-in-go') })
+    setTimeout(()=>{ g.className='bar-fill'; b.className='bar-fill' }, 1500)
+  }
+
+  function countTo(t, id) {
+    const el=document.getElementById(id), dur=800, st=performance.now()
+    el.textContent='0'
+    function tick(now) {
+      const p=Math.min((now-st)/dur,1), e=1-Math.pow(1-p,3)
+      el.textContent=Math.round(e*t).toLocaleString()
+      if(p<1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }
+
+  function replayReveal() {
+    for(let i=1;i<=4;i++){document.getElementById('s'+i).classList.remove('vis');document.getElementById('a'+i).classList.remove('vis')}
+    setTimeout(()=>document.getElementById('s1').classList.add('vis'),100)
+    setTimeout(()=>document.getElementById('s2').classList.add('vis'),900)
+    setTimeout(()=>document.getElementById('s3').classList.add('vis'),1700)
+    setTimeout(()=>document.getElementById('s4').classList.add('vis'),2500)
+    setTimeout(()=>{for(let i=1;i<=4;i++) document.getElementById('a'+i).classList.add('vis')},100)
+  }
+
+  function replaySeq() {
+    const shapes=['cs1','cs2','cs3'], lbls=['cl1','cl2','cl3'], arrs=['ca1','ca2']
+    shapes.forEach(id=>document.getElementById(id).classList.remove('show'))
+    lbls.forEach(id=>document.getElementById(id).classList.remove('show'))
+    arrs.forEach(id=>document.getElementById(id).classList.remove('show'))
+    setTimeout(()=>{document.getElementById('cs1').classList.add('show');document.getElementById('cl1').classList.add('show')},200)
+    setTimeout(()=>document.getElementById('ca1').classList.add('show'),700)
+    setTimeout(()=>{document.getElementById('cs2').classList.add('show');document.getElementById('cl2').classList.add('show')},900)
+    setTimeout(()=>document.getElementById('ca2').classList.add('show'),1400)
+    setTimeout(()=>{document.getElementById('cs3').classList.add('show');document.getElementById('cl3').classList.add('show')},1600)
+  }
+
+  function replayPop() {
+    const s=document.getElementById('ps'), p=document.getElementById('pp')
+    s.classList.remove('spring'); p.classList.remove('plain')
+    s.style.transform='scale(0)'; p.style.transform='scale(0)'
+    void s.offsetWidth
+    s.classList.add('spring'); p.classList.add('plain')
+  }
+
+  function addFloat(zone,txt,x,y,col,sz) {
+    const pt=document.createElement('div')
+    pt.className='float-pt'; pt.innerHTML=txt
+    pt.style.cssText=`left:${x}%;top:${y}%;color:${col};font-size:${sz}px`
+    zone.appendChild(pt)
+    requestAnimationFrame(()=>pt.classList.add('go'))
+    setTimeout(()=>pt.remove(),1600)
+  }
+
+  function showToast(msg) {
+    const el=document.getElementById('toast')
+    el.textContent=msg; el.classList.add('show')
+    setTimeout(()=>el.classList.remove('show'),2500)
+  }
+
+  function fireTier(tier) {
+    const z=document.getElementById('cz'), t=document.getElementById('ct')
+    if(tier==='micro') {
+      t.textContent='+2 RP'; t.style.cssText='font-size:14px;color:var(--muted)'
+      addFloat(z,'+2',50,20,'#6b7280',16)
+    } else if(tier==='standard') {
+      t.textContent='+7 RP'; t.style.cssText='font-size:18px;color:var(--purple);font-weight:700'
+      addFloat(z,'+7',45,15,'#5e17eb',20)
+      showToast('Courage challenge complete')
+    } else if(tier==='major') {
+      t.textContent='+10 RP'; t.style.cssText='font-size:22px;color:var(--gold);font-weight:800'
+      addFloat(z,'+10',40,10,'#E9A23B',22)
+      addFloat(z,'&#11088;',55,20,'#E9A23B',18)
+      setTimeout(()=>confetti({particleCount:50,spread:60,startVelocity:25,colors:['#f97316','#ea580c','#ffdd27'],origin:{y:0.7}}),200)
+      showToast('7-day streak! You showed up.')
+    } else if(tier==='epic') {
+      t.innerHTML='&#127881; LEVEL UP'; t.style.cssText='font-size:24px;color:var(--purple);font-weight:800'
+      addFloat(z,'+25',35,5,'#E9A23B',24)
+      addFloat(z,'&#10024;',55,15,'#5e17eb',20)
+      addFloat(z,'&#9733;',65,8,'#E9A23B',18)
+      setTimeout(()=>{
+        confetti({particleCount:120,angle:60,spread:55,origin:{x:0,y:0.7},colors:['#5e17eb','#7c3aed','#ffdd27','#22c55e']})
+        confetti({particleCount:120,angle:120,spread:55,origin:{x:1,y:0.7},colors:['#5e17eb','#7c3aed','#ffdd27','#22c55e']})
+      },100)
+      showToast('LEVEL UP: Movement Maker')
+    }
+  }
+
+  function replayRadar() {
+    const c=document.getElementById('rc'), d=document.getElementById('rd')
+    c.classList.remove('anim'); d.classList.remove('anim')
+    c.style.transform='scale(0)'; c.style.opacity='0'
+    d.style.transform='scale(0)'; d.style.opacity='0'
+    document.getElementById('gl1').classList.remove('show')
+    document.getElementById('gl2').classList.remove('show')
+    document.getElementById('radarCta').style.opacity='0'
+    void c.offsetWidth
+    c.classList.add('anim')
+    setTimeout(()=>d.classList.add('anim'),1300)
+    setTimeout(()=>document.getElementById('gl1').classList.add('show'),2100)
+    setTimeout(()=>document.getElementById('gl2').classList.add('show'),2400)
+    setTimeout(()=>document.getElementById('radarCta').style.opacity='1',2800)
+  }
+
+  function replayCourage() {
+    const ids=['cm1','cm2','cm3','cm4']
+    ids.forEach(id=>document.getElementById(id).classList.remove('show'))
+    setTimeout(()=>document.getElementById('cm1').classList.add('show'),200)
+    setTimeout(()=>document.getElementById('cm2').classList.add('show'),1000)
+    setTimeout(()=>document.getElementById('cm3').classList.add('show'),1800)
+    setTimeout(()=>{
+      const cm4 = document.getElementById('cm4')
+      cm4.classList.add('show')
+      confetti({particleCount:40,spread:50,startVelocity:20,origin:{y:0.8},colors:['#5e17eb','#E9A23B','#22c55e']})
+      setTimeout(()=> cm4.classList.add('hold'), 400)
+    },2600)
+  }
+
+  function replayAnti() {
+    document.getElementById('sb').classList.add('shaking')
+    document.getElementById('bb2').classList.add('bouncing')
+    setTimeout(()=>{document.getElementById('sb').classList.remove('shaking');document.getElementById('bb2').classList.remove('bouncing')},2000)
+  }
+
+  function replaySnap() {
+    const sm=document.getElementById('smb'), sn=document.getElementById('snb')
+    sm.className='bar-fill'; sn.className='snap-fill'
+    void sm.offsetWidth
+    requestAnimationFrame(()=>{sm.classList.add('ease-out-go');sn.classList.add('snapped')})
+    setTimeout(()=>{sm.className='bar-fill';sn.className='snap-fill'},1500)
+  }
+</script>
+</body>
+</html>
