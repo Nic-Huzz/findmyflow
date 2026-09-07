@@ -198,10 +198,9 @@ export default function ChooseQuestsFlow() {
     }
   }, [activeProjects, selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
 
-  // ── Confirm clustered paths → filter to selected, then save ──
+  // ── Confirm clustered paths → filter to selected non-empty, then save ──
   const confirmPaths = useCallback(() => {
-    // Keep only selected paths, reindex, then save
-    const kept = paths.filter((_, i) => selectedPaths.has(i))
+    const kept = paths.filter((_, i) => selectedPaths.has(i) && paths[i].projects?.length > 0)
     setPaths(kept)
     const newSelected = new Set()
     kept.forEach((_, i) => newSelected.add(i))
@@ -660,14 +659,15 @@ export default function ChooseQuestsFlow() {
         const next = prev.map(p => ({ ...p, projects: [...(p.projects || [])] }))
         const [project] = next[fromPathIdx].projects.splice(projectIdx, 1)
         next[toPathIdx].projects.push(project)
-        // Remove empty paths and reindex selectedPaths
-        const filtered = next.filter(p => p.projects.length > 0)
-        if (filtered.length < next.length) {
-          const newSelected = new Set()
-          filtered.forEach((_, i) => newSelected.add(i))
-          setSelectedPaths(newSelected)
-        }
-        return filtered
+        return next
+      })
+      // Auto-deselect paths that end up empty (after state update)
+      setSelectedPaths(prev => {
+        const next = new Set(prev)
+        paths.forEach((p, i) => {
+          if (i === fromPathIdx && (p.projects?.length || 0) <= 1) next.delete(i)
+        })
+        return next
       })
       setMovePopover(null)
     }
@@ -687,7 +687,9 @@ export default function ChooseQuestsFlow() {
             </div>
           )}
 
-          {paths.map((path, i) => (
+          {paths.map((path, i) => {
+            if (!path.projects?.length) return null
+            return (
             <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
               <div className="cqf-path-top">
                 <div className="cqf-path-check" onClick={() => togglePathSelection(i)}>
@@ -735,7 +737,8 @@ export default function ChooseQuestsFlow() {
                 </div>
               </div>
             </div>
-          ))}
+            )
+          })}
 
           <div className="cqf-fixed">
             <button className="cqf-cta cqf-cta-gold" disabled={activePaths.length === 0} onClick={confirmPaths}>
