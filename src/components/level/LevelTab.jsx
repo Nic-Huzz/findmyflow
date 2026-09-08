@@ -25,7 +25,8 @@ import MilestoneCommitModal from './MilestoneCommitModal'
 import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
-import CapacityCard from './CapacityCard'
+import QuadrantCard from './QuadrantCard'
+import useCapacityScore from '../../hooks/useCapacityScore'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import WeeklyFocus from './WeeklyFocus'
 import './WeeklyFocus.css'
@@ -37,6 +38,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   // maxUnlockedLevel is the user's actual journey level from DB. currentLevel is which level they're viewing.
   const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
+
+  // Quadrant score data (Safety x Expression)
+  const scoreData = useCapacityScore(userId, capacityRefresh)
 
   // DB-backed zone state (reads from user_level_progress if available)
   const [selectedZone, setSelectedZone] = useState(null)
@@ -462,6 +466,18 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
   return (
     <div className="level-tab">
+
+      {/* ══════ QUADRANT CARD ══════ */}
+      {!scoreData.loading && scoreData.safety !== null && scoreData.dataPoints > 0 && (
+        <QuadrantCard
+          safety={scoreData.safety}
+          expression={scoreData.expression}
+          maintenancePct={scoreData.maintenancePct}
+          zone={scoreData.zone}
+          todayProgress={scoreData.todayProgress}
+          trend={scoreData.trend}
+        />
+      )}
 
       {/* ══════ QUEST BOARD ══════ */}
 
