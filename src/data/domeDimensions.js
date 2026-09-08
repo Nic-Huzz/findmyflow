@@ -31,7 +31,7 @@ export const DOME_DIMENSIONS = [
     label: 'Money',
     icon: '💰',
     question: 'How much did you ask someone to pay?',
-    dreamQuestion: 'How much do you want to earn from this per experience?',
+    dreamQuestion: 'How much do you want to earn per experience or per month?',
     type: 'numeric',
     tiers: [0, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000],
     maxLevel: 10,

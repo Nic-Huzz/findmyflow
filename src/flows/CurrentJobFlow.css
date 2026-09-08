@@ -145,3 +145,53 @@
 
 /* ── Back link ── */
 .cjf-back { background: none; border: none; color: rgba(0,0,0,0.3); font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 0; font-family: inherit; margin-bottom: 12px; }
+
+/* ── Pain Reveal ── */
+.cjf-reveal { padding-top: 40px; }
+.cjf-reveal h2 { font-size: 22px; font-weight: 800; margin: 0 0 20px; text-align: center; }
+
+.cjf-fuel-reveal { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.cjf-fuel-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-radius: 12px; background: white;
+  border: 1.5px solid rgba(0,0,0,0.06);
+}
+.cjf-fuel-row.missing { border-color: rgba(239,68,68,0.15); background: rgba(239,68,68,0.02); }
+.cjf-fuel-row-emoji { font-size: 18px; flex-shrink: 0; }
+.cjf-fuel-row-name { font-size: 15px; font-weight: 600; flex: 1; color: #1a1a2e; }
+.cjf-fuel-row.missing .cjf-fuel-row-name { color: rgba(0,0,0,0.4); }
+.cjf-fuel-row-status { font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.cjf-fuel-row.has .cjf-fuel-row-status { color: #10b981; }
+.cjf-fuel-row.missing .cjf-fuel-row-status { color: #ef4444; }
+
+.cjf-reveal-insight {
+  font-size: 15px; color: rgba(0,0,0,0.6); line-height: 1.6;
+  text-align: center; margin: 0 0 80px;
+}
+.cjf-reveal-insight strong { color: #1a1a2e; }
+
+/* ── Dream dimensions (YES path) ── */
+.cjf-dim-current {
+  font-size: 11px; font-weight: 500; color: rgba(0,0,0,0.3);
+  margin-left: 6px;
+}
+.cjf-dream-selected {
+  border-color: #E9A23B !important;
+  background: rgba(233,162,59,0.06) !important;
+  color: #b8860b !important;
+}
+
+/* ── Dimension distance (NO path) ── */
+.cjf-distance-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.06); }
+.cjf-distance-row { margin-bottom: 12px; }
+.cjf-distance-label { font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 6px; }
+.cjf-distance-options { display: flex; gap: 6px; }
+.cjf-distance-pill {
+  flex: 1; padding: 8px 6px; border-radius: 10px;
+  border: 1.5px solid rgba(0,0,0,0.06); background: white;
+  font-size: 12px; font-weight: 500; color: #1a1a2e;
+  cursor: pointer; text-align: center; font-family: inherit;
+  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.cjf-distance-pill:active { transform: scale(0.97); }
+.cjf-distance-pill.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); color: #b8860b; font-weight: 600; }
