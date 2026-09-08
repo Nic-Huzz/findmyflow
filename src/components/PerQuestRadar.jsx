@@ -47,7 +47,16 @@ function QuestRadarCard({ quest, actualProgress }) {
 
   const start = quest.current_dimensions || {}
   const dream = quest.dream_dimensions || {}
-  const actual = actualProgress || {}
+  const rawActual = actualProgress || {}
+
+  // "Now" = max of start and challenge progress per dimension
+  // (you can't go below where you started)
+  const actual = {}
+  DOME_DIMENSIONS.forEach(dim => {
+    const s = start[dim.id] || 0
+    const a = rawActual[dim.id] || 0
+    if (s > 0 || a > 0) actual[dim.id] = Math.max(s, a)
+  })
 
   const hasDefinition = Object.keys(start).length > 0 || Object.keys(dream).length > 0
   const hasActual = Object.keys(actual).length > 0
