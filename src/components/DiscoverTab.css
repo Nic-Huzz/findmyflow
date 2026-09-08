@@ -309,3 +309,11 @@
   color: #fff;
   font-weight: 700;
 }
+
+.dt-bridge-cta.dt-bridge-locked {
+  background: rgba(0, 0, 0, 0.06);
+  cursor: default;
+}
+.dt-bridge-locked .dt-bridge-title { color: rgba(0, 0, 0, 0.3); }
+.dt-bridge-locked .dt-bridge-sub { color: rgba(0, 0, 0, 0.2); }
+.dt-bridge-lock { font-size: 18px; flex-shrink: 0; }
