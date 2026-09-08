@@ -15,7 +15,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
-import { DOME_DIMENSIONS } from '../data/domeDimensions'
+import { DOME_DIMENSIONS, calculateCourageScore } from '../data/domeDimensions'
 import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import DomeOfSafety from '../components/DomeOfSafety'
@@ -38,6 +38,17 @@ const SHIFT_FUELS = [
   { id: 'mastery', icon: '📈', label: 'Mastery', full: 'I grow at something that excites me' },
   { id: 'meaning', icon: '✨', label: 'Meaning', full: 'This serves something I care about' },
 ]
+
+const DIM_SUBS = {
+  people: 'More people watching or involved',
+  money: 'Charging or asking for money',
+  vulnerability: 'Removing shields, being seen',
+  stakes: 'More at risk if it goes wrong',
+  rarity: 'Doing something uncommon',
+  identity: 'Surprising the people who know you',
+  context: 'Unfamiliar territory or conditions',
+  business_commitment: 'Going deeper into your business',
+}
 
 const IDENTITY_EXAMPLES = [
   '...starts before they\'re ready',
@@ -76,6 +87,11 @@ export default function PathDefinitionFlow() {
   const [fearText, setFearText] = useState('')
   const [identityText, setIdentityText] = useState('')
   const [voice, setVoice] = useState(null)
+
+  // Step dimension tagging (same pattern as WahooCreator)
+  const [stepDims, setStepDims] = useState([])
+  const [stepDimValues, setStepDimValues] = useState({})
+  const [stepDrilledDim, setStepDrilledDim] = useState(null)
 
   // Essence data (for identity reveal)
   const [essenceName, setEssenceName] = useState(null)
@@ -230,6 +246,8 @@ export default function PathDefinitionFlow() {
             visibility_layers: [],
             accepted_at: new Date().toISOString(),
             predicted_voice: voice,
+            expansion_dimensions: stepDims.length > 0 ? stepDims : null,
+            dimension_values: Object.keys(stepDimValues).length > 0 ? stepDimValues : null,
           }).select('id').single()
 
           if (newGroan?.id) {
@@ -273,7 +291,8 @@ export default function PathDefinitionFlow() {
       setSaving(false)
     }
   }, [user, questId, quest, precursor, currentDims, aspirationDims,
-    stayingFuels, pathFuels, buts, stepText, fearText, identityText, voice])
+    stayingFuels, pathFuels, buts, stepText, fearText, identityText, voice,
+    stepDims, stepDimValues])
 
   // ── Loading ──
   if (loading) {
@@ -705,6 +724,126 @@ export default function PathDefinitionFlow() {
                 value={stepText}
                 onChange={e => setStepText(e.target.value)}
                 placeholder="The tiniest possible step..." />
+
+              {/* Dimension tagging (same UI as WahooCreator) */}
+              {stepText.trim() && !stepDrilledDim && (
+                <>
+                  <div className="pdf-q" style={{ marginTop: 20 }}>Where does this stretch you?</div>
+                  <p className="pdf-step-hint">Tap to pick, then set the level.</p>
+
+                  <div className="wc-dim-grid">
+                    {DOME_DIMENSIONS.map(d => {
+                      const active = stepDims.includes(d.id)
+                      const val = stepDimValues[d.id]
+                      let levelLabel = null
+                      if (val != null) {
+                        if (d.type === 'numeric') levelLabel = val
+                        else levelLabel = d.levels?.find(l => l.level === val)?.label
+                      }
+                      const gap = aspirationDims && currentDims
+                        ? (aspirationDims[d.id] || 0) - (currentDims[d.id] || 0) : 0
+                      const isTopGap = gap > 0 && (() => {
+                        const sorted = DOME_DIMENSIONS
+                          .map(dim => (aspirationDims[dim.id] || 0) - (currentDims[dim.id] || 0))
+                          .sort((a, b) => b - a)
+                        return gap >= (sorted[1] || 0)
+                      })()
+                      return (
+                        <button key={d.id}
+                          className={`wc-dim-card ${active ? 'active' : ''} ${isTopGap && !active ? 'wc-dim-gap' : ''}`}
+                          onClick={() => {
+                            hapticLight()
+                            if (!stepDims.includes(d.id)) setStepDims(prev => [...prev, d.id])
+                            setStepDrilledDim(d.id)
+                          }}>
+                          <span className="wc-dim-emoji">{d.icon}</span>
+                          <span className="wc-dim-label">{d.label}</span>
+                          {active && levelLabel && <span className="wc-dim-level-badge">{levelLabel}</span>}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {stepDims.length > 0 && (
+                    <div className="wc-dim-selected-list">
+                      {stepDims.map(id => {
+                        const d = DOME_DIMENSIONS.find(x => x.id === id)
+                        const val = stepDimValues[id]
+                        let levelLabel = null
+                        if (val != null) {
+                          if (d.type === 'numeric') levelLabel = val
+                          else levelLabel = d.levels?.find(l => l.level === val)?.label
+                        }
+                        return d ? (
+                          <div key={id} className="wc-dim-selected-tag">
+                            <span>{d.icon} {d.label}{levelLabel ? `: ${levelLabel}` : ''}</span>
+                            <button className="wc-dim-remove" onClick={(e) => {
+                              e.stopPropagation(); hapticLight()
+                              setStepDims(prev => prev.filter(x => x !== id))
+                              setStepDimValues(prev => { const n = { ...prev }; delete n[id]; return n })
+                            }}>×</button>
+                          </div>
+                        ) : null
+                      })}
+                    </div>
+                  )}
+
+                  {Object.keys(stepDimValues).length > 0 && (
+                    <div className="wc-courage-preview">
+                      Courage score: {calculateCourageScore(stepDimValues).toFixed(1)}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Drill-in level picker */}
+              {stepText.trim() && stepDrilledDim && (() => {
+                const dim = DOME_DIMENSIONS.find(d => d.id === stepDrilledDim)
+                if (!dim) return null
+                return (
+                  <div style={{ marginTop: 16 }}>
+                    <div className="wc-level-icon">{dim.icon}</div>
+                    <div className="pdf-q">{dim.question || dim.label}</div>
+                    <p className="pdf-step-hint">{DIM_SUBS[stepDrilledDim]}</p>
+                    <div className="wc-level-options">
+                      {dim.type === 'numeric' ? (
+                        <>
+                          <input className="wc-level-input" type="number" inputMode="numeric" min="0"
+                            placeholder={dim.placeholder}
+                            value={stepDimValues[stepDrilledDim] ?? ''}
+                            onChange={e => {
+                              const raw = e.target.value
+                              if (raw === '') {
+                                setStepDimValues(prev => { const n = { ...prev }; delete n[stepDrilledDim]; return n })
+                              } else {
+                                setStepDimValues(prev => ({ ...prev, [stepDrilledDim]: Number(raw) }))
+                              }
+                            }}
+                            autoFocus />
+                          <button className="pdf-cta pdf-cta-gold" style={{ marginTop: 12 }}
+                            disabled={stepDimValues[stepDrilledDim] == null}
+                            onClick={() => { hapticLight(); setStepDrilledDim(null) }}>
+                            Done →
+                          </button>
+                        </>
+                      ) : (
+                        dim.levels.map(lv => (
+                          <button key={lv.level}
+                            className={`wc-level-option ${stepDimValues[stepDrilledDim] === lv.level ? 'selected' : ''}`}
+                            onClick={() => {
+                              hapticLight()
+                              setStepDimValues(prev => ({ ...prev, [stepDrilledDim]: lv.level }))
+                              setTimeout(() => setStepDrilledDim(null), 250)
+                            }}>
+                            <span className="wc-level-option-label">{lv.label}</span>
+                            {lv.description && <span className="wc-level-option-desc">{lv.description}</span>}
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
           )}
 
