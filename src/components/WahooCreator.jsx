@@ -144,6 +144,7 @@ export default function WahooCreator({
     if (!freeText.trim() || !linkedQuestId || generating) return
     setGenerating(true)
     setError(null)
+    let resolvedHealingTaskId = null
 
     try {
       let sourceLabel = initialSourceLabel
@@ -202,6 +203,7 @@ export default function WahooCreator({
               healing_stage: 'in_progress',
               updated_at: new Date().toISOString(),
             }, { onConflict: 'quest_task_id' })
+            resolvedHealingTaskId = taskRow.id
             setHealingTaskId(taskRow.id)
           }
         } catch (e) { /* non-blocking */ }
@@ -209,7 +211,7 @@ export default function WahooCreator({
 
       hapticSuccess()
 
-      if (wantsHealing === 'yes' && protectiveVoice && healingTaskId) {
+      if (wantsHealing === 'yes' && protectiveVoice && resolvedHealingTaskId) {
         // Show success briefly then open healing flow
         setStep('success')
         successTimerRef.current = setTimeout(() => {

@@ -201,7 +201,7 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
             const dim = getDimensionById(dimId)
             if (!dim) return
             const level = dim.type === 'numeric'
-              ? (dim.tiers || []).findIndex(t => val < t) || dim.tiers?.length || 0
+              ? getNumericTier(dimId, val)
               : val
             if (level > 0) weekEdges[dimId] = Math.max(weekEdges[dimId] || 0, level)
           })

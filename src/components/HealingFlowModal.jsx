@@ -47,7 +47,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
   useEffect(() => {
     return () => {
       const d = dataRef.current
-      if (d.pattern && d.step > 1) {
+      if (d.pattern && d.step > 1 && questTaskId) {
         const insightText = (d.originText?.trim() && d.fearText?.trim())
           ? `When "${d.originText.trim().slice(0, 80)}" happened, your protective voice was created to keep you safe. But that was then. "${taskText}" is now.`
           : null

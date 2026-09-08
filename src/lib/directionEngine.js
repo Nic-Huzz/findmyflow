@@ -46,7 +46,7 @@ export async function getProblemProfile(userId) {
     .eq('user_id', userId)
     .eq('cluster_type', 'problems')
     .not('problem_tags', 'is', null)
-    .is('is_removed', null)
+    .neq('is_removed', true)
 
   if (!data?.length) return []
 

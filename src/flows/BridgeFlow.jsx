@@ -364,18 +364,19 @@ export default function BridgeFlow() {
 
   // ── SCREEN 3: VALUE & ASK ──
   if (step === STEPS.VALUE_AND_ASK) {
-    const current = validPeople[editingIndex] || validPeople[0]
-    // Derive global index by counting valid people up to editingIndex
+    const safeIdx = Math.min(editingIndex, validPeople.length - 1)
+    const current = validPeople[safeIdx] || validPeople[0]
+    // Derive global index by counting valid people up to safeIdx
     // Can't use indexOf — object references change after updatePerson spreads
     let currentGlobalIndex = -1
     let validCount = 0
     for (let i = 0; i < people.length; i++) {
       if (people[i].name.trim()) {
-        if (validCount === editingIndex) { currentGlobalIndex = i; break }
+        if (validCount === safeIdx) { currentGlobalIndex = i; break }
         validCount++
       }
     }
-    const isLast = editingIndex >= validPeople.length - 1
+    const isLast = safeIdx >= validPeople.length - 1
 
     return (
       <div className="brg">
