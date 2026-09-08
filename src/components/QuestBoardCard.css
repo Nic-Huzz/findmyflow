@@ -5,9 +5,9 @@
 .qbc {
   background: #ffffff;
   border-radius: 16px;
-  overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.05);
   margin-bottom: 8px;
+  position: relative;
 }
 
 /* ── Header ── */
@@ -116,6 +116,8 @@
   min-width: 0;
   color: #1a1a2e;
   line-height: 1.3;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 /* Experience state badge (tappable) */

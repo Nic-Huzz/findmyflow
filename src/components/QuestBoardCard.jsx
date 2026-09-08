@@ -37,6 +37,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [renaming, setRenaming] = useState(null) // null | 'quest' | expId
   const [renameText, setRenameText] = useState('')
   const renameRef = useRef(null)
+  const renameSavingRef = useRef(false)
   const [healingTaskId, setHealingTaskId] = useState(null)
   const [healingTaskText, setHealingTaskText] = useState('')
   const [healingExistingData, setHealingExistingData] = useState(null)
@@ -223,7 +224,8 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   }
 
   const saveRename = async () => {
-    if (!renameText.trim()) return
+    if (renameSavingRef.current || !renameText.trim()) return
+    renameSavingRef.current = true
     if (renaming === 'quest') {
       await supabase.from('quests').update({ label: renameText.trim() }).eq('id', quest.id)
     } else if (renaming) {
@@ -231,6 +233,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     }
     setRenaming(null)
     setRenameText('')
+    renameSavingRef.current = false
     onUpdate?.()
   }
 
