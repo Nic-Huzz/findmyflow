@@ -23,7 +23,7 @@ const SLIDES = [
     title: 'THE SYSTEM',
     preQuote: 'This James Clear quote lit a spark in me:',
     quote: '"You don\'t rise to the level of your goals, you fall to the level of your systems."',
-    attribution: '— James Clear',
+    attribution: '– James Clear',
     body: "It made me realise there must be a system out there to achieve any intention.\n\nIt became my mission to figure out the exact system that would guide people to do what I wish the traditional education system did for me:\n\nMonetise my mission to gain financial + location independence.",
   },
   {
@@ -33,7 +33,7 @@ const SLIDES = [
   {
     title: 'THE REAL BLOCKER',
     preQuote: 'Key realisation in my journey:',
-    quote: '"We don\'t rise to the level of our ambitions — we fall to the level that feels safe."',
+    quote: '"We don\'t rise to the level of our ambitions. We fall to the level that feels safe."',
     body: "It's not a lack of knowledge or ambition that limits our success. It's how we don't feel safe to take the action we know we need to take.",
   },
   {

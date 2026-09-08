@@ -9,7 +9,6 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
-import { sendNotification } from '../lib/notifications'
 import {
   handleConversationLogCompletion,
   handleMilestoneCompletion,
@@ -34,18 +33,19 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
-  'play-list': 'Quests',
-  'playlist': 'Quests',
-  'wahoo': 'Quests',         // backward compat — courage merged into quests
-  'courage': 'Quests',       // backward compat — courage merged into quests
-  'priority': 'Quests',
-  'level': 'Quests',         // backward compat
-  'quests': 'Quests',
-  'business': 'Quests',      // backward compat
-  'create': 'Quests',        // backward compat
-  'groans': 'Quests',        // backward compat — courage merged into quests
-  'healing': 'Quests',       // backward compat — courage merged into quests
-  'tracker': 'Quests',       // backward compat — courage merged into quests
+  'play-list': 'Paths',
+  'playlist': 'Paths',
+  'wahoo': 'Paths',         // backward compat — courage merged into quests
+  'courage': 'Paths',       // backward compat — courage merged into quests
+  'priority': 'Paths',
+  'level': 'Paths',         // backward compat
+  'quests': 'Paths',
+  'paths': 'Paths',
+  'business': 'Paths',      // backward compat
+  'create': 'Paths',        // backward compat
+  'groans': 'Paths',        // backward compat — courage merged into quests
+  'healing': 'Paths',       // backward compat — courage merged into quests
+  'tracker': 'Paths',       // backward compat — courage merged into quests
   'tune': 'Tune',
   'bonus': 'Tune',           // backward compat
   'journey': 'Discover',     // renamed
@@ -137,7 +137,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Discover', 'Quests', 'Tune', 'Progress']
+  const categories = ['Discover', 'Paths', 'Tune', 'Progress']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 
@@ -333,14 +333,6 @@ export function useChallengeData() {
       console.error('Error advancing day:', error)
     } else {
       setProgress(data)
-      if (newDay > currentProgress.current_day && newDay <= 7) {
-        await sendNotification(user.id, {
-          title: `Day ${newDay} Unlocked!`,
-          body: 'Your new daily quests are ready to complete',
-          url: '/7-day-challenge',
-          tag: `day-${newDay}`
-        })
-      }
     }
   }
 

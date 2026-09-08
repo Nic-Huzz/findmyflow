@@ -336,7 +336,7 @@ function HomeFirstTime({ onOnboardingComplete }) {
       const { error } = await supabase.from('user_projects').insert({
         user_id: user.id,
         name: 'Discovery Project',
-        description: 'Your flow discovery journey — this will update as you explore.',
+        description: 'Your flow discovery journey. This will update as you explore.',
         source_flow: 'discovery_default',
         status: 'active',
         current_stage: 0,

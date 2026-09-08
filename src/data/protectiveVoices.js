@@ -20,14 +20,14 @@ export const PROTECTIVE_VOICES = {
     id: 'controller',
     name: 'The Controller',
     icon: '🎮',
-    lie: "Leaving it to chance isn't an option.",
+    lie: 'I want to know how this ends before I do it.',
     origin: 'Developed when chaos, loss, or conditional approval created a need for safety through control and performance',
     howItProtects: 'By managing every outcome and controlling how others see you, it prevents unexpected pain and rejection',
     kryptonite: 'Letting go. Resting without guilt. Trusting others to handle it.',
     signs: [
       'Over-planning and micro-managing',
       'Inability to delegate or trust',
-      'Always being "on" — performing, impressing',
+      'Always being "on", performing, impressing',
       'Rest feels like laziness',
       'Worth tied to output and image'
     ],
@@ -39,7 +39,7 @@ export const PROTECTIVE_VOICES = {
     id: 'ghost',
     name: 'The Ghost',
     icon: '👻',
-    lie: "I don't feel comfortable sharing.",
+    lie: 'I want to disappear. Hide. Go quiet.',
     origin: 'Developed when being seen led to pain, criticism, or overwhelm',
     howItProtects: 'By withdrawing and staying hidden, it prevents judgment and emotional intensity',
     kryptonite: 'Being seen anyway. Sharing before you feel ready. Staying in the room.',
@@ -49,7 +49,7 @@ export const PROTECTIVE_VOICES = {
       'Leaving situations before they get intense',
       'Discomfort with any spotlight'
     ],
-    playBlocker: 'Stops you from playing publicly — play must stay private or hidden',
+    playBlocker: 'Stops you from playing publicly. Play must stay private or hidden',
     affirmation: 'Thank you for protecting me from danger. Being seen is safe now.'
   },
 
@@ -57,7 +57,7 @@ export const PROTECTIVE_VOICES = {
     id: 'perfectionist',
     name: 'The Perfectionist',
     icon: '🎭',
-    lie: "I'm not ready yet.",
+    lie: "It's not good enough yet. I need more time.",
     origin: 'Developed when mistakes led to shame, criticism, or punishment',
     howItProtects: 'By preventing you from shipping, it prevents you from failing publicly',
     kryptonite: 'Shipping something imperfect. "Done beats perfect."',
@@ -67,15 +67,15 @@ export const PROTECTIVE_VOICES = {
       'Inability to launch',
       'One more revision syndrome'
     ],
-    playBlocker: 'Stops you from playing until everything is "perfect" — gas and brake at the same time',
+    playBlocker: 'Stops you from playing until everything is "perfect". Gas and brake at the same time',
     affirmation: 'Thank you for protecting me from shame. I can handle imperfection now.'
   },
 
-  'auto-pilot': {
-    id: 'auto-pilot',
+  'auto_pilot': {
+    id: 'auto_pilot',
     name: 'The Auto-Pilot',
     icon: '🛋️',
-    lie: "I'm fine, just tired.",
+    lie: "I'm going through the motions. I've checked out.",
     origin: 'Developed when sustained overwhelm made checking out the only way to survive',
     howItProtects: 'By going through the motions, it prevents you from feeling the weight of what you are avoiding',
     kryptonite: 'Asking yourself "What do I actually want?" and sitting with the answer.',
@@ -85,15 +85,15 @@ export const PROTECTIVE_VOICES = {
       'Saying "I\'m fine" on autopilot',
       'No strong feelings about anything'
     ],
-    playBlocker: 'Play requires presence — Auto-Pilot keeps you checked out',
+    playBlocker: 'Play requires presence. Auto-Pilot keeps you checked out',
     affirmation: 'Thank you for protecting me from overwhelm. I can feel things now.'
   },
 
-  'people-pleaser': {
-    id: 'people-pleaser',
+  'people_pleaser': {
+    id: 'people_pleaser',
     name: 'The People Pleaser',
     icon: '🪞',
-    lie: "As long as everyone's happy, I'm good.",
+    lie: "I'd rather say yes than deal with their reaction.",
     origin: 'Developed when authenticity led to rejection or judgment',
     howItProtects: 'By making you agreeable, it prevents conflict and rejection',
     kryptonite: 'Showing up as yourself, setting boundaries, saying no',
@@ -103,7 +103,7 @@ export const PROTECTIVE_VOICES = {
       'Fear of disappointing others',
       'Changing yourself to fit in'
     ],
-    playBlocker: 'Stops you from playing YOUR way — always adapting to others',
+    playBlocker: 'Stops you from playing YOUR way, always adapting to others',
     affirmation: 'Thank you for protecting me from rejection. I can be myself now.'
   }
 }
@@ -113,8 +113,8 @@ export const PROTECTIVE_VOICES = {
  */
 export const resolveVoiceId = (id) => {
   if (id === 'performer') return 'controller'
-  if (id === 'auto_pilot') return 'auto-pilot'
-  if (id === 'people_pleaser') return 'people-pleaser'
+  if (id === 'auto-pilot') return 'auto_pilot'
+  if (id === 'people-pleaser') return 'people_pleaser'
   return id
 }
 

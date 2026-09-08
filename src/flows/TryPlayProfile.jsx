@@ -205,7 +205,7 @@ export default function TryPlayProfile() {
             profile={state.dnaProfile}
             match={state.matchResult}
             onContinue={handleContinue}
-            continueLabel="Go deeper — find your stuck point"
+            continueLabel="Go deeper. Find your stuck point"
             shareUrl="viberise.nichuzz.com/try/play-profile"
             onFounderChange={(selectedMatch) => {
               setState(prev => ({

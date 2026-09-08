@@ -448,7 +448,7 @@ function WinAnalysisView({ wins, stats }) {
               .map(win => (
                 <blockquote key={win.id} className="sold-quote">
                   "{win.what_sold_them}"
-                  <cite>— {win.deals?.contact_name}</cite>
+                  <cite>- {win.deals?.contact_name}</cite>
                 </blockquote>
               ))}
           </div>
@@ -624,7 +624,7 @@ function ComparisonView({ validationData, losses, stats }) {
               <span className="insight-icon">📝</span>
               <span>
                 {losses.length < 5
-                  ? 'Too early to tell — need more sales data.'
+                  ? 'Too early to tell. Need more sales data.'
                   : 'These might be edge cases or your positioning has preemptively addressed them.'}
               </span>
             </div>
@@ -702,7 +702,7 @@ function ComparisonView({ validationData, losses, stats }) {
                 <div className="action-content">
                   <span className="action-title">Re-evaluate validation assumptions</span>
                   <span className="action-detail">
-                    Some predicted objections haven't appeared — your messaging may be stronger than expected.
+                    Some predicted objections haven't appeared. Your messaging may be stronger than expected.
                   </span>
                 </div>
               </div>

@@ -305,7 +305,7 @@ export default function CACTracker() {
       <div className="cac-hero">
         <span className="cac-hero-label">Customer Acquisition Cost</span>
         <h2 className="cac-hero-title">${calculations.blendedCAC.toFixed(2)}</h2>
-        <p className="cac-hero-sub">Blended CAC{dataSource ? ` — from: ${dataSource}` : ''}</p>
+        <p className="cac-hero-sub">Blended CAC{dataSource ? `, from: ${dataSource}` : ''}</p>
         <div className="cac-hero-stats">
           <div className="cac-hero-stat">
             <span className="cac-hero-stat-value">${calculations.totalSpend.toLocaleString()}</span>

@@ -83,6 +83,8 @@ const STAGE_COLORS = {
 
 const SORT_OPTIONS = [
   { value: 'score', label: 'Score' },
+  { value: 'outlier', label: 'Outlier' },
+  { value: 'followers', label: 'Followers' },
   { value: 'posted_at', label: 'Recent' },
   { value: 'views', label: 'Views' },
   { value: 'engagement', label: 'Engagement' },
@@ -184,8 +186,19 @@ export default function ContentIntel({ refreshKey }) {
             letterSpacing: 0.8, color: '#6c757d', marginBottom: 6,
           }}>
             {patterns.analyzedCount} reels analyzed
+            {patterns.avgScore && (
+              <span style={{ color: '#adb5bd', fontWeight: 500 }}> · avg score {patterns.avgScore}</span>
+            )}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {patterns.outlierCount > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 14 }}>🔥</span>
+                <span style={{ fontSize: 11, color: '#6c757d' }}>
+                  <span style={{ fontWeight: 600, color: '#5e17eb' }}>{patterns.outlierCount} outlier{patterns.outlierCount !== 1 ? 's' : ''}</span> scored 2x+ above your average
+                </span>
+              </div>
+            )}
             {patterns.bestHook && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ fontSize: 14 }}>{HOOK_ICONS[patterns.bestHook] || '🎯'}</span>
@@ -208,6 +221,14 @@ export default function ContentIntel({ refreshKey }) {
                 <span style={{ fontSize: 14 }}>💾</span>
                 <span style={{ fontSize: 11, color: '#6c757d' }}>
                   <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{CONTENT_LABELS[patterns.bestContent]}</span> content gets most saves
+                </span>
+              </div>
+            )}
+            {patterns.topFollowersPost && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 14 }}>👥</span>
+                <span style={{ fontSize: 11, color: '#6c757d' }}>
+                  Top converter: <span style={{ fontWeight: 600, color: '#1a1a2e' }}>+{patterns.topFollowersPost.followers_gained}</span> followers from 1 reel
                 </span>
               </div>
             )}
@@ -319,10 +340,20 @@ export default function ContentIntel({ refreshKey }) {
                       {(reel.views || 0).toLocaleString()}
                     </span>
                     <span style={{ color: '#adb5bd' }}>views</span>
+                    {(reel.followers_gained || 0) > 0 && (
+                      <>
+                        <span style={{ color: '#dee2e6' }}>|</span>
+                        <span style={{ fontWeight: 600, color: '#5e17eb' }}>
+                          +{reel.followers_gained}
+                        </span>
+                        <span style={{ color: '#adb5bd' }}>follows</span>
+                      </>
+                    )}
                     <span style={{ color: '#dee2e6' }}>|</span>
                     <span>{reel.like_count || 0} likes</span>
                     {reel.shares > 0 && <span>{reel.shares} shares</span>}
                     {reel.saves > 0 && <span>{reel.saves} saves</span>}
+                    {/* Score + outlier badge */}
                     {s.hookFailed ? (
                       <span style={{
                         fontSize: 9, fontWeight: 600, marginLeft: 'auto',
@@ -333,10 +364,25 @@ export default function ContentIntel({ refreshKey }) {
                       </span>
                     ) : s.score > 0 ? (
                       <span style={{
-                        fontSize: 10, fontWeight: 700, marginLeft: 'auto',
-                        color: s.score >= 50 ? '#10b981' : s.score >= 20 ? '#E9A23B' : 'rgba(255,255,255,0.4)',
+                        display: 'flex', alignItems: 'center', gap: 4,
+                        marginLeft: 'auto',
                       }}>
-                        {s.score}
+                        {s.outlierRatio >= 2.0 && (
+                          <span style={{
+                            fontSize: 9, fontWeight: 700, padding: '1px 5px',
+                            borderRadius: 6,
+                            background: 'linear-gradient(135deg, rgba(94,23,235,0.15), rgba(233,162,59,0.15))',
+                            color: '#5e17eb',
+                          }}>
+                            {s.outlierRatio}x
+                          </span>
+                        )}
+                        <span style={{
+                          fontSize: 10, fontWeight: 700,
+                          color: s.score >= 50 ? '#10b981' : s.score >= 20 ? '#E9A23B' : '#adb5bd',
+                        }}>
+                          {s.score}
+                        </span>
                       </span>
                     ) : null}
                   </div>

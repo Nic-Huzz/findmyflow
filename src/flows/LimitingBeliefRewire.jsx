@@ -337,7 +337,7 @@ export default function LimitingBeliefRewire() {
             <p><strong>This flow takes about 10-15 minutes</strong></p>
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>7 questions to trace and heal a limiting belief.</p>
             <p>Find a quiet, safe space where you can be emotionally present.</p>
-            <p><strong>This work can bring up old memories — that's part of the healing.</strong></p>
+            <p><strong>This work can bring up old memories. That's part of the healing.</strong></p>
           </div>
 
           <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
@@ -365,7 +365,7 @@ export default function LimitingBeliefRewire() {
           <span className="highlight-word">Limiting Belief Rewire</span> helps you <em>heal</em> the root cause of those beliefs.
         </p>
         <p>We'll trace a safety contract back to its origin and remove the emotional "splinter" that created it.</p>
-        <p>This is deep work — and it's how lasting change happens.</p>
+        <p>This is deep work. And it's how lasting change happens.</p>
       </div>
 
       <button className="primary-button" onClick={() => setCurrentScreen('welcome')}>
@@ -382,7 +382,7 @@ export default function LimitingBeliefRewire() {
         <p><strong>Hey {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'there'}!</strong> I'm excited to dive deeper with you.</p>
         <p>Our mission here is to find the <strong>source</strong> of what's blocking your flow so we can heal it.</p>
         <p>In the Nervous System flow, you identified safety contracts that have been protecting you.</p>
-        <p>Now let's trace one back to its origin — and remove the emotional splinter driving it.</p>
+        <p>Now let's trace one back to its origin and remove the emotional splinter driving it.</p>
         <p className="hint-text">Be gentle with yourself. This is powerful work.</p>
       </div>
 
@@ -549,7 +549,7 @@ export default function LimitingBeliefRewire() {
       <h2 className="ns-hc-question-text">Now we can see how this belief formed</h2>
 
       <div className="ns-hc-result-box" style={{ marginTop: 32 }}>
-        <p>This experience — <span className="ns-hc-highlight">{responses.past_event_details}</span> — and feeling <span className="ns-hc-highlight">{responses.past_event_emotions}</span> was so impactful that your system decided to protect you from ever having the same experience again.</p>
+        <p>This experience, <span className="ns-hc-highlight">{responses.past_event_details}</span>, and feeling <span className="ns-hc-highlight">{responses.past_event_emotions}</span>, was so impactful that your system decided to protect you from ever having the same experience again.</p>
         <p style={{ marginTop: 16 }}>That's why it created this belief: <span className="ns-hc-highlight">"{responses.selected_safety_contract}"</span></p>
         <p style={{ marginTop: 16 }}>To protect you, it now doesn't feel safe doing anything that might create that experience again.</p>
         {!viewingResults && <p style={{ marginTop: 16 }}>Make sense?</p>}
@@ -652,7 +652,7 @@ export default function LimitingBeliefRewire() {
       <h1 className="ns-hc-welcome-greeting">🔒 Complete Nervous System Map First</h1>
       <div className="ns-hc-welcome-message animated-text">
         <p>Before you can rewire a limiting belief, you need to <strong>identify</strong> which beliefs are active in your nervous system.</p>
-        <p>The Nervous System Map will uncover the safety contracts holding you back — then you can return here to trace and heal them.</p>
+        <p>The Nervous System Map will uncover the safety contracts holding you back. Then you can return here to trace and heal them.</p>
       </div>
 
       <div className="ns-hc-sticky-nav">

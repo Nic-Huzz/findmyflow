@@ -885,7 +885,7 @@ const PublicValidationFlow = () => {
           <h2>You're amazing. Seriously.</h2>
           <p className="complete-message">
             Your honest answers are going to help shape something real.
-            The person who sent you this? They're not building for "the market" — they're building for people like you.
+            The person who sent you this? They're not building for "the market". They're building for people like you.
           </p>
 
           {responseSummary.length > 0 && (
@@ -911,7 +911,7 @@ const PublicValidationFlow = () => {
           <div className="completion-cta">
             <p className="cta-intro">Curious what they're using to build this?</p>
             <p className="cta-description">
-              Find My Flow helps people discover what they're meant to create — and actually follow through on it.
+              Find My Flow helps people discover what they're meant to create, and actually follow through on it.
             </p>
             {!launchNotifySubmitted ? (
               <button

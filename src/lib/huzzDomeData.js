@@ -136,10 +136,36 @@ export const HUZZ_DOME_STATES = {
   'sub-alt-2011': 'fun',        // Van life — nomadic lifestyle
   'sub-proptech-2008': 'fun',       // Airbnb hosting — duplicate of property-2008
   'sub-proptech-2015': 'fun',       // Co-living — duplicate of sub-communal-2015
-  'sub-proptech-2020': 'vibe_rise', // Working from home — self-employed, builds from laptop
+  'sub-proptech-2020': 'pressure', // Renovating / building — growth edge
   'sub-sacred-2010': 'fun',     // Wellness studio — attends/hosts at studios
   'sub-sacred-2020': 'vibe_rise', // Sound room / silent disco — duplicate of dance-2005
   'sub-sacred-1900': 'fun',     // Spa/bathhouse — Bali
+
+  // ═══════════════════════════════════════════
+  // NEW NODES (Sep 2026 session)
+  // ═══════════════════════════════════════════
+  'exp-singing': 'pressure',        // Singing — "Singing at Jamprov" courage challenge
+  'exp-rapping': 'pressure',        // Rapping — growth edge
+  'exp-teaching': 'vibe_rise',      // Teaching — runs Vibe Rise, coding program, AI masterclass
+  // exp-djing-live: uninterested   // DJing for crowd — didn't enjoy it, pivoted to facilitating + pre-recording
+  // exp-dance-expression: uninterested // Dance as creative art — not his thing (ecstatic dance is Movement)
+  'exp-acting': 'pressure',         // Acting / improv — improv comedy night, stressful but drawn to it
+  // exp-creative-writing: uninterested // Fiction/poetry — not interested (non-fiction covered by media-1991)
+  'exp-cycling': 'fun',             // Cycling
+  'exp-skiing': 'fun',              // Skiing / snowboarding
+  // exp-fishing: uninterested
+  // exp-horse-riding: uninterested
+  // exp-interior-design: uninterested
+  // exp-fashion-design: uninterested
+  'exp-product-design': 'vibe_rise', // Product design — builds apps, designs UX
+  'exp-graphic-design': 'pressure', // Graphic design — growth edge
+  'exp-investing': 'pressure',      // Investing / trading — growth edge
+  // exp-spreadsheets: uninterested
+  'exp-caring-kids': 'fun',         // Caring for kids
+  // exp-baking: uninterested
+  'exp-travel': 'fun',              // Travel / exploring a new place
+  'exp-puzzles': 'fun',             // Puzzles / escape rooms
+  'exp-choosing-style': 'vibe_rise', // Wearing clothes that express who you are
 
   // ═══════════════════════════════════════════
   // STORY — Content creation, stand-up, YouTube, podcasts, experience design

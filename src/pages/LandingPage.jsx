@@ -6,12 +6,12 @@ import './LandingPage.css'
 
 const CULTURES = [
   { term: 'Svadharma', tradition: 'Sanskrit', translation: '"One\'s own duty"', desc: 'Better to imperfectly follow your own path than to perfectly follow someone else\'s.' },
-  { term: 'Te', tradition: 'Taoist', translation: '"Inherent power"', desc: 'Your individual expression of the Tao. You don\'t create it through effort — you uncover it by removing obstructions.' },
+  { term: 'Te', tradition: 'Taoist', translation: '"Inherent power"', desc: 'Your individual expression of the Tao. You don\'t create it through effort. You uncover it by removing obstructions.' },
   { term: 'Ikigai', tradition: 'Japanese', translation: '"Reason for being"', desc: 'Emerges at the intersection of what you love and what others need.' },
 ]
 
 const STEPS = [
-  { title: 'Create your Essence Profile', desc: 'Discover your unique character — your skills, the problems you solve, and who you\'re meant to serve.' },
+  { title: 'Create your Essence Profile', desc: 'Discover your unique character: your skills, the problems you solve, and who you\'re meant to serve.' },
   { title: 'Take the Stage Finder', desc: 'Answer a few questions about where you are on your journey. Get placed at the right level.' },
   { title: 'Unlock your quests', desc: 'Get stage-specific quests that give you clarity on action and accountability to take it.' },
 ]
@@ -36,11 +36,11 @@ const FAQS = [
   },
   {
     q: "How is this different from courses or coaching?",
-    a: "Courses dump information and hope you figure it out. Coaches tell you what to do. We guide you through discovering your own answers — because you're the expert on you."
+    a: "Courses dump information and hope you figure it out. Coaches tell you what to do. We guide you through discovering your own answers, because you're the expert on you."
   },
   {
     q: "How long does it take?",
-    a: "The Earthquake Quiz takes 3 minutes. The full Flow Finder journey can be done in a few focused sessions. But this isn't about speed — it's about getting clear."
+    a: "The Earthquake Quiz takes 3 minutes. The full Flow Finder journey can be done in a few focused sessions. But this isn't about speed. It's about getting clear."
   },
   {
     q: "Is this just for people who want to start a business?",
@@ -48,11 +48,11 @@ const FAQS = [
   },
   {
     q: "What if I've tried other programs and they didn't work?",
-    a: "Most programs focus on what action to take, without addressing what's stopping you from taking action. We combine business strategy with healing work — so you actually do the things you know you should do."
+    a: "Most programs focus on what action to take, without addressing what's stopping you from taking action. We combine business strategy with healing work so you actually do the things you know you should do."
   },
   {
     q: "What's included in the free version?",
-    a: "The Earthquake Quiz is completely free. You'll discover your loudest Protective Voice, your awakening stage, and your primary block — with a personalised report. No credit card required."
+    a: "The Earthquake Quiz is completely free. You'll discover your loudest Protective Voice, your awakening stage, and your primary block, with a personalised report. No credit card required."
   },
 ]
 
@@ -253,14 +253,14 @@ export default function LandingPage() {
               <div className="fmf-arche-badge fmf-arche-badge--essence">ESSENCE VOICE</div>
               <h3 className="fmf-arche-title">The original song you were born to share.</h3>
               <p className="fmf-arche-desc">
-                Your essence voice is your authentic creative expression — the unique combination of skills, passions, and perspectives that only you bring. When you follow it, work feels like play.
+                Your essence voice is your authentic creative expression, the unique combination of skills, passions, and perspectives that only you bring. When you follow it, work feels like play.
               </p>
             </div>
             <div className="fmf-arche fmf-arche--protective reveal-slide-right" style={{ transitionDelay: '120ms' }}>
               <div className="fmf-arche-badge fmf-arche-badge--protective">PROTECTIVE PATTERN</div>
               <h3 className="fmf-arche-title">The armor that's now blocking your gifts.</h3>
               <p className="fmf-arche-desc">
-                Your protective pattern kept you safe growing up — but now it's the voice that says "don't put yourself out there." It's the gap between who you are and what you show the world.
+                Your protective pattern kept you safe growing up, but now it's the voice that says "don't put yourself out there." It's the gap between who you are and what you show the world.
               </p>
             </div>
           </div>
@@ -287,9 +287,9 @@ export default function LandingPage() {
             <p className="fmf-origin-line reveal-slide-right" style={{ transitionDelay: '0ms' }}>You sense life is supposed to be an adventure, not a ladder. About creating impact, not living for the weekend.</p>
             <p className="fmf-origin-line reveal-slide-right" style={{ transitionDelay: '60ms' }}><strong>Does this sound like you?</strong></p>
             <div className="fmf-origin-results reveal-blur-up" style={{ transitionDelay: '120ms' }}>
-              <p><strong>Head full of ambitions</strong> — but no clear path.</p>
-              <p><strong>Talents going to waste</strong> — best gifts gathering dust.</p>
-              <p><strong>Can't monetise gifts</strong> — no clear path from talent to income.</p>
+              <p><strong>Head full of ambitions</strong>, but no clear path.</p>
+              <p><strong>Talents going to waste</strong>, best gifts gathering dust.</p>
+              <p><strong>Can't monetise gifts</strong>, no clear path from talent to income.</p>
             </div>
           </div>
           <blockquote className="fmf-origin-quote reveal-slide-right">
@@ -320,7 +320,7 @@ export default function LandingPage() {
               <span className="fmf-why-num">2</span>
               <h3 className="fmf-why-title">Then We Entered The Matrix</h3>
               <p className="fmf-why-subtitle">A system optimised for safety, not fulfillment.</p>
-              <p className="fmf-why-body">Trade your time, energy, and most productive hours for security. It's not a conspiracy — it's just an optimisation that forgot about you.</p>
+              <p className="fmf-why-body">Trade your time, energy, and most productive hours for security. It's not a conspiracy. It's just an optimisation that forgot about you.</p>
             </div>
 
             <div className="fmf-why-card reveal-blur-up" style={{ transitionDelay: '350ms' }}>
@@ -357,7 +357,7 @@ export default function LandingPage() {
             <div className="fmf-sell reveal-slide-right" style={{ transitionDelay: '240ms' }}>
               <div className="fmf-sell-icon">{'\u{1F3AF}'}</div>
               <h3 className="fmf-sell-title">Specificity wins</h3>
-              <p className="fmf-sell-desc">The future rewards people who deeply understand specific problems — not generalists.</p>
+              <p className="fmf-sell-desc">The future rewards people who deeply understand specific problems, not generalists.</p>
             </div>
           </div>
         </div>
@@ -426,7 +426,7 @@ export default function LandingPage() {
               { emoji: '\u{1F49C}', label: 'Healing', value: 'Groan Matrix, Healing Compass, Nervous System' },
               { emoji: '\u{1F3AE}', label: 'Gamified', value: '7-Day Challenges, Points, Leaderboard' },
               { emoji: '\u{1F4BC}', label: 'CRM', value: 'Content Generator, Contacts, Email Sequences' },
-              { emoji: '\u{1F916}', label: 'AI Co-Founder', value: 'Zarlo — context-aware AI on every page' },
+              { emoji: '\u{1F916}', label: 'AI Co-Founder', value: 'Zarlo, context-aware AI on every page' },
             ].map((item, i) => (
               <div key={item.label} className="fmf-include reveal-fade-up" style={{ transitionDelay: `${i * 80}ms` }}>
                 <div className="fmf-include-emoji">{item.emoji}</div>
@@ -446,7 +446,7 @@ export default function LandingPage() {
             <p className="fmf-origin-line reveal-slide-left" style={{ transitionDelay: '60ms' }}>Hey, I'm Huzz.</p>
             <p className="fmf-origin-line reveal-slide-left" style={{ transitionDelay: '120ms' }}>In 2020, I realised a corporate job wasn't for me.</p>
             <p className="fmf-origin-line fmf-origin-bold reveal-slide-left" style={{ transitionDelay: '180ms' }}>Three years later? I was still in the same job.</p>
-            <p className="fmf-origin-line reveal-slide-left" style={{ transitionDelay: '240ms' }}>It wasn't from a lack of clarity. It wasn't from a lack of education — I'd spent $30,000 on 52 courses.</p>
+            <p className="fmf-origin-line reveal-slide-left" style={{ transitionDelay: '240ms' }}>It wasn't from a lack of clarity. It wasn't from a lack of education. I'd spent $30,000 on 52 courses.</p>
             <p className="fmf-origin-line fmf-origin-bold reveal-slide-left" style={{ transitionDelay: '300ms' }}>It was because I didn't feel safe.</p>
             <p className="fmf-origin-line fmf-origin-muted reveal-slide-left" style={{ transitionDelay: '360ms' }}>Scared of judgement. Scared of failing. Scared I wasn't good enough.</p>
           </div>
@@ -460,10 +460,10 @@ export default function LandingPage() {
           </div>
           <blockquote className="fmf-origin-quote reveal-slide-right">
             <div className="fmf-quote-mark" aria-hidden="true">&ldquo;</div>
-            <p>We don't rise to the level of our ambitions — we fall to the level of what feels safe.</p>
+            <p>We don't rise to the level of our ambitions. We fall to the level of what feels safe.</p>
           </blockquote>
           <p className="fmf-origin-close reveal-blur-up">
-            <strong>Find My Flow</strong> is the only platform that merges business teaching with healing — so you actually do the things you know you should do.
+            <strong>Find My Flow</strong> is the only platform that merges business teaching with healing so you actually do the things you know you should do.
           </p>
         </div>
       </section>

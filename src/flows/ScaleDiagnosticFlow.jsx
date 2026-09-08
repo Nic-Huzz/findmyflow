@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import './ScaleDiagnosticFlow.css'
 
 const STEPS = {
@@ -152,6 +153,12 @@ export default function ScaleDiagnosticFlow() {
   }, [step])
 
   const gatePassed = scoreBody >= 4 && scoreCulture >= 4
+
+  // Staggered reveal for results screen
+  const hasContext = !!(projectName || ruleBreak)
+  const hasGateFailure = !gatePassed && (scoreBody < 4 || scoreCulture < 4)
+  const resultItemCount = 5 + (hasContext ? 1 : 0) + (hasGateFailure ? 1 : 0)
+  const { revealStyle } = useStaggerReveal(resultItemCount, step === STEPS.RESULTS, { interval: 800 })
 
   const autoSave = () => {
     if (!user) return
@@ -435,14 +442,24 @@ export default function ScaleDiagnosticFlow() {
       { key: 'access', label: 'Access', score: scoreAccess },
     ]
 
+    // Build item index dynamically based on which conditional items render
+    let idx = 0
+    const badgeIdx = idx++
+    const contextIdx = hasContext ? idx++ : -1
+    const headlineIdx = idx++
+    const gateFailureIdx = hasGateFailure ? idx++ : -1
+    const scoreBarsIdx = idx++
+    const recsIdx = idx++
+    const navIdx = idx++
+
     return (
       <div className="sdf">
-        <div className="sdf-container sdf-screen">
-          <div className="sdf-badge">Your Diagnostic</div>
+        <div className="sdf-container sdf-screen sdf-results-reveal">
+          <div className="sdf-badge" style={revealStyle(badgeIdx)}>Your Diagnostic</div>
 
           {/* Context */}
-          {(projectName || ruleBreak) && (
-            <div className="sdf-context-card">
+          {hasContext && (
+            <div className="sdf-context-card" style={revealStyle(contextIdx)}>
               {projectName && <strong>{projectName}</strong>}
               {projectName && ruleBreak && ': '}
               {ruleBreak && `"${ruleBreak}"`}
@@ -450,19 +467,21 @@ export default function ScaleDiagnosticFlow() {
           )}
 
           {/* Headline */}
-          {gatePassed ? (
-            <h2 className="sdf-result-headline sdf-result-headline-gold">
-              Your rule break has scale conditions.
-            </h2>
-          ) : (
-            <h2 className="sdf-result-headline sdf-result-headline-neutral">
-              Your rule break has a growth ceiling.
-            </h2>
-          )}
+          <div style={revealStyle(headlineIdx)}>
+            {gatePassed ? (
+              <h2 className="sdf-result-headline sdf-result-headline-gold">
+                Your rule break has scale conditions.
+              </h2>
+            ) : (
+              <h2 className="sdf-result-headline sdf-result-headline-neutral">
+                Your rule break has a growth ceiling.
+              </h2>
+            )}
+          </div>
 
           {/* Gate failure explanation */}
-          {!gatePassed && lowGate.length > 0 && (
-            <div style={{ marginBottom: '1rem' }}>
+          {hasGateFailure && (
+            <div style={{ ...revealStyle(gateFailureIdx), marginBottom: '1rem' }}>
               {lowGate.includes('body') && (
                 <div className="sdf-gap-card">
                   <div className="sdf-gap-label">Body scored {scoreBody}/5</div>
@@ -479,7 +498,7 @@ export default function ScaleDiagnosticFlow() {
           )}
 
           {/* Score bars */}
-          <div className="sdf-results-section">
+          <div className="sdf-results-section" style={revealStyle(scoreBarsIdx)}>
             {scoreItems.map(item => (
               <div
                 key={item.key}
@@ -500,27 +519,29 @@ export default function ScaleDiagnosticFlow() {
           </div>
 
           {/* Accelerator or gap recommendation */}
-          {gatePassed ? (
-            <div className="sdf-accelerator-card">
-              <div className="sdf-accelerator-label">Your growth accelerator: {QUADRANT_NAMES[weakest.key]}</div>
-              <p className="sdf-accelerator-text">{RECOMMENDATIONS[weakest.key]}</p>
-            </div>
-          ) : (
-            allGaps.length > 0 && (
-              <div>
-                {allGaps.map(gap => (
-                  <div key={gap} className="sdf-gap-card">
-                    <div className="sdf-gap-label">Strengthen: {QUADRANT_NAMES[gap]}</div>
-                    <p className="sdf-gap-text">{RECOMMENDATIONS[gap]}</p>
-                  </div>
-                ))}
+          <div style={revealStyle(recsIdx)}>
+            {gatePassed ? (
+              <div className="sdf-accelerator-card">
+                <div className="sdf-accelerator-label">Your growth accelerator: {QUADRANT_NAMES[weakest.key]}</div>
+                <p className="sdf-accelerator-text">{RECOMMENDATIONS[weakest.key]}</p>
               </div>
-            )
-          )}
+            ) : (
+              allGaps.length > 0 && (
+                <div>
+                  {allGaps.map(gap => (
+                    <div key={gap} className="sdf-gap-card">
+                      <div className="sdf-gap-label">Strengthen: {QUADRANT_NAMES[gap]}</div>
+                      <p className="sdf-gap-text">{RECOMMENDATIONS[gap]}</p>
+                    </div>
+                  ))}
+                </div>
+              )
+            )}
+          </div>
 
           {error && <div className="sdf-error">{error}</div>}
 
-          <div className="sdf-nav">
+          <div className="sdf-nav" style={revealStyle(navIdx)}>
             <button className="sdf-back" onClick={() => setStep(STEPS.ACCESS)}>Back</button>
             <button
               className="sdf-cta"

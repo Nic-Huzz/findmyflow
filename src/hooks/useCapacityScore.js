@@ -1,81 +1,97 @@
 /**
- * useCapacityScore.js — v4 Pillar Model
+ * useCapacityScore.js — v5 Per-Day Quadrant Model
  *
- * Zone = how many of 3 pillars are active in a 7-day window:
- *   0 active → Stuck (0-25)
- *   1 active → Wired (25-50)
- *   2 active → Grounded (50-75)
- *   3 active → Vibe Rise (75-100)
+ * Safety score (0-10):
+ *   For each of last 7 days, daily_ratio = min(1, safety_items / SAFETY_DAILY_TARGET)
+ *   safety = avg(daily_ratios) * 10
  *
- * Position within zone = average strength of active pillars.
+ * Expression score (0-10):
+ *   For each of last 7 days, daily_ratio = min(1, expression_items / EXPRESSION_DAILY_TARGET)
+ *   wahoo_bonus = has_wahoo_this_week ? 1.0 : 0.0
+ *   expression = min(10, avg(daily_ratios) * 8 + wahoo_bonus * 2)
  *
- * Pillar thresholds (7-day window):
- *   Safety:      4+ practices (meditation, breathwork, prayer, healing, self-compassion, savouring, connect)
- *   Expression:  3+ tune practices AND 1+ completed courage challenge
- *   Maintenance: 50%+ of daily items logged (sleep, exercise, sunlight, meals)
+ * Quadrant (replaces zone):
+ *   >= 5 on both → vibe-rise
+ *   >= 5 safety only → grounded
+ *   >= 5 expression only → wired
+ *   both < 5 → stuck
  *
- * Zones: 0-25 Stuck, 25-50 Wired, 50-75 Grounded, 75-100 Vibe Rise
- * Rolling 7-day window.
+ * Maintenance: same per-day average as before.
  *
- * Rewritten: 2026-08-30 (v4)
+ * Rewritten: 2026-09-07 (v5)
  */
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { formatLocalDate } from '../lib/dateUtils'
 
-// Pillar activation thresholds
-const SAFETY_THRESHOLD = 4       // 4+ safety practices in 7 days
-const EXPRESSION_PRACTICE_THRESHOLD = 3  // 3+ expression tune practices AND 1+ wahoo
-const MAINTENANCE_THRESHOLD = 50 // 50%+ of daily items logged
-
-// Max strength per pillar (for normalising to 0-1)
-const SAFETY_MAX = 15    // ~2/day of 5 possible items
-const EXPRESSION_MAX = 15
-const MAINTENANCE_MAX = 100 // percentage
+// Per-day targets
+const SAFETY_DAILY_TARGET = 4
+const EXPRESSION_DAILY_TARGET = 3
+const QUADRANT_THRESHOLD = 5.0  // >= 5 on an axis = "high"
 
 // Quest IDs by category
 const MAINTENANCE_IDS = ['practice_sleep', 'practice_exercise', 'practice_sunlight', 'meal_breakfast', 'meal_lunch', 'meal_dinner']
 const SAFETY_IDS = ['reconnect_morning_meditation_breathwork', 'reconnect_daily_prayer', 'practice_connect_friend', 'safety_self_compassion', 'safety_savouring']
 const EXPRESSION_IDS = ['practice_voice_work', 'practice_own_style', 'practice_social_media', 'weekly_peak_state', 'rewire_weekly_focus']
 
-function getZone(score) {
-  if (score >= 75) return 'vibe-rise'
-  if (score >= 50) return 'grounded'
-  if (score >= 25) return 'wired'
+function getQuadrant(safety, expression) {
+  const highSafety = safety >= QUADRANT_THRESHOLD
+  const highExpression = expression >= QUADRANT_THRESHOLD
+  if (highSafety && highExpression) return 'vibe-rise'
+  if (highSafety) return 'grounded'
+  if (highExpression) return 'wired'
   return 'stuck'
 }
 
-function computeAxes(completions, checkins, wahoos) {
-  // --- Count Safety inputs ---
-  const safetyPractices = completions.filter(c => SAFETY_IDS.includes(c.quest_id)).length
-  const dailyHealing = completions.filter(c =>
-    c.quest_category === 'Healing' && !c.quest_id?.startsWith('reconnect_weekly')
-    && c.quest_id !== 'reconnect_remove_negative' && c.quest_id !== 'session_with_huzz'
-  ).length
-  const weeklyHealing = completions.filter(c =>
-    c.quest_category === 'Healing' && (
-      c.quest_id?.startsWith('reconnect_weekly') ||
-      c.quest_id === 'reconnect_remove_negative' ||
-      c.quest_id === 'session_with_huzz'
-    )
-  ).length
-  const safetyCount = safetyPractices + dailyHealing + weeklyHealing
+/**
+ * Count items per day matching a filter, returning array of 7 daily counts (oldest first)
+ */
+function dailyCounts(completions, filterFn, dateField = 'completed_at') {
+  const dayMap = {}
+  completions.filter(filterFn).forEach(c => {
+    const ts = c[dateField]
+    if (ts) {
+      const day = formatLocalDate(new Date(ts))
+      dayMap[day] = (dayMap[day] || 0) + 1
+    }
+  })
 
-  // --- Count Expression inputs ---
-  const exprPractices = completions.filter(c => EXPRESSION_IDS.includes(c.quest_id)).length
-  const embodyEssence = completions.filter(c => c.quest_id === 'rewire_behavior_change').length
-  const wahooCount = wahoos.length
-  const exprCount = exprPractices + embodyEssence + wahooCount
+  const counts = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date()
+    d.setDate(d.getDate() - i)
+    const dateStr = formatLocalDate(d)
+    counts.push(dayMap[dateStr] || 0)
+  }
+  return counts
+}
+
+function computeAxes(completions, checkins, wahoos) {
+  // --- Safety: per-day average ---
+  const isSafety = c =>
+    SAFETY_IDS.includes(c.quest_id) ||
+    c.quest_category === 'Healing'
+  const safetyCounts = dailyCounts(completions, isSafety)
+  const safetyRatios = safetyCounts.map(count => Math.min(1, count / SAFETY_DAILY_TARGET))
+  const safety = Math.round((safetyRatios.reduce((a, b) => a + b, 0) / 7) * 10 * 10) / 10
+
+  // --- Expression: per-day average + wahoo bonus ---
+  const isExpression = c =>
+    EXPRESSION_IDS.includes(c.quest_id) || c.quest_id === 'rewire_behavior_change'
+  const exprCounts = dailyCounts(completions, isExpression)
+  const exprRatios = exprCounts.map(count => Math.min(1, count / EXPRESSION_DAILY_TARGET))
+  const wahooBonus = wahoos.length > 0 ? 1.0 : 0.0
+  const expression = Math.round(Math.min(10, (exprRatios.reduce((a, b) => a + b, 0) / 7) * 8 + wahooBonus * 2) * 10) / 10
 
   // --- Maintenance (rolling 7-day %) ---
   const maintenanceCompletions = completions.filter(c => MAINTENANCE_IDS.includes(c.quest_id))
-  const dayMap = {}
+  const maintDayMap = {}
   maintenanceCompletions.forEach(c => {
     if (c.completed_at) {
       const day = formatLocalDate(new Date(c.completed_at))
-      if (!dayMap[day]) dayMap[day] = new Set()
-      dayMap[day].add(c.quest_id)
+      if (!maintDayMap[day]) maintDayMap[day] = new Set()
+      maintDayMap[day].add(c.quest_id)
     }
   })
 
@@ -84,7 +100,7 @@ function computeAxes(completions, checkins, wahoos) {
     const d = new Date()
     d.setDate(d.getDate() - i)
     const dateStr = formatLocalDate(d)
-    const done = dayMap[dateStr]?.size || 0
+    const done = maintDayMap[dateStr]?.size || 0
     const total = MAINTENANCE_IDS.length
     maintenanceDays.push({
       label: ['S', 'M', 'T', 'W', 'T', 'F', 'S'][d.getDay()],
@@ -98,50 +114,48 @@ function computeAxes(completions, checkins, wahoos) {
   const totalMaintDone = maintenanceDays.reduce((sum, d) => sum + d.done, 0)
   const maintenancePct = totalMaintPossible > 0 ? Math.round((totalMaintDone / totalMaintPossible) * 100) : 0
 
-  // --- Pillar activation ---
-  const safetyActive = safetyCount >= SAFETY_THRESHOLD
-  const exprTuneCount = exprPractices + embodyEssence
-  const expressionActive = exprTuneCount >= EXPRESSION_PRACTICE_THRESHOLD && wahooCount >= 1
-  const maintenanceActive = maintenancePct >= MAINTENANCE_THRESHOLD
+  // --- Quadrant + backward-compat capacity ---
+  const zone = getQuadrant(safety, expression)
+  const capacity = Math.round((safety + expression) * 5) // 0-100 for leaderboard compat
 
+  // --- Pillar activation (backward compat) ---
+  const safetyTotal = safetyCounts.reduce((a, b) => a + b, 0)
+  const exprTotal = exprCounts.reduce((a, b) => a + b, 0)
+  const safetyActive = safety >= QUADRANT_THRESHOLD
+  const expressionActive = expression >= QUADRANT_THRESHOLD
+  const maintenanceActive = maintenancePct >= 50
   const activePillars = [safetyActive, expressionActive, maintenanceActive].filter(Boolean).length
 
-  // --- Pillar strengths (0-1 each) ---
-  const safetyStrength = Math.min(1, safetyCount / SAFETY_MAX)
-  const expressionStrength = Math.min(1, exprCount / EXPRESSION_MAX)
-  const maintenanceStrength = Math.min(1, maintenancePct / MAINTENANCE_MAX)
-
-  // Average strength of ACTIVE pillars determines position within zone
-  const activeStrengths = []
-  if (safetyActive) activeStrengths.push(safetyStrength)
-  if (expressionActive) activeStrengths.push(expressionStrength)
-  if (maintenanceActive) activeStrengths.push(maintenanceStrength)
-  const avgStrength = activeStrengths.length > 0
-    ? activeStrengths.reduce((a, b) => a + b, 0) / activeStrengths.length
-    : 0
-
-  // --- Compute capacity score ---
-  const ZONE_BASE = { 0: 0, 1: 25, 2: 50, 3: 75 }
-  const ZONE_RANGE = 25
-  const capacity = Math.round(ZONE_BASE[activePillars] + avgStrength * (ZONE_RANGE - 1))
-
-  // Back-compat: safety/expression as 0-10 values from strength
-  const safety = Math.round(safetyStrength * 10 * 10) / 10
-  const expression = Math.round(expressionStrength * 10 * 10) / 10
+  // --- Today's progress ---
+  const todayStr = formatLocalDate(new Date())
+  const todaySafety = completions.filter(c => {
+    if (!c.completed_at) return false
+    return formatLocalDate(new Date(c.completed_at)) === todayStr && isSafety(c)
+  }).length
+  const todayExpression = completions.filter(c => {
+    if (!c.completed_at) return false
+    return formatLocalDate(new Date(c.completed_at)) === todayStr && isExpression(c)
+  }).length
+  const todayMaintenance = maintDayMap[todayStr]?.size || 0
 
   return {
     safety,
     expression,
     capacity,
-    zone: getZone(capacity),
+    zone,
     maintenancePct,
     maintenanceDays,
     pillars: {
-      safety: { active: safetyActive, count: safetyCount, strength: safetyStrength },
-      expression: { active: expressionActive, count: exprCount, strength: expressionStrength },
-      maintenance: { active: maintenanceActive, pct: maintenancePct, strength: maintenanceStrength },
+      safety: { active: safetyActive, count: safetyTotal, strength: safety / 10 },
+      expression: { active: expressionActive, count: exprTotal, strength: expression / 10 },
+      maintenance: { active: maintenanceActive, pct: maintenancePct, strength: maintenancePct / 100 },
     },
     activePillars,
+    todayProgress: {
+      safety: { done: todaySafety, target: SAFETY_DAILY_TARGET },
+      expression: { done: todayExpression, target: EXPRESSION_DAILY_TARGET },
+      maintenance: { done: todayMaintenance, target: MAINTENANCE_IDS.length },
+    },
   }
 }
 
@@ -158,6 +172,7 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
     maintenanceDays: [],
     pillars: null,
     activePillars: 0,
+    todayProgress: null,
     dataPoints: 0,
     loading: true,
   })
@@ -235,6 +250,7 @@ export function useCapacityScore(userId, refreshTrigger = 0) {
         maintenanceDays: thisWeek.maintenanceDays,
         pillars: thisWeek.pillars,
         activePillars: thisWeek.activePillars,
+        todayProgress: thisWeek.todayProgress,
         dataPoints: totalInputs,
         loading: false,
       })

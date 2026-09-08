@@ -999,7 +999,7 @@ export default function MindSpace() {
 
               {v.undecidedCount > 0 && (
                 <div className="undecided-notice">
-                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining — keep or remove each to continue
+                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining. Keep or remove each to continue
                 </div>
               )}
 
@@ -1035,7 +1035,7 @@ export default function MindSpace() {
 
               {v.undecidedCount > 0 && (
                 <div className="undecided-notice">
-                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining — keep or remove each to continue
+                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining. Keep or remove each to continue
                 </div>
               )}
 
@@ -1096,7 +1096,7 @@ export default function MindSpace() {
 
               {v.undecidedCount > 0 && (
                 <div className="undecided-notice">
-                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining — keep or remove each to continue
+                  {v.undecidedCount} item{v.undecidedCount > 1 ? 's' : ''} remaining. Keep or remove each to continue
                 </div>
               )}
 
@@ -1158,7 +1158,7 @@ export default function MindSpace() {
                 <span className="option-icon">🌱</span>
                 <span className="option-text">
                   <strong>I'm still exploring</strong>
-                  <span>Keep discovering — no pressure to decide yet</span>
+                  <span>Keep discovering, no pressure to decide yet</span>
                 </span>
               </button>
             </div>

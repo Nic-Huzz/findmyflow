@@ -14,7 +14,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
-import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
+import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment, findProblemSegment } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
@@ -204,7 +204,7 @@ export default function SelfTestFlow() {
 
   const getProblemDisplay = (cluster) => {
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = PROBLEM_SEGMENTS.find(p => p.id === segmentId)
+    const segment = findProblemSegment(segmentId)
     return {
       id: cluster.id,
       name: cluster.cluster_label || segment?.displayName || 'Problem',
@@ -229,7 +229,7 @@ export default function SelfTestFlow() {
     const cluster = problems.find(p => p.id === problemId)
     if (!cluster) return { name: 'your problem', icon: '🎯' }
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = PROBLEM_SEGMENTS.find(p => p.id === segmentId)
+    const segment = findProblemSegment(segmentId)
     return {
       name: cluster.cluster_label || segment?.displayName || 'Problem',
       icon: segment?.icon || '🎯'
@@ -437,7 +437,7 @@ export default function SelfTestFlow() {
                   {feeling}
                   {voice && layer && (
                     <span style={{ marginLeft: '8px', opacity: 0.7 }}>
-                      — {voice.icon} {voice.label} × {layer.icon} {layer.label}
+                      · {voice.icon} {voice.label} × {layer.icon} {layer.label}
                     </span>
                   )}
                 </p>
@@ -514,7 +514,7 @@ export default function SelfTestFlow() {
             <span className="encouragement-icon">{'🔬'}</span>
             <h2>Go Test It!</h2>
             <p className="encouragement-text">
-              You're going to apply <strong>{skillInfo.name}</strong> to <strong>{problemInfo.name}</strong> — on yourself.
+              You're going to apply <strong>{skillInfo.name}</strong> to <strong>{problemInfo.name}</strong>, on yourself.
             </p>
             <p className="encouragement-sub">
               After you've done it, complete the <strong>Play-list Self-Trial Review</strong> quest to reflect and earn bonus points!

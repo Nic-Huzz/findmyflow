@@ -44,7 +44,7 @@ export async function runDiagnosticExchange({
       message: `Let's cut to the chase. Based on what you've shared about ${stuckPointName.toLowerCase()}, here's what I think is really going on.`,
       responseOptions: [],
       isDiagnosisReady: true,
-      diagnosis: `You're working through ${stuckPointName.toLowerCase()} — ${stuckPointDescription}. Let me show you what ${founderName} did when they faced this.`,
+      diagnosis: `You're working through ${stuckPointName.toLowerCase()}. ${stuckPointDescription}. Let me show you what ${founderName} did when they faced this.`,
     }
   }
 }
@@ -102,9 +102,9 @@ function buildFallbackChallenge(founderName, stageStories, knowledgeStyle) {
       ? `Here's what they did: ${solutionStory.content}`
       : `${founderName}'s approach was always to act quickly and learn from the result, not to plan endlessly.`,
     action: type === 'DO_IT'
-      ? `Today, take ONE small action related to this stuck point. Don't plan it, don't perfect it — just do it and see what happens. ${founderName} would tell you: "The market will teach you faster than any plan."`
+      ? `Today, take ONE small action related to this stuck point. Don't plan it, don't perfect it. Just do it and see what happens. ${founderName} would tell you: "The market will teach you faster than any plan."`
       : type === 'THINK_IT'
-      ? `Sit with this question for 15 minutes today: "What would ${founderName} cut from my approach?" Write down everything that comes up — the discomfort is the signal.`
+      ? `Sit with this question for 15 minutes today: "What would ${founderName} cut from my approach?" Write down everything that comes up. The discomfort is the signal.`
       : `Make something small today that shows your idea to one person. ${founderName}'s philosophy: build it, show it, learn from the reaction.`,
   }
 }

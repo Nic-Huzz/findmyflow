@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { completeGroanChallenge } from '../lib/crm/groanChallengeService'
 import { getScoringCategory } from '../lib/scoringCategories'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { awardMovementXP } from '../lib/movementXP'
+import { DIFFICULTY_SCALE, getDifficultyLabel, calculateGap } from '../data/domeDimensions'
+import { hapticLight } from '../lib/haptics'
 import NervousSystemCheckin from './NervousSystemCheckin'
 import ShareWinStep from './playlist/ShareWinStep'
 import confetti from 'canvas-confetti'
@@ -12,6 +14,9 @@ import { postFeedEvent } from '../lib/communityFeed'
 import { earnMysteryBox, checkNewCategoryBox } from '../lib/mysteryBoxes'
 import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import { detectShift } from '../lib/shiftDetection'
+import { detectNewPattern, markPatternShown, buildPatternMessage } from '../lib/voicePatternDetector'
+import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
+import HealingFlowModal from './HealingFlowModal'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -33,13 +38,21 @@ const WAHOO_RP = {
 }
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
-  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'share'
+  const [step, setStep] = useState('state_checkin') // 'state_checkin' | 'wahoo_check' | 'aftertaste' | 'gap_check' | 'expectation' | 'cross_pollination' | 'three_percent' | 'life_fuel' | 'share'
+  const savedRef = useRef(false)
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
     document.body.classList.add('modal-active')
     return () => document.body.classList.remove('modal-active')
   }, [])
+
+  // If closed after save happened, still refresh the UI
+  const handleClose = useCallback(() => {
+    if (savedRef.current) onComplete?.()
+    onClose()
+  }, [onComplete, onClose])
+
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [showExplainer, setShowExplainer] = useState(false)
@@ -90,6 +103,21 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         setPreviousStatements(sorted)
       })
   }, [userId])
+
+  // Life Fuel channels
+  const [lifeFuel, setLifeFuel] = useState({ choice: false, connection: false, mastery: false, meaning: false })
+
+  // Prediction error (gap measurement)
+  const [preactionDifficulty, setPreactionDifficulty] = useState(null)
+  const [experiencedDifficulty, setExperiencedDifficulty] = useState(null)
+  const [gapVoice, setGapVoice] = useState(null)
+  const [checkingPattern, setCheckingPattern] = useState(false)
+  const [patternDiscovered, setPatternDiscovered] = useState(null) // { voice, dimensions, count, message }
+  const [showPatternHealing, setShowPatternHealing] = useState(false)
+  const [patternQuestTaskId, setPatternQuestTaskId] = useState(null)
+
+  // Aftertaste (essence alignment filter)
+  const [aftertaste, setAftertaste] = useState(null) // 'yes' | 'not_sure' | 'no'
 
   // Expectation check
   const [expectationResult, setExpectationResult] = useState(null) // 'better' | 'expected' | 'worse'
@@ -145,6 +173,20 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       })
       if (groanError) throw groanError
 
+      // 1b. Save prediction error data (if gap_check was completed)
+      if (preactionDifficulty || experiencedDifficulty) {
+        try {
+          await supabase.from('groan_challenges').update({
+            preaction_difficulty: preactionDifficulty,
+            experienced_difficulty: experiencedDifficulty,
+            experienced_at: new Date().toISOString(),
+            ...(gapVoice ? { gap_voice: gapVoice } : {}),
+          }).eq('id', challenge.id)
+        } catch (e) {
+          console.warn('Gap data save error:', e)
+        }
+      }
+
       // 2. Upsert quest_completions record (delete old first to prevent RP farming)
       const questId = `play_list_challenge_${challenge.id}`
       try {
@@ -171,7 +213,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           voice_objection: wahooClassification === 'anxious' ? (identityStatement || null) : null,
           expectation_result: expectationResult,
           reflection,
+          life_fuel: lifeFuel,
+          aftertaste,
         }),
+        aftertaste,
       })
       if (questError) throw questError
 
@@ -382,6 +427,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#5e17eb', '#8b5cf6', '#c4b5fd'] })
       }
       // Pressure + Uninterested: no confetti (intentional — the copy IS the response)
+      savedRef.current = true
       setStep('share')
     } catch (err) {
       console.error('Error completing challenge:', err)
@@ -413,9 +459,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
 
   return (
-    <div className="gcm-overlay" onClick={onClose}>
+    <div className="gcm-overlay" onClick={handleClose}>
       <div className="gcm-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="gcm-close" onClick={onClose}>&times;</button>
+        <button className="gcm-close" onClick={handleClose}>&times;</button>
 
         {step === 'state_checkin' && (
           <>
@@ -456,7 +502,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 style={wahooClassification === 'anxious' ? { borderColor: '#ef4444', background: 'rgba(239,68,68,0.06)', color: '#ef4444' } : undefined}
               >
                 <span className="gcm-wahoo-emoji">😰</span>
-                <span className="gcm-wahoo-label">Pressure</span>
+                <span className="gcm-wahoo-label">Stressful</span>
               </button>
               <button
                 className={`gcm-wahoo-btn ${wahooClassification === 'shutdown' ? 'selected' : ''}`}
@@ -464,7 +510,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 style={wahooClassification === 'shutdown' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
               >
                 <span className="gcm-wahoo-emoji">😶</span>
-                <span className="gcm-wahoo-label">Uninterested</span>
+                <span className="gcm-wahoo-label">Bored</span>
               </button>
             </div>
             {/* Per-state response copy (Hades inversion: every state gets a meaningful response) */}
@@ -531,9 +577,208 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             <button
               className="gcm-gold-btn"
               disabled={!wahooClassification}
-              onClick={() => setStep('expectation')}
+              onClick={() => setStep('aftertaste')}
             >
               Continue
+            </button>
+          </>
+        )}
+
+        {step === 'aftertaste' && (
+          <>
+            <h2 className="gcm-title">Do you want to do that again?</h2>
+            <div className="gcm-wahoo-options">
+              <button
+                className={`gcm-wahoo-btn ${aftertaste === 'yes' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setAftertaste('yes') }}
+                style={aftertaste === 'yes' ? { borderColor: '#E9A23B', background: 'rgba(233,162,59,0.06)', color: '#E9A23B' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">🔥</span>
+                <span className="gcm-wahoo-label">Yes</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${aftertaste === 'not_sure' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setAftertaste('not_sure') }}
+                style={aftertaste === 'not_sure' ? { borderColor: '#5e17eb', background: 'rgba(94,23,235,0.06)', color: '#5e17eb' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">🤔</span>
+                <span className="gcm-wahoo-label">Not sure</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${aftertaste === 'no' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setAftertaste('no') }}
+                style={aftertaste === 'no' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji">😶</span>
+                <span className="gcm-wahoo-label">No</span>
+              </button>
+            </div>
+            <button
+              className="gcm-gold-btn"
+              disabled={!aftertaste}
+              onClick={() => setStep(challenge.predicted_difficulty ? 'gap_check' : 'expectation')}
+            >
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 'gap_check' && (() => {
+          const predicted = getDifficultyLabel(challenge.predicted_difficulty)
+          const preaction = getDifficultyLabel(preactionDifficulty)
+          const experienced = getDifficultyLabel(experiencedDifficulty)
+          const planningGap = (experiencedDifficulty)
+            ? calculateGap(challenge.predicted_difficulty, experiencedDifficulty)
+            : null
+          const anticipationGap = (preactionDifficulty && experiencedDifficulty)
+            ? calculateGap(preactionDifficulty, experiencedDifficulty)
+            : null
+
+          return (
+            <>
+              <h2 className="gcm-title">Body Check</h2>
+
+              <div className="gcm-gap-section">
+                <p className="gcm-gap-q">
+                  You predicted <span className="gcm-gap-highlight">{predicted?.icon} {predicted?.label}</span>.
+                  Right before you did it, what was your body doing?
+                </p>
+                <div className="gcm-gap-pills">
+                  {DIFFICULTY_SCALE.map(ds => (
+                    <button
+                      key={ds.level}
+                      className={`gcm-gap-pill ${preactionDifficulty === ds.level ? 'selected' : ''}`}
+                      onClick={() => { hapticLight(); setPreactionDifficulty(ds.level) }}
+                      title={ds.description}
+                    >
+                      <span className="gcm-gap-pill-icon">{ds.icon}</span>
+                      <span className="gcm-gap-pill-label">{ds.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {preactionDifficulty && (
+                <div className="gcm-gap-section">
+                  <p className="gcm-gap-q">And while you were doing it?</p>
+                  <div className="gcm-gap-pills">
+                    {DIFFICULTY_SCALE.map(ds => (
+                      <button
+                        key={ds.level}
+                        className={`gcm-gap-pill ${experiencedDifficulty === ds.level ? 'selected' : ''}`}
+                        onClick={() => { hapticLight(); setExperiencedDifficulty(ds.level) }}
+                        title={ds.description}
+                      >
+                        <span className="gcm-gap-pill-icon">{ds.icon}</span>
+                        <span className="gcm-gap-pill-label">{ds.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {planningGap != null && planningGap > 0 && (
+                <div className="gcm-gap-result gcm-gap-positive">
+                  Planning: you expected {predicted?.icon} {predicted?.label}, reality was {experienced?.icon} {experienced?.label}. Your nervous system just learned something.
+                </div>
+              )}
+              {anticipationGap != null && anticipationGap > 0 && preactionDifficulty !== challenge.predicted_difficulty && (
+                <div className="gcm-gap-result gcm-gap-positive">
+                  Right before: you felt {preaction?.icon} {preaction?.label}, reality was {experienced?.icon} {experienced?.label}.
+                </div>
+              )}
+              {planningGap != null && planningGap === 0 && (anticipationGap == null || anticipationGap === 0) && (
+                <div className="gcm-gap-result">
+                  Your prediction matched reality. Your self-awareness is sharp.
+                </div>
+              )}
+
+              {/* Negative gap: voice discovery */}
+              {experiencedDifficulty && preactionDifficulty && experiencedDifficulty > challenge.predicted_difficulty && (
+                <div className="gcm-gap-section">
+                  <p className="gcm-gap-q">Your body reacted more than you expected. Which voice showed up?</p>
+                  <div className="gcm-gap-pills">
+                    {[
+                      { id: 'ghost', icon: '👻', label: 'Ghost' },
+                      { id: 'perfectionist', icon: '🎯', label: 'Perfectionist' },
+                      { id: 'people_pleaser', icon: '🪞', label: 'People Pleaser' },
+                      { id: 'controller', icon: '🎮', label: 'Controller' },
+                      { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot' },
+                    ].map(v => (
+                      <button
+                        key={v.id}
+                        className={`gcm-gap-pill ${gapVoice === v.id ? 'selected' : ''}`}
+                        onClick={() => { hapticLight(); setGapVoice(v.id) }}
+                      >
+                        <span className="gcm-gap-pill-icon">{v.icon}</span>
+                        <span className="gcm-gap-pill-label">{v.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <button
+                className="gcm-gold-btn"
+                disabled={!preactionDifficulty || !experiencedDifficulty || checkingPattern}
+                onClick={async () => {
+                  if (gapVoice) {
+                    setCheckingPattern(true)
+                    try {
+                      const pattern = await detectNewPattern(userId)
+                      if (pattern) {
+                        setPatternDiscovered({
+                          ...pattern,
+                          message: buildPatternMessage(pattern.voice, pattern.dimensions),
+                        })
+                        await markPatternShown(userId, pattern.voice, pattern.dimensions)
+                        setCheckingPattern(false)
+                        setStep('pattern_discovered')
+                        return
+                      }
+                    } catch (e) {
+                      console.warn('Pattern detection error:', e)
+                    }
+                    setCheckingPattern(false)
+                  }
+                  setStep('expectation')
+                }}
+              >
+                {checkingPattern ? 'Checking...' : 'Continue'}
+              </button>
+            </>
+          )
+        })()}
+
+        {step === 'pattern_discovered' && patternDiscovered && (
+          <>
+            <h2 className="gcm-title">We noticed something</h2>
+            <div className="gcm-gap-section">
+              <p className="gcm-gap-q">{patternDiscovered.message}</p>
+              <p className="gcm-gap-sub">This voice has appeared {patternDiscovered.count} times on these challenges.</p>
+            </div>
+            <button
+              className="gcm-gold-btn"
+              onClick={async () => {
+                hapticLight()
+                try {
+                  const { data: taskRow } = await supabase
+                    .from('quest_tasks')
+                    .select('id')
+                    .eq('groan_challenge_id', challenge.id)
+                    .maybeSingle()
+                  if (taskRow) setPatternQuestTaskId(taskRow.id)
+                } catch (e) { /* non-blocking */ }
+                setShowPatternHealing(true)
+              }}
+            >
+              Explore now
+            </button>
+            <button
+              className="gcm-text-btn"
+              onClick={() => setStep('expectation')}
+            >
+              Later (find it on your Progress tab)
             </button>
           </>
         )}
@@ -646,6 +891,37 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
             {error && <p className="gcm-error">{error}</p>}
 
+            <button className="gcm-gold-btn" onClick={() => setStep('life_fuel')}>
+              Continue
+            </button>
+          </>
+        )}
+
+        {step === 'life_fuel' && (
+          <>
+            <h2 className="gcm-title">Life Fuel</h2>
+            <p className="gcm-subtitle">Which of these were true during this?</p>
+
+            <div className="gcm-fuel-checks">
+              {CHANNEL_IDS.map(id => {
+                const ch = LIFE_FUEL_CHANNELS[id]
+                return (
+                  <button
+                    key={id}
+                    className={`gcm-fuel-btn ${lifeFuel[id] ? 'selected' : ''}`}
+                    style={lifeFuel[id] ? { borderColor: ch.color, background: `${ch.color}12` } : undefined}
+                    onClick={() => setLifeFuel(prev => ({ ...prev, [id]: !prev[id] }))}
+                  >
+                    <span className="gcm-fuel-emoji">{ch.emoji}</span>
+                    <span className="gcm-fuel-label">{ch.checkbox}</span>
+                    {lifeFuel[id] && <span className="gcm-fuel-check">✓</span>}
+                  </button>
+                )
+              })}
+            </div>
+
+            {error && <p className="gcm-error">{error}</p>}
+
             <button className="gcm-gold-btn" onClick={handleCompleteReflection} disabled={saving}>
               {saving ? 'Saving...' : 'Complete Challenge'}
             </button>
@@ -662,6 +938,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           />
         )}
       </div>
+
+      {/* Pattern healing modal */}
+      {showPatternHealing && patternDiscovered && (
+        <HealingFlowModal
+          taskText={challenge.title}
+          userId={userId}
+          questTaskId={patternQuestTaskId}
+          existingData={{ pattern: patternDiscovered.voice }}
+          onComplete={() => { setShowPatternHealing(false); setStep('expectation') }}
+          onClose={() => { setShowPatternHealing(false); setStep('expectation') }}
+        />
+      )}
     </div>
   )
 }

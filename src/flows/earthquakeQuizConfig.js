@@ -37,7 +37,7 @@ export const QUESTIONS = [
     question: 'Which pattern do you recognize most in yourself?',
     type: 'multi',
     options: [
-      { id: 'perfectionist', label: 'I endlessly prepare, revise, and polish — but rarely ship' },
+      { id: 'perfectionist', label: 'I endlessly prepare, revise, and polish, but rarely ship' },
       { id: 'people_pleaser', label: 'I say yes to everything and hide what I really think' },
       { id: 'controller', label: "I need to control every detail and can't stop working" },
       { id: 'ghost', label: 'I have great work but I pull back from sharing it' },
@@ -78,7 +78,7 @@ export const QUESTIONS = [
       { id: 'courses', label: 'Online courses + programs (altMBA, coaching certs...)' },
       { id: 'therapy', label: 'Therapy or coaching (1-on-1 sessions)' },
       { id: 'quizzes', label: 'Quizzes + personality tests (MBTI, Enneagram, Sparketype...)' },
-      { id: 'nothing', label: "Nothing yet — I'm just starting to look" },
+      { id: 'nothing', label: "Nothing yet. I'm just starting to look" },
     ],
   },
 
@@ -108,7 +108,7 @@ export const QUESTIONS = [
   },
   {
     id: 'q9_emotional_state',
-    question: 'When thinking about your current progress — where are you on the emotional spectrum?',
+    question: 'When thinking about your current progress, where are you on the emotional spectrum?',
     type: 'single',
     options: [
       { id: 'acceptance', label: 'Acceptance', icon: '😌', description: 'It is what it is, I can work with this' },
@@ -314,10 +314,10 @@ export const STAGES = [
 ]
 
 export const STAGE_DESCRIPTIONS = {
-  matrix: "You're still in the Matrix. Something feels off but you can't name it yet. That nagging feeling? It's the first signal. You're not crazy — you're waking up.",
-  earthquake: "You've felt the crack. You know something needs to change. But you haven't found the system to actually make the move. You're in the most important — and most uncomfortable — stage.",
-  early_training: "You know what you want but something keeps stopping you. This isn't a knowledge gap — it's a nervous system gap. Your Protective Voice is running interference.",
-  training: "You're building, but hitting walls. The blocks you're facing aren't random — they're your Protective Voice's last stand. You're closer than you think.",
+  matrix: "You're still in the Matrix. Something feels off but you can't name it yet. That nagging feeling? It's the first signal. You're not crazy. You're waking up.",
+  earthquake: "You've felt the crack. You know something needs to change. But you haven't found the system to actually make the move. You're in the most important, and most uncomfortable, stage.",
+  early_training: "You know what you want but something keeps stopping you. This isn't a knowledge gap. It's a nervous system gap. Your Protective Voice is running interference.",
+  training: "You're building, but hitting walls. The blocks you're facing aren't random. They're your Protective Voice's last stand. You're closer than you think.",
 }
 
 // ─── BLOCK CONTENT ────────────────────────────────────────────
@@ -326,17 +326,17 @@ export const BLOCK_CONTENT = {
   visibility: {
     name: 'Visibility',
     description: "Your nervous system has learned that being seen = danger. This isn't a mindset problem. It's a safety mechanism.",
-    reframe: "The path forward isn't \"just do it.\" It's gradual nervous system expansion through play — starting small, building evidence that visibility is safe.",
+    reframe: "The path forward isn't \"just do it.\" It's gradual nervous system expansion through play. Starting small, building evidence that visibility is safe.",
   },
   money: {
     name: 'Money',
-    description: "Financial fear is real — but it's also the Controller's favorite weapon. It uses \"I can't afford the risk\" to keep you paralyzed in safety.",
-    reframe: "The path forward isn't reckless risk. It's proving the model works at small scale first — one person, one transaction, one proof point at a time.",
+    description: "Financial fear is real, but it's also the Controller's favorite weapon. It uses \"I can't afford the risk\" to keep you paralyzed in safety.",
+    reframe: "The path forward isn't reckless risk. It's proving the model works at small scale first. One person, one transaction, one proof point at a time.",
   },
   action: {
     name: 'Action',
     description: "You have the knowledge. You have the ideas. But the gap between knowing and doing feels impossible to cross.",
-    reframe: "The path forward isn't more motivation. It's smaller actions that bypass your Protective Voice entirely — tasks so small they don't trigger resistance.",
+    reframe: "The path forward isn't more motivation. It's smaller actions that bypass your Protective Voice entirely. Tasks so small they don't trigger resistance.",
   },
 }
 
@@ -347,7 +347,7 @@ export const DAM_COPY = {
   courses: "You don't need more information. You need integration.",
   therapy: 'Therapy heals the past. Find My Flow builds the future. You need both.',
   quizzes: 'Quizzes give labels. You need daily action that expands what feels safe.',
-  nothing: "Good — you're starting fresh. No bad habits to unlearn.",
+  nothing: "Good. You're starting fresh. No bad habits to unlearn.",
 }
 
 // ─── HOOK SCREEN COPY ─────────────────────────────────────────

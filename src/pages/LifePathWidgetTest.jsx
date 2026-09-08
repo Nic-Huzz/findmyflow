@@ -845,8 +845,8 @@ export default function LifePathFlow() {
                               <option value="">What voice tries to stop you?</option>
                               <option value="controller">Controller (pushes too hard)</option>
                               <option value="ghost">Ghost (disappears, avoids)</option>
-                              <option value="people-pleaser">People Pleaser (says yes when you mean no)</option>
-                              <option value="auto-pilot">Auto-Pilot (goes through the motions)</option>
+                              <option value="people_pleaser">People Pleaser (says yes when you mean no)</option>
+                              <option value="auto_pilot">Auto-Pilot (goes through the motions)</option>
                               <option value="perfectionist">Perfectionist (won't start until it's perfect)</option>
                             </select>
                           </div>
@@ -981,10 +981,10 @@ export default function LifePathFlow() {
               <div className="flp-punchline visible"><p>Your quests are ready.</p></div>
               <div style={{ fontSize: 14, color: 'rgba(0,0,0,0.5)', lineHeight: 1.6, maxWidth: 320, textAlign: 'center', marginTop: 8 }}>
                 <p style={{ margin: '0 0 10px' }}>Your life paths are now active quests. The things you've been putting off are your courage challenges.</p>
-                <p style={{ margin: 0 }}>Head to your Quests tab to see them.</p>
+                <p style={{ margin: 0 }}>Head to your Paths tab to see them.</p>
               </div>
-              <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge?tab=Quests')} style={{ marginTop: 16 }}>
-                Go to my quests →
+              <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge?tab=Paths')} style={{ marginTop: 16 }}>
+                Go to my paths →
               </button>
               <button className="flp-advance-btn" onClick={() => setStep(STEPS.MAP)} style={{ marginTop: 8, opacity: 0.5, background: 'transparent', border: '1px solid rgba(0,0,0,0.1)', color: '#1a1a2e' }}>
                 Explore the map

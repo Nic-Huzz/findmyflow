@@ -1,25 +1,28 @@
 /**
  * ChooseQuestsFlow.jsx — /choose-quests
  *
- * Phase 1→2 bridge: Dome experiences → AI life path suggestions → quest creation.
- * Flow: Intro → Select Experiences → Processing → Pick Paths → Stuck Points → Done
+ * Phase 1→2 bridge: Dome experiences → AI project ideas → path creation.
+ * Flow: Intro → Select → Deep Dive → Processing → Projects → (Clustering) → Paths Review → Save → Done
+ * Path definition (dimensions, fuels, commitment) happens separately at /path-definition/:questId.
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useDomeData } from '../hooks/useDomeData'
 import { getDomeExperiencesForBridge, groupByPrimal, formatDomeForPrompt } from '../lib/domeSummary'
+import { getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
-import { getWeekStartLocal } from '../lib/dateUtils'
 import './ChooseQuestsFlow.css'
 
 const STEPS = {
   INTRO: 'intro',
   SELECT: 'select',
+  DEEP_DIVE: 'deep_dive',
   PROCESSING: 'processing',
-  PATHS: 'paths',
-  STUCK: 'stuck',
+  PROJECTS: 'projects',
+  CLUSTERING: 'clustering',
+  PATHS_REVIEW: 'paths_review',
   SAVING: 'saving',
   DONE: 'done',
 }
@@ -28,8 +31,6 @@ export default function ChooseQuestsFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { domeStates, loading: domeLoading } = useDomeData(user?.id)
-  const spNextId = useRef(1)
-
   // Hide bottom toolbar
   useEffect(() => {
     document.body.classList.add('hide-toolbar')
@@ -43,18 +44,26 @@ export default function ChooseQuestsFlow() {
   const [selectedIds, setSelectedIds] = useState(new Set())
   const [showFun, setShowFun] = useState(false)
 
-  // Paths step
+  // Deep dive step — { [nodeId]: { formats: Set, vectors: Set } }
+  const [deepDive, setDeepDive] = useState({})
+  const [ddIndex, setDdIndex] = useState(0) // current node index in deep dive
+  const deepDiveRef = useRef(deepDive)
+  useEffect(() => { deepDiveRef.current = deepDive }, [deepDive])
+
+  // Projects step (AI-generated project ideas)
+  const [projects, setProjects] = useState([])
+  const [removedProjects, setRemovedProjects] = useState(new Set())
+  const [aiError, setAiError] = useState(null)
+  const [customProjectInput, setCustomProjectInput] = useState('')
+  const [showCustomProject, setShowCustomProject] = useState(false)
+
+  // Paths (either from clustering or 1:1 from projects)
   const [paths, setPaths] = useState([])
   const [selectedPaths, setSelectedPaths] = useState(new Set())
-  const [customInput, setCustomInput] = useState('')
-  const [showCustom, setShowCustom] = useState(false)
-  const [aiError, setAiError] = useState(null)
-
-  // Stuck points step
-  const [stuckPoints, setStuckPoints] = useState([])
-  const [stuckInputs, setStuckInputs] = useState({}) // { [pathIdx]: 'text' }
-  const [activeSpId, setActiveSpId] = useState(null)
-  const stuckInputRef = useRef(null)
+  const [clusterLoading, setClusterLoading] = useState(false)
+  const [clusterError, setClusterError] = useState(null)
+  const [movePopover, setMovePopover] = useState(null) // { fromPath, projectIdx }
+  const [shouldSave, setShouldSave] = useState(false)
 
   // Load essence archetype
   useEffect(() => {
@@ -101,37 +110,39 @@ export default function ChooseQuestsFlow() {
   }, [])
 
   // ── AI call ──
+  // ── AI call: generate project ideas ──
   const callAI = useCallback(async () => {
     goTo(STEPS.PROCESSING)
     setAiError(null)
 
     const allExps = [...vibeRise, ...fun]
     const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
-    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype)
+    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDiveRef.current, allExps)
 
     try {
       const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
-        body: { domeProfile, curiosityClusters: [], skills: [], problems: [] },
+        body: { domeProfile },
       })
       if (error) throw error
       if (data?.error) throw new Error(data.error)
-      if (data?.paths?.length) {
-        setPaths(data.paths)
-        goTo(STEPS.PATHS)
+      if (data?.projects?.length) {
+        setProjects(data.projects)
+        setRemovedProjects(new Set())
+        goTo(STEPS.PROJECTS)
       } else {
-        throw new Error('No paths returned')
+        throw new Error('No projects returned')
       }
     } catch (err) {
       console.error('Life path suggestions failed:', err)
       setAiError(err.message)
-      goTo(STEPS.PATHS)
+      goTo(STEPS.PROJECTS)
     }
   }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
 
-  // ── Path selection ──
-  const togglePath = useCallback((idx) => {
+  // ── Remove/restore a project ──
+  const toggleRemoveProject = useCallback((idx) => {
     hapticLight()
-    setSelectedPaths(prev => {
+    setRemovedProjects(prev => {
       const next = new Set(prev)
       if (next.has(idx)) next.delete(idx)
       else next.add(idx)
@@ -139,64 +150,148 @@ export default function ChooseQuestsFlow() {
     })
   }, [])
 
-  const addCustomPath = useCallback(() => {
-    if (!customInput.trim()) return
-    const newPath = { name: customInput.trim(), description: 'Your own path', draws_from: 'custom', isCustom: true }
-    setPaths(prev => {
-      setSelectedPaths(sel => new Set([...sel, prev.length]))
-      return [...prev, newPath]
-    })
-    setCustomInput('')
-    setShowCustom(false)
-    hapticLight()
-  }, [customInput])
+  // ── Get active (non-removed) projects ──
+  const activeProjects = projects.filter((_, i) => !removedProjects.has(i))
 
-  // ── Stuck points ──
-  const addStuckPoint = useCallback((pathIdx) => {
-    const text = (stuckInputs[pathIdx] || '').trim()
-    if (!text) return
-    const sp = {
-      id: 'sp' + spNextId.current++,
-      pathIdx,
-      text,
-      depthLevel: null,
-      wahooCategory: null,
-      protectiveVoice: null,
+  // ── Proceed from projects: 1 → direct path, 2+ → cluster via AI ──
+  const proceedFromProjects = useCallback(async () => {
+    if (activeProjects.length === 0) return
+
+    if (activeProjects.length === 1) {
+      // Single project becomes its own path — skip clustering
+      const directPaths = [{ name: activeProjects[0].name, description: activeProjects[0].description, draws_from: activeProjects[0].draws_from, projects: [activeProjects[0]] }]
+      setPaths(directPaths)
+      setSelectedPaths(new Set([0]))
+      goTo(STEPS.PATHS_REVIEW)
+      return
     }
-    setStuckPoints(prev => [...prev, sp])
-    setStuckInputs(prev => ({ ...prev, [pathIdx]: '' }))
-    setActiveSpId(sp.id)
-  }, [stuckInputs])
 
-  const updateStuckField = useCallback((spId, field, value) => {
-    setStuckPoints(prev => prev.map(sp => sp.id === spId ? { ...sp, [field]: value } : sp))
-  }, [])
+    // 2+ projects: cluster into paths via AI
+    setClusterLoading(true)
+    setClusterError(null)
+    goTo(STEPS.CLUSTERING)
 
-  const removeStuckPoint = useCallback((spId) => {
-    setStuckPoints(prev => prev.filter(sp => sp.id !== spId))
-  }, [])
+    const allExps = [...vibeRise, ...fun]
+    const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
+    const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDiveRef.current, allExps)
 
-  // ── Save quests + courage challenges ──
+    try {
+      const { data, error } = await supabase.functions.invoke('suggest-life-paths', {
+        body: { mode: 'cluster', selectedProjects: activeProjects, domeProfile },
+      })
+      if (error) throw error
+      if (data?.error) throw new Error(data.error)
+      if (data?.paths?.length) {
+        setPaths(data.paths)
+        const allSelected = new Set()
+        data.paths.forEach((_, i) => allSelected.add(i))
+        setSelectedPaths(allSelected)
+        goTo(STEPS.PATHS_REVIEW)
+      } else {
+        throw new Error('No paths returned from clustering')
+      }
+    } catch (err) {
+      console.error('Life path clustering failed:', err)
+      setClusterError(err.message)
+    } finally {
+      setClusterLoading(false)
+    }
+  }, [activeProjects, selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+
+  // ── Confirm clustered paths → filter to selected non-empty, then save ──
+  const confirmPaths = useCallback(() => {
+    const kept = paths.filter((_, i) => selectedPaths.has(i) && paths[i].projects?.length > 0)
+    setPaths(kept)
+    const newSelected = new Set()
+    kept.forEach((_, i) => newSelected.add(i))
+    setSelectedPaths(newSelected)
+    // saveQuests will be called on next render via effect
+    setShouldSave(true)
+  }, [paths, selectedPaths])
+
+  // Auto-advance past deep dive if ddIndex exceeds selected count
+  const allExpsForDD = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+  const ddAutoAdvance = step === STEPS.DEEP_DIVE && allExpsForDD.length > 0 && ddIndex >= allExpsForDD.length
+  useEffect(() => {
+    if (ddAutoAdvance) callAI()
+  }, [ddAutoAdvance]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save trigger — fires after confirmPaths updates state
+  useEffect(() => {
+    if (shouldSave) {
+      setShouldSave(false)
+      saveQuests()
+    }
+  }, [shouldSave]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Save quests ──
   const saveQuests = useCallback(async () => {
     if (!user?.id) return
     goTo(STEPS.SAVING)
 
     try {
-      for (const pathIdx of selectedPaths) {
-        const path = paths[pathIdx]
+      const dd = deepDiveRef.current || {}
+      const allExps = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+      const chosenArr = paths.filter((_, i) => selectedPaths.has(i))
+
+      for (let idx = 0; idx < chosenArr.length; idx++) {
+        const path = chosenArr[idx]
         if (!path) continue
 
-        // Create quest
+        // Resolve career vector via majority rule from path's projects
+        const vectorCounts = {}
+        const questFormats = []
+
+        // Check projects for vectors, fall back to draws_from text matching
+        const projectDraws = (path.projects || []).map(p => (p.draws_from || '').toLowerCase()).join(' ')
+        const drawsFrom = ((path.draws_from || '') + ' ' + projectDraws).toLowerCase()
+        const pathName = (path.name || '').toLowerCase()
+
+        for (const exp of allExps) {
+          const expDd = dd[exp.id]
+          if (!expDd) continue
+          const expLabel = exp.label.toLowerCase()
+          if (!drawsFrom.includes(expLabel) && !pathName.includes(expLabel)) continue
+          const vecs = expDd.vectors instanceof Set ? [...expDd.vectors] : (expDd.vectors || [])
+          const nonHobby = vecs.filter(v => v !== 'hobby')
+          nonHobby.forEach(v => { vectorCounts[v] = (vectorCounts[v] || 0) + 1 })
+          const fmts = expDd.formats instanceof Set ? expDd.formats : new Set(expDd.formats || [])
+          if (fmts.size) {
+            getSubNodes(exp.id).filter(s => fmts.has(s.id)).forEach(s => {
+              if (!questFormats.includes(s.label)) questFormats.push(s.label)
+            })
+          }
+        }
+
+        // Majority vector
+        const questVector = Object.entries(vectorCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null
+
+        // Create quest (discovery data only, no path definition)
         const { data: newQuest } = await supabase.from('quests').insert({
           user_id: user.id,
           label: path.name,
-          career_id: `dome-bridge-${Date.now()}-${pathIdx}`,
+          career_id: `dome-bridge-${Date.now()}-${idx}`,
           predicted_state: 'vibe_rise',
           status: 'active',
+          career_vector: questVector,
+          format_picks: questFormats.length ? questFormats : null,
         }).select('id').single()
 
         const questId = newQuest?.id
         if (!questId) continue
+
+        // Create quest_experiences for each project under the path
+        if (path.projects?.length) {
+          await supabase.from('quest_experiences').insert(
+            path.projects.map((p, j) => ({
+              quest_id: questId,
+              user_id: user.id,
+              label: p.name,
+              status: 'active',
+              sort_order: j,
+            }))
+          )
+        }
 
         // Auto-tag skills (non-blocking)
         import('../lib/questSkillTagger').then(async (m) => {
@@ -207,91 +302,24 @@ export default function ChooseQuestsFlow() {
             ).catch(() => {})
           }
         }).catch(() => {})
-
-        // Create courage challenges from stuck points
-        const pathStuck = stuckPoints.filter(sp => sp.pathIdx === pathIdx)
-        for (const sp of pathStuck) {
-          const { data: existingGroan } = await supabase.from('groan_challenges')
-            .select('id').eq('user_id', user.id).eq('title', sp.text).limit(1)
-          let groanId = existingGroan?.[0]?.id
-
-          if (!groanId) {
-            const { data: newGroan } = await supabase.from('groan_challenges').insert({
-              user_id: user.id,
-              title: sp.text,
-              challenge_text: sp.text,
-              status: 'active',
-              source_type: 'skill',
-              challenge_source: 'dome_bridge',
-              source_label: path.name,
-              scary_score: 5,
-              wahoo_score: 5,
-              depth_level: sp.depthLevel || null,
-              wahoo_category: sp.wahooCategory || null,
-              visibility_layer: sp.wahooCategory || 'screen',
-              visibility_layers: sp.wahooCategory ? [sp.wahooCategory] : [],
-              accepted_at: new Date().toISOString(),
-            }).select('id').single()
-
-            if (newGroan?.id) {
-              groanId = newGroan.id
-              try {
-                await supabase.from('priority_weekly_picks').upsert({
-                  user_id: user.id,
-                  week_start_date: getWeekStartLocal(),
-                  pick_type: 'groan',
-                  reference_id: groanId,
-                  display_name: sp.text,
-                }, { onConflict: 'user_id,week_start_date,pick_type,reference_id', ignoreDuplicates: true })
-              } catch {}
-            }
-          }
-
-          if (groanId) {
-            const { data: existingTask } = await supabase.from('quest_tasks')
-              .select('id').eq('quest_id', questId).eq('text', sp.text).limit(1)
-            if (!existingTask?.length) {
-              try {
-                const { data: taskRow } = await supabase.from('quest_tasks').insert({
-                  quest_id: questId,
-                  user_id: user.id,
-                  text: sp.text,
-                  is_courage_challenge: true,
-                  groan_challenge_id: groanId,
-                  sort_order: pathStuck.indexOf(sp),
-                }).select('id').single()
-
-                if (taskRow?.id && sp.protectiveVoice) {
-                  await supabase.from('healing_intentions').upsert({
-                    quest_task_id: taskRow.id,
-                    user_id: user.id,
-                    pattern: sp.protectiveVoice,
-                    protective_voice: sp.protectiveVoice,
-                    healing_stage: 'in_progress',
-                  }, { onConflict: 'quest_task_id' })
-                }
-              } catch {}
-            }
-          }
-        }
       }
 
-      // Write life_path_sessions row so Quests tab auto-unlocks
+      // Write life_path_sessions row so Paths tab auto-unlocks
       await supabase.from('life_path_sessions').insert({
         client_name: user.email || user.id,
         client_email: user.email || null,
-        careers: chosenPaths.map((p, i) => ({ id: `dome-${i}`, label: p.name, predictedState: 'vibe_rise' })),
-        stuck_points: stuckPoints.map(sp => ({ id: sp.id, careerId: sp.pathIdx, text: sp.text, protectiveVoice: sp.protectiveVoice })),
+        careers: chosenArr.map((p, i) => ({ id: `dome-${i}`, label: p.name, predictedState: 'vibe_rise' })),
+        stuck_points: [],
         step: 'complete',
-      }).then(() => {}).catch(() => {}) // non-blocking
+      }).then(() => {}).catch(() => {})
 
       hapticSuccess()
       goTo(STEPS.DONE)
     } catch (err) {
       console.error('Quest creation failed:', err)
-      goTo(STEPS.STUCK)
+      goTo(STEPS.PROJECTS)
     }
-  }, [user, paths, selectedPaths, stuckPoints, chosenPaths, goTo])
+  }, [user, paths, selectedPaths, goTo, vibeRise, fun, selectedIds])
 
   // ── Loading ──
   if (domeLoading) {
@@ -375,8 +403,117 @@ export default function ChooseQuestsFlow() {
           )}
 
           <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={callAI}>
-              {n === 0 ? 'Select at least 1 →' : 'Show me life paths →'}
+            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => { setDdIndex(0); goTo(STEPS.DEEP_DIVE) }}>
+              {n === 0 ? 'Select at least 1 →' : 'Tell us more →'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── DEEP DIVE ──
+  if (step === STEPS.DEEP_DIVE) {
+    const selectedExps = allExpsForDD
+    const currentExp = selectedExps[ddIndex]
+
+    if (!currentExp) {
+      // Waiting for useEffect to fire callAI
+      return <div className="cqf"><div className="cqf-container"><div className="cqf-processing"><div className="cqf-spinner" /></div></div></div>
+    }
+
+    const nodeId = currentExp.id
+    const subNodes = getSubNodes(nodeId)
+    const hasFormats = subNodes.length > 0
+    const dd = deepDive[nodeId] || { formats: new Set(), vectors: new Set() }
+
+    const toggleFormat = (fmtId) => {
+      hapticLight()
+      setDeepDive(prev => {
+        const existing = prev[nodeId] || { formats: new Set(), vectors: new Set() }
+        const next = new Set(existing.formats)
+        if (next.has(fmtId)) next.delete(fmtId)
+        else next.add(fmtId)
+        return { ...prev, [nodeId]: { ...existing, formats: next } }
+      })
+    }
+
+    const toggleVector = (vecId) => {
+      hapticLight()
+      setDeepDive(prev => {
+        const existing = prev[nodeId] || { formats: new Set(), vectors: new Set() }
+        const next = new Set(existing.vectors)
+        if (next.has(vecId)) next.delete(vecId)
+        else next.add(vecId)
+        return { ...prev, [nodeId]: { ...existing, vectors: next } }
+      })
+    }
+
+    const canProceed = dd.vectors.size > 0 && (!hasFormats || dd.formats.size > 0)
+    const isLast = ddIndex === selectedExps.length - 1
+
+    const goNext = () => {
+      if (isLast) {
+        callAI()
+      } else {
+        setDdIndex(ddIndex + 1)
+        window.scrollTo(0, 0)
+      }
+    }
+
+    return (
+      <div className="cqf">
+        <div className="cqf-container">
+          <div className="cqf-dd-progress">
+            {ddIndex + 1} of {selectedExps.length}
+          </div>
+
+          <div className="cqf-dd-header">
+            <h2>{currentExp.label}</h2>
+          </div>
+
+          {hasFormats && (
+            <div className="cqf-dd-section">
+              <div className="cqf-dd-q">Which formats specifically?</div>
+              <div className="cqf-dd-options">
+                {subNodes.map(sub => (
+                  <div key={sub.id}
+                    className={`cqf-dd-chip ${dd.formats.has(sub.id) ? 'selected' : ''}`}
+                    onClick={() => toggleFormat(sub.id)}>
+                    <div className="cqf-dd-chip-check">✓</div>
+                    <span>{sub.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="cqf-dd-section">
+            <div className="cqf-dd-q">When you imagine doing more of this, what excites you?</div>
+            <div className="cqf-dd-vectors">
+              {CAREER_VECTORS.map(vec => (
+                <div key={vec.id}
+                  className={`cqf-dd-vector ${dd.vectors.has(vec.id) ? 'selected' : ''}`}
+                  onClick={() => toggleVector(vec.id)}>
+                  <div className="cqf-dd-vector-check">✓</div>
+                  <div>
+                    <div className="cqf-dd-vector-label">{vec.label}</div>
+                    <div className="cqf-dd-vector-sub">{vec.subtitle}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="cqf-fixed">
+            <button className="cqf-cta cqf-cta-gold" disabled={!canProceed} onClick={goNext}>
+              {hasFormats && dd.formats.size === 0 ? 'Pick at least one format' : dd.vectors.size === 0 ? 'Pick at least one role' : isLast ? 'Show me life paths →' : 'Next →'}
+            </button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => {
+              if (ddIndex > 0) { setDdIndex(ddIndex - 1); window.scrollTo(0, 0) }
+              else goTo(STEPS.SELECT)
+            }}>
+              ← Back
             </button>
           </div>
         </div>
@@ -404,34 +541,34 @@ export default function ChooseQuestsFlow() {
     )
   }
 
-  // ── PICK PATHS ──
-  if (step === STEPS.PATHS) {
-    const n = selectedPaths.size
+  // ── PROJECTS (user removes ones they don't want) ──
+  if (step === STEPS.PROJECTS) {
+    const activeCount = activeProjects.length
     return (
       <div className="cqf">
         <div className="cqf-container">
           <div className="cqf-paths-header">
-            <h2>Life paths for you</h2>
-            <p>Pick 1-3 experiences that sound super exciting to you.</p>
+            <h2>Projects you could pursue</h2>
+            <p>Remove any that don't excite you. Keep the ones that make you think "yes, that."</p>
           </div>
 
           {aiError && (
             <div className="cqf-error">
-              Something went wrong generating paths.
+              Something went wrong generating projects.
               <button onClick={callAI}>Try again</button>
             </div>
           )}
 
-          {paths.map((path, i) => (
-            <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : ''}`} onClick={() => togglePath(i)}>
+          {projects.map((project, i) => (
+            <div key={i} className={`cqf-path ${removedProjects.has(i) ? 'cqf-path-removed' : 'selected'}`} onClick={() => toggleRemoveProject(i)}>
               <div className="cqf-path-top">
-                <div className="cqf-path-check">✓</div>
+                <div className="cqf-path-check">{removedProjects.has(i) ? '✕' : '✓'}</div>
                 <div>
-                  <div className="cqf-path-name">{path.name}</div>
-                  <div className="cqf-path-desc">{path.description}</div>
-                  {path.draws_from && !path.isCustom && (
+                  <div className="cqf-path-name">{project.name}</div>
+                  <div className="cqf-path-desc">{project.description}</div>
+                  {project.draws_from && (
                     <div className="cqf-path-sources">
-                      {path.draws_from
+                      {project.draws_from
                         .split(/[,+.]/)
                         .map(s => s.trim()
                           .replace(/^(and|or|SELECTED:|Vibe Rise:|Fun:|Growth edge:)\s*/gi, '')
@@ -442,7 +579,7 @@ export default function ChooseQuestsFlow() {
                       }
                     </div>
                   )}
-                  {path.draws_from?.toLowerCase().includes('wild card') && (
+                  {project.draws_from?.toLowerCase().includes('wild card') && (
                     <div className="cqf-path-wild">Wild card</div>
                   )}
                 </div>
@@ -451,101 +588,164 @@ export default function ChooseQuestsFlow() {
           ))}
 
           <div className="cqf-add-own">
-            {!showCustom ? (
-              <button onClick={() => setShowCustom(true)}>+ Add your own path</button>
+            {!showCustomProject ? (
+              <button onClick={() => setShowCustomProject(true)}>+ Add your own project</button>
             ) : (
               <div className="cqf-custom-input">
-                <input type="text" value={customInput} onChange={e => setCustomInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && addCustomPath()}
-                  placeholder="Type your own life path..." autoFocus />
-                <button onClick={addCustomPath} disabled={!customInput.trim()}>Add</button>
+                <input type="text" value={customProjectInput} onChange={e => setCustomProjectInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && customProjectInput.trim()) {
+                      setProjects(prev => [...prev, { name: customProjectInput.trim(), description: 'Your own project idea', draws_from: 'custom' }])
+                      setCustomProjectInput('')
+                      setShowCustomProject(false)
+                      hapticLight()
+                    }
+                  }}
+                  placeholder="Type your project idea..." autoFocus />
+                <button disabled={!customProjectInput.trim()} onClick={() => {
+                  if (!customProjectInput.trim()) return
+                  setProjects(prev => [...prev, { name: customProjectInput.trim(), description: 'Your own project idea', draws_from: 'custom' }])
+                  setCustomProjectInput('')
+                  setShowCustomProject(false)
+                  hapticLight()
+                }}>Add</button>
               </div>
             )}
           </div>
 
           <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" disabled={n === 0} onClick={() => goTo(STEPS.STUCK)}>
-              {n === 0 ? 'Select at least 1 →' : 'Continue →'}
+            <button className="cqf-cta cqf-cta-gold" disabled={activeCount === 0} onClick={proceedFromProjects}>
+              {activeCount === 0 ? 'Keep at least 1 →' : activeCount === 1 ? 'Continue →' : `Group ${activeCount} into paths →`}
             </button>
-            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setPaths([]); setSelectedPaths(new Set()); setStuckPoints([]); setStuckInputs({}); goTo(STEPS.SELECT) }}>← Change experiences</button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => { setProjects([]); setRemovedProjects(new Set()); goTo(STEPS.SELECT) }}>← Change experiences</button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ── STUCK POINTS ──
-  if (step === STEPS.STUCK) {
+  // ── CLUSTERING (loading state while AI groups projects into paths) ──
+  if (step === STEPS.CLUSTERING) {
     return (
       <div className="cqf">
         <div className="cqf-container">
-          <div className="cqf-stuck-header">
-            <h2>What's your first step?</h2>
-            <p>For each path, what's the smallest thing you could do this week to take a step towards making it real?</p>
+          <div className="cqf-processing">
+            <div className="cqf-spinner" />
+            <h2>Grouping your projects into life paths...</h2>
+            <p>Finding the distinct directions in what you've chosen.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── PATHS REVIEW (after clustering — user confirms/edits) ──
+  if (step === STEPS.PATHS_REVIEW) {
+    const updatePathName = (idx, newName) => {
+      setPaths(prev => prev.map((p, i) => i === idx ? { ...p, name: newName } : p))
+    }
+    const togglePathSelection = (idx) => {
+      hapticLight()
+      setSelectedPaths(prev => {
+        const next = new Set(prev)
+        if (next.has(idx)) next.delete(idx)
+        else next.add(idx)
+        return next
+      })
+    }
+    const moveProject = (fromPathIdx, projectIdx, toPathIdx) => {
+      hapticLight()
+      setPaths(prev => {
+        const next = prev.map(p => ({ ...p, projects: [...(p.projects || [])] }))
+        const [project] = next[fromPathIdx].projects.splice(projectIdx, 1)
+        next[toPathIdx].projects.push(project)
+        // Remove empty paths, rebuild clean
+        const cleaned = next.filter(p => p.projects.length > 0)
+        // Reindex selectedPaths to match cleaned array
+        const newSelected = new Set()
+        cleaned.forEach((_, ci) => newSelected.add(ci))
+        // Use setTimeout to avoid nested setState in updater
+        setTimeout(() => setSelectedPaths(newSelected), 0)
+        return cleaned
+      })
+      setMovePopover(null)
+    }
+    const activePaths = paths.filter((_, i) => selectedPaths.has(i))
+
+    // Only show move option when there are 2+ paths
+    const canMove = paths.length >= 2
+    return (
+      <div className="cqf">
+        <div className="cqf-container">
+          <div className="cqf-paths-header">
+            <h2>Your life paths</h2>
+            <p>{canMove ? 'Rename paths, move projects between them, or remove a path.' : 'All your projects are under one path.'}</p>
           </div>
 
-          {chosenPaths.map((path, displayIdx) => {
-            const pathIdx = paths.indexOf(path)
-            const pStuck = stuckPoints.filter(sp => sp.pathIdx === pathIdx)
-            return (
-              <div key={pathIdx} className="cqf-stuck-group">
-                <div className="cqf-stuck-group-name">
-                  <div className="cqf-stuck-group-dot" />
-                  {path.name}
+          {clusterError && (
+            <div className="cqf-error">
+              Something went wrong grouping projects.
+              <button onClick={proceedFromProjects}>Try again</button>
+            </div>
+          )}
+
+          {paths.map((path, i) => (
+            <div key={i} className={`cqf-path ${selectedPaths.has(i) ? 'selected' : 'cqf-path-removed'}`}>
+              <div className="cqf-path-top">
+                <div className="cqf-path-check" onClick={() => togglePathSelection(i)}>
+                  {selectedPaths.has(i) ? '✓' : '✕'}
                 </div>
-
-                {pStuck.map(sp => (
-                  <div key={sp.id} className="cqf-stuck-item">
-                    <div className="cqf-stuck-item-row">
-                      <span className="cqf-stuck-item-text">{sp.text}</span>
-                      <span className="cqf-stuck-remove" onClick={() => removeStuckPoint(sp.id)}>✕</span>
+                <div style={{ flex: 1 }}>
+                  <input
+                    className="cqf-path-name-edit"
+                    value={path.name}
+                    onChange={e => updatePathName(i, e.target.value)}
+                  />
+                  <div className="cqf-path-desc">{path.description}</div>
+                  {path.projects?.length > 0 && (
+                    <div className="cqf-projects-section">
+                      <div className="cqf-projects-label">Projects:</div>
+                      {canMove && <div className="cqf-projects-hint">Tap to move between paths</div>}
+                      <div className="cqf-projects-list">
+                        {path.projects.map((p, j) => (
+                          <div key={j} className="cqf-project-wrap">
+                            <span className="cqf-project-tag" onClick={canMove ? (e) => {
+                              e.stopPropagation()
+                              const isOpen = movePopover?.fromPath === i && movePopover?.projectIdx === j
+                              setMovePopover(isOpen ? null : { fromPath: i, projectIdx: j })
+                            } : undefined}>
+                              {p.name}{canMove ? ' ↕' : ''}
+                            </span>
+                            {canMove && movePopover?.fromPath === i && movePopover?.projectIdx === j && (
+                              <div className="cqf-move-popover">
+                                <div className="cqf-move-label">Move to:</div>
+                                {paths.map((op, oi) => oi !== i && (
+                                  <button key={oi} className="cqf-move-option" onClick={(e) => {
+                                    e.stopPropagation()
+                                    moveProject(i, j, oi)
+                                  }}>
+                                    {op.name}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    {activeSpId === sp.id && !sp.protectiveVoice && (
-                      <div className="cqf-voice-picker">
-                        <div className="cqf-voice-q">Which voice tries to stop you?</div>
-                        <div className="cqf-voice-options">
-                          {[
-                            { id: 'perfectionist', icon: '🎯', label: 'Perfectionist', sub: "Won't start until it's perfect" },
-                            { id: 'ghost', icon: '👻', label: 'Ghost', sub: 'Disappears, avoids, goes quiet' },
-                            { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser', sub: 'Says yes when you mean no' },
-                            { id: 'controller', icon: '🧱', label: 'Controller', sub: 'Needs to control every variable' },
-                            { id: 'auto-pilot', icon: '🤖', label: 'Auto-Pilot', sub: 'Goes through the motions' },
-                          ].map(v => (
-                            <button key={v.id} className="cqf-voice-btn"
-                              onClick={() => { updateStuckField(sp.id, 'protectiveVoice', v.id); setActiveSpId(null); hapticLight() }}>
-                              <span className="cqf-voice-icon">{v.icon}</span>
-                              <span className="cqf-voice-label">{v.label}</span>
-                            </button>
-                          ))}
-                          <button className="cqf-voice-skip" onClick={() => setActiveSpId(null)}>Skip</button>
-                        </div>
-                      </div>
-                    )}
-                    {sp.protectiveVoice && (
-                      <div className="cqf-stuck-badges">
-                        <span className="cqf-stuck-badge voice">{sp.protectiveVoice}</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                <div className="cqf-stuck-input">
-                  <input type="text"
-                    value={stuckInputs[pathIdx] || ''}
-                    onChange={e => setStuckInputs(prev => ({ ...prev, [pathIdx]: e.target.value }))}
-                    onKeyDown={e => { if (e.key === 'Enter' && (stuckInputs[pathIdx] || '').trim()) addStuckPoint(pathIdx) }}
-                    placeholder="The smallest possible step..." />
-                  <button onClick={() => addStuckPoint(pathIdx)} disabled={!(stuckInputs[pathIdx] || '').trim()}>Add</button>
+                  )}
                 </div>
               </div>
-            )
-          })}
+            </div>
+          ))}
 
           <div className="cqf-fixed">
-            <button className="cqf-cta cqf-cta-gold" onClick={saveQuests}>
-              {stuckPoints.length > 0 ? 'Create my quests →' : 'Skip for now, create quests →'}
+            <button className="cqf-cta cqf-cta-gold" disabled={activePaths.length === 0} onClick={confirmPaths}>
+              {activePaths.length === 0 ? 'Select at least 1 →' : 'These look right →'}
             </button>
-            <button className="cqf-cta cqf-cta-secondary" onClick={() => goTo(STEPS.PATHS)}>← Change paths</button>
+            <button className="cqf-cta cqf-cta-secondary" onClick={() => goTo(STEPS.PROJECTS)}>
+              ← Go back and change projects
+            </button>
           </div>
         </div>
       </div>
@@ -573,8 +773,8 @@ export default function ChooseQuestsFlow() {
         <div className="cqf-container">
           <div className="cqf-done">
             <div className="cqf-done-check">✓</div>
-            <h2>Quests created</h2>
-            <p>Head to your Quests tab to see your active quests and start your first courage challenge.</p>
+            <h2>Paths created</h2>
+            <p>Head to your Paths tab to see your active paths and start your first courage challenge.</p>
             <div className="cqf-done-list">
               {chosenPaths.map((path, i) => (
                 <div key={i} className="cqf-done-quest">
@@ -584,8 +784,8 @@ export default function ChooseQuestsFlow() {
               ))}
             </div>
             <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Quests')}>
-                Go to my quests →
+              <button className="cqf-cta cqf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
+                Go to my paths →
               </button>
             </div>
           </div>

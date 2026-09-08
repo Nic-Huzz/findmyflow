@@ -116,7 +116,7 @@ export default function CreatorPositionCard({ userId, essenceName, skills, probl
           setLifeQuake(`People experiencing ${problems[0].toLowerCase()}`)
         }
         if (!data?.transformation && essenceName) {
-          setTransformation(`${essenceName} — safe, seen, and clear on what's next`)
+          setTransformation(`${essenceName}, safe, seen, and clear on what's next`)
         }
         setPosLoaded(true)
       })

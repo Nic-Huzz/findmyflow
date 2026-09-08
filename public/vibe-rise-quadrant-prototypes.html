@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise Quadrant</title>
+<style>
+  :root {
+    --gold: #E9A23B;
+    --gold-soft: #f5d08a;
+    --purple: #5e17eb;
+    --purple-soft: #a78bfa;
+    --red: #e05252;
+    --red-soft: #f1a0a0;
+    --grey: #9ca3af;
+    --grey-soft: #d1d5db;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --border: #e9ecef;
+    --text: #1a1a2e;
+    --text-muted: #8a8a82;
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-title { font-size: 18px; font-weight: 800; text-align: center; margin-bottom: 4px; }
+  .page-sub { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 400; margin-bottom: 40px; }
+
+  .prototypes { display: flex; flex-direction: column; gap: 48px; max-width: 400px; margin: 0 auto; }
+  .version-label { font-size: 10px; font-weight: 700; color: var(--purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; text-align: center; opacity: 0.7; }
+
+  /* ═══════════════════════════════════════════ */
+  /*  QUADRANT FIELD                             */
+  /* ═══════════════════════════════════════════ */
+  .quad-field {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(94,23,235,0.02) 0%, rgba(233,162,59,0.03) 100%);
+  }
+  .quad-field .zone {
+    position: absolute;
+    width: 50%; height: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 0.5s ease, filter 0.5s ease;
+  }
+  .quad-field .zone:not(.active) { opacity: 0.25; filter: saturate(0.2); }
+  .zone.tl { top: 0; left: 0; }
+  .zone.tr { top: 0; right: 0; }
+  .zone.bl { bottom: 0; left: 0; }
+  .zone.br { bottom: 0; right: 0; }
+
+  .zone-grounded { background: radial-gradient(circle at 0% 0%, rgba(94,23,235,0.12) 0%, rgba(94,23,235,0.02) 80%); }
+  .zone-viberise { background: radial-gradient(circle at 100% 0%, rgba(233,162,59,0.16) 0%, rgba(233,162,59,0.02) 80%); }
+  .zone-stuck    { background: radial-gradient(circle at 0% 100%, rgba(156,163,175,0.10) 0%, rgba(156,163,175,0.01) 80%); }
+  .zone-wired    { background: radial-gradient(circle at 100% 100%, rgba(224,82,82,0.10) 0%, rgba(224,82,82,0.01) 80%); }
+
+  .zone-name { font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
+  .zone-sub { font-size: 9.5px; font-weight: 400; opacity: 0.5; margin-top: 1px; }
+  .zone-grounded .zone-name { color: var(--purple); }
+  .zone-viberise .zone-name { color: #b8860b; }
+  .zone-stuck .zone-name { color: var(--grey); }
+  .zone-wired .zone-name { color: var(--red); }
+
+  .quad-field .axis-h, .quad-field .axis-v { position: absolute; background: rgba(0,0,0,0.04); }
+  .quad-field .axis-h { width: 100%; height: 1px; top: 50%; }
+  .quad-field .axis-v { height: 100%; width: 1px; left: 50%; }
+  .quad-field .ax-label { position: absolute; font-size: 8.5px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(0,0,0,0.15); }
+  .ax-label.bottom { bottom: 8px; left: 50%; transform: translateX(-50%); }
+  .ax-label.left { left: 8px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+
+  /* Orb */
+  .pos-orb {
+    position: absolute; z-index: 10;
+    width: 16px; height: 16px; border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .pos-orb::before {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    background: radial-gradient(circle, var(--orb-color) 0%, transparent 70%);
+    opacity: 0.35; animation: breathe 3s ease-in-out infinite;
+  }
+  .pos-orb::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: var(--orb-color); border: 2.5px solid var(--card);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.35; }
+    50% { transform: scale(1.5); opacity: 0.15; }
+  }
+
+  .trail-dot {
+    position: absolute; border-radius: 50%;
+    background: var(--orb-color); transform: translate(-50%, -50%);
+  }
+
+  /* ═══════════════════════════════════════════ */
+  /*  COMPASS CARD                               */
+  /* ═══════════════════════════════════════════ */
+  .card {
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* Mini compass */
+  .compass {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .compass .mz {
+    position: absolute; width: 50%; height: 50%;
+    transition: opacity 0.4s;
+  }
+  .compass .mz:not(.active) { opacity: 0.12; }
+  .compass .mz.tl { top: 0; left: 0; border-radius: 14px 0 0 0; }
+  .compass .mz.tr { top: 0; right: 0; border-radius: 0 14px 0 0; }
+  .compass .mz.bl { bottom: 0; left: 0; border-radius: 0 0 0 14px; }
+  .compass .mz.br { bottom: 0; right: 0; border-radius: 0 0 14px 0; }
+
+  .compass .mini-orb {
+    position: absolute; z-index: 2;
+    width: 9px; height: 9px; border-radius: 50%;
+    border: 2px solid var(--card);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 6px rgba(0,0,0,0.12);
+  }
+  .compass .mini-orb::after {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%; background: inherit;
+    opacity: 0.3; animation: breathe 3s ease-in-out infinite;
+  }
+
+  .card-meta { flex: 1; min-width: 0; }
+  .card-zone { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+  .card-desc { font-size: 12px; color: var(--text-muted); font-weight: 400; margin-top: 1px; }
+
+  .card-chevron {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(0,0,0,0.03);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .card-chevron svg { width: 14px; height: 14px; stroke: var(--text-muted); stroke-width: 2; fill: none; }
+  .card.open .card-chevron { transform: rotate(180deg); }
+
+  .card-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card.open .card-body { grid-template-rows: 1fr; }
+  .card-body-inner { overflow: hidden; }
+  .card-body-content { padding: 0 20px 22px; }
+
+  /* ─── Option A: Clean bars (no numbers) ─── */
+  .bars { display: flex; gap: 6px; margin-top: 14px; }
+  .bar-item { flex: 1; text-align: center; }
+  .bar-track {
+    height: 28px; border-radius: 8px;
+    background: rgba(0,0,0,0.03);
+    position: relative; overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .bar-fill {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    border-radius: 8px;
+    transition: height 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .bar-label {
+    font-size: 9px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--text-muted);
+  }
+
+  /* ─── Option B: Actionable bars (with today's nudge) ─── */
+  .action-bars { display: flex; gap: 8px; margin-top: 14px; }
+  .action-bar {
+    flex: 1; text-align: center;
+    padding: 10px 6px 8px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.02);
+  }
+  .action-bar-track {
+    height: 4px; border-radius: 2px;
+    background: rgba(0,0,0,0.06);
+    overflow: hidden; margin-bottom: 8px;
+  }
+  .action-bar-fill {
+    height: 100%; border-radius: 2px;
+    transition: width 0.8s ease;
+  }
+  .action-bar-label {
+    font-size: 9px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .action-bar-nudge {
+    font-size: 11px; font-weight: 500;
+    color: var(--text); margin-top: 4px;
+    line-height: 1.3;
+  }
+  .action-bar-nudge .done { color: #10b981; }
+  .action-bar-nudge .todo { color: var(--purple); }
+
+  /* Nudge */
+  .nudge {
+    margin-top: 14px; padding: 12px 14px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(94,23,235,0.03), rgba(233,162,59,0.04));
+    border: 1px solid rgba(94,23,235,0.05);
+    font-size: 13px; line-height: 1.5; color: #555; font-weight: 400;
+  }
+  .nudge strong { font-weight: 600; color: var(--purple); }
+
+  /* ═══════════════════════════════════════════ */
+  /*  4-STATE GRID                               */
+  /* ═══════════════════════════════════════════ */
+  .states-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .state-card {
+    background: var(--card); border-radius: 16px;
+    padding: 16px; border: 1px solid var(--border);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  }
+  .state-name { font-size: 14px; font-weight: 800; margin-bottom: 10px; }
+  .state-card .quad-field { aspect-ratio: 1; border-radius: 12px; }
+  .state-card .zone-name { font-size: 10px; }
+  .state-card .zone-sub { display: none; }
+  .state-card .pos-orb { width: 12px; height: 12px; }
+  .state-card .pos-orb::before { inset: -4px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Vibe Rise Quadrant</div>
+<p class="page-sub">Compass Card with two bar options</p>
+
+<div class="prototypes">
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  OPTION A: Clean bars (no numbers)          -->
+<!-- ═══════════════════════════════════════════ -->
+<div>
+  <div class="version-label">Option A: Clean Bars</div>
+  <div class="card" onclick="this.classList.toggle('open')">
+    <div class="card-header">
+      <div class="compass">
+        <div class="mz tl zone-grounded"></div>
+        <div class="mz tr zone-viberise active"></div>
+        <div class="mz bl zone-stuck"></div>
+        <div class="mz br zone-wired"></div>
+        <div class="mini-orb" style="background: var(--gold); left: 76%; top: 22%;"></div>
+      </div>
+      <div class="card-meta">
+        <div class="card-zone" style="color: #b8860b;">Vibe Rise</div>
+        <div class="card-desc">Safe and expressing yourself fully</div>
+      </div>
+      <div class="card-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+
+    <div class="card-body"><div class="card-body-inner"><div class="card-body-content">
+      <div class="quad-field" style="--orb-color: var(--gold);">
+        <div class="axis-h"></div><div class="axis-v"></div>
+        <div class="zone tl zone-grounded"><div class="zone-name">Grounded</div><div class="zone-sub">Safe, not expressing</div></div>
+        <div class="zone tr zone-viberise active"><div class="zone-name">Vibe Rise</div><div class="zone-sub">Safe and expressed</div></div>
+        <div class="zone bl zone-stuck"><div class="zone-name">Stuck</div><div class="zone-sub">Low on both</div></div>
+        <div class="zone br zone-wired"><div class="zone-name">Wired</div><div class="zone-sub">Expressing without safety</div></div>
+        <div class="trail-dot" style="--orb-color: var(--gold); left: 68%; top: 28%; width: 5px; height: 5px; opacity: 0.15;"></div>
+        <div class="trail-dot" style="--orb-color: var(--gold); left: 62%; top: 35%; width: 4px; height: 4px; opacity: 0.10;"></div>
+        <div class="trail-dot" style="--orb-color: var(--gold); left: 55%; top: 42%; width: 3px; height: 3px; opacity: 0.06;"></div>
+        <div class="pos-orb" style="left: 76%; top: 22%;"></div>
+        <span class="ax-label bottom">expression</span>
+        <span class="ax-label left">safety</span>
+      </div>
+
+      <div class="bars">
+        <div class="bar-item">
+          <div class="bar-track"><div class="bar-fill" style="height: 72%; background: linear-gradient(0deg, rgba(94,23,235,0.12), rgba(94,23,235,0.35));"></div></div>
+          <div class="bar-label">Safety</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-track"><div class="bar-fill" style="height: 81%; background: linear-gradient(0deg, rgba(233,162,59,0.15), rgba(233,162,59,0.45));"></div></div>
+          <div class="bar-label">Expression</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-track"><div class="bar-fill" style="height: 73%; background: linear-gradient(0deg, rgba(34,197,94,0.10), rgba(34,197,94,0.30));"></div></div>
+          <div class="bar-label">Maintain</div>
+        </div>
+      </div>
+    </div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  OPTION B: Actionable bars (today's nudge)  -->
+<!-- ═══════════════════════════════════════════ -->
+<div>
+  <div class="version-label">Option B: Actionable Bars</div>
+  <div class="card" onclick="this.classList.toggle('open')">
+    <div class="card-header">
+      <div class="compass">
+        <div class="mz tl zone-grounded"></div>
+        <div class="mz tr zone-viberise active"></div>
+        <div class="mz bl zone-stuck"></div>
+        <div class="mz br zone-wired"></div>
+        <div class="mini-orb" style="background: var(--gold); left: 76%; top: 22%;"></div>
+      </div>
+      <div class="card-meta">
+        <div class="card-zone" style="color: #b8860b;">Vibe Rise</div>
+        <div class="card-desc">Safe and expressing yourself fully</div>
+      </div>
+      <div class="card-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+
+    <div class="card-body"><div class="card-body-inner"><div class="card-body-content">
+      <div class="quad-field" style="--orb-color: var(--gold);">
+        <div class="axis-h"></div><div class="axis-v"></div>
+        <div class="zone tl zone-grounded"><div class="zone-name">Grounded</div><div class="zone-sub">Safe, not expressing</div></div>
+        <div class="zone tr zone-viberise active"><div class="zone-name">Vibe Rise</div><div class="zone-sub">Safe and expressed</div></div>
+        <div class="zone bl zone-stuck"><div class="zone-name">Stuck</div><div class="zone-sub">Low on both</div></div>
+        <div class="zone br zone-wired"><div class="zone-name">Wired</div><div class="zone-sub">Expressing without safety</div></div>
+        <div class="trail-dot" style="--orb-color: var(--gold); left: 68%; top: 28%; width: 5px; height: 5px; opacity: 0.15;"></div>
+        <div class="trail-dot" style="--orb-color: var(--gold); left: 62%; top: 35%; width: 4px; height: 4px; opacity: 0.10;"></div>
+        <div class="pos-orb" style="left: 76%; top: 22%;"></div>
+        <span class="ax-label bottom">expression</span>
+        <span class="ax-label left">safety</span>
+      </div>
+
+      <div class="action-bars">
+        <div class="action-bar">
+          <div class="action-bar-label">Safety</div>
+          <div class="action-bar-track"><div class="action-bar-fill" style="width: 75%; background: linear-gradient(90deg, var(--purple-soft), var(--purple));"></div></div>
+          <div class="action-bar-nudge"><span class="done">3/4 done</span></div>
+        </div>
+        <div class="action-bar">
+          <div class="action-bar-label">Expression</div>
+          <div class="action-bar-track"><div class="action-bar-fill" style="width: 100%; background: linear-gradient(90deg, var(--gold-soft), var(--gold));"></div></div>
+          <div class="action-bar-nudge"><span class="done">4/3 done</span></div>
+        </div>
+        <div class="action-bar">
+          <div class="action-bar-label">Maintain</div>
+          <div class="action-bar-track"><div class="action-bar-fill" style="width: 50%; background: linear-gradient(90deg, rgba(34,197,94,0.4), #22c55e);"></div></div>
+          <div class="action-bar-nudge"><span class="todo">3 left today</span></div>
+        </div>
+      </div>
+    </div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  WIRED STATE (shows nudge power)            -->
+<!-- ═══════════════════════════════════════════ -->
+<div>
+  <div class="version-label">Wired State (Option B)</div>
+  <div class="card" onclick="this.classList.toggle('open')">
+    <div class="card-header">
+      <div class="compass">
+        <div class="mz tl zone-grounded"></div>
+        <div class="mz tr zone-viberise"></div>
+        <div class="mz bl zone-stuck"></div>
+        <div class="mz br zone-wired active"></div>
+        <div class="mini-orb" style="background: var(--red); left: 78%; top: 68%;"></div>
+      </div>
+      <div class="card-meta">
+        <div class="card-zone" style="color: var(--red);">Wired</div>
+        <div class="card-desc">Expressing but your body needs safety</div>
+      </div>
+      <div class="card-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+
+    <div class="card-body"><div class="card-body-inner"><div class="card-body-content">
+      <div class="quad-field" style="--orb-color: var(--red);">
+        <div class="axis-h"></div><div class="axis-v"></div>
+        <div class="zone tl zone-grounded"><div class="zone-name">Grounded</div><div class="zone-sub">Safe, not expressing</div></div>
+        <div class="zone tr zone-viberise"><div class="zone-name">Vibe Rise</div><div class="zone-sub">Safe and expressed</div></div>
+        <div class="zone bl zone-stuck"><div class="zone-name">Stuck</div><div class="zone-sub">Low on both</div></div>
+        <div class="zone br zone-wired active"><div class="zone-name">Wired</div><div class="zone-sub">Expressing without safety</div></div>
+        <div class="pos-orb" style="left: 78%; top: 68%;"></div>
+        <span class="ax-label bottom">expression</span>
+        <span class="ax-label left">safety</span>
+      </div>
+
+      <div class="action-bars">
+        <div class="action-bar">
+          <div class="action-bar-label">Safety</div>
+          <div class="action-bar-track"><div class="action-bar-fill" style="width: 25%; background: linear-gradient(90deg, var(--red-soft), var(--red));"></div></div>
+          <div class="action-bar-nudge"><span class="todo">1/4 today</span></div>
+        </div>
+        <div class="action-bar">
+          <div class="action-bar-label">Expression</div>
+          <div class="action-bar-track"><div class="action-bar-fill" style="width: 100%; background: linear-gradient(90deg, var(--gold-soft), var(--gold));"></div></div>
+          <div class="action-bar-nudge"><span class="done">5/3 done</span></div>
+        </div>
+        <div class="action-bar">
+          <div class="action-bar-label">Maintain</div>
+          <div class="action-bar-track"><div class="action-bar-fill" style="width: 33%; background: linear-gradient(90deg, var(--red-soft), var(--red));"></div></div>
+          <div class="action-bar-nudge"><span class="todo">4 left today</span></div>
+        </div>
+      </div>
+
+      <div class="nudge">
+        You're putting yourself out there. But your body needs more <strong>safety practices</strong> to sustain it. Try breathwork or meditation.
+      </div>
+    </div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  ALL 4 STATES                               -->
+<!-- ═══════════════════════════════════════════ -->
+<div>
+  <div class="version-label">All 4 Quadrant States</div>
+  <div class="states-grid">
+    <div class="state-card">
+      <div class="state-name" style="color: var(--grey);">Stuck</div>
+      <div class="quad-field" style="--orb-color: var(--grey);">
+        <div class="zone tl zone-grounded"><div class="zone-name">Grounded</div></div>
+        <div class="zone tr zone-viberise"><div class="zone-name">Vibe Rise</div></div>
+        <div class="zone bl zone-stuck active"><div class="zone-name">Stuck</div></div>
+        <div class="zone br zone-wired"><div class="zone-name">Wired</div></div>
+        <div class="pos-orb" style="left: 24%; top: 76%;"></div>
+      </div>
+    </div>
+    <div class="state-card">
+      <div class="state-name" style="color: var(--red);">Wired</div>
+      <div class="quad-field" style="--orb-color: var(--red);">
+        <div class="zone tl zone-grounded"><div class="zone-name">Grounded</div></div>
+        <div class="zone tr zone-viberise"><div class="zone-name">Vibe Rise</div></div>
+        <div class="zone bl zone-stuck"><div class="zone-name">Stuck</div></div>
+        <div class="zone br zone-wired active"><div class="zone-name">Wired</div></div>
+        <div class="pos-orb" style="left: 78%; top: 68%;"></div>
+      </div>
+    </div>
+    <div class="state-card">
+      <div class="state-name" style="color: var(--purple);">Grounded</div>
+      <div class="quad-field" style="--orb-color: var(--purple);">
+        <div class="zone tl zone-grounded active"><div class="zone-name">Grounded</div></div>
+        <div class="zone tr zone-viberise"><div class="zone-name">Vibe Rise</div></div>
+        <div class="zone bl zone-stuck"><div class="zone-name">Stuck</div></div>
+        <div class="zone br zone-wired"><div class="zone-name">Wired</div></div>
+        <div class="pos-orb" style="left: 30%; top: 26%;"></div>
+      </div>
+    </div>
+    <div class="state-card">
+      <div class="state-name" style="color: #b8860b;">Vibe Rise</div>
+      <div class="quad-field" style="--orb-color: var(--gold);">
+        <div class="zone tl zone-grounded"><div class="zone-name">Grounded</div></div>
+        <div class="zone tr zone-viberise active"><div class="zone-name">Vibe Rise</div></div>
+        <div class="zone bl zone-stuck"><div class="zone-name">Stuck</div></div>
+        <div class="zone br zone-wired"><div class="zone-name">Wired</div></div>
+        <div class="pos-orb" style="left: 80%; top: 20%;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

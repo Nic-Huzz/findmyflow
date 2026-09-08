@@ -84,7 +84,7 @@ export default function TestingExplainer() {
             But the gap between what you <em>think</em> works and what <em>actually</em> works can be huge.
           </p>
           <p>
-            Testing closes that gap — fast.
+            Testing closes that gap. Fast.
           </p>
           <p className="highlight-box">
             <strong>The businesses that test early, win. The ones that guess, struggle.</strong>

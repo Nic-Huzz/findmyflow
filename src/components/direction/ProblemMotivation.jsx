@@ -1,0 +1,180 @@
+/**
+ * ProblemMotivation.jsx — Card 2: What drives you
+ *
+ * "Which of these do you feel like the experiences you love are motivated by?"
+ * Shows taxonomy categories ranked by frequency from user's Life Map clusters.
+ * Multi-select 1-3 categories.
+ */
+
+import { useState, useEffect } from 'react'
+import { getProblemProfile } from '../../lib/directionEngine'
+import { supabase } from '../../lib/supabaseClient'
+import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import { PROBLEM_SEGMENTS, resolveProblemId } from '../../lib/wheelTaxonomy'
+import './ProblemMotivation.css'
+
+// Build lookup from taxonomy (single source of truth)
+const CATEGORY_META = {}
+PROBLEM_SEGMENTS.forEach(c => {
+  CATEGORY_META[c.id] = { displayName: c.displayName, tagline: c.tagline, turnsInto: c.turnsInto }
+})
+
+export default function ProblemMotivation({ userId, onComplete, onClose }) {
+  const [profile, setProfile] = useState(null)
+  const [selected, setSelected] = useState(new Set())
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [triggeredClassify, setTriggeredClassify] = useState(false)
+
+  const loadProfile = async () => {
+    setLoading(true)
+    const data = await getProblemProfile(userId)
+    // Deduplicate by resolved ID (old DB data may have voice_taken + minds_hurting as separate entries)
+    const seen = new Map()
+    data.forEach(({ id: rawId, count }) => {
+      const resolved = resolveProblemId(rawId) || rawId
+      seen.set(resolved, (seen.get(resolved) || 0) + count)
+    })
+    setProfile([...seen.entries()].map(([id, count]) => ({ id, count })))
+    setLoading(false)
+  }
+
+  useEffect(() => { loadProfile() }, [userId])
+
+  // If no tagged problems, trigger classify-quest-skills in problems mode for untagged clusters
+  useEffect(() => {
+    if (loading || triggeredClassify) return
+    if (profile && profile.length === 0) {
+      setTriggeredClassify(true)
+      // Fire classify for all untagged problem clusters, then reload
+      supabase
+        .from('nikigai_clusters')
+        .select('id, cluster_label, insight')
+        .eq('user_id', userId)
+        .eq('cluster_type', 'problems')
+        .is('problem_tags', null)
+        .is('is_removed', null)
+        .then(async ({ data: untagged }) => {
+          if (!untagged?.length) return
+          // Classify in parallel (cap at 10 to avoid rate limits)
+          const batch = untagged.slice(0, 10)
+          await Promise.all(batch.map(async (row) => {
+            const { data: tagData } = await supabase.functions.invoke('classify-quest-skills', {
+              body: { label: row.cluster_label, insight: row.insight, mode: 'problems' },
+            })
+            if (tagData?.problem_tags?.length) {
+              await supabase.from('nikigai_clusters')
+                .update({ problem_tags: tagData.problem_tags })
+                .eq('id', row.id)
+            }
+          }))
+          // Reload profile
+          loadProfile()
+        })
+    }
+  }, [loading, profile, triggeredClassify, userId])
+
+  const toggleCategory = (id) => {
+    hapticLight()
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else if (next.size < 3) {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  const handleSave = async () => {
+    if (saving || selected.size === 0) return
+    setSaving(true)
+    hapticSuccess()
+
+    const selectedArray = [...selected]
+
+    await supabase.from('direction_reveals').upsert({
+      user_id: userId,
+      reveal_type: 'problem_motivation',
+      reveal_data: { selected: selectedArray },
+    }, { onConflict: 'user_id,reveal_type' })
+
+    onComplete?.()
+  }
+
+  if (loading) {
+    return (
+      <div className="pmot-container">
+        <div className="pmot-loading">Looking at your story...</div>
+      </div>
+    )
+  }
+
+  if (triggeredClassify && (!profile || profile.length === 0)) {
+    return (
+      <div className="pmot-container">
+        <div className="pmot-loading">Processing your story...</div>
+      </div>
+    )
+  }
+
+  if (!profile || profile.length === 0) {
+    return (
+      <div className="pmot-container">
+        <button className="pmot-close" onClick={onClose}>&times;</button>
+        <div className="pmot-empty">
+          <h2>No problem data yet</h2>
+          <p>Complete the Life Map first so we can find the problems that drive you.</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="pmot-container">
+      <button className="pmot-close" onClick={onClose}>&times;</button>
+
+      <div className="pmot-header">
+        <h2 className="pmot-title">What drives you</h2>
+        <p className="pmot-subtitle">
+          Which of these do you feel like the experiences you love are motivated by?
+        </p>
+        <p className="pmot-hint">Select 1-3</p>
+      </div>
+
+      <div className="pmot-categories">
+        {profile.map(({ id, count }) => {
+          const meta = CATEGORY_META[id]
+          if (!meta) return null
+          const isSelected = selected.has(id)
+
+          return (
+            <button
+              key={id}
+              className={`pmot-cat ${isSelected ? 'selected' : ''}`}
+              onClick={() => toggleCategory(id)}
+            >
+              <div className="pmot-cat-top">
+                <span className="pmot-cat-check">{isSelected ? '●' : '○'}</span>
+                <span className="pmot-cat-name">{meta.displayName}</span>
+                <span className="pmot-cat-count">{count}</span>
+              </div>
+              <div className="pmot-cat-tagline">{meta.tagline}</div>
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="pmot-fixed">
+        <button
+          className="pmot-cta"
+          disabled={selected.size === 0 || saving}
+          onClick={handleSave}
+        >
+          {saving ? 'Saving...' : selected.size === 0 ? 'Select at least 1' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  )
+}

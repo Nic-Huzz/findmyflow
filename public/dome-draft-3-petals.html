@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dome of Safety - Draft 3: Petals</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f5f0; font-family: Inter, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 24px; min-height: 100vh; }
+  h2 { font-size: 18px; color: #1a1a1a; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
+  .dome-container { position: relative; width: 340px; height: 340px; }
+  svg { width: 100%; height: 100%; }
+  .center-avatar { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 2px 12px rgba(94,23,235,0.25); }
+  .score-row { margin-top: 16px; display: flex; align-items: baseline; gap: 6px; }
+  .score-num { font-size: 28px; font-weight: 800; color: #5e17eb; }
+  .score-max { font-size: 14px; color: #bbb; font-weight: 600; }
+  .score-label { font-size: 11px; color: #999; margin-top: 2px; }
+  .dim-rows { margin-top: 20px; width: 320px; display: flex; flex-direction: column; gap: 6px; }
+  .dim-row { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: white; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .dim-row-icon { font-size: 14px; width: 20px; text-align: center; }
+  .dim-row-name { font-size: 11px; font-weight: 600; color: #333; width: 80px; }
+  .dim-row-bar { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; position: relative; }
+  .dim-row-dome { height: 100%; border-radius: 4px; position: absolute; left: 0; top: 0; }
+  .dim-row-edge { height: 100%; border-radius: 4px; position: absolute; left: 0; top: 0; }
+  .dim-row-val { font-size: 10px; color: #999; width: 30px; text-align: right; }
+  .biz-models { margin-top: 28px; width: 320px; }
+  .biz-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+  .biz-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .biz-pill { font-size: 10px; font-weight: 600; padding: 6px 10px; border-radius: 8px; }
+  .biz-unlocked { background: rgba(94,23,235,0.08); color: #5e17eb; }
+  .biz-locked { background: #eee; color: #bbb; }
+  .biz-close { background: rgba(233,162,59,0.1); color: #E9A23B; border: 1px dashed #E9A23B; }
+</style>
+</head>
+<body>
+
+<h2>Your Dome of Safety</h2>
+<p class="subtitle">Where you can operate while staying regulated</p>
+
+<div class="dome-container">
+  <svg viewBox="0 0 340 340" id="dome"></svg>
+  <div class="center-avatar">🔥</div>
+</div>
+
+<div class="score-row">
+  <span class="score-num">4.5</span>
+  <span class="score-max">/ 8.0</span>
+</div>
+<div class="score-label">Courage Score (last challenge)</div>
+
+<div class="dim-rows" id="dimRows"></div>
+
+<div class="biz-models">
+  <div class="biz-title">Business models your dome supports</div>
+  <div class="biz-grid">
+    <span class="biz-pill biz-unlocked">1:1 Sessions</span>
+    <span class="biz-pill biz-unlocked">Per Session</span>
+    <span class="biz-pill biz-unlocked">Content</span>
+    <span class="biz-pill biz-unlocked">Group Program</span>
+    <span class="biz-pill biz-close">Live Events (1 away)</span>
+    <span class="biz-pill biz-locked">Membership</span>
+    <span class="biz-pill biz-locked">Retreat</span>
+    <span class="biz-pill biz-locked">Certification</span>
+  </div>
+</div>
+
+<script>
+const CX = 170, CY = 170, MAX_R = 110;
+const DIMS = [
+  { id: 'people',     label: 'People',         icon: '👥', max: 12, dome: 6,  edge: 8,  color: '#5e17eb' },
+  { id: 'money',      label: 'Money',          icon: '💰', max: 11, dome: 3,  edge: 3,  color: '#7c3aed' },
+  { id: 'vulnerability', label: 'Vulnerability', icon: '💜', max: 5,  dome: 4,  edge: 5,  color: '#8b5cf6' },
+  { id: 'stakes',     label: 'Stakes',         icon: '⚖️', max: 4,  dome: 3,  edge: 4,  color: '#a78bfa' },
+  { id: 'rarity',     label: 'Rarity',         icon: '✦',  max: 5,  dome: 4,  edge: 5,  color: '#c4a03f' },
+  { id: 'identity',   label: 'Identity',       icon: '🪞', max: 5,  dome: 3,  edge: 5,  color: '#E9A23B' },
+  { id: 'context',    label: 'Context',        icon: '🧭', max: 5,  dome: 3,  edge: 5,  color: '#d4943a' },
+  { id: 'bizcommit',  label: 'Business',       icon: '📈', max: 5,  dome: 3,  edge: 4,  color: '#c98c35' },
+];
+
+const N = DIMS.length;
+const angleStep = (2 * Math.PI) / N;
+const PETAL_WIDTH = 0.28; // radians, half-width of each petal
+
+function polar(i, r) {
+  const a = angleStep * i - Math.PI / 2;
+  return { x: CX + r * Math.cos(a), y: CY + r * Math.sin(a) };
+}
+
+function petalPath(i, value, maxVal) {
+  const r = (value / maxVal) * MAX_R;
+  const angle = angleStep * i - Math.PI / 2;
+  const tip = { x: CX + r * Math.cos(angle), y: CY + r * Math.sin(angle) };
+  const leftAngle = angle - PETAL_WIDTH;
+  const rightAngle = angle + PETAL_WIDTH;
+  const baseR = r * 0.35;
+  const left = { x: CX + baseR * Math.cos(leftAngle), y: CY + baseR * Math.sin(leftAngle) };
+  const right = { x: CX + baseR * Math.cos(rightAngle), y: CY + baseR * Math.sin(rightAngle) };
+  const cp1 = { x: CX + r * 0.8 * Math.cos(angle - PETAL_WIDTH * 0.5), y: CY + r * 0.8 * Math.sin(angle - PETAL_WIDTH * 0.5) };
+  const cp2 = { x: CX + r * 0.8 * Math.cos(angle + PETAL_WIDTH * 0.5), y: CY + r * 0.8 * Math.sin(angle + PETAL_WIDTH * 0.5) };
+  return `M ${CX} ${CY} L ${left.x} ${left.y} Q ${cp1.x} ${cp1.y} ${tip.x} ${tip.y} Q ${cp2.x} ${cp2.y} ${right.x} ${right.y} Z`;
+}
+
+const svg = document.getElementById('dome');
+let html = '';
+
+// Defs
+html += `<defs>
+  <filter id="softGlow">
+    <feGaussianBlur stdDeviation="3" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>`;
+
+// Subtle guide circles
+for (let ring = 1; ring <= 4; ring++) {
+  const r = MAX_R * (ring / 4);
+  html += `<circle cx="${CX}" cy="${CY}" r="${r}" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="0.5"/>`;
+}
+
+// Edge petals (gold, dashed outline only)
+DIMS.forEach((d, i) => {
+  if (d.edge > d.dome) {
+    html += `<path d="${petalPath(i, d.edge, d.max)}" fill="rgba(233,162,59,0.04)" stroke="#E9A23B" stroke-width="0.8" stroke-dasharray="3 2"/>`;
+  }
+});
+
+// Dome petals (each with its own color)
+DIMS.forEach((d, i) => {
+  html += `<path d="${petalPath(i, d.dome, d.max)}" fill="${d.color}" fill-opacity="0.12" stroke="${d.color}" stroke-width="1.5" filter="url(#softGlow)"/>`;
+});
+
+// Dots at tips
+DIMS.forEach((d, i) => {
+  const v = d.dome / d.max;
+  const p = polar(i, v * MAX_R);
+  html += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="${d.color}"/>`;
+});
+
+// Labels
+DIMS.forEach((d, i) => {
+  const p = polar(i, MAX_R + 18);
+  const anchor = p.x < CX - 20 ? 'end' : p.x > CX + 20 ? 'start' : 'middle';
+  html += `<text x="${p.x}" y="${p.y}" text-anchor="${anchor}" dominant-baseline="central" font-size="10" fill="#888" font-family="Inter, sans-serif">${d.icon} ${d.label}</text>`;
+});
+
+svg.innerHTML = html;
+
+// Dimension bars below
+const rows = document.getElementById('dimRows');
+DIMS.forEach(d => {
+  const domePct = Math.round((d.dome / d.max) * 100);
+  const edgePct = Math.round((d.edge / d.max) * 100);
+  rows.innerHTML += `
+    <div class="dim-row">
+      <span class="dim-row-icon">${d.icon}</span>
+      <span class="dim-row-name">${d.label}</span>
+      <div class="dim-row-bar">
+        <div class="dim-row-edge" style="width: ${edgePct}%; background: rgba(233,162,59,0.15);"></div>
+        <div class="dim-row-dome" style="width: ${domePct}%; background: ${d.color}; opacity: 0.3;"></div>
+      </div>
+      <span class="dim-row-val">${d.dome}/${d.max}</span>
+    </div>`;
+});
+</script>
+</body>
+</html>

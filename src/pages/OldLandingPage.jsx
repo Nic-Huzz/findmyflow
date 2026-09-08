@@ -55,11 +55,11 @@ const OldLandingPage = () => {
     },
     {
       q: "How is this different from courses or coaching?",
-      a: "Courses dump information on you and hope you figure it out. Coaches tell you what to do. We guide you through discovering your own answers — because you're the expert on you. It's structured self-discovery, not someone else's blueprint."
+      a: "Courses dump information on you and hope you figure it out. Coaches tell you what to do. We guide you through discovering your own answers, because you're the expert on you. It's structured self-discovery, not someone else's blueprint."
     },
     {
       q: "How long does it take?",
-      a: "The Career Clarity Quiz takes 4 minutes. The full Flow Finder journey can be done in a few focused sessions. But this isn't about speed — it's about finally getting clear on what you actually want."
+      a: "The Career Clarity Quiz takes 4 minutes. The full Flow Finder journey can be done in a few focused sessions. But this isn't about speed. It's about finally getting clear on what you actually want."
     },
     {
       q: "Is this just for people who want to start a business?",
@@ -67,11 +67,11 @@ const OldLandingPage = () => {
     },
     {
       q: "What if I've tried other programs and they didn't work?",
-      a: "Most programs focus on what action to take, without addressing what's stopping you from taking action. We combine business strategy with healing work — so you actually do the things you know you should do. That's the difference."
+      a: "Most programs focus on what action to take, without addressing what's stopping you from taking action. We combine business strategy with healing work so you actually do the things you know you should do. That's the difference."
     },
     {
       q: "Is there a community or am I doing this alone?",
-      a: "You're not alone. You'll be part of a community of people on the same journey — sharing wins, supporting each other through challenges, and building accountability together."
+      a: "You're not alone. You'll be part of a community of people on the same journey, sharing wins, supporting each other through challenges, and building accountability together."
     },
     {
       q: "What's included in the free version?",
@@ -108,7 +108,7 @@ const OldLandingPage = () => {
           </h1>
 
           <p className="hero-vision">
-            A unique path only you can walk — where work feels like play,
+            A unique path only you can walk, where work feels like play,
             income meets purpose, and you finally stop trading your best hours
             for someone else's dream.
           </p>
@@ -171,7 +171,7 @@ const OldLandingPage = () => {
               </div>
               <p className="culture-translation">"Inherent power"</p>
               <p className="culture-description">
-                Your individual expression of the Tao. You don't create it through effort — you uncover it by removing obstructions.
+                Your individual expression of the Tao. You don't create it through effort. You uncover it by removing obstructions.
               </p>
             </div>
 
@@ -240,12 +240,12 @@ const OldLandingPage = () => {
               <div className="symptom-card">
                 <div className="symptom-icon">🧠</div>
                 <h3>Head Full of Ambitions</h3>
-                <p>Big dreams, endless ideas — but no clear path to make them real.</p>
+                <p>Big dreams, endless ideas, but no clear path to make them real.</p>
               </div>
               <div className="symptom-card">
                 <div className="symptom-icon">😔</div>
                 <h3>Talents Going to Waste</h3>
-                <p>You finish each day feeling unfulfilled — like your best gifts are gathering dust.</p>
+                <p>You finish each day feeling unfulfilled, like your best gifts are gathering dust.</p>
               </div>
               <div className="symptom-card">
                 <div className="symptom-icon">🚫</div>
@@ -255,7 +255,7 @@ const OldLandingPage = () => {
               <div className="symptom-card">
                 <div className="symptom-icon">😰</div>
                 <h3>Visibility Paralysis</h3>
-                <p>Fear of judgement keeps you invisible — even when you're ready to share.</p>
+                <p>Fear of judgement keeps you invisible, even when you're ready to share.</p>
               </div>
             </div>
           </div>
@@ -289,7 +289,7 @@ const OldLandingPage = () => {
                   Sit down. Shut up. Memorise this. Get graded. Repeat for 15+ years.
                 </p>
                 <p className="chapter-body">
-                  They trained the curiosity out of us — and made learning feel like a chore.
+                  They trained the curiosity out of us, and made learning feel like a chore.
                 </p>
               </div>
             </div>
@@ -305,7 +305,7 @@ const OldLandingPage = () => {
                   Trade your time, energy, and most productive hours for security.
                 </p>
                 <p className="chapter-body">
-                  It's not a conspiracy — it's just an optimisation that forgot about you.
+                  It's not a conspiracy. It's just an optimisation that forgot about you.
                 </p>
               </div>
             </div>
@@ -335,7 +335,7 @@ const OldLandingPage = () => {
                 <h3 className="chapter-title">There's Many Ways to Build a Life</h3>
                 <p className="chapter-subtitle">The ladder became the default when there were no other options.</p>
                 <p className="chapter-body">
-                  Good grades → Degree → Job → Promotion → Corner Office → "Is this it?"
+                  Good grades, Degree, Job, Promotion, Corner Office... "Is this it?"
                 </p>
                 <p className="chapter-body chapter-bridge">
                   But now there is another way...
@@ -361,7 +361,7 @@ const OldLandingPage = () => {
 
             <p className="world-changed-new">
               AI collapsed the build-cost barrier. Distribution is free. The new economy rewards
-              people who deeply understand specific problems — not generalists serving everyone poorly.
+              people who deeply understand specific problems, not generalists serving everyone poorly.
             </p>
           </div>
 
@@ -405,7 +405,7 @@ const OldLandingPage = () => {
               <h2 className="founder-greeting">Hey, I'm Huzz</h2>
 
               <p className="founder-thesis">
-                Ever since I quit my job, I've developed an unwavering belief in <strong>'Flow'</strong> —
+                Ever since I quit my job, I've developed an unwavering belief in <strong>'Flow'</strong>,
                 the idea that there's a unique path only you can walk, based on your combination of
                 skills, experiences, and circumstances.
               </p>
@@ -439,7 +439,7 @@ const OldLandingPage = () => {
                 <div className="story-chapter">
                   <p className="chapter-heading">The Confusion</p>
                   <p>It wasn't from a lack of clarity.</p>
-                  <p>It wasn't from a lack of education — I'd spent <strong>$30,000</strong> on 52 courses.</p>
+                  <p>It wasn't from a lack of education. I'd spent <strong>$30,000</strong> on 52 courses.</p>
                   <p>It wasn't from a lack of will.</p>
                 </div>
 
@@ -470,7 +470,7 @@ const OldLandingPage = () => {
 
                 <div className="story-chapter story-chapter-insight">
                   <p className="chapter-heading">The Insight</p>
-                  <p className="chapter-quote">"We don't rise to the level of our ambitions — we fall to the level of what feels safe."</p>
+                  <p className="chapter-quote">"We don't rise to the level of our ambitions. We fall to the level of what feels safe."</p>
                   <p>This challenge changed what felt safe. And that changed everything.</p>
                 </div>
               </div>
@@ -510,7 +510,7 @@ const OldLandingPage = () => {
                   <div className="experience-item">
                     <span className="experience-icon">🚀</span>
                     <span className="experience-text">
-                      <strong>5 years at Investible (VC)</strong> — building and delivering entrepreneurial programs
+                      <strong>5 years at Investible (VC)</strong>, building and delivering entrepreneurial programs
                       from 12-week accelerators to 2-day hackathons and everything in between
                     </span>
                   </div>
@@ -565,8 +565,8 @@ const OldLandingPage = () => {
                 </div>
 
                 <p className="formula-desc">
-                  — my unique formula for creating "magic programs" that cause participants
-                  to walk away feeling like they've had one of the most transformational experiences of their life
+                  My unique formula for creating "magic programs" that cause participants
+                  to walk away feeling like they've had one of the most transformational experiences of their life.
                 </p>
 
                 <p className="credentials-kicker">
@@ -574,7 +574,7 @@ const OldLandingPage = () => {
                 </p>
 
                 <p className="founder-mission">
-                  <strong>My north star:</strong> Help you go from idea to monetising your mission —
+                  <strong>My north star:</strong> Help you go from idea to monetising your mission,
                   as fast as possible.
                 </p>
               </div>
@@ -655,7 +655,7 @@ const OldLandingPage = () => {
         <div className="landing-container">
           <h2 className="section-heading">The Flow Finder Framework</h2>
           <p className="section-subheading">
-            Inspired by Ikigai — redesigned for building a business around your passions
+            Inspired by Ikigai, redesigned for building a business around your passions
           </p>
 
           <div className="nikigai-content">
@@ -892,7 +892,7 @@ const OldLandingPage = () => {
               <div className="step-content">
                 <h3 className="step-title">Create Your Essence Profile</h3>
                 <p className="step-description">
-                  Discover your unique character — your skills, the problems you solve, and who you're meant to serve.
+                  Discover your unique character: your skills, the problems you solve, and who you're meant to serve.
                 </p>
                 <p className="step-game">
                   <span className="game-tag">Build your hero identity</span>
@@ -927,7 +927,7 @@ const OldLandingPage = () => {
                   Get stage-specific quests that give you clarity on action + accountability to take action.
                 </p>
                 <p className="step-game">
-                  <span className="game-tag">No overwhelm — just what you need now</span>
+                  <span className="game-tag">No overwhelm, just what you need now</span>
                 </p>
               </div>
             </div>
@@ -1171,10 +1171,10 @@ const OldLandingPage = () => {
             </div>
 
             <ul className="synergies-list">
-              <li><strong>Healing</strong> enables <strong>Play-List</strong> — you can approach play when you understand why it scared you</li>
-              <li><strong>Play-List</strong> enables <strong>Business</strong> — you can own your identity publicly when play feels safe again</li>
-              <li><strong>Business</strong> creates <strong>Service</strong> — your gift reaches people</li>
-              <li><strong>Service</strong> unlocks <strong>Your Flow</strong> — your unique life adventure</li>
+              <li><strong>Healing</strong> enables <strong>Play-List</strong>. You can approach play when you understand why it scared you.</li>
+              <li><strong>Play-List</strong> enables <strong>Business</strong>. You can own your identity publicly when play feels safe again.</li>
+              <li><strong>Business</strong> creates <strong>Service</strong>. Your gift reaches people.</li>
+              <li><strong>Service</strong> unlocks <strong>Your Flow</strong>. Your unique life adventure.</li>
             </ul>
           </div>
 
@@ -1189,65 +1189,65 @@ const OldLandingPage = () => {
               <div className="included-category">
                 <h4 className="included-category-title">Discovery</h4>
                 <ul className="included-list">
-                  <li><span className="included-check">&#10003;</span>Flow Finder — discover your skills, problems & ideal persona</li>
-                  <li><span className="included-check">&#10003;</span>Essence Archetype Profile — your unique character strengths</li>
-                  <li><span className="included-check">&#10003;</span>Protective Pattern Profile — the armour blocking your gifts</li>
-                  <li><span className="included-check">&#10003;</span>Career Clarity Quiz — job vs. your own thing</li>
-                  <li><span className="included-check">&#10003;</span>Library of Answers — visual map of everything you've uncovered</li>
+                  <li><span className="included-check">&#10003;</span>Flow Finder: discover your skills, problems & ideal persona</li>
+                  <li><span className="included-check">&#10003;</span>Essence Archetype Profile: your unique character strengths</li>
+                  <li><span className="included-check">&#10003;</span>Protective Pattern Profile: the armour blocking your gifts</li>
+                  <li><span className="included-check">&#10003;</span>Career Clarity Quiz: job vs. your own thing</li>
+                  <li><span className="included-check">&#10003;</span>Library of Answers: visual map of everything you've uncovered</li>
                 </ul>
               </div>
 
               <div className="included-category">
                 <h4 className="included-category-title">Building</h4>
                 <ul className="included-list">
-                  <li><span className="included-check">&#10003;</span>$100M Offer Builder — create an offer people can't refuse</li>
-                  <li><span className="included-check">&#10003;</span>Grand Slam Matrix — evaluate and stack your offers</li>
-                  <li><span className="included-check">&#10003;</span>Lead Magnet & Product Selection flows</li>
-                  <li><span className="included-check">&#10003;</span>Funnel Builder & Calculator — plan and track your pipeline</li>
-                  <li><span className="included-check">&#10003;</span>Income Calculator — model your revenue streams</li>
+                  <li><span className="included-check">&#10003;</span>$100M Offer Builder: create an offer people can't refuse</li>
+                  <li><span className="included-check">&#10003;</span>Grand Slam Matrix: evaluate and stack your offers</li>
+                  <li><span className="included-check">&#10003;</span>Lead Magnet & Product Selection Flows</li>
+                  <li><span className="included-check">&#10003;</span>Funnel Builder & Calculator: plan and track your pipeline</li>
+                  <li><span className="included-check">&#10003;</span>Income Calculator: model your revenue streams</li>
                 </ul>
               </div>
 
               <div className="included-category">
                 <h4 className="included-category-title">Healing & Growth</h4>
                 <ul className="included-list">
-                  <li><span className="included-check">&#10003;</span>Groan Matrix — courage challenges across 5 visibility layers</li>
-                  <li><span className="included-check">&#10003;</span>Healing Compass — go to the root of what's holding you back</li>
-                  <li><span className="included-check">&#10003;</span>Nervous System Flow — regulate before you take action</li>
-                  <li><span className="included-check">&#10003;</span>Flow Compass — daily energy tracking (N/E/S/W directions)</li>
-                  <li><span className="included-check">&#10003;</span>Journey Mapping — see how far you've come</li>
+                  <li><span className="included-check">&#10003;</span>Groan Matrix: courage challenges across 5 visibility layers</li>
+                  <li><span className="included-check">&#10003;</span>Healing Compass: go to the root of what's holding you back</li>
+                  <li><span className="included-check">&#10003;</span>Nervous System Flow: regulate before you take action</li>
+                  <li><span className="included-check">&#10003;</span>Flow Compass: daily energy tracking (N/E/S/W directions)</li>
+                  <li><span className="included-check">&#10003;</span>Journey Mapping: see how far you've come</li>
                 </ul>
               </div>
 
               <div className="included-category">
                 <h4 className="included-category-title">Gamified System</h4>
                 <ul className="included-list">
-                  <li><span className="included-check">&#10003;</span>7-Day Challenge — daily quests tailored to your stage</li>
-                  <li><span className="included-check">&#10003;</span>Weekly Planning — 4-phase cycle (Push, Flow, Rest, Launch)</li>
-                  <li><span className="included-check">&#10003;</span>Points, Streaks & Leaderboard — stay motivated</li>
-                  <li><span className="included-check">&#10003;</span>Hero Profile & Level System — track your transformation</li>
-                  <li><span className="included-check">&#10003;</span>Stage Progression — 10 stages from discovery to scaling</li>
+                  <li><span className="included-check">&#10003;</span>7-Day Challenge: daily quests tailored to your stage</li>
+                  <li><span className="included-check">&#10003;</span>Weekly Planning: 4-phase cycle (Push, Flow, Rest, Launch)</li>
+                  <li><span className="included-check">&#10003;</span>Points, Streaks & Leaderboard: stay motivated</li>
+                  <li><span className="included-check">&#10003;</span>Hero Profile & Level System: track your transformation</li>
+                  <li><span className="included-check">&#10003;</span>Stage Progression: 10 stages from discovery to scaling</li>
                 </ul>
               </div>
 
               <div className="included-category">
                 <h4 className="included-category-title">CRM Command Center</h4>
                 <ul className="included-list">
-                  <li><span className="included-check">&#10003;</span>AI Content Generator — create posts, emails & pages</li>
-                  <li><span className="included-check">&#10003;</span>Contact Management — track leads, deals & outreach</li>
-                  <li><span className="included-check">&#10003;</span>Email Sequences — nurture campaigns with copy-to-clipboard</li>
-                  <li><span className="included-check">&#10003;</span>Sales Scripts — 15 proven Hormozi-style scripts</li>
-                  <li><span className="included-check">&#10003;</span>Business Systems — flywheel checklist to systemise growth</li>
+                  <li><span className="included-check">&#10003;</span>AI Content Generator: create posts, emails & pages</li>
+                  <li><span className="included-check">&#10003;</span>Contact Management: track leads, deals & outreach</li>
+                  <li><span className="included-check">&#10003;</span>Email Sequences: nurture campaigns with copy-to-clipboard</li>
+                  <li><span className="included-check">&#10003;</span>Sales Scripts: 15 proven Hormozi-style scripts</li>
+                  <li><span className="included-check">&#10003;</span>Business Systems: flywheel checklist to systemise growth</li>
                 </ul>
               </div>
 
               <div className="included-category">
                 <h4 className="included-category-title">AI Co-Founder</h4>
                 <ul className="included-list">
-                  <li><span className="included-check">&#10003;</span>Zarlo — AI assistant on every page, knows your context</li>
-                  <li><span className="included-check">&#10003;</span>Guided Flows — AI-powered conversations that extract your answers</li>
-                  <li><span className="included-check">&#10003;</span>Smart Prompts — 7 templates for content, outreach & strategy</li>
-                  <li><span className="included-check">&#10003;</span>Personalised Recommendations — based on your stage & data</li>
+                  <li><span className="included-check">&#10003;</span>Zarlo: AI assistant on every page, knows your context</li>
+                  <li><span className="included-check">&#10003;</span>Guided Flows: AI-powered conversations that extract your answers</li>
+                  <li><span className="included-check">&#10003;</span>Smart Prompts: 7 templates for content, outreach & strategy</li>
+                  <li><span className="included-check">&#10003;</span>Personalised Recommendations: based on your stage & data</li>
                 </ul>
               </div>
             </div>
@@ -1276,7 +1276,7 @@ const OldLandingPage = () => {
                 </div>
                 <div className="lore-slide">
                   <p className="lore-text">You are one of the Awakening.</p>
-                  <p className="lore-subtext">The glitch you felt was real. The restlessness isn't a flaw—it's your Flow trying to activate after years of suppression.</p>
+                  <p className="lore-subtext">The glitch you felt was real. The restlessness isn't a flaw. It's your Flow trying to activate after years of suppression.</p>
                 </div>
                 <div className="lore-slide">
                   <p className="lore-text">Welcome to the game, hero.</p>
@@ -1410,7 +1410,7 @@ const OldLandingPage = () => {
               <p className="regret-text">
                 "I wish I'd had the courage to live a life true to myself, not the life others expected of me."
               </p>
-              <cite>— Bronnie Ware, <em>The Top Five Regrets of the Dying</em></cite>
+              <cite>– Bronnie Ware, <em>The Top Five Regrets of the Dying</em></cite>
             </blockquote>
 
             <div className="why-matters-answer">

@@ -54,7 +54,7 @@ export default function useContentIntel(refreshKey) {
     if (!user?.id) return
     const { data } = await supabase
       .from('instagram_posts')
-      .select('id, ig_media_id, caption, media_type, media_product_type, thumbnail_url, permalink, posted_at, like_count, comments_count, shares, saves, reach, views, skip_rate, avg_watch_time, total_watch_time, ai_analysis')
+      .select('id, ig_media_id, caption, media_type, media_product_type, thumbnail_url, permalink, posted_at, like_count, comments_count, shares, saves, reach, views, skip_rate, avg_watch_time, total_watch_time, ai_analysis, followers_gained, profile_visits')
       .eq('user_id', user.id)
       .in('media_product_type', ['REELS', 'VIDEO'])
       .order('posted_at', { ascending: false })
@@ -177,28 +177,69 @@ export default function useContentIntel(refreshKey) {
 
     const multiplier = overallAvgViews > 0 ? (bestHookAvg / overallAvgViews).toFixed(1) : null
 
+    // Outlier stats: count posts 2x+ above rolling average score
+    const allScores = reels.map(r => computeContentScore(r))
+    const validScores = allScores.map(s => s.score).filter(s => s > 0)
+    const avgScore = validScores.length >= 3
+      ? validScores.reduce((a, b) => a + b, 0) / validScores.length
+      : null
+    const outlierCount = avgScore
+      ? validScores.filter(s => s >= avgScore * 2).length
+      : 0
+
+    // Top followers-gained post
+    const topFollowersPost = reels
+      .filter(r => (r.followers_gained || 0) > 0)
+      .sort((a, b) => (b.followers_gained || 0) - (a.followers_gained || 0))[0] || null
+
     return {
       bestHook,
       bestHookMultiplier: multiplier,
       bestContent,
       analyzedCount: analyzed.length,
       totalCount: reels.length,
+      outlierCount,
+      avgScore: avgScore ? Math.round(avgScore * 10) / 10 : null,
+      topFollowersPost,
     }
   }, [reels])
 
-  // Compute scores and sort/filter
+  // Compute scores, outlier ratios, and sort/filter
   const sortedReels = useMemo(() => {
+    // Score ALL reels first (before filtering) to get a true rolling average
+    const allScored = reels.map(r => ({ ...r, _score: computeContentScore(r) }))
+
+    // Compute rolling average from non-zero, non-hook-failed scores
+    const validScores = allScored
+      .map(r => r._score.score)
+      .filter(s => s > 0)
+    const avgScore = validScores.length >= 3
+      ? validScores.reduce((a, b) => a + b, 0) / validScores.length
+      : null
+
+    // Attach outlier ratio to each reel
+    const withOutlier = allScored.map(r => ({
+      ...r,
+      _score: {
+        ...r._score,
+        outlierRatio: avgScore && r._score.score > 0
+          ? Math.round((r._score.score / avgScore) * 10) / 10
+          : null,
+        avgScore,
+      },
+    }))
+
+    // Now apply hook type filter
     const filtered = filterHookType
-      ? reels.filter(r => r.ai_analysis?.hook_type === filterHookType)
-      : reels
+      ? withOutlier.filter(r => r.ai_analysis?.hook_type === filterHookType)
+      : withOutlier
 
-    // Attach content score to each reel
-    const scored = filtered.map(r => ({ ...r, _score: computeContentScore(r) }))
-
-    const sorted = [...scored].sort((a, b) => {
+    const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
         case 'score': return (b._score.score || 0) - (a._score.score || 0)
+        case 'outlier': return (b._score.outlierRatio || 0) - (a._score.outlierRatio || 0)
         case 'views': return (b.views || 0) - (a.views || 0)
+        case 'followers': return (b.followers_gained || 0) - (a.followers_gained || 0)
         case 'skip_rate': return (a.skip_rate ?? 100) - (b.skip_rate ?? 100)
         case 'avg_watch_time': return (b.avg_watch_time || 0) - (a.avg_watch_time || 0)
         case 'engagement': {

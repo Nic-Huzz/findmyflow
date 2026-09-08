@@ -10,6 +10,7 @@
  * Rewritten: 2026-08-30 (v4)
  */
 
+import { useState, useEffect } from 'react'
 import useCapacityScore from '../../hooks/useCapacityScore'
 import './CapacityCard.css'
 
@@ -36,6 +37,25 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
     pillars, activePillars,
     dataPoints, loading,
   } = scoreData || hookData
+
+  const [revealed, setRevealed] = useState(false)
+  const [revealedItems, setRevealedItems] = useState(new Set())
+
+  useEffect(() => {
+    if (capacity === null || loading) return
+    const t = setTimeout(() => setRevealed(true), 100)
+    return () => clearTimeout(t)
+  }, [capacity, loading])
+
+  // Stagger reveal: pillars → zone bar → zone labels → maintenance
+  useEffect(() => {
+    if (!revealed) return
+    const items = ['pillars', 'bar', 'labels', 'maint']
+    const timers = items.map((item, i) =>
+      setTimeout(() => setRevealedItems(prev => new Set([...prev, item])), i * 400)
+    )
+    return () => timers.forEach(clearTimeout)
+  }, [revealed])
 
   if (loading) return null
   if (capacity === null || dataPoints === 0) {
@@ -67,7 +87,7 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
 
       {/* Pillar status: 3 pills showing active/inactive */}
       {pillars && (
-        <>
+        <div className={`cc-reveal ${revealedItems.has('pillars') ? 'cc-revealed' : ''}`}>
           <div className="cc-pillars">
             {PILLAR_CONFIG.map(p => {
               const pillar = pillars[p.key]
@@ -90,19 +110,19 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
               </p>
             )
           })()}
-        </>
+        </div>
       )}
 
       {/* Zone bar */}
-      <div className="cc-bar-wrap">
+      <div className={`cc-bar-wrap cc-reveal ${revealedItems.has('bar') ? 'cc-revealed' : ''}`}>
         <div className="cc-bar-track">
           {ZONE_LABELS.map(z => (
             <div key={z.id} className={`cc-bar-zone cc-bz-${z.id} ${zone === z.id ? 'active' : ''}`} />
           ))}
         </div>
-        <div className="cc-marker" style={{ left: `${Math.min(99, Math.max(1, capacity))}%` }} />
+        <div className="cc-marker" style={{ left: revealedItems.has('bar') ? `${Math.min(99, Math.max(1, capacity))}%` : '0%' }} />
       </div>
-      <div className="cc-zone-labels">
+      <div className={`cc-zone-labels cc-reveal ${revealedItems.has('labels') ? 'cc-revealed' : ''}`}>
         {ZONE_LABELS.map(z => (
           <span key={z.id} className={`cc-zone-label ${zone === z.id ? `active cc-zl-${z.id}` : ''}`}>
             {z.label}
@@ -112,7 +132,7 @@ export default function CapacityCard({ userId, refreshTrigger = 0, scoreData, on
 
       {/* Maintenance streak dots */}
       {!hideMaintenance && (
-        <div className="cc-maint">
+        <div className={`cc-maint cc-reveal ${revealedItems.has('maint') ? 'cc-revealed' : ''}`}>
           <div className="cc-maint-header">
             <span className="cc-maint-label">Maintenance</span>
             <span className="cc-maint-pct">{maintenancePct}%</span>

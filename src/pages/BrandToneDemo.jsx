@@ -148,10 +148,10 @@ const BrandToneDemo = () => {
           <h3>Characteristics of this tone:</h3>
           {activeTone === 'playful-warmth' && (
             <ul>
-              <li><strong>Motion:</strong> Spring bounce for wins, gentle breathing for rest — energy when celebrating, calm when reflecting</li>
+              <li><strong>Motion:</strong> Spring bounce for wins, gentle breathing for rest. Energy when celebrating, calm when reflecting.</li>
               <li><strong>Colors:</strong> Warm purple/gold palette with vibrant accents for achievements</li>
-              <li><strong>Copy:</strong> Encouraging with personality — uses emojis for celebration, acknowledges feelings during challenges</li>
-              <li><strong>Feedback:</strong> Celebrates effort AND results — "That took courage" alongside "You did it!"</li>
+              <li><strong>Copy:</strong> Encouraging with personality. Uses emojis for celebration, acknowledges feelings during challenges.</li>
+              <li><strong>Feedback:</strong> Celebrates effort AND results. "That took courage" alongside "You did it!"</li>
               <li><strong>Hovers:</strong> Satisfying spring bounce, warm glows, icons float playfully</li>
               <li><strong>Vibe:</strong> A supportive friend who celebrates your wins enthusiastically</li>
             </ul>

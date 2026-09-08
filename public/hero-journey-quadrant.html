@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Journey — Your Path</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f5f0;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .wrapper {
+    max-width: 420px;
+    width: 100%;
+  }
+
+  /* === CARD === */
+  .journey-card {
+    background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+    border-radius: 24px;
+    padding: 24px 20px 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+  }
+
+  .stage-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 4px;
+  }
+  .stage-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .stage-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
+  /* === MAP === */
+  .journey-map {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.25;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .journey-map svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* === ZONE FIGURES (big emojis at each zone corner) === */
+  .zone-fig {
+    position: absolute;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  .zone-fig-emoji {
+    font-size: 32px;
+    line-height: 1;
+    filter: grayscale(0);
+  }
+  .zone-fig-label {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    text-align: center;
+  }
+  .zone-fig-sub {
+    font-size: 8px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 80px;
+  }
+
+  .zone-fig.start {
+    bottom: 6%;
+    left: 3%;
+    color: rgba(255,255,255,0.3);
+  }
+  .zone-fig.start .zone-fig-emoji { filter: grayscale(0.5); opacity: 0.5; }
+
+  .zone-fig.burnout {
+    top: 3%;
+    left: 3%;
+    color: rgba(239, 68, 68, 0.7);
+  }
+
+  .zone-fig.stuck {
+    bottom: 3%;
+    right: 3%;
+    color: rgba(147, 130, 220, 0.65);
+  }
+
+  .zone-fig.destination {
+    top: 3%;
+    right: 3%;
+    color: rgba(233, 162, 59, 0.85);
+  }
+
+  /* Current callout */
+  .current-callout {
+    position: absolute;
+    background: rgba(233, 162, 59, 0.15);
+    border: 1px solid rgba(233, 162, 59, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 10px;
+    padding: 6px 10px;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    white-space: nowrap;
+  }
+  .current-callout-name {
+    font-size: 11px;
+    font-weight: 800;
+    color: #E9A23B;
+  }
+  .current-callout-arrow {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(233, 162, 59, 0.3);
+  }
+
+  /* === LEGEND === */
+  .journey-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+  }
+  .legend-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+  .legend-dot.life { background: rgba(255,255,255,0.15); border: 1px dashed rgba(255,255,255,0.25); }
+  .legend-dot.done { background: #E9A23B; }
+  .legend-dot.now { background: #E9A23B; box-shadow: 0 0 6px rgba(233,162,59,0.6); }
+  .legend-dot.later { background: rgba(255,255,255,0.12); }
+
+  /* === PATH DRAW ANIMATION === */
+  .path-animated {
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+  }
+  .path-animated.draw {
+    animation: drawPath 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes drawPath {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Life path draws first */
+  .life-path-animated {
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+  }
+  .life-path-animated.draw {
+    animation: drawLife 1s ease-out forwards;
+  }
+  @keyframes drawLife {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Dots fade in */
+  .dot-fade {
+    opacity: 0;
+  }
+  .dot-fade.show {
+    animation: dotAppear 0.3s ease forwards;
+  }
+  @keyframes dotAppear {
+    to { opacity: 1; }
+  }
+
+  /* Figure fade in */
+  .zone-fig {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .zone-fig.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* === DEMO === */
+  .demo-controls {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .demo-controls label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-right: 8px;
+  }
+  .demo-controls input[type=range] {
+    width: 200px;
+    accent-color: #5e17eb;
+  }
+  .demo-controls .demo-val {
+    font-size: 14px;
+    font-weight: 800;
+    color: #5e17eb;
+    margin-left: 8px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .path-animated, .life-path-animated { animation: none; stroke-dashoffset: 0; }
+    .dot-fade { opacity: 1; animation: none; }
+    .zone-fig { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="journey-card">
+    <div class="stage-label">Stage <span id="stageNum">9</span> of 12</div>
+    <div class="stage-name" id="stageName">First Reward</div>
+    <div class="stage-desc" id="stageDesc">You're earning from what you love.</div>
+
+    <div class="journey-map" id="journeyMap">
+      <svg viewBox="0 0 380 300" id="journeySvg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="startGlow" cx="10%" cy="90%" r="35%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.05)" />
+            <stop offset="100%" stop-color="transparent" />
+          </radialGradient>
+          <radialGradient id="burnoutGlow" cx="12%" cy="12%" r="40%">
+            <stop offset="0%" stop-color="rgba(239,68,68,0.08)" />
+            <stop offset="100%" stop-color="transparent" />
+          </radialGradient>
+          <radialGradient id="stuckGlow" cx="82%" cy="85%" r="35%">
+            <stop offset="0%" stop-color="rgba(147,130,220,0.06)" />
+            <stop offset="100%" stop-color="transparent" />
+          </radialGradient>
+          <radialGradient id="destGlow" cx="88%" cy="12%" r="40%">
+            <stop offset="0%" stop-color="rgba(233,162,59,0.10)" />
+            <stop offset="100%" stop-color="transparent" />
+          </radialGradient>
+
+          <linearGradient id="pathDone" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.25)" />
+            <stop offset="100%" stop-color="#E9A23B" />
+          </linearGradient>
+
+          <linearGradient id="lifeGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.06)" />
+            <stop offset="100%" stop-color="rgba(239,68,68,0.2)" />
+          </linearGradient>
+
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Zone glows -->
+        <rect x="0" y="0" width="380" height="300" fill="url(#startGlow)" />
+        <rect x="0" y="0" width="380" height="300" fill="url(#burnoutGlow)" />
+        <rect x="0" y="0" width="380" height="300" fill="url(#stuckGlow)" />
+        <rect x="0" y="0" width="380" height="300" fill="url(#destGlow)" />
+
+        <!-- ═══ "LIFE SO FAR" ═══ -->
+        <path id="lifePath"
+          d="M 55 265 C 50 220, 48 160, 52 110 C 56 75, 60 55, 65 42"
+          fill="none"
+          stroke="url(#lifeGrad)"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          class="life-path-animated"
+        />
+        <!-- Year dots -->
+        <circle cx="55" cy="265" r="3" fill="rgba(255,255,255,0.10)" class="dot-fade" data-delay="200" />
+        <circle cx="53" cy="230" r="2" fill="rgba(255,255,255,0.07)" class="dot-fade" data-delay="350" />
+        <circle cx="51" cy="195" r="2" fill="rgba(255,255,255,0.07)" class="dot-fade" data-delay="500" />
+        <circle cx="50" cy="160" r="2" fill="rgba(255,255,255,0.07)" class="dot-fade" data-delay="650" />
+        <circle cx="51" cy="125" r="2" fill="rgba(255,255,255,0.08)" class="dot-fade" data-delay="800" />
+        <circle cx="55" cy="90" r="2.5" fill="rgba(239,68,68,0.18)" class="dot-fade" data-delay="900" />
+        <circle cx="60" cy="60" r="2.5" fill="rgba(239,68,68,0.22)" class="dot-fade" data-delay="950" />
+
+        <!-- Arrow at top of life path -->
+        <polygon points="65,42 60,50 70,50" fill="rgba(239,68,68,0.22)" class="dot-fade" data-delay="1000" />
+
+        <!-- "Life so far" rotated text -->
+        <text x="30" y="170" font-size="8" font-weight="700" fill="rgba(255,255,255,0.13)"
+              transform="rotate(-85, 30, 170)" text-anchor="middle"
+              font-family="-apple-system, BlinkMacSystemFont, sans-serif"
+              class="dot-fade" data-delay="600">
+          YOUR LIFE SO FAR
+        </text>
+
+        <!-- ═══ JOURNEY PATHS ═══ -->
+        <path id="pathBg" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 8" />
+        <path id="pathActive" fill="none" stroke="url(#pathDone)" stroke-width="3.5" stroke-linecap="round" class="path-animated" />
+
+        <!-- Stage dots rendered by JS -->
+      </svg>
+
+      <!-- Zone figures -->
+      <div class="zone-fig start" data-reveal="200">
+        <span class="zone-fig-emoji">🌱</span>
+        <div class="zone-fig-label">Starting Out</div>
+        <div class="zone-fig-sub">Before the grind</div>
+      </div>
+      <div class="zone-fig burnout" data-reveal="400">
+        <span class="zone-fig-emoji">🏃‍♂️</span>
+        <div class="zone-fig-label">Burnout</div>
+        <div class="zone-fig-sub">Busy but lost</div>
+      </div>
+      <div class="zone-fig stuck" data-reveal="600">
+        <span class="zone-fig-emoji">🤔</span>
+        <div class="zone-fig-label">Stuck</div>
+        <div class="zone-fig-sub">You know what<br>you want but<br>can't start</div>
+      </div>
+      <div class="zone-fig destination" data-reveal="800">
+        <span class="zone-fig-emoji">🎉</span>
+        <div class="zone-fig-label">Doing What<br>You Love</div>
+        <div class="zone-fig-sub">Action meets<br>purpose</div>
+      </div>
+
+      <!-- Current stage floating callout -->
+      <div class="current-callout" id="callout" style="opacity:0">
+        <div class="current-callout-name" id="calloutName">9. First Reward</div>
+        <div class="current-callout-arrow"></div>
+      </div>
+    </div>
+
+    <div class="journey-legend">
+      <div class="legend-item"><div class="legend-dot life"></div> Life so far</div>
+      <div class="legend-item"><div class="legend-dot done"></div> Done</div>
+      <div class="legend-item"><div class="legend-dot now"></div> You</div>
+      <div class="legend-item"><div class="legend-dot later"></div> Next</div>
+    </div>
+  </div>
+
+  <!-- Demo slider -->
+  <div class="demo-controls">
+    <label>Stage:</label>
+    <input type="range" min="1" max="12" value="9" id="stageSlider" />
+    <span class="demo-val" id="sliderVal">9</span>
+  </div>
+</div>
+
+<script>
+const STAGES = [
+  { stage: 1,  name: 'Waking Up',            x: 65,  y: 42,  desc: 'You feel something needs to change.' },
+  { stage: 2,  name: 'Exploring',             x: 95,  y: 72,  desc: 'You\'re looking at what lights you up.' },
+  { stage: 3,  name: 'Discovering Yourself',   x: 135, y: 115, desc: 'You\'re learning who you really are.' },
+  { stage: 4,  name: 'Choosing a Direction',   x: 185, y: 210, desc: 'You can see the path, but haven\'t stepped on it.' },
+  { stage: 5,  name: 'Finding Your Way',       x: 215, y: 200, desc: 'You start building what matters to you.' },
+  { stage: 6,  name: 'Facing Resistance',      x: 240, y: 180, desc: 'The voices that held you back show up.' },
+  { stage: 7,  name: 'Going Deeper',           x: 260, y: 165, desc: 'You\'re working through what\'s underneath.' },
+  { stage: 8,  name: 'The Breakthrough',        x: 280, y: 130, desc: 'Something clicks. You feel different.' },
+  { stage: 9,  name: 'First Reward',           x: 300, y: 100, desc: 'You\'re earning from what you love.' },
+  { stage: 10, name: 'Building Momentum',      x: 318, y: 78,  desc: 'It\'s working and you keep going.' },
+  { stage: 11, name: 'Proving It\'s Real',     x: 335, y: 58,  desc: 'This isn\'t luck. It\'s you.' },
+  { stage: 12, name: 'Doing What You Love',    x: 350, y: 40,  desc: 'Your life is yours.' },
+]
+
+const svg = document.getElementById('journeySvg')
+const pathBg = document.getElementById('pathBg')
+const pathActive = document.getElementById('pathActive')
+const stageNumEl = document.getElementById('stageNum')
+const stageNameEl = document.getElementById('stageName')
+const stageDescEl = document.getElementById('stageDesc')
+const callout = document.getElementById('callout')
+const calloutName = document.getElementById('calloutName')
+const mapEl = document.getElementById('journeyMap')
+const slider = document.getElementById('stageSlider')
+const sliderValEl = document.getElementById('sliderVal')
+
+function buildPath(points) {
+  if (points.length < 2) return ''
+  let d = `M ${points[0].x} ${points[0].y}`
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1]
+    const curr = points[i]
+    const cpx1 = prev.x + (curr.x - prev.x) * 0.5
+    const cpy1 = prev.y
+    const cpx2 = curr.x - (curr.x - prev.x) * 0.5
+    const cpy2 = curr.y
+    d += ` C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${curr.x} ${curr.y}`
+  }
+  return d
+}
+
+function render(currentStage, animate) {
+  const stageIdx = currentStage - 1
+  const info = STAGES[stageIdx]
+
+  stageNumEl.textContent = currentStage
+  stageNameEl.textContent = info.name
+  stageDescEl.textContent = info.desc
+
+  // Full background path
+  pathBg.setAttribute('d', buildPath(STAGES))
+
+  // Active path
+  const activePath = buildPath(STAGES.slice(0, stageIdx + 1))
+  pathActive.setAttribute('d', activePath)
+
+  // Measure path length for draw animation
+  if (animate) {
+    const len = pathActive.getTotalLength()
+    pathActive.style.strokeDasharray = len
+    pathActive.style.strokeDashoffset = len
+    pathActive.classList.remove('draw')
+    void pathActive.offsetWidth // force reflow
+    pathActive.classList.add('draw')
+  } else {
+    pathActive.style.strokeDasharray = 'none'
+    pathActive.style.strokeDashoffset = '0'
+    pathActive.classList.remove('draw')
+    pathActive.classList.remove('path-animated')
+  }
+
+  // Clear old dots
+  svg.querySelectorAll('.sd, .sr, .sn').forEach(el => el.remove())
+
+  // Base delay: life path (1s) + active path (2s) for initial animate
+  const dotBaseDelay = animate ? 1200 : 0
+
+  STAGES.forEach((s, i) => {
+    const done = s.stage < currentStage
+    const current = s.stage === currentStage
+    const future = s.stage > currentStage
+
+    // Pulse ring
+    if (current) {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+      ring.setAttribute('cx', s.x); ring.setAttribute('cy', s.y)
+      ring.setAttribute('r', 14); ring.setAttribute('fill', 'none')
+      ring.setAttribute('stroke', 'rgba(233,162,59,0.2)'); ring.setAttribute('stroke-width', 2)
+      ring.classList.add('sr')
+      if (animate) {
+        ring.style.opacity = '0'
+        setTimeout(() => { ring.style.opacity = '1'; ring.style.transition = 'opacity 0.3s' }, dotBaseDelay + i * 80)
+      }
+      const a1 = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
+      a1.setAttribute('attributeName', 'r'); a1.setAttribute('values', '14;18;14')
+      a1.setAttribute('dur', '2.5s'); a1.setAttribute('repeatCount', 'indefinite')
+      ring.appendChild(a1)
+      const a2 = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
+      a2.setAttribute('attributeName', 'opacity'); a2.setAttribute('values', '1;0.2;1')
+      a2.setAttribute('dur', '2.5s'); a2.setAttribute('repeatCount', 'indefinite')
+      ring.appendChild(a2)
+      svg.appendChild(ring)
+    }
+
+    // Dot
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    dot.setAttribute('cx', s.x); dot.setAttribute('cy', s.y)
+    dot.setAttribute('r', current ? 7 : done ? 4.5 : 3.5)
+    dot.classList.add('sd')
+    if (done) {
+      dot.setAttribute('fill', '#E9A23B'); dot.setAttribute('opacity', '0.7')
+    } else if (current) {
+      dot.setAttribute('fill', '#E9A23B'); dot.setAttribute('filter', 'url(#glow)')
+    } else {
+      dot.setAttribute('fill', 'rgba(255,255,255,0.12)')
+    }
+
+    // Stagger dot appearance on animate
+    if (animate && (done || current)) {
+      dot.style.opacity = '0'
+      setTimeout(() => { dot.style.opacity = done ? '0.7' : '1'; dot.style.transition = 'opacity 0.2s' }, dotBaseDelay + i * 80)
+    }
+
+    // Stage number
+    if (done || current || s.stage <= currentStage + 2) {
+      const num = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+      num.setAttribute('x', s.x); num.setAttribute('y', s.y - (current ? 16 : 11))
+      num.setAttribute('text-anchor', 'middle')
+      num.setAttribute('font-size', current ? '10' : '8')
+      num.setAttribute('font-weight', '700')
+      num.setAttribute('font-family', '-apple-system, BlinkMacSystemFont, sans-serif')
+      num.setAttribute('fill', current ? '#E9A23B' : done ? 'rgba(233,162,59,0.45)' : 'rgba(255,255,255,0.12)')
+      num.classList.add('sn')
+      num.textContent = s.stage
+      if (animate) {
+        num.style.opacity = '0'
+        setTimeout(() => { num.style.opacity = current ? '1' : done ? '0.45' : '0.12'; num.style.transition = 'opacity 0.2s' }, dotBaseDelay + i * 80)
+      }
+      svg.appendChild(num)
+    }
+
+    svg.appendChild(dot)
+  })
+
+  // Callout position
+  const mapRect = mapEl.getBoundingClientRect()
+  const scaleX = mapRect.width / 380
+  const scaleY = mapRect.height / 300
+  calloutName.textContent = `${info.stage}. ${info.name}`
+  callout.style.left = `${info.x * scaleX}px`
+  callout.style.top = `${info.y * scaleY - 38}px`
+  callout.style.transform = 'translateX(-50%)'
+
+  if (animate) {
+    callout.style.opacity = '0'
+    setTimeout(() => { callout.style.opacity = '1'; callout.style.transition = 'opacity 0.4s' }, dotBaseDelay + stageIdx * 80 + 200)
+  } else {
+    callout.style.opacity = '1'
+  }
+}
+
+// ── Entry animation sequence ──
+function playEntryAnimation(stage) {
+  const lifePath = document.getElementById('lifePath')
+  const dotFades = document.querySelectorAll('.dot-fade')
+  const zoneFigs = document.querySelectorAll('.zone-fig')
+
+  // 1. Zone figures fade in
+  zoneFigs.forEach(fig => {
+    const delay = parseInt(fig.dataset.reveal) || 0
+    setTimeout(() => fig.classList.add('visible'), delay)
+  })
+
+  // 2. Life path draws
+  setTimeout(() => {
+    lifePath.classList.add('draw')
+  }, 300)
+
+  // 3. Life path dots appear
+  dotFades.forEach(dot => {
+    const delay = parseInt(dot.dataset.delay) || 0
+    setTimeout(() => dot.classList.add('show'), 300 + delay)
+  })
+
+  // 4. Journey path draws with staggered dots
+  setTimeout(() => {
+    render(stage, true)
+  }, 1100)
+}
+
+// Initial: play the full animation
+playEntryAnimation(9)
+
+// Resize
+let resizeTimer
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => render(parseInt(slider.value), false), 100)
+})
+
+// Slider — no animation on drag, just instant update
+slider.addEventListener('input', (e) => {
+  const val = parseInt(e.target.value)
+  sliderValEl.textContent = val
+  render(val, false)
+})
+</script>
+</body>
+</html>

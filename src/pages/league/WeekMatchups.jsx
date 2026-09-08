@@ -109,7 +109,7 @@ export default function WeekMatchups() {
     <div className="week-matchups-page">
       {useMock && (
         <div style={{ background: '#f59e0b', color: '#000', textAlign: 'center', padding: '4px 0', fontSize: '0.7rem', fontWeight: 700, position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200 }}>
-          PREVIEW MODE — Mock Data
+          PREVIEW MODE - Mock Data
         </div>
       )}
 

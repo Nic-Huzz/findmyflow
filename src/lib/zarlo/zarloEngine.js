@@ -11,6 +11,43 @@ import { generateZarloWheelContext, getWheelSummary, analyzeGapsAndOpportunities
 import { computeLevel, SKILL_THRESHOLDS, getNextThreshold, formatSkillsForPrompt } from '../../hooks/useSkills'
 
 // ============================================
+// DOME OF SAFETY - lightweight summary for Zarlo prompt
+// ============================================
+
+const DOME_DIM_NAMES = {
+  people: 'People', money: 'Money', vulnerability: 'Vulnerability',
+  stakes: 'Stakes', rarity: 'Rarity', identity: 'Identity',
+  context: 'Context', business_commitment: 'Business',
+}
+
+function computeDomeSummary(challenges) {
+  if (!challenges?.length) return null
+  // Count dimensions used + total challenges with dome data
+  const dimCounts = {}
+  let totalGap = 0, gapCount = 0
+  for (const c of challenges) {
+    if (c.dimension_values) {
+      for (const dimId of Object.keys(c.dimension_values)) {
+        dimCounts[dimId] = (dimCounts[dimId] || 0) + 1
+      }
+    }
+    if (c.predicted_difficulty && c.experienced_difficulty) {
+      const gap = Math.max(0, c.predicted_difficulty - c.experienced_difficulty)
+      totalGap += gap
+      gapCount++
+    }
+  }
+  const topDims = Object.entries(dimCounts).sort((a, b) => b[1] - a[1]).slice(0, 3)
+  const untouchedDims = Object.keys(DOME_DIM_NAMES).filter(d => !dimCounts[d])
+  return {
+    challengeCount: challenges.length,
+    topDimensions: topDims.map(([id, count]) => ({ name: DOME_DIM_NAMES[id] || id, count })),
+    untouchedDimensions: untouchedDims.map(id => DOME_DIM_NAMES[id] || id),
+    averageGap: gapCount > 0 ? Math.round((totalGap / gapCount) * 10) / 10 : null,
+  }
+}
+
+// ============================================
 // INTAKE FLOW
 // ============================================
 
@@ -19,7 +56,7 @@ export const INTAKE_STRUGGLES = [
     id: 'visibility',
     label: "I know what I want but can't get visible",
     followUp: {
-      question: 'When you think about being more visible — posting content, reaching out, putting yourself out there — what comes up?',
+      question: 'When you think about being more visible, posting content, reaching out, putting yourself out there, what comes up?',
       options: [
         { id: 'judged', label: 'Fear of being judged' },
         { id: 'not_ready', label: "Feeling like I'm not ready yet" },
@@ -27,11 +64,11 @@ export const INTAKE_STRUGGLES = [
         { id: 'procrastinate', label: "I just procrastinate and don't know why" }
       ]
     },
-    reframe: `Here's the sneaky truth: that's not a courage problem — it's a safety problem.
+    reframe: `Here's the sneaky truth: that's not a courage problem. It's a safety problem.
 
 Your nervous system has learned that being visible isn't safe. Maybe from a past experience where you put yourself out there and got hurt. So now it pulls you back every time you try to expand.
 
-The good news? We can find exactly where your "safe edge" is — and start expanding it.`,
+The good news? We can find exactly where your "safe edge" is, and start expanding it.`,
     route: '/nervous-system',
     cta: 'Ready to map your nervous system?'
   },
@@ -63,10 +100,10 @@ Let's find out what your system is actually protecting you from.`,
     followUp: {
       question: "When you imagine finally having clarity on what to build, what's the first feeling that comes up?",
       options: [
-        { id: 'relief', label: 'Relief — I could finally move forward' },
-        { id: 'pressure', label: 'Pressure — then I\'d have to actually do it' },
-        { id: 'fear', label: 'Fear — what if I pick wrong?' },
-        { id: 'excitement', label: 'Excitement — I\'ve been waiting for this' }
+        { id: 'relief', label: 'Relief: I could finally move forward' },
+        { id: 'pressure', label: 'Pressure: then I\'d have to actually do it' },
+        { id: 'fear', label: 'Fear: what if I pick wrong?' },
+        { id: 'excitement', label: 'Excitement: I\'ve been waiting for this' }
       ]
     },
     reframe: `Not knowing what to build can feel paralyzing. But here's what I've noticed:
@@ -91,7 +128,7 @@ The clarity often comes through action, not thinking.`,
         { id: 'ready', label: "I'm recovering and ready for gentle steps" }
       ]
     },
-    reframe: `I hear you. Burnout isn't just tiredness — it's your system telling you something's been off for too long.
+    reframe: `I hear you. Burnout isn't just tiredness. It's your system telling you something's been off for too long.
 
 Here's what we're going to do differently:
 
@@ -114,13 +151,13 @@ You don't have to earn rest. You don't have to be productive to be worthy. Let's
         { id: 'motivation', label: "I've lost motivation to work on it" }
       ]
     },
-    reframe: `Got it — you've already built something but you're hitting a wall.
+    reframe: `Got it, you've already built something but you're hitting a wall.
 
 That's actually a great place to be. You have real experience to work with.
 
 Let's capture what you've built, identify where you're hitting resistance, and find out what's really blocking the next level.
 
-Often the block isn't strategic — it's nervous system.`,
+Often the block isn't strategic. It's nervous system.`,
     route: '/existing-project',
     cta: 'Ready to capture your project?'
   }
@@ -132,7 +169,7 @@ Often the block isn't strategic — it's nervous system.`,
 
 export const ACCOUNTABILITY_RESPONSES = {
   completed: {
-    message: `Yes! You did the thing. And look — you're still alive. That's how we teach your system that growth is safe.
+    message: `Yes! You did the thing. And look, you're still alive. That's how we teach your system that growth is safe.
 
 What do you want to tackle next?`,
     options: [
@@ -151,7 +188,7 @@ What do you want to tackle next?`,
     ]
   },
   skipped: {
-    message: `The groan won today, huh? No shame — let's figure out what happened.
+    message: `The groan won today, huh? No shame. Let's figure out what happened.
 
 When the time came to do it, what showed up?`,
     options: [
@@ -162,9 +199,9 @@ When the time came to do it, what showed up?`,
     ]
   },
   resistance_followup: {
-    message: `That resistance? That's your nervous system doing its job — protecting you from what it perceives as danger.
+    message: `That resistance? That's your nervous system doing its job, protecting you from what it perceives as danger.
 
-The commitment might have been too big of a stretch. We want the "groan zone" — uncomfortable but doable.
+The commitment might have been too big of a stretch. We want the "groan zone", uncomfortable but doable.
 
 Want to try a smaller version? Or something different?`,
     options: [
@@ -409,7 +446,8 @@ export async function getUserContext(userId) {
       { data: ecData },
       { data: nsVoiceData },
       wheelData,
-      { data: briefData }
+      { data: briefData },
+      { data: domeChallenges },
     ] = await Promise.all([
       supabase.from('nervous_system_responses').select('id').eq('user_id', userId).limit(1),
       supabase.from('nikigai_clusters').select('id').eq('user_id', userId).limit(1),
@@ -420,7 +458,9 @@ export async function getUserContext(userId) {
       supabase.from('nervous_system_checkins').select('protective_voice').eq('user_id', userId).not('protective_voice', 'is', null),
       loadWheelData(userId),
       // Load pre-computed Zarlo Brief
-      supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle()
+      supabase.from('zarlo_briefs').select('brief').eq('user_id', userId).maybeSingle(),
+      // Dome of Safety: completed challenges with dimension data
+      supabase.from('groan_challenges').select('id, dimension_values, predicted_difficulty, experienced_difficulty').eq('user_id', userId).eq('status', 'completed').not('dimension_values', 'is', null),
     ])
 
     // Also fetch healing_intentions voices (combined with NS checkins for accurate count)
@@ -474,6 +514,8 @@ export async function getUserContext(userId) {
       essenceName: stageData?.essence_name || null,
       // Pre-computed Zarlo Brief (may be null for new users or if cron hasn't run)
       zarloBrief: briefData?.brief || null,
+      // Dome of Safety summary
+      domeSummary: computeDomeSummary(domeChallenges),
     }
   } catch (err) {
     console.error('Error getting user context:', err)
@@ -558,11 +600,11 @@ export function getStruggleConfig(struggleId) {
 // ============================================
 
 export const PUBLIC_FLOW_GREETINGS = {
-  '/try/nervous-system': `Hey! I'm Zarlo — your guide through this assessment. 👋\n\nYou're about to discover something most people never see: the invisible beliefs that are quietly running your life.\n\nGot questions as you go? I'm right here.`,
+  '/try/nervous-system': `Hey! I'm Zarlo, your guide through this assessment. 👋\n\nYou're about to discover something most people never see: the invisible beliefs that are quietly running your life.\n\nGot questions as you go? I'm right here.`,
 
-  '/try/offer/attraction': `Hey! I'm Zarlo — here to help you figure out your offer. 👋\n\nThis assessment is based on Alex Hormozi's $100M Offers framework. By the end, you'll know exactly what type of offer fits YOU.\n\nGot questions? I'm here.`,
+  '/try/offer/attraction': `Hey! I'm Zarlo, here to help you figure out your offer. 👋\n\nThis assessment is based on Alex Hormozi's $100M Offers framework. By the end, you'll know exactly what type of offer fits YOU.\n\nGot questions? I'm here.`,
 
-  '/try/offer/default': `Hey! I'm Zarlo — your guide through this assessment. 👋\n\nBy the end, you'll have real clarity on your strategy — not just theory, but a direction you can actually act on.\n\nQuestions along the way? I'm here.`
+  '/try/offer/default': `Hey! I'm Zarlo, your guide through this assessment. 👋\n\nBy the end, you'll have real clarity on your strategy. Not just theory, but a direction you can actually act on.\n\nQuestions along the way? I'm here.`
 }
 
 /**
@@ -615,7 +657,7 @@ export function getMilestoneMessage(groanCount, userContext) {
   const messages = {
     5: {
       title: "5 Groans Complete!",
-      message: `Look at you — 5 groans in and still going. Your nervous system is starting to learn that growth doesn't mean death.
+      message: `Look at you, 5 groans in and still going. Your nervous system is starting to learn that growth doesn't mean death.
 
 I'm noticing some patterns in your data. Want to see what's emerging?`,
       options: [
@@ -629,13 +671,13 @@ I'm noticing some patterns in your data. Want to see what's emerging?`,
 
 How are you feeling about the progress?`,
       options: [
-        { id: 'great', label: 'Great — what\'s next?' },
+        { id: 'great', label: 'Great, what\'s next?' },
         { id: 'struggling', label: 'Honestly, it\'s been hard' },
         { id: 'curious', label: 'Curious about my patterns' }
       ]
     },
     20: {
-      title: "20 Groans — You're a Groan Master!",
+      title: "20 Groans! You're a Groan Master!",
       message: `20 groans is no joke. You've taught your nervous system something powerful: that you can feel uncomfortable AND survive.
 
 That's the whole game. Everything else is just details.`,
@@ -875,6 +917,28 @@ function computeOpenLoopHooks(skills) {
  * Compute weekly countdown context for CD6 scarcity.
  * "2 wahoos from completing your week. 18 hours left."
  */
+function buildDomeSection(domeSummary) {
+  if (!domeSummary) return ''
+  let s = '\n\nDOME OF SAFETY:'
+  s += `\n${domeSummary.challengeCount} courage challenges with dimension data.`
+  if (domeSummary.topDimensions.length > 0) {
+    s += `\nMost stretched: ${domeSummary.topDimensions.map(d => `${d.name} (${d.count}x)`).join(', ')}.`
+  }
+  if (domeSummary.untouchedDimensions.length > 0) {
+    s += `\nNever stretched: ${domeSummary.untouchedDimensions.join(', ')}.`
+  }
+  if (domeSummary.averageGap != null) {
+    s += `\nAvg prediction gap: ${domeSummary.averageGap} (higher = their body learns more per challenge).`
+  }
+  s += '\nDOME RULES:'
+  s += '\n- If untouched dimensions exist, gently wonder "I notice you never stretch [dim]. Is that on purpose or are you avoiding it?"'
+  s += '\n- If one dimension dominates (5+ challenges), acknowledge it: "You keep pushing [dim]. That\'s clearly an edge you\'re working."'
+  s += '\n- If avg gap is high (>1), celebrate: "Your body keeps being surprised that things go better than you expect."'
+  s += '\n- If avg gap is 0, notice: "You predict perfectly. Are you playing it safe or are you genuinely that self-aware?"'
+  s += '\n- Never say "dome" to the user. Say "your comfort zone" or "what your body can handle."'
+  return s
+}
+
 function computeWeeklyCountdown(recentActions) {
   // Days remaining in the week (Mon-Sun)
   const now = new Date()
@@ -973,6 +1037,7 @@ INTERIOR SCOREBOARD RULES:
 - If zone of excellence warning exists, name it: "You're good at [quest] but your body keeps telling you it's not the thing"
 - Never lecture about scores. Mention them like a friend who noticed something.
 ${scoreboardSection}
+${buildDomeSection(userContext?.domeSummary)}
 
 WHAT YOU KNOW:
 ${briefSection}

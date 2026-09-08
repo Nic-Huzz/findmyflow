@@ -6,6 +6,7 @@
  */
 import { VIRTUAL_EXPERIENCE_NODES, getExperienceLabel, isCoreNode } from './experienceDomeConfig'
 import { INDUSTRIES, industryNodes } from './ruleBreakTreeData'
+import { getSubNodes as getSubNodesFromConfig } from '../data/experienceDomeSubNodes'
 
 // Same overrides as DomeRadar + ExperienceGameFlow
 const PRIMAL_OVERRIDES = {
@@ -61,6 +62,32 @@ export function getDomeExperiencesForBridge(domeStates) {
   return { vibeRise, fun }
 }
 
+/**
+ * Returns ALL rated dome experiences across all NS states.
+ * Used by CurrentJobFlow to let users pick which experiences are part of their work.
+ * @param {Object} domeStates - { [nodeId]: nsState }
+ * @returns {{ vibeRise: Array, fun: Array, stressed: Array, bored: Array }}
+ */
+export function getAllDomeExperiences(domeStates) {
+  const lookup = getNodeLookup()
+  const buckets = { vibeRise: [], fun: [], stressed: [], bored: [] }
+
+  Object.entries(domeStates).forEach(([nodeId, nsState]) => {
+    if (!isCoreNode(nodeId)) return
+    const info = lookup.get(nodeId)
+    if (!info) return
+    const item = { id: nodeId, label: info.label, primal: info.primal, nsState }
+    if (nsState === 'vibe_rise') buckets.vibeRise.push(item)
+    else if (nsState === 'fun') buckets.fun.push(item)
+    else if (nsState === 'pressure' || nsState === 'growth_edge') buckets.stressed.push(item)
+    else if (nsState === 'bored' || nsState === 'uninterested') buckets.bored.push(item)
+  })
+
+  const sort = (a, b) => a.primal.localeCompare(b.primal) || a.label.localeCompare(b.label)
+  Object.values(buckets).forEach(arr => arr.sort(sort))
+  return buckets
+}
+
 // Primal display order (common → uncommon)
 const PRIMAL_ORDER = ['movement', 'play', 'bonds', 'story', 'nourishment', 'status', 'healing', 'shelter', 'fire', 'sleep']
 const PRIMAL_LABELS = { movement: 'Movement', play: 'Play', bonds: 'Bonds', story: 'Story', nourishment: 'Nourishment', status: 'Style', healing: 'Healing', shelter: 'Shelter', fire: 'Fire', sleep: 'Sleep' }
@@ -89,27 +116,47 @@ export function groupByPrimal(items) {
  * @param {string[]} selectedLabels - labels the user picked ("Ecstatic dance", etc.)
  * @param {Object} domeStates - full dome map { [nodeId]: nsState }
  * @param {string|null} essenceArchetype - e.g. "Playful Alchemist"
+ * @param {Object} [deepDive] - { [nodeId]: { formats: Set<string>, vectors: Set<string> } }
+ * @param {Array} [allExps] - full list of { id, label } experience items
  * @returns {Object|null} domeProfile payload, or null if no data
  */
-export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype) {
+export function formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDive, allExps) {
   if (!domeStates || Object.keys(domeStates).length === 0) return null
 
-  const lookup = getNodeLookup()
-  const buckets = { vibe_rise: [], fun: [], pressure: [] }
+  // Only send the experiences the user explicitly selected + their deep dive data.
+  // No fun, no pressure, no full vibe_rise list. The selection IS the signal.
+  let selected = selectedLabels
+  if (deepDive && allExps && Object.keys(deepDive).length > 0) {
+    selected = allExps
+      .filter(e => selectedLabels.includes(e.label))
+      .map(e => {
+        const dd = deepDive[e.id]
+        if (!dd) return { nodeId: e.id, label: e.label, formats: null, vectors: null }
 
-  Object.entries(domeStates).forEach(([nodeId, nsState]) => {
-    if (!isCoreNode(nodeId)) return
-    const info = lookup.get(nodeId)
-    if (!info) return
-    const state = nsState === 'growth_edge' ? 'pressure' : nsState
-    if (buckets[state]) buckets[state].push(info.label)
-  })
+        // Convert vector Set to array
+        const vectors = dd.vectors?.size ? [...dd.vectors] : null
+        const nonHobbyVectors = vectors?.filter(v => v !== 'hobby')
+
+        // Hobby-only: exclude entirely from AI payload
+        if (!nonHobbyVectors?.length) return null
+
+        // Resolve format IDs to labels
+        const formatLabels = dd.formats?.size
+          ? getSubNodesFromConfig(e.id).filter(s => dd.formats.has(s.id)).map(s => s.label)
+          : null
+
+        return {
+          nodeId: e.id,
+          label: e.label,
+          formats: formatLabels?.length ? formatLabels : null,
+          vectors: nonHobbyVectors,
+        }
+      })
+      .filter(Boolean) // Remove hobby-only nulls
+  }
 
   return {
-    selected: selectedLabels,
-    vibeRise: buckets.vibe_rise,
-    fun: buckets.fun,
-    pressure: buckets.pressure,
+    selected,
     essence: essenceArchetype || null,
   }
 }

@@ -27,7 +27,7 @@ export const VOICE_ARCHIVES = [
         title: 'The Origin',
         body: `Before the Matrix taught you that mistakes were dangerous, you tried things freely.
 
-Maybe it was a classroom where your wrong answer drew laughter. A parent whose love felt conditional on your grades. A moment where "good enough" was met with "you can do better." Or perhaps it was subtler—a pattern of praise only when things were perfect, silence when they weren't.
+Maybe it was a classroom where your wrong answer drew laughter. A parent whose love felt conditional on your grades. A moment where "good enough" was met with "you can do better." Or perhaps it was subtler: a pattern of praise only when things were perfect, silence when they weren't.
 
 The Perfectionist emerged to protect you. If you never finish, you never fail. If you keep revising, no one can criticize the final version. If you're "still working on it," you're safe from judgment.
 
@@ -70,7 +70,7 @@ The people who need what only you can offer? They're waiting while you revise. T
 
 **The Perfectionist's cost:**
 - Brilliant ideas die in "draft" folders
-- You watch others succeed with work worse than yours—because they shipped
+- You watch others succeed with work worse than yours, because they shipped
 - Opportunities pass while you prepare for them
 - You're exhausted from the labor of never being done
 
@@ -81,7 +81,7 @@ The tragedy: seeking perfection, you achieve nothing. The imperfect shipped thin
         title: 'The Kryptonite',
         body: `**Shipping something imperfect. On purpose. In public.**
 
-Not despite the flaws—*because* of them. The Perfectionist dissolves when you prove that imperfect work can still create value, still be received well, still matter.
+Not despite the flaws, *because* of them. The Perfectionist dissolves when you prove that imperfect work can still create value, still be received well, still matter.
 
 **Playground challenges that weaken The Perfectionist:**
 - Post something with a typo you don't fix
@@ -96,7 +96,7 @@ Every imperfect thing you ship is evidence that done beats perfect.`,
       rewiring: {
         title: 'The Rewiring',
         quote: 'Done is better than perfect. Shipped is better than polished. Real is better than flawless.',
-        body: `The wound of perfectionism becomes the gift of iteration. You know what it costs to wait for perfect—which makes you passionate about helping others ship.
+        body: `The wound of perfectionism becomes the gift of iteration. You know what it costs to wait for perfect, which makes you passionate about helping others ship.
 
 **Affirmation:**
 *"Thank you for protecting me from shame. I can handle imperfection now. My work doesn't need to be perfect to be valuable. I ship, I learn, I improve. 3% better each time is the path."*`,
@@ -104,9 +104,9 @@ Every imperfect thing you ship is evidence that done beats perfect.`,
 
       heroes: {
         title: 'Heroes Who Faced The Perfectionist',
-        body: `*"I spent two years 'perfecting' my course. When I finally launched, someone asked why I waited so long—the V1 was already better than most things out there. Two years of people who could have been helped, waiting."* — Marcus, The Translator
+        body: `*"I spent two years 'perfecting' my course. When I finally launched, someone asked why I waited so long. The V1 was already better than most things out there. Two years of people who could have been helped, waiting."* - Marcus, The Translator
 
-*"My Perfectionist convinced me I needed one more certification. Then one more. I had five certifications and zero clients. The day I posted 'I help people with X' without being 'ready' was the day my business started."* — Priya, The Bridge Builder`,
+*"My Perfectionist convinced me I needed one more certification. Then one more. I had five certifications and zero clients. The day I posted 'I help people with X' without being 'ready' was the day my business started."* - Priya, The Bridge Builder`,
       },
     },
   },
@@ -121,16 +121,16 @@ Every imperfect thing you ship is evidence that done beats perfect.`,
     icon: '🪞',
     order: 2,
     unlockTrigger: UNLOCK_TRIGGERS.VOICE_IDENTIFIED,
-    unlockValue: 'people-pleaser',
+    unlockValue: 'people_pleaser',
     altUnlockTrigger: UNLOCK_TRIGGERS.VOICE_FACED,
-    altUnlockValue: 'people-pleaser',
+    altUnlockValue: 'people_pleaser',
 
     content: {
       origin: {
         title: 'The Origin',
         body: `Before the Matrix taught you that acceptance required agreement, you had opinions.
 
-Maybe it was a family where peace was kept by compliance. A friendship where your real thoughts cost you belonging. A moment where being yourself led to being excluded. Or perhaps it was subtler—learning that the easiest version of you was the most loved version.
+Maybe it was a family where peace was kept by compliance. A friendship where your real thoughts cost you belonging. A moment where being yourself led to being excluded. Or perhaps it was subtler: learning that the easiest version of you was the most loved version.
 
 The People Pleaser emerged to protect you. If you agree with everyone, no one rejects you. If you adapt to each room, you always fit in. If you never have a controversial opinion, you're never alone.
 
@@ -144,7 +144,7 @@ But protection became erasure.`,
         quote: "They won't like the real you. Keep everyone happy. Don't rock the boat.",
         body: `The People Pleaser speaks in caring tones:
 
-- *"Don't share that opinion—what if they disagree?"*
+- *"Don't share that opinion. What if they disagree?"*
 - *"Just go along with it. It's not worth the conflict."*
 - *"They seem to like this version of you. Don't ruin it."*
 - *"What if you disappoint them?"*
@@ -167,7 +167,7 @@ The cruelest part? It uses your empathy against you. It knows you care about oth
 
       blocking: {
         title: "Why It's Blocking Your Flow Now",
-        body: `Your unique gift requires you to show up as YOU—not a mirror of what others want.
+        body: `Your unique gift requires you to show up as YOU, not a mirror of what others want.
 
 The people who need what only you can offer? They can't find you if you're shapeshifting. The authentic service you're meant to provide? It requires having a point of view.
 
@@ -184,7 +184,7 @@ The tragedy: seeking universal approval, you lose yourself. The few who would ha
         title: 'The Kryptonite',
         body: `**Showing up as yourself. Having an opinion. Saying no.**
 
-Not to hurt anyone—but to honor yourself. The People Pleaser dissolves when you prove that authentic you is actually more loveable than performing you.
+Not to hurt anyone, but to honor yourself. The People Pleaser dissolves when you prove that authentic you is actually more loveable than performing you.
 
 **Playground challenges that weaken The People Pleaser:**
 - Share an unpopular opinion you actually hold
@@ -199,7 +199,7 @@ Every time you're yourself and still loved, the lie loses power.`,
       rewiring: {
         title: 'The Rewiring',
         quote: 'The right people will love the real me. The wrong people filtering out is a feature, not a bug.',
-        body: `The wound of people-pleasing becomes the gift of authentic connection. You know what it costs to perform—which makes you passionate about creating spaces where others can be real.
+        body: `The wound of people-pleasing becomes the gift of authentic connection. You know what it costs to perform, which makes you passionate about creating spaces where others can be real.
 
 **Affirmation:**
 *"Thank you for protecting me from rejection. I can handle not being liked by everyone now. The people who matter will love the real me. My authenticity is the gift, not the risk."*`,
@@ -207,9 +207,9 @@ Every time you're yourself and still loved, the lie loses power.`,
 
       heroes: {
         title: 'Heroes Who Faced The People Pleaser',
-        body: `*"I built a following by being what I thought they wanted. It worked—and I was miserable. The day I posted 'here's what I actually think' and lost 200 followers was the day I found my people. The ones who stayed are my actual community."* — Aisha, The Truth-Teller
+        body: `*"I built a following by being what I thought they wanted. It worked, and I was miserable. The day I posted 'here's what I actually think' and lost 200 followers was the day I found my people. The ones who stayed are my actual community."* - Aisha, The Truth-Teller
 
-*"My People Pleaser had me saying yes to every client request. I was exhausted and resentful. The first time I said 'that's not how I work,' I expected to be fired. Instead, they respected me more. Boundaries created trust."* — David, The Grounded Guardian`,
+*"My People Pleaser had me saying yes to every client request. I was exhausted and resentful. The first time I said 'that's not how I work,' I expected to be fired. Instead, they respected me more. Boundaries created trust."* - David, The Grounded Guardian`,
       },
     },
   },
@@ -233,13 +233,13 @@ Every time you're yourself and still loved, the lie loses power.`,
         title: 'The Origin',
         body: `Before the Matrix taught you that uncertainty was dangerous and worth was earned, you embraced the unknown freely.
 
-Maybe it was a childhood where things fell apart without warning. A home where love seemed proportional to achievement. A culture that celebrated "hustle" and shamed rest. Or perhaps it was subtler—an environment where the only safety was in what you could predict, control, and perform.
+Maybe it was a childhood where things fell apart without warning. A home where love seemed proportional to achievement. A culture that celebrated "hustle" and shamed rest. Or perhaps it was subtler: an environment where the only safety was in what you could predict, control, and perform.
 
 The Controller emerged to protect you. If you can see all the variables, nothing surprises you. If you're always achieving, you're always worthy. If you manage every outcome and control how people see you, you're never caught off guard and never "not enough."
 
 And it worked. You became prepared, driven, accomplished. Someone who "thinks things through" and "gets things done."
 
-But protection became prison—and exhaustion.`,
+But protection became prison, and exhaustion.`,
       },
 
       lie: {
@@ -279,7 +279,7 @@ Flow, by definition, can't be controlled. The sustainable service you're buildin
 **The Controller's cost:**
 - You over-plan and under-act
 - Burnout cycles from never stopping
-- Inability to enjoy any win—there's always the next risk to manage
+- Inability to enjoy any win, because there's always the next risk to manage
 - Rest feels like laziness, spontaneity feels reckless
 - Life feels like a series of risk assessments and performance reviews
 
@@ -290,7 +290,7 @@ The tragedy: seeking certainty and enoughness, you get stagnation and exhaustion
         title: 'The Kryptonite',
         body: `**Letting go. Resting without guilt. Trusting others to handle it.**
 
-Not recklessly—but trustingly. The Controller dissolves when you prove that good things can happen without being engineered, and that you're worthy without performing.
+Not recklessly, but trustingly. The Controller dissolves when you prove that good things can happen without being engineered, and that you're worthy without performing.
 
 **Playground challenges that weaken The Controller:**
 - Start something without knowing all the steps
@@ -299,13 +299,13 @@ Not recklessly—but trustingly. The Controller dissolves when you prove that go
 - Celebrate a small win instead of optimizing
 - Do something spontaneous with no backup plan
 
-Every time you surrender control and things work out—every moment you exist without producing and find you're still worthy—the lie weakens.`,
+Every time you surrender control and things work out, every moment you exist without producing and find you're still worthy, the lie weakens.`,
       },
 
       rewiring: {
         title: 'The Rewiring',
         quote: 'I can handle whatever comes. My worth is not my work. Uncertainty is where possibility lives.',
-        body: `The wound of chaos and conditional worth becomes the gift of adaptability and presence. You know what it costs to over-control and over-perform—which makes you passionate about helping others trust the process and know they're enough.
+        body: `The wound of chaos and conditional worth becomes the gift of adaptability and presence. You know what it costs to over-control and over-perform, which makes you passionate about helping others trust the process and know they're enough.
 
 **Affirmation:**
 *"Thank you for protecting me from chaos and rejection. I can handle uncertainty now. I am enough even when still. Flow requires surrender, and surrender is safe."*`,
@@ -313,9 +313,9 @@ Every time you surrender control and things work out—every moment you exist wi
 
       heroes: {
         title: 'Heroes Who Faced The Controller',
-        body: `*"I had a 47-page business plan. Every contingency mapped. Three years later, I still hadn't started. The day I launched with a one-page 'let's see what happens' approach, my actual business began."* — James, The Cosmic Connector
+        body: `*"I had a 47-page business plan. Every contingency mapped. Three years later, I still hadn't started. The day I launched with a one-page 'let's see what happens' approach, my actual business began."* - James, The Cosmic Connector
 
-*"I hit every goal I set—and felt nothing. The day I took a week off with no 'productive' purpose was the hardest thing I'd ever done. Halfway through, I realized I'd been running from stillness my whole life."* — Chris, The Rhythm Architect`,
+*"I hit every goal I set, and felt nothing. The day I took a week off with no 'productive' purpose was the hardest thing I'd ever done. Halfway through, I realized I'd been running from stillness my whole life."* - Chris, The Rhythm Architect`,
       },
     },
   },
@@ -330,16 +330,16 @@ Every time you surrender control and things work out—every moment you exist wi
     icon: '🛋️',
     order: 4,
     unlockTrigger: UNLOCK_TRIGGERS.VOICE_IDENTIFIED,
-    unlockValue: 'auto-pilot',
+    unlockValue: 'auto_pilot',
     altUnlockTrigger: UNLOCK_TRIGGERS.VOICE_FACED,
-    altUnlockValue: 'auto-pilot',
+    altUnlockValue: 'auto_pilot',
 
     content: {
       origin: {
         title: 'The Origin',
         body: `Before the Matrix wore you down, you wanted things.
 
-Maybe it was years of sustained stress with no resolution. A career that looked successful but felt hollow. A relationship where you stopped asking for what you needed because it never came. Or perhaps it was subtler—a slow accumulation of small surrenders until "I'm fine" became your autopilot response to everything.
+Maybe it was years of sustained stress with no resolution. A career that looked successful but felt hollow. A relationship where you stopped asking for what you needed because it never came. Or perhaps it was subtler: a slow accumulation of small surrenders until "I'm fine" became your autopilot response to everything.
 
 The Auto-Pilot emerged to protect you. If you stop feeling, you stop hurting. If you go through the motions, you don't have to face the gap between what you have and what you want. If you check out, the weight of it all becomes bearable.
 
@@ -378,7 +378,7 @@ The cruelest part? It feels like peace. It disguises collapse as contentment, nu
         title: "Why It's Blocking Your Flow Now",
         body: `Your unique gift requires presence. Flow is the opposite of autopilot.
 
-The creative breakthroughs, the genuine connections, the moments of alignment—they all require you to be HERE. Checked in. Feeling things. The service you're meant to provide? It needs the part of you that cares, not the part that's going through the motions.
+The creative breakthroughs, the genuine connections, the moments of alignment. They all require you to be HERE. Checked in. Feeling things. The service you're meant to provide? It needs the part of you that cares, not the part that's going through the motions.
 
 **The Auto-Pilot's cost:**
 - Days blur together with no memorable moments
@@ -398,7 +398,7 @@ Not doing anything about it yet. Just letting yourself want something. The Auto-
 
 **Playground challenges that weaken The Auto-Pilot:**
 - Put your phone down for an hour and notice what you feel
-- Write down three things you want (not need—want)
+- Write down three things you want (not need, want)
 - Do something that requires your full attention
 - Tell someone how you actually feel when they ask
 - Try something new that has no practical purpose
@@ -409,17 +409,17 @@ Every moment of genuine presence is evidence that feeling things is safe.`,
       rewiring: {
         title: 'The Rewiring',
         quote: 'I am allowed to want things. Feeling is not dangerous. Presence is the antidote.',
-        body: `The wound of overwhelm becomes the gift of compassion. You know what it's like to be so exhausted you check out—which makes you passionate about creating environments where people can come back to themselves gently.
+        body: `The wound of overwhelm becomes the gift of compassion. You know what it's like to be so exhausted you check out, which makes you passionate about creating environments where people can come back to themselves gently.
 
 **Affirmation:**
-*"Thank you for protecting me from overwhelm. I can feel things now. My desires are valid. I don't have to go through the motions anymore. I choose to be here—present, imperfect, alive."*`,
+*"Thank you for protecting me from overwhelm. I can feel things now. My desires are valid. I don't have to go through the motions anymore. I choose to be here. Present, imperfect, alive."*`,
       },
 
       heroes: {
         title: 'Heroes Who Faced The Auto-Pilot',
-        body: `*"Someone asked me what I wanted for dinner and I couldn't answer. Not because I didn't care—because I'd stopped letting myself want anything. That tiny moment cracked something open. I started with dinner. Then bigger things."* — Kai, The Grounded Guardian
+        body: `*"Someone asked me what I wanted for dinner and I couldn't answer. Not because I didn't care, but because I'd stopped letting myself want anything. That tiny moment cracked something open. I started with dinner. Then bigger things."* - Kai, The Grounded Guardian
 
-*"I spent five years 'fine.' Great job, nice apartment, solid routine. One morning I realized I couldn't remember the last time I felt excited about anything. The Auto-Pilot had kept me safe—and completely disconnected from my own life."* — Elena, The Mystic Messenger`,
+*"I spent five years 'fine.' Great job, nice apartment, solid routine. One morning I realized I couldn't remember the last time I felt excited about anything. The Auto-Pilot had kept me safe, and completely disconnected from my own life."* - Elena, The Mystic Messenger`,
       },
     },
   },
@@ -443,7 +443,7 @@ Every moment of genuine presence is evidence that feeling things is safe.`,
         title: 'The Origin',
         body: `Before the Matrix taught you to hide, you were seen.
 
-Maybe it was a classroom where your answer was mocked. A family dinner where your excitement was dismissed. A moment on stage where silence felt like rejection. Or perhaps it was subtler—a pattern of being overlooked until you learned that invisibility was safer than visibility.
+Maybe it was a classroom where your answer was mocked. A family dinner where your excitement was dismissed. A moment on stage where silence felt like rejection. Or perhaps it was subtler: a pattern of being overlooked until you learned that invisibility was safer than visibility.
 
 The Ghost emerged to protect you. If they can't see you, they can't hurt you. If you stay in the shadows, you're safe from criticism. If you never claim the spotlight, you never have to fear its glare.
 
@@ -457,7 +457,7 @@ But protection became prison.`,
         quote: "Visibility is dangerous. Stay small. Don't attract attention.",
         body: `The Ghost speaks in whispers:
 
-- *"Don't post that—who do you think you are?"*
+- *"Don't post that. Who do you think you are?"*
 - *"Let someone else go first."*
 - *"You're not ready to be seen yet."*
 - *"What if they think you're showing off?"*
@@ -499,7 +499,7 @@ The tragedy: seeking safety in invisibility, you achieve irrelevance. The hidden
 
 Not perfectly. Not when you're "ready." Now. Imperfectly. Visibly.
 
-Every time you post, publish, present, or claim space—and survive—the Ghost learns that visibility isn't death.
+Every time you post, publish, present, or claim space, and survive, the Ghost learns that visibility isn't death.
 
 **Playground challenges that weaken The Ghost:**
 - Share something you made (Screen)
@@ -514,17 +514,17 @@ Every visibility action is evidence that being seen is safe.`,
       rewiring: {
         title: 'The Rewiring',
         quote: "I am safe to be seen. My visibility serves others. The world needs what I'm hiding.",
-        body: `The wound of invisibility becomes the gift of visibility. You know what it's like to be overlooked—which makes you passionate about helping others be seen.
+        body: `The wound of invisibility becomes the gift of visibility. You know what it's like to be overlooked, which makes you passionate about helping others be seen.
 
 **Affirmation:**
-*"Thank you for protecting me from danger. I can handle being seen now. My visibility isn't arrogance—it's service. The people who need me can only find me if I'm findable."*`,
+*"Thank you for protecting me from danger. I can handle being seen now. My visibility isn't arrogance, it's service. The people who need me can only find me if I'm findable."*`,
       },
 
       heroes: {
         title: 'Heroes Who Faced The Ghost',
-        body: `*"I spent 15 years letting my coworkers present my ideas. When I finally started posting my own thoughts, I expected attacks. Instead, I found my people."* — Sarah, The Translator
+        body: `*"I spent 15 years letting my coworkers present my ideas. When I finally started posting my own thoughts, I expected attacks. Instead, I found my people."* - Sarah, The Translator
 
-*"The Ghost told me authority meant arrogance. Turns out, claiming my expertise was the most generous thing I could do for my clients. They needed someone confident in what they knew."* — Marcus, The Wise Sage`,
+*"The Ghost told me authority meant arrogance. Turns out, claiming my expertise was the most generous thing I could do for my clients. They needed someone confident in what they knew."* - Marcus, The Wise Sage`,
       },
     },
   },

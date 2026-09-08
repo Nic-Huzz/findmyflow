@@ -44,7 +44,7 @@ const VOICED_MESSAGES = {
   ],
   pressure_wahoo: [
     "That wasn't fun. It wasn't supposed to be. You did it anyway.",
-    "Pressure. Not every win feels good. This one still counts.",
+    "Stressful. Not every win feels good. This one still counts.",
   ],
   streak_broken: [
     "The streak resets. What you built doesn't.",

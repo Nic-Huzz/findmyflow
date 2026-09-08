@@ -114,18 +114,18 @@ SKILL DEFINITIONS (tag each cluster with 1-3 matching skills):
 - speaking_up: advocating, being vulnerable publicly, challenging norms
 
 PROBLEM DEFINITIONS (tag each cluster with 1-2 matching problems):
-- kids_deserved_better: childhood education failures
-- voice_taken: expression suppressed
-- pain_not_believed: suffering dismissed
-- world_losing: environmental/societal loss
-- life_not_yours: living someone else's script
-- feeling_stupid: intellectual shame
-- locked_out: exclusion, gatekeeping
-- work_treated_nothing: labour undervalued
-- left_behind: abandonment, disconnection
-- forgot_what_for: lost purpose
-- stopped_wondering: curiosity killed
-- work_hollows: burnout, meaninglessness
+- kids_deserved_better: helping kids thrive
+- pain_not_believed: healing the body, chronic pain, burnout
+- minds_hurting: anxiety, depression, trauma, addiction, grief
+- money_stress: debt, financial stress, wealth gap
+- lonely_disconnected: loneliness, relationships, isolation, belonging
+- feeling_stupid: confusing knowledge, bad teaching, jargon
+- work_treated_nothing: creative work ignored, stolen, underpaid
+- work_hollows: toxic jobs, career burnout, meaningless work
+- teams_leaders_broken: bad leadership, team dysfunction, org culture
+- world_losing: climate, conservation, environmental loss
+- people_treated_unfairly: rights, justice, discrimination, gatekeeping
+- feeling_lost: lost purpose, meaning, direction
 
 Respond ONLY as JSON:
 {"clusters": [{"name": "...", "description": "...", "why": "...", "branch": "...", "skills": ["skill_id"], "problems": ["problem_id"], "input_count": 0, "titles": ["title1", "title2"]}]}`

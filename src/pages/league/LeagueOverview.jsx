@@ -332,7 +332,7 @@ export default function LeagueOverview() {
   const handleShare = async () => {
     if (!userTeam?.invite_code) return
     const shareUrl = `${window.location.origin}/league?join=${userTeam.invite_code}`
-    const shareText = `Join my Fantasy League on Find My Flow! Code: ${userTeam.invite_code} — ${shareUrl}`
+    const shareText = `Join my Fantasy League on Find My Flow! Code: ${userTeam.invite_code} ${shareUrl}`
 
     if (navigator.share) {
       try {

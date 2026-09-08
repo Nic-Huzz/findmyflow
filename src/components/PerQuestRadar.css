@@ -1,0 +1,176 @@
+/* PerQuestRadar — swipeable per-quest radar cards */
+
+.pqr-wrapper { margin: 0 -20px; } /* bleed to edges */
+
+.pqr-strip {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 0;
+}
+.pqr-strip::-webkit-scrollbar { display: none; }
+
+.pqr-card {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.pqr-card-inner {
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Header */
+.pqr-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.pqr-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pqr-name {
+  font-size: 15px;
+  font-weight: 700;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pqr-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(94,23,235,0.06);
+  color: #5e17eb;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Radar container */
+.pqr-radar {
+  display: flex;
+  justify-content: center;
+}
+
+/* Legend */
+.pqr-legend {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(0,0,0,0.4);
+}
+.pqr-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.pqr-legend-line {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+}
+.pqr-legend-start { background: #5e17eb; opacity: 0.3; }
+.pqr-legend-actual { background: #5e17eb; }
+.pqr-legend-dream { background: #E9A23B; border: none; height: 0; border-top: 2px dashed #E9A23B; }
+
+/* Gap callout */
+.pqr-gap {
+  text-align: center;
+  font-size: 12px;
+  color: #E9A23B;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.pqr-gap-icon { margin-right: 4px; }
+
+/* Life fuel bars */
+.pqr-fuel { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); }
+.pqr-fuel-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(0,0,0,0.3); margin-bottom: 8px; }
+.pqr-fuel-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.pqr-fuel-label { font-size: 12px; font-weight: 500; width: 100px; flex-shrink: 0; white-space: nowrap; }
+.pqr-fuel-track { flex: 1; height: 6px; background: rgba(0,0,0,0.06); border-radius: 3px; overflow: hidden; }
+.pqr-fuel-fill { height: 100%; background: #5e17eb; border-radius: 3px; transition: width 0.3s ease; }
+.pqr-fuel-pct { font-size: 11px; font-weight: 700; color: #5e17eb; width: 32px; text-align: right; flex-shrink: 0; }
+.pqr-fuel-weeks { font-size: 10px; color: rgba(0,0,0,0.25); text-align: right; margin-top: 2px; }
+.pqr-fuel-insight { font-size: 12px; color: rgba(0,0,0,0.45); margin-top: 8px; line-height: 1.4; }
+
+/* Dot navigation */
+.pqr-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 4px 0;
+}
+.pqr-dot-nav {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d4d4d4;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.pqr-dot-nav.active {
+  width: 8px;
+  height: 8px;
+  background: #5e17eb;
+}
+
+/* Empty state */
+.pqr-empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: rgba(0,0,0,0.35);
+  line-height: 1.5;
+}
+.pqr-define-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1.5px dashed rgba(94,23,235,0.3);
+  background: rgba(94,23,235,0.03);
+  color: #5e17eb;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* SVG start dome layer */
+.pqr-start-fill {
+  fill: rgba(94, 23, 235, 0.06);
+  stroke: #5e17eb;
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  opacity: 0.5;
+}
+
+/* Gap pulse ring */
+.pqr-gap-ring {
+  fill: none;
+  stroke: #E9A23B;
+  stroke-width: 1.5;
+  animation: pqrPulse 1.8s ease-in-out alternate infinite;
+}
+@keyframes pqrPulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}

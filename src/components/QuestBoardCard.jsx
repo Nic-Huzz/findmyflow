@@ -5,33 +5,27 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
+import { getDimensionById } from '../data/domeDimensions'
+import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
 import './QuestBoardCard.css'
 
-const DIMENSION_META = {
-  duration: { label: 'Duration', scale: false },
-  frequency: { label: 'Frequency', scale: false },
-  medium: { label: 'Medium', scale: false },
-  people: { label: 'People', scale: false },
-  money: { label: 'Money', scale: true },
-  location: { label: 'Location', scale: true },
-  independence: { label: 'Independence', scale: true },
-}
-
 const STATE_LABELS = {
   vibe_rise: 'Vibe Rise',
   fun: 'Fun',
-  pressure: 'Pressure',
-  uninterested: 'Not for me',
+  pressure: 'Stressful',
+  uninterested: 'Bored',
 }
 
 const STATE_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', uninterested: '😐' }
 
 export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate }) {
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
@@ -41,6 +35,10 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [saving, setSaving] = useState(false)
   const [showClose, setShowClose] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [renaming, setRenaming] = useState(null) // null | 'quest' | expId
+  const [renameText, setRenameText] = useState('')
+  const renameRef = useRef(null)
+  const renameSavingRef = useRef(false)
   const [healingTaskId, setHealingTaskId] = useState(null)
   const [healingTaskText, setHealingTaskText] = useState('')
   const [healingExistingData, setHealingExistingData] = useState(null)
@@ -48,8 +46,10 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [outcomeTaskId, setOutcomeTaskId] = useState(null)
   const [groanModalChallenge, setGroanModalChallenge] = useState(null)
   const [signalTaskId, setSignalTaskId] = useState(null)
+  const [expandedTaskId, setExpandedTaskId] = useState(null)
   const [collapsedExps, setCollapsedExps] = useState(new Set())
   const [challengeDims, setChallengeDims] = useState({})
+  const [challengeDimValues, setChallengeDimValues] = useState({})
   const [reRatingExpId, setReRatingExpId] = useState(null)
   const inputRef = useRef(null)
 
@@ -81,13 +81,18 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     if (!groanIds.length) return
     supabase
       .from('groan_challenges')
-      .select('id, expansion_dimensions')
+      .select('id, expansion_dimensions, dimension_values')
       .in('id', groanIds)
       .then(({ data }) => {
         if (data) {
           const dims = {}
-          data.forEach(g => { dims[g.id] = g.expansion_dimensions || [] })
+          const vals = {}
+          data.forEach(g => {
+            dims[g.id] = g.expansion_dimensions || []
+            vals[g.id] = g.dimension_values || {}
+          })
           setChallengeDims(dims)
+          setChallengeDimValues(vals)
         }
       })
   }, [taskIdKey])
@@ -219,6 +224,27 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     }
   }
 
+  const saveRename = async () => {
+    if (renameSavingRef.current || !renameText.trim()) return
+    renameSavingRef.current = true
+    if (renaming === 'quest') {
+      await supabase.from('quests').update({ label: renameText.trim() }).eq('id', quest.id)
+    } else if (renaming) {
+      await supabase.from('quest_experiences').update({ label: renameText.trim() }).eq('id', renaming)
+    }
+    setRenaming(null)
+    setRenameText('')
+    renameSavingRef.current = false
+    onUpdate?.()
+  }
+
+  const startRename = (type, currentName) => {
+    setRenaming(type)
+    setRenameText(currentName)
+    setShowMenu(false)
+    setTimeout(() => renameRef.current?.focus(), 50)
+  }
+
   const reRateExperience = async (expId, newState) => {
     const { error } = await supabase.from('quest_experiences')
       .update({ capacity_state: newState, updated_at: new Date().toISOString() })
@@ -247,22 +273,24 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     if (!task.groan_challenge_id) return []
     return challengeDims[task.groan_challenge_id] || []
   }
+  const getDimVals = (task) => {
+    if (!task.groan_challenge_id) return {}
+    return challengeDimValues[task.groan_challenge_id] || {}
+  }
 
-  const renderTaskRow = (task) => (
+  const renderTaskRow = (task) => {
+    const dims = getDims(task)
+    const hasDims = dims.length > 0
+    const isTaskExpanded = expandedTaskId === task.id
+    return (
     <div key={task.id}>
-      <div className="qbc-task-row">
-        <button className="qbc-check" onClick={() => toggleTask(task)} />
+      <div
+        className={`qbc-task-row ${isTaskExpanded ? 'qbc-task-row--expanded' : ''}`}
+        onClick={hasDims ? () => setExpandedTaskId(isTaskExpanded ? null : task.id) : undefined}
+      >
+        <button className="qbc-check" onClick={(e) => { e.stopPropagation(); toggleTask(task) }} />
         <div className="qbc-task-content">
           <div className="qbc-task-text">{task.text}</div>
-          {getDims(task).length > 0 && (
-            <div className="qbc-dims">
-              {getDims(task).map(d => {
-                const meta = DIMENSION_META[d]
-                if (!meta) return null
-                return <span key={d} className={`qbc-dim ${meta.scale ? 'qbc-dim--scale' : ''}`}>{meta.label}</span>
-              })}
-            </div>
-          )}
         </div>
         <div className="qbc-task-icons">
           {task.is_courage_challenge && (
@@ -277,8 +305,33 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             </button>
           )}
           {healingIntentions[task.id] && <span className="qbc-icon-heal">💚</span>}
+          {hasDims && <span className="qbc-dim-hint">{isTaskExpanded ? '▴' : '▾'}</span>}
         </div>
       </div>
+      {isTaskExpanded && hasDims && (
+        <div className="qbc-dims">
+          {dims.map(d => {
+            const dim = getDimensionById(d)
+            if (!dim) return null
+            const val = getDimVals(task)[d]
+            let tierLabel = null
+            if (val != null) {
+              if (dim.type === 'numeric') {
+                tierLabel = val
+              } else {
+                const tier = dim.levels?.find(l => l.level === val)
+                tierLabel = tier?.label || `Level ${val}`
+              }
+            }
+            return (
+              <div key={d} className="qbc-dim-row">
+                <span className="qbc-dim-name">{dim.icon} {dim.label}:</span>
+                <span className="qbc-dim-value">{tierLabel || 'Not set'}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
       {signalTaskId === task.id && (
         <div className="qbc-signal-row">
           <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}>🔥 Lit me up</button>
@@ -287,7 +340,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
         </div>
       )}
     </div>
-  )
+  )}
 
   const renderCompletedRow = (task) => (
     <div key={task.id} className="qbc-task-row qbc-task-row--done">
@@ -305,17 +358,70 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   return (
     <div className="qbc">
       {/* Header */}
-      <div className="qbc-header" onClick={() => { setExpanded(!expanded); setShowMenu(false) }}>
-        <div className="qbc-dot" style={{ background: quest.color || stateMeta?.color || '#6b7280' }} />
-        <div className="qbc-title">{quest.label}</div>
-        {courageCount > 0 && (
-          <div className="qbc-badge">{courageDoneCount}/{courageCount} courage</div>
+      <div className="qbc-header">
+        <div className="qbc-header-main" onClick={() => { setExpanded(!expanded); setShowMenu(false) }}>
+          <div className="qbc-dot" style={{ background: quest.color || stateMeta?.color || '#6b7280' }} />
+          {renaming === 'quest' ? (
+            <input ref={renameRef} className="qbc-rename-input" value={renameText}
+              onChange={e => setRenameText(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') saveRename(); if (e.key === 'Escape') setRenaming(null) }}
+              onBlur={saveRename}
+              onClick={e => e.stopPropagation()} />
+          ) : (
+            <div className="qbc-title">{quest.label}</div>
+          )}
+          {courageCount > 0 && (
+            <div className="qbc-badge">{courageDoneCount}/{courageCount}</div>
+          )}
+          <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
+        </div>
+        <button className="qbc-menu-trigger" onClick={(e) => { e.stopPropagation(); setShowMenu(!showMenu); setShowClose(false) }}>···</button>
+        {showMenu && (
+          <div className="qbc-menu-dropdown">
+            {!showClose ? (
+              <>
+                <button className="qbc-menu-item" onClick={() => startRename('quest', quest.label)}>Rename path</button>
+                <button className="qbc-menu-item" onClick={() => setShowClose(true)}>Close path</button>
+              </>
+            ) : (
+              <div className="qbc-close-options">
+                <div className="qbc-close-title">Close "{quest.label}"?</div>
+                <button className="qbc-close-btn achieved" onClick={() => closeQuest('achieved')}>🎉 I achieved it!</button>
+                <button className="qbc-close-btn lost" onClick={() => closeQuest('lost_interest')}>🤔 Lost interest</button>
+                <button className="qbc-close-btn paused" onClick={() => closeQuest('not_right_time')}>⏳ Not the right time</button>
+                <button className="qbc-close-cancel" onClick={() => { setShowClose(false); setShowMenu(false) }}>Cancel</button>
+              </div>
+            )}
+          </div>
         )}
-        <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
       </div>
 
       {expanded && (
         <div className="qbc-body">
+
+          {/* Current job reference — show life fuels instead of define CTA */}
+          {quest.is_current_job && quest.life_fuel_baseline && (
+            <div className="qbc-fuel-summary">
+              {CHANNEL_IDS.map(id => {
+                const ch = LIFE_FUEL_CHANNELS[id]
+                const has = quest.life_fuel_baseline[id]
+                return (
+                  <div key={id} className={`qbc-fuel-row ${has ? 'has' : 'missing'}`}>
+                    <span>{ch.emoji}</span>
+                    <span className="qbc-fuel-name">{ch.name}</span>
+                    <span className="qbc-fuel-status">{has ? '✓' : 'missing'}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Define path CTA — shows when quest has no current_dimensions (not for current job reference) */}
+          {(!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && !(quest.is_current_job && quest.status === 'reference') && (
+            <button className="qbc-define-cta" onClick={() => navigate(`/path-definition/${quest.id}`)}>
+              Define this path →
+            </button>
+          )}
 
           {/* Experience sections (collapsible) */}
           {hasExperiences && activeExperiences.map(exp => {
@@ -326,7 +432,15 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               <div key={exp.id} className="qbc-exp">
                 <div className="qbc-exp-header" onClick={() => toggleExp(exp.id)}>
                   <span className="qbc-exp-icon">›</span>
-                  <span className="qbc-exp-name">{exp.label}</span>
+                  {renaming === exp.id ? (
+                    <input ref={renameRef} className="qbc-rename-input qbc-rename-exp" value={renameText}
+                      onChange={e => setRenameText(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') saveRename(); if (e.key === 'Escape') setRenaming(null) }}
+                      onBlur={saveRename}
+                      onClick={e => e.stopPropagation()} />
+                  ) : (
+                    <span className="qbc-exp-name" onDoubleClick={(e) => { e.stopPropagation(); startRename(exp.id, exp.label) }}>{exp.label}</span>
+                  )}
                   {isReRating ? (
                     <div className="qbc-exp-rerate" onClick={e => e.stopPropagation()}>
                       {['vibe_rise', 'fun', 'pressure', 'uninterested'].map(s => (
@@ -438,25 +552,6 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             </div>
           )}
 
-          {/* Three-dot menu → close quest */}
-          <div className="qbc-menu-area">
-            <button className="qbc-menu-trigger" onClick={() => { setShowMenu(!showMenu); setShowClose(false) }}>···</button>
-            {showMenu && (
-              <div className="qbc-menu-dropdown">
-                {!showClose ? (
-                  <button className="qbc-menu-item" onClick={() => setShowClose(true)}>Close quest</button>
-                ) : (
-                  <div className="qbc-close-options">
-                    <div className="qbc-close-title">Close "{quest.label}"?</div>
-                    <button className="qbc-close-btn achieved" onClick={() => closeQuest('achieved')}>🎉 I achieved it!</button>
-                    <button className="qbc-close-btn lost" onClick={() => closeQuest('lost_interest')}>🤔 Lost interest</button>
-                    <button className="qbc-close-btn paused" onClick={() => closeQuest('not_right_time')}>⏳ Not the right time</button>
-                    <button className="qbc-close-cancel" onClick={() => { setShowClose(false); setShowMenu(false) }}>Cancel</button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </div>
       )}
 

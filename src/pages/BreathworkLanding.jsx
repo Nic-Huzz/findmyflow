@@ -71,7 +71,7 @@ export default function BreathworkLanding() {
   const [stickyVisible, setStickyVisible] = useState(false)
   const [inputFocused, setInputFocused] = useState(false)
 
-  useEffect(() => { document.title = 'Breathwork Session — Your Experience' }, [])
+  useEffect(() => { document.title = 'Breathwork Session: Your Experience' }, [])
 
   // Sticky CTA
   useEffect(() => {

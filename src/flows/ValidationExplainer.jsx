@@ -142,7 +142,7 @@ export default function ValidationExplainer() {
             That fear is exactly why this stage matters.
           </p>
           <p className="highlight-box">
-            The goal isn't perfection — it's ensuring we don't waste our time and <strong>make something people are willing to pay for</strong>.
+            The goal isn't perfection. It's ensuring we don't waste our time and <strong>make something people are willing to pay for</strong>.
           </p>
         </div>
       )

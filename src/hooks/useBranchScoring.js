@@ -25,18 +25,18 @@ import careerModelsData from '../../public/data/careerModels.json'
 
 // Problem categoryId → branch mapping (from wheel taxonomy)
 const PROBLEM_BRANCH_MAP = {
-  voice_taken: ['healing', 'bonds'],
-  pain_not_believed: ['healing'],
   kids_deserved_better: ['healing', 'bonds'],
-  work_hollows: ['healing', 'movement'],
-  forgot_what_for: ['healing', 'story'],
-  life_not_yours: ['healing', 'status'],
+  pain_not_believed: ['healing'],
+  minds_hurting: ['healing', 'bonds'],
+  money_stress: ['tools', 'status'],
+  lonely_disconnected: ['bonds', 'healing'],
   feeling_stupid: ['tools', 'status'],
-  locked_out: ['bonds', 'shelter'],
-  stopped_wondering: ['healing', 'tools', 'story'],
   work_treated_nothing: ['status'],
-  left_behind: ['bonds'],
+  work_hollows: ['healing', 'movement'],
+  teams_leaders_broken: ['status', 'tools'],
   world_losing: ['fire', 'threat'],
+  people_treated_unfairly: ['healing', 'status', 'bonds'],
+  feeling_lost: ['healing', 'story'],
 }
 
 // Career label → branch keyword matching

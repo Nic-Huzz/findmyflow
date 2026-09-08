@@ -45,7 +45,7 @@ export default function HealingCompassLanding() {
   const [selectedArchetypes, setSelectedArchetypes] = useState([])
   const photoInputRef = useRef(null)
 
-  useEffect(() => { document.title = 'Your Healing Compass — Workshop Results' }, [])
+  useEffect(() => { document.title = 'Your Healing Compass: Workshop Results' }, [])
 
   // Sticky CTA: show after hero, hide when footer visible
   useEffect(() => {
@@ -234,7 +234,7 @@ export default function HealingCompassLanding() {
           <p className="hcl-hero-label">Healing Compass Workshop</p>
           <h1 className="hcl-hero-headline">Your Healing Compass</h1>
           <p className="hcl-hero-sub">
-            Everything from today's workshop — your answers, the frameworks, and your next steps.
+            Everything from today's workshop: your answers, the frameworks, and your next steps.
           </p>
           <div className="hcl-scroll-hint" aria-hidden="true">
             <span className="hcl-scroll-arrow" />
@@ -252,7 +252,7 @@ export default function HealingCompassLanding() {
           <div className="hcl-splinter-text reveal-fade-up">
             <p>
               As children, we all experience moments where our emotional needs aren't met.
-              These <em>"emotional splinters"</em> don't disappear — they create protective patterns
+              These <em>"emotional splinters"</em> don't disappear. They create protective patterns
               that follow us into adulthood.
             </p>
             <p>
@@ -405,7 +405,7 @@ export default function HealingCompassLanding() {
             8 Essence Archetypes
           </h2>
           <p className="hcl-section-desc reveal-fade-up">
-            Underneath every protective pattern is an essence — who you really are when the armour comes off.
+            Underneath every protective pattern is an essence, who you really are when the armour comes off.
             Use these as inspiration, or name your own.
           </p>
 
@@ -482,7 +482,7 @@ export default function HealingCompassLanding() {
               <span className={`hcl-letter-fill${selectedNeed ? ' hcl-letter-fill--active' : ''}`}>
                 {selectedNeed ? selectedNeed.name : '[emotional need]'}
               </span>
-              {' '}— and that when it's not met, I've been using{' '}
+              {', '}and that when it's not met, I've been using{' '}
               <span className={`hcl-letter-fill${selectedPattern ? ' hcl-letter-fill--active' : ''}`}>
                 {selectedPattern ? selectedPattern.name : '[protective pattern]'}
               </span>
@@ -516,7 +516,7 @@ export default function HealingCompassLanding() {
                 {answers.essenceArchetype?.trim() || '[essence archetype]'}
               </span>
               {selectedArchetype && (
-                <> — <em>{selectedArchetype.poetic_line}</em></>
+                <> – <em>{selectedArchetype.poetic_line}</em></>
               )}
             </p>
 
@@ -584,7 +584,7 @@ export default function HealingCompassLanding() {
             The Message to Your Younger Self
           </h2>
           <p className="hcl-section-desc hcl-section-desc--dark reveal-fade-up">
-            During the workshop, you spoke to your younger self and gave them a new truth —
+            During the workshop, you spoke to your younger self and gave them a new truth,
             a belief to replace the old one.
           </p>
           <div className="hcl-action-input-wrap reveal-fade-up">

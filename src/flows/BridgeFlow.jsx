@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess, hapticError } from '../lib/haptics'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import './BridgeFlow.css'
 
 const STEPS = {
@@ -132,6 +133,7 @@ export default function BridgeFlow() {
   }
 
   const validPeople = people.filter(p => p.name.trim())
+  const { isRevealed } = useStaggerReveal(validPeople.length, step === STEPS.SUMMARY, { interval: 800 })
 
   const saveBridges = async () => {
     if (!user || saving || validPeople.length === 0) return
@@ -362,18 +364,19 @@ export default function BridgeFlow() {
 
   // ── SCREEN 3: VALUE & ASK ──
   if (step === STEPS.VALUE_AND_ASK) {
-    const current = validPeople[editingIndex] || validPeople[0]
-    // Derive global index by counting valid people up to editingIndex
+    const safeIdx = Math.min(editingIndex, validPeople.length - 1)
+    const current = validPeople[safeIdx] || validPeople[0]
+    // Derive global index by counting valid people up to safeIdx
     // Can't use indexOf — object references change after updatePerson spreads
     let currentGlobalIndex = -1
     let validCount = 0
     for (let i = 0; i < people.length; i++) {
       if (people[i].name.trim()) {
-        if (validCount === editingIndex) { currentGlobalIndex = i; break }
+        if (validCount === safeIdx) { currentGlobalIndex = i; break }
         validCount++
       }
     }
-    const isLast = editingIndex >= validPeople.length - 1
+    const isLast = safeIdx >= validPeople.length - 1
 
     return (
       <div className="brg">
@@ -453,7 +456,10 @@ export default function BridgeFlow() {
           </p>
 
           {validPeople.map((person, i) => (
-            <div key={i} className="brg-summary-card">
+            <div
+              key={i}
+              className={`brg-summary-card brg-summary-reveal ${isRevealed(i) ? 'brg-summary-visible' : ''}`}
+            >
               <div className="brg-summary-name">{person.name}</div>
               {person.platform && <div className="brg-summary-platform">{person.platform}</div>}
               {person.value && (

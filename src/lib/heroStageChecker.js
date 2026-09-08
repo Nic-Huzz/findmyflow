@@ -16,8 +16,10 @@ import { postFeedEvent } from './communityFeed'
  *   6: 5+ courage challenges completed
  *   7: First healing flow started
  *   8: 3+ healing outcomes + 20+ courage completed
- *   9: Scale Portal started (remarkable_angles or scale_diagnostics)
- *   10-12: Deferred (need income tracking)
+ *   9: First income > 0 (income_self_reports)
+ *   10: 3+ months income > 0
+ *   11: Income >= expenses target
+ *   12: Self-declared (deferred)
  */
 export async function checkHeroGraduation(userId) {
   const { data: stageData } = await supabase
@@ -41,7 +43,7 @@ export async function checkHeroGraduation(userId) {
   // 2→3: Dome completed (10+ experience ticks)
   if (currentStage === 2) {
     const { count } = await supabase
-      .from('experience_checkins')
+      .from('experience_dome_ratings')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
     if (count >= 10) newStage = 3
@@ -84,52 +86,77 @@ export async function checkHeroGraduation(userId) {
   }
 
   // 7→8: 3+ healing flows with outcome + 20+ courage completed
+  // Healing = per-task healing_intentions + pattern-level voice healing
   if (currentStage === 7) {
-    const [{ count: healingCount }, { count: courageCount }] = await Promise.all([
+    const [{ count: healingCount }, { count: patternCount }, { count: courageCount }] = await Promise.all([
       supabase
         .from('healing_intentions')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .not('outcome', 'is', null),
       supabase
+        .from('pattern_healing_responses')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('healing_stage', 'recognised'),
+      supabase
         .from('groan_challenges')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', userId)
         .eq('status', 'completed'),
     ])
-    if (healingCount >= 3 && courageCount >= 20) newStage = 8
+    if ((healingCount + patternCount) >= 3 && courageCount >= 20) newStage = 8
   }
 
-  // 8→9: Scale Portal started (remarkable_angles or scale_diagnostics exist)
+  // 8→9: First income reported > 0
   if (currentStage === 8) {
-    const [{ count: raCount }, { count: sdCount }] = await Promise.all([
-      supabase
-        .from('remarkable_angles')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId),
-      supabase
-        .from('scale_diagnostics')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId),
-    ])
-    if (raCount > 0 || sdCount > 0) newStage = 9
+    const { count } = await supabase
+      .from('income_self_reports')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .gt('amount_cents', 0)
+    if (count > 0) newStage = 9
   }
 
-  // Stages 10-12: Deferred — need income tracking. Users cap at 9.
-
-  // If graduated, update the stage
-  if (newStage !== null && newStage > currentStage) {
+  // 9→10: 3+ months with income > 0
+  if (currentStage === 9) {
     const { count } = await supabase
-      .from('user_stage_progress')
-      .update({ current_journey_level: newStage })
+      .from('income_self_reports')
+      .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
+      .gt('amount_cents', 0)
+    if (count >= 3) newStage = 10
+  }
 
-    // Fallback: if no row existed, create minimal one
-    if (count === 0) {
+  // 10→11: Income >= expenses target (expenses_target_cents UI deferred to stage 10 scope)
+  if (currentStage === 10) {
+    const [{ data: latest }, { data: stage }] = await Promise.all([
+      supabase.from('income_self_reports')
+        .select('amount_cents').eq('user_id', userId)
+        .order('month_year', { ascending: false }).limit(1).maybeSingle(),
+      supabase.from('user_stage_progress')
+        .select('expenses_target_cents').eq('user_id', userId).maybeSingle(),
+    ])
+    if (latest?.amount_cents > 0 && stage?.expenses_target_cents > 0
+        && latest.amount_cents >= stage.expenses_target_cents) {
+      newStage = 11
+    }
+  }
+
+  // Stage 12: Self-declared + threshold (deferred)
+
+  // If graduated, update the stage (upsert to handle missing rows)
+  if (newStage !== null && newStage > currentStage) {
+    try {
       await supabase
         .from('user_stage_progress')
-        .insert({ user_id: userId, current_journey_level: newStage, conversations_logged: 0 })
-        .catch(() => {})
+        .upsert({
+          user_id: userId,
+          current_journey_level: newStage,
+          conversations_logged: stageData?.conversations_logged || 0,
+        }, { onConflict: 'user_id' })
+    } catch {
+      // ignore upsert errors
     }
 
     // Auto-post stage graduation to community feed
@@ -142,6 +169,8 @@ export async function checkHeroGraduation(userId) {
       7: 'Approach to the Inmost Cave',
       8: 'The Ordeal',
       9: 'Reward',
+      10: 'The Road Back',
+      11: 'Resurrection',
     }
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
     postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`)

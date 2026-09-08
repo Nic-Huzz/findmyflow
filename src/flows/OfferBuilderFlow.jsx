@@ -1225,7 +1225,7 @@ function OfferBuilderFlow() {
             <h1 className="welcome-greeting">Product Builder</h1>
             <div className="welcome-message">
               <p><strong>Ready to create an offer so good people feel silly saying no?</strong></p>
-              <p>Great offers aren't built on hope—they're engineered from deep customer understanding.</p>
+              <p>Great offers aren't built on hope. They're engineered from deep customer understanding.</p>
               <p>We'll start with the persona you validated, let you refine based on feedback, then build out your niche, solution, and MVP.</p>
               <p className="welcome-cta-text">Let's turn validation into a real offer.</p>
             </div>
@@ -1948,7 +1948,7 @@ function OfferBuilderFlow() {
                       color: 'rgba(255, 255, 255, 0.7)'
                     }}>
                       <span>⚠️</span>
-                      <span>Low confidence — only {displayData.totalResponses || 0} response{displayData.totalResponses === 1 ? '' : 's'}. Get 2+ responses for reliable insights.</span>
+                      <span>Low confidence, only {displayData.totalResponses || 0} response{displayData.totalResponses === 1 ? '' : 's'}. Get 2+ responses for reliable insights.</span>
                     </div>
                   )}
 
@@ -2532,7 +2532,7 @@ function OfferBuilderFlow() {
           </div>
 
           <div className="summary-callout">
-            <p><strong>Next step:</strong> Complete Product Designer — apply the Value Equation to each of your solutions to maximise their perceived value.</p>
+            <p><strong>Next step:</strong> Complete Product Designer to apply the Value Equation to each of your solutions to maximise their perceived value.</p>
           </div>
 
           {error && <ErrorMessage error={error} component="OfferBuilder" action="save" />}

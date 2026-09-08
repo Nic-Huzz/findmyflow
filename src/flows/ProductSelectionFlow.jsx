@@ -23,6 +23,7 @@ import { completeFlowQuest } from '../lib/questCompletion'
 import { useProjectId } from '../hooks/useProjectId'
 import { trackFlowCompletion } from '../lib/flowTracking'
 import { useAutoSave } from '../hooks/useAutoSave'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './ProductSelectionFlow.css'
@@ -221,7 +222,7 @@ const VALUE_QUESTIONS = [
   {
     id: 'perceived_likelihood',
     question: 'How can you prove it works?',
-    subtext: 'Select all that apply — the more proof, the higher the perceived likelihood of success',
+    subtext: 'Select all that apply. The more proof, the higher the perceived likelihood of success.',
     multiSelect: true,
     options: [
       { value: 'case_studies', label: 'Case Studies', description: 'Detailed success stories with numbers', score: 10 },
@@ -260,6 +261,13 @@ function ProductSelectionFlow() {
   const [showResumePrompt, setShowResumePrompt] = useState(false)
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('product-selection', user?.id)
+
+  // Stagger reveal for summary items
+  const { revealStyle } = useStaggerReveal(
+    (coreProducts.length > 1 ? 2 : 0) + coreProducts.length,
+    stage === STAGES.SUMMARY,
+    { interval: 800 }
+  )
 
   // Existing products from products table (for looking up names)
   const [existingProducts, setExistingProducts] = useState([])
@@ -1173,7 +1181,7 @@ function ProductSelectionFlow() {
                 : 'How does this solve their problem?'}
             </h2>
             <p className="question-subtext">
-              Explain the approach or mechanism — what makes this solution work for them?
+              Explain the approach or mechanism. What makes this solution work for them?
             </p>
 
             <textarea
@@ -1442,6 +1450,8 @@ function ProductSelectionFlow() {
   // SUMMARY STAGE
   if (stage === STAGES.SUMMARY) {
     const buildFirstRec = getBuildFirstRecommendation()
+    const hasMultiple = coreProducts.length > 1
+    const cardIndexOffset = hasMultiple ? 2 : 0
 
     return (
       <div className="product-selection-flow">
@@ -1454,7 +1464,7 @@ function ProductSelectionFlow() {
 
           {/* BUILD FIRST RECOMMENDATION - Only show if multiple products */}
           {buildFirstRec && (
-            <div className="build-first-section">
+            <div className="build-first-section" style={revealStyle(0)}>
               <div className="build-first-header">
                 <span className="build-first-badge">🎯 BUILD FIRST</span>
                 <h3>{getProductDisplayLabel(buildFirstRec.recommended)}</h3>
@@ -1471,7 +1481,7 @@ function ProductSelectionFlow() {
 
           {/* COMPARISON VIEW - Only show if multiple products */}
           {coreProducts.length > 1 && (
-            <div className="comparison-section">
+            <div className="comparison-section" style={revealStyle(1)}>
               <h4>📊 Product Comparison</h4>
               <div className="comparison-table">
                 <div className="comparison-header">
@@ -1510,14 +1520,14 @@ function ProductSelectionFlow() {
 
           {/* PRODUCT CARDS WITH DETAILED INSIGHTS */}
           <div className="scores-list">
-            {coreProducts.map((product) => {
+            {coreProducts.map((product, productIdx) => {
               const score = calculateValueScore(product.id)
               const level = getValueLevel(score)
               const ans = answers[product.id]
               const isExpanded = expandedProduct === product.id
 
               return (
-                <div key={product.id} className={`score-card ${isExpanded ? 'expanded' : ''}`}>
+                <div key={product.id} className={`score-card ${isExpanded ? 'expanded' : ''}`} style={revealStyle(cardIndexOffset + productIdx)}>
                   <div className="score-header">
                     <div className="header-left">
                       <span className="level-icon">{level.icon}</span>

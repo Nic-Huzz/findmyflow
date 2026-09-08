@@ -449,8 +449,8 @@ export default function PublicNervousSystemFlow() {
         <p>Your nervous system has a boundary around what feels 'safe'.</p>
         <p>Safe to earn. Safe to be seen. Safe to succeed.</p>
         <p>Anything beyond that boundary? <strong>It pulls you back.</strong></p>
-        <p>Not because you lack capability — but because expansion feels dangerous to your system.</p>
-        <p className="hint-text">Let's discover where your boundaries are — so you can expand them.</p>
+        <p>Not because you lack capability, but because expansion feels dangerous to your system.</p>
+        <p className="hint-text">Let's discover where your boundaries are so you can expand them.</p>
       </div>
 
       <button className="primary-button glow-button" onClick={() => setCurrentScreen('q1')}>
@@ -545,7 +545,7 @@ export default function PublicNervousSystemFlow() {
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Question 4 of 4</div>
       <h2 className="ns-hc-question-text">Where are you struggling most with your ambition at the moment?</h2>
-      <p className="ns-hc-question-subtext">Be honest — this helps us understand your current edge</p>
+      <p className="ns-hc-question-subtext">Be honest. This helps us understand your current edge</p>
 
       <div className="ns-hc-text-input-container">
         <textarea
@@ -668,7 +668,7 @@ export default function PublicNervousSystemFlow() {
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">Let's Find Your Edge</h1>
       <div className="ns-hc-welcome-message animated-text">
-        <p>Now let's see where your system feels safe — and where it contracts.</p>
+        <p>Now let's see where your system feels safe, and where it contracts.</p>
         <p>I'm going to give you <strong>5 statements to test</strong> using the sway test.</p>
         <p>Say each one out loud, notice your body's response, and let me know: <strong>YES or NO?</strong></p>
       </div>
@@ -818,7 +818,7 @@ export default function PublicNervousSystemFlow() {
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">Safety Contracts</h1>
       <div className="ns-hc-welcome-message animated-text">
-        <p>Your nervous system operates on <strong>safety contracts</strong> — subconscious beliefs designed to protect you.</p>
+        <p>Your nervous system operates on <strong>safety contracts</strong>, subconscious beliefs designed to protect you.</p>
         <p>Now we'll test <strong>{safetyContracts.length} contracts</strong> to see which ones are still active in your system.</p>
         <p>For each one, use the sway test: <strong>YES (this fear is active) or NO (not a concern)</strong>.</p>
       </div>
@@ -856,7 +856,7 @@ export default function PublicNervousSystemFlow() {
       <h1 className="ns-hc-welcome-greeting">The Mirror</h1>
       <div className="ns-hc-welcome-message animated-text">
         <p>Now let's reflect back what your nervous system just revealed.</p>
-        <p>This isn't judgment — it's <strong>pattern recognition</strong>.</p>
+        <p>This isn't judgment. It's <strong>pattern recognition</strong>.</p>
         <p>Understanding your protective pattern is the first step to expanding beyond it.</p>
       </div>
 
@@ -870,7 +870,7 @@ export default function PublicNervousSystemFlow() {
     <div className="ns-hc-container ns-hc-processing-container">
       <div className="ns-hc-spinner"></div>
       <div className="ns-hc-processing-text">Analyzing your nervous system pattern...</div>
-      <p className="ns-hc-processing-subtext">This process can take 10–15 seconds</p>
+      <p className="ns-hc-processing-subtext">This usually takes 10 to 15 seconds</p>
     </div>
   )
 

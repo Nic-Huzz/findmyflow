@@ -448,7 +448,7 @@ export default function FlowFinderIntegration() {
             </div>
 
             <div className="welcome-message">
-              <p>Now let's bring it all together into your unique <strong>Nikigai</strong> — the intersection where your gifts meet the world's needs.</p>
+              <p>Now let's bring it all together into your unique <strong>Nikigai</strong>, the intersection where your gifts meet the world's needs.</p>
             </div>
 
             <button className="primary-button" onClick={() => setCurrentScreen('processing')}>

@@ -1337,7 +1337,7 @@ const ValidationFlowsManager = () => {
                       rows={2}
                     />
                     <div className="insight-capture-actions">
-                      <span className="insight-capture-hint">Optional — capture insights for future reference</span>
+                      <span className="insight-capture-hint">Optional. Capture insights for future reference.</span>
                       <button
                         className={`insight-save-btn ${insightSaved ? 'saved' : ''}`}
                         onClick={saveValidationInsight}

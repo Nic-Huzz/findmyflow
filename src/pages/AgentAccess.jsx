@@ -228,7 +228,7 @@ ${step3Text}
               </button>
             </div>
             <p className="agent-key-reveal-warning">
-              Save this key now — you won't be able to see it again.
+              Save this key now. You won't be able to see it again.
             </p>
             <button className="agent-key-dismiss-btn" onClick={() => setGeneratedKey(null)}>
               I've saved it

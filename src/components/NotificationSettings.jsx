@@ -10,8 +10,7 @@ import {
   subscribeToPushNotifications,
   unsubscribeFromPushNotifications,
   showLocalNotification,
-  initializeNotifications,
-  sendNotification
+  initializeNotifications
 } from '../lib/notifications'
 import InstallPWA from './InstallPWA'
 import './NotificationSettings.css'
@@ -29,8 +28,6 @@ function NotificationSettings() {
   })
   const [loading, setLoading] = useState(false)
   const [preferences, setPreferences] = useState({
-    questReminders: true,
-    achievementCelebrations: true,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Auto-detect timezone
   })
 
@@ -51,8 +48,6 @@ function NotificationSettings() {
 
       if (!error && data) {
         setPreferences({
-          questReminders: data.quest_reminders ?? true,
-          achievementCelebrations: data.achievement_celebrations ?? true,
           timezone: data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
         })
       }
@@ -139,24 +134,14 @@ function NotificationSettings() {
 
   const handleTestNotification = async () => {
     try {
-      if (isNativePushSupported()) {
-        // Native: local notifications aren't available, use server push
-        await sendNotification(user.id, {
-          title: 'Test Notification',
+      await showLocalNotification(
+        'Test Notification',
+        {
           body: 'This is what your notifications will look like!',
           tag: 'test',
           url: '/7-day-challenge'
-        })
-      } else {
-        await showLocalNotification(
-          'Test Notification',
-          {
-            body: 'This is what your notifications will look like!',
-            tag: 'test',
-            url: '/7-day-challenge'
-          }
-        )
-      }
+        }
+      )
     } catch (error) {
       console.error('Error showing test notification:', error)
       alert('Could not send test notification. Please try again.')
@@ -179,8 +164,6 @@ function NotificationSettings() {
         .from('notification_preferences')
         .upsert({
           user_id: user.id,
-          quest_reminders: newPreferences.questReminders,
-          achievement_celebrations: newPreferences.achievementCelebrations,
           timezone: newPreferences.timezone
         }, {
           onConflict: 'user_id'
@@ -331,7 +314,7 @@ function NotificationSettings() {
                 <label className="timezone-label">
                   <span className="preference-name">🌍 Your Timezone</span>
                   <span className="preference-description">
-                    Notifications sent at 8am, 12pm & 6pm in your local time
+                    You'll get a gentle nudge if you haven't opened the app in a while
                   </span>
                 </label>
                 <select
@@ -376,33 +359,6 @@ function NotificationSettings() {
                 </select>
               </div>
 
-              <label className="preference-item">
-                <input
-                  type="checkbox"
-                  checked={preferences.questReminders}
-                  onChange={() => handlePreferenceChange('questReminders')}
-                />
-                <div className="preference-info">
-                  <span className="preference-name">Quest Reminders</span>
-                  <span className="preference-description">
-                    Get morning, midday & evening reminders about your quests
-                  </span>
-                </div>
-              </label>
-
-              <label className="preference-item">
-                <input
-                  type="checkbox"
-                  checked={preferences.achievementCelebrations}
-                  onChange={() => handlePreferenceChange('achievementCelebrations')}
-                />
-                <div className="preference-info">
-                  <span className="preference-name">Achievement Celebrations</span>
-                  <span className="preference-description">
-                    Get notified when you unlock achievements or level up
-                  </span>
-                </div>
-              </label>
             </div>
           </>
         )}

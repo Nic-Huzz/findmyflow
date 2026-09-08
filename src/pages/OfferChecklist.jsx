@@ -752,7 +752,7 @@ function OfferChecklist() {
                 onChange={(e) => setThreePercent(e.target.value)}
                 rows={3}
               />
-              <p className="post-action-hint">Optional — your insights compound over time</p>
+              <p className="post-action-hint">Optional. Your insights compound over time.</p>
             </div>
 
             {/* Compass Check or Complete Button */}

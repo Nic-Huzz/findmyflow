@@ -61,6 +61,8 @@ The scale dimensions grow as a byproduct of craft. As you get better and show up
 - "I charged someone" = Phase 2 courage challenge
 - "I need to optimize my pricing tiers" = Phase 3 strategy
 
+**Life Fuel (Choice, Connection, Mastery, Meaning):** Captures why users pursue expansion paths over their current situation. Tracked via checkboxes after courage challenges. The motivational layer underneath the NS measurement.
+
 **Courage at this phase:** Expanding what your nervous system can handle. "I love breathwork" becomes "Can I facilitate breathwork for 50 strangers?" The nervous system is still the measurement: does expansion put you in Vibe Rise or push you into Stress?
 
 **The score:** Depth within your lit-up experiences. Measured by life path progress, quest completion, courage challenges completed, and the Zone Matrix (Action Score x Clarity).

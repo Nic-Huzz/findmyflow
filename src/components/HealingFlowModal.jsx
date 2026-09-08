@@ -13,10 +13,11 @@ import { postFeedEvent } from '../lib/communityFeed'
 import './HealingFlowModal.css'
 
 const PATTERNS = [
-  { id: 'ghost', name: 'The Ghost', icon: '👻', desc: 'You hide. You stay invisible. Being seen feels dangerous.' },
-  { id: 'controller', name: 'The Controller', icon: '🧱', desc: 'You grip. You overwork. If you let go, everything falls apart.' },
-  { id: 'auto_pilot', name: 'The Auto-Pilot', icon: '🤖', desc: 'You go through the motions. Nobody\'s home. "This is fine."' },
-  { id: 'perfectionist', name: 'The Perfectionist', icon: '🎯', desc: 'You wait until it\'s perfect. Nothing is ever ready.' },
+  { id: 'ghost', name: 'The Ghost', icon: '👻', desc: 'I want to disappear. Hide. Go quiet.' },
+  { id: 'controller', name: 'The Controller', icon: '🧱', desc: 'I want to know how this ends before I do it.' },
+  { id: 'auto_pilot', name: 'The Auto-Pilot', icon: '🤖', desc: 'I\'m going through the motions. I\'ve checked out.' },
+  { id: 'perfectionist', name: 'The Perfectionist', icon: '🎯', desc: 'It\'s not good enough yet. I need more time.' },
+  { id: 'people_pleaser', name: 'The People Pleaser', icon: '🪞', desc: 'I\'d rather say yes than deal with their reaction.' },
 ]
 
 export default function HealingFlowModal({ taskText, userId, questTaskId, existingData, onComplete, onClose }) {
@@ -46,7 +47,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
   useEffect(() => {
     return () => {
       const d = dataRef.current
-      if (d.pattern && d.step > 1) {
+      if (d.pattern && d.step > 1 && questTaskId) {
         const insightText = (d.originText?.trim() && d.fearText?.trim())
           ? `When "${d.originText.trim().slice(0, 80)}" happened, your protective voice was created to keep you safe. But that was then. "${taskText}" is now.`
           : null

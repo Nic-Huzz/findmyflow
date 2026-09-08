@@ -632,12 +632,12 @@ export default function FlowFinderSkills() {
         <p><strong>In the Find My Flow journey...</strong></p>
         <p className="highlight-box">
           <span className="highlight-word">Flow Finder: Skills</span> is the first step.<br /><br />
-          You'll discover the <em>skills and curiosities</em> that make you unique — the dots you've been collecting your whole life.
+          You'll discover the <em>skills and curiosities</em> that make you unique, the dots you've been collecting your whole life.
         </p>
         <p>After this, you'll also explore:</p>
         <p style={{ color: 'rgba(255,255,255,0.8)', lineHeight: '1.8' }}>
-          • <strong>Problems</strong> — issues you naturally want to solve<br />
-          • <strong>Persona</strong> — the people you're meant to serve
+          • <strong>Problems</strong>: issues you naturally want to solve<br />
+          • <strong>Persona</strong>: the people you're meant to serve
         </p>
         <p>These three together create <span className="highlight-word">business opportunities that feel like play</span>.</p>
       </div>
@@ -659,7 +659,7 @@ export default function FlowFinderSkills() {
           It <span className="highlight-word">solves a problem</span>, for a <span className="highlight-word">specific person</span>, using a <span className="highlight-word">set of skills</span>.
         </p>
         <p>Flow Finder helps you discover all three.</p>
-        <p>When you find the intersection of skills you love using, problems you're passionate about solving, and people you genuinely want to serve — <strong>you find business opportunities that feel like play</strong>.</p>
+        <p>When you find the intersection of skills you love using, problems you're passionate about solving, and people you genuinely want to serve, <strong>you find business opportunities that feel like play</strong>.</p>
       </div>
 
       <button className="primary-button" onClick={() => setCurrentScreen('steve_jobs')}>
@@ -676,9 +676,9 @@ export default function FlowFinderSkills() {
         <p className="quote-box">
           "You can't connect the dots looking forward; you can only connect them looking backward. So you have to trust that the dots will somehow connect in your future."
         </p>
-        <p style={{ textAlign: 'right', color: 'rgba(255,255,255,0.7)', marginTop: '4px', marginBottom: '20px' }}>— Steve Jobs</p>
+        <p style={{ textAlign: 'right', color: 'rgba(255,255,255,0.7)', marginTop: '4px', marginBottom: '20px' }}>– Steve Jobs</p>
         <p>The <span className="highlight-word">curiosities</span> you've loved throughout your life aren't random.<br /><strong>They're clues.</strong></p>
-        <p>We're about to look back at different periods of your life and collect these "dots" — the things you naturally gravitated toward.</p>
+        <p>We're about to look back at different periods of your life and collect these "dots", the things you naturally gravitated toward.</p>
         <p>Then <strong>AI will help us find the patterns</strong> that connect them.</p>
         <p className="hint-text">💡 For each question, aim for 5+ bullet points.<br />The more dots we collect, the clearer the patterns become.</p>
       </div>
@@ -949,7 +949,7 @@ export default function FlowFinderSkills() {
     <div className="container question-container">
       <div className="question-number">Question 5 of 5</div>
       <h2 className="question-text">What skills have you loved to develop?</h2>
-      <p className="question-subtext">Think about skills you've intentionally worked on — through courses, practice, or personal curiosity.</p>
+      <p className="question-subtext">Think about skills you've intentionally worked on, through courses, practice, or personal curiosity.</p>
       <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
@@ -1244,11 +1244,11 @@ export default function FlowFinderSkills() {
         <>
           <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>Skills Discovery Complete!</h1>
           <div className="welcome-message">
-            <p>These role archetypes represent where you naturally thrive—the intersection of your talents, interests, and energy.</p>
+            <p>These role archetypes represent where you naturally thrive, the intersection of your talents, interests, and energy.</p>
           </div>
 
           <div className="welcome-message" style={{ marginTop: '24px' }}>
-            <p>These aren't just skills — <strong>they're your art forms.</strong> The unique ways you create value and impact for others.</p>
+            <p>These aren't just skills. <strong>They're your art forms.</strong> The unique ways you create value and impact for others.</p>
             {clusters.length >= 2 && (
               <p style={{ marginTop: '16px', fontStyle: 'italic', color: 'rgba(255, 255, 255, 0.8)' }}>
                 {clusters[0].label} is an art. {clusters[Math.min(1, clusters.length - 1)].label} is an art. Every one of these is a way you deliver change.

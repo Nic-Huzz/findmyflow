@@ -629,12 +629,12 @@ const Profile = () => {
   const onboardingSlides = [
     {
       title: "The Voices",
-      content: "These are your Essence and Protective archetypes—the two voices inside you.\n\nYour Essence is who you truly are. Your Protective voice developed to keep you safe.\n\nClick to expand and explore deeper insights about each.",
+      content: "These are your Essence and Protective archetypes, the two voices inside you.\n\nYour Essence is who you truly are. Your Protective voice developed to keep you safe.\n\nClick to expand and explore deeper insights about each.",
       componentSelector: ".stats-grid"
     },
     {
       title: "Your Flow Map",
-      content: "See your journey visualised as a river.\n\nEach dot represents a moment you've logged—flowing, redirecting, resting, or honouring.\n\nSwitch between projects to see different journeys.",
+      content: "See your journey visualised as a river.\n\nEach dot represents a moment you've logged: flowing, redirecting, resting, or honouring.\n\nSwitch between projects to see different journeys.",
       componentSelector: ".flow-map-river"
     },
     {
@@ -1075,7 +1075,7 @@ const Profile = () => {
                     </button>
                   </div>
                   <p className="agent-key-reveal-warning">
-                    Save this key now — you won't be able to see it again.
+                    Save this key now. You won't be able to see it again.
                   </p>
                   <button
                     className="agent-key-dismiss-btn"

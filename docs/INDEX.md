@@ -89,6 +89,7 @@ Active feature designs, specs, and flows not yet fully built or still serving as
 |-----|-----------------|
 | [vibe-rise-challenge-alignment.md](features/challenge/vibe-rise-challenge-alignment.md) | Source of truth mapping between Challenge system and Vibe Rise framework |
 | [wahoo-discovery-implementation-plan.md](features/challenge/wahoo-discovery-implementation-plan.md) | Wahoo Discovery flow and inspiration engines |
+| [experience-dome-deep-dive.md](features/experience-dome-deep-dive.md) | Dome deep dive: Layer 1 format variations (509 sub-nodes) + Layer 2 career vectors (Do/Guide/Build/Hobby) for quest-path refinement in `/choose-quests` |
 
 ### Zone Calibration / Journey
 | Doc | What it contains |

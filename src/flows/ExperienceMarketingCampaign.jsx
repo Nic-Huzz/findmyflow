@@ -33,7 +33,7 @@ const CAMPAIGN_ITEMS = [
   {
     id: 'winner_announcement',
     name: 'Winner Announcement',
-    desc: 'Announce the winner — creates buzz and social proof',
+    desc: 'Announce the winner. Creates buzz and social proof',
     icon: '🏆',
     gate: 'giveaway',
     checklistItems: ['Announce giveaway winner on social'],
@@ -71,7 +71,7 @@ const CAMPAIGN_ITEMS = [
   {
     id: 'essence_promo',
     name: 'Essence Promo Video',
-    desc: 'Words + music — the deeper meaning and essence of the event',
+    desc: 'Words + music. The deeper meaning and essence of the event',
     icon: '✨',
     gate: 'videos',
     checklistItems: ['Create essence promo video (words + music, deeper meaning)', 'Post essence video on social'],
@@ -88,7 +88,7 @@ const CAMPAIGN_ITEMS = [
   {
     id: 'business_cards',
     name: 'Business Cards with QR Code',
-    desc: 'Hand out as you live your life — QR links to the event page',
+    desc: 'Hand out as you live your life. QR links to the event page',
     icon: '🪪',
     gate: null,
     checklistItems: ['Print business cards with QR code to event page', 'Carry cards and hand out to people you meet'],
@@ -287,10 +287,10 @@ export default function ExperienceMarketingCampaign() {
                     <div className="emc-item-desc">
                       {item.desc}
                       {item.alwaysAvailable && answers[item.gate] === 'yes' && item.gateLabel && (
-                        <span className="emc-item-note"> — {item.gateLabel}</span>
+                        <span className="emc-item-note"> ({item.gateLabel})</span>
                       )}
                       {item.alwaysAvailable && answers[item.gate] !== 'yes' && item.noGateLabel && (
-                        <span className="emc-item-note"> — {item.noGateLabel}</span>
+                        <span className="emc-item-note"> ({item.noGateLabel})</span>
                       )}
                     </div>
                   </div>

@@ -19,7 +19,7 @@ export const MONEY_MODEL_EMAILS = {
     body: `
 Hi {{name}},
 
-You just completed the {{offer_type}} assessment — nice work.
+You just completed the {{offer_type}} assessment. Nice work.
 
 Based on your answers, your recommended strategy is:
 
@@ -153,13 +153,13 @@ This isn't about passion. It's about intersection.
 
 Where your skills meet real problems people will pay to solve.
 
-When you nail this intersection, selling becomes easy. Because you're not convincing anyone of anything — you're just offering the obvious solution to a problem they already have.
+When you nail this intersection, selling becomes easy. Because you're not convincing anyone of anything. You're just offering the obvious solution to a problem they already have.
 
 Inside Find My Flow, we use something called the Flow Finder to map this intersection:
 
-1. **Skills Discovery** — What you're actually good at (not what you think you should be good at)
-2. **Problems Discovery** — What problems you naturally notice and want to solve
-3. **Persona Discovery** — Who specifically has these problems and can pay
+1. **Skills Discovery**: What you're actually good at (not what you think you should be good at)
+2. **Problems Discovery**: What problems you naturally notice and want to solve
+3. **Persona Discovery**: Who specifically has these problems and can pay
 
 When all three align, you've found your flow.
 
@@ -211,7 +211,7 @@ If yes, come on in:
 
 https://viberise.nichuzz.com
 
-See you inside (or not — no pressure),
+See you inside (or not, no pressure),
 
 Huzz
     `.trim()
@@ -229,7 +229,7 @@ export const NERVOUS_SYSTEM_EMAILS = {
     body: `
 Hi {{name}},
 
-You just mapped your nervous system — that takes courage.
+You just mapped your nervous system. That takes courage.
 
 Here's what we discovered:
 
@@ -247,7 +247,7 @@ They're limits on what your nervous system currently believes is SAFE.
 
 Big difference.
 
-The good news? These edges can expand. That's literally what the nervous system does — it adapts to new levels of safety through gradual exposure.
+The good news? These edges can expand. That's literally what the nervous system does. It adapts to new levels of safety through gradual exposure.
 
 Over the next few days, I'll share:
 - Why knowing your pattern isn't enough (and what to do instead)
@@ -287,9 +287,9 @@ So what actually works?
 
 Two things:
 
-1. **Somatic practices** — Working with the body, not just the mind. Breathwork. Movement. Regulation techniques. Things that tell your nervous system "we're safe" in a language it understands.
+1. **Somatic practices**: Working with the body, not just the mind. Breathwork. Movement. Regulation techniques. Things that tell your nervous system "we're safe" in a language it understands.
 
-2. **Graduated exposure** — Small, safe expansions beyond your current edge. Not giant leaps that overwhelm your system. Tiny steps that build new neural pathways.
+2. **Graduated exposure**: Small, safe expansions beyond your current edge. Not giant leaps that overwhelm your system. Tiny steps that build new neural pathways.
 
 This is why Find My Flow includes both strategy AND healing work.
 
@@ -309,7 +309,7 @@ Hi {{name}},
 
 You're a {{archetype}}.
 
-Your edge is around {{edge_type}} — specifically, {{edge_earning}}/year and being seen by {{edge_visibility}} people.
+Your edge is around {{edge_type}}, specifically {{edge_earning}}/year and being seen by {{edge_visibility}} people.
 
 Here's what works for people with your pattern:
 
@@ -325,7 +325,7 @@ Here's what works for people with your pattern:
    After each expansion, acknowledge it. "I did that. I'm still here. I'm safe." This teaches your nervous system that expansion ≠ danger.
 
 4. **Repair When Needed**
-   Some days you'll contract. That's normal. Have a practice ready — breathing, journaling, movement — that brings you back to baseline.
+   Some days you'll contract. That's normal. Have a practice ready (breathing, journaling, movement) that brings you back to baseline.
 
 Inside Find My Flow, we've gamified this with the 7-Day Challenge.
 
@@ -421,7 +421,7 @@ Where do you want it to be?
 
 https://viberise.nichuzz.com
 
-See you inside (or not — your choice),
+See you inside (or not, your choice),
 
 Huzz
     `.trim()

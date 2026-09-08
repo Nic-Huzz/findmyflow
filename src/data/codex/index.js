@@ -88,7 +88,7 @@ export function checkUnlock(entry, userData) {
  */
 function normalizeVoiceName(name) {
   if (!name) return ''
-  return name.toLowerCase().replace(/\s+/g, '-')
+  return name.toLowerCase().replace(/[\s-]+/g, '_')
 }
 
 /**

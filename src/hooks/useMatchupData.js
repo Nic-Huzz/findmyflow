@@ -11,8 +11,6 @@ import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/league/leagueConfig'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { triggerSideCannons } from '../components/Celebrations'
 import { hapticSuccess, hapticError } from '../lib/haptics'
-import { sendNotification } from '../lib/notifications'
-import { supabase } from '../lib/supabaseClient'
 
 export function useMatchupData({
   completions,
@@ -30,7 +28,6 @@ export function useMatchupData({
   const fetchIdRef = useRef(0)
   const lastHiddenRef = useRef(null)
   const prevWinningRef = useRef(null) // { [categoryKey]: boolean } for W/L flip detection
-  const lastNotifyRef = useRef(0) // rate limit: max 1 game day notify per 15min
 
   // ─── Phase 1: Derive user's category scores from in-memory completions ───
   const categoryScores = useMemo(() => {
@@ -140,33 +137,6 @@ export function useMatchupData({
             myWins,
             oppWins,
           })
-
-          // Game day push to opponent team (rate-limited to 1 per 15min)
-          const now = Date.now()
-          if (now - lastNotifyRef.current > 15 * 60 * 1000) {
-            lastNotifyRef.current = now
-            ;(async () => {
-              try {
-                const { data: prefs } = await supabase
-                  .from('notification_preferences')
-                  .select('user_id, matchup_alerts')
-                  .in('user_id', oppMemberIds)
-                const enabledIds = (prefs || [])
-                  .filter(p => p.matchup_alerts !== false)
-                  .map(p => p.user_id)
-                for (const uid of enabledIds) {
-                  sendNotification(uid, {
-                    title: `🏆 ${userTeam.name} just overtook you!`,
-                    body: `You're now trailing ${oppWins}-${myWins}. Time to fight back!`,
-                    url: '/league/matchup',
-                    tag: 'matchup-flip',
-                  }).catch(() => {})
-                }
-              } catch (err) {
-                console.warn('Game day notify error:', err)
-              }
-            })()
-          }
         } else if (lostFlip) {
           hapticError()
           setFlipEvent({ type: 'loss' })

@@ -190,7 +190,7 @@ export default function LTVCalculator() {
       <div className="ltv-hero">
         <span className="ltv-hero-label">Lifetime Value Analysis</span>
         <h2 className="ltv-hero-title">${calculations.ltvPerCustomer.toFixed(2)}</h2>
-        <p className="ltv-hero-sub">LTV per lead (100 lead basis){dataSource ? ` — from: ${dataSource}` : ''}</p>
+        <p className="ltv-hero-sub">LTV per lead (100 lead basis){dataSource ? `, from: ${dataSource}` : ''}</p>
         <div className="ltv-hero-stats">
           <div className="ltv-hero-stat">
             <span className="ltv-hero-stat-value gold">${calculations.avgRevenuePerCoreBuyer.toFixed(0)}</span>

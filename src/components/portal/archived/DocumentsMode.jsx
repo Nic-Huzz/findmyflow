@@ -15,7 +15,7 @@ const OUTCOMES = [
   { key: 'create_deck', name: 'Create Pitch Deck', icon: '🎯', description: 'Turn talking points into a structured presentation outline' },
   { key: 'extract_insights', name: 'Extract Insights', icon: '💡', description: 'Pull out key quotes, data points, and patterns from documents' },
   { key: 'compare', name: 'Compare Documents', icon: '⚖️', description: 'Analyze differences and similarities across multiple files' },
-  { key: 'transform', name: 'Transform Format', icon: '🔄', description: 'Convert between formats — notes to runsheet, transcript to blog post, etc.' },
+  { key: 'transform', name: 'Transform Format', icon: '🔄', description: 'Convert between formats: notes to runsheet, transcript to blog post, etc.' },
 ]
 
 function assemblePrompt({ folderPath, outcome, freeform, context, fileCount }) {

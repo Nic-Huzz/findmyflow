@@ -13,6 +13,16 @@
   font-size: 14px;
 }
 
+/* Revisit label (when direction section is shown) */
+.dt-revisit-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #999;
+  margin-top: 8px;
+}
+
 /* Discovery cards */
 .dt-card {
   display: flex;
@@ -299,3 +309,11 @@
   color: #fff;
   font-weight: 700;
 }
+
+.dt-bridge-cta.dt-bridge-locked {
+  background: rgba(0, 0, 0, 0.06);
+  cursor: default;
+}
+.dt-bridge-locked .dt-bridge-title { color: rgba(0, 0, 0, 0.3); }
+.dt-bridge-locked .dt-bridge-sub { color: rgba(0, 0, 0, 0.2); }
+.dt-bridge-lock { font-size: 18px; flex-shrink: 0; }

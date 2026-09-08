@@ -14,7 +14,7 @@ function ContinuityFlow() {
   const welcomeContent = (
     <>
       <p><strong>Ready to build predictable, recurring revenue?</strong></p>
-      <p>Continuity offers provide ongoing value that customers make ongoing payments for—until they cancel.</p>
+      <p>Continuity offers provide ongoing value that customers make ongoing payments for, until they cancel.</p>
       <p>They boost profit from every customer and give you one last thing to sell.</p>
       <p>But not all continuity models work for every business...</p>
       <p>Some work best with high-value bonuses. Others use commitment discounts. Some waive setup fees. Others downsell upsells.</p>

@@ -172,7 +172,7 @@ export default function Step2_Influences({ influences, onChangeInfluences, onCon
       </div>
 
       <button className="vt-continue-btn" onClick={onContinue}>
-        {cards.some(c => c.name.trim()) ? 'Continue →' : 'Skip — let my writing speak for itself →'}
+        {cards.some(c => c.name.trim()) ? 'Continue →' : 'Skip, let my writing speak for itself →'}
       </button>
     </div>
   )

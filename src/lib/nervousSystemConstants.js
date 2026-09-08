@@ -58,8 +58,8 @@ export const REGULATION_EXERCISES = {
     subtitle: "You're shut down. Try one of these to come back online.",
     exercises: [
       { id: 'wiggle', name: 'Wiggle', instruction: 'Wiggle your fingers and toes for 10 seconds. Feel them come alive.', duration: '15s' },
-      { id: 'deeper_breaths', name: 'Deeper Breaths', instruction: 'Take 3 breaths slightly deeper than normal. Not forced — just a little more.', duration: '30s' },
-      { id: 'look_around', name: 'Look Around', instruction: 'Look around the room. Name 3 things you can see — out loud.', duration: '15s' },
+      { id: 'deeper_breaths', name: 'Deeper Breaths', instruction: 'Take 3 breaths slightly deeper than normal. Not forced, just a little more.', duration: '30s' },
+      { id: 'look_around', name: 'Look Around', instruction: 'Look around the room. Name 3 things you can see. Out loud.', duration: '15s' },
       { id: 'rub_hands', name: 'Warm Hands', instruction: 'Rub your hands together vigorously until they\'re warm. Feel the heat.', duration: '15s' },
       { id: 'shake', name: 'Shake It Out', instruction: 'Stand up and shake your whole body for 30 seconds. Arms, legs, everything.', duration: '30s' },
       { id: 'cold_water_up', name: 'Cold Water', instruction: 'Splash cold water on your face. The shock gently wakes the system.', duration: '15s' },
@@ -69,7 +69,7 @@ export const REGULATION_EXERCISES = {
     label: "You're Regulated",
     subtitle: "Good place to be. What's one stretch you could take today?",
     exercises: [
-      { id: 'wahoo_nudge', name: 'Consider a Wahoo', instruction: "You're safe and grounded — the perfect launch pad for a courage challenge.", duration: null },
+      { id: 'wahoo_nudge', name: 'Consider a Wahoo', instruction: "You're safe and grounded. The perfect launch pad for a courage challenge.", duration: null },
     ],
   },
   vibe_rise: {

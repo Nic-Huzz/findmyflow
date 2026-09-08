@@ -31,7 +31,7 @@ export default function BossFightCard({ boss, condition, zone, isCompleted, onSu
           <div className="level-boss-fight-title">Boss Fight: {boss}</div>
           <div className="level-boss-fight-sub">
             {condition
-              ? `Your shift session for ${condition}${zone ? ` — ${zone}` : ''}`
+              ? `Your shift session for ${condition}${zone ? `: ${zone}` : ''}`
               : 'Book a healing session to defeat this boss'}
           </div>
         </div>

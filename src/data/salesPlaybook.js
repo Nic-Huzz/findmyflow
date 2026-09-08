@@ -38,7 +38,7 @@ export const THREE_DISTORTIONS = {
               id: 'when_then_fallacy',
               name: 'When-Then Fallacy',
               shortScript:
-                'When I have X, then I will do Y — but that flips the sequence. The program IS how you get X.',
+                'When I have X, then I will do Y, but that flips the sequence. The program IS how you get X.',
               fullScript:
                 "Totally get it... Do you want this to last for the long term? Do you think you're gonna be busy again in the future? Well then, don't you think it'd be best to start now when you are busy? Because if you learn how to do it when you're busy, you'll be able to do it forever. If you can only learn it during a perfect circumstance, you'll fall off when it gets busy again.",
               keywords: ['busy', 'season', 'later', 'when', 'future'],
@@ -63,9 +63,9 @@ export const THREE_DISTORTIONS = {
               id: 'phone_time_story',
               name: 'Phone Time Story',
               shortScript:
-                "Share the story about screen time revealing hidden hours. It's not about adding — it's about removing what's not working.",
+                "Share the story about screen time revealing hidden hours. It's not about adding. It's about removing what's not working.",
               fullScript:
-                'I had the same issue. I used to complain all the time about not having time to be successful. And my wife got so sick of it, she pulled my phone out and was like "Look, I guess I just found your time, didn\'t I?" The first thing any good program does is cut out the 90% of stuff that\'s causing you to feel overwhelmed. It\'s not about adding to your plate — it\'s about removing what\'s not working.',
+                'I had the same issue. I used to complain all the time about not having time to be successful. And my wife got so sick of it, she pulled my phone out and was like "Look, I guess I just found your time, didn\'t I?" The first thing any good program does is cut out the 90% of stuff that\'s causing you to feel overwhelmed. It\'s not about adding to your plate. It\'s about removing what\'s not working.',
               keywords: ['time', 'day', 'schedule', 'hours'],
             },
           ],
@@ -81,7 +81,7 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "If it's a lot of money to you, that means you'll try harder. The best success stories come from people in your exact situation.",
               fullScript:
-                "Is this a lot of money to you? That's the exact reason you're gonna be successful — because you're all in. The best stories always come from people like you in your exact situation. That shouldn't be a reason not to do it. That should be THE reason to do it.",
+                "Is this a lot of money to you? That's the exact reason you're gonna be successful, because you're all in. The best stories always come from people like you in your exact situation. That shouldn't be a reason not to do it. That should be THE reason to do it.",
               keywords: ['expensive', 'afford', 'cost', 'lot'],
             },
             {
@@ -90,16 +90,16 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "It's a lot in absolute terms, but relative to the result, it's very little. If it does what we say, is it worth it?",
               fullScript:
-                "It's a lot in terms of absolute amount, but relative amount it's very little. If all this does is add $10,000 a month to your income, is it worth it? Then it's not about the price — it's about whether you believe me. So let's talk about that.",
+                "It's a lot in terms of absolute amount, but relative amount it's very little. If all this does is add $10,000 a month to your income, is it worth it? Then it's not about the price. It's about whether you believe me. So let's talk about that.",
               keywords: ['worth', 'value', 'roi', 'return'],
             },
             {
               id: 'money_or_time',
               name: 'Money or Time?',
               shortScript:
-                "You're going to buy this program either way — the question is whether you pay with money or with time. 12 weeks or 12 years?",
+                "You're going to buy this program either way. The question is whether you pay with money or with time. 12 weeks or 12 years?",
               fullScript:
-                "You're gonna spend this money either way over the next 12 months. And you're going to buy this program — the question is whether you pay for it in money or in time. Do you want it to take 12 weeks or 12 years? The question is, 12 months from now, is that money gonna be spent on stuff that didn't get you anywhere, or stuff that did? You've probably been paying with time the last six years. How's that working for you?",
+                "You're gonna spend this money either way over the next 12 months. And you're going to buy this program. The question is whether you pay for it in money or in time. Do you want it to take 12 weeks or 12 years? The question is, 12 months from now, is that money gonna be spent on stuff that didn't get you anywhere, or stuff that did? You've probably been paying with time the last six years. How's that working for you?",
               keywords: ['money', 'pay', 'investment', 'spend'],
             },
           ],
@@ -124,16 +124,16 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "What you've been doing has been getting you what you've been getting. The pain of staying the same vs. the pain of change.",
               fullScript:
-                "You gotta change the change. What you've been doing has been getting what you've been getting. The question is whether the pain of staying the same is greater than the pain of change. Are you in enough pain? If not — gain 50 more pounds and come back. Everyone has a rock bottom.",
+                "You gotta change the change. What you've been doing has been getting what you've been getting. The question is whether the pain of staying the same is greater than the pain of change. Are you in enough pain? If not, gain 50 more pounds and come back. Everyone has a rock bottom.",
               keywords: ['change', 'different', "don't like", 'aspect'],
             },
             {
               id: 'unicorn_close',
               name: 'Unicorn Close',
               shortScript:
-                "If this were perfect, would you do it? If yes: what's the gap? If no: it's not about the program — they don't trust you.",
+                "If this were perfect, would you do it? If yes: what's the gap? If no: it's not about the program, they don't trust you.",
               fullScript:
-                "If this were perfect, would you do it? On a scale from 1 to 10, where is this? Cool, what would make it a 10? If someone says no to \"if this were perfect\" — it has nothing to do with what you're selling. They don't trust you. Now we can talk about that. What's the difference between perfection and what we've got? Most of the time they'll say \"I don't know\" — because it's nothing to do with the program, it's all to do with you.",
+                "If this were perfect, would you do it? On a scale from 1 to 10, where is this? Cool, what would make it a 10? If someone says no to \"if this were perfect\", it has nothing to do with what you're selling. They don't trust you. Now we can talk about that. What's the difference between perfection and what we've got? Most of the time they'll say \"I don't know\", because it's nothing to do with the program, it's all to do with you.",
               keywords: ['trust', 'perfect', 'sure', 'believe', 'skeptical'],
             },
           ],
@@ -188,7 +188,7 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "You've been making this decision for years. All we're doing is deciding to actually do something about it.",
               fullScript:
-                "This is NOT a fast decision. You've been making this decision for the last six years. You continually make the decision. All we're saying is — are you going to actually do something about it? You did all these things to get here because it's important to you. So don't let that distortion stop you from getting what you want. What are you most afraid of having happen?",
+                "This is NOT a fast decision. You've been making this decision for the last six years. You continually make the decision. All we're saying is, are you going to actually do something about it? You did all these things to get here because it's important to you. So don't let that distortion stop you from getting what you want. What are you most afraid of having happen?",
               keywords: ['fast', 'quick', 'rush', 'slow down'],
             },
             {
@@ -204,9 +204,9 @@ export const THREE_DISTORTIONS = {
               id: 'cost_of_inaction',
               name: 'Cost of Inaction',
               shortScript:
-                "Are you tired of another year of almost? The question isn't what it costs — it's how much it's cost you NOT to decide.",
+                "Are you tired of another year of almost? The question isn't what it costs. It's how much it's cost you NOT to decide.",
               fullScript:
-                "Are you tired of another year of almost? Almost hitting your goals, almost getting to 10K a month, almost hiring the team you wanted. The question isn't what it costs you — but how much has it cost you to NOT decide up to this point? We never regret the things we did. We regret the things we didn't do, the opportunities we let pass by.",
+                "Are you tired of another year of almost? Almost hitting your goals, almost getting to 10K a month, almost hiring the team you wanted. The question isn't what it costs you, but how much has it cost you to NOT decide up to this point? We never regret the things we did. We regret the things we didn't do, the opportunities we let pass by.",
               keywords: ['almost', 'year', 'waiting', 'inaction'],
             },
             {
@@ -215,7 +215,7 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 'A bad past experience burned you once. Don\'t let it burn you twice by stopping you from a good investment.',
               fullScript:
-                "You let a bad decision burn you twice — once when you made the poor investment, and a second time when you let that bad investment stop you from a good one. Don't let the bad one control your next decision. You're gonna have to do these actions whether you're part of this program or not. So you might as well have somebody who'll get you there faster.",
+                "You let a bad decision burn you twice: once when you made the poor investment, and a second time when you let that bad investment stop you from a good one. Don't let the bad one control your next decision. You're gonna have to do these actions whether you're part of this program or not. So you might as well have somebody who'll get you there faster.",
               keywords: ['burned', 'before', 'tried', 'failed', 'scam', 'program'],
             },
           ],
@@ -229,9 +229,9 @@ export const THREE_DISTORTIONS = {
               id: 'rocking_chair',
               name: 'Rocking Chair',
               shortScript:
-                "You're not going to sit in a rocking chair and ponder this. Life will take over. It doesn't take time to decide — it takes information, and I'm the source.",
+                "You're not going to sit in a rocking chair and ponder this. Life will take over. It doesn't take time to decide. It takes information, and I'm the source.",
               fullScript:
-                "You're not gonna go home, sit in the rocking chair, and stare at the clouds wondering. You're gonna get in your car, pick up the kids, do groceries, do laundry. And three days from now, you'll have made the decision by not making one. It doesn't take time to make decisions — it takes information. And I'm the only source of information you've got. So let's talk. I'm here for you.",
+                "You're not gonna go home, sit in the rocking chair, and stare at the clouds wondering. You're gonna get in your car, pick up the kids, do groceries, do laundry. And three days from now, you'll have made the decision by not making one. It doesn't take time to make decisions. It takes information. And I'm the only source of information you've got. So let's talk. I'm here for you.",
               keywords: ['think', 'consider', 'sleep on it', 'mull'],
             },
             {
@@ -240,7 +240,7 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "1) Will this help you get closer to your goals? 2) Do you trust me to fulfill my word? 3) Do you think it'll work for you?",
               fullScript:
-                "There are three things we need to understand: 1) Do you think this is gonna help you get closer to your goals? Yes or no? 2) Do you trust me to fulfill my word? 3) Do you think it'll work for you? If yes to all three — do you have or have access to the amount to get started? If I was giving you a Ferrari for $5,000, you'd find the money. So find the money. Let's do it.",
+                "There are three things we need to understand: 1) Do you think this is gonna help you get closer to your goals? Yes or no? 2) Do you trust me to fulfill my word? 3) Do you think it'll work for you? If yes to all three, do you have or have access to the amount to get started? If I was giving you a Ferrari for $5,000, you'd find the money. So find the money. Let's do it.",
               keywords: ['decide', 'how', 'decision', 'help'],
             },
             {
@@ -249,16 +249,16 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "You can't make an informed decision until you've tried it from the inside. That's why we have a guarantee.",
               fullScript:
-                "How can you make an informed decision if you haven't even tried it? I'm not asking you to make a decision right now. I'm asking you to make an INFORMED decision — which you can only do on the inside. And if after 30 days I'm not what I said, I'll give you the money back.",
+                "How can you make an informed decision if you haven't even tried it? I'm not asking you to make a decision right now. I'm asking you to make an INFORMED decision, which you can only do on the inside. And if after 30 days I'm not what I said, I'll give you the money back.",
               keywords: ['guarantee', 'refund', 'risk', 'try'],
             },
             {
               id: 'definition_of_decision',
               name: 'Definition of Decision',
               shortScript:
-                'Decidere = "to cut off." Which future are we killing today — your dreams or your past?',
+                'Decidere = "to cut off." Which future are we killing today, your dreams or your past?',
               fullScript:
-                'Do you know what "deciding" even means? It comes from Latin — "decidere" — which means to cut off, to kill off. So the question is: which future are we killing off today? Are we killing your dreams? Or are we killing your past? Because indecision IS a decision. Inaction IS an active decision.',
+                'Do you know what "deciding" even means? It comes from Latin, "decidere", which means to cut off, to kill off. So the question is: which future are we killing off today? Are we killing your dreams? Or are we killing your past? Because indecision IS a decision. Inaction IS an active decision.',
               keywords: ['indecisive', 'decide', 'choice', 'options'],
             },
           ],
@@ -272,9 +272,9 @@ export const THREE_DISTORTIONS = {
               id: 'magnifying_pain',
               name: 'Magnifying Pain',
               shortScript:
-                "It's been 5 years of struggle. How does another 5 sound? Let's consider the options — only one guarantees you don't get there.",
+                "It's been 5 years of struggle. How does another 5 sound? Let's consider the options. Only one guarantees you don't get there.",
               fullScript:
-                "You got here, it's been five years, you've been struggling. How's another five years sound? Let's consider the options: Option 1 — you do the thing, you get the result, life is awesome. Option 2 — you don't do the thing, you don't get the result. Option 3 — you do the thing but don't get the result (but we have a guarantee). Only one option guarantees you won't get where you want — walking out the door.",
+                "You got here, it's been five years, you've been struggling. How's another five years sound? Let's consider the options: Option 1, you do the thing, you get the result, life is awesome. Option 2, you don't do the thing, you don't get the result. Option 3, you do the thing but don't get the result (but we have a guarantee). Only one option guarantees you won't get where you want: walking out the door.",
               keywords: ['pain', 'struggling', 'years', 'same'],
             },
             {
@@ -283,16 +283,16 @@ export const THREE_DISTORTIONS = {
               shortScript:
                 "Three options: Do it and succeed. Don't do it and stay stuck. Do it and it doesn't work (but you're guaranteed). Only one has zero upside.",
               fullScript:
-                "Option one: you do the thing, get the result, life is awesome. Option two: you don't do the thing, don't get the result. Option three: you do the thing but don't get the result — but we have a guarantee so it's risk-free. Only one of them has a TRUE guarantee of not getting you where you want: walking out the door. So which risk-free option do you want?",
+                "Option one: you do the thing, get the result, life is awesome. Option two: you don't do the thing, don't get the result. Option three: you do the thing but don't get the result, but we have a guarantee so it's risk-free. Only one of them has a TRUE guarantee of not getting you where you want: walking out the door. So which risk-free option do you want?",
               keywords: ['options', 'choice', 'risk'],
             },
             {
               id: 'urgency_direction',
               name: 'Urgency / Direction',
               shortScript:
-                "You're gonna do something about this eventually. Might as well start now. We don't need to be snipers — just directionally right.",
+                "You're gonna do something about this eventually. Might as well start now. We don't need to be snipers, just directionally right.",
               fullScript:
-                "You're not gonna struggle forever, right? You're gonna do something about this. If you're gonna fix it eventually, you might as well start now so you can enjoy the fruits sooner. Would you prefer making more money faster or slower? We don't need to be snipers — we need to be directionally right. If we do that long enough, we'll get there. No one program changed my life, but the decision to invest in education changed my life forever.",
+                "You're not gonna struggle forever, right? You're gonna do something about this. If you're gonna fix it eventually, you might as well start now so you can enjoy the fruits sooner. Would you prefer making more money faster or slower? We don't need to be snipers. We need to be directionally right. If we do that long enough, we'll get there. No one program changed my life, but the decision to invest in education changed my life forever.",
               keywords: ['eventually', 'someday', 'soon', 'ready'],
             },
           ],
@@ -305,7 +305,7 @@ export const THREE_DISTORTIONS = {
     name: 'The Reason IS the Reason',
     icon: '🔑',
     shortScript:
-      'Whatever reason they give for NOT doing it — that\'s the very reason they NEED to do it.',
+      'Whatever reason they give for NOT doing it, that\'s the very reason they NEED to do it.',
     fullScript:
       "The fact that you can't afford it is the reason you need to do this. The fact that you don't have time is the very reason you need to do this. The fact that you're dependent on your spouse is the reason you need to own this decision. Whatever reason is holding you back is the biggest chain you're enslaving yourself to. Break that chain and the power comes back to you. The ignorance of not knowing how to create a million dollars a year IS costing you a million dollars a year.",
     keywords: ['reason', 'but', 'because'],
@@ -329,7 +329,7 @@ export const CLOSER_FRAMEWORK = {
       guidance:
         'Use QUESTIONS here, not statements. Let them talk. Discover their real motivation.',
       templateText:
-        'So {{name}}, tell me — what made you book this call today? What\'s going on in your {{niche}} right now?',
+        'So {{name}}, tell me, what made you book this call today? What\'s going on in your {{niche}} right now?',
     },
     {
       id: 'L',
@@ -358,7 +358,7 @@ export const CLOSER_FRAMEWORK = {
       letter: 'S',
       title: 'Sell the Vacation',
       description:
-        'Paint the dream outcome. Not your process — their destination.',
+        'Paint the dream outcome. Not your process. Their destination.',
       guidance:
         'Use ANECDOTAL STORIES here. "Sell the destination, not the plane ride." Paint what life looks like after.',
       templateText:
@@ -388,7 +388,7 @@ export const CLOSER_FRAMEWORK = {
       guidance:
         "Restate their goals and how you've addressed their concerns. Make the decision feel easy and logical.",
       templateText:
-        "So just to recap — you said {{goals}}. We've addressed {{concerns}}. {{guarantee_text}} What would you like to do?",
+        "So just to recap. You said {{goals}}. We've addressed {{concerns}}. {{guarantee_text}} What would you like to do?",
     },
   ],
 }
@@ -416,7 +416,7 @@ export const NINE_THINGS = [
       "Deals that haven't moved in 14+ days are zombies. Either close them or move on. Don't let dead deals clog your pipeline.",
     isPhase1: true,
     nudgeTrigger: 'stale_deal',
-    nudgeMessage: 'Kill the zombie — close or move on.',
+    nudgeMessage: 'Kill the zombie. Close or move on.',
   },
   {
     id: 'ask_again',
@@ -487,14 +487,14 @@ export const CONVICTION_TONALITY = [
     id: 'conviction_transfers',
     title: 'Conviction Transfers',
     description:
-      "If YOU believe, THEY believe. When you stop believing, you stop closing — even with the same skills. Fill your conviction daily.",
+      "If YOU believe, THEY believe. When you stop believing, you stop closing, even with the same skills. Fill your conviction daily.",
     icon: '🔥',
   },
   {
     id: 'tone_for_hard_questions',
     title: 'Playful & Confident Tone',
     description:
-      "Say hard things with a playful, confident tone — never apologetic. Childlike curiosity, not confrontation. It's seduction, not a fight.",
+      "Say hard things with a playful, confident tone, never apologetic. Childlike curiosity, not confrontation. It's seduction, not a fight.",
     icon: '🎭',
   },
   {
@@ -549,7 +549,7 @@ export const THREE_THINGS_ON_CALL = {
 export const SELL_THE_VACATION = {
   title: 'Sell the Vacation, Not the Plane Ride',
   description:
-    "Paint the dream outcome. What does their life look like AFTER? Don't describe your process — that's the plane ride. They're buying the destination.",
+    "Paint the dream outcome. What does their life look like AFTER? Don't describe your process. That's the plane ride. They're buying the destination.",
   guidance:
     'When describing your offer, focus 80% on the outcome and 20% (or less) on the mechanism. Use vivid, specific language about their life after.',
 }
@@ -576,11 +576,11 @@ export const CASE_STUDY_DATA = {
 export const KEY_PRINCIPLES = [
   {
     id: 1,
-    text: "Expect no — it IS the job. If they already said yes, you're not necessary.",
+    text: "Expect no. It IS the job. If they already said yes, you're not necessary.",
   },
   {
     id: 2,
-    text: 'Closing is a dance, not a fight — use childlike curiosity, not confrontation.',
+    text: 'Closing is a dance, not a fight. Use childlike curiosity, not confrontation.',
   },
   {
     id: 3,
@@ -592,11 +592,11 @@ export const KEY_PRINCIPLES = [
   },
   {
     id: 5,
-    text: "Obstacles before the ask, objections after. Handle obstacles upfront — they're easier.",
+    text: "Obstacles before the ask, objections after. Handle obstacles upfront. They're easier.",
   },
   {
     id: 6,
-    text: "Frameworks, not scripts — understand the principles, don't memorize words.",
+    text: "Frameworks, not scripts. Understand the principles, don't memorize words.",
   },
   {
     id: 7,
@@ -608,11 +608,11 @@ export const KEY_PRINCIPLES = [
   },
   {
     id: 9,
-    text: "Conviction transfers — 90% tonality, 10% words. If you believe, they'll question their own excuses.",
+    text: "Conviction transfers: 90% tonality, 10% words. If you believe, they'll question their own excuses.",
   },
   {
     id: 10,
-    text: 'BAMFAM — always book the next meeting before hanging up. Never end without a next step.',
+    text: 'BAMFAM: always book the next meeting before hanging up. Never end without a next step.',
   },
 ]
 
@@ -632,12 +632,12 @@ export const LOSS_REASON_MIGRATION_MAP = {
 
 // Human-readable labels for Three Distortions categories (used in ObjectionPatterns, DealOutcomeModal)
 export const DISTORTION_REASON_LABELS = {
-  'circumstances/time_macro': 'Time (Macro) — Busy season',
-  'circumstances/time_micro': 'Time (Micro) — No daily time',
-  'circumstances/price': "Price — Can't afford it",
-  'circumstances/fit': "Fit — Not sure it's for me",
-  'others/authority': 'Authority — Need partner approval',
-  'self/avoidance_past': 'Past — Bad experience / too fast',
-  'self/avoidance_present': 'Present — Need to think about it',
-  'self/avoidance_future': 'Future — Not sure / still deciding',
+  'circumstances/time_macro': 'Time (Macro): Busy season',
+  'circumstances/time_micro': 'Time (Micro): No daily time',
+  'circumstances/price': "Price: Can't afford it",
+  'circumstances/fit': "Fit: Not sure it's for me",
+  'others/authority': 'Authority: Need partner approval',
+  'self/avoidance_past': 'Past: Bad experience / too fast',
+  'self/avoidance_present': 'Present: Need to think about it',
+  'self/avoidance_future': 'Future: Not sure / still deciding',
 }

@@ -1,0 +1,379 @@
+/**
+ * QuadrantCard.css
+ * CSS prefix: qc- (scoped under .qc-card)
+ * Based on approved prototype: Option B (Compass Card with actionable bars)
+ */
+
+/* ── Card shell ── */
+.qc-card {
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* ── Collapsed header ── */
+.qc-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ── Mini compass (52px 2x2 grid) ── */
+.qc-compass {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f5f5f0;
+}
+
+.qc-compass .qc-mz {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  transition: opacity 0.4s;
+}
+
+.qc-compass .qc-mz:not(.qc-mz-active) {
+  opacity: 0.12;
+}
+
+.qc-compass .qc-mz-tl {
+  top: 0;
+  left: 0;
+  border-radius: 14px 0 0 0;
+  background: radial-gradient(circle at 0% 0%, rgba(94, 23, 235, 0.12) 0%, rgba(94, 23, 235, 0.02) 80%);
+}
+
+.qc-compass .qc-mz-tr {
+  top: 0;
+  right: 0;
+  border-radius: 0 14px 0 0;
+  background: radial-gradient(circle at 100% 0%, rgba(233, 162, 59, 0.16) 0%, rgba(233, 162, 59, 0.02) 80%);
+}
+
+.qc-compass .qc-mz-bl {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 0 14px;
+  background: radial-gradient(circle at 0% 100%, rgba(156, 163, 175, 0.10) 0%, rgba(156, 163, 175, 0.01) 80%);
+}
+
+.qc-compass .qc-mz-br {
+  bottom: 0;
+  right: 0;
+  border-radius: 0 0 14px 0;
+  background: radial-gradient(circle at 100% 100%, rgba(224, 82, 82, 0.10) 0%, rgba(224, 82, 82, 0.01) 80%);
+}
+
+.qc-mini-orb {
+  position: absolute;
+  z-index: 2;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+}
+
+.qc-mini-orb::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.35;
+  animation: qc-breathe 3s ease-in-out infinite;
+}
+
+/* ── Header meta ── */
+.qc-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.qc-zone-name {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.qc-zone-desc {
+  font-size: 12px;
+  color: #8a8a82;
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+/* ── Chevron ── */
+.qc-chevron {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.qc-chevron svg {
+  width: 14px;
+  height: 14px;
+  stroke: #8a8a82;
+  stroke-width: 2;
+  fill: none;
+}
+
+.qc-card.qc-open .qc-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Expand body (grid-template-rows animation) ── */
+.qc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.qc-card.qc-open .qc-body {
+  grid-template-rows: 1fr;
+}
+
+.qc-body-inner {
+  overflow: hidden;
+}
+
+.qc-body-content {
+  padding: 0 20px 22px;
+}
+
+/* ── Quadrant field (square) ── */
+.qc-field {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.02) 0%, rgba(233, 162, 59, 0.03) 100%);
+}
+
+.qc-field .qc-zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+
+.qc-field .qc-zone:not(.qc-zone-active) {
+  opacity: 0.25;
+  filter: saturate(0.2);
+}
+
+.qc-zone-tl { top: 0; left: 0; }
+.qc-zone-tr { top: 0; right: 0; }
+.qc-zone-bl { bottom: 0; left: 0; }
+.qc-zone-br { bottom: 0; right: 0; }
+
+.qc-zone-grounded {
+  background: radial-gradient(circle at 0% 0%, rgba(94, 23, 235, 0.12) 0%, rgba(94, 23, 235, 0.02) 80%);
+}
+
+.qc-zone-viberise {
+  background: radial-gradient(circle at 100% 0%, rgba(233, 162, 59, 0.16) 0%, rgba(233, 162, 59, 0.02) 80%);
+}
+
+.qc-zone-stuck {
+  background: radial-gradient(circle at 0% 100%, rgba(156, 163, 175, 0.10) 0%, rgba(156, 163, 175, 0.01) 80%);
+}
+
+.qc-zone-wired {
+  background: radial-gradient(circle at 100% 100%, rgba(224, 82, 82, 0.10) 0%, rgba(224, 82, 82, 0.01) 80%);
+}
+
+.qc-field .qc-zone-label-text {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+
+.qc-field .qc-zone-sub-text {
+  font-size: 9.5px;
+  font-weight: 400;
+  opacity: 0.5;
+  margin-top: 1px;
+}
+
+.qc-zone-grounded .qc-zone-label-text { color: #5e17eb; }
+.qc-zone-viberise .qc-zone-label-text { color: #b8860b; }
+.qc-zone-stuck .qc-zone-label-text { color: #9ca3af; }
+.qc-zone-wired .qc-zone-label-text { color: #e05252; }
+
+/* ── Axis lines ── */
+.qc-axis-h,
+.qc-axis-v {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.qc-axis-h {
+  width: 100%;
+  height: 1px;
+  top: 50%;
+}
+
+.qc-axis-v {
+  height: 100%;
+  width: 1px;
+  left: 50%;
+}
+
+.qc-ax-label {
+  position: absolute;
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.qc-ax-label-bottom {
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.qc-ax-label-left {
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+/* ── Position orb ── */
+.qc-orb {
+  position: absolute;
+  z-index: 10;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.qc-orb::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--qc-orb-color) 0%, transparent 70%);
+  opacity: 0.35;
+  animation: qc-breathe 3s ease-in-out infinite;
+}
+
+.qc-orb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--qc-orb-color);
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes qc-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50% { transform: scale(1.5); opacity: 0.15; }
+}
+
+/* ── Actionable bars ── */
+.qc-bars {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.qc-bar {
+  flex: 1;
+  text-align: center;
+  padding: 10px 6px 8px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.qc-bar-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8a8a82;
+  margin-bottom: 4px;
+}
+
+.qc-bar-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.qc-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+
+.qc-bar-fill-safety {
+  background: linear-gradient(90deg, #a78bfa, #5e17eb);
+}
+
+.qc-bar-fill-expression {
+  background: linear-gradient(90deg, #f5d08a, #E9A23B);
+}
+
+.qc-bar-fill-maintenance {
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.4), #22c55e);
+}
+
+.qc-bar-nudge {
+  font-size: 11px;
+  font-weight: 500;
+  color: #1a1a2e;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.qc-bar-done {
+  color: #10b981;
+}
+
+.qc-bar-todo {
+  color: #5e17eb;
+}
+
+/* ── Nudge text ── */
+.qc-nudge {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.03), rgba(233, 162, 59, 0.04));
+  border: 1px solid rgba(94, 23, 235, 0.05);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555;
+  font-weight: 400;
+}

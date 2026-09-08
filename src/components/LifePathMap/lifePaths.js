@@ -18,8 +18,8 @@ export const STUCK_REASONS = [
 export const STATE_META = {
   vibe:     { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', felt: 'alive, lit up' },
   peace:    { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', felt: 'fun, settled' },
-  anxious:  { y: 380, color: '#ef4444', label: 'Stress',          emoji: '😰', felt: 'stressed, tight' },
-  shutdown: { y: 520, color: '#6b7280', label: 'Uninterested',   emoji: '😶', felt: 'bored, flat' },
+  anxious:  { y: 380, color: '#ef4444', label: 'Stressful',       emoji: '😰', felt: 'stressed, tight' },
+  shutdown: { y: 520, color: '#6b7280', label: 'Bored',           emoji: '😶', felt: 'bored, flat' },
 }
 
 export function stateY(s) { return STATE_META[s]?.y ?? TRUNK_Y }

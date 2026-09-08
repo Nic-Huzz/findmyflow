@@ -388,7 +388,7 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries, 
                   </div>
                 </div>
                 <div className="fp-popup-direction" style={{ background: `${dc.color}15`, color: dc.color }}>
-                  <span style={{ fontWeight: 900 }}>{dc.icon}</span> {dc.label} — {dc.desc}
+                  <span style={{ fontWeight: 900 }}>{dc.icon}</span> {dc.label}: {dc.desc}
                 </div>
                 {selectedEntry.activity_description && (
                   <div className="fp-popup-body">{selectedEntry.activity_description}</div>

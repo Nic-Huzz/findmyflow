@@ -215,7 +215,7 @@ function ObjectionMode({ deal, userId, onObjectionLogged }) {
         <span className="playbook-drawer-icon">🎯</span>
         <div>
           <h3>Objection Handling</h3>
-          <p className="playbook-drawer-subtitle">{deal.contact_name} — Three Distortions</p>
+          <p className="playbook-drawer-subtitle">{deal.contact_name}: Three Distortions</p>
         </div>
       </div>
 

@@ -47,10 +47,10 @@ const getEssenceMessage = (voice, layer, actionType) => {
     'perfectionist_screen': 'Your Perfectionist wants the offer to be flawless before sharing. But real feedback from real people shapes better offers than endless polishing.',
     'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But offers evolve through iteration, not isolation.',
     'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show unfinished work. But testing ideas early prevents building the wrong thing.',
-    'perfectionist_money': 'Your Perfectionist wants the pricing to be perfect. But the market tells you the right price — your guess can\'t.',
+    'perfectionist_money': 'Your Perfectionist wants the pricing to be perfect. But the market tells you the right price. Your guess can\'t.',
     'perfectionist_authority': 'Your Perfectionist wants more credentials first. But you already know enough to create value.',
     // People Pleaser patterns
-    'people_pleaser_screen': 'Your People Pleaser worries about being "salesy." But your offer helps people — sharing it is generous.',
+    'people_pleaser_screen': 'Your People Pleaser worries about being "salesy." But your offer helps people. Sharing it is generous.',
     'people_pleaser_live': 'Your People Pleaser fears disappointing someone. But authentic offers attract the right people.',
     'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But most people appreciate being asked what they need.',
     'people_pleaser_money': 'Your People Pleaser feels uncomfortable asking for money. But fair exchange benefits everyone.',
@@ -68,7 +68,7 @@ const getEssenceMessage = (voice, layer, actionType) => {
     'auto_pilot_money': 'Your Auto-Pilot says "what\'s the point?" But wanting something is the first step back.',
     'auto_pilot_authority': 'Your Auto-Pilot has checked out. But you still have something worth sharing.',
     // Ghost patterns
-    'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen — and so do you.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen, and so do you.',
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
     'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',

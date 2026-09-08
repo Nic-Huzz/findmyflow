@@ -41,8 +41,8 @@ function matchToCategory(clusterLabel, clusterInsight) {
     }
   }
 
-  // Default to 'forgot_what_for' (purpose/meaning) if no strong match
-  return bestMatch || PROBLEM_SEGMENTS.find(s => s.id === 'forgot_what_for')
+  // Default to 'feeling_lost' (purpose/meaning) if no strong match
+  return bestMatch || PROBLEM_SEGMENTS.find(s => s.id === 'feeling_lost')
 }
 
 export default function PlayListUpdateFlow() {

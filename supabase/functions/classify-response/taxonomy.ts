@@ -49,51 +49,51 @@ export const SKILLS_SEGMENTS = [
 export const PROBLEM_SEGMENTS = [
   {
     id: 'kids_deserved_better',
-    keywords: ['children', 'kids', 'parenting', 'education', 'youth', 'childhood', 'school', 'student', 'play', 'development'],
-  },
-  {
-    id: 'voice_taken',
-    keywords: ['silence', 'voice', 'suppressed', 'censored', 'erased', 'identity', 'invisible', 'unheard', 'gender', 'expression'],
+    keywords: ['children', 'kids', 'parenting', 'education', 'youth', 'childhood', 'school', 'student', 'play', 'development', 'tutoring', 'mentoring'],
   },
   {
     id: 'pain_not_believed',
-    keywords: ['pain', 'health', 'body', 'illness', 'chronic', 'dying', 'sleep', 'burnout', 'exhaustion', 'disability'],
+    keywords: ['pain', 'health', 'body', 'illness', 'chronic', 'dying', 'sleep', 'burnout', 'exhaustion', 'disability', 'wellness', 'fitness', 'nutrition', 'energy'],
   },
   {
-    id: 'world_losing',
-    keywords: ['climate', 'environment', 'sustainability', 'planet', 'nature', 'conservation', 'species', 'ecological', 'green'],
+    id: 'minds_hurting',
+    keywords: ['anxiety', 'depression', 'trauma', 'mental health', 'therapy', 'addiction', 'grief', 'confidence', 'identity', 'self-worth', 'shame', 'healing', 'recovery'],
   },
   {
-    id: 'life_not_yours',
-    keywords: ['oppression', 'control', 'rights', 'freedom', 'justice', 'discrimination', 'colonialism', 'apartheid', 'slavery'],
+    id: 'money_stress',
+    keywords: ['money', 'debt', 'finance', 'investing', 'budget', 'poverty', 'wealth', 'income', 'savings', 'financial literacy', 'rent', 'salary', 'broke'],
+  },
+  {
+    id: 'lonely_disconnected',
+    keywords: ['lonely', 'relationships', 'dating', 'friendship', 'isolation', 'belonging', 'community', 'connection', 'divorce', 'family', 'social', 'alone'],
   },
   {
     id: 'feeling_stupid',
-    keywords: ['jargon', 'confusing', 'complicated', 'explain', 'simplify', 'education', 'literacy', 'understand', 'clarity'],
-  },
-  {
-    id: 'locked_out',
-    keywords: ['access', 'cost', 'affordable', 'gatekeeping', 'credentials', 'privilege', 'inequality', 'poverty', 'opportunity'],
+    keywords: ['jargon', 'confusing', 'complicated', 'explain', 'simplify', 'education', 'literacy', 'understand', 'clarity', 'courses', 'teach', 'learn'],
   },
   {
     id: 'work_treated_nothing',
-    keywords: ['art', 'creativity', 'dismissed', 'ignored', 'stolen', 'credit', 'recognition', 'invisible', 'craft'],
-  },
-  {
-    id: 'left_behind',
-    keywords: ['abandoned', 'forgotten', 'homeless', 'displaced', 'refugee', 'veteran', 'elderly', 'community', 'mutual aid', 'invisible'],
-  },
-  {
-    id: 'forgot_what_for',
-    keywords: ['meaning', 'purpose', 'lost', 'direction', 'existential', 'spiritual', 'soul', 'why', 'emptiness', 'stuck'],
-  },
-  {
-    id: 'stopped_wondering',
-    keywords: ['certainty', 'dogma', 'rigid', 'closed', 'questioning', 'curious', 'dialogue', 'bias', 'assumptions', 'critical thinking'],
+    keywords: ['art', 'creativity', 'dismissed', 'ignored', 'stolen', 'credit', 'recognition', 'invisible', 'craft', 'portfolio', 'marketing', 'visibility'],
   },
   {
     id: 'work_hollows',
-    keywords: ['burnout', 'work', 'job', 'career', 'exploit', 'dignity', 'corporate', 'quit', 'toxic', 'hustle', 'grind'],
+    keywords: ['burnout', 'work', 'job', 'career', 'exploit', 'dignity', 'corporate', 'quit', 'toxic', 'hustle', 'grind', 'career change', 'resign'],
+  },
+  {
+    id: 'teams_leaders_broken',
+    keywords: ['leadership', 'management', 'team', 'culture', 'organization', 'executive', 'CEO', 'manager', 'meetings', 'dysfunction', 'hiring', 'performance'],
+  },
+  {
+    id: 'world_losing',
+    keywords: ['climate', 'environment', 'sustainability', 'planet', 'nature', 'conservation', 'species', 'ecological', 'green', 'renewable', 'carbon', 'ocean'],
+  },
+  {
+    id: 'people_treated_unfairly',
+    keywords: ['oppression', 'control', 'rights', 'freedom', 'justice', 'discrimination', 'access', 'gatekeeping', 'inequality', 'poverty', 'privilege', 'credentials'],
+  },
+  {
+    id: 'feeling_lost',
+    keywords: ['meaning', 'purpose', 'lost', 'direction', 'existential', 'spiritual', 'soul', 'why', 'emptiness', 'stuck', 'transition', 'midlife', 'quarter-life'],
   },
 ];
 

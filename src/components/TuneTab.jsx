@@ -20,7 +20,7 @@ import { hapticLight, hapticSuccess } from '../lib/haptics'
 import confetti from 'canvas-confetti'
 import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import HealingCompletionModal from './HealingCompletionModal'
-import CapacityCard from './level/CapacityCard'
+import QuadrantCard from './level/QuadrantCard'
 import useCapacityScore from '../hooks/useCapacityScore'
 import RegulationCard from './RegulationCard'
 import { REGULATION_EXERCISES } from '../lib/nervousSystemConstants'
@@ -47,12 +47,12 @@ const VOICES_BY_STATE = {
   sympathetic: [
     { id: 'controller', name: 'Controller', icon: '🧱' },
     { id: 'ghost', name: 'Ghost', icon: '👻' },
-    { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
+    { id: 'people_pleaser', name: 'People Pleaser', icon: '🪞' },
   ],
   dorsal: [
-    { id: 'auto-pilot', name: 'Auto-Pilot', icon: '🤖' },
+    { id: 'auto_pilot', name: 'Auto-Pilot', icon: '🤖' },
     { id: 'perfectionist', name: 'Perfectionist', icon: '🎯' },
-    { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
+    { id: 'people_pleaser', name: 'People Pleaser', icon: '🪞' },
   ],
 }
 
@@ -893,8 +893,17 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
   return (
     <div className="tune-tab">
-      {/* Vibe Rise Score */}
-      <CapacityCard userId={userId} refreshTrigger={capacityRefresh} scoreData={scoreData} />
+      {/* Vibe Rise Quadrant */}
+      {!scoreData.loading && scoreData.safety !== null && (
+        <QuadrantCard
+          safety={scoreData.safety}
+          expression={scoreData.expression}
+          maintenancePct={scoreData.maintenancePct}
+          zone={scoreData.zone}
+          todayProgress={scoreData.todayProgress}
+          trend={scoreData.trend}
+        />
+      )}
 
       {/* Section 1: Daily Practices */}
       <div className="tt-section">

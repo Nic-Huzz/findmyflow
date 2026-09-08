@@ -25,7 +25,7 @@ import MilestoneCommitModal from './MilestoneCommitModal'
 import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
-import CapacityCard from './CapacityCard'
+import useCapacityScore from '../../hooks/useCapacityScore'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import WeeklyFocus from './WeeklyFocus'
 import './WeeklyFocus.css'
@@ -38,6 +38,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const unlockedLevel = maxUnlockedLevel ?? currentLevel
   const config = getLevelConfig(currentLevel)
 
+  // Quadrant score data (Safety x Expression)
+  const scoreData = useCapacityScore(userId, capacityRefresh)
+
   // DB-backed zone state (reads from user_level_progress if available)
   const [selectedZone, setSelectedZone] = useState(null)
   const [boss, setBoss] = useState(null)
@@ -46,6 +49,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [hasLifeMap, setHasLifeMap] = useState(false)
   const [hasCareerClarity, setHasCareerClarity] = useState(false)
   const [showJourney, setShowJourney] = useState(false)
+
   const [hasPeopleMatching, setHasPeopleMatching] = useState(false)
   const [hasHealingCompass, setHasHealingCompass] = useState(false)
   const [hasPlaylistUpdate, setHasPlaylistUpdate] = useState(false)
@@ -71,6 +75,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [addQuestCustom, setAddQuestCustom] = useState(false) // true = typing new path, false = picked from dropdown
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
   const [matrixData, setMatrixData] = useState(null) // { actionScore, clarityPct, zone, total }
+  const [hasCurrentJob, setHasCurrentJob] = useState(false)
 
   // Load matrix data (Action Score + Clarity)
   useEffect(() => {
@@ -112,6 +117,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       .order('sort_order', { ascending: true })
     if (questData) {
       setQuests(questData)
+      setHasCurrentJob(questData.some(q => q.is_current_job))
       // Load tasks + experiences for all quests
       const questIds = questData.map(q => q.id)
       // Fetch courage count in parallel with tasks
@@ -489,19 +495,17 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       <div className="quest-section">
         <div className="quest-section-header">
-          <span className="quest-section-icon">⚔️</span>
-          <span className="quest-section-title">Active Quests</span>
+          <span className="quest-section-title">Your Paths</span>
         </div>
-        <p className="quest-section-sub">Life paths you're actively pursuing right now.</p>
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
             <span style={{ fontSize: 20 }}>🔒</span>
-            <p>Map your life paths first, then add quests along them</p>
+            <p>Complete discovery first to unlock your paths</p>
             <a href="/try/life-paths" className="quest-locked-link">Start Life Paths →</a>
           </div>
         )}
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && hasLifePaths && (
-          <div className="quest-empty">No active quests yet. Add one from your life paths below.</div>
+          <div className="quest-empty">No active paths yet. Add one from your life paths below.</div>
         )}
         {!hasLifePaths && quests.length > 0 && (
           <div className="quest-soft-prompt">
@@ -514,8 +518,12 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         }).map(q => (
           <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} experiences={questExperiences[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
         ))}
+        {/* Discovery prompt */}
+        <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Discover')}>
+          Keep completing discovery experiences to identify new paths →
+        </div>
         {hasLifePaths && !showAddQuest && (
-          <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Quest</button>
+          <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Path</button>
         )}
         {hasLifePaths && showAddQuest && (
           <div className="quest-add-modal">
@@ -600,7 +608,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name experiences you'd love to have that scare you a little. Host a silent disco. Post a vulnerable video. Cold-call a stranger.</p>
             <p className="quest-modal-question">Each one is a rep in the gym, training your system that expressing yourself this way is safe.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Quests') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -618,7 +626,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
             <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Quests') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -755,7 +763,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Quests')}
+                  onClick={() => onNavigateTab?.('Paths')}
                   style={{ cursor: 'pointer' }}
                 >
                   {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
@@ -788,7 +796,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Quests')}
+                  onClick={() => onNavigateTab?.('Paths')}
                   style={{ cursor: 'pointer' }}
                 >
                   {healingDone > 0 ? `${healingDone}/${healingTarget}` : 'Start'}

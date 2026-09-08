@@ -23,6 +23,20 @@ export const AuthProvider = ({ children }) => {
       const { data: { session } } = await supabase.auth.getSession()
       setUser(session?.user ?? null)
       setLoading(false)
+
+      // Track last_seen_at for re-engagement notifications (fire and forget)
+      if (session?.user) {
+        supabase
+          .from('notification_preferences')
+          .upsert({
+            user_id: session.user.id,
+            last_seen_at: new Date().toISOString(),
+            notifications_paused: false,
+          }, { onConflict: 'user_id' })
+          .then(({ error }) => {
+            if (error) console.warn('Failed to update last_seen_at:', error)
+          })
+      }
     }
 
     getInitialSession()
@@ -33,6 +47,20 @@ export const AuthProvider = ({ children }) => {
         console.log('🔐 Auth state changed:', event, session?.user?.email)
         setUser(session?.user ?? null)
         setLoading(false)
+
+        // Track last_seen_at for re-engagement notifications (fire and forget)
+        if (event === 'SIGNED_IN' && session?.user) {
+          supabase
+            .from('notification_preferences')
+            .upsert({
+              user_id: session.user.id,
+              last_seen_at: new Date().toISOString(),
+              notifications_paused: false,
+            }, { onConflict: 'user_id' })
+            .then(({ error }) => {
+              if (error) console.warn('Failed to update last_seen_at:', error)
+            })
+        }
 
         // Track new signups (created_at ~= last_sign_in_at means first login)
         if (event === 'SIGNED_IN' && session?.user) {
@@ -52,6 +80,20 @@ export const AuthProvider = ({ children }) => {
                   personalization_tokens: { name }
                 }
               }).catch(err => console.warn('Welcome email enrollment failed:', err))
+
+              // Claim aliveness quiz results from public_leads (if they took the quiz before signup)
+              supabase.from('public_leads')
+                .select('flow_results')
+                .eq('email', userEmail)
+                .eq('source_flow', 'aliveness_quiz')
+                .maybeSingle()
+                .then(({ data }) => {
+                  if (!data?.flow_results) return
+                  supabase.from('user_stage_progress').upsert({
+                    user_id: session.user.id,
+                    life_fuel_quiz: data.flow_results,
+                  }, { onConflict: 'user_id', ignoreDuplicates: false }).catch(() => {})
+                }).catch(() => {})
             }
           }
         }

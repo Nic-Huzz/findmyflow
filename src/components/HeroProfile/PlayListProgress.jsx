@@ -42,8 +42,8 @@ function PlayListProgress({ visibilityProgress, groanChallenges = [] }) {
       {!hasAnyData && (
         <div className="playlist-empty">
           <p className="playlist-empty-text">
-            Your Play-List tracks courage challenges across 5 visibility layers
-            — from behind a screen to full authority. Start generating challenges
+            Your Play-List tracks courage challenges across 5 visibility layers,
+            from behind a screen to full authority. Start generating challenges
             in the{' '}
             <Link to="/7-day-challenge?tab=groans" className="hero-profile-link">
               Groan Matrix →

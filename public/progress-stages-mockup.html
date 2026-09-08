@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Tab - All Stages</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --border: #e9ecef;
+  --purple-soft: rgba(94, 23, 235, 0.06);
+  --gold-soft: rgba(233, 162, 59, 0.08);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.08);
+  --red-soft: rgba(239, 68, 68, 0.06);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  background: #e8e8e3;
+}
+
+/* Stage selector */
+.stage-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--text-primary);
+  padding: 12px 16px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stage-nav::-webkit-scrollbar { display: none; }
+
+.stage-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.stage-btn.active {
+  background: var(--brand-gold);
+  color: var(--text-primary);
+}
+
+.stage-btn:hover:not(.active) { background: rgba(255,255,255,0.15); }
+
+/* Phone frame */
+.phone-frame {
+  max-width: 480px;
+  margin: 24px auto;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.15);
+  min-height: 700px;
+  display: none;
+}
+
+.phone-frame.visible { display: block; }
+
+.phone-content { padding: 20px 20px 40px; }
+
+/* Stage label */
+.stage-context {
+  text-align: center;
+  padding: 12px;
+  background: rgba(94,23,235,0.04);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-purple);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ═══ REUSABLE COMPONENTS (same as progress-tab-design.html) ═══ */
+
+.pt-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 28px 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94,23,235,0.3);
+}
+
+.pt-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.pt-stage-label {
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px; position: relative; z-index: 1;
+}
+
+.pt-stage-name {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.3px;
+  margin-bottom: 20px; position: relative; z-index: 1;
+}
+
+.pt-journey-bar {
+  position: relative; height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 100px; margin-bottom: 6px; z-index: 1;
+}
+
+.pt-journey-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.4), var(--brand-gold));
+  position: relative;
+}
+
+.pt-journey-fill::after {
+  content: ''; position: absolute;
+  right: -1px; top: -4px;
+  width: 14px; height: 14px;
+  background: var(--brand-gold); border-radius: 50%;
+  box-shadow: 0 0 12px rgba(233,162,59,0.4);
+  border: 2px solid white;
+}
+
+.pt-journey-endpoints {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: rgba(255,255,255,0.4);
+  font-weight: 600; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+
+.pt-think {
+  padding: 12px 14px;
+  border-left: 3px solid var(--brand-gold);
+  background: rgba(255,255,255,0.06);
+  border-radius: 0 12px 12px 0;
+  position: relative; z-index: 1;
+}
+
+.pt-think-label {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--brand-gold); margin-bottom: 4px;
+}
+
+.pt-think-ref {
+  font-size: 13px; font-style: italic;
+  color: rgba(255,255,255,0.6); line-height: 1.6;
+}
+
+.pt-bridge {
+  padding: 20px 8px; text-align: center;
+}
+
+.pt-bridge-text {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-secondary); font-style: italic;
+}
+
+/* CTA card */
+.pt-cta-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.pt-cta-card-icon { font-size: 40px; margin-bottom: 12px; }
+
+.pt-cta-card-title {
+  font-size: 18px; font-weight: 800;
+  letter-spacing: -0.3px; margin-bottom: 6px;
+}
+
+.pt-cta-card-sub {
+  font-size: 14px; color: var(--text-secondary);
+  line-height: 1.5; margin-bottom: 20px;
+}
+
+.pt-cta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: var(--text-primary); border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 800; cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+}
+
+.pt-cta span { font-size: 18px; }
+
+.pt-cta-purple {
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  color: white;
+  box-shadow: 0 4px 16px rgba(94,23,235,0.3);
+}
+
+/* Essence card */
+.pt-essence-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05); text-align: center;
+}
+
+.pt-essence-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  object-fit: cover; margin-bottom: 12px;
+  border: 3px solid var(--brand-purple);
+  box-shadow: 0 4px 16px rgba(94,23,235,0.2);
+}
+
+.pt-essence-name {
+  font-size: 18px; font-weight: 800;
+  letter-spacing: -0.3px; color: var(--brand-purple);
+  margin-bottom: 8px;
+}
+
+.pt-essence-superpower {
+  font-size: 15px; color: var(--text-primary);
+  line-height: 1.6; font-style: italic; font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.pt-essence-vision {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* Fuel pain */
+.pt-fuel-pain {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+
+.pt-fuel-pain-text {
+  font-size: 16px; color: var(--text-secondary); line-height: 1.7;
+}
+
+.pt-fuel-has { color: var(--green); font-weight: 700; }
+.pt-fuel-missing { color: #ef4444; font-weight: 700; }
+
+/* Voice card */
+.pt-voice-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  display: flex; align-items: flex-start; gap: 14px;
+}
+
+.pt-voice-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.pt-voice-content { flex: 1; }
+.pt-voice-name { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+.pt-voice-stat { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+.pt-voice-stat strong { color: var(--text-primary); }
+
+.pt-voice-dots { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.pt-voice-dots-row { display: flex; align-items: center; gap: 5px; }
+.pt-voice-dots-label { font-size: 10px; font-weight: 600; color: var(--text-muted); width: 72px; flex-shrink: 0; }
+.pt-voice-dot { width: 10px; height: 10px; border-radius: 50%; }
+.pt-voice-dot.filled { background: var(--brand-purple); opacity: 0.7; }
+.pt-voice-dot.empty { background: rgba(0,0,0,0.06); }
+.pt-voice-trend { font-size: 12px; font-weight: 700; color: var(--green); margin-top: 8px; }
+
+/* Evidence */
+.pt-section-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+
+.pt-section-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+
+.pt-section-label {
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--brand-purple);
+}
+
+.pt-section-meta {
+  margin-left: auto; font-size: 11px;
+  color: var(--text-muted); font-weight: 600;
+}
+
+.pt-evidence-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 20px; margin-bottom: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  position: relative; overflow: hidden;
+}
+
+.pt-evidence-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 4px;
+  border-radius: 24px 0 0 24px;
+}
+
+.pt-evidence-card[data-state="vibe_rise"]::before { background: var(--brand-gold); }
+.pt-evidence-card[data-state="vibe_rise"] { background: linear-gradient(135deg, #fffdf7, #fff9eb); border-color: rgba(233,162,59,0.15); }
+.pt-evidence-card[data-state="fun"]::before { background: var(--green); }
+.pt-evidence-card[data-state="pressure"]::before { background: #ef4444; }
+
+.pt-evidence-quest { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 4px; }
+.pt-evidence-title { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 12px; line-height: 1.3; }
+
+.pt-evidence-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+.pt-chip-growth {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 12px; background: var(--gold-soft);
+  border-radius: 10px; font-size: 12px; font-weight: 700; color: #b8860b;
+}
+.pt-chip-growth-arrow { font-size: 10px; opacity: 0.5; }
+
+.pt-chip-state {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 700;
+}
+.pt-chip-state[data-state="vibe_rise"] { background: var(--gold-soft); color: #b8860b; }
+.pt-chip-state[data-state="fun"] { background: var(--green-soft); color: #059669; }
+.pt-chip-state[data-state="pressure"] { background: var(--red-soft); color: #dc2626; }
+
+.pt-evidence-summary {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 16px 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+}
+.pt-evidence-summary strong { color: var(--text-primary); font-weight: 700; }
+
+/* Checklist */
+.pt-checklist {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; padding: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+
+.pt-checklist-title {
+  font-size: 16px; font-weight: 800; margin-bottom: 12px;
+}
+
+.pt-check-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+}
+
+.pt-check-item + .pt-check-item { border-top: 1px solid rgba(0,0,0,0.04); }
+
+.pt-check-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+
+.pt-check-dot.done { background: var(--green); color: white; }
+.pt-check-dot.next { background: var(--brand-gold); color: white; animation: ptPulse 2s infinite; }
+.pt-check-dot.locked { background: rgba(0,0,0,0.06); color: var(--text-muted); }
+
+@keyframes ptPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(233,162,59,0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(233,162,59,0); }
+}
+
+.pt-check-text { flex: 1; }
+.pt-check-name { font-size: 14px; font-weight: 600; }
+.pt-check-name.done { color: var(--text-muted); text-decoration: line-through; }
+.pt-check-name.next { color: var(--text-primary); }
+.pt-check-name.locked { color: var(--text-muted); }
+.pt-check-sub { font-size: 12px; color: var(--text-muted); }
+
+.pt-check-arrow { color: var(--text-muted); font-size: 14px; }
+
+</style>
+</head>
+<body>
+
+<!-- Stage selector -->
+<div class="stage-nav">
+  <button class="stage-btn active" onclick="showStage(0)">1. Brand New</button>
+  <button class="stage-btn" onclick="showStage(1)">2. After Dome</button>
+  <button class="stage-btn" onclick="showStage(2)">3. After Essence</button>
+  <button class="stage-btn" onclick="showStage(3)">4. After Current Job</button>
+  <button class="stage-btn" onclick="showStage(4)">5. After Paths</button>
+  <button class="stage-btn" onclick="showStage(5)">6. Active User</button>
+  <button class="stage-btn" onclick="showStage(6)">7. Momentum</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 1: BRAND NEW USER
+     Has: nothing
+     Needs: Experience Dome first
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame visible" id="stage-0">
+  <div class="stage-context">Stage 1: Brand new user. Nothing completed.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 1 of 12</div>
+      <div class="pt-stage-name">Waking Up</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 8%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Ariel seeing the surface world for the first time.</div>
+        <div class="pt-think-ref">Neo seeing the Matrix for the first time.</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">let's find out what lights you up.</span></div>
+
+    <div class="pt-cta-card">
+      <div class="pt-cta-card-icon">🎮</div>
+      <div class="pt-cta-card-title">What lights you up?</div>
+      <div class="pt-cta-card-sub">Tick experiences that make you feel alive. Takes about 2 minutes.</div>
+      <button class="pt-cta">Play the Experience Game <span>→</span></button>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">your journey starts here.</span></div>
+
+    <div class="pt-checklist">
+      <div class="pt-checklist-title">Your Setup</div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot next">1</div>
+        <div class="pt-check-text"><div class="pt-check-name next">Play the Experience Game</div><div class="pt-check-sub">Find what lights you up</div></div>
+        <div class="pt-check-arrow">›</div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot locked">2</div>
+        <div class="pt-check-text"><div class="pt-check-name locked">Discover your essence</div><div class="pt-check-sub">Meet who you really are</div></div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot locked">3</div>
+        <div class="pt-check-text"><div class="pt-check-name locked">Map your current work</div><div class="pt-check-sub">See what's missing</div></div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot locked">4</div>
+        <div class="pt-check-text"><div class="pt-check-name locked">Choose your paths</div><div class="pt-check-sub">Pick what you want to pursue</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 2: AFTER EXPERIENCE DOME
+     Has: dome ratings
+     Needs: Essence Mirror
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame" id="stage-1">
+  <div class="stage-context">Stage 2: Dome complete. Needs Essence Mirror.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 2 of 12</div>
+      <div class="pt-stage-name">Exploring</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 17%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Peter Parker getting bitten by the spider.</div>
+        <div class="pt-think-ref">Neo taking the red pill.</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">you know what lights you up. now, who are you really?</span></div>
+
+    <div class="pt-cta-card">
+      <div class="pt-cta-card-icon">✨</div>
+      <div class="pt-cta-card-title">Discover your essence</div>
+      <div class="pt-cta-card-sub">Underneath all the roles you play, there's someone powerful. Find them in 3 minutes.</div>
+      <button class="pt-cta">Start the Essence Mirror <span>→</span></button>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">your setup so far.</span></div>
+
+    <div class="pt-checklist">
+      <div class="pt-checklist-title">Your Setup</div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot done">✓</div>
+        <div class="pt-check-text"><div class="pt-check-name done">Play the Experience Game</div></div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot next">2</div>
+        <div class="pt-check-text"><div class="pt-check-name next">Discover your essence</div><div class="pt-check-sub">Meet who you really are</div></div>
+        <div class="pt-check-arrow">›</div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot locked">3</div>
+        <div class="pt-check-text"><div class="pt-check-name locked">Map your current work</div></div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot locked">4</div>
+        <div class="pt-check-text"><div class="pt-check-name locked">Choose your paths</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 3: AFTER ESSENCE MIRROR
+     Has: dome + essence archetype
+     Needs: Current Job flow
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame" id="stage-2">
+  <div class="stage-context">Stage 3: Essence discovered. Needs Current Job.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 3 of 12</div>
+      <div class="pt-stage-name">Discovering Yourself</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 25%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Simba running away to the jungle.</div>
+        <div class="pt-think-ref">Miles Morales saying "I can't do this."</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">you are...</span></div>
+
+    <div class="pt-essence-card">
+      <img class="pt-essence-avatar" src="/images/essence/radiant-rebel.png" alt="" />
+      <div class="pt-essence-name">The Radiant Rebel</div>
+      <div class="pt-essence-superpower">"You ignite courage in the quiet. You say what others won't."</div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">now let's see what your current life looks like.</span></div>
+
+    <div class="pt-cta-card">
+      <div class="pt-cta-card-icon">🧭</div>
+      <div class="pt-cta-card-title">Where are you now?</div>
+      <div class="pt-cta-card-sub">Map your current work to see which life fuels you have and which ones you're missing.</div>
+      <button class="pt-cta">Map your current work <span>→</span></button>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">your setup so far.</span></div>
+
+    <div class="pt-checklist">
+      <div class="pt-checklist-title">Your Setup</div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot done">✓</div>
+        <div class="pt-check-text"><div class="pt-check-name done">Play the Experience Game</div></div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot done">✓</div>
+        <div class="pt-check-text"><div class="pt-check-name done">Discover your essence</div></div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot next">3</div>
+        <div class="pt-check-text"><div class="pt-check-name next">Map your current work</div><div class="pt-check-sub">See what's missing</div></div>
+        <div class="pt-check-arrow">›</div>
+      </div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot locked">4</div>
+        <div class="pt-check-text"><div class="pt-check-name locked">Choose your paths</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 4: AFTER CURRENT JOB
+     Has: dome + essence + current job (fuels + dims)
+     Shows: pain reveal. Needs: Choose Quests
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame" id="stage-3">
+  <div class="stage-context">Stage 4: Current job mapped. Pain visible. Needs paths.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 4 of 12</div>
+      <div class="pt-stage-name">Choosing a Direction</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 33%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Aladdin meeting the Genie.</div>
+        <div class="pt-think-ref">Luke meeting Yoda on Dagobah.</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">you are...</span></div>
+
+    <div class="pt-essence-card">
+      <img class="pt-essence-avatar" src="/images/essence/radiant-rebel.png" alt="" />
+      <div class="pt-essence-name">The Radiant Rebel</div>
+      <div class="pt-essence-superpower">"You ignite courage in the quiet."</div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">but right now...</span></div>
+
+    <div class="pt-fuel-pain">
+      <div class="pt-fuel-pain-text">
+        Your current life gives you <span class="pt-fuel-has">🤝 Connection</span> and <span class="pt-fuel-has">📈 Mastery</span>, but you're missing <span class="pt-fuel-missing">🔓 Choice</span> and <span class="pt-fuel-missing">✨ Meaning</span>.
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">ready to find your path?</span></div>
+
+    <div class="pt-cta-card">
+      <div class="pt-cta-card-icon">🗺️</div>
+      <div class="pt-cta-card-title">Choose your paths</div>
+      <div class="pt-cta-card-sub">Turn the experiences that light you up into life paths you can actually pursue.</div>
+      <button class="pt-cta">Choose your paths <span>→</span></button>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">your setup so far.</span></div>
+
+    <div class="pt-checklist">
+      <div class="pt-checklist-title">Your Setup</div>
+      <div class="pt-check-item"><div class="pt-check-dot done">✓</div><div class="pt-check-text"><div class="pt-check-name done">Play the Experience Game</div></div></div>
+      <div class="pt-check-item"><div class="pt-check-dot done">✓</div><div class="pt-check-text"><div class="pt-check-name done">Discover your essence</div></div></div>
+      <div class="pt-check-item"><div class="pt-check-dot done">✓</div><div class="pt-check-text"><div class="pt-check-name done">Map your current work</div></div></div>
+      <div class="pt-check-item">
+        <div class="pt-check-dot next">4</div>
+        <div class="pt-check-text"><div class="pt-check-name next">Choose your paths</div><div class="pt-check-sub">Turn experiences into life paths</div></div>
+        <div class="pt-check-arrow">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 5: AFTER CHOOSE QUESTS
+     Has: everything. No courage challenges yet.
+     Shows: full narrative, empty evidence. CTA: add courage
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame" id="stage-4">
+  <div class="stage-context">Stage 5: Paths chosen. No courage challenges yet.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 5 of 12</div>
+      <div class="pt-stage-name">Finding Your Way</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 42%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Spider-Man's first swing through New York.</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">you are...</span></div>
+
+    <div class="pt-essence-card">
+      <img class="pt-essence-avatar" src="/images/essence/radiant-rebel.png" alt="" />
+      <div class="pt-essence-name">The Radiant Rebel</div>
+      <div class="pt-essence-superpower">"You ignite courage in the quiet."</div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">but right now...</span></div>
+
+    <div class="pt-fuel-pain">
+      <div class="pt-fuel-pain-text">
+        You're missing <span class="pt-fuel-missing">🔓 Choice</span> and <span class="pt-fuel-missing">✨ Meaning</span>. Your paths are set. Time to do something brave.
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">this week...</span></div>
+
+    <div class="pt-cta-card">
+      <div class="pt-cta-card-icon">⚡</div>
+      <div class="pt-cta-card-title">Nothing brave yet this week</div>
+      <div class="pt-cta-card-sub">Your progress shows up here when you complete a courage challenge. Each one grows your comfort zone.</div>
+      <button class="pt-cta pt-cta-purple">Add a courage challenge <span>→</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 6: ACTIVE USER
+     Has: everything + courage data + voice data
+     Shows: full narrative flow
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame" id="stage-5">
+  <div class="stage-context">Stage 6: Active user. Full narrative visible.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 6 of 12</div>
+      <div class="pt-stage-name">Facing Resistance</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 50%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Mulan training with the army.</div>
+        <div class="pt-think-ref">Rocky running up the stairs.</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">you are...</span></div>
+
+    <div class="pt-essence-card">
+      <img class="pt-essence-avatar" src="/images/essence/radiant-rebel.png" alt="" />
+      <div class="pt-essence-name">The Radiant Rebel</div>
+      <div class="pt-essence-superpower">"You ignite courage in the quiet."</div>
+      <div class="pt-essence-vision">Turning chaos into clarity, they spark revolutions with nothing but their voice.</div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">but right now...</span></div>
+
+    <div class="pt-fuel-pain">
+      <div class="pt-fuel-pain-text">
+        Your job gives you <span class="pt-fuel-has">🤝 Connection</span> and <span class="pt-fuel-has">📈 Mastery</span>. Your courage challenges are adding <span class="pt-fuel-has">🔓 Choice</span> and <span class="pt-fuel-has">✨ Meaning</span>.
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">what's still getting in the way?</span></div>
+
+    <div class="pt-voice-card">
+      <div class="pt-voice-icon">👻</div>
+      <div class="pt-voice-content">
+        <div class="pt-voice-name">Your Ghost</div>
+        <div class="pt-voice-stat">Shows up most when <strong>Vulnerability</strong> is involved.</div>
+        <div class="pt-voice-dots">
+          <div class="pt-voice-dots-row">
+            <span class="pt-voice-dots-label">Last month</span>
+            <span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span>
+          </div>
+          <div class="pt-voice-dots-row">
+            <span class="pt-voice-dots-label">This month</span>
+            <span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot empty"></span><span class="pt-voice-dot empty"></span><span class="pt-voice-dot empty"></span>
+          </div>
+        </div>
+        <div class="pt-voice-trend">It's getting quieter ↓</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">but this week you fought back.</span></div>
+
+    <div class="pt-section-header">
+      <div class="pt-section-icon">⚡</div>
+      <div class="pt-section-label">This Week</div>
+      <div class="pt-section-meta">3 challenges</div>
+    </div>
+
+    <div class="pt-evidence-card" data-state="vibe_rise">
+      <div class="pt-evidence-quest">Ecstatic Dance Events</div>
+      <div class="pt-evidence-title">Ran my first ecstatic dance event</div>
+      <div class="pt-evidence-chips">
+        <span class="pt-chip-growth">👥 People 3 <span class="pt-chip-growth-arrow">→</span> 5</span>
+        <span class="pt-chip-growth">💜 Vulnerability 1 <span class="pt-chip-growth-arrow">→</span> 3</span>
+        <span class="pt-chip-state" data-state="vibe_rise">🔥 Vibe Rise</span>
+      </div>
+    </div>
+
+    <div class="pt-evidence-card" data-state="fun">
+      <div class="pt-evidence-quest">Career Growth</div>
+      <div class="pt-evidence-title">Asked for a raise at work</div>
+      <div class="pt-evidence-chips">
+        <span class="pt-chip-growth">💰 Money 2 <span class="pt-chip-growth-arrow">→</span> 4</span>
+        <span class="pt-chip-state" data-state="fun">😊 Fun</span>
+      </div>
+    </div>
+
+    <div class="pt-evidence-card" data-state="pressure">
+      <div class="pt-evidence-quest">Content Creation</div>
+      <div class="pt-evidence-title">Posted my face on Instagram</div>
+      <div class="pt-evidence-chips">
+        <span class="pt-chip-growth">🪞 Identity 1 <span class="pt-chip-growth-arrow">→</span> 2</span>
+        <span class="pt-chip-state" data-state="pressure">😰 Stressful</span>
+      </div>
+    </div>
+
+    <div class="pt-evidence-summary">
+      Your comfort zone grew in <strong>3 dimensions</strong> this week. The things that felt like Vibe Rise gave you the most growth.
+      <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.04); font-size: 12px; color: var(--text-muted);">
+        This week: <strong style="color: var(--text-primary);">3 challenges, 3 dimensions grew</strong>. Last month: 8 challenges, 5 dimensions grew.
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">here's how far you've come.</span></div>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); text-align: center; color: var(--text-muted); font-size: 13px;">
+      <div style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">Ecstatic Dance Events</div>
+      [PerQuestRadar: start → now → dream]
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STAGE 7: MOMENTUM (8+)
+     Has: everything + income + direction
+     Shows: full narrative + income + voice quieting
+     ═══════════════════════════════════════════════════ -->
+<div class="phone-frame" id="stage-6">
+  <div class="stage-context">Stage 8+: The Breakthrough. Income tracking unlocked.</div>
+  <div class="phone-content">
+    <div class="pt-hero">
+      <div class="pt-stage-label">Stage 9 of 12</div>
+      <div class="pt-stage-name">First Reward</div>
+      <div class="pt-journey-bar"><div class="pt-journey-fill" style="width: 75%"></div></div>
+      <div class="pt-journey-endpoints"><span>The Crack</span><span>Doing What You Love</span></div>
+      <div class="pt-think">
+        <div class="pt-think-label">Think:</div>
+        <div class="pt-think-ref">Simba taking his place on Pride Rock.</div>
+        <div class="pt-think-ref">Thor finally becoming worthy.</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">you are...</span></div>
+
+    <div class="pt-essence-card">
+      <img class="pt-essence-avatar" src="/images/essence/radiant-rebel.png" alt="" />
+      <div class="pt-essence-name">The Radiant Rebel</div>
+      <div class="pt-essence-superpower">"You ignite courage in the quiet."</div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">and it's working.</span></div>
+
+    <div class="pt-fuel-pain">
+      <div class="pt-fuel-pain-text">
+        You now have <span class="pt-fuel-has">🔓 Choice</span>, <span class="pt-fuel-has">🤝 Connection</span>, <span class="pt-fuel-has">📈 Mastery</span>, and <span class="pt-fuel-has">✨ Meaning</span>. All four fuels are active.
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">your Ghost is getting quieter.</span></div>
+
+    <div class="pt-voice-card">
+      <div class="pt-voice-icon">👻</div>
+      <div class="pt-voice-content">
+        <div class="pt-voice-name">Your Ghost</div>
+        <div class="pt-voice-stat">Only showed up <strong>once</strong> this month.</div>
+        <div class="pt-voice-dots">
+          <div class="pt-voice-dots-row">
+            <span class="pt-voice-dots-label">3 months ago</span>
+            <span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span><span class="pt-voice-dot filled"></span>
+          </div>
+          <div class="pt-voice-dots-row">
+            <span class="pt-voice-dots-label">This month</span>
+            <span class="pt-voice-dot filled"></span><span class="pt-voice-dot empty"></span><span class="pt-voice-dot empty"></span><span class="pt-voice-dot empty"></span><span class="pt-voice-dot empty"></span><span class="pt-voice-dot empty"></span>
+          </div>
+        </div>
+        <div class="pt-voice-trend">Down 83% in 3 months ↓</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">the Radiant Rebel is earning from what they love.</span></div>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.05);">
+      <div style="text-align: center;">
+        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--brand-gold); margin-bottom: 8px;">Income This Month</div>
+        <div style="font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">$2,400</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">Ecstatic Dance Events ($1,800) + Coaching ($600)</div>
+      </div>
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">here's how far you've come.</span></div>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); text-align: center; color: var(--text-muted); font-size: 13px;">
+      <div style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">Ecstatic Dance Events</div>
+      [PerQuestRadar: start → now → dream]
+    </div>
+
+    <div class="pt-bridge"><span class="pt-bridge-text">keep going.</span></div>
+
+    <button class="pt-cta">Grow consistent income <span>→</span></button>
+  </div>
+</div>
+
+<script>
+function showStage(index) {
+  document.querySelectorAll('.phone-frame').forEach(f => f.classList.remove('visible'))
+  document.getElementById('stage-' + index).classList.add('visible')
+  document.querySelectorAll('.stage-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === index)
+  })
+}
+</script>
+
+</body>
+</html>

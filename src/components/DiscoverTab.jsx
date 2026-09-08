@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
-import { isCoreNode } from '../lib/experienceDomeConfig'
+import { isDomeVisibleNode } from '../lib/experienceDomeConfig'
 import DomeRadar from './DomeRadar'
+import DirectionSection from './direction/DirectionSection'
 import './DiscoverTab.css'
 
 const WEEK_KEY = 'weekly_experience_focus_'
@@ -20,7 +21,7 @@ function getWeekKey() {
   return WEEK_KEY + getWeekStartLocal()
 }
 
-export default function DiscoverTab({ userId, onUnlockTab }) {
+export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpdate }) {
   const navigate = useNavigate()
   const [essenceDone, setEssenceDone] = useState(false)
   const [domeCount, setDomeCount] = useState(0)
@@ -32,6 +33,7 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
   const [showNsRating, setShowNsRating] = useState(false)
   const [loading, setLoading] = useState(true)
   const [domeExpanded, setDomeExpanded] = useState(false)
+  const [hasCurrentJob, setHasCurrentJob] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -69,7 +71,7 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       ;(domeRes.data || []).forEach(r => {
         if (r.ns_state) ratings[r.node_id] = r.ns_state
         checked[r.node_id] = true
-        if (isCoreNode(r.node_id)) coreCount++
+        if (isDomeVisibleNode(r.node_id)) coreCount++
       })
       setDomeRatings(ratings)
       setDomeChecked(checked)
@@ -86,6 +88,10 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
       console.error('DiscoverTab load error:', err)
       setLoading(false)
     })
+
+    // Check for current job quest
+    supabase.from('quests').select('id').eq('user_id', userId).eq('is_current_job', true).limit(1)
+      .then(({ data }) => { if (data?.length > 0) setHasCurrentJob(true) })
   }, [userId])
 
   const pickExperience = (nodeId, nodeLabel) => {
@@ -136,6 +142,16 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
 
   return (
     <div className="discover-tab">
+      {/* Phase 2→3 Direction Bridge (hero stage 8+) */}
+      {heroStage >= 8 && (
+        <DirectionSection userId={userId} onUpdate={onUpdate} />
+      )}
+
+      {/* Phase 1 content */}
+      {heroStage >= 8 && (
+        <div className="dt-revisit-label">Revisit</div>
+      )}
+
       {/* Experience to try this week */}
       {domeCount > 0 && (
         <div className="dt-weekly-card">
@@ -216,6 +232,39 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
         <span className="dt-card-arrow">→</span>
       </button>
 
+      {/* Current Job CTA — sits under Experience Dome, before the viz */}
+      {domeCount > 0 && !hasCurrentJob && (
+        <button className="dt-card" onClick={() => navigate('/add-current-job')}>
+          <div className="dt-card-header">
+            <span className="dt-card-icon">💼</span>
+            <span className="dt-card-title">Map your current work</span>
+          </div>
+          <p className="dt-card-desc">
+            Find what's already alive in your job. Creates your first path.
+          </p>
+          <span className="dt-card-arrow">→</span>
+        </button>
+      )}
+
+      {/* Phase 1→2 Bridge CTA — locked until essence + dome + current job done */}
+      {(() => {
+        const bridgeReady = essenceDone && domeCount > 0 && hasCurrentJob
+        return (
+          <button
+            className={`dt-bridge-cta ${!bridgeReady ? 'dt-bridge-locked' : ''}`}
+            onClick={() => bridgeReady ? navigate('/choose-quests') : null}
+            disabled={!bridgeReady}
+          >
+            {!bridgeReady && <span className="dt-bridge-lock">🔒</span>}
+            <div className="dt-bridge-text">
+              <span className="dt-bridge-title">{bridgeReady ? 'Ready to go deeper on a life path?' : 'Complete the steps above to unlock'}</span>
+              <span className="dt-bridge-sub">Turn what lights you up into paths you can pursue.</span>
+            </div>
+            {bridgeReady && <span className="dt-bridge-arrow">→</span>}
+          </button>
+        )
+      })()}
+
       {/* Dome Radar (mini viz when data exists) — tap to expand */}
       {domeCount > 0 && (
         <div
@@ -246,22 +295,6 @@ export default function DiscoverTab({ userId, onUnlockTab }) {
             </button>
           </div>
         </div>
-      )}
-
-      {/* Weekly experience section moved to top of tab */}
-
-      {/* Phase 1→2 Bridge CTA */}
-      {domeCount > 0 && (
-        <button
-          className="dt-bridge-cta"
-          onClick={() => navigate('/choose-quests')}
-        >
-          <div className="dt-bridge-text">
-            <span className="dt-bridge-title">Ready to go deeper on a life path?</span>
-            <span className="dt-bridge-sub">Turn what lights you up into quests you can pursue.</span>
-          </div>
-          <span className="dt-bridge-arrow">→</span>
-        </button>
       )}
     </div>
   )

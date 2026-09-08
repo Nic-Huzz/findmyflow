@@ -426,20 +426,18 @@ function Challenge() {
         }
       }
 
-      // 4. Tab unlock logic — Quests unlocks after /choose-quests completion
+      // 4. Tab unlock logic — Paths unlocks after choose-quests OR current job completion
       const email = (await supabase.auth.getUser()).data?.user?.email
-      if (email) {
-        supabase.from('life_path_sessions')
-          .select('id')
-          .eq('client_email', email)
-          .eq('step', 'complete')
-          .limit(1)
-          .then(({ data }) => {
-            if (data?.length > 0) {
-              setUnlockedTabs(prev => new Set([...prev, 'Quests']))
-            }
-          })
-      }
+      Promise.all([
+        email
+          ? supabase.from('life_path_sessions').select('id').eq('client_email', email).eq('step', 'complete').limit(1)
+          : Promise.resolve({ data: [] }),
+        supabase.from('quests').select('id').eq('user_id', user.id).eq('is_current_job', true).limit(1),
+      ]).then(([lpRes, cjRes]) => {
+        if (lpRes.data?.length > 0 || cjRes.data?.length > 0) {
+          setUnlockedTabs(prev => new Set([...prev, 'Paths']))
+        }
+      })
     }
 
     loadStageAndCheckGraduation()
@@ -1522,6 +1520,7 @@ function Challenge() {
         <WeeklyReview
           userId={user.id}
           weekStart={reviewWeekStart}
+          heroStage={currentJourneyLevel}
           onComplete={() => { setShowWeeklyReview(false); setWeeklyReviewNeeded(false) }}
           onClose={() => setShowWeeklyReview(false)}
         />
@@ -1595,7 +1594,7 @@ function Challenge() {
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
-            onBack={() => setActiveCategory('Quests')}
+            onBack={() => setActiveCategory('Paths')}
             progress={progress}
             completions={completions}
           />
@@ -1604,7 +1603,7 @@ function Challenge() {
         {/* Healing Summary */}
         {activeCategory === 'HealingSummary' && (
           <HealingSummary
-            onBack={() => setActiveCategory('Quests')}
+            onBack={() => setActiveCategory('Paths')}
             progress={progress}
           />
         )}
@@ -1701,11 +1700,11 @@ function Challenge() {
 
         {/* Journey Tab — hero stage, voice progress, thresholds */}
         {activeCategory === 'Discover' && (
-          <DiscoverTab userId={user?.id} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} />
+          <DiscoverTab userId={user?.id} heroStage={currentJourneyLevel} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} onUpdate={() => { loadStageProgress(); loadUserScores(); recheckStage() }} />
         )}
 
         {/* Level Tab */}
-        {activeCategory === 'Quests' && (
+        {activeCategory === 'Paths' && (
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)

@@ -15,14 +15,22 @@ const PRIMAL_OVERRIDES = {
   'sub-communal-2017': 'shelter',   // Living abroad: where you live, not bonds
 }
 
-// Only show experience branches (Threat + Tools dropped)
-const EXPERIENCE_PRIMALS = PRIMALS.filter(p => p.id !== 'threat' && p.id !== 'tools')
+// Only show experience branches (Threat dropped)
+const EXPERIENCE_PRIMALS = PRIMALS.filter(p => p.id !== 'threat')
 
 const NS_GLOW = {
   vibe_rise: 1.0,
-  fun: 0.6,
-  pressure: 0.8,
+  fun: 0.4,
+  pressure: 0.3,
   bored: 0,
+}
+
+// NS state visual intensity — Vibe Rise pops, others progressively muted
+const NS_FILL_OPACITY = {
+  vibe_rise: 1.0,
+  fun: 0.65,
+  pressure: 0.55,
+  bored: 0.45,
 }
 
 // NS state → distance from center (0 = center, 1 = edge)
@@ -168,8 +176,17 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
         {layout.nodes.map(n => {
           const isChecked = !!checked[n.id]
           const nsState = ratings[n.id]
-          const glowLevel = nsState ? (NS_GLOW[nsState] || 0) : (isChecked ? 0.5 : 0)
+          const glowLevel = nsState ? (NS_GLOW[nsState] || 0) : (isChecked ? 0.3 : 0)
           const isDark = !isChecked
+          const fillOpacity = nsState ? (NS_FILL_OPACITY[nsState] || 0.3) : (isChecked ? 0.4 : 0)
+          const isVibeRise = nsState === 'vibe_rise'
+          const isStressful = nsState === 'pressure'
+          const isBored = nsState === 'bored'
+          // Stressful/bored get desaturated grey-ish fill, others get primal color
+          const nodeFill = isDark ? '#e0e0dc'
+            : isStressful ? '#b0a0a8'
+            : isBored ? '#c0bfba'
+            : n.color
           const nodeR = size * 0.018
 
           return (
@@ -177,15 +194,15 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
               onClick={interactive ? (e) => { e.stopPropagation(); setTappedNode(tappedNode === n.id ? null : n.id) } : undefined}
               style={interactive ? { cursor: 'pointer' } : undefined}
             >
-              {/* Glow */}
+              {/* Glow — only for Vibe Rise and Fun */}
               {glowLevel > 0 && (
                 <circle
                   cx={n.x}
                   cy={n.y}
                   r={nodeR + size * 0.025}
-                  fill={n.color}
+                  fill={isVibeRise ? '#E9A23B' : n.color}
                   opacity={glowLevel * 0.35}
-                  className={nsState === 'pressure' ? 'dome-mini-pulse' : ''}
+                  className={isStressful ? 'dome-mini-pulse' : ''}
                 />
               )}
               {/* Node circle */}
@@ -193,20 +210,20 @@ export default function DomeRadar({ checked = {}, ratings = {}, size = 280, show
                 cx={n.x}
                 cy={n.y}
                 r={interactive ? nodeR * 1.3 : nodeR}
-                fill={isDark ? '#e0e0dc' : n.color}
-                stroke={tappedNode === n.id ? '#1a1a1a' : (isDark ? '#d0d0cc' : n.color)}
+                fill={nodeFill}
+                stroke={tappedNode === n.id ? '#1a1a1a' : (isDark ? '#d0d0cc' : nodeFill)}
                 strokeWidth={tappedNode === n.id ? 2 : (isDark ? 1 : 1.5)}
-                opacity={isDark ? 0.7 : 1}
+                opacity={isDark ? 0.7 : fillOpacity}
                 style={{ transition: 'all 0.4s ease' }}
               />
-              {/* Inner bright fill for lit nodes */}
-              {isChecked && (
+              {/* Inner bright dot — gold for Vibe Rise only */}
+              {isVibeRise && (
                 <circle
                   cx={n.x}
                   cy={n.y}
                   r={nodeR * 0.5}
-                  fill={nsState === 'vibe_rise' ? '#E9A23B' : n.color}
-                  opacity={glowLevel > 0.5 ? 0.9 : 0.6}
+                  fill="#E9A23B"
+                  opacity={0.9}
                   style={{ transition: 'all 0.4s ease' }}
                 />
               )}

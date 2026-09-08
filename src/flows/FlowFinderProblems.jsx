@@ -552,7 +552,7 @@ export default function FlowFinderProblems() {
           <>
             <div className="welcome-message">
               <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
-              <p>Now let's discover the <strong>problems and changes you care about</strong> — the things that matter to you and the impact you want to create.</p>
+              <p>Now let's discover the <strong>problems and changes you care about</strong>, the things that matter to you and the impact you want to create.</p>
               <p>We'll explore your learning interests, impact you've made, life chapters, role models, and future vision.</p>
               <p><strong>For each question, aim for 3-5+ bullet points.</strong></p>
             </div>
@@ -580,11 +580,11 @@ export default function FlowFinderProblems() {
             <input
               type="text"
               className="text-input"
-              placeholder={index === 0 ? "Psychology — how the mind works" :
-                           index === 1 ? "Business — how ideas grow" :
-                           index === 2 ? "Health — how the body heals" :
-                           index === 3 ? "Creativity — how innovation happens" :
-                           "Philosophy — what makes life meaningful"}
+              placeholder={index === 0 ? "Psychology: how the mind works" :
+                           index === 1 ? "Business: how ideas grow" :
+                           index === 2 ? "Health: how the body heals" :
+                           index === 3 ? "Creativity: how innovation happens" :
+                           "Philosophy: what makes life meaningful"}
               value={value}
               onChange={(e) => updateResponse('q1_topics', index, e.target.value)}
             />
@@ -703,7 +703,7 @@ export default function FlowFinderProblems() {
           </div>
 
           <div className="processing-subtext" style={{ marginTop: '24px' }}>
-            Let's go deeper — your life story will reveal even more.
+            Let's go deeper. Your life story will reveal even more.
           </div>
 
           <button className="primary-button" onClick={() => setCurrentScreen('q3')} style={{ marginTop: '24px' }}>
@@ -756,7 +756,7 @@ export default function FlowFinderProblems() {
           // Pre-fill Q4 with chapter names from Q3
           const filledChapters = responses.q3_chapters.filter(ch => ch.trim())
           if (filledChapters.length > 0) {
-            const prefilled = filledChapters.map(chapter => `${chapter} — `)
+            const prefilled = filledChapters.map(chapter => `${chapter}: `)
             // Pad with empty strings if needed to maintain minimum 5 inputs
             while (prefilled.length < 5) {
               prefilled.push('')
@@ -782,24 +782,24 @@ export default function FlowFinderProblems() {
     const getPlaceholder = (index) => {
       const chapter = responses.q3_chapters[index]?.trim()
       if (chapter) {
-        return `${chapter} — describe the struggle...`
+        return `${chapter}: describe the struggle...`
       }
       // Default placeholders if no chapter entered
       const defaults = [
-        "The Explorer Years — finding a place I felt safe to be myself",
-        "The Rebuild — recovering from burnout and redefining success",
-        "The Awakening — letting go of others' expectations",
-        "Finding My Voice — overcoming fear of visibility",
-        "Building My Legacy — balancing ambition with presence"
+        "The Explorer Years: finding a place I felt safe to be myself",
+        "The Rebuild: recovering from burnout and redefining success",
+        "The Awakening: letting go of others' expectations",
+        "Finding My Voice: overcoming fear of visibility",
+        "Building My Legacy: balancing ambition with presence"
       ]
-      return defaults[index] || "Chapter name — describe the struggle..."
+      return defaults[index] || "Chapter name: describe the struggle..."
     }
 
     return (
     <div className="container question-container">
       <div className="question-number">Question 4 of 7</div>
       <h2 className="question-text">For each chapter, what struggle did you face?</h2>
-      <p className="question-subtext">We've pre-filled your chapter names — now add the struggle you faced</p>
+      <p className="question-subtext">We've pre-filled your chapter names. Now add the struggle you faced</p>
       <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
@@ -853,11 +853,11 @@ export default function FlowFinderProblems() {
             <input
               type="text"
               className="text-input"
-              placeholder={index === 0 ? "Brené Brown — Her work on vulnerability helped me accept imperfection" :
-                           index === 1 ? "My grandmother — Showed me the power of resilience and quiet strength" :
-                           index === 2 ? "Seth Godin — Taught me to see marketing as service, not manipulation" :
-                           index === 3 ? "Hermione Granger — Demonstrated that being smart is powerful" :
-                           "My first manager — Believed in me before I believed in myself"}
+              placeholder={index === 0 ? "Brene Brown: Her work on vulnerability helped me accept imperfection" :
+                           index === 1 ? "My grandmother: Showed me the power of resilience and quiet strength" :
+                           index === 2 ? "Seth Godin: Taught me to see marketing as service, not manipulation" :
+                           index === 3 ? "Hermione Granger: Demonstrated that being smart is powerful" :
+                           "My first manager: Believed in me before I believed in myself"}
               value={value}
               onChange={(e) => updateResponse('q5_rolemodels', index, e.target.value)}
             />
@@ -1289,11 +1289,11 @@ export default function FlowFinderProblems() {
 
       <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Problems Discovery Complete!</h1>
       <div className="welcome-message">
-        <p>These problem themes represent the impact you want to create in the world—the changes that matter to you.</p>
+        <p>These problem themes represent the impact you want to create in the world, the changes that matter to you.</p>
       </div>
 
       <div className="welcome-message" style={{ marginTop: '24px' }}>
-        <p>These aren't just problems — <strong>they're your message.</strong> The specific change your art exists to deliver.</p>
+        <p>These aren't just problems. <strong>They're your message.</strong> The specific change your art exists to deliver.</p>
         {clusters.length >= 2 && (
           <p style={{ marginTop: '16px', fontStyle: 'italic', color: 'rgba(255, 255, 255, 0.8)' }}>
             "{clusters[0].label}" is a message. "{clusters[Math.min(1, clusters.length - 1)].label}" is a message. Every one of these is something you believe the world needs to hear.

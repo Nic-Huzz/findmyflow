@@ -354,7 +354,7 @@ export default function FlowFinderPersona() {
             }}>
               <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}><strong>Here's the key insight:</strong></p>
               <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}>You're most qualified to help <strong>former versions of yourself.</strong></p>
-              <p style={{ marginBottom: 0, fontSize: '16px', lineHeight: '1.8' }}>The struggles you've overcome, the growth you've experienced — that's your superpower. You understand those people because you <em>were</em> those people.</p>
+              <p style={{ marginBottom: 0, fontSize: '16px', lineHeight: '1.8' }}>The struggles you've overcome, the growth you've experienced. That's your superpower. You understand those people because you <em>were</em> those people.</p>
             </div>
 
             <div className="welcome-message">
@@ -393,7 +393,7 @@ export default function FlowFinderPersona() {
       </div>
 
       <div className="welcome-message">
-        <p>From this, I'll identify 3-5 personas — former versions of you at different life stages — who need what you've learned.</p>
+        <p>From this, I'll identify 3-5 personas, former versions of you at different life stages, who need what you've learned.</p>
       </div>
 
       <button className="primary-button" onClick={analyzeJourney}>
@@ -553,7 +553,7 @@ export default function FlowFinderPersona() {
       <div className="container welcome-container">
         <h1 className="welcome-greeting">Here's what we discovered about you</h1>
         <div className="welcome-message">
-          <p>Based on your journey, we've identified {clusters.length} personas—former versions of yourself who need what you've learned:</p>
+          <p>Based on your journey, we've identified {clusters.length} personas, former versions of yourself who need what you've learned:</p>
         </div>
 
         {/* All Clusters with journey stage badges */}
@@ -604,7 +604,7 @@ export default function FlowFinderPersona() {
         </div>
 
         <div className="welcome-message" style={{ marginTop: '24px' }}>
-          <p>These aren't just customer profiles — <strong>they're your audience.</strong> The people whose lives change when they experience your art.</p>
+          <p>These aren't just customer profiles. <strong>They're your audience.</strong> The people whose lives change when they experience your art.</p>
           {clusters.length >= 2 && (
             <p style={{ marginTop: '16px', fontStyle: 'italic', color: 'rgba(255, 255, 255, 0.8)' }}>
               {clusters[0].label} is waiting for your message. {clusters[Math.min(1, clusters.length - 1)].label} is waiting for your message. Your art was made for these people.

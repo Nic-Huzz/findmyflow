@@ -1,0 +1,149 @@
+/* PathDefinitionFlow.css — Standalone path commitment flow */
+
+.pdf { max-width: 480px; margin: 0 auto; padding: 20px 20px 180px; min-height: 100dvh; background: #f5f5f0; }
+.pdf-container { max-width: 440px; margin: 0 auto; }
+
+/* ── Progress + header ── */
+.pdf-progress { text-align: center; font-size: 12px; color: rgba(0,0,0,0.3); font-weight: 600; margin-bottom: 4px; }
+.pdf-path-name { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+.pdf-section { margin-bottom: 24px; }
+.pdf-q { font-size: 14px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 10px; }
+
+/* ── Loading + error ── */
+.pdf-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60dvh; text-align: center; gap: 12px; }
+.pdf-spinner { width: 48px; height: 48px; border: 3px solid rgba(94,23,235,0.1); border-top-color: #5e17eb; border-radius: 50%; animation: pdf-spin 0.8s linear infinite; }
+@keyframes pdf-spin { to { transform: rotate(360deg); } }
+.pdf-error { text-align: center; padding: 20px; font-size: 14px; color: #ef4444; }
+.pdf-error button { margin-top: 8px; background: none; border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; }
+
+/* ── Precursor cards ── */
+.pdf-precursor { display: flex; flex-direction: column; gap: 6px; }
+.pdf-pre-card { padding: 14px 16px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; }
+.pdf-pre-card:active { transform: scale(0.98); }
+.pdf-pre-card.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); }
+.pdf-pre-label { font-size: 15px; font-weight: 600; }
+.pdf-pre-desc { font-size: 12px; color: rgba(0,0,0,0.4); margin-top: 2px; }
+
+/* ── Dimension pickers (all 8, current + aspiration) ── */
+.pdf-dims { display: flex; flex-direction: column; gap: 12px; }
+.pdf-dim-card { padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(0,0,0,0.06); background: white; }
+.pdf-dim-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer; }
+.pdf-dim-icon { font-size: 18px; }
+.pdf-dim-label { font-size: 14px; font-weight: 700; flex: 1; }
+.pdf-dim-values { font-size: 12px; color: rgba(0,0,0,0.4); }
+.pdf-dim-chevron { font-size: 12px; color: rgba(0,0,0,0.3); }
+
+.pdf-dim-body { padding-top: 4px; }
+.pdf-dim-sub { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; margin-top: 10px; }
+.pdf-dim-sub:first-child { margin-top: 0; }
+
+.pdf-tiers { display: flex; flex-direction: column; gap: 4px; }
+.pdf-tier { padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(0,0,0,0.06); background: white; cursor: pointer; transition: all 0.15s; position: relative; user-select: none; -webkit-tap-highlight-color: transparent; }
+.pdf-tier:active { transform: scale(0.98); }
+.pdf-tier.current { border-color: #5e17eb; background: rgba(94,23,235,0.03); }
+.pdf-tier.aspiration { border-color: #E9A23B; background: rgba(233,162,59,0.06); }
+.pdf-tier.guess { border-left: 3px solid rgba(94,23,235,0.3); }
+.pdf-tier-level { font-size: 14px; font-weight: 600; }
+.pdf-tier-desc { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 2px; }
+.pdf-tier-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px; }
+.pdf-tier-badge.current-badge { color: #5e17eb; background: rgba(94,23,235,0.08); }
+.pdf-tier-badge.aspiration-badge { color: #E9A23B; background: rgba(233,162,59,0.08); }
+.pdf-tier-badge.guess-badge { color: rgba(0,0,0,0.3); }
+
+/* ── Radar preview ── */
+.pdf-radar { display: flex; flex-direction: column; align-items: center; margin: 16px 0; }
+.pdf-radar-legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: rgba(0,0,0,0.4); }
+.pdf-legend-now { color: #5e17eb; }
+.pdf-legend-dream { color: #E9A23B; }
+
+/* ── Fuel chips ── */
+.pdf-fuel-chips { display: flex; flex-direction: column; gap: 6px; }
+.pdf-fuel-chip { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; font-size: 14px; }
+.pdf-fuel-chip:active { transform: scale(0.98); }
+.pdf-fuel-chip.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); }
+.pdf-fuel-icon { font-size: 18px; flex-shrink: 0; }
+.pdf-fuel-none { font-style: italic; color: rgba(0,0,0,0.4); }
+
+/* ── Bridge text ── */
+.pdf-bridge { font-size: 13px; color: rgba(0,0,0,0.45); line-height: 1.5; padding: 12px 14px; background: rgba(94,23,235,0.03); border-radius: 12px; margin-bottom: 16px; text-align: center; }
+
+/* ── Buts ── */
+.pdf-but-input { display: flex; gap: 8px; margin-bottom: 10px; }
+.pdf-but-input input { flex: 1; padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1); font-size: 14px; font-family: inherit; background: white; }
+.pdf-but-input button { padding: 12px 16px; border-radius: 12px; border: none; background: #5e17eb; color: white; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; }
+.pdf-but-input button:disabled { opacity: 0.3; }
+
+.pdf-buts-list { display: flex; flex-direction: column; gap: 6px; }
+.pdf-but-item { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 12px; background: white; border: 1px solid rgba(0,0,0,0.06); transition: all 0.3s; }
+.pdf-but-item.reframed { background: rgba(233,162,59,0.04); border-color: rgba(233,162,59,0.15); }
+.pdf-but-text { flex: 1; font-size: 14px; line-height: 1.4; }
+.pdf-and { color: #E9A23B; font-weight: 700; }
+.pdf-but-remove { font-size: 16px; color: rgba(0,0,0,0.2); cursor: pointer; padding: 2px 4px; flex-shrink: 0; }
+.pdf-reframe-btn { width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: linear-gradient(135deg, #E9A23B, #d4912f); color: white; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 8px; transition: all 0.15s; }
+.pdf-reframe-btn:active { transform: scale(0.98); }
+.pdf-reframe-note { font-size: 12px; color: rgba(0,0,0,0.35); margin-top: 8px; line-height: 1.4; font-style: italic; }
+
+/* ── Commitment inputs ── */
+.pdf-step-hint { font-size: 12px; color: rgba(0,0,0,0.35); margin-bottom: 8px; line-height: 1.4; }
+.pdf-step-input { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(0,0,0,0.1); font-size: 14px; font-family: inherit; background: white; box-sizing: border-box; }
+.pdf-step-quote { font-size: 13px; color: rgba(0,0,0,0.4); font-style: italic; margin-bottom: 10px; padding: 8px 12px; background: rgba(0,0,0,0.02); border-radius: 8px; }
+.pdf-all-buts { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.pdf-all-buts-label { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.35); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.pdf-all-buts-item { font-size: 13px; color: rgba(0,0,0,0.4); font-style: italic; padding: 6px 12px; background: rgba(0,0,0,0.02); border-radius: 8px; }
+
+/* ── Identity ── */
+.pdf-identity-input { font-weight: 600; }
+.pdf-identity-examples { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pdf-identity-ex { background: rgba(233,162,59,0.06); border: 1px solid rgba(233,162,59,0.15); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: #b8860b; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.pdf-identity-ex:active { transform: scale(0.97); }
+
+/* ── Voice picker (emoji spacing fix) ── */
+.pdf-voices { display: flex; flex-direction: column; gap: 8px; }
+.pdf-voice { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; }
+.pdf-voice:active { transform: scale(0.98); }
+.pdf-voice.selected { border-color: #5e17eb; background: rgba(94,23,235,0.03); }
+.pdf-voice-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 2px; color: transparent; transition: all 0.15s; }
+.pdf-voice.selected .pdf-voice-check { background: #5e17eb; border-color: #5e17eb; color: white; }
+.pdf-voice-content { flex: 1; }
+.pdf-voice-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.pdf-voice-emoji { font-size: 18px; }
+.pdf-voice-sub { font-size: 12px; color: rgba(0,0,0,0.4); margin-top: 2px; }
+
+/* ── Fixed bottom ── */
+.pdf-fixed { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 16px 20px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, #f5f5f0 30%); }
+.pdf-cta { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.pdf-cta:active { transform: scale(0.98); }
+.pdf-cta-gold { background: linear-gradient(135deg, #5e17eb, #E9A23B); color: white; }
+.pdf-cta-gold:disabled { opacity: 0.3; }
+.pdf-cta-secondary { background: white; color: #5e17eb; border: 1.5px solid rgba(94,23,235,0.15); margin-top: 8px; font-size: 14px; padding: 12px; }
+
+/* ── Done ── */
+.pdf-done { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70dvh; text-align: center; gap: 16px; }
+.pdf-done-check { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B); display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; }
+.pdf-done h2 { font-size: 24px; font-weight: 700; }
+.pdf-done p { font-size: 14px; color: rgba(0,0,0,0.45); max-width: 280px; line-height: 1.5; }
+
+/* ── Future contrast cards (Screen 2 identity reveal) ── */
+.pdf-future-card { padding: 16px 18px; border-radius: 14px; margin-bottom: 10px; }
+.pdf-future-protective { background: rgba(0,0,0,0.03); border: 1.5px solid rgba(0,0,0,0.08); }
+.pdf-future-essence { background: rgba(94,23,235,0.03); border: 1.5px solid rgba(94,23,235,0.15); }
+.pdf-future-label { font-size: 12px; font-weight: 600; color: rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.pdf-future-protective .pdf-future-label { color: rgba(0,0,0,0.35); }
+.pdf-future-essence .pdf-future-label { color: #5e17eb; }
+.pdf-future-quote { font-size: 14px; line-height: 1.5; color: rgba(0,0,0,0.6); font-style: italic; margin-bottom: 4px; }
+.pdf-future-quote:last-child { margin-bottom: 0; }
+.pdf-future-essence .pdf-future-quote { color: rgba(0,0,0,0.7); }
+
+/* ── Identity pre-fill / reveal ── */
+.pdf-identity-prefill { margin-top: 16px; }
+.pdf-identity-reveal { font-size: 16px; font-weight: 600; color: #5e17eb; padding: 14px 16px; background: rgba(94,23,235,0.04); border: 1.5px solid rgba(94,23,235,0.12); border-radius: 14px; cursor: pointer; line-height: 1.4; transition: all 0.15s; }
+.pdf-identity-reveal:active { transform: scale(0.98); background: rgba(94,23,235,0.08); }
+
+/* ── Essence CTA (fallback when no essence data) ── */
+.pdf-essence-cta { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; background: rgba(94,23,235,0.03); border: 1.5px dashed rgba(94,23,235,0.15); border-radius: 14px; margin-bottom: 16px; text-align: center; }
+.pdf-essence-cta-text { font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.4; }
+.pdf-essence-cta-link { font-size: 14px; font-weight: 600; color: #5e17eb; text-decoration: none; padding: 8px 16px; border-radius: 10px; background: rgba(94,23,235,0.06); transition: all 0.15s; }
+.pdf-essence-cta-link:active { transform: scale(0.97); }
+
+/* ── Saving ── */
+.pdf-saving { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60dvh; text-align: center; gap: 12px; }

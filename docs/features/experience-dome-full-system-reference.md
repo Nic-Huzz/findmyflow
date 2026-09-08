@@ -287,10 +287,18 @@ Learning is meta to all branches, not its own primal.
 | Business model earnings data | Built (data only) | 3 |
 | Problem ←→ Desire poles | Documented | 2→3 |
 | Persona ←→ Problem mapping | Documented | 2→3 |
-| **Multiplication screen (career reveal)** | **NOT BUILT** | 2→3 |
-| **Role model matching (creators)** | **NOT BUILT** | 2→3 |
-| **Dome → skill inference wiring** | **NOT BUILT** | 2→3 |
-| **Problem → Industry → Buyer recommender** | **NOT BUILT** | 3 |
+| **Direction Bridge (5 cards on Discover tab)** | **Built** (Sep 1-5) | 2→3 |
+| **Multiplication screen (career reveal)** | **Built** (Sep 1, Card 3) | 2→3 |
+| **Problem auto-classification** | **Built** (Sep 1, classify-quest-skills mode:problems) | 2→3 |
+| **Income tracking + hero stages 9-12** | **Built** (Sep 1, Card 5 + WeeklyReview) | 3 |
+| **Money model ladder + business stages** | **Built** (Sep 3-5, Card 4) | 3 |
+| **Domain-specific pricing (94 experiences)** | **Built** (Sep 3, experiencePricing.js) | 3 |
+| **Revenue model tags (94 experiences)** | **Built** (Sep 4, experienceRevenueModels.js) | 3 |
+| **Content multiplier + consumer-primary** | **Built** (Sep 5, content as meta-model) | 3 |
+| **Role model matching (creators)** | **NOT BUILT** (future Direction Card) | 2→3 |
+| **Buyer type reveal** | **NOT BUILT** (future Direction Card) | 3 |
+| **Category question ("What category are you creating?")** | **NOT BUILT** (future Direction Card) | 3 |
+| Dome → skill inference wiring | Skipped (courage XP sufficient) | — |
 
 ---
 
@@ -302,7 +310,9 @@ Learning is meta to all branches, not its own primal.
 4. Feedback loops are aspirational — courage completion doesn't auto-update dome.
 5. 33 creator profiles only validate wellness industry.
 6. Tools (1 node) and Threat (1 node) branches are thin. May need expanding after user testing.
-7. "Bored" label used in Experience Game, but "Uninterested" still used in Life Paths, zone assessments, and other components. Needs app-wide rename pass.
+7. ~~"Bored" label rename~~ **Done** (Aug 31). All components now use "Stressful" and "Bored" consistently.
+8. Domain-specific pricing has 64% average confidence. 3 entries below 30% (fire ceremony, intentional napping, van life). Needs practitioner validation.
+9. Revenue model tags are intrinsic-only. Content creation is a multiplier, not tagged per-experience. If this model is wrong, all 94 tags need rethinking.
 
 ---
 

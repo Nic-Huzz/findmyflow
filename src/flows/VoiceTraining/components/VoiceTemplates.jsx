@@ -20,7 +20,7 @@ export default function VoiceTemplates({ onSelectTemplate, onStartFullTraining, 
         <h2>Choose Your Voice Style</h2>
         <p>
           Pick a starting point that resonates with you. This pre-fills your style
-          preferences — you&apos;ll still add your own writing samples next.
+          preferences. You&apos;ll still add your own writing samples next.
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export default function VoiceTemplates({ onSelectTemplate, onStartFullTraining, 
       </button>
 
       <div style={{ textAlign: 'center', margin: '24px 0 16px', color: '#6c757d' }}>
-        — or —
+        or
       </div>
 
       <button className="vt-secondary-btn" onClick={onStartFullTraining}>

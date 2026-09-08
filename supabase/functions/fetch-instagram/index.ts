@@ -218,6 +218,7 @@ serve(async (req) => {
           const isReel = post.media_product_type === 'REELS'
 
           // Base metrics (all post types)
+          let postFollowsGained = 0, postProfileVisits = 0
           try {
             const postInsights = await composioExecute(
               'INSTAGRAM_GET_IG_MEDIA_INSIGHTS',
@@ -251,7 +252,7 @@ serve(async (req) => {
                 composio_connection_id,
                 {
                   ig_media_id: post.id,
-                  metric: ['reels_skip_rate', 'ig_reels_avg_watch_time', 'ig_reels_video_view_total_time'],
+                  metric: ['reels_skip_rate', 'ig_reels_avg_watch_time', 'ig_reels_video_view_total_time', 'follows', 'profile_visits'],
                 },
                 user_id
               )
@@ -263,6 +264,8 @@ serve(async (req) => {
                   if (m.name === 'reels_skip_rate' && val !== null) postSkipRate = val
                   if (m.name === 'ig_reels_avg_watch_time' && val !== null) postAvgWatchTime = val
                   if (m.name === 'ig_reels_video_view_total_time' && val !== null) postTotalWatchTime = val
+                  if (m.name === 'follows') postFollowsGained = Number(val) || 0
+                  if (m.name === 'profile_visits') postProfileVisits = Number(val) || 0
                 }
               }
             } catch (e) {
@@ -288,6 +291,8 @@ serve(async (req) => {
             skip_rate: postSkipRate,
             avg_watch_time: postAvgWatchTime,
             total_watch_time: postTotalWatchTime,
+            followers_gained: postFollowsGained,
+            profile_visits: postProfileVisits,
             updated_at: new Date().toISOString(),
           }
 

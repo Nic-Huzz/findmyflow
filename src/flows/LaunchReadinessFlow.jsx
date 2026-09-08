@@ -19,6 +19,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useProjectId } from '../hooks/useProjectId'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import { ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LaunchReadinessFlow.css'
@@ -60,9 +61,9 @@ const getEssenceMessage = (voice, layer) => {
     'perfectionist_screen': 'Your Perfectionist wants everything flawless before launch. But real launches teach you more than endless preparation.',
     'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But launches evolve through iteration, not isolation.',
     'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show something unfinished. But launching early gets you real feedback.',
-    'perfectionist_money': 'Your Perfectionist wants the pricing to be perfect. But the market tells you the right price — your guess can\'t.',
+    'perfectionist_money': 'Your Perfectionist wants the pricing to be perfect. But the market tells you the right price. Your guess can\'t.',
     'perfectionist_authority': 'Your Perfectionist wants more credentials first. But you already know enough to help people.',
-    'people_pleaser_screen': 'Your People Pleaser worries about being "too promotional." But your offer helps people — sharing it is generous.',
+    'people_pleaser_screen': 'Your People Pleaser worries about being "too promotional." But your offer helps people. Sharing it is generous.',
     'people_pleaser_live': 'Your People Pleaser fears disappointing someone. But authentic launches attract the right people.',
     'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But most people appreciate knowing about solutions.',
     'people_pleaser_money': 'Your People Pleaser feels uncomfortable asking for money. But fair exchange benefits everyone.',
@@ -77,7 +78,7 @@ const getEssenceMessage = (voice, layer) => {
     'auto_pilot_vulnerable': 'Your Auto-Pilot has stopped caring. But that numbness is protection, not truth.',
     'auto_pilot_money': 'Your Auto-Pilot says "what\'s the point?" But wanting something is the first step back.',
     'performer_authority': 'Your Performer needs more validation. But the validation comes from launching.',
-    'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen — and so do you.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen, and so do you.',
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
     'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',
@@ -178,6 +179,9 @@ function LaunchReadinessFlow() {
 
   const [launchApproach, setLaunchApproach] = useState('')
   const [launchNotes, setLaunchNotes] = useState('')
+
+  // Staggered reveal for results section
+  const { revealStyle } = useStaggerReveal(6, stage === STAGES.RESULTS, { interval: 800 })
 
   // PRE-ACTION state
   const [preActionFeeling, setPreActionFeeling] = useState(null)
@@ -1167,7 +1171,7 @@ function LaunchReadinessFlow() {
         <div className="lr-results">
           <h2>Your Launch Readiness</h2>
 
-          <div className="lr-score-display" style={{ borderColor: gradeInfo.color }}>
+          <div className="lr-score-display" style={{ borderColor: gradeInfo.color, ...revealStyle(0) }}>
             <div className="lr-score-circle" style={{ background: `linear-gradient(135deg, ${gradeInfo.color}40, ${gradeInfo.color}20)` }}>
               <span className="lr-score-number" style={{ color: gradeInfo.color }}>{score}</span>
               <span className="lr-score-max">/100</span>
@@ -1178,14 +1182,14 @@ function LaunchReadinessFlow() {
             <p className="lr-grade-label">{gradeInfo.label}</p>
           </div>
 
-          <div className="lr-approach-summary">
+          <div className="lr-approach-summary" style={revealStyle(1)}>
             <span className="lr-approach-icon">{selectedApproach?.icon}</span>
             <span>Launch Approach: <strong>{selectedApproach?.name}</strong></span>
           </div>
 
           {strengths.length > 0 && (
-            <div className="lr-strengths">
-              <h3>✅ Strengths</h3>
+            <div className="lr-strengths" style={revealStyle(2)}>
+              <h3>Strengths</h3>
               <ul>
                 {strengths.map((s, i) => (
                   <li key={i}>{s}</li>
@@ -1195,8 +1199,8 @@ function LaunchReadinessFlow() {
           )}
 
           {gaps.length > 0 && (
-            <div className="lr-gaps">
-              <h3>⚠️ Gaps to Address</h3>
+            <div className="lr-gaps" style={revealStyle(3)}>
+              <h3>Gaps to Address</h3>
               <ul>
                 {gaps.map((gap, i) => (
                   <li key={i} className={`priority-${gap.priority}`}>
@@ -1208,8 +1212,8 @@ function LaunchReadinessFlow() {
           )}
 
           {/* Campaign Progress Tracker */}
-          <div className="lr-campaign-progress">
-            <h3>📋 Campaign Setup Progress</h3>
+          <div className="lr-campaign-progress" style={revealStyle(4)}>
+            <h3>Campaign Setup Progress</h3>
             <div className="lr-progress-items">
               {Object.entries(campaignProgress).map(([key, item]) => {
                 const statusIcon = item.status.includes('completed') ? '✅' :
@@ -1233,7 +1237,7 @@ function LaunchReadinessFlow() {
 
           {error && <p className="error-message">{error}</p>}
 
-          <div className="nav-buttons">
+          <div className="nav-buttons" style={revealStyle(5)}>
             <button className="secondary-button" onClick={() => setStage(STAGES.LAUNCH_APPROACH)}>Back</button>
             <button
               className="primary-button glow-button"

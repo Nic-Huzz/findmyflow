@@ -350,6 +350,7 @@ export default function IdentifyTopicsFlow() {
           const aiMatch = aiExtractions.find(e => e.problem === itemText)
           const seg = findProblemSegment(catId)
 
+          const validCatId = PROBLEM_SEGMENTS.some(s => s.id === catId) ? catId : null
           rows.push({
             session_id: session.id,
             user_id: user.id,
@@ -357,6 +358,7 @@ export default function IdentifyTopicsFlow() {
             cluster_stage: 'final',
             step_id: 'identify_topics',
             cluster_label: itemText,
+            problem_tags: validCatId ? [validCatId] : [],
             items: [{
               text: itemText,
               categoryId: catId,
