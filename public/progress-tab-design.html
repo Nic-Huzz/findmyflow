@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Tab Design</title>
+<style>
+/* ═══════════════════════════════════════════════════════
+   PROGRESS TAB — Narrative flow with connective tissue
+   Brand-aligned: page-component-design-guide.md
+   ═══════════════════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --border: #e9ecef;
+  --purple-soft: rgba(94, 23, 235, 0.06);
+  --gold-soft: rgba(233, 162, 59, 0.08);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.08);
+  --red-soft: rgba(239, 68, 68, 0.06);
+}
+
+body {
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: var(--text-primary);
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px 120px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ HERO CARD ══════════════════════════════════════ */
+
+.pt-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 0;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+
+.pt-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  animation: ptGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ptGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.pt-stage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.pt-stage-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pt-stages-toggle {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.pt-stages-toggle:hover { background: rgba(255, 255, 255, 0.15); }
+
+.pt-stage-name {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Journey bar */
+.pt-journey-bar {
+  position: relative;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  margin-bottom: 6px;
+  z-index: 1;
+}
+
+.pt-journey-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.4), var(--brand-gold));
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.pt-journey-fill::after {
+  content: '';
+  position: absolute;
+  right: -1px; top: -4px;
+  width: 14px; height: 14px;
+  background: var(--brand-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(233, 162, 59, 0.4);
+  border: 2px solid white;
+}
+
+.pt-journey-endpoints {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Think refs */
+.pt-think {
+  padding: 12px 14px;
+  border-left: 3px solid var(--brand-gold);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 0 12px 12px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.pt-think-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--brand-gold);
+  margin-bottom: 4px;
+}
+
+.pt-think-ref {
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+/* Stage dropdown (hidden by default) */
+.pt-stages-dropdown {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.pt-stage-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.pt-stage-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.pt-stage-dot.completed { background: var(--brand-gold); }
+.pt-stage-dot.current {
+  background: var(--brand-gold);
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.5);
+  width: 10px; height: 10px;
+}
+
+.pt-stage-item-name {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.pt-stage-item-name.completed { color: rgba(255, 255, 255, 0.7); }
+.pt-stage-item-name.current { color: white; font-weight: 700; }
+
+/* ═══ CONNECTIVE TISSUE ══════════════════════════════ */
+
+.pt-bridge {
+  padding: 20px 8px;
+  text-align: center;
+}
+
+.pt-bridge-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ═══ NARRATIVE CARDS ════════════════════════════════ */
+
+/* Essence identity */
+.pt-essence-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.pt-essence-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 3px solid var(--brand-purple);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.2);
+}
+
+.pt-essence-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--brand-purple);
+  margin-bottom: 8px;
+}
+
+.pt-essence-superpower {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.pt-essence-vision {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Missing essence CTA */
+.pt-essence-empty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.pt-essence-empty-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* Life fuel pain (simplified) */
+.pt-fuel-pain {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.pt-fuel-pain-text {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.pt-fuel-has {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.pt-fuel-missing {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+/* Protective voice block */
+.pt-voice-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.pt-voice-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+
+.pt-voice-content { flex: 1; }
+
+.pt-voice-name {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.pt-voice-stat {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.pt-voice-stat strong { color: var(--text-primary); }
+
+.pt-voice-dots {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pt-voice-dots-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pt-voice-dots-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.pt-voice-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.pt-voice-dot.filled {
+  background: var(--brand-purple);
+  opacity: 0.7;
+}
+
+.pt-voice-dot.empty {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.pt-voice-trend {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  margin-top: 8px;
+}
+
+.pt-voice-trend.up { color: #ef4444; }
+
+/* ═══ EVIDENCE SECTION ═══════════════════════════════ */
+
+.pt-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.pt-section-icon {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+
+.pt-section-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--brand-purple);
+}
+
+.pt-section-meta {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Evidence card */
+.pt-evidence-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  animation: ptSlideIn 0.3s ease both;
+}
+
+.pt-evidence-card:nth-child(3) { animation-delay: 0.05s; }
+.pt-evidence-card:nth-child(4) { animation-delay: 0.1s; }
+
+@keyframes ptSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pt-evidence-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 24px 0 0 24px;
+}
+
+.pt-evidence-card[data-state="vibe_rise"]::before { background: var(--brand-gold); }
+.pt-evidence-card[data-state="fun"]::before { background: var(--green); }
+.pt-evidence-card[data-state="pressure"]::before { background: #ef4444; }
+.pt-evidence-card[data-state="bored"]::before { background: #9ca3af; }
+
+.pt-evidence-card[data-state="vibe_rise"] {
+  background: linear-gradient(135deg, #fffdf7 0%, #fff9eb 100%);
+  border-color: rgba(233, 162, 59, 0.15);
+}
+
+.pt-evidence-quest {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.pt-evidence-title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.pt-evidence-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.pt-chip-growth {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  background: var(--gold-soft);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b8860b;
+}
+
+.pt-chip-growth-arrow { font-size: 10px; opacity: 0.5; }
+
+.pt-chip-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pt-chip-state[data-state="vibe_rise"] { background: var(--gold-soft); color: #b8860b; }
+.pt-chip-state[data-state="fun"] { background: var(--green-soft); color: #059669; }
+.pt-chip-state[data-state="pressure"] { background: var(--red-soft); color: #dc2626; }
+.pt-chip-state[data-state="bored"] { background: rgba(156, 163, 175, 0.08); color: #6b7280; }
+
+/* Evidence summary */
+.pt-evidence-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.pt-evidence-summary strong { color: var(--text-primary); font-weight: 700; }
+
+/* ═══ JOURNEY SECTION ════════════════════════════════ */
+
+.pt-radar-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.pt-radar-card-name {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+
+.pt-radar-placeholder {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 40px 0;
+}
+
+/* Fuel comparison */
+.pt-fuel-compare {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  margin-top: 12px;
+}
+
+.pt-fuel-compare-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--brand-purple);
+  margin-bottom: 16px;
+}
+
+.pt-fuel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.pt-fuel-row + .pt-fuel-row {
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.pt-fuel-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 110px;
+  flex-shrink: 0;
+}
+
+.pt-fuel-name-emoji { font-size: 16px; }
+
+.pt-fuel-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pt-fuel-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pt-fuel-bar-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.pt-fuel-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.pt-fuel-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.6s ease;
+}
+
+.pt-fuel-bar-fill.started { background: var(--brand-purple); opacity: 0.25; }
+.pt-fuel-bar-fill.now { background: var(--brand-gold); }
+
+/* ═══ GOLD CTA ═══════════════════════════════════════ */
+
+.pt-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.pt-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
+}
+
+.pt-cta span { font-size: 18px; }
+
+/* ═══ EMPTY STATE ════════════════════════════════════ */
+
+.pt-empty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.pt-empty-icon { font-size: 40px; display: block; margin-bottom: 16px; }
+
+.pt-empty-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.pt-empty-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO CARD ═══ -->
+<div class="pt-hero">
+  <div class="pt-stage-row">
+    <div class="pt-stage-label">Stage 5 of 12</div>
+    <button class="pt-stages-toggle" onclick="document.querySelector('.pt-stages-dropdown').style.display = document.querySelector('.pt-stages-dropdown').style.display === 'none' ? 'block' : 'none'">All stages ▾</button>
+  </div>
+  <div class="pt-stage-name">Finding Your Way</div>
+
+  <div class="pt-journey-bar">
+    <div class="pt-journey-fill" style="width: 42%"></div>
+  </div>
+  <div class="pt-journey-endpoints">
+    <span>The Crack</span>
+    <span>Doing What You Love</span>
+  </div>
+
+  <div class="pt-think">
+    <div class="pt-think-label">Think:</div>
+    <div class="pt-think-ref">Jasmine and Aladdin on the magic carpet for the first time.</div>
+    <div class="pt-think-ref">Spider-Man's first swing through New York.</div>
+    <div class="pt-think-ref">Neo dodging bullets for the first time.</div>
+  </div>
+
+  <!-- Stage dropdown (toggle) -->
+  <div class="pt-stages-dropdown" style="display: none;">
+    <div class="pt-stage-item"><div class="pt-stage-dot completed"></div><span class="pt-stage-item-name completed">1. Waking Up</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot completed"></div><span class="pt-stage-item-name completed">2. Exploring</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot completed"></div><span class="pt-stage-item-name completed">3. Discovering Yourself</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot completed"></div><span class="pt-stage-item-name completed">4. Choosing a Direction</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot current"></div><span class="pt-stage-item-name current">5. Finding Your Way</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">6. Facing Resistance</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">7. Going Deeper</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">8. The Breakthrough</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">9. First Reward</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">10. Building Momentum</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">11. Proving It's Real</span></div>
+    <div class="pt-stage-item"><div class="pt-stage-dot"></div><span class="pt-stage-item-name">12. Doing What You Love</span></div>
+  </div>
+</div>
+
+<!-- ═══ NARRATIVE FLOW ═══ -->
+
+<!-- Essence identity -->
+<div class="pt-bridge"><span class="pt-bridge-text">you are...</span></div>
+
+<div class="pt-essence-card">
+  <img class="pt-essence-avatar" src="/images/essence/radiant-rebel.png" alt="Radiant Rebel" />
+  <div class="pt-essence-name">The Radiant Rebel</div>
+  <div class="pt-essence-superpower">"You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck."</div>
+  <div class="pt-essence-vision">Turning chaos into clarity, they spark revolutions with nothing but their voice.</div>
+</div>
+
+<!-- Pain -->
+<div class="pt-bridge"><span class="pt-bridge-text">but right now...</span></div>
+
+<div class="pt-fuel-pain">
+  <div class="pt-fuel-pain-text">
+    Your current life gives you <span class="pt-fuel-has">🤝 Connection</span> and <span class="pt-fuel-has">📈 Mastery</span>, but you're missing <span class="pt-fuel-missing">🔓 Choice</span> and <span class="pt-fuel-missing">✨ Meaning</span>.
+  </div>
+</div>
+
+<!-- Block -->
+<div class="pt-bridge"><span class="pt-bridge-text">what's getting in the way?</span></div>
+
+<div class="pt-voice-card">
+  <div class="pt-voice-icon">👻</div>
+  <div class="pt-voice-content">
+    <div class="pt-voice-name">Your Ghost</div>
+    <div class="pt-voice-stat">
+      Shows up most when <strong>Vulnerability</strong> is involved.
+    </div>
+    <div class="pt-voice-dots">
+      <div class="pt-voice-dots-row">
+        <span class="pt-voice-dots-label">Last month</span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+      </div>
+      <div class="pt-voice-dots-row">
+        <span class="pt-voice-dots-label">This month</span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot filled"></span>
+        <span class="pt-voice-dot empty"></span>
+        <span class="pt-voice-dot empty"></span>
+        <span class="pt-voice-dot empty"></span>
+      </div>
+    </div>
+    <div class="pt-voice-trend">It's getting quieter ↓</div>
+  </div>
+</div>
+
+<!-- Evidence -->
+<div class="pt-bridge"><span class="pt-bridge-text">but this week you fought back.</span></div>
+
+<div class="pt-section-header">
+  <div class="pt-section-icon">⚡</div>
+  <div class="pt-section-label">This Week</div>
+  <div class="pt-section-meta">3 challenges</div>
+</div>
+
+<div class="pt-evidence-card" data-state="vibe_rise">
+  <div class="pt-evidence-quest">Ecstatic Dance Events</div>
+  <div class="pt-evidence-title">Ran my first ecstatic dance event</div>
+  <div class="pt-evidence-chips">
+    <span class="pt-chip-growth">👥 People 3 <span class="pt-chip-growth-arrow">→</span> 5</span>
+    <span class="pt-chip-growth">💜 Vulnerability 1 <span class="pt-chip-growth-arrow">→</span> 3</span>
+    <span class="pt-chip-state" data-state="vibe_rise">🔥 Vibe Rise</span>
+  </div>
+</div>
+
+<div class="pt-evidence-card" data-state="fun">
+  <div class="pt-evidence-quest">Career Growth</div>
+  <div class="pt-evidence-title">Asked for a raise at work</div>
+  <div class="pt-evidence-chips">
+    <span class="pt-chip-growth">💰 Money 2 <span class="pt-chip-growth-arrow">→</span> 4</span>
+    <span class="pt-chip-state" data-state="fun">😊 Fun</span>
+  </div>
+</div>
+
+<div class="pt-evidence-card" data-state="pressure">
+  <div class="pt-evidence-quest">Content Creation</div>
+  <div class="pt-evidence-title">Posted my face on Instagram</div>
+  <div class="pt-evidence-chips">
+    <span class="pt-chip-growth">🪞 Identity 1 <span class="pt-chip-growth-arrow">→</span> 2</span>
+    <span class="pt-chip-state" data-state="pressure">😰 Stressful</span>
+  </div>
+</div>
+
+<div class="pt-evidence-summary">
+  Your comfort zone grew in <strong>3 dimensions</strong> this week. The things that felt like Vibe Rise gave you the most growth.
+</div>
+
+<!-- Journey -->
+<div class="pt-bridge"><span class="pt-bridge-text">here's how far you've come.</span></div>
+
+<div class="pt-section-header">
+  <div class="pt-section-icon">🗺️</div>
+  <div class="pt-section-label">Your Paths</div>
+</div>
+
+<div class="pt-radar-card">
+  <div class="pt-radar-card-name">Ecstatic Dance Events</div>
+  <div class="pt-radar-placeholder">[PerQuestRadar: start → now → dream]</div>
+</div>
+
+<div class="pt-fuel-compare">
+  <div class="pt-fuel-compare-title">Life Fuel Over Time</div>
+
+  <div class="pt-fuel-row">
+    <div class="pt-fuel-name"><span class="pt-fuel-name-emoji">🔓</span> Choice</div>
+    <div class="pt-fuel-bars">
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Start</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill started" style="width: 20%"></div></div></div>
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Now</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill now" style="width: 65%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="pt-fuel-row">
+    <div class="pt-fuel-name"><span class="pt-fuel-name-emoji">🤝</span> Connection</div>
+    <div class="pt-fuel-bars">
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Start</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill started" style="width: 70%"></div></div></div>
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Now</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill now" style="width: 80%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="pt-fuel-row">
+    <div class="pt-fuel-name"><span class="pt-fuel-name-emoji">📈</span> Mastery</div>
+    <div class="pt-fuel-bars">
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Start</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill started" style="width: 50%"></div></div></div>
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Now</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill now" style="width: 90%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="pt-fuel-row">
+    <div class="pt-fuel-name"><span class="pt-fuel-name-emoji">✨</span> Meaning</div>
+    <div class="pt-fuel-bars">
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Start</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill started" style="width: 10%"></div></div></div>
+      <div class="pt-fuel-bar-row"><span class="pt-fuel-bar-label">Now</span><div class="pt-fuel-bar"><div class="pt-fuel-bar-fill now" style="width: 75%"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Next step -->
+<div class="pt-bridge"><span class="pt-bridge-text">next step</span></div>
+
+<a class="pt-cta" href="#">
+  Map your current work <span>→</span>
+</a>
+
+</body>
+</html>
