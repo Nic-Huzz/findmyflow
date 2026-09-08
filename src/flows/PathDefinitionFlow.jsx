@@ -675,12 +675,20 @@ export default function PathDefinitionFlow() {
                     <div className="pdf-future-quote">"{essenceVision}"</div>
                   </div>
 
-                  {/* Editable pre-filled identity */}
+                  {/* Identity reveal — read-only with tap to edit */}
                   <div className="pdf-identity-prefill">
                     <div className="pdf-q">I am someone who...</div>
-                    <input className="pdf-step-input pdf-identity-input" type="text"
+                    <div className="pdf-identity-reveal" onClick={() => {
+                      const input = document.querySelector('.pdf-identity-edit')
+                      if (input) { input.style.display = 'block'; input.focus() }
+                    }}>
+                      {identityText || essenceSuperpower}
+                    </div>
+                    <input className="pdf-step-input pdf-identity-input pdf-identity-edit" type="text"
+                      style={{ display: 'none' }}
                       value={identityText}
                       onChange={e => setIdentityText(e.target.value)}
+                      onBlur={e => { if (e.target.value.trim()) e.target.style.display = 'none' }}
                       placeholder="...finish this sentence" />
                   </div>
                 </>

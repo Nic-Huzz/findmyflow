@@ -123,5 +123,27 @@
 .pdf-done h2 { font-size: 24px; font-weight: 700; }
 .pdf-done p { font-size: 14px; color: rgba(0,0,0,0.45); max-width: 280px; line-height: 1.5; }
 
+/* ── Future contrast cards (Screen 2 identity reveal) ── */
+.pdf-future-card { padding: 16px 18px; border-radius: 14px; margin-bottom: 10px; }
+.pdf-future-protective { background: rgba(0,0,0,0.03); border: 1.5px solid rgba(0,0,0,0.08); }
+.pdf-future-essence { background: rgba(94,23,235,0.03); border: 1.5px solid rgba(94,23,235,0.15); }
+.pdf-future-label { font-size: 12px; font-weight: 600; color: rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.pdf-future-protective .pdf-future-label { color: rgba(0,0,0,0.35); }
+.pdf-future-essence .pdf-future-label { color: #5e17eb; }
+.pdf-future-quote { font-size: 14px; line-height: 1.5; color: rgba(0,0,0,0.6); font-style: italic; margin-bottom: 4px; }
+.pdf-future-quote:last-child { margin-bottom: 0; }
+.pdf-future-essence .pdf-future-quote { color: rgba(0,0,0,0.7); }
+
+/* ── Identity pre-fill / reveal ── */
+.pdf-identity-prefill { margin-top: 16px; }
+.pdf-identity-reveal { font-size: 16px; font-weight: 600; color: #5e17eb; padding: 14px 16px; background: rgba(94,23,235,0.04); border: 1.5px solid rgba(94,23,235,0.12); border-radius: 14px; cursor: pointer; line-height: 1.4; transition: all 0.15s; }
+.pdf-identity-reveal:active { transform: scale(0.98); background: rgba(94,23,235,0.08); }
+
+/* ── Essence CTA (fallback when no essence data) ── */
+.pdf-essence-cta { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; background: rgba(94,23,235,0.03); border: 1.5px dashed rgba(94,23,235,0.15); border-radius: 14px; margin-bottom: 16px; text-align: center; }
+.pdf-essence-cta-text { font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.4; }
+.pdf-essence-cta-link { font-size: 14px; font-weight: 600; color: #5e17eb; text-decoration: none; padding: 8px 16px; border-radius: 10px; background: rgba(94,23,235,0.06); transition: all 0.15s; }
+.pdf-essence-cta-link:active { transform: scale(0.97); }
+
 /* ── Saving ── */
 .pdf-saving { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60dvh; text-align: center; gap: 12px; }
