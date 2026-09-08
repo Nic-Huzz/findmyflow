@@ -9,7 +9,6 @@ import {
   triggerFireConfetti,
   triggerSideCannons
 } from '../components/Celebrations'
-import { sendAchievementNotification } from '../lib/notifications'
 
 /**
  * Hook for managing celebration animations
@@ -69,12 +68,6 @@ export function useCelebrations() {
       navigator.vibrate([100, 50, 100, 50, 200])
     }
 
-    // Send achievement notification
-    const levelName = typeof newLevel === 'object' ? newLevel.name : `Level ${newLevel}`
-    sendAchievementNotification({
-      title: `🎉 ${levelName} Unlocked!`,
-      body: 'Keep up the amazing work on your journey!'
-    })
   }, [])
 
   /**
@@ -95,11 +88,6 @@ export function useCelebrations() {
       navigator.vibrate([100, 50, 100])
     }
 
-    // Send achievement notification
-    sendAchievementNotification({
-      title: `🔥 ${days} Day Streak!`,
-      body: `You've completed ${days} days in a row. Amazing consistency!`
-    })
   }, [])
 
   /**

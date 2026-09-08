@@ -145,7 +145,11 @@ const EXPERIENCE_LABELS = {
   'exp-fishing': 'Fishing',
   'exp-horse-riding': 'Horse riding',
   'exp-interior-design': 'Interior / spatial design',
-  'exp-fashion-design': 'Fashion design',
+  'exp-fashion-design': 'Creating something others wear or use to express themselves',
+  'exp-style-turning-heads': 'Dressing in a way that turns heads',
+  'exp-style-scary': 'Wearing something that scares you a little',
+  'exp-style-becoming': 'Changing your look to match who you\'re becoming',
+  'exp-style-comfort': 'Choosing comfort over expectation',
   'exp-product-design': 'Product design',
   'exp-graphic-design': 'Graphic design',
   'exp-investing': 'Investing / trading',
@@ -659,10 +663,14 @@ const CORE_NODE_IDS = new Set([
   'exp-new-cuisine',         // Trying a cuisine you've never had
   'exp-baking',              // Baking
 
-  // Style (3) — how you present yourself to the world
-  'exp-choosing-style',      // Wearing clothes that express who you are
-  'exp-tattoo',              // Tattoo / body art / piercings
-  'exp-fashion-design',      // Fashion design
+  // Style (7) — expressing who you are through how you show up
+  'exp-choosing-style',      // Dressing as the version of you that feels most alive
+  'exp-tattoo',              // Marking your body with something meaningful
+  'exp-fashion-design',      // Creating something others wear or use to express themselves
+  'exp-style-turning-heads', // Dressing in a way that turns heads
+  'exp-style-scary',         // Wearing something that scares you a little
+  'exp-style-becoming',      // Changing your look to match who you're becoming
+  'exp-style-comfort',       // Choosing comfort over expectation
 
   // Tools (5) — extending capability
   'exp-coding',              // Coding / building software
@@ -759,8 +767,8 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-public-speaking', label: 'Public speaking / presenting', branch: 'story-oral', primal: 'story' },
   { id: 'exp-selling', label: 'Selling / pitching', branch: 'story-oral', primal: 'story' },
   { id: 'exp-coaching', label: 'Coaching / mentoring someone', branch: 'story-oral', primal: 'story' },
-  { id: 'exp-choosing-style', label: 'Wearing clothes that express who you are', branch: 'status-fashion', primal: 'status' },
-  { id: 'exp-tattoo', label: 'Tattoo / body art / piercings', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-choosing-style', label: 'Dressing as the version of you that feels most alive', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-tattoo', label: 'Marking your body with something meaningful', branch: 'status-fashion', primal: 'status' },
   { id: 'exp-swimming', label: 'Swimming / ocean', branch: 'move-outdoor', primal: 'movement' },
   { id: 'exp-club-dancing', label: 'Going out dancing / clubbing', branch: 'move-dance', primal: 'movement' },
   { id: 'exp-drinks-friends', label: 'Drinks with friends / hanging out', branch: 'bonds-ritual', primal: 'bonds' },
@@ -781,7 +789,11 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-djing-live', label: 'DJing / playing a set for a crowd', branch: 'play-sport', primal: 'play' },
   { id: 'exp-dance-expression', label: 'Dancing (creative / performance)', branch: 'story-immersive', primal: 'story' },
   { id: 'exp-interior-design', label: 'Interior / spatial design', branch: 'shelter-sacred', primal: 'shelter' },
-  { id: 'exp-fashion-design', label: 'Fashion design', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-fashion-design', label: 'Creating something others wear or use to express themselves', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-style-turning-heads', label: 'Dressing in a way that turns heads', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-style-scary', label: 'Wearing something that scares you a little', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-style-becoming', label: 'Changing your look to match who you\'re becoming', branch: 'status-fashion', primal: 'status' },
+  { id: 'exp-style-comfort', label: 'Choosing comfort over expectation', branch: 'status-fashion', primal: 'status' },
   { id: 'exp-product-design', label: 'Product design', branch: 'tech', primal: 'tools' },
   { id: 'exp-graphic-design', label: 'Graphic design', branch: 'tech', primal: 'tools' },
   { id: 'exp-investing', label: 'Investing / trading', branch: 'tech', primal: 'tools' },

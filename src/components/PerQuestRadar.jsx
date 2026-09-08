@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import { supabase } from '../lib/supabaseClient'
 import './PerQuestRadar.css'
+import './DomeOfSafety.css'
 
 const LABEL_OFFSET = 24
 const RING_COUNT = 5
@@ -24,8 +25,8 @@ function polarToXY(cx, cy, angle, radius) {
 
 function buildPolygon(cx, cy, maxRadius, values, maxLevels, angleStep) {
   return DOME_DIMENSIONS.map((dim, i) => {
-    const level = values[dim.id] || 0
-    const max = maxLevels[dim.id] || dim.maxLevel
+    const level = Number(values[dim.id]) || 0
+    const max = Number(maxLevels[dim.id] || dim.maxLevel) || 1
     const ratio = max > 0 ? Math.min(level / max, 1) : 0
     return polarToXY(cx, cy, i * angleStep, Math.max(ratio * maxRadius, 0))
   }).map(p => `${p.x},${p.y}`).join(' ')

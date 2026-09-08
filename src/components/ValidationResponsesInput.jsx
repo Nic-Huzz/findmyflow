@@ -16,10 +16,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
-import {
-  checkValidationProgressNotification,
-  sendAnalysisUnlockedNotification
-} from '../lib/notifications'
 import './ValidationResponsesInput.css'
 
 // Badge configuration
@@ -123,10 +119,7 @@ function ValidationResponsesInput({ quest, onComplete, projectId = null }) {
       setTotalResponses(total)
 
       if (total > 0 && total < REQUIRED_RESPONSES) {
-        checkValidationProgressNotification(user.id, total, REQUIRED_RESPONSES)
         await loadPreviewQuotes(flowsWithResponses)
-      } else if (total >= REQUIRED_RESPONSES) {
-        sendAnalysisUnlockedNotification(user.id)
       }
 
       let analysisQuery = supabase

@@ -9,7 +9,6 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
-import { sendNotification } from '../lib/notifications'
 import {
   handleConversationLogCompletion,
   handleMilestoneCompletion,
@@ -334,14 +333,6 @@ export function useChallengeData() {
       console.error('Error advancing day:', error)
     } else {
       setProgress(data)
-      if (newDay > currentProgress.current_day && newDay <= 7) {
-        await sendNotification(user.id, {
-          title: `Day ${newDay} Unlocked!`,
-          body: 'Your new daily quests are ready to complete',
-          url: '/7-day-challenge',
-          tag: `day-${newDay}`
-        })
-      }
     }
   }
 
