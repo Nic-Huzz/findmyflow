@@ -33,16 +33,16 @@ import careerModelsData from '../../public/data/careerModels.json'
  * Logic: "If you have THIS skill, you can help with THESE problems"
  */
 export const SKILLS_TO_PROBLEMS = {
-  storytelling: ['voice_taken', 'work_treated_nothing', 'forgot_what_for'],
-  teaching: ['feeling_stupid', 'locked_out', 'kids_deserved_better'],
-  coaching: ['forgot_what_for', 'kids_deserved_better', 'pain_not_believed'],
-  performing: ['voice_taken', 'work_treated_nothing', 'work_hollows'],
-  creating: ['work_treated_nothing', 'voice_taken', 'stopped_wondering'],
-  building: ['locked_out', 'feeling_stupid', 'left_behind'],
-  designing: ['work_treated_nothing', 'left_behind', 'feeling_stupid'],
-  leading: ['work_hollows', 'left_behind', 'life_not_yours'],
-  connecting: ['left_behind', 'forgot_what_for', 'voice_taken'],
-  speaking_up: ['life_not_yours', 'voice_taken', 'world_losing'],
+  storytelling: ['minds_hurting', 'work_treated_nothing', 'feeling_lost'],
+  teaching: ['feeling_stupid', 'kids_deserved_better', 'teams_leaders_broken'],
+  coaching: ['feeling_lost', 'kids_deserved_better', 'minds_hurting'],
+  performing: ['minds_hurting', 'work_treated_nothing', 'work_hollows'],
+  creating: ['work_treated_nothing', 'minds_hurting', 'feeling_lost'],
+  building: ['people_treated_unfairly', 'feeling_stupid', 'money_stress'],
+  designing: ['work_treated_nothing', 'lonely_disconnected', 'feeling_stupid'],
+  leading: ['work_hollows', 'teams_leaders_broken', 'people_treated_unfairly'],
+  connecting: ['lonely_disconnected', 'feeling_lost', 'minds_hurting'],
+  speaking_up: ['people_treated_unfairly', 'minds_hurting', 'world_losing'],
 }
 
 /**
@@ -55,17 +55,17 @@ export const SKILLS_TO_PROBLEMS = {
  */
 export const PROBLEMS_TO_PERSONAS = {
   kids_deserved_better: ['nurturers', 'teachers', 'protectors'],
-  voice_taken: ['challengers', 'creators', 'seekers'],
   pain_not_believed: ['healers', 'nurturers', 'protectors'],
-  world_losing: ['protectors', 'visionaries', 'challengers'],
-  life_not_yours: ['challengers', 'visionaries', 'protectors'],
+  minds_hurting: ['healers', 'seekers', 'creators'],
+  money_stress: ['builders', 'achievers', 'protectors'],
+  lonely_disconnected: ['connectors', 'nurturers', 'seekers'],
   feeling_stupid: ['teachers', 'builders', 'seekers'],
-  locked_out: ['builders', 'challengers', 'connectors'],
   work_treated_nothing: ['creators', 'explorers', 'visionaries'],
-  left_behind: ['connectors', 'nurturers', 'builders'],
-  forgot_what_for: ['seekers', 'healers', 'explorers'],
-  stopped_wondering: ['seekers', 'visionaries', 'teachers'],
   work_hollows: ['builders', 'explorers', 'achievers'],
+  teams_leaders_broken: ['achievers', 'builders', 'visionaries'],
+  world_losing: ['protectors', 'visionaries', 'challengers'],
+  people_treated_unfairly: ['challengers', 'visionaries', 'protectors'],
+  feeling_lost: ['seekers', 'healers', 'explorers'],
 }
 
 /**

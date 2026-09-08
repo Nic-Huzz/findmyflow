@@ -75,10 +75,10 @@ export default function MobilePlaylistPicker({
 
   // Problem category icons
   const CATEGORY_ICONS = {
-    kids_deserved_better: '👶', voice_taken: '😤', pain_not_believed: '😣',
-    world_losing: '🌍', life_not_yours: '🎭', feeling_stupid: '😵‍💫',
-    locked_out: '🔒', work_treated_nothing: '💔', left_behind: '😞',
-    forgot_what_for: '🌑', stopped_wondering: '🤔', work_hollows: '😔',
+    kids_deserved_better: '🧸', pain_not_believed: '💔', minds_hurting: '🧠',
+    money_stress: '💰', lonely_disconnected: '🫂', feeling_stupid: '💡',
+    work_treated_nothing: '🎭', work_hollows: '🏭', teams_leaders_broken: '🏢',
+    world_losing: '🌍', people_treated_unfairly: '⚖️', feeling_lost: '🧭',
   }
 
   const getTopicLabel = () => {
