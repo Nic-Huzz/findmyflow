@@ -25,7 +25,6 @@ import MilestoneCommitModal from './MilestoneCommitModal'
 import MilestoneReflectModal from './MilestoneReflectModal'
 import ProgressBars from './ProgressBars'
 import SweetSpotGraph from './SweetSpotGraph'
-import QuadrantCard from './QuadrantCard'
 import useCapacityScore from '../../hooks/useCapacityScore'
 import JourneyGraphPopup from '../JourneyGraphPopup'
 import WeeklyFocus from './WeeklyFocus'
@@ -467,18 +466,6 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   return (
     <div className="level-tab">
 
-      {/* ══════ QUADRANT CARD ══════ */}
-      {!scoreData.loading && scoreData.safety !== null && (
-        <QuadrantCard
-          safety={scoreData.safety}
-          expression={scoreData.expression}
-          maintenancePct={scoreData.maintenancePct}
-          zone={scoreData.zone}
-          todayProgress={scoreData.todayProgress}
-          trend={scoreData.trend}
-        />
-      )}
-
       {/* ══════ QUEST BOARD ══════ */}
 
       {/* Active Quests */}
@@ -508,10 +495,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       <div className="quest-section">
         <div className="quest-section-header">
-          <span className="quest-section-icon">⚔️</span>
-          <span className="quest-section-title">Active Paths</span>
+          <span className="quest-section-title">Your Paths</span>
         </div>
-        <p className="quest-section-sub">Life paths you're actively pursuing right now.</p>
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
             <span style={{ fontSize: 20 }}>🔒</span>
