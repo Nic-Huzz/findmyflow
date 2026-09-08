@@ -29,7 +29,13 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
   const loadProfile = async () => {
     setLoading(true)
     const data = await getProblemProfile(userId)
-    setProfile(data)
+    // Deduplicate by resolved ID (old DB data may have voice_taken + minds_hurting as separate entries)
+    const seen = new Map()
+    data.forEach(({ id: rawId, count }) => {
+      const resolved = resolveProblemId(rawId) || rawId
+      seen.set(resolved, (seen.get(resolved) || 0) + count)
+    })
+    setProfile([...seen.entries()].map(([id, count]) => ({ id, count })))
     setLoading(false)
   }
 
@@ -138,8 +144,7 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
       </div>
 
       <div className="pmot-categories">
-        {profile.map(({ id: rawId, count }) => {
-          const id = resolveProblemId(rawId) || rawId
+        {profile.map(({ id, count }) => {
           const meta = CATEGORY_META[id]
           if (!meta) return null
           const isSelected = selected.has(id)

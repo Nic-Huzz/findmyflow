@@ -13,7 +13,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
-import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment } from '../lib/wheelTaxonomy'
+import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment, findProblemSegment } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
 import '../styles/flow-base.css'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
@@ -211,7 +211,7 @@ export default function LetsPlayFlow() {
 
   const getProblemDisplay = (cluster) => {
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = PROBLEM_SEGMENTS.find(p => p.id === segmentId)
+    const segment = findProblemSegment(segmentId)
     return {
       id: cluster.id,
       name: cluster.cluster_label || segment?.displayName || 'Problem',
@@ -237,7 +237,7 @@ export default function LetsPlayFlow() {
     const cluster = problems.find(p => p.id === problemId)
     if (!cluster) return { name: 'their problem', icon: '🎯' }
     const segmentId = cluster.taxonomy_keys?.[0]
-    const segment = PROBLEM_SEGMENTS.find(p => p.id === segmentId)
+    const segment = findProblemSegment(segmentId)
     return {
       name: cluster.cluster_label || segment?.displayName || 'Problem',
       icon: segment?.icon || '🎯'
