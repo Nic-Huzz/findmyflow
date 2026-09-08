@@ -15,7 +15,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
-import { DOME_DIMENSIONS, calculateCourageScore } from '../data/domeDimensions'
+import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import DomeOfSafety from '../components/DomeOfSafety'
@@ -39,7 +39,18 @@ const SHIFT_FUELS = [
   { id: 'meaning', icon: '✨', label: 'Meaning', full: 'This serves something I care about' },
 ]
 
-const DIM_SUBS = {
+const STEP_DIM_QUESTIONS = {
+  people: 'How many people will be involved?',
+  money: 'How much money is on the line?',
+  vulnerability: 'How visible will you be?',
+  stakes: 'What will be at risk?',
+  rarity: 'How uncommon is this?',
+  identity: 'How much of a stretch is this for you?',
+  context: 'How unfamiliar will the conditions be?',
+  business_commitment: 'How deep into business does this go?',
+}
+
+const STEP_DIM_SUBS = {
   people: 'More people watching or involved',
   money: 'Charging or asking for money',
   vulnerability: 'Removing shields, being seen',
@@ -786,11 +797,6 @@ export default function PathDefinitionFlow() {
                     </div>
                   )}
 
-                  {Object.keys(stepDimValues).length > 0 && (
-                    <div className="wc-courage-preview">
-                      Courage score: {calculateCourageScore(stepDimValues).toFixed(1)}
-                    </div>
-                  )}
                 </>
               )}
 
@@ -800,9 +806,15 @@ export default function PathDefinitionFlow() {
                 if (!dim) return null
                 return (
                   <div style={{ marginTop: 16 }}>
+                    <button className="cjf-back" onClick={() => {
+                      if (stepDimValues[stepDrilledDim] == null) {
+                        setStepDims(prev => prev.filter(x => x !== stepDrilledDim))
+                      }
+                      setStepDrilledDim(null)
+                    }}>← Back</button>
                     <div className="wc-level-icon">{dim.icon}</div>
-                    <div className="pdf-q">{dim.question || dim.label}</div>
-                    <p className="pdf-step-hint">{DIM_SUBS[stepDrilledDim]}</p>
+                    <div className="pdf-q">{STEP_DIM_QUESTIONS[stepDrilledDim] || dim.label}</div>
+                    <p className="pdf-step-hint">{STEP_DIM_SUBS[stepDrilledDim]}</p>
                     <div className="wc-level-options">
                       {dim.type === 'numeric' ? (
                         <>
