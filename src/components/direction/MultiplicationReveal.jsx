@@ -12,11 +12,11 @@ import { useState, useEffect } from 'react'
 import { getTopSkills, getDomeFuel } from '../../lib/directionEngine'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
-import problemTaxonomy from '../../../public/data/problemTaxonomyV2.json'
+import { PROBLEM_SEGMENTS, resolveProblemId } from '../../lib/wheelTaxonomy'
 import './MultiplicationReveal.css'
 
 const CATEGORY_META = {}
-problemTaxonomy.categories.forEach(c => {
+PROBLEM_SEGMENTS.forEach(c => {
   CATEGORY_META[c.id] = { displayName: c.displayName, tagline: c.tagline, turnsInto: c.turnsInto }
 })
 
@@ -52,8 +52,12 @@ export default function MultiplicationReveal({ userId, problemSelections = [], o
       setFuel(fuelData)
 
       // Use problem selections passed from DirectionSection (avoids re-fetch race)
+      // Resolve legacy IDs (old DB data may have voice_taken, forgot_what_for, etc.)
       const problemData = problemSelections
-        .map(id => CATEGORY_META[id])
+        .map(id => {
+          const resolved = resolveProblemId(id) || id
+          return CATEGORY_META[resolved] ? { ...CATEGORY_META[resolved], id: resolved } : null
+        })
         .filter(Boolean)
       setProblems(problemData)
 

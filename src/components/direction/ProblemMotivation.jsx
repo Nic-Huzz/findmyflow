@@ -10,12 +10,12 @@ import { useState, useEffect } from 'react'
 import { getProblemProfile } from '../../lib/directionEngine'
 import { supabase } from '../../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
-import problemTaxonomy from '../../../public/data/problemTaxonomyV2.json'
+import { PROBLEM_SEGMENTS, resolveProblemId } from '../../lib/wheelTaxonomy'
 import './ProblemMotivation.css'
 
-// Build lookup from taxonomy
+// Build lookup from taxonomy (single source of truth)
 const CATEGORY_META = {}
-problemTaxonomy.categories.forEach(c => {
+PROBLEM_SEGMENTS.forEach(c => {
   CATEGORY_META[c.id] = { displayName: c.displayName, tagline: c.tagline, turnsInto: c.turnsInto }
 })
 
@@ -138,7 +138,8 @@ export default function ProblemMotivation({ userId, onComplete, onClose }) {
       </div>
 
       <div className="pmot-categories">
-        {profile.map(({ id, count }) => {
+        {profile.map(({ id: rawId, count }) => {
+          const id = resolveProblemId(rawId) || rawId
           const meta = CATEGORY_META[id]
           if (!meta) return null
           const isSelected = selected.has(id)

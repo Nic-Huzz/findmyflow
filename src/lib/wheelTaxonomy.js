@@ -315,6 +315,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'kids_deserved_better',
     displayName: 'Helping kids thrive',
     tagline: 'Parenting, education, youth programs, and giving kids what they actually need to grow',
+    turnsInto: 'Child development, play therapy, progressive education, parenting coaching, youth advocacy',
     keywords: ['children', 'kids', 'parenting', 'education', 'youth', 'childhood', 'school', 'student', 'play', 'development', 'tutoring', 'mentoring'],
     recognitionPhrases: [
       "You can't stand how we treat kids",
@@ -335,6 +336,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'pain_not_believed',
     displayName: 'Healing the body',
     tagline: 'Chronic pain, burnout, illness, disability, sleep, and health problems the system ignores',
+    turnsInto: 'Functional medicine, chronic illness coaching, burnout recovery, pain management, disability advocacy',
     keywords: ['pain', 'health', 'body', 'illness', 'chronic', 'dying', 'sleep', 'burnout', 'exhaustion', 'disability', 'wellness', 'fitness', 'nutrition', 'energy'],
     recognitionPhrases: [
       "You know what it's like when nobody believes your pain is real",
@@ -355,6 +357,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'minds_hurting',
     displayName: 'Minds that are hurting',
     tagline: 'Anxiety, depression, trauma, addiction, grief, and helping people find themselves again',
+    turnsInto: 'Therapy, mental health coaching, addiction recovery, grief support, trauma healing, confidence programs',
     keywords: ['anxiety', 'depression', 'trauma', 'mental health', 'therapy', 'addiction', 'grief', 'confidence', 'identity', 'self-worth', 'shame', 'healing', 'recovery'],
     recognitionPhrases: [
       "You know what it's like when your own mind turns against you",
@@ -376,6 +379,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'money_stress',
     displayName: 'Money that stresses you out',
     tagline: 'Debt, financial stress, not understanding money, and the gap between rich and stuck',
+    turnsInto: 'Financial coaching, debt management, investing education, budgeting tools, financial literacy programs',
     keywords: ['money', 'debt', 'finance', 'investing', 'budget', 'poverty', 'wealth', 'income', 'savings', 'financial literacy', 'rent', 'salary', 'broke'],
     recognitionPhrases: [
       "You know what it's like to check your bank account with your heart racing",
@@ -396,6 +400,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'lonely_disconnected',
     displayName: 'Lonely and disconnected',
     tagline: 'Relationships, dating, friendship, isolation, and finding where you belong',
+    turnsInto: 'Relationship coaching, community building, dating support, event hosting, belonging programs',
     keywords: ['lonely', 'relationships', 'dating', 'friendship', 'isolation', 'belonging', 'community', 'connection', 'divorce', 'family', 'social', 'alone'],
     recognitionPhrases: [
       "You know what real loneliness feels like, even in a crowded room",
@@ -416,6 +421,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'feeling_stupid',
     displayName: 'Making hard things simple',
     tagline: 'Taking confusing stuff and explaining it so anyone can get it',
+    turnsInto: 'Online courses, explainer content, financial literacy, tech education, simplification consulting',
     keywords: ['jargon', 'confusing', 'complicated', 'explain', 'simplify', 'education', 'literacy', 'understand', 'clarity', 'courses', 'teach', 'learn'],
     recognitionPhrases: [
       "You've been made to feel stupid by someone who just couldn't explain it",
@@ -436,6 +442,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'work_treated_nothing',
     displayName: 'Getting your work seen',
     tagline: 'Helping creators, artists, and builders get credit, get paid, and stop being ignored',
+    turnsInto: 'Creative coaching, portfolio building, IP protection, artist representation, visibility strategy',
     keywords: ['art', 'creativity', 'dismissed', 'ignored', 'stolen', 'credit', 'recognition', 'invisible', 'craft', 'portfolio', 'marketing', 'visibility'],
     recognitionPhrases: [
       "You know what it's like to pour yourself into something and have it dismissed",
@@ -456,6 +463,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'work_hollows',
     displayName: 'Making work worth it',
     tagline: 'Career change, toxic workplaces, burnout, and finding work that builds you up',
+    turnsInto: 'Career coaching, workplace culture consulting, burnout recovery, job transition support',
     keywords: ['burnout', 'work', 'job', 'career', 'exploit', 'dignity', 'corporate', 'quit', 'toxic', 'hustle', 'grind', 'career change', 'resign'],
     recognitionPhrases: [
       "You've felt your job slowly eating you alive",
@@ -475,6 +483,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'teams_leaders_broken',
     displayName: 'Teams underperforming',
     tagline: 'Leadership, management, team culture, and fixing organizations from the inside',
+    turnsInto: 'Executive coaching, leadership development, team performance consulting, org culture, management training',
     keywords: ['leadership', 'management', 'team', 'culture', 'organization', 'executive', 'CEO', 'manager', 'meetings', 'dysfunction', 'hiring', 'performance'],
     recognitionPhrases: [
       "You've watched a great team fall apart under bad leadership",
@@ -495,6 +504,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'world_losing',
     displayName: 'Protecting the planet',
     tagline: 'Climate, conservation, sustainability, and building businesses that help nature instead of wrecking it',
+    turnsInto: 'Sustainability consulting, conservation, climate tech, regenerative business, eco-products',
     keywords: ['climate', 'environment', 'sustainability', 'planet', 'nature', 'conservation', 'species', 'ecological', 'green', 'renewable', 'carbon', 'ocean'],
     recognitionPhrases: [
       "You feel the weight of what we're doing to this planet",
@@ -514,6 +524,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'people_treated_unfairly',
     displayName: 'People treated unfairly',
     tagline: 'Rights, justice, discrimination, access, and fighting systems that keep people down',
+    turnsInto: 'Advocacy, human rights law, accessibility consulting, social enterprise, policy change, affordable alternatives',
     keywords: ['oppression', 'control', 'rights', 'freedom', 'justice', 'discrimination', 'access', 'gatekeeping', 'inequality', 'poverty', 'privilege', 'credentials'],
     recognitionPhrases: [
       "You can't look away when someone's life isn't their own",
@@ -535,6 +546,7 @@ export const PROBLEM_SEGMENTS = [
     id: 'feeling_lost',
     displayName: 'Feeling lost',
     tagline: 'Purpose, meaning, direction, and what to do with your life when nothing makes sense',
+    turnsInto: 'Life coaching, purpose retreats, spiritual direction, career clarity, midlife reinvention programs',
     keywords: ['meaning', 'purpose', 'lost', 'direction', 'existential', 'spiritual', 'soul', 'why', 'emptiness', 'stuck', 'transition', 'midlife', 'quarter-life'],
     recognitionPhrases: [
       "You've woken up and not known why you're doing any of it",

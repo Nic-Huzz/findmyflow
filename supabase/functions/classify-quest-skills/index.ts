@@ -20,18 +20,18 @@ const SKILL_DEFINITIONS = `The 10 skills (use these exact IDs):
 - speaking_up: advocating, being vulnerable publicly, challenging norms, using your voice`
 
 const PROBLEM_DEFINITIONS = `The 12 problem categories (use these exact IDs):
-- kids_deserved_better: children dismissed, labelled, hit, or left to face the worst alone
-- voice_taken: people whose voice was taken, suppressed, or erased
-- pain_not_believed: physical or emotional suffering that nobody names, treats, or believes is real
-- world_losing: ecological destruction, species loss, climate crisis
-- life_not_yours: systems of control that own, oppress, or decide your life for you
-- feeling_stupid: knowledge made unnecessarily hard, wrapped in jargon
-- locked_out: education, healthcare, opportunity blocked by cost, credentials, or gatekeeping
-- work_treated_nothing: your work being treated as nothing, underpaid, unrecognised
-- left_behind: people abandoned by systems built without them
-- forgot_what_for: the search for purpose when the old answers stop working
-- stopped_wondering: the damage done when people stop questioning
-- work_hollows: jobs that strip dignity, businesses that exploit`
+- kids_deserved_better: helping kids thrive — parenting, education, youth
+- pain_not_believed: healing the body — chronic pain, burnout, illness, disability
+- minds_hurting: minds that are hurting — anxiety, depression, trauma, addiction, grief
+- money_stress: money that stresses you out — debt, financial literacy, wealth gap
+- lonely_disconnected: lonely and disconnected — relationships, dating, isolation, belonging
+- feeling_stupid: making hard things simple — confusing knowledge, jargon, bad teaching
+- work_treated_nothing: getting your work seen — creative recognition, being ignored or stolen from
+- work_hollows: making work worth it — toxic jobs, career change, burnout
+- teams_leaders_broken: teams underperforming — leadership, management, team culture, org dysfunction
+- world_losing: protecting the planet — climate, conservation, sustainability
+- people_treated_unfairly: people treated unfairly — rights, justice, discrimination, access, gatekeeping
+- feeling_lost: feeling lost — purpose, meaning, direction, life transitions`
 
 const BRANCH_DEFINITIONS = `The 10 industry branches (use these exact IDs).
 Pick the ONE branch this quest/life path primarily SERVES, not the skills used to do it.
@@ -94,7 +94,7 @@ serve(async (req) => {
       const parsed = match ? JSON.parse(match[0]) : {}
       const tags = Array.isArray(parsed.problem_tags) ? parsed.problem_tags : []
 
-      const validProblemIds = ['kids_deserved_better', 'voice_taken', 'pain_not_believed', 'world_losing', 'life_not_yours', 'feeling_stupid', 'locked_out', 'work_treated_nothing', 'left_behind', 'forgot_what_for', 'stopped_wondering', 'work_hollows']
+      const validProblemIds = ['kids_deserved_better', 'pain_not_believed', 'minds_hurting', 'money_stress', 'lonely_disconnected', 'feeling_stupid', 'work_treated_nothing', 'work_hollows', 'teams_leaders_broken', 'world_losing', 'people_treated_unfairly', 'feeling_lost']
       const filteredTags = tags.filter((t: string) => validProblemIds.includes(t))
 
       return new Response(JSON.stringify({ problem_tags: filteredTags }), {
