@@ -56,8 +56,26 @@ export default function WahooCreator({
   const [predictedDifficulty, setPredictedDifficulty] = useState(null)
   // Drill-in: which dimension is currently being leveled (null = show grid)
   const [drilledDim, setDrilledDim] = useState(null)
+  // Quest dimension gaps (for gap nudge on dimension grid)
+  const [questDims, setQuestDims] = useState(null) // { current: {}, dream: {} }
   const successTimerRef = useRef(null)
   const drillTimer = useRef(null)
+
+  // Load quest dimensions when quest is linked
+  useEffect(() => {
+    if (!linkedQuestId) { setQuestDims(null); return }
+    supabase.from('quests')
+      .select('current_dimensions, dream_dimensions')
+      .eq('id', linkedQuestId)
+      .single()
+      .then(({ data }) => {
+        if (data?.current_dimensions && data?.dream_dimensions) {
+          setQuestDims({ current: data.current_dimensions, dream: data.dream_dimensions })
+        } else {
+          setQuestDims(null)
+        }
+      })
+  }, [linkedQuestId])
 
   useEffect(() => {
     return () => {
@@ -307,14 +325,37 @@ export default function WahooCreator({
           <h2 className="wc-headline">Where are you stretching?</h2>
           <p className="wc-sub">Tap to pick, then set the level.</p>
 
+          {/* Gap nudge: show top growth areas from quest radar */}
+          {questDims && (() => {
+            const gaps = DOME_DIMENSIONS
+              .map(d => ({ id: d.id, icon: d.icon, label: d.label, gap: (questDims.dream[d.id] || 0) - (questDims.current[d.id] || 0) }))
+              .filter(g => g.gap > 0)
+              .sort((a, b) => b.gap - a.gap)
+              .slice(0, 2)
+            if (!gaps.length) return null
+            return (
+              <div className="wc-gap-nudge">
+                <span className="wc-gap-nudge-label">Biggest growth areas:</span>
+                {gaps.map(g => <span key={g.id} className="wc-gap-nudge-dim">{g.icon} {g.label}</span>)}
+              </div>
+            )
+          })()}
+
           <div className="wc-dim-grid">
             {DOME_DIMENSIONS.map(d => {
               const active = expansionDims.includes(d.id)
               const levelLabel = getLevelLabel(d.id)
+              const gap = questDims ? (questDims.dream[d.id] || 0) - (questDims.current[d.id] || 0) : 0
+              const isTopGap = gap > 0 && questDims && (() => {
+                const sorted = DOME_DIMENSIONS
+                  .map(dim => (questDims.dream[dim.id] || 0) - (questDims.current[dim.id] || 0))
+                  .sort((a, b) => b - a)
+                return gap >= sorted[1] // top 2
+              })()
               return (
                 <button
                   key={d.id}
-                  className={`wc-dim-card ${active ? 'active' : ''}`}
+                  className={`wc-dim-card ${active ? 'active' : ''} ${isTopGap && !active ? 'wc-dim-gap' : ''}`}
                   onClick={() => handleDimTap(d.id)}
                 >
                   <span className="wc-dim-emoji">{d.icon}</span>

@@ -219,6 +219,27 @@
   transform: scale(1.02);
 }
 
+.wc-dim-card.wc-dim-gap {
+  border-color: rgba(233, 162, 59, 0.4);
+  background: rgba(233, 162, 59, 0.04);
+}
+.wc-dim-card.wc-dim-gap .wc-dim-label { color: #b8860b; }
+
+/* Gap nudge banner */
+.wc-gap-nudge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: rgba(233, 162, 59, 0.06);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.wc-gap-nudge-label { color: rgba(0,0,0,0.4); font-weight: 500; }
+.wc-gap-nudge-dim { color: #E9A23B; font-weight: 700; }
+
 .wc-dim-emoji {
   font-size: 24px;
 }
