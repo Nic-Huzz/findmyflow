@@ -20,42 +20,53 @@ import './ProgressTab.css'
 // Path: top-left (Burnout) → bottom-right (Stuck) → top-right (Self-Actualisation)
 // Stage 4 is the deepest point, stage 5 starts the climb
 const HERO_STAGES = [
+  // →2: First NS check-in
   { stage: 0,  name: 'Waking Up',            x: 65,  y: 42,  desc: 'You feel something needs to change.',
     refs: ['Ariel seeing the surface world for the first time.', 'Neo seeing the Matrix for the first time.'],
-    nextAction: 'Play the Experience Game', nextRoute: '/experience-game' },
+    nextAction: 'Do your first check-in', nextRoute: '/7-day-challenge' },
   { stage: 1,  name: 'Waking Up',            x: 65,  y: 42,  desc: 'You feel something needs to change.',
     refs: ['Ariel seeing the surface world for the first time.', 'Neo seeing the Matrix for the first time.'],
-    nextAction: 'Play the Experience Game', nextRoute: '/experience-game' },
+    nextAction: 'Do your first check-in', nextRoute: '/7-day-challenge' },
+  // 2→3: 10+ experience dome ticks
   { stage: 2,  name: 'Exploring',             x: 95,  y: 72,  desc: 'You\'re looking at what lights you up.',
     refs: ['Peter Parker getting bitten by the spider.', 'Neo taking the red pill.'],
-    nextAction: 'Discover your essence', nextRoute: '/essence-mirror' },
+    nextAction: 'Play the Experience Game', nextRoute: '/experience-game' },
+  // 3→4: Essence Mirror + avatar
   { stage: 3,  name: 'Discovering Yourself',   x: 135, y: 115, desc: 'You\'re learning who you really are.',
     refs: ['Simba running away to the jungle.', 'Miles Morales saying "I can\'t do this."'],
-    nextAction: 'Map your current work', nextRoute: '/add-current-job' },
+    nextAction: 'Discover your essence', nextRoute: '/essence-mirror' },
+  // 4→5: 1+ quest created
   { stage: 4,  name: 'Choosing a Direction',   x: 185, y: 210, desc: 'You can see the path, but haven\'t stepped on it.',
     refs: ['Aladdin meeting the Genie.', 'Luke meeting Yoda on Dagobah.'],
     nextAction: 'Choose your paths', nextRoute: '/choose-quests' },
+  // 5→6: 5+ courage challenges completed
   { stage: 5,  name: 'Finding Your Way',       x: 215, y: 200, desc: 'You start building what matters to you.',
     refs: ['Spider-Man\'s first swing through New York.', 'Neo dodging bullets for the first time.'],
-    nextAction: 'Complete a courage challenge', nextRoute: '/7-day-challenge' },
+    nextAction: 'Complete 5 courage challenges', nextRoute: '/7-day-challenge' },
+  // 6→7: First healing flow started
   { stage: 6,  name: 'Facing Resistance',      x: 240, y: 180, desc: 'The voices that held you back show up.',
     refs: ['Mulan training with the army.', 'Rocky running up the stairs.'],
-    nextAction: 'Face a harder challenge', nextRoute: '/7-day-challenge' },
+    nextAction: 'Explore a protective voice', nextRoute: '/7-day-challenge' },
+  // 7→8: 3+ healing outcomes + 20+ courage completed
   { stage: 7,  name: 'Going Deeper',           x: 260, y: 165, desc: 'You\'re working through what\'s underneath.',
     refs: ['Simba returning to the Pride Lands.', 'Luke entering the cave on Dagobah.'],
-    nextAction: 'Explore a healing pattern', nextRoute: '/7-day-challenge' },
+    nextAction: 'Complete 3 healing flows and 20 challenges', nextRoute: '/7-day-challenge' },
+  // 8→9: First income > 0
   { stage: 8,  name: 'The Breakthrough',        x: 280, y: 130, desc: 'Something clicks. You feel different.',
     refs: ['Neo dying and coming back as The One.', 'Tony Stark snapping the Infinity Gauntlet.'],
     nextAction: 'Report your first income', nextRoute: '/7-day-challenge' },
+  // 9→10: 3+ months with income > 0
   { stage: 9,  name: 'First Reward',           x: 300, y: 100, desc: 'You\'re earning from what you love.',
     refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.'],
-    nextAction: 'Keep earning for 3 months', nextRoute: '/7-day-challenge' },
+    nextAction: 'Earn income 3 months in a row', nextRoute: '/7-day-challenge' },
+  // 10→11: Income >= expenses target
   { stage: 10, name: 'Building Momentum',      x: 318, y: 78,  desc: 'It\'s working and you keep going.',
     refs: ['Woody choosing to leave Andy.', 'Bilbo writing his book.'],
-    nextAction: 'Build your income streak', nextRoute: '/7-day-challenge' },
+    nextAction: 'Cover your monthly expenses', nextRoute: '/7-day-challenge' },
+  // 11→12: Self-declared (deferred)
   { stage: 11, name: 'Proving It\'s Real',     x: 335, y: 58,  desc: 'This isn\'t luck. It\'s you.',
     refs: ['Simba defeating Scar.', 'Tony Stark saying "I am Iron Man."'],
-    nextAction: 'Cover your expenses', nextRoute: '/7-day-challenge' },
+    nextAction: null, nextRoute: null },
   { stage: 12, name: 'Doing What You Love',    x: 350, y: 40,  desc: 'Your life is yours.',
     refs: ['Simba standing on Pride Rock as king.', 'Frodo sailing to the Undying Lands.'],
     nextAction: null, nextRoute: null },
