@@ -71,13 +71,7 @@ function computeAxes(completions, checkins, wahoos) {
   // --- Safety: per-day average ---
   const isSafety = c =>
     SAFETY_IDS.includes(c.quest_id) ||
-    (c.quest_category === 'Healing' && !c.quest_id?.startsWith('reconnect_weekly')
-      && c.quest_id !== 'reconnect_remove_negative' && c.quest_id !== 'session_with_huzz') ||
-    (c.quest_category === 'Healing' && (
-      c.quest_id?.startsWith('reconnect_weekly') ||
-      c.quest_id === 'reconnect_remove_negative' ||
-      c.quest_id === 'session_with_huzz'
-    ))
+    c.quest_category === 'Healing'
   const safetyCounts = dailyCounts(completions, isSafety)
   const safetyRatios = safetyCounts.map(count => Math.min(1, count / SAFETY_DAILY_TARGET))
   const safety = Math.round((safetyRatios.reduce((a, b) => a + b, 0) / 7) * 10 * 10) / 10

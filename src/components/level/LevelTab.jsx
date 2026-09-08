@@ -468,7 +468,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     <div className="level-tab">
 
       {/* ══════ QUADRANT CARD ══════ */}
-      {!scoreData.loading && scoreData.safety !== null && scoreData.dataPoints > 0 && (
+      {!scoreData.loading && scoreData.safety !== null && (
         <QuadrantCard
           safety={scoreData.safety}
           expression={scoreData.expression}

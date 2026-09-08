@@ -91,7 +91,7 @@
   inset: -4px;
   border-radius: 50%;
   background: inherit;
-  opacity: 0.3;
+  opacity: 0.35;
   animation: qc-breathe 3s ease-in-out infinite;
 }
 
