@@ -10,7 +10,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import PerQuestRadar from './PerQuestRadar'
-import { LIFE_FUEL_CHANNELS, CHANNEL_IDS, calculateLifeFuel } from '../data/channelMapping'
 import { getDimensionById, getNumericTier } from '../data/domeDimensions'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
@@ -108,8 +107,6 @@ function getNsDisplay(state) {
   return NS_LABELS[state] || { emoji: '😊', label: 'Fun', key: 'fun' }
 }
 
-// ── Fuel threshold for "active" ──
-const FUEL_THRESHOLD = 20
 
 // ── Smart CTA definitions ──
 const SETUP_CHECKS = [
@@ -145,8 +142,6 @@ export default function ProgressTab({ userId }) {
   const [avatarUrl, setAvatarUrl] = useState(null)
 
   // Fuel data
-  const [jobFuelBaseline, setJobFuelBaseline] = useState(null)
-  const [courageFuelData, setCourageFuelData] = useState(null)
 
   // Voice data
   const [voiceData, setVoiceData] = useState(null)
@@ -277,7 +272,6 @@ export default function ProgressTab({ userId }) {
         const currentJobQuest = currentJobRes.data?.[0]
         if (currentJobQuest) {
           setHasCurrentJob(true)
-          setJobFuelBaseline(currentJobQuest.life_fuel_baseline || null)
         }
 
         // Process paths
@@ -342,17 +336,6 @@ export default function ProgressTab({ userId }) {
           }
         })
         setEvidenceFeed(feed)
-
-        // Process life fuel from all courage data
-        const allEntries = (completionsRes.data || []).map(row => {
-          try {
-            const parsed = JSON.parse(row.reflection_text)
-            return parsed?.life_fuel || null
-          } catch { return null }
-        }).filter(Boolean)
-        if (allEntries.length > 0) {
-          setCourageFuelData(calculateLifeFuel(allEntries))
-        }
 
         // Process voice data
         const voiceCounts = {}
@@ -498,25 +481,6 @@ export default function ProgressTab({ userId }) {
   }, [setupComplete])
 
   // Fuel feedback state (A-D)
-  const fuelState = useMemo(() => {
-    if (!jobFuelBaseline) return null
-    const jobHas = CHANNEL_IDS.filter(id => jobFuelBaseline[id])
-    const jobMissing = CHANNEL_IDS.filter(id => !jobFuelBaseline[id])
-
-    if (jobMissing.length === 0) return { state: 'D', jobHas, jobMissing, courageFilledGaps: [] }
-    if (!courageFuelData) return { state: 'A', jobHas, jobMissing, courageFilledGaps: [] }
-
-    const courageFilledGaps = jobMissing.filter(id => (courageFuelData[id] || 0) >= FUEL_THRESHOLD)
-
-    if (courageFilledGaps.length === jobMissing.length) {
-      return { state: 'C', jobHas, jobMissing, courageFilledGaps }
-    }
-    if (courageFilledGaps.length > 0) {
-      return { state: 'B', jobHas, jobMissing, courageFilledGaps }
-    }
-    return { state: 'A', jobHas, jobMissing, courageFilledGaps }
-  }, [jobFuelBaseline, courageFuelData])
-
   // Voice bridge text
   const voiceBridge = useMemo(() => {
     if (!voiceData) return null
@@ -525,73 +489,7 @@ export default function ProgressTab({ userId }) {
     return 'what\'s getting in the way?'
   }, [voiceData])
 
-  // Pain bridge text
-  const painBridge = useMemo(() => {
-    if (!fuelState) return 'but right now...'
-    if (fuelState.state === 'C' || fuelState.state === 'D') return 'and it\'s working.'
-    if (fuelState.courageFilledGaps.length > 0) return 'and it\'s working.'
-    return 'but right now...'
-  }, [fuelState])
-
   if (loading) return <div className="pt-loading">Loading...</div>
-
-  // ── Fuel rendering helpers ──
-
-  function renderFuelPain() {
-    if (!fuelState) return null
-    const { state, jobHas, jobMissing, courageFilledGaps } = fuelState
-
-    if (state === 'D') {
-      return (
-        <div className="pt-fuel-pain">
-          <div className="pt-fuel-pain-text">
-            You now have {CHANNEL_IDS.map((id, i) => (
-              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < 3 ? (i === 2 ? ', and ' : ', ') : ''}</span>
-            ))}. All four fuels are active.
-          </div>
-        </div>
-      )
-    }
-
-    if (state === 'C') {
-      return (
-        <div className="pt-fuel-pain">
-          <div className="pt-fuel-pain-text">
-            You started without {jobMissing.map((id, i) => (
-              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobMissing.length - 1 ? ' and ' : ''}</span>
-            ))}. Now all four fuels are active.
-          </div>
-        </div>
-      )
-    }
-
-    if (state === 'B') {
-      return (
-        <div className="pt-fuel-pain">
-          <div className="pt-fuel-pain-text">
-            You started with {jobHas.map((id, i) => (
-              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobHas.length - 1 ? ' and ' : ''}</span>
-            ))}. Your courage challenges are adding {courageFilledGaps.map((id, i) => (
-              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < courageFilledGaps.length - 1 ? ' and ' : ''}</span>
-            ))}.
-          </div>
-        </div>
-      )
-    }
-
-    // State A
-    return (
-      <div className="pt-fuel-pain">
-        <div className="pt-fuel-pain-text">
-          You have {jobHas.map((id, i) => (
-            <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobHas.length - 1 ? ' and ' : ''}</span>
-          ))}, but you're missing {jobMissing.map((id, i) => (
-            <span key={id}><span className="pt-fuel-missing">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobMissing.length - 1 ? ' and ' : ''}</span>
-          ))}.
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="progress-tab">
@@ -941,44 +839,6 @@ export default function ProgressTab({ userId }) {
             <div className="pt-section-label">Your Paths</div>
           </div>
           <PerQuestRadar userId={userId} />
-
-          {/* Life Fuel Comparison */}
-          {jobFuelBaseline && (
-            <div className="pt-fuel-compare">
-              <div className="pt-fuel-compare-title">Life Fuel Over Time</div>
-              {CHANNEL_IDS.map(id => {
-                const ch = LIFE_FUEL_CHANNELS[id]
-                const startVal = jobFuelBaseline[id] ? 70 : 10
-                const nowVal = courageFuelData ? Math.max(courageFuelData[id] || 0, startVal) : startVal
-                return (
-                  <div key={id} className="pt-fuel-row">
-                    <div className="pt-fuel-name">
-                      <span className="pt-fuel-name-emoji">{ch.emoji}</span>
-                      {ch.name}
-                    </div>
-                    <div className="pt-fuel-bars">
-                      <div className="pt-fuel-bar-row">
-                        <span className="pt-fuel-bar-label">Start</span>
-                        <div className="pt-fuel-bar">
-                          <div className="pt-fuel-bar-fill started" style={{ width: `${startVal}%` }} />
-                        </div>
-                      </div>
-                      <div className="pt-fuel-bar-row">
-                        <span className="pt-fuel-bar-label">Now</span>
-                        <div className="pt-fuel-bar">
-                          <div className="pt-fuel-bar-fill now" style={{ width: `${nowVal}%` }} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-              {!courageFuelData && (
-                <div className="pt-fuel-compare-note">Complete courage challenges to see how your fuels change.</div>
-              )}
-              {fuelState && renderFuelPain()}
-            </div>
-          )}
         </>
       )}
 

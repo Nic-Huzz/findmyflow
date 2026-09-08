@@ -41,6 +41,9 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
   const [voiceWhich, setVoiceWhich] = useState(null)
   const [voiceText, setVoiceText] = useState('')
 
+  // Per-path fuel reviews: { questId: { choice: bool, connection: bool, mastery: bool, meaning: bool } | 'skip' }
+  const [pathFuels, setPathFuels] = useState({})
+
   // Load active quests for income tagging
   useEffect(() => {
     if (!userId) return
@@ -282,6 +285,24 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
         }, { onConflict: 'user_id,month_year' }).catch(() => {})
       }
 
+      // Save per-path fuel reviews
+      const fuelRows = Object.entries(pathFuels)
+        .filter(([, val]) => val && val !== 'skip' && typeof val === 'object')
+        .map(([questId, fuels]) => ({
+          user_id: userId,
+          quest_id: questId,
+          week_of: weekStart,
+          choice: fuels.choice ?? null,
+          connection: fuels.connection ?? null,
+          mastery: fuels.mastery ?? null,
+          meaning: fuels.meaning ?? null,
+        }))
+      if (fuelRows.length > 0) {
+        await supabase.from('path_fuel_reviews')
+          .upsert(fuelRows, { onConflict: 'user_id,quest_id,week_of' })
+          .catch(() => {})
+      }
+
       hapticSuccess()
       confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } })
       setSavedReview(data)
@@ -476,6 +497,73 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
               maxLength={200}
             />
           </div>
+
+          {/* Q3b: Life fuel per path */}
+          {activeQuests.length > 0 && (
+            <div className="wr-question">
+              <div className="wr-question-top">
+                <span className="wr-question-icon">⛽</span>
+                <span className="wr-question-label">Life Fuel</span>
+              </div>
+              <p className="wr-question-text">For each path, what was true this week?</p>
+              {activeQuests.map(q => {
+                const fuel = pathFuels[q.id]
+                const skipped = fuel === 'skip'
+                return (
+                  <div key={q.id} className="wr-fuel-quest">
+                    <div className="wr-fuel-quest-name">{q.label}</div>
+                    {!skipped ? (
+                      <>
+                        {[
+                          { id: 'choice', emoji: '🔓', text: 'I did this because I wanted to' },
+                          { id: 'connection', emoji: '🤝', text: 'The people felt like my tribe' },
+                          { id: 'mastery', emoji: '📈', text: 'I used or grew a skill I love' },
+                          { id: 'meaning', emoji: '✨', text: 'This served something I care about' },
+                        ].map(f => {
+                          const val = fuel?.[f.id]
+                          return (
+                            <div key={f.id} className="wr-fuel-row">
+                              <span className="wr-fuel-emoji">{f.emoji}</span>
+                              <span className="wr-fuel-text">{f.text}</span>
+                              <div className="wr-fuel-toggle">
+                                <button
+                                  className={`wr-fuel-btn ${val === true ? 'yes' : ''}`}
+                                  onClick={() => {
+                                    hapticLight()
+                                    setPathFuels(prev => ({
+                                      ...prev,
+                                      [q.id]: { ...(typeof prev[q.id] === 'object' ? prev[q.id] : {}), [f.id]: val === true ? null : true }
+                                    }))
+                                  }}>Yes</button>
+                                <button
+                                  className={`wr-fuel-btn ${val === false ? 'no' : ''}`}
+                                  onClick={() => {
+                                    hapticLight()
+                                    setPathFuels(prev => ({
+                                      ...prev,
+                                      [q.id]: { ...(typeof prev[q.id] === 'object' ? prev[q.id] : {}), [f.id]: val === false ? null : false }
+                                    }))
+                                  }}>No</button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                        <button className="wr-fuel-skip" onClick={() => {
+                          hapticLight()
+                          setPathFuels(prev => ({ ...prev, [q.id]: 'skip' }))
+                        }}>I didn't work on this path</button>
+                      </>
+                    ) : (
+                      <button className="wr-fuel-unskip" onClick={() => {
+                        hapticLight()
+                        setPathFuels(prev => ({ ...prev, [q.id]: {} }))
+                      }}>Skipped. Tap to undo.</button>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
 
           {/* Dome growth this week — per quest */}
           {weeklyGrowth.length > 0 && (

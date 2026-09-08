@@ -34,7 +34,14 @@ function buildPolygon(cx, cy, maxRadius, values, maxLevels, angleStep) {
   }).map(p => `${p.x},${p.y}`).join(' ')
 }
 
-function QuestRadarCard({ quest, actualProgress }) {
+const FUEL_CHANNELS = [
+  { id: 'choice', emoji: '🔓', name: 'Choice' },
+  { id: 'connection', emoji: '🤝', name: 'Connection' },
+  { id: 'mastery', emoji: '📈', name: 'Mastery' },
+  { id: 'meaning', emoji: '✨', name: 'Meaning' },
+]
+
+function QuestRadarCard({ quest, actualProgress, fuel }) {
   const navigate = useNavigate()
   const size = 220
   const cx = size / 2
@@ -208,6 +215,23 @@ function QuestRadarCard({ quest, actualProgress }) {
           Biggest growth area: {topGap.dim.label}
         </div>
       )}
+
+      {/* Life fuel bars */}
+      {fuel && fuel.weeks > 0 && (
+        <div className="pqr-fuel">
+          <div className="pqr-fuel-title">Life Fuel</div>
+          {FUEL_CHANNELS.map(ch => (
+            <div key={ch.id} className="pqr-fuel-row">
+              <span className="pqr-fuel-label">{ch.emoji} {ch.name}</span>
+              <div className="pqr-fuel-track">
+                <div className="pqr-fuel-fill" style={{ width: `${fuel[ch.id]}%` }} />
+              </div>
+              <span className="pqr-fuel-pct">{fuel[ch.id]}%</span>
+            </div>
+          ))}
+          <div className="pqr-fuel-weeks">{fuel.weeks} week{fuel.weeks !== 1 ? 's' : ''}</div>
+        </div>
+      )}
     </div>
   )
 }
@@ -215,6 +239,7 @@ function QuestRadarCard({ quest, actualProgress }) {
 export default function PerQuestRadar({ userId }) {
   const [quests, setQuests] = useState([])
   const [progress, setProgress] = useState({}) // { questId: { dimId: maxLevel } }
+  const [fuelData, setFuelData] = useState({}) // { questId: { choice: %, connection: %, mastery: %, meaning: %, weeks: n } }
   const [loading, setLoading] = useState(true)
   const [activeIdx, setActiveIdx] = useState(0)
   const stripRef = useRef(null)
@@ -270,8 +295,35 @@ export default function PerQuestRadar({ userId }) {
           })
         }
 
+        // Load fuel review data
+        const { data: fuelRows } = await supabase
+          .from('path_fuel_reviews')
+          .select('quest_id, choice, connection, mastery, meaning')
+          .eq('user_id', userId)
+          .in('quest_id', questIds)
+
+        const fuelMap = {}
+        if (fuelRows?.length) {
+          const byQuest = {}
+          fuelRows.forEach(r => {
+            if (!byQuest[r.quest_id]) byQuest[r.quest_id] = []
+            byQuest[r.quest_id].push(r)
+          })
+          for (const [qId, rows] of Object.entries(byQuest)) {
+            const weeks = rows.length
+            fuelMap[qId] = {
+              choice: Math.round(rows.filter(r => r.choice === true).length / weeks * 100),
+              connection: Math.round(rows.filter(r => r.connection === true).length / weeks * 100),
+              mastery: Math.round(rows.filter(r => r.mastery === true).length / weeks * 100),
+              meaning: Math.round(rows.filter(r => r.meaning === true).length / weeks * 100),
+              weeks,
+            }
+          }
+        }
+
         setQuests(questData.map(q => ({ ...q, _courageCount: counts[q.id] || 0 })))
         setProgress(progressMap)
+        setFuelData(fuelMap)
         setLoading(false)
       })
   }, [userId])
@@ -312,7 +364,7 @@ export default function PerQuestRadar({ userId }) {
       <div className="pqr-strip" ref={stripRef}>
         {quests.map(quest => (
           <div key={quest.id} className="pqr-card">
-            <QuestRadarCard quest={quest} actualProgress={progress[quest.id]} />
+            <QuestRadarCard quest={quest} actualProgress={progress[quest.id]} fuel={fuelData[quest.id]} />
           </div>
         ))}
       </div>

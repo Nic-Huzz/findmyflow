@@ -96,6 +96,16 @@
 }
 .pqr-gap-icon { margin-right: 4px; }
 
+/* Life fuel bars */
+.pqr-fuel { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); }
+.pqr-fuel-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(0,0,0,0.3); margin-bottom: 8px; }
+.pqr-fuel-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.pqr-fuel-label { font-size: 12px; font-weight: 500; width: 100px; flex-shrink: 0; white-space: nowrap; }
+.pqr-fuel-track { flex: 1; height: 6px; background: rgba(0,0,0,0.06); border-radius: 3px; overflow: hidden; }
+.pqr-fuel-fill { height: 100%; background: #5e17eb; border-radius: 3px; transition: width 0.3s ease; }
+.pqr-fuel-pct { font-size: 11px; font-weight: 700; color: #5e17eb; width: 32px; text-align: right; flex-shrink: 0; }
+.pqr-fuel-weeks { font-size: 10px; color: rgba(0,0,0,0.25); text-align: right; margin-top: 2px; }
+
 /* Dot navigation */
 .pqr-dots {
   display: flex;
