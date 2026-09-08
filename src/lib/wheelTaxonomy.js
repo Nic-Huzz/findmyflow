@@ -473,7 +473,7 @@ export const PROBLEM_SEGMENTS = [
   },
   {
     id: 'teams_leaders_broken',
-    displayName: 'Teams and leaders that aren\'t working',
+    displayName: 'Teams underperforming',
     tagline: 'Leadership, management, team culture, and fixing organizations from the inside',
     keywords: ['leadership', 'management', 'team', 'culture', 'organization', 'executive', 'CEO', 'manager', 'meetings', 'dysfunction', 'hiring', 'performance'],
     recognitionPhrases: [
