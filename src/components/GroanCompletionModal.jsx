@@ -16,6 +16,7 @@ import { getLevel, getLevelNumber } from '../lib/crm/statsService'
 import { detectShift } from '../lib/shiftDetection'
 import { detectNewPattern, markPatternShown, buildPatternMessage } from '../lib/voicePatternDetector'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
+import HealingFlowModal from './HealingFlowModal'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -112,6 +113,8 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [gapVoice, setGapVoice] = useState(null)
   const [checkingPattern, setCheckingPattern] = useState(false)
   const [patternDiscovered, setPatternDiscovered] = useState(null) // { voice, dimensions, count, message }
+  const [showPatternHealing, setShowPatternHealing] = useState(false)
+  const [patternQuestTaskId, setPatternQuestTaskId] = useState(null)
 
   // Aftertaste (essence alignment filter)
   const [aftertaste, setAftertaste] = useState(null) // 'yes' | 'not_sure' | 'no'
@@ -756,11 +759,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             </div>
             <button
               className="gcm-gold-btn"
-              onClick={() => {
+              onClick={async () => {
                 hapticLight()
-                // TODO: open HealingFlowModal with voice pre-selected
-                // For now, continue to expectation
-                setStep('expectation')
+                // Look up the quest_task_id for this challenge
+                try {
+                  const { data: taskRow } = await supabase
+                    .from('quest_tasks')
+                    .select('id')
+                    .eq('groan_challenge_id', challenge.id)
+                    .maybeSingle()
+                  if (taskRow) setPatternQuestTaskId(taskRow.id)
+                } catch (e) { /* non-blocking */ }
+                setShowPatternHealing(true)
               }}
             >
               Explore this pattern
@@ -929,6 +939,18 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
           />
         )}
       </div>
+
+      {/* Pattern healing modal */}
+      {showPatternHealing && patternDiscovered && (
+        <HealingFlowModal
+          taskText={challenge.title}
+          userId={userId}
+          questTaskId={patternQuestTaskId}
+          existingData={{ pattern: patternDiscovered.voice }}
+          onComplete={() => { setShowPatternHealing(false); setStep('expectation') }}
+          onClose={() => { setShowPatternHealing(false); setStep('expectation') }}
+        />
+      )}
     </div>
   )
 }
