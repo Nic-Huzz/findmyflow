@@ -73,6 +73,15 @@
   to { opacity: 1; }
 }
 
+/* ── Life fuel summary (current job) ── */
+.qbc-fuel-summary { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.qbc-fuel-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+.qbc-fuel-row.missing { opacity: 0.4; }
+.qbc-fuel-name { flex: 1; font-weight: 500; }
+.qbc-fuel-status { font-size: 12px; font-weight: 600; }
+.qbc-fuel-row.has .qbc-fuel-status { color: #10b981; }
+.qbc-fuel-row.missing .qbc-fuel-status { color: #ef4444; }
+
 /* ── Define path CTA ── */
 .qbc-define-cta {
   display: block;

@@ -21,6 +21,7 @@ export const LIFE_FUEL_CHANNELS = {
     category: 'Survive',
     color: '#60a5fa',
     checkbox: 'I did this because I wanted to',
+    present: 'I do this because I want to',
   },
   connection: {
     id: 'connection',
@@ -29,6 +30,7 @@ export const LIFE_FUEL_CHANNELS = {
     category: 'Survive',
     color: '#f472b6',
     checkbox: 'The people around me feel like my tribe',
+    present: 'The people around me feel like my tribe',
   },
   mastery: {
     id: 'mastery',
@@ -37,6 +39,7 @@ export const LIFE_FUEL_CHANNELS = {
     category: 'Thrive',
     color: '#34d399',
     checkbox: 'I used or grew a skill I love',
+    present: 'I use or grow a skill I love',
   },
   meaning: {
     id: 'meaning',
@@ -45,6 +48,7 @@ export const LIFE_FUEL_CHANNELS = {
     category: 'Thrive',
     color: '#fbbf24',
     checkbox: 'This served something I care about',
+    present: 'This serves something I care about',
   },
 }
 

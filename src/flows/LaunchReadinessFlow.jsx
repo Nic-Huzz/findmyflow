@@ -19,6 +19,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useProjectId } from '../hooks/useProjectId'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import { ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LaunchReadinessFlow.css'
@@ -180,7 +181,7 @@ function LaunchReadinessFlow() {
   const [launchNotes, setLaunchNotes] = useState('')
 
   // Staggered reveal for results section
-  const [revealedItems, setRevealedItems] = useState(new Set())
+  const { revealStyle } = useStaggerReveal(6, stage === STAGES.RESULTS, { interval: 800 })
 
   // PRE-ACTION state
   const [preActionFeeling, setPreActionFeeling] = useState(null)
@@ -207,23 +208,6 @@ function LaunchReadinessFlow() {
       loadExistingData()
     }
   }, [user])
-
-  // Stagger reveal items when entering results stage
-  useEffect(() => {
-    if (stage !== STAGES.RESULTS) {
-      setRevealedItems(new Set())
-      return
-    }
-    const totalItems = 6 // score, approach, strengths, gaps, campaign, nav
-    const timers = []
-    for (let i = 0; i < totalItems; i++) {
-      const timer = setTimeout(() => {
-        setRevealedItems(prev => new Set([...prev, i]))
-      }, i * 800)
-      timers.push(timer)
-    }
-    return () => timers.forEach(t => clearTimeout(t))
-  }, [stage])
 
   // Note: Removed auto-register useEffect that was causing duplicate quest completions
   // Quest completion now only happens once when flow is completed
@@ -1179,12 +1163,6 @@ function LaunchReadinessFlow() {
     const { score, gaps, strengths } = calculateReadinessScore()
     const gradeInfo = getScoreGrade(score)
     const selectedApproach = LAUNCH_APPROACHES.find(a => a.id === launchApproach)
-
-    const revealStyle = (index) => ({
-      opacity: revealedItems.has(index) ? 1 : 0,
-      transform: revealedItems.has(index) ? 'translateY(0)' : 'translateY(12px)',
-      transition: 'opacity 0.4s ease, transform 0.4s ease'
-    })
 
     return (
       <div className="launch-readiness-flow">

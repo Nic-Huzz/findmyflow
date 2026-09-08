@@ -121,9 +121,9 @@ Every imperfect thing you ship is evidence that done beats perfect.`,
     icon: '🪞',
     order: 2,
     unlockTrigger: UNLOCK_TRIGGERS.VOICE_IDENTIFIED,
-    unlockValue: 'people-pleaser',
+    unlockValue: 'people_pleaser',
     altUnlockTrigger: UNLOCK_TRIGGERS.VOICE_FACED,
-    altUnlockValue: 'people-pleaser',
+    altUnlockValue: 'people_pleaser',
 
     content: {
       origin: {
@@ -330,9 +330,9 @@ Every time you surrender control and things work out, every moment you exist wit
     icon: '🛋️',
     order: 4,
     unlockTrigger: UNLOCK_TRIGGERS.VOICE_IDENTIFIED,
-    unlockValue: 'auto-pilot',
+    unlockValue: 'auto_pilot',
     altUnlockTrigger: UNLOCK_TRIGGERS.VOICE_FACED,
-    altUnlockValue: 'auto-pilot',
+    altUnlockValue: 'auto_pilot',
 
     content: {
       origin: {

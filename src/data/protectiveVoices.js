@@ -71,8 +71,8 @@ export const PROTECTIVE_VOICES = {
     affirmation: 'Thank you for protecting me from shame. I can handle imperfection now.'
   },
 
-  'auto-pilot': {
-    id: 'auto-pilot',
+  'auto_pilot': {
+    id: 'auto_pilot',
     name: 'The Auto-Pilot',
     icon: '🛋️',
     lie: "I'm going through the motions. I've checked out.",
@@ -89,8 +89,8 @@ export const PROTECTIVE_VOICES = {
     affirmation: 'Thank you for protecting me from overwhelm. I can feel things now.'
   },
 
-  'people-pleaser': {
-    id: 'people-pleaser',
+  'people_pleaser': {
+    id: 'people_pleaser',
     name: 'The People Pleaser',
     icon: '🪞',
     lie: "I'd rather say yes than deal with their reaction.",
@@ -113,8 +113,8 @@ export const PROTECTIVE_VOICES = {
  */
 export const resolveVoiceId = (id) => {
   if (id === 'performer') return 'controller'
-  if (id === 'auto_pilot') return 'auto-pilot'
-  if (id === 'people_pleaser') return 'people-pleaser'
+  if (id === 'auto-pilot') return 'auto_pilot'
+  if (id === 'people-pleaser') return 'people_pleaser'
   return id
 }
 

@@ -698,9 +698,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                     {[
                       { id: 'ghost', icon: '👻', label: 'Ghost' },
                       { id: 'perfectionist', icon: '🎯', label: 'Perfectionist' },
-                      { id: 'people-pleaser', icon: '🪞', label: 'People Pleaser' },
+                      { id: 'people_pleaser', icon: '🪞', label: 'People Pleaser' },
                       { id: 'controller', icon: '🎮', label: 'Controller' },
-                      { id: 'auto-pilot', icon: '🛋️', label: 'Auto-Pilot' },
+                      { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot' },
                     ].map(v => (
                       <button
                         key={v.id}

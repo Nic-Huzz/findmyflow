@@ -114,9 +114,9 @@ export async function getPatternHealing(userId, voice) {
 const VOICE_DISPLAY = {
   ghost: { name: 'Ghost', icon: '👻' },
   perfectionist: { name: 'Perfectionist', icon: '🎯' },
-  'people-pleaser': { name: 'People Pleaser', icon: '🪞' },
+  'people_pleaser': { name: 'People Pleaser', icon: '🪞' },
   controller: { name: 'Controller', icon: '🎮' },
-  'auto-pilot': { name: 'Auto-Pilot', icon: '🛋️' },
+  'auto_pilot': { name: 'Auto-Pilot', icon: '🛋️' },
 }
 
 /**

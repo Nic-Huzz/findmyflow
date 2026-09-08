@@ -17,6 +17,7 @@ const PATTERNS = [
   { id: 'controller', name: 'The Controller', icon: '🧱', desc: 'I want to know how this ends before I do it.' },
   { id: 'auto_pilot', name: 'The Auto-Pilot', icon: '🤖', desc: 'I\'m going through the motions. I\'ve checked out.' },
   { id: 'perfectionist', name: 'The Perfectionist', icon: '🎯', desc: 'It\'s not good enough yet. I need more time.' },
+  { id: 'people_pleaser', name: 'The People Pleaser', icon: '🪞', desc: 'I\'d rather say yes than deal with their reaction.' },
 ]
 
 export default function HealingFlowModal({ taskText, userId, questTaskId, existingData, onComplete, onClose }) {

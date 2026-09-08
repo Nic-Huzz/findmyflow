@@ -1,228 +1,1026 @@
 /**
- * ProgressTab.jsx — "How far have I come?" reporting tab
+ * ProgressTab.jsx — Narrative redesign
  *
- * Shows: Hero journey stage (with movie refs + next step),
- * Zone Matrix (X/Y graph), stats, expansion dimensions.
- * Skills collected in background but hidden from UI.
+ * Three-section story: WHERE YOU ARE → THE EVIDENCE → THE JOURNEY
+ * Progressive disclosure based on data availability.
+ * Connective tissue bridges between every section.
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import PerQuestRadar from './PerQuestRadar'
-import { LIFE_FUEL_CHANNELS, calculateLifeFuel } from '../data/channelMapping'
+import { LIFE_FUEL_CHANNELS, CHANNEL_IDS, calculateLifeFuel } from '../data/channelMapping'
+import { getDimensionById, getNumericTier } from '../data/domeDimensions'
+import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import './ProgressTab.css'
 
-// Hero stage names (Campbell) + movie refs + next step guidance
-// Triggers: see docs/features/experience-dome-full-system-reference.md
+// ── Hero Stages with quadrant coordinates ──
+// Path: top-left (Burnout) → bottom-right (Stuck) → top-right (Self-Actualisation)
+// Stage 4 is the deepest point, stage 5 starts the climb
 const HERO_STAGES = [
-  { stage: 0, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], nextTitle: 'Explore the Experience Dome', nextHow: 'Go to the Discover tab and tap "Experience Dome". Tick experiences that light you up.', route: '/7-day-challenge' },
-  { stage: 1, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], nextTitle: 'Explore the Experience Dome', nextHow: 'Go to the Discover tab and tap "Experience Dome". Tick experiences that light you up.', route: '/7-day-challenge' },
-  { stage: 2, name: 'Call to Adventure', refs: ['Ariel seeing the surface world for the first time.', 'Peter Parker getting bitten by the spider.', 'Neo seeing the Matrix for the first time.'], nextTitle: 'Tick 10 experiences in the Dome', nextHow: 'Open the Experience Dome on the Discover tab. Rate how each experience makes you feel.', route: '/7-day-challenge' },
-  { stage: 3, name: 'Refusal of the Call', refs: ['Simba running away to the jungle.', 'Miles Morales saying "I can\'t do this."', 'Frodo saying "I wish the ring had never come to me."'], nextTitle: 'Complete the Essence Mirror', nextHow: 'On the Discover tab, tap "Essence Mirror". Swipe through 12 cards, pick what resonates, and meet your archetype.', route: '/essence-mirror' },
-  { stage: 4, name: 'Meeting the Mentor', refs: ['Aladdin meeting the Genie.', 'Tony Stark building the first suit in the cave.', 'Luke meeting Yoda on Dagobah.'], nextTitle: 'Choose your life paths', nextHow: 'Tap "Ready to go deeper?" on the Discover tab. Pick experiences you want to pursue and they become quests.', route: '/choose-quests' },
-  { stage: 5, name: 'Crossing the Threshold', refs: ['Jasmine and Aladdin on the magic carpet for the first time.', 'Spider-Man\'s first swing through New York.', 'Neo dodging bullets for the first time.'], nextTitle: 'Complete 5 courage challenges', nextHow: 'On the Quests tab, open a quest card. Tap the checkbox on any courage challenge (⚡), do the brave thing, then check it off.', route: '/7-day-challenge' },
-  { stage: 6, name: 'Tests, Allies, Enemies', refs: ['Mulan training with the army.', 'The Avengers learning to fight together.', 'Rocky running up the stairs.'], nextTitle: 'Start your first healing flow', nextHow: 'On the Quests tab, tap the ⚡ icon on any undone courage challenge. Walk through all 7 steps to understand what\'s really blocking you.', route: '/7-day-challenge' },
-  { stage: 7, name: 'Approach to the Inmost Cave', refs: ['Simba returning to the Pride Lands to face Scar.', 'Doctor Strange facing Dormammu.', 'Luke entering the cave on Dagobah.'], nextTitle: 'Complete 3 healing flows', nextHow: 'After completing a courage challenge, tap "Dive deeper" to explore why the protective voice you identified exists. Complete all 7 steps, then answer "Did the positive outcome happen?"', route: '/7-day-challenge' },
-  { stage: 8, name: 'The Ordeal', refs: ['Mufasa\'s death breaking Simba open.', 'Tony Stark snapping the Infinity Gauntlet.', 'Neo dying and coming back as The One.'], nextTitle: 'Find your direction', nextHow: 'Go to the Discover tab and work through the Direction cards. Review your story, find the problem that drives you, and see your career direction revealed.', route: '/7-day-challenge?tab=discover' },
-  { stage: 9, name: 'Reward', refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.', 'Frodo holding the ring at Mount Doom.'], nextTitle: 'Grow consistent income', nextHow: 'You earned your first dollar from what you love. Keep showing up, refining your offer, and serving your people.', route: '/create' },
-  { stage: 10, name: 'The Road Back', refs: ['Woody choosing to leave Andy.', 'Spider-Man returning to Queens.', 'Bilbo writing his book.'], nextTitle: 'Cover your living expenses', nextHow: 'You\'ve been earning consistently for 3+ months. Set your expenses target and work toward covering them.' },
-  { stage: 11, name: 'Resurrection', refs: ['Simba defeating Scar.', 'Tony Stark saying "I am Iron Man."', 'Neo stopping bullets with his hand.'], nextTitle: 'Cover your living expenses', nextHow: 'Your new life design sustains you. The old career is optional now.' },
-  { stage: 12, name: 'Return with the Elixir', refs: ['Simba standing on Pride Rock as king.', 'The Avengers saving the universe.', 'Frodo sailing to the Undying Lands.'], nextTitle: 'You\'re free', nextHow: 'Earning from play, choosing where you live, working with who you want.' },
+  { stage: 0,  name: 'Waking Up',            x: 65,  y: 42,  desc: 'You feel something needs to change.',
+    refs: ['Ariel seeing the surface world for the first time.', 'Neo seeing the Matrix for the first time.'],
+    nextAction: 'Play the Experience Game', nextRoute: '/experience-game' },
+  { stage: 1,  name: 'Waking Up',            x: 65,  y: 42,  desc: 'You feel something needs to change.',
+    refs: ['Ariel seeing the surface world for the first time.', 'Neo seeing the Matrix for the first time.'],
+    nextAction: 'Play the Experience Game', nextRoute: '/experience-game' },
+  { stage: 2,  name: 'Exploring',             x: 95,  y: 72,  desc: 'You\'re looking at what lights you up.',
+    refs: ['Peter Parker getting bitten by the spider.', 'Neo taking the red pill.'],
+    nextAction: 'Discover your essence', nextRoute: '/essence-mirror' },
+  { stage: 3,  name: 'Discovering Yourself',   x: 135, y: 115, desc: 'You\'re learning who you really are.',
+    refs: ['Simba running away to the jungle.', 'Miles Morales saying "I can\'t do this."'],
+    nextAction: 'Map your current work', nextRoute: '/add-current-job' },
+  { stage: 4,  name: 'Choosing a Direction',   x: 185, y: 210, desc: 'You can see the path, but haven\'t stepped on it.',
+    refs: ['Aladdin meeting the Genie.', 'Luke meeting Yoda on Dagobah.'],
+    nextAction: 'Choose your paths', nextRoute: '/choose-quests' },
+  { stage: 5,  name: 'Finding Your Way',       x: 215, y: 200, desc: 'You start building what matters to you.',
+    refs: ['Spider-Man\'s first swing through New York.', 'Neo dodging bullets for the first time.'],
+    nextAction: 'Complete a courage challenge', nextRoute: '/7-day-challenge' },
+  { stage: 6,  name: 'Facing Resistance',      x: 240, y: 180, desc: 'The voices that held you back show up.',
+    refs: ['Mulan training with the army.', 'Rocky running up the stairs.'],
+    nextAction: 'Face a harder challenge', nextRoute: '/7-day-challenge' },
+  { stage: 7,  name: 'Going Deeper',           x: 260, y: 165, desc: 'You\'re working through what\'s underneath.',
+    refs: ['Simba returning to the Pride Lands.', 'Luke entering the cave on Dagobah.'],
+    nextAction: 'Explore a healing pattern', nextRoute: '/7-day-challenge' },
+  { stage: 8,  name: 'The Breakthrough',        x: 280, y: 130, desc: 'Something clicks. You feel different.',
+    refs: ['Neo dying and coming back as The One.', 'Tony Stark snapping the Infinity Gauntlet.'],
+    nextAction: 'Report your first income', nextRoute: '/7-day-challenge' },
+  { stage: 9,  name: 'First Reward',           x: 300, y: 100, desc: 'You\'re earning from what you love.',
+    refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.'],
+    nextAction: 'Keep earning for 3 months', nextRoute: '/7-day-challenge' },
+  { stage: 10, name: 'Building Momentum',      x: 318, y: 78,  desc: 'It\'s working and you keep going.',
+    refs: ['Woody choosing to leave Andy.', 'Bilbo writing his book.'],
+    nextAction: 'Build your income streak', nextRoute: '/7-day-challenge' },
+  { stage: 11, name: 'Proving It\'s Real',     x: 335, y: 58,  desc: 'This isn\'t luck. It\'s you.',
+    refs: ['Simba defeating Scar.', 'Tony Stark saying "I am Iron Man."'],
+    nextAction: 'Cover your expenses', nextRoute: '/7-day-challenge' },
+  { stage: 12, name: 'Doing What You Love',    x: 350, y: 40,  desc: 'Your life is yours.',
+    refs: ['Simba standing on Pride Rock as king.', 'Frodo sailing to the Undying Lands.'],
+    nextAction: null, nextRoute: null },
 ]
 
-// Dimension metadata now sourced from domeDimensions.js (DOME_DIMENSIONS)
+// Build smooth bezier SVG path through points
+function buildJourneyPath(points) {
+  if (points.length < 2) return ''
+  let d = `M ${points[0].x} ${points[0].y}`
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1]
+    const curr = points[i]
+    const cpx1 = prev.x + (curr.x - prev.x) * 0.5
+    const cpy1 = prev.y
+    const cpx2 = curr.x - (curr.x - prev.x) * 0.5
+    const cpy2 = curr.y
+    d += ` C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${curr.x} ${curr.y}`
+  }
+  return d
+}
+
+// Stages 1-12 for path rendering (skip index 0 duplicate)
+const JOURNEY_POINTS = HERO_STAGES.filter(s => s.stage >= 1)
+
+// ── NS state mapping (internal → user-facing) ──
+const NS_LABELS = {
+  vibe_rise: { emoji: '🔥', label: 'Vibe Rise', key: 'vibe_rise' },
+  ventral: { emoji: '🔥', label: 'Vibe Rise', key: 'vibe_rise' },
+  fun: { emoji: '😊', label: 'Fun', key: 'fun' },
+  pressure: { emoji: '😰', label: 'Stressful', key: 'pressure' },
+  sympathetic: { emoji: '😰', label: 'Stressful', key: 'pressure' },
+  growth_edge: { emoji: '😰', label: 'Stressful', key: 'pressure' },
+  bored: { emoji: '😐', label: 'Bored', key: 'bored' },
+  uninterested: { emoji: '😐', label: 'Bored', key: 'bored' },
+  dorsal: { emoji: '😐', label: 'Bored', key: 'bored' },
+}
+
+function getNsDisplay(state) {
+  return NS_LABELS[state] || { emoji: '😊', label: 'Fun', key: 'fun' }
+}
+
+// ── Fuel threshold for "active" ──
+const FUEL_THRESHOLD = 20
+
+// ── Smart CTA definitions ──
+const SETUP_CHECKS = [
+  { key: 'dome', title: 'What lights you up?', sub: 'Tick experiences you love.', route: '/experience-game', ctaText: 'Play the Experience Game', icon: '🎮' },
+  { key: 'essence', title: 'Who are you really?', sub: 'Find out in 3 minutes.', route: '/essence-mirror', ctaText: 'Start the Essence Mirror', icon: '✨' },
+  { key: 'paths', title: 'Choose your paths', sub: 'Turn experiences into life paths.', route: '/choose-quests', ctaText: 'Choose your paths', icon: '🗺️' },
+  { key: 'current_job', title: 'Where are you now?', sub: 'Map your current work.', route: '/add-current-job', ctaText: 'Map your current work', icon: '🧭' },
+]
+
+// Checklist items for onboarding
+const SETUP_CHECKLIST = [
+  { key: 'dome', label: 'Play the Experience Game', sub: 'Find what lights you up' },
+  { key: 'essence', label: 'Discover your essence', sub: 'Meet who you really are' },
+  { key: 'paths', label: 'Choose your paths', sub: 'Pick what you want to pursue' },
+  { key: 'current_job', label: 'Map your current work', sub: 'See what\'s missing' },
+]
 
 export default function ProgressTab({ userId }) {
   const navigate = useNavigate()
   const [heroStage, setHeroStage] = useState(0)
   const [matrixData, setMatrixData] = useState(null)
-  const [lifeFuel, setLifeFuel] = useState(null)
-  const [lifeFuelBaseline, setLifeFuelBaseline] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [showStages, setShowStages] = useState(false)
+
+  // Data availability flags
+  const [hasEssence, setHasEssence] = useState(false)
+  const [hasDome, setHasDome] = useState(false)
+  const [hasCurrentJob, setHasCurrentJob] = useState(false)
+  const [hasPaths, setHasPaths] = useState(false)
+
+  // Essence data
+  const [essenceData, setEssenceData] = useState(null)
+  const [avatarUrl, setAvatarUrl] = useState(null)
+
+  // Fuel data
+  const [jobFuelBaseline, setJobFuelBaseline] = useState(null)
+  const [courageFuelData, setCourageFuelData] = useState(null)
+
+  // Voice data
+  const [voiceData, setVoiceData] = useState(null)
+
+  // Evidence feed
+  const [evidenceFeed, setEvidenceFeed] = useState([])
+  const [trajectoryData, setTrajectoryData] = useState(null)
+
+  // Income data (stage 8+)
+  const [incomeData, setIncomeData] = useState(null)
+
+  // Quest names lookup
+  const [questNames, setQuestNames] = useState({})
+
   useEffect(() => {
     if (!userId) return
     let mounted = true
 
-    supabase.from('user_stage_progress')
-      .select('current_journey_level, life_fuel_quiz')
-      .eq('user_id', userId).maybeSingle()
-    .then((stageRes) => {
-      if (!mounted) return
-      setHeroStage(stageRes.data?.current_journey_level || 0)
+    async function loadAllData() {
+      try {
+        const weekStart = getWeekStartLocal()
 
-      // Quiz baseline for Life Fuel diamond (fallback when no courage data)
-      const quizData = stageRes.data?.life_fuel_quiz
-      if (quizData && typeof quizData.choice === 'number') {
-        setLifeFuelBaseline({
-          choice: Math.round((quizData.choice / 3) * 100),
-          connection: Math.round((quizData.connection / 3) * 100),
-          mastery: Math.round((quizData.mastery / 3) * 100),
-          meaning: Math.round((quizData.meaning / 3) * 100),
+        // Parallel batch 1: All the checks + core data
+        const [
+          stageRes,
+          essenceRes,
+          currentJobRes,
+          pathRes,
+          questsRes,
+          groanRes,
+          completionsRes,
+          challengeVoicesRes,
+          reviewVoicesRes,
+          monthlyGroanRes,
+          stageProgressRes,
+        ] = await Promise.all([
+          // Hero stage
+          supabase.from('user_stage_progress')
+            .select('current_journey_level, hero_avatar_url')
+            .eq('user_id', userId).maybeSingle(),
+          // Essence check
+          supabase.from('lead_flow_profiles')
+            .select('essence_archetype, custom_essence_name, custom_essence_fields')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .limit(1),
+          // Current job check
+          supabase.from('quests')
+            .select('id, label, life_fuel_baseline')
+            .eq('user_id', userId)
+            .eq('is_current_job', true)
+            .limit(1),
+          // Paths check (non-current-job active quests)
+          supabase.from('quests')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', userId)
+            .eq('status', 'active')
+            .neq('is_current_job', true),
+          // All active quests (for name lookup)
+          supabase.from('quests')
+            .select('id, label')
+            .eq('user_id', userId)
+            .eq('status', 'active'),
+          // This week's completed courage challenges
+          supabase.from('groan_challenges')
+            .select('id, title, dimension_values, expansion_dimensions, quest_id, completed_at')
+            .eq('user_id', userId)
+            .eq('status', 'completed')
+            .not('dimension_values', 'is', null)
+            .gte('completed_at', weekStart + 'T00:00:00')
+            .order('completed_at', { ascending: false }),
+          // Life fuel from quest_completions
+          supabase.from('quest_completions')
+            .select('reflection_text')
+            .eq('user_id', userId)
+            .eq('quest_category', 'Groans')
+            .not('reflection_text', 'is', null),
+          // Voice data: from challenges
+          supabase.from('groan_challenges')
+            .select('predicted_voice, gap_voice, completed_at, expansion_dimensions')
+            .eq('user_id', userId)
+            .eq('status', 'completed'),
+          // Voice data: from weekly reviews
+          supabase.from('weekly_reviews')
+            .select('identity_did, identity_text, created_at')
+            .eq('user_id', userId)
+            .eq('identity_did', true),
+          // Monthly courage count (last 30 days for trajectory)
+          supabase.from('groan_challenges')
+            .select('id, dimension_values', { count: 'exact' })
+            .eq('user_id', userId)
+            .eq('status', 'completed')
+            .not('dimension_values', 'is', null)
+            .gte('completed_at', new Date(Date.now() - 30 * 86400000).toISOString()),
+          // Income data (for stage 8+)
+          supabase.from('income_self_reports')
+            .select('amount_cents, currency, source, month_year')
+            .eq('user_id', userId)
+            .order('month_year', { ascending: false })
+            .limit(1),
+        ])
+
+        if (!mounted) return
+
+        // Process hero stage
+        setHeroStage(stageRes.data?.current_journey_level || 0)
+        setAvatarUrl(stageRes.data?.hero_avatar_url || null)
+
+        // Process essence
+        const essenceProfile = essenceRes.data?.[0]
+        if (essenceProfile) {
+          setHasEssence(true)
+          const name = essenceProfile.custom_essence_name || essenceProfile.essence_archetype
+          const fields = essenceProfile.custom_essence_fields || {}
+          const archetype = ESSENCE_ARCHETYPES.find(a => a.name === name || a.id === name)
+          setEssenceData({
+            name: name || archetype?.name,
+            superpower: fields.superpower || archetype?.superpower,
+            vision: fields.vision_in_action || archetype?.vision_in_action,
+            image: archetype?.image,
+          })
+        }
+
+        // Process dome check (from matrixData later, but also check here)
+        // matrixData is loaded separately via import
+
+        // Process current job
+        const currentJobQuest = currentJobRes.data?.[0]
+        if (currentJobQuest) {
+          setHasCurrentJob(true)
+          setJobFuelBaseline(currentJobQuest.life_fuel_baseline || null)
+        }
+
+        // Process paths
+        const pathsExist = (pathRes.count || 0) > 0
+        setHasPaths(pathsExist)
+
+        // Quest names lookup
+        const namesMap = {}
+        questsRes.data?.forEach(q => { namesMap[q.id] = q.label })
+        setQuestNames(namesMap)
+
+        // Process NS checkins for evidence feed
+        const groanIds = (groanRes.data || []).map(g => g.id)
+        let nsMap = {}
+        if (groanIds.length > 0) {
+          const { data: checkins } = await supabase.from('nervous_system_checkins')
+            .select('source_challenge_id, after_state')
+            .in('source_challenge_id', groanIds)
+            .not('after_state', 'is', null)
+          if (checkins) {
+            checkins.forEach(c => { nsMap[c.source_challenge_id] = c.after_state })
+          }
+        }
+
+        // Build evidence feed
+        const feed = (groanRes.data || []).map(g => {
+          const nsState = nsMap[g.id]
+          const nsDisplay = nsState ? getNsDisplay(nsState) : null
+
+          // Calculate dimension growth chips
+          const growthChips = []
+          if (g.dimension_values) {
+            Object.entries(g.dimension_values).forEach(([dimId, value]) => {
+              const dim = getDimensionById(dimId)
+              if (!dim) return
+              let level
+              if (dim.type === 'numeric') {
+                level = getNumericTier(dimId, value)
+              } else {
+                level = value
+              }
+              if (level > 0) {
+                growthChips.push({
+                  dimId,
+                  icon: dim.icon,
+                  label: dim.label,
+                  level,
+                })
+              }
+            })
+          }
+
+          return {
+            id: g.id,
+            title: g.title,
+            questId: g.quest_id,
+            nsState: nsDisplay?.key || 'fun',
+            nsEmoji: nsDisplay?.emoji || '😊',
+            nsLabel: nsDisplay?.label || 'Fun',
+            growthChips,
+            completedAt: g.completed_at,
+          }
         })
-      }
+        setEvidenceFeed(feed)
 
-      setLoading(false)
-    }).catch(err => {
-      console.error('ProgressTab load error:', err)
-      if (mounted) setLoading(false)
-    })
-
-    // Zone Matrix
-    import('../lib/scoreUtilities').then(async (m) => {
-      const result = await m.calculateZoneMatrix(userId)
-      if (!mounted) return
-      setMatrixData(result)
-    }).catch(err => console.warn('Matrix load error:', err))
-
-    // Life Fuel — parse from quest_completions reflection_text
-    supabase.from('quest_completions')
-      .select('reflection_text')
-      .eq('user_id', userId)
-      .eq('quest_category', 'Groans')
-      .not('reflection_text', 'is', null)
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
-        if (!mounted || !data) return
-        const entries = data.map(row => {
+        // Process life fuel from all courage data
+        const allEntries = (completionsRes.data || []).map(row => {
           try {
             const parsed = JSON.parse(row.reflection_text)
             return parsed?.life_fuel || null
           } catch { return null }
         }).filter(Boolean)
-        if (entries.length > 0) setLifeFuel(calculateLifeFuel(entries))
-      }).catch(() => {})
+        if (allEntries.length > 0) {
+          setCourageFuelData(calculateLifeFuel(allEntries))
+        }
+
+        // Process voice data
+        const voiceCounts = {}
+        const voiceDims = {}
+        const now = new Date()
+        const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+        const lastMonthKey = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth() + 1).padStart(2, '0')}`
+
+        // From challenge voices (predicted_voice from creation + gap_voice from completion)
+        ;(challengeVoicesRes.data || []).forEach(row => {
+          const monthKey = row.completed_at ? row.completed_at.substring(0, 7) : thisMonth
+          // Count each unique voice per challenge (deduplicate if same voice on both)
+          const voices = new Set()
+          if (row.predicted_voice) voices.add(row.predicted_voice)
+          if (row.gap_voice) voices.add(row.gap_voice)
+          voices.forEach(voice => {
+            if (!voiceCounts[voice]) voiceCounts[voice] = {}
+            voiceCounts[voice][monthKey] = (voiceCounts[voice][monthKey] || 0) + 1
+
+            // Track co-occurring dimensions
+            if (row.expansion_dimensions) {
+              if (!voiceDims[voice]) voiceDims[voice] = {}
+              const dims = Array.isArray(row.expansion_dimensions) ? row.expansion_dimensions : []
+              dims.forEach(d => {
+                voiceDims[voice][d] = (voiceDims[voice][d] || 0) + 1
+              })
+            }
+          })
+        })
+
+        // From weekly review voices
+        ;(reviewVoicesRes.data || []).forEach(row => {
+          if (!row.identity_text) return
+          const voice = row.identity_text.split(':')[0]?.trim()
+          if (!voice) return
+          const monthKey = row.created_at ? row.created_at.substring(0, 7) : thisMonth
+          if (!voiceCounts[voice]) voiceCounts[voice] = {}
+          voiceCounts[voice][monthKey] = (voiceCounts[voice][monthKey] || 0) + 1
+        })
+
+        // Find dominant voice
+        const voiceEntries = Object.entries(voiceCounts)
+        if (voiceEntries.length > 0) {
+          const dominantVoice = voiceEntries.reduce((best, [voice, months]) => {
+            const total = Object.values(months).reduce((s, c) => s + c, 0)
+            return total > best.total ? { voice, months, total } : best
+          }, { voice: null, months: {}, total: 0 })
+
+          if (dominantVoice.voice) {
+            const thisMonthCount = dominantVoice.months[thisMonth] || 0
+            const lastMonthCount = dominantVoice.months[lastMonthKey] || 0
+            const peakCount = Math.max(...Object.values(dominantVoice.months))
+
+            // Find top co-occurring dimension
+            const dims = voiceDims[dominantVoice.voice] || {}
+            const topDim = Object.entries(dims).sort((a, b) => b[1] - a[1])[0]
+            const topDimInfo = topDim ? getDimensionById(topDim[0]) : null
+
+            setVoiceData({
+              voice: dominantVoice.voice,
+              thisMonth: thisMonthCount,
+              lastMonth: lastMonthCount,
+              peak: peakCount,
+              maxDots: Math.max(thisMonthCount, lastMonthCount, 6),
+              topDimension: topDimInfo?.label || null,
+              isDecreasing: thisMonthCount < lastMonthCount,
+              dropPercent: lastMonthCount > 0
+                ? Math.round(((lastMonthCount - thisMonthCount) / lastMonthCount) * 100)
+                : 0,
+            })
+          }
+        }
+
+        // Trajectory data
+        const weekGroanCount = (groanRes.data || []).length
+        const weekDims = new Set()
+        ;(groanRes.data || []).forEach(g => {
+          if (g.dimension_values) Object.keys(g.dimension_values).forEach(d => weekDims.add(d))
+        })
+        const monthGroanCount = monthlyGroanRes.count || 0
+        const monthDims = new Set()
+        ;(monthlyGroanRes.data || []).forEach(g => {
+          if (g.dimension_values) Object.keys(g.dimension_values).forEach(d => monthDims.add(d))
+        })
+        setTrajectoryData({
+          weekChallenges: weekGroanCount,
+          weekDims: weekDims.size,
+          monthChallenges: monthGroanCount,
+          monthDims: monthDims.size,
+        })
+
+        // Income
+        if ((stageRes.data?.current_journey_level || 0) >= 8 && stageProgressRes.data?.[0]) {
+          const inc = stageProgressRes.data[0]
+          setIncomeData({
+            amount: inc.amount_cents / 100,
+            currency: inc.currency || 'USD',
+            source: inc.source,
+            monthYear: inc.month_year,
+          })
+        }
+
+      } catch (err) {
+        console.error('ProgressTab load error:', err)
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    }
+
+    loadAllData()
+
+    // Zone Matrix (loaded via dynamic import as before)
+    import('../lib/scoreUtilities').then(async (m) => {
+      const result = await m.calculateZoneMatrix(userId)
+      if (!mounted) return
+      setMatrixData(result)
+      setHasDome(result.hasDome)
+    }).catch(err => console.warn('Matrix load error:', err))
 
     return () => { mounted = false }
   }, [userId])
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
 
+  // Setup completion map
+  const setupComplete = useMemo(() => ({
+    dome: hasDome,
+    essence: hasEssence,
+    current_job: hasCurrentJob,
+    paths: hasPaths,
+  }), [hasDome, hasEssence, hasCurrentJob, hasPaths])
+
+  // Are all 4 setup steps done?
+  const allSetupDone = setupComplete.dome && setupComplete.essence && setupComplete.current_job && setupComplete.paths
+
+  // Smart CTA: first missing item
+  const nextCta = useMemo(() => {
+    for (const check of SETUP_CHECKS) {
+      if (!setupComplete[check.key]) return check
+    }
+    return null // All done
+  }, [setupComplete])
+
+  // Fuel feedback state (A-D)
+  const fuelState = useMemo(() => {
+    if (!jobFuelBaseline) return null
+    const jobHas = CHANNEL_IDS.filter(id => jobFuelBaseline[id])
+    const jobMissing = CHANNEL_IDS.filter(id => !jobFuelBaseline[id])
+
+    if (jobMissing.length === 0) return { state: 'D', jobHas, jobMissing, courageFilledGaps: [] }
+    if (!courageFuelData) return { state: 'A', jobHas, jobMissing, courageFilledGaps: [] }
+
+    const courageFilledGaps = jobMissing.filter(id => (courageFuelData[id] || 0) >= FUEL_THRESHOLD)
+
+    if (courageFilledGaps.length === jobMissing.length) {
+      return { state: 'C', jobHas, jobMissing, courageFilledGaps }
+    }
+    if (courageFilledGaps.length > 0) {
+      return { state: 'B', jobHas, jobMissing, courageFilledGaps }
+    }
+    return { state: 'A', jobHas, jobMissing, courageFilledGaps }
+  }, [jobFuelBaseline, courageFuelData])
+
+  // Voice bridge text
+  const voiceBridge = useMemo(() => {
+    if (!voiceData) return null
+    if (voiceData.dropPercent >= 50) return 'your Ghost is getting quieter.'
+    if (voiceData.isDecreasing) return 'what\'s still getting in the way?'
+    return 'what\'s getting in the way?'
+  }, [voiceData])
+
+  // Pain bridge text
+  const painBridge = useMemo(() => {
+    if (!fuelState) return 'but right now...'
+    if (fuelState.state === 'C' || fuelState.state === 'D') return 'and it\'s working.'
+    if (fuelState.courageFilledGaps.length > 0) return 'and it\'s working.'
+    return 'but right now...'
+  }, [fuelState])
+
   if (loading) return <div className="pt-loading">Loading...</div>
 
-  // Zone matrix dot position
-  const dotX = matrixData ? (matrixData.hasLifePaths ? 80 : matrixData.hasLifeMap || matrixData.hasDome ? 50 : 15) : 15
-  const dotY = matrixData?.hasCourageThisWeek ? 80 : 15
+  // ── Fuel rendering helpers ──
+  function renderFuelName(id) {
+    const ch = LIFE_FUEL_CHANNELS[id]
+    return <span className={fuelState?.jobHas?.includes(id) || fuelState?.courageFilledGaps?.includes(id) ? 'pt-fuel-has' : 'pt-fuel-missing'}>{ch.emoji} {ch.name}</span>
+  }
+
+  function renderFuelPain() {
+    if (!fuelState) return null
+    const { state, jobHas, jobMissing, courageFilledGaps } = fuelState
+
+    if (state === 'D') {
+      return (
+        <div className="pt-fuel-pain">
+          <div className="pt-fuel-pain-text">
+            You now have {CHANNEL_IDS.map((id, i) => (
+              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < 3 ? (i === 2 ? ', and ' : ', ') : ''}</span>
+            ))}. All four fuels are active.
+          </div>
+        </div>
+      )
+    }
+
+    if (state === 'C') {
+      return (
+        <div className="pt-fuel-pain">
+          <div className="pt-fuel-pain-text">
+            You started without {jobMissing.map((id, i) => (
+              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobMissing.length - 1 ? ' and ' : ''}</span>
+            ))}. Now all four fuels are active.
+          </div>
+        </div>
+      )
+    }
+
+    if (state === 'B') {
+      return (
+        <div className="pt-fuel-pain">
+          <div className="pt-fuel-pain-text">
+            You started with {jobHas.map((id, i) => (
+              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobHas.length - 1 ? ' and ' : ''}</span>
+            ))}. Your courage challenges are adding {courageFilledGaps.map((id, i) => (
+              <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < courageFilledGaps.length - 1 ? ' and ' : ''}</span>
+            ))}.
+          </div>
+        </div>
+      )
+    }
+
+    // State A
+    return (
+      <div className="pt-fuel-pain">
+        <div className="pt-fuel-pain-text">
+          You have {jobHas.map((id, i) => (
+            <span key={id}><span className="pt-fuel-has">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobHas.length - 1 ? ' and ' : ''}</span>
+          ))}, but you're missing {jobMissing.map((id, i) => (
+            <span key={id}><span className="pt-fuel-missing">{LIFE_FUEL_CHANNELS[id].emoji} {LIFE_FUEL_CHANNELS[id].name}</span>{i < jobMissing.length - 1 ? ' and ' : ''}</span>
+          ))}.
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="progress-tab">
-      {/* Hero Journey Stage */}
-      <div className="pt-hero-card">
-        <div className="pt-hero-stage">Stage {heroStage}</div>
-        <div className="pt-hero-name">{stageInfo.name}</div>
-        <div className="pt-hero-bar">
-          <div className="pt-hero-fill" style={{ width: `${Math.min((heroStage / 12) * 100, 100)}%` }} />
+
+      {/* ═══ HERO CARD ═══ */}
+      <div className="pt-hero">
+        <div className="pt-stage-row">
+          <div className="pt-stage-label">Stage {heroStage} of 12</div>
+          <button className="pt-stages-toggle" onClick={() => setShowStages(!showStages)}>
+            {showStages ? 'Hide map' : 'See your journey'} {showStages ? '▴' : '▾'}
+          </button>
         </div>
-        <div className="pt-hero-endpoints">
+        <div className="pt-stage-name">{stageInfo.name}</div>
+
+        <div className="pt-journey-bar">
+          <div className="pt-journey-fill" style={{ width: `${Math.max(Math.min((heroStage / 12) * 100, 100), 4)}%` }} />
+        </div>
+        <div className="pt-journey-endpoints">
           <span>The Crack</span>
-          <span>Self-Actualisation</span>
+          <span>Doing What You Love</span>
         </div>
+
+        {stageInfo.desc && (
+          <div className="pt-stage-desc">{stageInfo.desc}</div>
+        )}
+
+        {/* Think refs */}
         {stageInfo.refs && (
-          <div className="pt-hero-refs">
-            <span className="pt-hero-refs-label">Think:</span>
+          <div className="pt-think">
+            <div className="pt-think-label">Think:</div>
             {stageInfo.refs.map((ref, i) => (
-              <span key={i} className="pt-hero-ref">{ref}</span>
+              <div key={i} className="pt-think-ref">{ref}</div>
             ))}
           </div>
         )}
-        {stageInfo.nextTitle && (
-          <div
-            className={`pt-hero-next ${stageInfo.route ? 'pt-hero-next-tappable' : ''}`}
-            onClick={() => stageInfo.route && navigate(stageInfo.route)}
-          >
-            <span className="pt-hero-next-label">Next step</span>
-            <span className="pt-hero-next-title">{stageInfo.nextTitle}</span>
-            <span className="pt-hero-next-how">{stageInfo.nextHow}</span>
-            {stageInfo.route && <span className="pt-hero-next-arrow">Go ›</span>}
+
+        {/* Next action CTA */}
+        {stageInfo.nextAction && (
+          <button className="pt-next-action" onClick={() => navigate(stageInfo.nextRoute)}>
+            Next step: {stageInfo.nextAction} <span>→</span>
+          </button>
+        )}
+
+        {/* ═══ Expandable Journey Quadrant Map ═══ */}
+        {showStages && (
+          <div className="pt-journey-expand">
+            <div className="pt-journey-map">
+              <svg viewBox="0 0 380 300" className="pt-journey-svg">
+                <defs>
+                  <radialGradient id="ptBurnoutGlow" cx="12%" cy="12%" r="40%">
+                    <stop offset="0%" stopColor="rgba(239,68,68,0.08)" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </radialGradient>
+                  <radialGradient id="ptStuckGlow" cx="82%" cy="85%" r="35%">
+                    <stop offset="0%" stopColor="rgba(147,130,220,0.06)" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </radialGradient>
+                  <radialGradient id="ptDestGlow" cx="88%" cy="12%" r="40%">
+                    <stop offset="0%" stopColor="rgba(233,162,59,0.10)" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </radialGradient>
+                  <linearGradient id="ptPathDone" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
+                    <stop offset="100%" stopColor="#E9A23B" />
+                  </linearGradient>
+                  <linearGradient id="ptLifeGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
+                    <stop offset="100%" stopColor="rgba(239,68,68,0.2)" />
+                  </linearGradient>
+                  <filter id="ptGlow">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                </defs>
+
+                {/* Zone glows */}
+                <rect x="0" y="0" width="380" height="300" fill="url(#ptBurnoutGlow)" />
+                <rect x="0" y="0" width="380" height="300" fill="url(#ptStuckGlow)" />
+                <rect x="0" y="0" width="380" height="300" fill="url(#ptDestGlow)" />
+
+                {/* Axis labels */}
+                <text x="200" y="294" textAnchor="middle" fontSize="7" fontWeight="700"
+                  fill="rgba(255,255,255,0.15)" letterSpacing="1.5">KNOWING YOURSELF →</text>
+                <text x="8" y="150" textAnchor="middle" fontSize="7" fontWeight="700"
+                  fill="rgba(255,255,255,0.15)" letterSpacing="1.5"
+                  transform="rotate(-90, 8, 150)">TAKING ACTION →</text>
+
+                {/* Life so far */}
+                <path
+                  d="M 55 265 C 50 220, 48 160, 52 110 C 56 75, 60 55, 65 42"
+                  fill="none" stroke="url(#ptLifeGrad)" strokeWidth="2.5"
+                  strokeLinecap="round" strokeDasharray="4 6"
+                />
+                <circle cx="55" cy="265" r="3" fill="rgba(255,255,255,0.10)" />
+                <circle cx="53" cy="230" r="2" fill="rgba(255,255,255,0.07)" />
+                <circle cx="51" cy="195" r="2" fill="rgba(255,255,255,0.07)" />
+                <circle cx="50" cy="160" r="2" fill="rgba(255,255,255,0.07)" />
+                <circle cx="51" cy="125" r="2" fill="rgba(255,255,255,0.08)" />
+                <circle cx="55" cy="90" r="2.5" fill="rgba(239,68,68,0.18)" />
+                <circle cx="60" cy="60" r="2.5" fill="rgba(239,68,68,0.22)" />
+                <polygon points="65,42 60,50 70,50" fill="rgba(239,68,68,0.22)" />
+                <text x="30" y="170" fontSize="8" fontWeight="700" fill="rgba(255,255,255,0.13)"
+                  transform="rotate(-85, 30, 170)" textAnchor="middle">YOUR LIFE SO FAR</text>
+
+                {/* Full path (faint dashed) */}
+                <path d={buildJourneyPath(JOURNEY_POINTS)} fill="none"
+                  stroke="rgba(255,255,255,0.06)" strokeWidth="3"
+                  strokeLinecap="round" strokeDasharray="6 8" />
+
+                {/* Active path (gold) */}
+                <path d={buildJourneyPath(JOURNEY_POINTS.filter(s => s.stage <= heroStage))}
+                  fill="none" stroke="url(#ptPathDone)" strokeWidth="3.5" strokeLinecap="round" />
+
+                {/* Stage dots */}
+                {JOURNEY_POINTS.map(s => {
+                  const done = s.stage < heroStage
+                  const current = s.stage === heroStage
+                  const showNum = done || current || s.stage <= heroStage + 2
+                  return (
+                    <g key={s.stage}>
+                      {current && (
+                        <circle cx={s.x} cy={s.y} r="14" fill="none"
+                          stroke="rgba(233,162,59,0.2)" strokeWidth="2">
+                          <animate attributeName="r" values="14;18;14" dur="2.5s" repeatCount="indefinite" />
+                          <animate attributeName="opacity" values="1;0.2;1" dur="2.5s" repeatCount="indefinite" />
+                        </circle>
+                      )}
+                      <circle cx={s.x} cy={s.y}
+                        r={current ? 7 : done ? 4.5 : 3.5}
+                        fill={done ? '#E9A23B' : current ? '#E9A23B' : 'rgba(255,255,255,0.12)'}
+                        opacity={done ? 0.7 : 1}
+                        filter={current ? 'url(#ptGlow)' : undefined}
+                      />
+                      {showNum && (
+                        <text x={s.x} y={s.y - (current ? 16 : 11)}
+                          textAnchor="middle" fontSize={current ? 10 : 8} fontWeight="700"
+                          fill={current ? '#E9A23B' : done ? 'rgba(233,162,59,0.45)' : 'rgba(255,255,255,0.12)'}>
+                          {s.stage}
+                        </text>
+                      )}
+                    </g>
+                  )
+                })}
+              </svg>
+
+              {/* Zone figures */}
+              <div className="pt-zone-fig pt-zone-start">
+                <span className="pt-zone-emoji">🌱</span>
+                <div className="pt-zone-label">Starting Out</div>
+              </div>
+              <div className="pt-zone-fig pt-zone-burnout">
+                <span className="pt-zone-emoji">🏃‍♂️</span>
+                <div className="pt-zone-label">Burnout</div>
+                <div className="pt-zone-sub">Busy but lost</div>
+              </div>
+              <div className="pt-zone-fig pt-zone-stuck">
+                <span className="pt-zone-emoji">🤔</span>
+                <div className="pt-zone-label">Stuck</div>
+                <div className="pt-zone-sub">Aware but can't start</div>
+              </div>
+              <div className="pt-zone-fig pt-zone-dest">
+                <span className="pt-zone-emoji">🎉</span>
+                <div className="pt-zone-label">Doing What<br/>You Love</div>
+              </div>
+            </div>
+
+            <div className="pt-journey-legend">
+              <span className="pt-legend-item"><span className="pt-legend-dot pt-legend-life" /> Life so far</span>
+              <span className="pt-legend-item"><span className="pt-legend-dot pt-legend-done" /> Done</span>
+              <span className="pt-legend-item"><span className="pt-legend-dot pt-legend-now" /> You</span>
+              <span className="pt-legend-item"><span className="pt-legend-dot pt-legend-next" /> Next</span>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Zone Matrix — X/Y graph */}
-      {matrixData && (
-        <div className="pt-section">
-          <div className="pt-section-title">Last 7 days</div>
-          <div className="pt-matrix-grid">
-            <div className="pt-matrix-label pt-matrix-y-high">Aligned action</div>
-            <div className="pt-matrix-label pt-matrix-y-low">Low action</div>
-            <div className="pt-matrix-label pt-matrix-x-high">High clarity</div>
-            <div className="pt-matrix-quadrant pt-q-tl">Misguided Zone</div>
-            <div className="pt-matrix-quadrant pt-q-tr">Self-Actualisation</div>
-            <div className="pt-matrix-quadrant pt-q-bl">Unfulfilment</div>
-            <div className="pt-matrix-quadrant pt-q-br">Head Full of Dreams</div>
-            <div className="pt-matrix-dot" style={{ left: `${dotX}%`, bottom: `${dotY}%` }} />
+      {/* ═══ ESSENCE CARD ═══ */}
+      {hasEssence && essenceData && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">you are...</span></div>
+          <div className="pt-essence-card">
+            <img
+              className="pt-essence-avatar"
+              src={avatarUrl || essenceData.image || '/images/essence/radiant-rebel.png'}
+              alt={essenceData.name || 'Your essence'}
+            />
+            <div className="pt-essence-name">The {essenceData.name}</div>
+            {essenceData.superpower && (
+              <div className="pt-essence-superpower">"{essenceData.superpower}"</div>
+            )}
+            {essenceData.vision && (
+              <div className="pt-essence-vision">{essenceData.vision}</div>
+            )}
           </div>
-          <div className="pt-matrix-zone">{matrixData.zone}</div>
-        </div>
+        </>
       )}
 
-      {/* Life Fuel Diamond — courage data, or quiz baseline as fallback */}
-      {(lifeFuel || lifeFuelBaseline) && (() => {
-        const fuel = lifeFuel || lifeFuelBaseline
-        const isBaseline = !lifeFuel && !!lifeFuelBaseline
-        return (
-        <div className="pt-section pt-fuel-section">
-          <div className="pt-section-title">Life Fuel{isBaseline ? ' (from quiz)' : ''}</div>
-          <div className="pt-fuel-diamond">
-            {/* Labels positioned around the SVG */}
-            <div className="pt-fuel-label pt-fuel-top">
-              <span className="pt-fuel-pct">{fuel.mastery}%</span>
-              <span className="pt-fuel-name">Mastery</span>
+      {/* ═══ VOICE SECTION ═══ */}
+      {voiceData && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">{voiceBridge}</span></div>
+          <div className="pt-voice-card">
+            <div className="pt-voice-icon">👻</div>
+            <div className="pt-voice-content">
+              <div className="pt-voice-name">Your Ghost</div>
+              <div className="pt-voice-stat">
+                {voiceData.thisMonth === 0
+                  ? <>Hasn't shown up this month.</>
+                  : voiceData.thisMonth === 1
+                    ? <>Only showed up <strong>once</strong> this month.</>
+                    : <>Shows up most when <strong>{voiceData.topDimension || 'pushing your comfort zone'}</strong> is involved.</>
+                }
+              </div>
+              <div className="pt-voice-dots">
+                <div className="pt-voice-dots-row">
+                  <span className="pt-voice-dots-label">Last month</span>
+                  {Array.from({ length: voiceData.maxDots }).map((_, i) => (
+                    <span key={i} className={`pt-voice-dot ${i < voiceData.lastMonth ? 'filled' : 'empty'}`} />
+                  ))}
+                </div>
+                <div className="pt-voice-dots-row">
+                  <span className="pt-voice-dots-label">This month</span>
+                  {Array.from({ length: voiceData.maxDots }).map((_, i) => (
+                    <span key={i} className={`pt-voice-dot ${i < voiceData.thisMonth ? 'filled' : 'empty'}`} />
+                  ))}
+                </div>
+              </div>
+              {voiceData.isDecreasing && (
+                <div className="pt-voice-trend">
+                  {voiceData.dropPercent >= 50
+                    ? `Down ${voiceData.dropPercent}% ↓`
+                    : 'It\'s getting quieter ↓'
+                  }
+                </div>
+              )}
+              {!voiceData.isDecreasing && voiceData.thisMonth > 0 && (
+                <div className="pt-voice-trend up">Still showing up</div>
+              )}
             </div>
-            <div className="pt-fuel-label pt-fuel-right">
-              <span className="pt-fuel-pct">{fuel.meaning}%</span>
-              <span className="pt-fuel-name">Meaning</span>
+          </div>
+        </>
+      )}
+
+      {/* ═══ EVIDENCE SECTION ═══ */}
+      {allSetupDone && (
+        <>
+          <div className="pt-bridge">
+            <span className="pt-bridge-text">
+              {evidenceFeed.length > 0 ? 'but this week you fought back.' : 'this week...'}
+            </span>
+          </div>
+
+          {evidenceFeed.length > 0 ? (
+            <>
+              <div className="pt-section-header">
+                <div className="pt-section-icon">⚡</div>
+                <div className="pt-section-label">This Week</div>
+                <div className="pt-section-meta">{evidenceFeed.length} challenge{evidenceFeed.length !== 1 ? 's' : ''}</div>
+              </div>
+
+              {evidenceFeed.map(item => (
+                <div key={item.id} className="pt-evidence-card" data-state={item.nsState}>
+                  {item.questId && questNames[item.questId] && (
+                    <div className="pt-evidence-quest">{questNames[item.questId]}</div>
+                  )}
+                  <div className="pt-evidence-title">{item.title}</div>
+                  <div className="pt-evidence-chips">
+                    {item.growthChips.map(chip => (
+                      <span key={chip.dimId} className="pt-chip-growth">
+                        {chip.icon} {chip.label} <span className="pt-chip-growth-arrow">→</span> {chip.level}
+                      </span>
+                    ))}
+                    <span className="pt-chip-state" data-state={item.nsState}>
+                      {item.nsEmoji} {item.nsLabel}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {/* Trajectory summary */}
+              {trajectoryData && (
+                <div className="pt-evidence-summary">
+                  Your comfort zone grew in <strong>{trajectoryData.weekDims} dimension{trajectoryData.weekDims !== 1 ? 's' : ''}</strong> this week.
+                  <div className="pt-trajectory-line">
+                    This week: <strong>{trajectoryData.weekChallenges} challenge{trajectoryData.weekChallenges !== 1 ? 's' : ''}, {trajectoryData.weekDims} dimension{trajectoryData.weekDims !== 1 ? 's' : ''} grew</strong>.{' '}
+                    Last month: {trajectoryData.monthChallenges} challenge{trajectoryData.monthChallenges !== 1 ? 's' : ''}, {trajectoryData.monthDims} dimension{trajectoryData.monthDims !== 1 ? 's' : ''} grew.
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="pt-cta-card">
+              <div className="pt-cta-card-icon">⚡</div>
+              <div className="pt-cta-card-title">Nothing brave yet this week</div>
+              <div className="pt-cta-card-sub">Your progress shows up here when you complete a courage challenge. Each one grows your comfort zone.</div>
+              <button className="pt-cta pt-cta-purple" onClick={() => navigate('/7-day-challenge')}>
+                Add a courage challenge <span>→</span>
+              </button>
             </div>
-            <div className="pt-fuel-label pt-fuel-bottom">
-              <span className="pt-fuel-pct">{fuel.connection}%</span>
-              <span className="pt-fuel-name">Connection</span>
+          )}
+        </>
+      )}
+
+      {/* ═══ INCOME CARD (Stage 8+) ═══ */}
+      {heroStage >= 8 && incomeData && essenceData && (
+        <>
+          <div className="pt-bridge">
+            <span className="pt-bridge-text">the {essenceData.name} is earning from what they love.</span>
+          </div>
+          <div className="pt-income-card">
+            <div className="pt-income-label">Income This Month</div>
+            <div className="pt-income-amount">
+              {incomeData.currency === 'USD' ? '$' : incomeData.currency === 'IDR' ? 'Rp ' : ''}{incomeData.amount.toLocaleString()}
             </div>
-            <div className="pt-fuel-label pt-fuel-left">
-              <span className="pt-fuel-pct">{fuel.choice}%</span>
-              <span className="pt-fuel-name">Choice</span>
-            </div>
-            <svg viewBox="0 0 200 200" className="pt-fuel-svg">
-              <defs>
-                <linearGradient id="fuelFill" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#5e17eb" stopOpacity="0.12" />
-                  <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.12" />
-                </linearGradient>
-              </defs>
-              {/* Grid diamonds */}
-              {[25, 50, 75, 100].map(pct => {
-                const r = (pct / 100) * 70
+            {incomeData.source && (
+              <div className="pt-income-source">{incomeData.source}</div>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* ═══ SMART CTA ═══ */}
+      {nextCta && allSetupDone === false && (
+        <>
+          <div className="pt-bridge">
+            <span className="pt-bridge-text">
+              {!hasDome ? 'let\'s find out what lights you up.' : !hasEssence ? 'now, who are you really?' : !hasPaths ? 'ready to find your path?' : 'now let\'s see what your current life looks like.'}
+            </span>
+          </div>
+          <div className="pt-cta-card">
+            <div className="pt-cta-card-icon">{nextCta.icon}</div>
+            <div className="pt-cta-card-title">{nextCta.title}</div>
+            <div className="pt-cta-card-sub">{nextCta.sub}</div>
+            <button className="pt-cta" onClick={() => navigate(nextCta.route)}>
+              {nextCta.ctaText} <span>→</span>
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ═══ JOURNEY SECTION ═══ */}
+      {hasPaths && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">here's how far you've come.</span></div>
+          <div className="pt-section-header">
+            <div className="pt-section-icon">🗺️</div>
+            <div className="pt-section-label">Your Paths</div>
+          </div>
+          <PerQuestRadar userId={userId} />
+
+          {/* Life Fuel Comparison */}
+          {jobFuelBaseline && (
+            <div className="pt-fuel-compare">
+              <div className="pt-fuel-compare-title">Life Fuel Over Time</div>
+              {CHANNEL_IDS.map(id => {
+                const ch = LIFE_FUEL_CHANNELS[id]
+                const startVal = jobFuelBaseline[id] ? 70 : 10
+                const nowVal = courageFuelData ? Math.max(courageFuelData[id] || 0, startVal) : startVal
                 return (
-                  <polygon key={pct}
-                    points={`100,${100 - r} ${100 + r},100 100,${100 + r} ${100 - r},100`}
-                    fill="none" stroke="rgba(94,23,235,0.06)" strokeWidth="1"
-                  />
+                  <div key={id} className="pt-fuel-row">
+                    <div className="pt-fuel-name">
+                      <span className="pt-fuel-name-emoji">{ch.emoji}</span>
+                      {ch.name}
+                    </div>
+                    <div className="pt-fuel-bars">
+                      <div className="pt-fuel-bar-row">
+                        <span className="pt-fuel-bar-label">Start</span>
+                        <div className="pt-fuel-bar">
+                          <div className="pt-fuel-bar-fill started" style={{ width: `${startVal}%` }} />
+                        </div>
+                      </div>
+                      <div className="pt-fuel-bar-row">
+                        <span className="pt-fuel-bar-label">Now</span>
+                        <div className="pt-fuel-bar">
+                          <div className="pt-fuel-bar-fill now" style={{ width: `${nowVal}%` }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )
               })}
-              {/* Axis lines */}
-              <line x1="100" y1="30" x2="100" y2="170" stroke="rgba(94,23,235,0.08)" strokeWidth="1" />
-              <line x1="30" y1="100" x2="170" y2="100" stroke="rgba(94,23,235,0.08)" strokeWidth="1" />
-              {/* Data shape */}
-              <polygon
-                points={`100,${100 - (fuel.mastery / 100) * 70} ${100 + (fuel.meaning / 100) * 70},100 100,${100 + (fuel.connection / 100) * 70} ${100 - (fuel.choice / 100) * 70},100`}
-                fill="url(#fuelFill)"
-                stroke="#5e17eb" strokeWidth="2" strokeLinejoin="round"
-              />
-              {/* Dots */}
-              <circle cx="100" cy={100 - (fuel.mastery / 100) * 70} r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
-              <circle cx={100 + (fuel.meaning / 100) * 70} cy="100" r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
-              <circle cx="100" cy={100 + (fuel.connection / 100) * 70} r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
-              <circle cx={100 - (fuel.choice / 100) * 70} cy="100" r="4" fill="#5e17eb" stroke="#fff" strokeWidth="2" />
-            </svg>
-          </div>
-        </div>
-        )
-      })()}
+              {!courageFuelData && (
+                <div className="pt-fuel-compare-note">Complete courage challenges to see how your fuels change.</div>
+              )}
+              {fuelState && renderFuelPain()}
+            </div>
+          )}
+        </>
+      )}
 
-      {/* Per-quest radars */}
-      <div className="pt-section">
-        <div className="pt-section-title">Your Paths</div>
-        <PerQuestRadar userId={userId} />
-      </div>
+      {/* ═══ SETUP CHECKLIST (during onboarding) ═══ */}
+      {!allSetupDone && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">your setup so far.</span></div>
+          <div className="pt-checklist">
+            <div className="pt-checklist-title">Your Setup</div>
+            {SETUP_CHECKLIST.map((item, idx) => {
+              const done = setupComplete[item.key]
+              const isNext = !done && SETUP_CHECKLIST.slice(0, idx).every(prev => setupComplete[prev.key])
+              const locked = !done && !isNext
+              return (
+                <div
+                  key={item.key}
+                  className="pt-check-item"
+                  onClick={() => {
+                    if (isNext) {
+                      const cta = SETUP_CHECKS.find(c => c.key === item.key)
+                      if (cta) navigate(cta.route)
+                    }
+                  }}
+                  style={{ cursor: isNext ? 'pointer' : 'default' }}
+                >
+                  <div className={`pt-check-dot ${done ? 'done' : isNext ? 'next' : 'locked'}`}>
+                    {done ? '✓' : idx + 1}
+                  </div>
+                  <div className="pt-check-text">
+                    <div className={`pt-check-name ${done ? 'done' : isNext ? 'next' : 'locked'}`}>{item.label}</div>
+                    {!done && <div className="pt-check-sub">{item.sub}</div>}
+                  </div>
+                  {isNext && <div className="pt-check-arrow">›</div>}
+                </div>
+              )
+            })}
+          </div>
+        </>
+      )}
+
+      {/* ═══ ALL-DONE CTA ═══ */}
+      {allSetupDone && !nextCta && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">next step</span></div>
+          <button className="pt-cta" onClick={() => navigate('/7-day-challenge')}>
+            Add a courage challenge <span>→</span>
+          </button>
+        </>
+      )}
 
     </div>
   )

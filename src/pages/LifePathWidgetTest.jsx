@@ -845,8 +845,8 @@ export default function LifePathFlow() {
                               <option value="">What voice tries to stop you?</option>
                               <option value="controller">Controller (pushes too hard)</option>
                               <option value="ghost">Ghost (disappears, avoids)</option>
-                              <option value="people-pleaser">People Pleaser (says yes when you mean no)</option>
-                              <option value="auto-pilot">Auto-Pilot (goes through the motions)</option>
+                              <option value="people_pleaser">People Pleaser (says yes when you mean no)</option>
+                              <option value="auto_pilot">Auto-Pilot (goes through the motions)</option>
                               <option value="perfectionist">Perfectionist (won't start until it's perfect)</option>
                             </select>
                           </div>

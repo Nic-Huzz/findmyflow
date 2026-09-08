@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess, hapticError } from '../lib/haptics'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import './BridgeFlow.css'
 
 const STEPS = {
@@ -56,28 +57,12 @@ export default function BridgeFlow() {
   const [error, setError] = useState(null)
   const [remarkableAngle, setRemarkableAngle] = useState(null)
   const [existingBridges, setExistingBridges] = useState([])
-  const [revealedItems, setRevealedItems] = useState(-1)
 
   const setStep = (next) => {
     setStepRaw(next)
     setError(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-
-  // Stagger reveal summary items when SUMMARY step is active
-  useEffect(() => {
-    if (step !== STEPS.SUMMARY) { setRevealedItems(-1); return }
-    const total = validPeople.length
-    if (total === 0) return
-    let idx = 0
-    setRevealedItems(-1)
-    const timer = setInterval(() => {
-      setRevealedItems(idx)
-      idx++
-      if (idx >= total) clearInterval(timer)
-    }, 800)
-    return () => clearInterval(timer)
-  }, [step]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load existing bridges + remarkable angle
   useEffect(() => {
@@ -148,6 +133,7 @@ export default function BridgeFlow() {
   }
 
   const validPeople = people.filter(p => p.name.trim())
+  const { isRevealed } = useStaggerReveal(validPeople.length, step === STEPS.SUMMARY, { interval: 800 })
 
   const saveBridges = async () => {
     if (!user || saving || validPeople.length === 0) return
@@ -471,7 +457,7 @@ export default function BridgeFlow() {
           {validPeople.map((person, i) => (
             <div
               key={i}
-              className={`brg-summary-card brg-summary-reveal ${i <= revealedItems ? 'brg-summary-visible' : ''}`}
+              className={`brg-summary-card brg-summary-reveal ${isRevealed(i) ? 'brg-summary-visible' : ''}`}
             >
               <div className="brg-summary-name">{person.name}</div>
               {person.platform && <div className="brg-summary-platform">{person.platform}</div>}

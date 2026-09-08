@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
 import { getDimensionById } from '../data/domeDimensions'
+import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
@@ -398,8 +399,25 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
       {expanded && (
         <div className="qbc-body">
 
-          {/* Define path CTA — shows when quest has no current_dimensions */}
-          {(!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && (
+          {/* Current job reference — show life fuels instead of define CTA */}
+          {quest.is_current_job && quest.life_fuel_baseline && (
+            <div className="qbc-fuel-summary">
+              {CHANNEL_IDS.map(id => {
+                const ch = LIFE_FUEL_CHANNELS[id]
+                const has = quest.life_fuel_baseline[id]
+                return (
+                  <div key={id} className={`qbc-fuel-row ${has ? 'has' : 'missing'}`}>
+                    <span>{ch.emoji}</span>
+                    <span className="qbc-fuel-name">{ch.name}</span>
+                    <span className="qbc-fuel-status">{has ? '✓' : 'missing'}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Define path CTA — shows when quest has no current_dimensions (not for current job reference) */}
+          {(!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && !(quest.is_current_job && quest.status === 'reference') && (
             <button className="qbc-define-cta" onClick={() => navigate(`/path-definition/${quest.id}`)}>
               Define this path →
             </button>

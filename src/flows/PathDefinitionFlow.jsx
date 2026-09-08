@@ -27,9 +27,9 @@ import './PathDefinitionFlow.css'
 const VOICES = [
   { id: 'ghost', emoji: '👻', label: 'Ghost', sub: 'I want to disappear. Hide. Go quiet.' },
   { id: 'perfectionist', emoji: '🎯', label: 'Perfectionist', sub: "It's not good enough yet. I need more time." },
-  { id: 'people-pleaser', emoji: '🪞', label: 'People Pleaser', sub: "I'd rather say yes than deal with their reaction." },
+  { id: 'people_pleaser', emoji: '🪞', label: 'People Pleaser', sub: "I'd rather say yes than deal with their reaction." },
   { id: 'controller', emoji: '🧱', label: 'Controller', sub: 'I want to know how this ends before I do it.' },
-  { id: 'auto-pilot', emoji: '🤖', label: 'Auto-Pilot', sub: "I'm going through the motions. I've checked out." },
+  { id: 'auto_pilot', emoji: '🤖', label: 'Auto-Pilot', sub: "I'm going through the motions. I've checked out." },
 ]
 
 const SHIFT_FUELS = [
@@ -173,7 +173,7 @@ export default function PathDefinitionFlow() {
       return dim.tiers.map((t, i) => ({
         level: i + 1,
         label: dim.id === 'money' ? `$${t.toLocaleString()}` : (t >= 1000 ? `${t / 1000}K` : String(t)),
-        description: dim.id === 'people' ? 'people per experience' : dim.id === 'money' ? 'per experience' : null,
+        description: dim.id === 'people' ? 'people per experience' : dim.id === 'money' ? 'per month or per experience' : null,
       }))
     }
     return dim.levels
@@ -338,7 +338,7 @@ export default function PathDefinitionFlow() {
           {/* All 8 dimensions — current + aspiration */}
           {precursor && (
             <div className="pdf-section">
-              <div className="pdf-q">Where are you now, and where do you want to be?</div>
+              <div className="pdf-q">Where are you now, and where does this path take you?</div>
               <div className="pdf-dims">
                 {DOME_DIMENSIONS.map(dim => {
                   const tiers = getDimTiers(dim)
@@ -444,8 +444,8 @@ export default function PathDefinitionFlow() {
 
   // ── SCREEN 1: THE SHIFT ──
   if (screen === 1) {
-    const bothFuelsPicked = stayingFuels.size > 0 && pathFuels.size > 0
-    const canAdvance = bothFuelsPicked && buts.length > 0 && voice && showReframe
+    const fuelsPicked = pathFuels.size > 0
+    const canAdvance = fuelsPicked && buts.length > 0 && voice && showReframe
 
     const toggleFuel = (which, fuelId) => {
       hapticLight()
@@ -467,31 +467,9 @@ export default function PathDefinitionFlow() {
           <div className="pdf-progress">The Shift</div>
           <div className="pdf-path-name">{quest.label}</div>
 
-          {/* Staying fuels */}
-          <div className="pdf-section">
-            <div className="pdf-q">What does your current life give you?</div>
-            <div className="pdf-fuel-chips">
-              {SHIFT_FUELS.map(f => (
-                <div key={f.id}
-                  className={`pdf-fuel-chip ${stayingFuels.has(f.id) ? 'selected' : ''}`}
-                  onClick={() => toggleFuel('staying', f.id)}>
-                  <span className="pdf-fuel-icon">{f.icon}</span>
-                  <span>{f.full}</span>
-                </div>
-              ))}
-              <div className={`pdf-fuel-chip ${stayingFuels.has('none') ? 'selected' : ''}`}
-                onClick={() => {
-                  hapticLight()
-                  setStayingFuels(prev => prev.has('none') ? new Set() : new Set(['none']))
-                }}>
-                <span className="pdf-fuel-none">None of the above</span>
-              </div>
-            </div>
-          </div>
-
           {/* Path fuels */}
           <div className="pdf-section">
-            <div className="pdf-q">What does this path give you?</div>
+            <div className="pdf-q">What would this path give you?</div>
             <div className="pdf-fuel-chips">
               {SHIFT_FUELS.map(f => (
                 <div key={f.id}
@@ -505,19 +483,15 @@ export default function PathDefinitionFlow() {
           </div>
 
           {/* Bridge line */}
-          {bothFuelsPicked && (
+          {fuelsPicked && (
             <div className="pdf-bridge">
-              {stayingFuels.has('none')
-                ? 'Your current life doesn\'t give you what you need.'
-                : `Your current life gives you ${stayingLabels.join(', ')}.`
-              }
-              {' '}This path gives you {pathLabels.join(', ')}.
+              This path gives you {pathLabels.join(', ')}.
               {' '}So what's in the way?
             </div>
           )}
 
           {/* Buts */}
-          {bothFuelsPicked && (
+          {fuelsPicked && (
             <div className="pdf-section">
               <div className="pdf-q">I want to pursue {quest.label}, but...</div>
               <div className="pdf-but-input">
@@ -601,7 +575,7 @@ export default function PathDefinitionFlow() {
             <button className="pdf-cta pdf-cta-gold"
               disabled={!canAdvance}
               onClick={() => goScreen(2)}>
-              {!bothFuelsPicked ? 'Pick what each gives you' : buts.length === 0 ? 'Add at least one "but"' : !voice ? 'Pick which voice says that' : 'Next →'}
+              {!fuelsPicked ? 'Pick what this path gives you' : buts.length === 0 ? 'Add at least one "but"' : !voice ? 'Pick which voice says that' : 'Next →'}
             </button>
             <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(0)}>← Back to setup</button>
           </div>
@@ -671,11 +645,10 @@ export default function PathDefinitionFlow() {
                   {/* Card 2: Essence future (pull) */}
                   <div className="pdf-future-card pdf-future-essence">
                     <div className="pdf-future-label">When the {essenceName} leads:</div>
-                    <div className="pdf-future-quote">"{essenceSuperpower}"</div>
                     <div className="pdf-future-quote">"{essenceVision}"</div>
                   </div>
 
-                  {/* Identity reveal — read-only with tap to edit */}
+                  {/* Identity — auto-filled with superpower, editable */}
                   <div className="pdf-identity-prefill">
                     <div className="pdf-q">I am someone who...</div>
                     <div className="pdf-identity-reveal" onClick={() => {

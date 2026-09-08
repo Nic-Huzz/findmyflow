@@ -10,7 +10,7 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DOME_DIMENSIONS } from '../data/domeDimensions'
+import { DOME_DIMENSIONS, getNumericTier } from '../data/domeDimensions'
 import { supabase } from '../lib/supabaseClient'
 import './PerQuestRadar.css'
 import './DomeOfSafety.css'
@@ -25,7 +25,9 @@ function polarToXY(cx, cy, angle, radius) {
 
 function buildPolygon(cx, cy, maxRadius, values, maxLevels, angleStep) {
   return DOME_DIMENSIONS.map((dim, i) => {
-    const level = Number(values[dim.id]) || 0
+    const raw = Number(values[dim.id]) || 0
+    // Numeric dimensions (people, money) may store raw values — convert to tier
+    const level = dim.type === 'numeric' && raw > dim.maxLevel ? getNumericTier(dim.id, raw) : raw
     const max = Number(maxLevels[dim.id] || dim.maxLevel) || 1
     const ratio = max > 0 ? Math.min(level / max, 1) : 0
     return polarToXY(cx, cy, i * angleStep, Math.max(ratio * maxRadius, 0))
@@ -251,7 +253,9 @@ export default function PerQuestRadar({ userId }) {
             const qId = questByGroan[g.id]
             if (!qId) return
             if (!progressMap[qId]) progressMap[qId] = {}
-            for (const [dimId, val] of Object.entries(g.dimension_values)) {
+            for (const [dimId, rawVal] of Object.entries(g.dimension_values)) {
+              const dim = DOME_DIMENSIONS.find(d => d.id === dimId)
+              const val = dim?.type === 'numeric' && rawVal > dim.maxLevel ? getNumericTier(dimId, rawVal) : rawVal
               progressMap[qId][dimId] = Math.max(progressMap[qId][dimId] || 0, val)
             }
           })

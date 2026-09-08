@@ -53,7 +53,8 @@
 /* ── Dimension picker ── */
 .cjf-dim-section { margin-bottom: 16px; }
 .cjf-dim-label { font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 2px; }
-.cjf-dim-desc { font-size: 12px; color: rgba(0,0,0,0.35); margin-bottom: 8px; line-height: 1.4; }
+.cjf-dim-desc { font-size: 12px; color: rgba(0,0,0,0.4); margin-top: 6px; line-height: 1.4; font-style: italic; animation: cjf-desc-in 0.2s ease-out; }
+@keyframes cjf-desc-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 .cjf-dim-hint { font-size: 12px; color: #5e17eb; margin-top: 6px; line-height: 1.4; font-style: italic; }
 .cjf-dim-options { display: flex; flex-wrap: wrap; gap: 6px; }
 .cjf-dim-pill {

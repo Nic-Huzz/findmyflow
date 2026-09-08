@@ -47,12 +47,12 @@ const VOICES_BY_STATE = {
   sympathetic: [
     { id: 'controller', name: 'Controller', icon: '🧱' },
     { id: 'ghost', name: 'Ghost', icon: '👻' },
-    { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
+    { id: 'people_pleaser', name: 'People Pleaser', icon: '🪞' },
   ],
   dorsal: [
-    { id: 'auto-pilot', name: 'Auto-Pilot', icon: '🤖' },
+    { id: 'auto_pilot', name: 'Auto-Pilot', icon: '🤖' },
     { id: 'perfectionist', name: 'Perfectionist', icon: '🎯' },
-    { id: 'people-pleaser', name: 'People Pleaser', icon: '🪞' },
+    { id: 'people_pleaser', name: 'People Pleaser', icon: '🪞' },
   ],
 }
 

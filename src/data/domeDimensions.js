@@ -43,7 +43,7 @@ export const DOME_DIMENSIONS = [
     label: 'Vulnerability',
     icon: '💜',
     question: 'How much could you hide?',
-    dreamQuestion: 'How visible do you want to be?',
+    dreamQuestion: 'How visible would you need to be?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -59,7 +59,7 @@ export const DOME_DIMENSIONS = [
     label: 'Stakes',
     icon: '⚖️',
     question: 'What was at risk?',
-    dreamQuestion: 'What are you willing to put on the line?',
+    dreamQuestion: 'What would you need to put on the line?',
     type: 'qualitative',
     maxLevel: 4,
     levels: [
@@ -74,7 +74,7 @@ export const DOME_DIMENSIONS = [
     label: 'Rarity',
     icon: '✦',
     question: 'How normal is this in the world?',
-    dreamQuestion: 'How original do you want this to be?',
+    dreamQuestion: 'How original would this need to be?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -90,7 +90,7 @@ export const DOME_DIMENSIONS = [
     label: 'Identity',
     icon: '🪞',
     question: 'How much does this feel like you?',
-    dreamQuestion: 'How much of a stretch is this?',
+    dreamQuestion: 'How different from your current self would this be?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [
@@ -106,7 +106,7 @@ export const DOME_DIMENSIONS = [
     label: 'Context',
     icon: '🧭',
     question: 'How familiar were the conditions?',
-    dreamQuestion: 'How far outside your comfort zone do you want to operate?',
+    dreamQuestion: 'How unfamiliar would the conditions be?',
     type: 'qualitative',
     maxLevel: 5,
     // Context = ALL surrounding conditions: physical place, platform, format, support structure, delivery method.
@@ -124,7 +124,7 @@ export const DOME_DIMENSIONS = [
     label: 'Business',
     icon: '📈',
     question: 'How deep are you in building a business?',
-    dreamQuestion: 'How far do you want to build this?',
+    dreamQuestion: 'How far would you need to build this?',
     type: 'qualitative',
     maxLevel: 5,
     levels: [

@@ -650,6 +650,88 @@
   }
 }
 
+/* === HEALING PROMPT === */
+
+.wc-healing-prompt {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px solid rgba(94, 23, 235, 0.12);
+  border-radius: 16px;
+  animation: wcFadeIn 0.25s ease;
+}
+
+@keyframes wcFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wc-healing-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.wc-healing-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.wc-healing-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wc-healing-btn.yes {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+  border-color: transparent;
+}
+
+.wc-healing-btn.no {
+  color: #6c757d;
+}
+
+.wc-healing-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* === HEALING OVERLAY === */
+
+.wc-healing-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: wcOverlayIn 0.3s ease;
+}
+
+@keyframes wcOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.wc-healing-overlay > * {
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 /* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
   .wc-step-screen,
@@ -667,5 +749,10 @@
 
   .wc-progress-fill {
     transition: none;
+  }
+
+  .wc-healing-prompt,
+  .wc-healing-overlay {
+    animation: none;
   }
 }

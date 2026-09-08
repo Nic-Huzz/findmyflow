@@ -23,6 +23,7 @@ import { completeFlowQuest } from '../lib/questCompletion'
 import { useProjectId } from '../hooks/useProjectId'
 import { trackFlowCompletion } from '../lib/flowTracking'
 import { useAutoSave } from '../hooks/useAutoSave'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './ProductSelectionFlow.css'
@@ -247,7 +248,6 @@ function ProductSelectionFlow() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [expandedProduct, setExpandedProduct] = useState(null) // Track which product card is expanded
-  const [revealedItems, setRevealedItems] = useState(-1) // Staggered reveal index for summary
 
   // New: Product specification state
   // { solutionId: { mechanism: '', featureBenefits: [{ feature: '', benefit: '' }] } }
@@ -263,25 +263,11 @@ function ProductSelectionFlow() {
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('product-selection', user?.id)
 
   // Stagger reveal for summary items
-  useEffect(() => {
-    if (stage !== STAGES.SUMMARY) {
-      setRevealedItems(-1)
-      return
-    }
-    // Total items: build-first (if present) + comparison (if present) + each product card
-    const hasMultiple = coreProducts.length > 1
-    const totalItems = (hasMultiple ? 2 : 0) + coreProducts.length
-    let current = 0
-    const timer = setInterval(() => {
-      if (current >= totalItems) {
-        clearInterval(timer)
-        return
-      }
-      setRevealedItems(current)
-      current++
-    }, 800)
-    return () => clearInterval(timer)
-  }, [stage, coreProducts.length])
+  const { revealStyle } = useStaggerReveal(
+    (coreProducts.length > 1 ? 2 : 0) + coreProducts.length,
+    stage === STAGES.SUMMARY,
+    { interval: 800 }
+  )
 
   // Existing products from products table (for looking up names)
   const [existingProducts, setExistingProducts] = useState([])
@@ -1466,12 +1452,6 @@ function ProductSelectionFlow() {
     const buildFirstRec = getBuildFirstRecommendation()
     const hasMultiple = coreProducts.length > 1
     const cardIndexOffset = hasMultiple ? 2 : 0
-
-    const revealStyle = (idx) => ({
-      opacity: revealedItems >= idx ? 1 : 0,
-      transform: revealedItems >= idx ? 'translateY(0)' : 'translateY(12px)',
-      transition: 'opacity 0.4s ease, transform 0.4s ease'
-    })
 
     return (
       <div className="product-selection-flow">

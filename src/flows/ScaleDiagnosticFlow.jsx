@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import useStaggerReveal from '../hooks/useStaggerReveal'
 import './ScaleDiagnosticFlow.css'
 
 const STEPS = {
@@ -152,6 +153,12 @@ export default function ScaleDiagnosticFlow() {
   }, [step])
 
   const gatePassed = scoreBody >= 4 && scoreCulture >= 4
+
+  // Staggered reveal for results screen
+  const hasContext = !!(projectName || ruleBreak)
+  const hasGateFailure = !gatePassed && (scoreBody < 4 || scoreCulture < 4)
+  const resultItemCount = 5 + (hasContext ? 1 : 0) + (hasGateFailure ? 1 : 0)
+  const { revealStyle } = useStaggerReveal(resultItemCount, step === STEPS.RESULTS, { interval: 800 })
 
   const autoSave = () => {
     if (!user) return
@@ -423,43 +430,6 @@ export default function ScaleDiagnosticFlow() {
   }
 
   // ── SCREEN 5: RESULTS ──
-  // Staggered reveal state for results items
-  const [revealedItems, setRevealedItems] = useState([])
-
-  useEffect(() => {
-    if (step !== STEPS.RESULTS) {
-      setRevealedItems([])
-      return
-    }
-    // Count how many result items will render
-    const hasContext = !!(projectName || ruleBreak)
-    const hasGateFailure = !gatePassed && (scoreBody < 4 || scoreCulture < 4)
-    let count = 0
-    count++ // badge
-    if (hasContext) count++
-    count++ // headline
-    if (hasGateFailure) count++
-    count++ // score bars
-    count++ // accelerator or gap recs
-    count++ // nav
-
-    const timers = []
-    for (let i = 0; i < count; i++) {
-      const t = setTimeout(() => {
-        setRevealedItems(prev => [...prev, i])
-      }, i * 800)
-      timers.push(t)
-    }
-    return () => timers.forEach(clearTimeout)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step])
-
-  const revealStyle = (index) => ({
-    opacity: revealedItems.includes(index) ? 1 : 0,
-    transform: revealedItems.includes(index) ? 'translateY(0)' : 'translateY(12px)',
-    transition: 'all 0.4s ease',
-  })
-
   if (step === STEPS.RESULTS) {
     const weakest = getWeakest()
     const lowGate = getLowGateQuestions()
@@ -473,8 +443,6 @@ export default function ScaleDiagnosticFlow() {
     ]
 
     // Build item index dynamically based on which conditional items render
-    const hasContext = !!(projectName || ruleBreak)
-    const hasGateFailure = !gatePassed && lowGate.length > 0
     let idx = 0
     const badgeIdx = idx++
     const contextIdx = hasContext ? idx++ : -1

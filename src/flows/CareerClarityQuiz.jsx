@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../auth/AuthProvider';
+import useStaggerReveal from '../hooks/useStaggerReveal';
 
 const STORAGE_KEY = 'ccq_progress';
 
@@ -27,18 +28,8 @@ const CareerClarityQuiz = () => {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [quizResultId, setQuizResultId] = useState(null);
-  const [revealedItems, setRevealedItems] = useState([]);
 
-  // Stagger-reveal results items when entering the results stage
-  useEffect(() => {
-    if (stage !== 'results') return;
-    setRevealedItems([]);
-    const totalItems = 9;
-    const timers = Array.from({ length: totalItems }, (_, i) =>
-      setTimeout(() => setRevealedItems(prev => [...prev, i]), (i + 1) * 800)
-    );
-    return () => timers.forEach(clearTimeout);
-  }, [stage]);
+  const { isRevealed } = useStaggerReveal(9, stage === 'results', { interval: 800 });
 
   // Save progress to localStorage on every meaningful state change
   const saveProgress = useCallback(() => {
@@ -910,7 +901,7 @@ const CareerClarityQuiz = () => {
         <div className="ccq-content ccq-results">
 
           {/* PATH HEADLINE */}
-          <div className={`ccq-results-header ccq-result-item ${revealedItems.includes(0) ? 'revealed' : ''}`}>
+          <div className={`ccq-results-header ccq-result-item ${isRevealed(0) ? 'revealed' : ''}`}>
             <div className={`ccq-path-badge ${pathClass}`}>
               {path === 'own-thing' ? '🚀 Independence Path' : '🏢 Employment Path'}
             </div>
@@ -919,7 +910,7 @@ const CareerClarityQuiz = () => {
           </div>
 
           {/* SEEN MESSAGE */}
-          <div className={`ccq-seen-card ${pathClass} ccq-result-item ${revealedItems.includes(1) ? 'revealed' : ''}`}>
+          <div className={`ccq-seen-card ${pathClass} ccq-result-item ${isRevealed(1) ? 'revealed' : ''}`}>
             <h3 className="ccq-seen-title">
               <span>💡</span> Here's Why You're Feeling This Way
             </h3>
@@ -927,7 +918,7 @@ const CareerClarityQuiz = () => {
           </div>
 
           {/* VALIDATION POINTS */}
-          <div className={`ccq-validation-card ccq-result-item ${revealedItems.includes(2) ? 'revealed' : ''}`} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: 'white' }}>
+          <div className={`ccq-validation-card ccq-result-item ${isRevealed(2) ? 'revealed' : ''}`} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: 'white' }}>
             <h3 className="ccq-validation-title" style={{ color: 'white' }}>Your profile suggests:</h3>
             <div className="ccq-validation-list">
               {pathContent.validationPoints.map((point, i) => (
@@ -940,14 +931,14 @@ const CareerClarityQuiz = () => {
           </div>
 
           {/* CLARITY MESSAGE */}
-          <div className={`ccq-clarity-section ccq-result-item ${revealedItems.includes(3) ? 'revealed' : ''}`}>
+          <div className={`ccq-clarity-section ccq-result-item ${isRevealed(3) ? 'revealed' : ''}`}>
             <h2 className="ccq-clarity-title">What Needs to Change</h2>
             <p className="ccq-clarity-text">{pathContent.clarityMessage}</p>
           </div>
 
           {/* UNMET NEEDS - EXPANDABLE */}
           {unmetNeeds.length > 0 && (
-            <div className={`ccq-unmet-needs ccq-result-item ${revealedItems.includes(4) ? 'revealed' : ''}`}>
+            <div className={`ccq-unmet-needs ccq-result-item ${isRevealed(4) ? 'revealed' : ''}`}>
               {unmetNeeds.map(need => {
                 const isExpanded = expandedNeeds[need.id];
                 const isAccomplish = need.isAccomplish;
@@ -1016,7 +1007,7 @@ const CareerClarityQuiz = () => {
 
           {/* CHECKLIST - Job Path Only */}
           {path === 'job' && unmetNeeds.length > 0 && (
-            <div className={`ccq-checklist-card ccq-result-item ${revealedItems.includes(5) ? 'revealed' : ''}`}>
+            <div className={`ccq-checklist-card ccq-result-item ${isRevealed(5) ? 'revealed' : ''}`}>
               <h3 className="ccq-checklist-title">
                 <span>📋</span> Your Next Role Checklist
               </h3>
@@ -1040,7 +1031,7 @@ const CareerClarityQuiz = () => {
           )}
 
           {/* EMAIL CAPTURE */}
-          <div className={`ccq-email-card ccq-result-item ${revealedItems.includes(6) ? 'revealed' : ''}`}>
+          <div className={`ccq-email-card ccq-result-item ${isRevealed(6) ? 'revealed' : ''}`}>
             {!emailSubmitted ? (
               <>
                 <h3 className="ccq-email-title">
@@ -1073,7 +1064,7 @@ const CareerClarityQuiz = () => {
           </div>
 
           {/* CTA */}
-          <div className={`ccq-result-item ${revealedItems.includes(7) ? 'revealed' : ''}`}>
+          <div className={`ccq-result-item ${isRevealed(7) ? 'revealed' : ''}`}>
             {path === 'own-thing' ? (
               <>
                 <div className="ccq-clarity-section" style={{ marginBottom: '0.75rem' }}>
@@ -1106,7 +1097,7 @@ const CareerClarityQuiz = () => {
           </div>
 
           {/* RESET */}
-          <div className={`ccq-reset ccq-result-item ${revealedItems.includes(8) ? 'revealed' : ''}`}>
+          <div className={`ccq-reset ccq-result-item ${isRevealed(8) ? 'revealed' : ''}`}>
             <button
               onClick={() => {
                 localStorage.removeItem(STORAGE_KEY);
