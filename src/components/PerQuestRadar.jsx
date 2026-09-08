@@ -230,6 +230,13 @@ function QuestRadarCard({ quest, actualProgress, fuel }) {
             </div>
           ))}
           <div className="pqr-fuel-weeks">{fuel.weeks} week{fuel.weeks !== 1 ? 's' : ''}</div>
+          {(() => {
+            const strong = FUEL_CHANNELS.filter(ch => fuel[ch.id] >= 75)
+            const weak = FUEL_CHANNELS.filter(ch => fuel[ch.id] < 50)
+            if (strong.length === 4) return <div className="pqr-fuel-insight">All four fuels are active on this path.</div>
+            if (weak.length > 0) return <div className="pqr-fuel-insight">This path is missing {weak.map(ch => `${ch.emoji} ${ch.name}`).join(' and ')}.</div>
+            return null
+          })()}
         </div>
       )}
     </div>
