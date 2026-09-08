@@ -10,6 +10,8 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import PerQuestRadar from './PerQuestRadar'
+import HealingFlowModal from './HealingFlowModal'
+import { getVoiceDisplay, buildPatternMessage } from '../lib/voicePatternDetector'
 import { getDimensionById, getNumericTier } from '../data/domeDimensions'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
@@ -145,6 +147,8 @@ export default function ProgressTab({ userId }) {
 
   // Voice data
   const [voiceData, setVoiceData] = useState(null)
+  const [unhealedPattern, setUnhealedPattern] = useState(null) // { voice, dimensions, count, message }
+  const [showHealing, setShowHealing] = useState(false)
 
   // Evidence feed
   const [evidenceFeed, setEvidenceFeed] = useState([])
@@ -439,6 +443,27 @@ export default function ProgressTab({ userId }) {
           })
         }
 
+        // Check for unhealed voice patterns (shown but not explored)
+        const { data: shownPatterns } = await supabase
+          .from('voice_pattern_prompts')
+          .select('voice, primary_dimensions, challenge_count, healing_started')
+          .eq('user_id', userId)
+          .order('shown_at', { ascending: false })
+          .limit(1)
+
+        if (shownPatterns?.[0] && !shownPatterns[0].healing_started) {
+          const p = shownPatterns[0]
+          const display = getVoiceDisplay(p.voice)
+          setUnhealedPattern({
+            voice: p.voice,
+            dimensions: p.primary_dimensions || [],
+            count: p.challenge_count || 3,
+            message: buildPatternMessage(p.voice, p.primary_dimensions || []),
+            icon: display.icon,
+            name: display.name,
+          })
+        }
+
       } catch (err) {
         console.error('ProgressTab load error:', err)
       } finally {
@@ -728,9 +753,38 @@ export default function ProgressTab({ userId }) {
               {!voiceData.isDecreasing && voiceData.thisMonth > 0 && (
                 <div className="pt-voice-trend up">Still showing up</div>
               )}
+
+              {/* Unhealed pattern CTA */}
+              {unhealedPattern && (
+                <button
+                  className="pt-voice-explore"
+                  onClick={async () => {
+                    setShowHealing(true)
+                    // Mark as started so CTA doesn't persist
+                    await supabase.from('voice_pattern_prompts')
+                      .update({ healing_started: true })
+                      .eq('user_id', userId)
+                      .eq('voice', unhealedPattern.voice)
+                  }}
+                >
+                  {unhealedPattern.icon} Explore why {unhealedPattern.name} keeps showing up →
+                </button>
+              )}
             </div>
           </div>
         </>
+      )}
+
+      {/* Healing modal for pattern exploration */}
+      {showHealing && unhealedPattern && (
+        <HealingFlowModal
+          taskText={`Pattern: ${unhealedPattern.name} on ${unhealedPattern.dimensions.join(', ')}`}
+          userId={userId}
+          questTaskId={null}
+          existingData={{ pattern: unhealedPattern.voice }}
+          onComplete={() => setShowHealing(false)}
+          onClose={() => setShowHealing(false)}
+        />
       )}
 
       {/* ═══ EVIDENCE SECTION ═══ */}

@@ -479,6 +479,28 @@
   color: #ef4444;
 }
 
+.progress-tab .pt-voice-explore {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(94, 23, 235, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5e17eb;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.progress-tab .pt-voice-explore:hover {
+  background: rgba(94, 23, 235, 0.1);
+}
+
 /* ═══ EVIDENCE SECTION ═══════════════════════════════ */
 
 .progress-tab .pt-section-header {

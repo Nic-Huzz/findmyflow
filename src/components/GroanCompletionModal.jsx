@@ -761,7 +761,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               className="gcm-gold-btn"
               onClick={async () => {
                 hapticLight()
-                // Look up the quest_task_id for this challenge
                 try {
                   const { data: taskRow } = await supabase
                     .from('quest_tasks')
@@ -773,13 +772,13 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 setShowPatternHealing(true)
               }}
             >
-              Explore this pattern
+              Explore now
             </button>
             <button
               className="gcm-text-btn"
               onClick={() => setStep('expectation')}
             >
-              Not now
+              Later (find it on your Progress tab)
             </button>
           </>
         )}
