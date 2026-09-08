@@ -536,10 +536,6 @@ export default function ProgressTab({ userId }) {
   if (loading) return <div className="pt-loading">Loading...</div>
 
   // ── Fuel rendering helpers ──
-  function renderFuelName(id) {
-    const ch = LIFE_FUEL_CHANNELS[id]
-    return <span className={fuelState?.jobHas?.includes(id) || fuelState?.courageFilledGaps?.includes(id) ? 'pt-fuel-has' : 'pt-fuel-missing'}>{ch.emoji} {ch.name}</span>
-  }
 
   function renderFuelPain() {
     if (!fuelState) return null

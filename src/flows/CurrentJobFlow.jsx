@@ -9,8 +9,7 @@
  *     4a. experiences: Pick dome experiences involved in this job
  *     4b. dimensions: Set current + dream dimensions (real dome tiers)
  *   NO path:
- *     4c. ideal_fuel: Which fuels would your ideal path have?
- *     → navigate to /choose-quests
+ *     4c. no_summary: Fuel summary + CTAs to /choose-quests or /7-day-challenge
  */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -281,9 +280,10 @@ export default function CurrentJobFlow() {
               </button>
               <button
                 className="cjf-direction-btn"
+                disabled={saving}
                 onClick={() => {
+                  if (saving) return
                   hapticLight()
-                  setIdealFuel({ choice: true, connection: true, mastery: true, meaning: true })
                   handleSaveNoPath({ choice: true, connection: true, mastery: true, meaning: true })
                 }}
               >

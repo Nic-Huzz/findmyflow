@@ -466,10 +466,9 @@ export default function PathDefinitionFlow() {
     const fuelsPicked = pathFuels.size > 0
     const canAdvance = fuelsPicked && buts.length > 0 && voice && showReframe
 
-    const toggleFuel = (which, fuelId) => {
+    const toggleFuel = (fuelId) => {
       hapticLight()
-      const setter = which === 'staying' ? setStayingFuels : setPathFuels
-      setter(prev => {
+      setPathFuels(prev => {
         const next = new Set(prev)
         if (next.has(fuelId)) next.delete(fuelId)
         else next.add(fuelId)
@@ -477,7 +476,6 @@ export default function PathDefinitionFlow() {
       })
     }
 
-    const stayingLabels = [...stayingFuels].map(id => SHIFT_FUELS.find(f => f.id === id)?.label).filter(Boolean)
     const pathLabels = [...pathFuels].map(id => SHIFT_FUELS.find(f => f.id === id)?.label).filter(Boolean)
 
     return (
@@ -493,7 +491,7 @@ export default function PathDefinitionFlow() {
               {SHIFT_FUELS.map(f => (
                 <div key={f.id}
                   className={`pdf-fuel-chip ${pathFuels.has(f.id) ? 'selected' : ''}`}
-                  onClick={() => toggleFuel('path', f.id)}>
+                  onClick={() => toggleFuel(f.id)}>
                   <span className="pdf-fuel-icon">{f.icon}</span>
                   <span>{f.full}</span>
                 </div>
