@@ -4,7 +4,7 @@
  * When the same gap_voice appears on 3+ challenges with overlapping dimensions,
  * triggers a pattern-discovered popup. One-time per voice (tracked in voice_pattern_prompts).
  *
- * Used by: GroanCompletionModal (after gap_check), LevelTab (on mount)
+ * Used by: GroanCompletionModal (after gap_check), ProgressTab (voice card CTA)
  */
 
 import { supabase } from './supabaseClient'
