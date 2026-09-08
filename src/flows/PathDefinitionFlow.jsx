@@ -2,17 +2,22 @@
  * PathDefinitionFlow.jsx — /path-definition/:questId
  *
  * Standalone commitment flow for a single quest. Loads quest from DB,
- * guides user through Setup → Framing → Commitment, saves back to DB.
+ * guides user through Setup > The Shift > The Commitment, saves back to DB.
  *
  * Screen 0: Setup (precursor + all 8 dimensions current/aspiration)
- * Screen 1: Framing (life fuels + buts + reframe)
- * Screen 2: Commitment (smallest step + fear + identity + voice → courage challenge)
+ * Screen 1: The Shift (life fuels + buts + voice picker + reframe with voice attribution)
+ * Screen 2: The Commitment (fear + identity contrast cards + editable identity + smallest step)
+ *
+ * Follows the Robbins x Dispenza leverage sequence:
+ * Voice moves earlier (after buts), identity becomes a reveal (not blank input),
+ * smallest step moves to last position.
  */
 import { useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
+import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import DomeOfSafety from '../components/DomeOfSafety'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
@@ -72,6 +77,15 @@ export default function PathDefinitionFlow() {
   const [identityText, setIdentityText] = useState('')
   const [voice, setVoice] = useState(null)
 
+  // Essence data (for identity reveal)
+  const [essenceName, setEssenceName] = useState(null)
+  const [essenceSuperpower, setEssenceSuperpower] = useState(null)
+  const [essenceVision, setEssenceVision] = useState(null)
+  const [essenceLoaded, setEssenceLoaded] = useState(false)
+
+  // Pre-fill identity from essence when entering Screen 2
+  const [identityPrefilled, setIdentityPrefilled] = useState(false)
+
   // Saving
   const [saving, setSaving] = useState(false)
 
@@ -117,6 +131,37 @@ export default function PathDefinitionFlow() {
       })
   }, [user?.id, questId])
 
+  // Load essence data for identity reveal
+  useEffect(() => {
+    if (!user?.id) return
+    supabase.from('lead_flow_profiles')
+      .select('essence_archetype, custom_essence_name, custom_essence_fields')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.[0]) {
+          const profile = data[0]
+          const name = profile.custom_essence_name || profile.essence_archetype
+          const fields = profile.custom_essence_fields || {}
+          const archetype = ESSENCE_ARCHETYPES.find(a => a.name === name || a.id === name)
+
+          setEssenceName(name || archetype?.name || null)
+          setEssenceSuperpower(fields.superpower || archetype?.superpower || null)
+          setEssenceVision(fields.vision_in_action || archetype?.vision_in_action || null)
+        }
+        setEssenceLoaded(true)
+      })
+  }, [user?.id])
+
+  // Pre-fill identity input from essence superpower when arriving at Screen 2
+  useEffect(() => {
+    if (screen === 2 && essenceSuperpower && !identityPrefilled && !identityText) {
+      setIdentityText(essenceSuperpower)
+      setIdentityPrefilled(true)
+    }
+  }, [screen, essenceSuperpower, identityPrefilled, identityText])
+
   const goScreen = useCallback((s) => {
     setScreen(s)
     window.scrollTo(0, 0)
@@ -128,6 +173,7 @@ export default function PathDefinitionFlow() {
       return dim.tiers.map((t, i) => ({
         level: i + 1,
         label: dim.id === 'money' ? `$${t.toLocaleString()}` : (t >= 1000 ? `${t / 1000}K` : String(t)),
+        description: dim.id === 'people' ? 'people per experience' : dim.id === 'money' ? 'per experience' : null,
       }))
     }
     return dim.levels
@@ -396,10 +442,10 @@ export default function PathDefinitionFlow() {
     )
   }
 
-  // ── SCREEN 1: FRAMING ──
+  // ── SCREEN 1: THE SHIFT ──
   if (screen === 1) {
     const bothFuelsPicked = stayingFuels.size > 0 && pathFuels.size > 0
-    const canAdvance = bothFuelsPicked && buts.length > 0 && showReframe
+    const canAdvance = bothFuelsPicked && buts.length > 0 && voice && showReframe
 
     const toggleFuel = (which, fuelId) => {
       hapticLight()
@@ -418,7 +464,7 @@ export default function PathDefinitionFlow() {
     return (
       <div className="pdf">
         <div className="pdf-container">
-          <div className="pdf-progress">What's at stake</div>
+          <div className="pdf-progress">The Shift</div>
           <div className="pdf-path-name">{quest.label}</div>
 
           {/* Staying fuels */}
@@ -458,7 +504,7 @@ export default function PathDefinitionFlow() {
             </div>
           </div>
 
-          {/* Bridge line — spelled out, not just emojis */}
+          {/* Bridge line */}
           {bothFuelsPicked && (
             <div className="pdf-bridge">
               {stayingFuels.has('none')
@@ -490,130 +536,32 @@ export default function PathDefinitionFlow() {
                 }}>Add</button>
               </div>
 
-              {buts.length > 0 && (
+              {buts.length > 0 && !voice && (
                 <div className="pdf-buts-list">
                   {buts.map((b, i) => (
-                    <div key={i} className={`pdf-but-item ${showReframe ? 'reframed' : ''}`}>
-                      <div className="pdf-but-text">
-                        {showReframe
-                          ? <>I want to pursue {quest.label}, <span className="pdf-and">and</span> {b.toLowerCase()}</>
-                          : <>...{b}</>
-                        }
-                      </div>
-                      {!showReframe && (
-                        <span className="pdf-but-remove" onClick={() => setButs(prev => prev.filter((_, j) => j !== i))}>✕</span>
-                      )}
+                    <div key={i} className="pdf-but-item">
+                      <div className="pdf-but-text">...{b}</div>
+                      <span className="pdf-but-remove" onClick={() => setButs(prev => prev.filter((_, j) => j !== i))}>✕</span>
                     </div>
                   ))}
-
-                  {!showReframe && (
-                    <button className="pdf-reframe-btn" onClick={() => {
-                      hapticLight()
-                      setShowReframe(true)
-                    }}>See the reframe →</button>
-                  )}
-
-                  {showReframe && (
-                    <div className="pdf-reframe-note">
-                      Saying "and" turns a block into a fact you're choosing to work with.
-                    </div>
-                  )}
                 </div>
               )}
             </div>
           )}
 
-          <div className="pdf-fixed">
-            <button className="pdf-cta pdf-cta-gold"
-              disabled={!canAdvance}
-              onClick={() => goScreen(2)}>
-              {!bothFuelsPicked ? 'Pick what each gives you' : buts.length === 0 ? 'Add at least one "but"' : !showReframe ? 'See the reframe first' : 'Next →'}
-            </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(0)}>← Back to setup</button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ── SCREEN 2: COMMITMENT (progressive reveal) ──
-  if (screen === 2) {
-    const canSave = stepText.trim() && fearText.trim() && identityText.trim() && voice
-
-    return (
-      <div className="pdf">
-        <div className="pdf-container">
-          <div className="pdf-progress">Your commitment</div>
-          <div className="pdf-path-name">{quest.label}</div>
-
-          {error && (
-            <div className="pdf-error" style={{ marginBottom: 16 }}>
-              {error}
-              <button onClick={() => setError(null)}>Dismiss</button>
-            </div>
-          )}
-
-          {/* Smallest step */}
-          <div className="pdf-section">
-            <div className="pdf-q">What's the smallest step this week?</div>
-            <div className="pdf-step-hint">Think really small. Not "build a website". More like "google how to set up a free one".</div>
-            <input className="pdf-step-input" type="text"
-              value={stepText}
-              onChange={e => setStepText(e.target.value)}
-              placeholder="The tiniest possible step..." />
-          </div>
-
-          {/* Fear question — shows ALL buts */}
-          {stepText.trim() && (
+          {/* Voice picker — after buts, before reframe */}
+          {buts.length > 0 && (
             <div className="pdf-section">
-              {buts.length > 0 && (
-                <div className="pdf-all-buts">
-                  <div className="pdf-all-buts-label">Your blocks:</div>
-                  {buts.map((b, i) => (
-                    <div key={i} className="pdf-all-buts-item">"{b}"</div>
-                  ))}
-                </div>
-              )}
-              <div className="pdf-q">If your "buts" win and you never do this, what are you most afraid happens?</div>
-              <input className="pdf-step-input" type="text"
-                value={fearText}
-                onChange={e => setFearText(e.target.value)}
-                placeholder="What future scares you most?" />
-            </div>
-          )}
-
-          {/* Identity declaration */}
-          {fearText.trim() && (
-            <div className="pdf-section">
-              <div className="pdf-step-quote">
-                Your fear: "{fearText.trim()}"
-              </div>
-              <div className="pdf-q">I am someone who...</div>
-              <input className="pdf-step-input pdf-identity-input" type="text"
-                value={identityText}
-                onChange={e => setIdentityText(e.target.value)}
-                placeholder="...finish this sentence" />
-              <div className="pdf-identity-examples">
-                {IDENTITY_EXAMPLES.map((ex, i) => (
-                  <button key={i} className="pdf-identity-ex" onClick={() => {
-                    hapticLight()
-                    setIdentityText(ex)
-                  }}>{ex}</button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Protective voice — emoji spacing fix */}
-          {identityText.trim() && (
-            <div className="pdf-section">
-              <div className="pdf-q">Which voice tries to stop you from being that person?</div>
-              <div className="pdf-step-quote">"I am someone who {identityText.trim()}"</div>
+              <div className="pdf-q">Which voice is saying that?</div>
               <div className="pdf-voices">
                 {VOICES.map(v => (
                   <div key={v.id}
                     className={`pdf-voice ${voice === v.id ? 'selected' : ''}`}
-                    onClick={() => { hapticLight(); setVoice(v.id) }}>
+                    onClick={() => {
+                      hapticLight()
+                      setVoice(v.id)
+                      if (!showReframe) setShowReframe(true)
+                    }}>
                     <div className="pdf-voice-check">✓</div>
                     <div className="pdf-voice-content">
                       <div className="pdf-voice-label">
@@ -628,18 +576,168 @@ export default function PathDefinitionFlow() {
             </div>
           )}
 
+          {/* Reframe — shows user's actual buts + voice attribution */}
+          {showReframe && voice && (
+            <div className="pdf-section">
+              <div className="pdf-buts-list">
+                {buts.map((b, i) => {
+                  const voiceName = VOICES.find(v => v.id === voice)?.label || 'voice'
+                  return (
+                    <div key={i} className="pdf-but-item reframed">
+                      <div className="pdf-but-text">
+                        "{b}." <span className="pdf-and">That's my {voiceName} talking.</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="pdf-reframe-note">
+                Naming the voice turns a feeling into a pattern you can see.
+              </div>
+            </div>
+          )}
+
+          <div className="pdf-fixed">
+            <button className="pdf-cta pdf-cta-gold"
+              disabled={!canAdvance}
+              onClick={() => goScreen(2)}>
+              {!bothFuelsPicked ? 'Pick what each gives you' : buts.length === 0 ? 'Add at least one "but"' : !voice ? 'Pick which voice says that' : 'Next →'}
+            </button>
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(0)}>← Back to setup</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 2: THE COMMITMENT (progressive reveal) ──
+  if (screen === 2) {
+    const hasEssence = essenceSuperpower && essenceVision && essenceName
+    const canSave = fearText.trim() && voice && stepText.trim() && identityText.trim()
+    const voiceName = VOICES.find(v => v.id === voice)?.label || 'voice'
+
+    // Identity section shown after fear
+    const showIdentity = fearText.trim()
+    // Smallest step shown after identity is filled
+    const showSmallestStep = showIdentity && identityText.trim()
+
+    const stepQuestion = hasEssence
+      ? `What's the first thing the ${essenceName} does this week?`
+      : "What's the smallest step this week?"
+
+    return (
+      <div className="pdf">
+        <div className="pdf-container">
+          <div className="pdf-progress">Your commitment</div>
+          <div className="pdf-path-name">{quest.label}</div>
+
+          {error && (
+            <div className="pdf-error" style={{ marginBottom: 16 }}>
+              {error}
+              <button onClick={() => setError(null)}>Dismiss</button>
+            </div>
+          )}
+
+          {/* Fear question */}
+          <div className="pdf-section">
+            {buts.length > 0 && (
+              <div className="pdf-all-buts">
+                <div className="pdf-all-buts-label">Your blocks:</div>
+                {buts.map((b, i) => (
+                  <div key={i} className="pdf-all-buts-item">"{b}"</div>
+                ))}
+              </div>
+            )}
+            <div className="pdf-q">If your "buts" win and you never do this, what are you most afraid happens?</div>
+            <input className="pdf-step-input" type="text"
+              value={fearText}
+              onChange={e => setFearText(e.target.value)}
+              placeholder="What future scares you most?" />
+          </div>
+
+          {/* Identity: contrast cards + editable pre-fill (if essence), or fallback text input */}
+          {showIdentity && (
+            <div className="pdf-section">
+              {hasEssence ? (
+                <>
+                  <div className="pdf-q">Two futures. Which one wins?</div>
+
+                  {/* Card 1: Protective future (push) */}
+                  <div className="pdf-future-card pdf-future-protective">
+                    <div className="pdf-future-label">When your {voiceName} leads:</div>
+                    <div className="pdf-future-quote">"{fearText.trim()}"</div>
+                  </div>
+
+                  {/* Card 2: Essence future (pull) */}
+                  <div className="pdf-future-card pdf-future-essence">
+                    <div className="pdf-future-label">When the {essenceName} leads:</div>
+                    <div className="pdf-future-quote">"{essenceSuperpower}"</div>
+                    <div className="pdf-future-quote">"{essenceVision}"</div>
+                  </div>
+
+                  {/* Editable pre-filled identity */}
+                  <div className="pdf-identity-prefill">
+                    <div className="pdf-q">I am someone who...</div>
+                    <input className="pdf-step-input pdf-identity-input" type="text"
+                      value={identityText}
+                      onChange={e => setIdentityText(e.target.value)}
+                      placeholder="...finish this sentence" />
+                  </div>
+                </>
+              ) : essenceLoaded ? (
+                <>
+                  <div className="pdf-step-quote">
+                    Your fear: "{fearText.trim()}"
+                  </div>
+                  <div className="pdf-essence-cta">
+                    <div className="pdf-essence-cta-text">
+                      Want to discover the identity that fights your fear?
+                    </div>
+                    <Link to="/essence-mirror" className="pdf-essence-cta-link">
+                      Discover your essence
+                    </Link>
+                  </div>
+                  <div className="pdf-q">I am someone who...</div>
+                  <input className="pdf-step-input pdf-identity-input" type="text"
+                    value={identityText}
+                    onChange={e => setIdentityText(e.target.value)}
+                    placeholder="...finish this sentence" />
+                  <div className="pdf-identity-examples">
+                    {IDENTITY_EXAMPLES.map((ex, i) => (
+                      <button key={i} className="pdf-identity-ex" onClick={() => {
+                        hapticLight()
+                        setIdentityText(ex)
+                      }}>{ex}</button>
+                    ))}
+                  </div>
+                </>
+              ) : null}
+            </div>
+          )}
+
+          {/* Smallest step — moved to last */}
+          {showSmallestStep && (
+            <div className="pdf-section">
+              <div className="pdf-q">{stepQuestion}</div>
+              <div className="pdf-step-hint">Think really small. Not "build a website". More like "google how to set up a free one".</div>
+              <input className="pdf-step-input" type="text"
+                value={stepText}
+                onChange={e => setStepText(e.target.value)}
+                placeholder="The tiniest possible step..." />
+            </div>
+          )}
+
           <div className="pdf-fixed">
             <button className="pdf-cta pdf-cta-gold"
               disabled={!canSave || saving}
               onClick={saveDefinition}>
               {saving ? 'Saving...' :
-                !stepText.trim() ? 'Add your first step' :
                 !fearText.trim() ? 'Name your fear' :
                 !identityText.trim() ? 'Claim your identity' :
-                !voice ? 'Pick a voice' :
+                !stepText.trim() ? 'Add your first step' :
                 'Define this path →'}
             </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(1)}>← Back to framing</button>
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(1)}>← Back to the shift</button>
           </div>
         </div>
       </div>
