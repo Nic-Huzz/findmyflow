@@ -30,8 +30,8 @@ const CURRENT_QUESTIONS = {
   money: 'How much do you earn per month or per experience?',
   vulnerability: 'How visible are you in your work?',
   stakes: 'What\'s at risk in your current role?',
-  rarity: 'How common is what you do?',
-  identity: 'How much does this work feel like you?',
+  rarity: 'How comfortable are you walking this path?',
+  identity: 'How much have you changed on this path so far?',
   context: 'How familiar is your work environment?',
   business_commitment: 'How deep are you in building this?',
 }
@@ -41,8 +41,8 @@ const DREAM_QUESTIONS = {
   money: 'How much would you want to earn per month or per experience?',
   vulnerability: 'How visible would you need to be?',
   stakes: 'What would you need to put on the line?',
-  rarity: 'How original would this need to be?',
-  identity: 'How different from your current self would this be?',
+  rarity: 'How much would you need to stand out?',
+  identity: 'How much would you need to change to live this ambition?',
   context: 'How unfamiliar would the conditions be?',
   business_commitment: 'How far would you need to build this?',
 }

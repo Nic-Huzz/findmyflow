@@ -29,8 +29,8 @@ const DIM_SUBS = {
   money: 'Charging or asking for money',
   vulnerability: 'Removing shields, being seen',
   stakes: 'More at risk if it goes wrong',
-  rarity: 'Doing something uncommon',
-  identity: 'Surprising the people who know you',
+  rarity: 'Standing out from the crowd',
+  identity: 'Becoming someone new',
   context: 'Unfamiliar territory or conditions',
   business_commitment: 'Going deeper into your business',
 }
@@ -54,9 +54,12 @@ function getGapPrompt(dimId, nextLevel, nextLabel) {
   if (dimId === 'stakes') return `What would a '${nextLabel}' situation look like?`
   if (dimId === 'rarity') {
     if (nextLevel === 2) return `What could you do that your peers would get, but most people wouldn't?`
-    return `What could you do that feels '${nextLabel}'?`
+    return `What could you do that's '${nextLabel}'?`
   }
-  if (dimId === 'identity') return `What would a '${nextLabel}' moment look like?`
+  if (dimId === 'identity') {
+    if (nextLevel <= 2) return `What could you try that's a small shift from who you are?`
+    return `What would '${nextLabel}' look like for you?`
+  }
   if (dimId === 'context') return `What could you try in '${nextLabel}' conditions?`
   if (dimId === 'business_commitment') return `What would reaching '${nextLabel}' look like?`
   return ''

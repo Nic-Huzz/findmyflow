@@ -43,8 +43,8 @@ Business model types (Per Session, Group Program, Content, Membership, etc.) are
 | 2 | **Money** | "How much did you ask someone to pay?" | Numeric | 💰 | $0 → $10,000+ |
 | 3 | **Vulnerability** | "How much could you hide?" | Qualitative (5) | 💜 | Fully shielded → Unmasked |
 | 4 | **Stakes** | "What was at risk?" | Qualitative (4) | ⚖️ | Nothing to lose → Major bet |
-| 5 | **Rarity** | "How normal is this in the world?" | Qualitative (5) | ✦ | Everyone does this → Unheard of |
-| 6 | **Identity** | "How much does this feel like you?" | Qualitative (5) | 🪞 | Nobody blinks → You become the story |
+| 5 | **Rarity** | "How much did you stand out?" | Qualitative (5) | ✦ | Not at all → I might be the only one |
+| 6 | **Identity** | "How different was this from who you used to be?" | Qualitative (5) | 🪞 | Same old me → Old me wouldn't believe this |
 | 7 | **Context** | "How familiar were the conditions?" | Qualitative (5) | 🧭 | Home turf → Nothing familiar |
 | 8 | **Business Commitment** | "How deep are you in building a business?" | Qualitative (5) | 📈 | Hobby → Team/scale |
 
@@ -112,41 +112,45 @@ Covers all types of risk: financial investment, reputation, relationships, caree
 
 ### Rarity (5 levels)
 
-**Question:** "How normal is this in the world?"
+**Courage question:** "How much did you stand out?"
+**Start question:** "How comfortable are you walking this path?"
+**Dream question:** "How much would you need to stand out?"
 
-NOT "how new is this to me" (personal novelty correlates with being outside your dome, but isn't a separate dimension — the dome already tracks your regulated capacity boundary). This is about social proof — how much permission exists in the world for this action. As you find your flow and create your category, you move toward rare/unheard of. The NS trigger: doing something with no blueprint means no social proof to lean on.
+Measures comfort with standing out. As you repeatedly do rare things, you become more comfortable being different. The NS trigger: doing something with no social proof means no permission to lean on.
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Everyone does this | Normal, socially accepted, proven path |
-| 2 | Common in your world | Your peers do it, but mainstream wouldn't |
-| 3 | Uncommon | Some people do it, but you'd have to explain it |
-| 4 | Rare | Most people have never seen this done |
-| 5 | Unheard of | You might be the first, no blueprint exists |
+| 1 | Not at all | I haven't started |
+| 2 | A bit unusual | My peers would get it, most people wouldn't |
+| 3 | Noticeably different | People noticed |
+| 4 | Very rare | Almost nobody does this |
+| 5 | I might be the only one | Nobody's done this before |
 
 **Examples:**
-- Running ads = 1 (everyone does this)
-- Running a group program = 2 (common in creator/wellness world)
-- Monument Rave = 4 (rare, people don't know what this is)
-- Shirt rip at Harvard = 5 (unheard of)
+- Running ads = 1 (totally normal)
+- Running a group program = 2 (a bit unusual outside creator world)
+- Monument Rave = 4 (very rare, people don't know what this is)
+- Shirt rip at Harvard = 5 (might be the only one)
 
-### Identity (5 levels — surprise/external perception)
+### Identity (5 levels — personal reinvention)
 
-**Question:** "How much does this feel like you?"
+**Courage question:** "How different was this from who you used to be?"
+**Start question:** "How much have you changed on this path so far?"
+**Dream question:** "How much would you need to change to live this ambition?"
 
-The NS trigger with identity is external: it's scary because of how others perceive the shift, not just how you feel internally. The scale measures how much your action disrupts other people's model of who you are.
+Measures accumulated transformation. How much you've become someone new through this path. Distinct from Rarity (what you DO is unusual) — Identity is about who you ARE becoming.
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Nobody blinks | This is obviously you, no one questions it |
-| 2 | Raised eyebrows | People notice, it's slightly unexpected |
-| 3 | "That's not like you" | People close to you call it out |
-| 4 | "What happened to you?" | People who know you genuinely don't recognise this version |
-| 5 | You become the story | People talk about it when you're not in the room |
+| 1 | Same old me | I haven't started |
+| 2 | A small shift | Slightly out of character |
+| 3 | People would be surprised | My friends would say "that's not like you" |
+| 4 | I barely recognize myself | I surprised even myself |
+| 5 | Old me wouldn't believe this | Complete reinvention |
 
 **Examples from Huzz's challenges:**
-- Monument Rave (now, after many) = 1 (obviously him)
-- Cold messaging = 2 (raised eyebrows)
+- Monument Rave (now, after many) = 1 (same old me, this is who I am now)
+- Cold messaging = 2 (a small shift)
 - Post abs photo = 3-4 ("That's not like you" / "What happened?")
 - Shirt rip at Harvard = 5 (people are literally telling that story)
 

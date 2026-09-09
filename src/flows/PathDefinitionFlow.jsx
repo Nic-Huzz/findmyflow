@@ -44,8 +44,8 @@ const STEP_DIM_QUESTIONS = {
   money: 'How much money is on the line?',
   vulnerability: 'How visible will you be?',
   stakes: 'What will be at risk?',
-  rarity: 'How uncommon is this?',
-  identity: 'How much of a stretch is this for you?',
+  rarity: 'How comfortable are you walking this path?',
+  identity: 'How much have you changed on this path so far?',
   context: 'How unfamiliar will the conditions be?',
   business_commitment: 'How deep into business does this go?',
 }
@@ -55,8 +55,8 @@ const STEP_DIM_SUBS = {
   money: 'Charging or asking for money',
   vulnerability: 'Removing shields, being seen',
   stakes: 'More at risk if it goes wrong',
-  rarity: 'Doing something uncommon',
-  identity: 'Surprising the people who know you',
+  rarity: 'Standing out from the crowd',
+  identity: 'Becoming someone new',
   context: 'Unfamiliar territory or conditions',
   business_commitment: 'Going deeper into your business',
 }
