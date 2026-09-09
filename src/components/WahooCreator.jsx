@@ -27,11 +27,11 @@ const VOICE_LIES = [
 const DIM_SUBS = {
   people: 'More people watching or involved',
   money: 'Charging or asking for money',
-  vulnerability: 'Removing shields, being seen',
+  vulnerability: 'Being more visible',
   stakes: 'More at risk if it goes wrong',
   rarity: 'Standing out from the crowd',
   identity: 'Becoming someone new',
-  context: 'Unfamiliar territory or conditions',
+  context: 'Stepping outside familiar conditions',
   business_commitment: 'Going deeper into your business',
 }
 
@@ -50,7 +50,7 @@ function getDimLevelLabel(dim, level) {
 function getGapPrompt(dimId, nextLevel, nextLabel) {
   if (dimId === 'people') return `What could you do to get in front of ${nextLabel} people?`
   if (dimId === 'money') return `How could you earn ${nextLabel}? Charge more per customer or attract more customers?`
-  if (dimId === 'vulnerability') return `What would '${nextLabel}' look like for you?`
+  if (dimId === 'vulnerability') return `What would being '${nextLabel}' look like for you?`
   if (dimId === 'stakes') return `What would a '${nextLabel}' situation look like?`
   if (dimId === 'rarity') {
     if (nextLevel === 2) return `What could you do that your peers would get, but most people wouldn't?`
@@ -60,7 +60,7 @@ function getGapPrompt(dimId, nextLevel, nextLabel) {
     if (nextLevel <= 2) return `What could you try that's a small shift from who you are?`
     return `What would '${nextLabel}' look like for you?`
   }
-  if (dimId === 'context') return `What could you try in '${nextLabel}' conditions?`
+  if (dimId === 'context') return `What could you try where '${nextLabel}'?`
   if (dimId === 'business_commitment') return `What would reaching '${nextLabel}' look like?`
   return ''
 }

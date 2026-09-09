@@ -194,7 +194,7 @@ export default function ProgressTab({ userId }) {
             .limit(1),
           // Current job check
           supabase.from('quests')
-            .select('id, label, life_fuel_baseline')
+            .select('id, label, life_fuel_baseline, current_dimensions')
             .eq('user_id', userId)
             .eq('is_current_job', true)
             .limit(1),
@@ -272,9 +272,9 @@ export default function ProgressTab({ userId }) {
         // Process dome check (from matrixData later, but also check here)
         // matrixData is loaded separately via import
 
-        // Process current job
+        // Process current job (only counts as done if dimensions are set)
         const currentJobQuest = currentJobRes.data?.[0]
-        if (currentJobQuest) {
+        if (currentJobQuest?.current_dimensions && Object.keys(currentJobQuest.current_dimensions).length > 0) {
           setHasCurrentJob(true)
         }
 

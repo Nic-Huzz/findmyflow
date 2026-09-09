@@ -336,7 +336,7 @@ export default function ChooseQuestsFlow() {
             <h1>Your dome knows<br/><span>what lights you up</span></h1>
             <p>Let's turn those experiences into life paths you can actually pursue.</p>
             <div className="cqf-steps">
-              <div className="cqf-step"><div className="cqf-step-num">1</div><div className="cqf-step-text">Pick experiences you want more of</div></div>
+              <div className="cqf-step"><div className="cqf-step-num">1</div><div className="cqf-step-text">Which experiences do you want to have</div></div>
               <div className="cqf-step"><div className="cqf-step-num">2</div><div className="cqf-step-text">We suggest life paths</div></div>
               <div className="cqf-step"><div className="cqf-step-num">3</div><div className="cqf-step-text">Choose your quests</div></div>
             </div>

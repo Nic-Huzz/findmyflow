@@ -140,27 +140,39 @@ export function useCelebrations() {
   const celebrateStageGraduation = useCallback((fromStage, toStage, context = {}) => {
     const CELEBRATIONS = {
       '0-2': { confetti: 'purple', emoji: '\u{1F331}',
-        title: 'Stage 2: Call to Adventure',
+        title: 'Stage 2: Exploring',
         message: 'You showed up. That takes more than most people realise. Your hero\'s journey has begun.' },
       '2-3': { confetti: 'purple', emoji: '\u{1F5FA}\uFE0F',
-        title: 'Stage 3: Mapping Your World',
+        title: 'Stage 3: Discovering Yourself',
         message: 'You\'ve started collecting dots. Your curiosities, your life story, your paths. Now the patterns can start forming.' },
       '3-4': { confetti: 'side_cannons', emoji: '\u{1FA9E}',
-        title: 'Stage 4: Meeting the Mentor',
+        title: 'Stage 4: Choosing a Direction',
         message: context.essenceName
           ? `Your essence voice has a name. ${context.essenceName}. This is who you\'ve always been underneath the noise.`
           : 'Your essence archetype has been revealed. This is who you are underneath the noise.' },
       '4-5': { confetti: 'gold', emoji: '\u{1F525}',
-        title: 'Stage 5: Crossing the Threshold',
-        message: 'You did something brave and felt it land. That feeling is your compass. Follow it.' },
+        title: 'Stage 5: Finding Your Way',
+        message: 'You did something courageous and felt it land. That feeling is your compass. Follow it.' },
       '5-6': { confetti: 'purple', emoji: '\u2694\uFE0F',
-        title: 'Stage 6: Tests, Allies, Enemies',
+        title: 'Stage 6: Facing Resistance',
         message: 'You\'re going deeper on one path. The courage challenges are building something real.' },
       '6-7': { confetti: null, emoji: '\u{1F441}\uFE0F',
-        title: 'Stage 7: The Inmost Cave',
+        title: 'Stage 7: Going Deeper',
         message: context.voiceName
           ? `The ${context.voiceName.charAt(0).toUpperCase() + context.voiceName.slice(1).replace(/_/g, ' ')}. Five times. The pattern is clear. You\'re ready to face what\'s underneath.`
           : 'The pattern is clear. You\'re ready to face what\'s underneath.' },
+      '7-8': { confetti: 'gold', emoji: '\u{1F4A5}',
+        title: 'Stage 8: The Breakthrough',
+        message: 'Something clicked. 20 courage challenges and 3 healing flows. You\'re not the same person who started this.' },
+      '8-9': { confetti: 'side_cannons', emoji: '\u{1F4B0}',
+        title: 'Stage 9: First Reward',
+        message: 'You earned real income from what you love. That\'s not luck. That\'s proof.' },
+      '9-10': { confetti: 'gold', emoji: '\u{1F680}',
+        title: 'Stage 10: Building Momentum',
+        message: 'Three months of income. This isn\'t a one-off. You\'re building something real.' },
+      '10-11': { confetti: 'side_cannons', emoji: '\u{1F451}',
+        title: 'Stage 11: Proving It\'s Real',
+        message: 'Your income covers your expenses. You\'re doing what you love for a living.' },
     }
 
     const key = `${fromStage}-${toStage}`

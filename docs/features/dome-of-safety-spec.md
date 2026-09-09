@@ -41,11 +41,11 @@ Business model types (Per Session, Group Program, Content, Membership, etc.) are
 |---|-----------|-----------------|------|------|--------|
 | 1 | **People** | "How many people were involved or watching?" | Numeric | 👥 | 1 → 100,000+ |
 | 2 | **Money** | "How much did you ask someone to pay?" | Numeric | 💰 | $0 → $10,000+ |
-| 3 | **Vulnerability** | "How much could you hide?" | Qualitative (5) | 💜 | Fully shielded → Unmasked |
+| 3 | **Vulnerability** | "How visible were you?" | Qualitative (5) | 💜 | Not visible yet → Nothing to hide behind |
 | 4 | **Stakes** | "What was at risk?" | Qualitative (4) | ⚖️ | Nothing to lose → Major bet |
 | 5 | **Rarity** | "How much did you stand out?" | Qualitative (5) | ✦ | Not at all → I might be the only one |
 | 6 | **Identity** | "How different was this from who you used to be?" | Qualitative (5) | 🪞 | Same old me → Old me wouldn't believe this |
-| 7 | **Context** | "How familiar were the conditions?" | Qualitative (5) | 🧭 | Home turf → Nothing familiar |
+| 7 | **Context** | "How far outside your comfort zone were the conditions?" | Qualitative (5) | 🧭 | Not at all → Everything was new |
 | 8 | **Business Commitment** | "How deep are you in building a business?" | Qualitative (5) | 📈 | Hobby → Team/scale |
 
 ---
@@ -70,26 +70,27 @@ Specifically about CHARGING, not investing. Investing = financial risk = belongs
 
 `$0 → $10 → $20 → $50 → $100 → $200 → $500 → $1,000 → $2,000 → $5,000 → $10,000+`
 
-### Vulnerability (5 levels — shields removed)
+### Vulnerability (5 levels — visibility ladder)
 
-**Question:** "How much could you hide?"
+**Courage question:** "How visible were you?"
+**Start question:** "How visible are you on this path?"
+**Dream question:** "How visible would you need to be?"
 
-Vulnerability is META to the action, not about what content you share. It's about how many shields (expertise, a screen, a role, a script, a team) were between you and judgment. Removing shields = increasing vulnerability.
+Each level removes one more shield between you and judgment. The NS trigger: being seen without protection.
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Fully shielded | Haven't put myself out there yet, or completely hidden |
-| 2 | Name on it | Your name is attached but you're behind structure |
-| 3 | Face visible | In person or on camera, but within a professional context |
-| 4 | Unscripted | Just you, no preparation or role to fall back on |
-| 5 | Unmasked | Doing something that reveals a part of you that's normally private (body, raw ability, deep beliefs) |
+| 1 | Not visible yet | Haven't put myself out there |
+| 2 | Behind the scenes | Name attached but behind structure |
+| 3 | Face on screen | On camera but behind a screen |
+| 4 | Face in person | In person, people can see you |
+| 5 | Nothing to hide behind | No professional context, just you |
 
 **Examples from Huzz's challenges:**
-- Cold messaging on social media = 2 (name on it, behind a screen)
-- Handing out flyers = 3 (face visible, but there's a mission)
-- Monument Rave = 4 (unscripted, leading something unusual in public)
-- Post abs photo = 5 (body exposed, normally private)
-- Shirt rip at Harvard = 5 (body + raw energy, in a prestigious setting)
+- Cold messaging on social media = 2 (behind the scenes, behind a screen)
+- Video call workshop = 3 (face on screen)
+- Handing out flyers = 4 (face in person)
+- Shirt rip at Harvard = 5 (nothing to hide behind)
 
 ### Stakes (4 levels)
 
@@ -156,19 +157,21 @@ Measures accumulated transformation. How much you've become someone new through 
 
 **Key insight:** The dome captures identity integration over time. What was a 5 when you first did it can become a 1 as your identity absorbs the new behavior.
 
-### Context (5 levels — contextual familiarity)
+### Context (5 levels — comfort outside familiar conditions)
 
-**Question:** "How familiar were the conditions?"
+**Courage question:** "How far outside your comfort zone were the conditions?"
+**Start question:** "How familiar are the conditions on this path?"
+**Dream question:** "How unfamiliar would the conditions be?"
 
 Merges the old Independence and Location dimensions into one spoke. The NS trigger: your nervous system is wired to feel safer in familiar conditions. Unfamiliar territory (geographic, social, structural) removes the primal sense of knowing where the exits are.
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Home turf | Haven't left familiar territory yet |
-| 2 | Mostly familiar | Known environment, one new variable |
-| 3 | Mixed | Some things familiar, some not (e.g. same format, new city) |
-| 4 | Mostly foreign | Multiple unfamiliar factors stacking |
-| 5 | Nothing familiar | Different place, different people, different norms, no safety net |
+| 1 | Not at all | Haven't left familiar territory |
+| 2 | One new thing | Mostly familiar, one new variable |
+| 3 | Half and half | Some things familiar, some not |
+| 4 | Mostly unfamiliar | Multiple new factors stacking |
+| 5 | Everything was new | Different place, people, norms, no safety net |
 
 **Examples from Huzz's challenges:**
 - Monument Rave in Bali (home base) = 1 (home turf)

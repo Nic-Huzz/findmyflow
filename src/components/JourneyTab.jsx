@@ -12,60 +12,59 @@ import './JourneyTab.css'
 
 const VOICE_ICONS = { ghost: '👻', controller: '🧱', auto_pilot: '🤖', perfectionist: '🎯', people_pleaser: '🪞' }
 
-// Hero stage names (Campbell) + movie references
+// Hero stage names + movie references
 const HERO_STAGES = [
-  // Stages 0-1 are pre-app. New users start seeing Stage 2 (signing up = answering the call)
-  { stage: 0, name: 'Call to Adventure', references: [
+  { stage: 0, name: 'Waking Up', references: [
     'Ariel seeing the surface world for the first time.',
     'Peter Parker getting bitten by the spider.',
     'Neo seeing the Matrix for the first time.',
   ]},
-  { stage: 1, name: 'Call to Adventure', references: [
+  { stage: 1, name: 'Waking Up', references: [
     'Ariel seeing the surface world for the first time.',
     'Peter Parker getting bitten by the spider.',
     'Neo seeing the Matrix for the first time.',
   ]},
-  { stage: 2, name: 'Call to Adventure', references: [
+  { stage: 2, name: 'Exploring', references: [
     'Ariel seeing the surface world for the first time.',
     'Peter Parker getting bitten by the spider.',
-    'Neo seeing the Matrix for the first time.',
+    'Neo taking the red pill.',
   ]},
-  { stage: 3, name: 'Refusal of the Call', references: [
+  { stage: 3, name: 'Discovering Yourself', references: [
     'Simba running away to the jungle.',
     'Miles Morales saying "I can\'t do this."',
     'Frodo saying "I wish the ring had never come to me."',
   ]},
-  { stage: 4, name: 'Meeting the Mentor', references: [
+  { stage: 4, name: 'Choosing a Direction', references: [
     'Aladdin meeting the Genie.',
     'Tony Stark building the first suit in the cave.',
     'Luke meeting Yoda on Dagobah.',
   ]},
-  { stage: 5, name: 'Crossing the Threshold', references: [
+  { stage: 5, name: 'Finding Your Way', references: [
     'Jasmine and Aladdin on the magic carpet for the first time.',
     'Spider-Man\'s first swing through New York.',
     'Neo dodging bullets for the first time.',
   ]},
-  { stage: 6, name: 'Tests, Allies, Enemies', references: [
+  { stage: 6, name: 'Facing Resistance', references: [
     'Mulan training with the army.',
     'The Avengers learning to fight together.',
     'Rocky running up the stairs.',
   ]},
-  { stage: 7, name: 'Approach to the Inmost Cave', references: [
+  { stage: 7, name: 'Going Deeper', references: [
     'Simba returning to the Pride Lands to face Scar.',
     'Doctor Strange facing Dormammu.',
     'Luke entering the cave on Dagobah.',
   ]},
-  { stage: 8, name: 'The Ordeal', references: [
+  { stage: 8, name: 'The Breakthrough', references: [
     'Mufasa\'s death breaking Simba open.',
     'Tony Stark snapping the Infinity Gauntlet.',
     'Neo dying and coming back as The One.',
   ]},
-  { stage: 9, name: 'Reward', references: [
+  { stage: 9, name: 'First Reward', references: [
     'Simba taking his place on Pride Rock.',
     'Thor finally becoming worthy.',
     'Frodo holding the ring at Mount Doom.',
   ]},
-  { stage: 10, name: 'The Road Back', references: [
+  { stage: 10, name: 'Building Momentum', references: [
     'Woody choosing to leave Andy.',
     'Spider-Man returning to Queens.',
     'Bilbo writing his book.',

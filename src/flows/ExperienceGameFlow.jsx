@@ -240,58 +240,7 @@ function generateInsights(branches, ratings) {
     })
   }
 
-  const mismatches = ranked.filter(([, s]) => s.ticked >= 2 && s.vibe_rise === 0 && s.fun > 0)
-  if (mismatches.length > 0) {
-    const m = mismatches[0][1]
-    insights.push({
-      type: 'surprise',
-      color: m.color,
-      text: `You do a lot of ${m.label}, but it doesn't hit Vibe Rise. Fun, not fulfilling. Worth noticing.`,
-    })
-  }
-
-  const growthEdges = ranked.filter(([, s]) => s.pressure > 0)
-  if (growthEdges.length > 0) {
-    const g = growthEdges[0][1]
-    insights.push({
-      type: 'growth edge',
-      color: g.color,
-      text: `${g.label} pushes you. You've experienced it but it's stressful. Your next growth edge lives here.`,
-    })
-  }
-
-  const unexplored = Object.entries(primalStats).filter(([, s]) => s.ticked === 0)
-  if (unexplored.length > 0) {
-    insights.push({
-      type: 'unexplored',
-      color: '#9ca3af',
-      text: `${unexplored.length} branch${unexplored.length > 1 ? 'es' : ''} you haven't touched yet: ${unexplored.map(([, s]) => s.label).join(', ')}.`,
-    })
-  }
-
-  // Recommended next experience
-  let recommended = null
-  for (const b of branches) {
-    const unticked = b.nodes.find(n => !ratings[n.id])
-    if (unticked) {
-      const branch = primalStats[b.id]
-      if (branch && branch.vibe_rise > 0) {
-        recommended = { ...unticked, branch: branch.label, branchColor: b.color }
-        break
-      }
-    }
-  }
-  if (!recommended) {
-    for (const b of branches) {
-      const unticked = b.nodes.find(n => !ratings[n.id])
-      if (unticked) {
-        recommended = { ...unticked, branch: b.label, branchColor: b.color }
-        break
-      }
-    }
-  }
-
-  return { insights, recommended, unexploredCount: unexplored.length }
+  return { insights, recommended: null, unexploredCount: 0 }
 }
 
 // ─── Intro Screen ───
@@ -702,8 +651,8 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onRe
           <span className="exp-game-stat-label">Vibe Rise</span>
         </div>
         <div className="exp-game-stat">
-          <span className="exp-game-stat-num">{unexploredCount}</span>
-          <span className="exp-game-stat-label">unexplored</span>
+          <span className="exp-game-stat-num">{totalRated}</span>
+          <span className="exp-game-stat-label">rated</span>
         </div>
       </div>
 

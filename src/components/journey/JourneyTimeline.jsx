@@ -9,13 +9,13 @@ import { supabase } from '../../lib/supabaseClient'
 import './JourneyTimeline.css'
 
 const HERO_STAGES = [
-  { stage: 1, name: 'Ordinary World', icon: '🏢' },
-  { stage: 2, name: 'Call to Adventure', icon: '⚡' },
-  { stage: 3, name: 'Refusal of the Call', icon: '💭' },
-  { stage: 4, name: 'Meeting the Mentor', icon: '🪞' },
-  { stage: 5, name: 'Crossing the Threshold', icon: '🔥' },
-  { stage: 6, name: 'Tests, Allies, Enemies', icon: '🔄' },
-  { stage: 7, name: 'Approach to the Inmost Cave', icon: '🔮' },
+  { stage: 1, name: 'Waking Up', icon: '🏢' },
+  { stage: 2, name: 'Exploring', icon: '⚡' },
+  { stage: 3, name: 'Discovering Yourself', icon: '💭' },
+  { stage: 4, name: 'Choosing a Direction', icon: '🪞' },
+  { stage: 5, name: 'Finding Your Way', icon: '🔥' },
+  { stage: 6, name: 'Facing Resistance', icon: '🔄' },
+  { stage: 7, name: 'Going Deeper', icon: '🔮' },
 ]
 
 export default function JourneyTimeline({ userId, heroStage, userEmail }) {
@@ -96,7 +96,7 @@ export default function JourneyTimeline({ userId, heroStage, userEmail }) {
     return () => { active = false }
   }, [userId, heroStage, userEmail])
 
-  // Always show at least stage 1 (Ordinary World) as completed — signing up = the crack happened
+  // Always show at least stage 1 (Waking Up) as completed — signing up = the crack happened
   const effectiveStage = Math.max(heroStage, 2)
   const completedStages = HERO_STAGES.filter(s => s.stage < effectiveStage)
 

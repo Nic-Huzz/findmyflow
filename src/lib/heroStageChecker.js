@@ -161,16 +161,16 @@ export async function checkHeroGraduation(userId) {
 
     // Auto-post stage graduation to community feed
     const STAGE_NAMES = {
-      2: 'Call to Adventure',
-      3: 'Refusal of the Call',
-      4: 'Meeting the Mentor',
-      5: 'Crossing the Threshold',
-      6: 'Tests, Allies, Enemies',
-      7: 'Approach to the Inmost Cave',
-      8: 'The Ordeal',
-      9: 'Reward',
-      10: 'The Road Back',
-      11: 'Resurrection',
+      2: 'Exploring',
+      3: 'Discovering Yourself',
+      4: 'Choosing a Direction',
+      5: 'Finding Your Way',
+      6: 'Facing Resistance',
+      7: 'Going Deeper',
+      8: 'The Breakthrough',
+      9: 'First Reward',
+      10: 'Building Momentum',
+      11: 'Proving It\'s Real',
     }
     const stageName = STAGE_NAMES[newStage] || `Stage ${newStage}`
     postFeedEvent(userId, 'stage_graduation', `Reached Stage ${newStage}: ${stageName}`)

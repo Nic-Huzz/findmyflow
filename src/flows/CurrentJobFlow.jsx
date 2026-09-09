@@ -28,11 +28,11 @@ const NS_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', growth_edge
 const CURRENT_QUESTIONS = {
   people: 'How many people do you serve?',
   money: 'How much do you earn per month or per experience?',
-  vulnerability: 'How visible are you in your work?',
+  vulnerability: 'How visible are you on this path?',
   stakes: 'What\'s at risk in your current role?',
   rarity: 'How comfortable are you walking this path?',
   identity: 'How much have you changed on this path so far?',
-  context: 'How familiar is your work environment?',
+  context: 'How familiar are the conditions on this path?',
   business_commitment: 'How deep are you in building this?',
 }
 

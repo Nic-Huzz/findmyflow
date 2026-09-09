@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radar Screenshot Tool — Dance Events</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; display: flex; justify-content: center; padding: 40px 20px; }
+  .wrapper { max-width: 420px; width: 100%; }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    border: 1px solid #e9ecef;
+  }
+
+  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: #5e17eb; }
+  .name { font-size: 18px; font-weight: 800; color: #1a1a2e; }
+  .badge { margin-left: auto; font-size: 13px; font-weight: 700; color: #5e17eb; background: rgba(94,23,235,0.08); padding: 4px 10px; border-radius: 8px; }
+
+  .radar-container { display: flex; justify-content: center; margin-bottom: 8px; }
+
+  .legend { display: flex; justify-content: center; gap: 18px; margin-bottom: 12px; font-size: 11px; color: #6c757d; }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-line { width: 20px; height: 2px; border-radius: 1px; }
+  .legend-start { background: #5e17eb; opacity: 0.35; }
+  .legend-now { background: #5e17eb; }
+  .legend-dream { background: #E9A23B; border-style: dashed; height: 0; border-top: 2px dashed #E9A23B; }
+
+  .gap-text { text-align: center; font-size: 13px; color: #E9A23B; font-weight: 600; }
+
+  .paths-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .paths-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: #5e17eb; display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .paths-label {
+    font-size: 13px; font-weight: 800; letter-spacing: 1.5px;
+    color: #5e17eb; text-transform: uppercase;
+  }
+
+  .controls {
+    margin-top: 20px;
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  }
+  .toggle-btn {
+    padding: 8px 18px; border-radius: 10px; border: 2px solid #e0e0e0;
+    font-size: 13px; font-weight: 700; cursor: pointer; background: #fff;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .toggle-btn.active { border-color: #5e17eb; background: rgba(94,23,235,0.06); color: #5e17eb; }
+  .toggle-btn.start-btn.active { border-color: #5e17eb; opacity: 0.5; }
+  .toggle-btn.now-btn.active { border-color: #5e17eb; }
+  .toggle-btn.dream-btn.active { border-color: #E9A23B; color: #E9A23B; background: rgba(233,162,59,0.06); }
+
+  .caption {
+    text-align: center; margin-top: 16px; font-size: 15px; font-weight: 600;
+    color: #1a1a2e; min-height: 24px; font-style: italic;
+  }
+
+  .instructions {
+    margin-top: 20px; padding: 16px; background: rgba(0,0,0,0.03); border-radius: 12px;
+    font-size: 12px; color: #888; line-height: 1.6;
+  }
+  .instructions strong { color: #555; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="paths-header">
+    <div class="paths-icon">🎨</div>
+    <span class="paths-label">YOUR PATHS</span>
+  </div>
+
+  <div class="card">
+    <div class="header">
+      <div class="dot"></div>
+      <div class="name">Dance Events</div>
+      <div class="badge">55 courage</div>
+    </div>
+
+    <div class="radar-container">
+      <svg id="radar" viewBox="0 0 340 340" width="340" height="340"></svg>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item" id="legend-start" style="display:none"><span class="legend-line legend-start"></span> Start</span>
+      <span class="legend-item" id="legend-now" style="display:none"><span class="legend-line legend-now"></span> Now</span>
+      <span class="legend-item" id="legend-dream" style="display:none"><span class="legend-line legend-dream"></span> Dream</span>
+    </div>
+
+    <div class="gap-text" id="gap-text"></div>
+  </div>
+
+  <div class="controls">
+    <button class="toggle-btn start-btn active" onclick="toggle('start')">Start</button>
+    <button class="toggle-btn now-btn active" onclick="toggle('now')">Now</button>
+    <button class="toggle-btn dream-btn active" onclick="toggle('dream')">Dream</button>
+  </div>
+
+  <div class="caption" id="caption"></div>
+
+  <div class="instructions">
+    <strong>Screenshot tool:</strong> Toggle layers on/off to capture each story frame.<br>
+    Frame 1: Start only → "Where my comfort zone started."<br>
+    Frame 2: Start + Now → "3 years of courage challenges later."<br>
+    Frame 3: All three → "Where I still need to grow."
+  </div>
+</div>
+
+<script>
+const DIMS = [
+  { id: 'people', label: 'PEOPLE', icon: '👥', maxLevel: 8 },
+  { id: 'money', label: 'MONEY', icon: '💰', maxLevel: 10 },
+  { id: 'vulnerability', label: 'VULNERABILITY', icon: '💜', maxLevel: 5 },
+  { id: 'stakes', label: 'STAKES', icon: '⚖️', maxLevel: 4 },
+  { id: 'rarity', label: 'RARITY', icon: '✦', maxLevel: 5 },
+  { id: 'identity', label: 'IDENTITY', icon: '🪞', maxLevel: 5 },
+  { id: 'context', label: 'CONTEXT', icon: '🧭', maxLevel: 5 },
+  { id: 'business', label: 'BUSINESS', icon: '📈', maxLevel: 5 },
+]
+
+const START = { people: 1, money: 1, vulnerability: 1, stakes: 1, rarity: 2, identity: 2, context: 1, business: 1 }
+const NOW =   { people: 4, money: 6, vulnerability: 5, stakes: 4, rarity: 5, identity: 5, context: 5, business: 4 }
+const DREAM = { people: 8, money: 10, vulnerability: 5, stakes: 4, rarity: 5, identity: 5, context: 5, business: 4 }
+
+const state = { start: true, now: true, dream: true }
+const size = 340
+const cx = size / 2, cy = size / 2
+const labelOffset = 28
+const maxRadius = size / 2 - labelOffset - 45
+const angleStep = 360 / DIMS.length
+const ringCount = 5
+
+function polarToXY(angle, radius) {
+  const rad = (angle - 90) * Math.PI / 180
+  return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) }
+}
+
+function buildPolygon(values) {
+  return DIMS.map((d, i) => {
+    const val = values[d.id] || 0
+    const ratio = Math.min(val / d.maxLevel, 1)
+    return polarToXY(i * angleStep, Math.max(ratio * maxRadius, 0))
+  }).map(p => `${p.x},${p.y}`).join(' ')
+}
+
+function render() {
+  const svg = document.getElementById('radar')
+  let html = ''
+
+  // Rings
+  for (let r = 1; r <= ringCount; r++) {
+    const radius = maxRadius * (r / ringCount)
+    const pts = DIMS.map((_, i) => polarToXY(i * angleStep, radius)).map(p => `${p.x},${p.y}`).join(' ')
+    html += `<polygon points="${pts}" fill="none" stroke="#e9ecef" stroke-width="${r === ringCount ? 1 : 0.8}" />`
+  }
+
+  // Spokes
+  DIMS.forEach((_, i) => {
+    const end = polarToXY(i * angleStep, maxRadius)
+    html += `<line x1="${cx}" y1="${cy}" x2="${end.x}" y2="${end.y}" stroke="#e9ecef" stroke-width="0.6" />`
+  })
+
+  // Start layer
+  if (state.start) {
+    html += `<polygon points="${buildPolygon(START)}" fill="rgba(94,23,235,0.06)" stroke="#5e17eb" stroke-width="1" stroke-dasharray="4 3" opacity="0.5" />`
+  }
+
+  // Dream layer (behind Now)
+  if (state.dream) {
+    html += `<polygon points="${buildPolygon(DREAM)}" fill="rgba(233,162,59,0.04)" stroke="#E9A23B" stroke-width="1.5" stroke-dasharray="6 4" />`
+  }
+
+  // Now layer
+  if (state.now) {
+    html += `<polygon points="${buildPolygon(NOW)}" fill="rgba(94,23,235,0.15)" stroke="#5e17eb" stroke-width="1.5" stroke-linejoin="round" />`
+  }
+
+  // Labels
+  DIMS.forEach((d, i) => {
+    const pos = polarToXY(i * angleStep, maxRadius + labelOffset)
+    html += `<text x="${pos.x}" y="${pos.y - 6}" text-anchor="middle" font-size="14">${d.icon}</text>`
+    html += `<text x="${pos.x}" y="${pos.y + 9}" text-anchor="middle" font-size="8" font-weight="700" fill="#6c757d" letter-spacing="0.3">${d.label}</text>`
+  })
+
+  svg.innerHTML = html
+
+  // Legend visibility
+  document.getElementById('legend-start').style.display = state.start ? '' : 'none'
+  document.getElementById('legend-now').style.display = state.now ? '' : 'none'
+  document.getElementById('legend-dream').style.display = state.dream ? '' : 'none'
+
+  // Gap text
+  const gapEl = document.getElementById('gap-text')
+  if (state.dream) {
+    let biggestGap = null, biggestVal = 0
+    DIMS.forEach(d => {
+      const current = state.now ? NOW[d.id] : START[d.id]
+      const gap = (DREAM[d.id] || 0) - (current || 0)
+      if (gap > biggestVal) { biggestVal = gap; biggestGap = d }
+    })
+    gapEl.textContent = biggestGap ? `${biggestGap.icon} Biggest growth area: ${biggestGap.label.charAt(0) + biggestGap.label.slice(1).toLowerCase()}` : ''
+  } else {
+    gapEl.textContent = ''
+  }
+
+  // Caption
+  const caption = document.getElementById('caption')
+  if (state.start && !state.now && !state.dream) caption.textContent = '"Where my comfort zone started."'
+  else if (state.start && state.now && !state.dream) caption.textContent = '"3 years of courage challenges later."'
+  else if (state.start && state.now && state.dream) caption.textContent = '"Where I still need to grow."'
+  else caption.textContent = ''
+}
+
+function toggle(layer) {
+  state[layer] = !state[layer]
+  document.querySelector(`.${layer}-btn`).classList.toggle('active')
+  render()
+}
+
+render()
+</script>
+</body>
+</html>

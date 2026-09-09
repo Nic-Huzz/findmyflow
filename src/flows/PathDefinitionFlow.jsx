@@ -42,11 +42,11 @@ const SHIFT_FUELS = [
 const STEP_DIM_QUESTIONS = {
   people: 'How many people will be involved?',
   money: 'How much money is on the line?',
-  vulnerability: 'How visible will you be?',
+  vulnerability: 'How visible are you on this path?',
   stakes: 'What will be at risk?',
   rarity: 'How comfortable are you walking this path?',
   identity: 'How much have you changed on this path so far?',
-  context: 'How unfamiliar will the conditions be?',
+  context: 'How familiar are the conditions on this path?',
   business_commitment: 'How deep into business does this go?',
 }
 

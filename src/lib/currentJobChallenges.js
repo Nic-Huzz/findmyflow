@@ -19,11 +19,11 @@ export const DIMENSION_OPTIONS = {
     { value: '1000_plus', label: '$1,000+' },
   ],
   vulnerability: [
-    { value: '1', label: 'Fully shielded' },
-    { value: '2', label: 'Name on it' },
-    { value: '3', label: 'Face visible' },
-    { value: '4', label: 'Unscripted' },
-    { value: '5', label: 'Unmasked' },
+    { value: '1', label: 'Not visible yet' },
+    { value: '2', label: 'Behind the scenes' },
+    { value: '3', label: 'Face on screen' },
+    { value: '4', label: 'Face in person' },
+    { value: '5', label: 'Nothing to hide behind' },
   ],
   stakes: [
     { value: '1', label: 'Nothing to lose' },
@@ -46,11 +46,11 @@ export const DIMENSION_OPTIONS = {
     { value: '5', label: 'Old me wouldn\'t believe this' },
   ],
   context: [
-    { value: '1', label: 'Home turf' },
-    { value: '2', label: 'Mostly familiar' },
-    { value: '3', label: 'Mixed' },
-    { value: '4', label: 'Mostly foreign' },
-    { value: '5', label: 'Nothing familiar' },
+    { value: '1', label: 'Not at all' },
+    { value: '2', label: 'One new thing' },
+    { value: '3', label: 'Half and half' },
+    { value: '4', label: 'Mostly unfamiliar' },
+    { value: '5', label: 'Everything was new' },
   ],
   business_commitment: [
     { value: '0', label: 'Current job' },
@@ -87,11 +87,11 @@ export const DIMENSION_ICONS = {
 export const DIMENSION_DESCRIPTIONS = {
   people: 'How many people are involved?',
   money: 'How much do you earn from this outside of a regular salary?',
-  vulnerability: 'How much could you hide?',
+  vulnerability: 'How visible were you?',
   stakes: 'What was at risk?',
   rarity: 'How much did you stand out?',
   identity: 'How different was this from who you used to be?',
-  context: 'How familiar were the conditions?',
+  context: 'How far outside your comfort zone were the conditions?',
   business_commitment: 'How deep are you in building a business?',
 }
 
@@ -111,11 +111,11 @@ export const OPTION_HINTS = {
     '1000_plus': 'Real income territory.',
   },
   vulnerability: {
-    '1': 'Haven\'t put myself out there yet, or completely hidden.',
-    '2': 'Your name attached but behind structure.',
-    '3': 'In person or on camera, within a professional context.',
-    '4': 'Just you, no preparation or role to fall back on.',
-    '5': 'Reveals something normally private (body, raw ability, deep beliefs).',
+    '1': 'Haven\'t put myself out there.',
+    '2': 'Name attached but behind structure.',
+    '3': 'On camera but behind a screen.',
+    '4': 'In person, people can see you.',
+    '5': 'No professional context, just you.',
   },
   stakes: {
     '1': 'Haven\'t put anything on the line yet.',
@@ -138,10 +138,10 @@ export const OPTION_HINTS = {
     '5': 'Complete reinvention.',
   },
   context: {
-    '1': 'Haven\'t left familiar territory yet.',
-    '2': 'Known environment, one new variable.',
-    '3': 'Some familiar, some not.',
-    '4': 'Multiple unfamiliar factors stacking.',
+    '1': 'Haven\'t left familiar territory.',
+    '2': 'Mostly familiar, one new variable.',
+    '3': 'Some things familiar, some not.',
+    '4': 'Multiple new factors stacking.',
     '5': 'Different place, people, norms, no safety net.',
   },
   business_commitment: {

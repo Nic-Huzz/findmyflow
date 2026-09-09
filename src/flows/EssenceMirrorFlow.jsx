@@ -461,6 +461,11 @@ export default function EssenceMirrorFlow() {
             ) : (
               <div className="em-hook-tap-hint">Tap anywhere to continue</div>
             )}
+            {hookIndex === 0 && (
+              <button className="em-hook-back" onClick={(e) => { e.stopPropagation(); navigate(returnTo) }}>
+                ← Back
+              </button>
+            )}
           </div>
         </div>
       )}

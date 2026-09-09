@@ -101,9 +101,13 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       setLoading(false)
     })
 
-    // Check for current job quest
-    supabase.from('quests').select('id').eq('user_id', userId).eq('is_current_job', true).limit(1)
-      .then(({ data }) => { if (data?.length > 0) setHasCurrentJob(true) })
+    // Check for current job quest (only counts as done if dimensions are set)
+    supabase.from('quests').select('id, current_dimensions').eq('user_id', userId).eq('is_current_job', true).limit(1)
+      .then(({ data }) => {
+        if (data?.length > 0 && data[0].current_dimensions && Object.keys(data[0].current_dimensions).length > 0) {
+          setHasCurrentJob(true)
+        }
+      })
   }, [userId])
 
   const pickExperience = (nodeId, nodeLabel) => {
@@ -266,25 +270,29 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {/* Step 2: Experience Dome */}
       <button className="dt-card" onClick={() => navigate('/experience-game')}>
         <div className="dt-card-header">
-          <span className="dt-card-icon">🎮</span>
-          <span className="dt-card-title">Experience Dome</span>
+          <span className="dt-card-icon">{domeCount > 0 ? '✅' : '🎮'}</span>
+          <span className="dt-card-title">{domeCount > 0 ? 'Experience Dome' : 'Play the Experience Game'}</span>
           {domeCount > 0 && <span className="dt-card-badge">{domeCount} rated</span>}
         </div>
         <p className="dt-card-desc">
-          What experiences light you up? Rate them with your nervous system.
+          {domeCount > 0
+            ? 'Revisit or rate more experiences.'
+            : 'What experiences light you up? Rate them with your nervous system.'}
         </p>
         <span className="dt-card-arrow">→</span>
       </button>
 
       {/* Current Job CTA — sits under Experience Dome, before the viz */}
-      {domeCount > 0 && !hasCurrentJob && (
+      {domeCount > 0 && (
         <button className="dt-card" onClick={() => navigate('/add-current-job')}>
           <div className="dt-card-header">
-            <span className="dt-card-icon">💼</span>
-            <span className="dt-card-title">Map your current work</span>
+            <span className="dt-card-icon">{hasCurrentJob ? '✅' : '💼'}</span>
+            <span className="dt-card-title">{hasCurrentJob ? 'Your current work' : 'Map your current work'}</span>
           </div>
           <p className="dt-card-desc">
-            Find what's already alive in your job. Creates your first path.
+            {hasCurrentJob
+              ? 'Revisit what\'s alive in your job.'
+              : 'Find what\'s already alive in your job. Creates your first path.'}
           </p>
           <span className="dt-card-arrow">→</span>
         </button>
