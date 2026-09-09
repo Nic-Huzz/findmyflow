@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduation Pop-up Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; }
+
+  .level-up-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1300;
+  }
+
+  .graduation-modal {
+    position: relative; text-align: center;
+    max-width: 340px; width: calc(100% - 32px);
+    padding: 48px 32px 36px;
+    background: linear-gradient(165deg, #1a1a2e 0%, #0f0a1e 100%);
+    border-radius: 28px;
+    border: 1px solid rgba(233, 162, 59, 0.15);
+    box-shadow: 0 0 80px rgba(94, 23, 235, 0.15), 0 0 40px rgba(233, 162, 59, 0.08), 0 24px 48px rgba(0, 0, 0, 0.4);
+    animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+  }
+  @keyframes pop { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+
+  .grad-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(233, 162, 59, 0.06);
+    pointer-events: none;
+  }
+  .grad-ring-1 { width: 300px; height: 300px; top: -60px; left: 50%; transform: translateX(-50%); animation: ringPulse 3s ease-in-out infinite; }
+  .grad-ring-2 { width: 400px; height: 400px; top: -110px; left: 50%; transform: translateX(-50%); animation: ringPulse 3s ease-in-out 0.5s infinite; }
+  @keyframes ringPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+  .grad-badge {
+    width: 88px; height: 88px; border-radius: 50%;
+    margin: 0 auto 20px; position: relative; z-index: 1;
+    opacity: 0; transform: scale(0.5);
+    animation: badgeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+  }
+  @keyframes badgeIn { to { opacity: 1; transform: scale(1); } }
+
+  .grad-badge::before {
+    content: ''; position: absolute; inset: -4px; border-radius: 50%;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    z-index: -1;
+    animation: badgeGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes badgeGlow {
+    from { box-shadow: 0 0 16px rgba(233, 162, 59, 0.3); }
+    to { box-shadow: 0 0 32px rgba(233, 162, 59, 0.5), 0 0 64px rgba(94, 23, 235, 0.2); }
+  }
+
+  .grad-avatar {
+    width: 100%; height: 100%; border-radius: 50%;
+    object-fit: cover; display: block;
+  }
+  .grad-emoji {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 50%;
+  }
+
+  .grad-progress {
+    display: flex; justify-content: center; gap: 5px; margin-bottom: 20px;
+    opacity: 0; transform: translateY(8px);
+    animation: fadeUp 0.5s ease 0.7s forwards;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .grad-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .grad-dot.filled { background: #5e17eb; }
+  .grad-dot.current {
+    background: #E9A23B; width: 8px; height: 8px;
+    box-shadow: 0 0 8px rgba(233, 162, 59, 0.5);
+  }
+
+  .grad-title {
+    font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
+    color: #E9A23B; margin-bottom: 12px;
+    opacity: 0; transform: translateY(12px);
+    animation: fadeUp 0.5s ease 1s forwards;
+  }
+
+  .grad-message {
+    font-size: 14px; font-weight: 500; line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 auto 24px; max-width: 280px;
+    opacity: 0; transform: translateY(12px);
+    animation: fadeUp 0.5s ease 1.6s forwards;
+  }
+
+  .grad-cta {
+    background: linear-gradient(135deg, #E9A23B, #f5c55a);
+    color: #1a1a1a; border: none;
+    padding: 12px 36px; border-radius: 100px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit;
+    opacity: 0; transform: translateY(12px);
+    animation: fadeUp 0.5s ease 2.2s forwards;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .grad-cta:hover { transform: scale(1.05); }
+
+  /* Controls */
+  .controls {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; z-index: 9999;
+  }
+  .ctrl-btn {
+    padding: 8px 14px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2);
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7);
+    font-family: inherit;
+  }
+  .ctrl-btn:hover { border-color: #E9A23B; color: #E9A23B; }
+</style>
+</head>
+<body>
+
+<div class="level-up-overlay" id="overlay">
+  <div class="graduation-modal">
+    <div class="grad-ring grad-ring-1"></div>
+    <div class="grad-ring grad-ring-2"></div>
+
+    <div class="grad-badge" id="badge">
+      <span class="grad-emoji" id="emoji">💥</span>
+    </div>
+
+    <div class="grad-progress" id="progress"></div>
+    <div class="grad-title" id="title">Stage 8: The Breakthrough</div>
+    <p class="grad-message" id="message">Something clicked. 20 courage challenges and 3 healing flows. You're not the same person who started this.</p>
+    <button class="grad-cta">Continue</button>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="showStage(2)">Stage 2</button>
+  <button class="ctrl-btn" onclick="showStage(3)">Stage 3</button>
+  <button class="ctrl-btn" onclick="showStage(4)">Stage 4</button>
+  <button class="ctrl-btn" onclick="showStage(5)">Stage 5</button>
+  <button class="ctrl-btn" onclick="showStage(6)">Stage 6</button>
+  <button class="ctrl-btn" onclick="showStage(7)">Stage 7</button>
+  <button class="ctrl-btn" onclick="showStage(8)">Stage 8</button>
+  <button class="ctrl-btn" onclick="showStage(9)">Stage 9</button>
+  <button class="ctrl-btn" onclick="showStage(10)">Stage 10</button>
+  <button class="ctrl-btn" onclick="showStage(11)">Stage 11</button>
+</div>
+
+<script>
+const STAGES = {
+  2:  { emoji: '🌱', title: 'Stage 2: Exploring', message: "You showed up. That takes more than most people realise. Your hero's journey has begun." },
+  3:  { emoji: '🗺️', title: 'Stage 3: Discovering Yourself', message: "You've started collecting dots. Your curiosities, your life story, your paths. Now the patterns can start forming." },
+  4:  { emoji: '🪞', title: 'Stage 4: Choosing a Direction', message: "Your essence archetype has been revealed. This is who you are underneath the noise." },
+  5:  { emoji: '🔥', title: 'Stage 5: Finding Your Way', message: "You did something courageous and felt it land. That feeling is your compass. Follow it." },
+  6:  { emoji: '⚔️', title: 'Stage 6: Facing Resistance', message: "You're going deeper on one path. The courage challenges are building something real." },
+  7:  { emoji: '👁️', title: 'Stage 7: Going Deeper', message: "The pattern is clear. You're ready to face what's underneath." },
+  8:  { emoji: '💥', title: 'Stage 8: The Breakthrough', message: "Something clicked. 20 courage challenges and 3 healing flows. You're not the same person who started this." },
+  9:  { emoji: '💰', title: 'Stage 9: First Reward', message: "You earned real income from what you love. That's not luck. That's proof." },
+  10: { emoji: '🚀', title: 'Stage 10: Building Momentum', message: "Three months of income. This isn't a one-off. You're building something real." },
+  11: { emoji: '👑', title: 'Stage 11: Proving It\'s Real', message: "Your income covers your expenses. You're doing what you love for a living." },
+}
+
+function showStage(n) {
+  const s = STAGES[n]
+  document.getElementById('emoji').textContent = s.emoji
+  document.getElementById('title').textContent = s.title
+  document.getElementById('message').textContent = s.message
+
+  const dots = Array.from({ length: 12 }, (_, i) => {
+    const cls = i < n ? 'grad-dot filled' : 'grad-dot'
+    return `<div class="${cls}${i === n - 1 ? ' current' : ''}"></div>`
+  }).join('')
+  document.getElementById('progress').innerHTML = dots
+
+  // Re-trigger animations
+  const modal = document.querySelector('.graduation-modal')
+  modal.style.animation = 'none'
+  modal.offsetHeight
+  modal.style.animation = ''
+
+  document.querySelectorAll('.grad-badge, .grad-progress, .grad-title, .grad-message, .grad-cta').forEach(el => {
+    el.style.animation = 'none'
+    el.offsetHeight
+    el.style.animation = ''
+  })
+}
+
+// Init with stage 8
+showStage(8)
+</script>
+</body>
+</html>
