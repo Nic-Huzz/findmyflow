@@ -35,6 +35,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [saving, setSaving] = useState(false)
   const [showClose, setShowClose] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [showRenameProject, setShowRenameProject] = useState(false)
   const [renaming, setRenaming] = useState(null) // null | 'quest' | expId
   const [renameText, setRenameText] = useState('')
   const renameRef = useRef(null)
@@ -48,6 +49,9 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [signalTaskId, setSignalTaskId] = useState(null)
   const [expandedTaskId, setExpandedTaskId] = useState(null)
   const [collapsedExps, setCollapsedExps] = useState(new Set())
+  const [addingProject, setAddingProject] = useState(false)
+  const [newProjectName, setNewProjectName] = useState('')
+  const addProjectRef = useRef(null)
   const [challengeDims, setChallengeDims] = useState({})
   const [challengeDimValues, setChallengeDimValues] = useState({})
   const [reRatingExpId, setReRatingExpId] = useState(null)
@@ -254,6 +258,20 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     onUpdate?.()
   }
 
+  const addProject = async () => {
+    if (!newProjectName.trim()) return
+    const { error } = await supabase.from('quest_experiences').insert({
+      quest_id: quest.id,
+      user_id: userId,
+      label: newProjectName.trim(),
+      capacity_state: null,
+    })
+    if (error) console.error('Add project error:', error)
+    setAddingProject(false)
+    setNewProjectName('')
+    onUpdate?.()
+  }
+
   const toggleExp = (expId) => {
     setReRatingExpId(null)
     setCollapsedExps(prev => {
@@ -375,14 +393,24 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
           )}
           <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
         </div>
-        <button className="qbc-menu-trigger" onClick={(e) => { e.stopPropagation(); setShowMenu(!showMenu); setShowClose(false) }}>···</button>
+        <button className="qbc-menu-trigger" onClick={(e) => { e.stopPropagation(); setShowMenu(!showMenu); setShowClose(false); setShowRenameProject(false) }}>···</button>
         {showMenu && (
           <div className="qbc-menu-dropdown">
-            {!showClose ? (
+            {!showClose && !showRenameProject ? (
               <>
                 <button className="qbc-menu-item" onClick={() => startRename('quest', quest.label)}>Rename path</button>
+                <button className="qbc-menu-item" disabled={!hasExperiences} onClick={() => hasExperiences && setShowRenameProject(true)}>Rename project</button>
+                <button className="qbc-menu-item" onClick={() => { setAddingProject(true); setShowMenu(false); setExpanded(true); setTimeout(() => addProjectRef.current?.focus(), 50) }}>Add project</button>
                 <button className="qbc-menu-item" onClick={() => setShowClose(true)}>Close path</button>
               </>
+            ) : showRenameProject ? (
+              <div className="qbc-close-options">
+                <div className="qbc-close-title">Which project?</div>
+                {activeExperiences.map(exp => (
+                  <button key={exp.id} className="qbc-close-btn" onClick={() => { startRename(exp.id, exp.label); setShowRenameProject(false) }}>{exp.label}</button>
+                ))}
+                <button className="qbc-close-cancel" onClick={() => { setShowRenameProject(false); setShowMenu(false) }}>Cancel</button>
+              </div>
             ) : (
               <div className="qbc-close-options">
                 <div className="qbc-close-title">Close "{quest.label}"?</div>
@@ -505,6 +533,25 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
                 <button className="qbc-outcome-btn qbc-outcome-yes" onClick={() => handleOutcome(outcomeTaskId, 'yes')}>Yes</button>
                 <button className="qbc-outcome-btn qbc-outcome-no" onClick={() => handleOutcome(outcomeTaskId, 'no')}>No</button>
                 <button className="qbc-outcome-btn qbc-outcome-better" onClick={() => handleOutcome(outcomeTaskId, 'something_better')}>Something better</button>
+              </div>
+            </div>
+          )}
+
+          {/* Add project inline input */}
+          {addingProject && (
+            <div className="qbc-add-project">
+              <input
+                ref={addProjectRef}
+                className="qbc-input"
+                type="text"
+                value={newProjectName}
+                onChange={e => setNewProjectName(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') addProject(); if (e.key === 'Escape') { setAddingProject(false); setNewProjectName('') } }}
+                placeholder="Project name..."
+              />
+              <div className="qbc-add-project-actions">
+                <button className="qbc-add-project-save" onClick={addProject} disabled={!newProjectName.trim()}>Add</button>
+                <button className="qbc-add-project-cancel" onClick={() => { setAddingProject(false); setNewProjectName('') }}>Cancel</button>
               </div>
             </div>
           )}

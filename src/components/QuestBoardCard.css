@@ -332,6 +332,29 @@
 .qbc-outcome-better:active { border-color: #E9A23B; background: rgba(233, 162, 59, 0.04); }
 
 /* ── Add actions ── */
+/* Add project */
+.qbc-add-project {
+  padding: 8px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  margin-top: 4px;
+}
+.qbc-add-project-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.qbc-add-project-save {
+  font-size: 12px; font-weight: 700; font-family: inherit;
+  padding: 6px 14px; border-radius: 8px; border: none; cursor: pointer;
+  background: #5e17eb; color: white;
+}
+.qbc-add-project-save:disabled { opacity: 0.4; cursor: default; }
+.qbc-add-project-cancel {
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  padding: 6px 14px; border-radius: 8px; border: none; cursor: pointer;
+  background: rgba(0,0,0,0.05); color: rgba(0,0,0,0.5);
+}
+
 .qbc-add-actions {
   display: flex;
   gap: 6px;

@@ -20,7 +20,7 @@ import './ProgressTab.css'
 // ── Hero Stages with quadrant coordinates ──
 // Path: top-left (Burnout) → bottom-right (Stuck) → top-right (Self-Actualisation)
 // Stage 4 is the deepest point, stage 5 starts the climb
-const HERO_STAGES = [
+export const HERO_STAGES = [
   // →2: First NS check-in
   { stage: 0,  name: 'Waking Up',            x: 65,  y: 42,  desc: 'You feel something needs to change.',
     refs: ['Ariel seeing the surface world for the first time.', 'Neo seeing the Matrix for the first time.'],

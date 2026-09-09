@@ -35,6 +35,33 @@ const DIM_SUBS = {
   business_commitment: 'Going deeper into your business',
 }
 
+function getDimLevelLabel(dim, level) {
+  if (!dim || !level) return ''
+  if (dim.type === 'numeric') {
+    const tier = dim.tiers?.[level - 1]
+    if (tier === undefined) return `Level ${level}`
+    if (dim.id === 'money') return `$${tier.toLocaleString()}`
+    return tier.toLocaleString()
+  }
+  const lvl = dim.levels?.find(l => l.level === level)
+  return lvl?.label || `Level ${level}`
+}
+
+function getGapPrompt(dimId, nextLevel, nextLabel) {
+  if (dimId === 'people') return `What could you do to get in front of ${nextLabel} people?`
+  if (dimId === 'money') return `How could you earn ${nextLabel}? Charge more per customer or attract more customers?`
+  if (dimId === 'vulnerability') return `What would '${nextLabel}' look like for you?`
+  if (dimId === 'stakes') return `What would a '${nextLabel}' situation look like?`
+  if (dimId === 'rarity') {
+    if (nextLevel === 2) return `What could you do that your peers would get, but most people wouldn't?`
+    return `What could you do that feels '${nextLabel}'?`
+  }
+  if (dimId === 'identity') return `What would a '${nextLabel}' moment look like?`
+  if (dimId === 'context') return `What could you try in '${nextLabel}' conditions?`
+  if (dimId === 'business_commitment') return `What would reaching '${nextLabel}' look like?`
+  return ''
+}
+
 const STEPS = ['freetext', 'dimensions', 'body', 'voice']
 
 export default function WahooCreator({
@@ -62,8 +89,53 @@ export default function WahooCreator({
   const [drilledDim, setDrilledDim] = useState(null)
   // Quest dimension gaps (for gap nudge on dimension grid)
   const [questDims, setQuestDims] = useState(null) // { current: {}, dream: {} }
+  // All quests' dimension gaps (for step 1 inspiration)
+  const [allQuestGaps, setAllQuestGaps] = useState([])
   const successTimerRef = useRef(null)
   const drillTimer = useRef(null)
+
+  // Load ALL active quests' dimension gaps on mount (for step 1 inspiration)
+  useEffect(() => {
+    if (!userId) return
+    supabase.from('quests')
+      .select('id, label, current_dimensions, dream_dimensions')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .then(({ data }) => {
+        if (!data?.length) return
+        const dimGaps = {}
+        data.forEach(q => {
+          if (!q.current_dimensions || !q.dream_dimensions) return
+          DOME_DIMENSIONS.forEach(d => {
+            const current = q.current_dimensions[d.id] || 0
+            const dream = q.dream_dimensions[d.id] || 0
+            const gap = dream - current
+            if (gap > 0 && (!dimGaps[d.id] || gap > dimGaps[d.id].gap)) {
+              dimGaps[d.id] = { gap, current, dream, questLabel: q.label }
+            }
+          })
+        })
+        const sorted = Object.entries(dimGaps)
+          .map(([id, info]) => {
+            const dim = DOME_DIMENSIONS.find(d => d.id === id)
+            const nextLevel = Math.min(info.current + 1, dim?.maxLevel || 5)
+            const nextLabel = getDimLevelLabel(dim, nextLevel)
+            return {
+              id, ...info,
+              icon: dim?.icon,
+              label: dim?.label,
+              currentLabel: getDimLevelLabel(dim, info.current),
+              nextLabel,
+              dreamLabel: getDimLevelLabel(dim, info.dream),
+              showNext: nextLevel < info.dream,
+              prompt: getGapPrompt(id, nextLevel, nextLabel),
+            }
+          })
+          .sort((a, b) => b.gap - a.gap)
+          .slice(0, 3)
+        setAllQuestGaps(sorted)
+      })
+  }, [userId])
 
   // Load quest dimensions when quest is linked
   useEffect(() => {
@@ -318,8 +390,34 @@ export default function WahooCreator({
       {/* ═══ STEP 1: What's the brave action? ═══ */}
       {step === 'freetext' && (
         <div className="wc-step-screen" key="freetext">
-          <h2 className="wc-headline">What's the brave thing?</h2>
+          <h2 className="wc-headline">What's the courageous thing?</h2>
           <p className="wc-sub">Something you'd love to do that scares you a little.</p>
+
+          {allQuestGaps.length > 0 && (
+            <div className="wc-gap-inspire">
+              {allQuestGaps.map(g => (
+                <div key={g.id} className="wc-gap-card">
+                  <div className="wc-gap-card-header">
+                    <span className="wc-gap-card-icon">{g.icon}</span>
+                    <span className="wc-gap-card-label">{g.label}</span>
+                    <span className="wc-gap-card-badge">+{g.gap}</span>
+                  </div>
+                  <div className="wc-gap-card-levels">
+                    <span className="wc-gap-card-current">Now: {g.currentLabel || 'Not started'}</span>
+                    <span className="wc-gap-card-arrow">→</span>
+                    {g.showNext && (
+                      <>
+                        <span className="wc-gap-card-next">Next: {g.nextLabel}</span>
+                        <span className="wc-gap-card-arrow">→</span>
+                      </>
+                    )}
+                    <span className="wc-gap-card-dream">Dream: {g.dreamLabel}</span>
+                  </div>
+                  <p className="wc-gap-card-prompt">{g.prompt}</p>
+                </div>
+              ))}
+            </div>
+          )}
 
           <textarea
             className="wc-textarea"

@@ -24,7 +24,7 @@ import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 // HomeFirstTime archived — replaced by /essence-mirror redirect
 import SeeYourFlow from '../components/SeeYourFlow'
-import CapacityCard from '../components/level/CapacityCard'
+import StageCard from '../components/StageCard'
 import { hasPendingJourneyData, persistJourneyOnboarding, hasPendingPlaySkillsData, persistPlaySkillsOnboarding } from '../lib/journeyOnboarding'
 import './MePage.css'
 
@@ -557,10 +557,10 @@ export default function MePage() {
       */}
 
       {/* ============================================================
-         SECTION 2: VIBE RISE SCORE
+         SECTION 2: STAGE LEVEL
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
-        <CapacityCard userId={user?.id} onNavigate={() => navigate('/7-day-challenge')} hideMaintenance />
+        <StageCard heroStage={currentJourneyLevel} />
       </section>
 
       {/* Fantasy League promo removed — re-enable when league is ready for spotlight */}

@@ -34,6 +34,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
   const [loading, setLoading] = useState(true)
   const [domeExpanded, setDomeExpanded] = useState(false)
   const [hasCurrentJob, setHasCurrentJob] = useState(false)
+  const [hasChosenQuests, setHasChosenQuests] = useState(false)
 
   useEffect(() => {
     if (!userId) return
@@ -58,7 +59,14 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         .eq('status', 'active')
         .order('created_at', { ascending: false })
         .limit(1),
-    ]).then(([essenceRes, domeRes, domeChallRes]) => {
+      supabase.from('quests')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('is_current_job', false)
+        .eq('status', 'active')
+        .neq('label', 'Healing Work')
+        .limit(1),
+    ]).then(([essenceRes, domeRes, domeChallRes, questsRes]) => {
       // Active dome challenge
       if (domeChallRes.data?.[0]) {
         setActiveDomeChallenge(domeChallRes.data[0])
@@ -82,6 +90,9 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       // show nodes that have been checked but not rated with NS state
       const unrated = (domeRes.data || []).filter(r => !r.ns_state).map(r => r.node_id)
       setUnratedNodes(unrated)
+
+      // Check if user has completed choose-quests (has non-current-job quests)
+      setHasChosenQuests(questsRes.data?.length > 0)
 
       setLoading(false)
     }).catch(err => {
@@ -249,6 +260,18 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {/* Phase 1→2 Bridge CTA — locked until essence + dome + current job done */}
       {(() => {
         const bridgeReady = essenceDone && domeCount > 0 && hasCurrentJob
+        if (hasChosenQuests) {
+          return (
+            <button className="dt-bridge-cta dt-bridge-done" onClick={() => navigate('/choose-quests')}>
+              <span className="dt-bridge-tick">✓</span>
+              <div className="dt-bridge-text">
+                <span className="dt-bridge-title">Go deeper on a life path</span>
+                <span className="dt-bridge-sub">You've chosen your paths. Tap to revisit.</span>
+              </div>
+              <span className="dt-bridge-arrow">→</span>
+            </button>
+          )
+        }
         return (
           <button
             className={`dt-bridge-cta ${!bridgeReady ? 'dt-bridge-locked' : ''}`}
