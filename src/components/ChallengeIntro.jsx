@@ -13,50 +13,25 @@ import './ChallengeIntro.css'
 
 const SLIDES = [
   {
-    heading: 'Life is a game.',
+    heading: 'Something cracked. That\'s not a breakdown. That\'s your origin story.',
     body: [
-      'The most magical game in the world.',
-      'The purpose? Have experiences you love.',
-      'There is a life path that is uniquely yours. This app helps you find it.',
+      'Every hero starts here. The old version stopped working.',
+      'Good.',
     ],
-    duration: 7000,
+    duration: 6000,
   },
   {
-    heading: 'The rules.',
+    heading: 'Here\'s what happens next.',
     body: [
-      'If you don\'t choose a quest, one is chosen for you.',
-      'Your spawn point was random. But your build? That\'s up to you.',
-      'XP only comes from action. Reading and planning doesn\'t level you up.',
-      'Failing isn\'t game over. The only real loss is quitting the run.',
-    ],
-    duration: 9000,
-  },
-  {
-    heading: 'Something cracked.',
-    body: [
-      'Maybe it was burnout.',
-      'Maybe it was a quiet realisation that the life you built isn\'t the one you want.',
-      'Either way, you\'re here because the old version stopped working.',
-    ],
-    duration: 7000,
-  },
-  {
-    heading: 'That\'s not a breakdown. That\'s your origin story.',
-    body: [
-      'Every hero starts in the Ordinary World. Then something breaks them open.',
-      'Right now you\'re answering the Call to Adventure.',
-      'This app is your map through the journey.',
+      'Step 1: Discover what lights you up.',
+      'Step 2: Turn them into life paths.',
+      'Step 3: Face what scares you. Watch your comfort zone grow.',
     ],
     duration: 8000,
   },
   {
     heading: 'Your quest starts now.',
-    body: [
-      'Discover what lights you up.',
-      'Face what scares you.',
-      'Heal what holds you back.',
-      'Your flow is on the other side.',
-    ],
+    body: [],
     duration: null,
     hasButton: true,
   },

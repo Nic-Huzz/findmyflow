@@ -32,9 +32,9 @@ const BEATS = {
 }
 
 const HOOK_SLIDES = [
-  { id: 'ikigai', text: 'Imagine going on your own hero\'s journey to find your Ikigai. And every step of it was a game.', subtext: 'This is the app.' },
-  { id: 'compass', text: 'We believe your curiosities are a compass.', subtext: 'Guiding you to a path only you can walk.' },
-  { id: 'origin', text: 'Your life to date is your superhero origin story.', subtext: 'Ready to have the impact you were born to make?' },
+  { id: 'ikigai', text: 'What if finding your Ikigai was a game? Not a course. Not a quiz. A game you play with your real life.', subtext: 'This is the app.' },
+  { id: 'compass', text: 'Your curiosities, your courage challenges, your comfort zone.', subtext: 'All gamified. All guiding you to your path.' },
+  { id: 'origin', text: 'You\'ve done the courses. Read the books. This turns knowing into doing.', subtext: '5 minutes to start. Free.' },
 ]
 
 // ─── Component ──────────────────────────────────────────────────────────────

@@ -43,10 +43,10 @@ const FUEL_CHANNELS = [
 
 function QuestRadarCard({ quest, actualProgress, fuel }) {
   const navigate = useNavigate()
-  const size = 220
+  const size = 310
   const cx = size / 2
   const cy = size / 2
-  const maxRadius = (size / 2) - LABEL_OFFSET - 10
+  const maxRadius = (size / 2) - LABEL_OFFSET - 45
   const angleStep = 360 / DOME_DIMENSIONS.length
 
   const maxLevels = {}

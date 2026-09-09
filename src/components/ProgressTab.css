@@ -338,7 +338,8 @@
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
+  display: block;
+  margin: 0 auto 12px;
   border: 3px solid #5e17eb;
   box-shadow: 0 4px 16px rgba(94, 23, 235, 0.2);
 }
