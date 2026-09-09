@@ -121,7 +121,7 @@ function ChallengeHeader({
           onClick={() => navigate(matchupData.opponentName === 'Ghost' ? '/league' : '/league/matchup')}
           style={{ cursor: 'pointer' }}
         >
-          <span className="challenge-matchup-team-name">Your Team</span>
+          <span className="challenge-matchup-team-name">You</span>
           <span className="challenge-matchup-pill">
             <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
               {matchupData.myWins}
@@ -132,7 +132,7 @@ function ChallengeHeader({
             </span>
           </span>
           <span className="challenge-matchup-vs">vs</span>
-          <span>{matchupData.opponentName}</span>
+          <span>Last Week You</span>
         </div>
       )}
 

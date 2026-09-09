@@ -168,11 +168,30 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {showHowItWorks && (
         <div className="dt-how-card">
           <button className="dt-how-close" onClick={() => { setShowHowItWorks(false); localStorage.setItem('hasSeenPortalExplainer', 'true') }}>×</button>
+          <div className="dt-how-accent" />
           <div className="dt-how-title">Here's how this works</div>
           <div className="dt-how-steps">
-            <p><strong>Discover</strong> — tick experiences you love. The more you tick, the clearer your path gets.</p>
-            <p><strong>Paths</strong> — turn those experiences into life paths with projects and courage challenges.</p>
-            <p><strong>Progress</strong> — watch your comfort zone grow as you take action.</p>
+            <div className="dt-how-step">
+              <span className="dt-how-icon">🎮</span>
+              <div>
+                <span className="dt-how-label">Discover</span>
+                <span className="dt-how-desc">Tick experiences you love. The more you tick, the clearer your path gets.</span>
+              </div>
+            </div>
+            <div className="dt-how-step">
+              <span className="dt-how-icon">🗺️</span>
+              <div>
+                <span className="dt-how-label">Paths</span>
+                <span className="dt-how-desc">Turn those experiences into life paths with projects and courage challenges.</span>
+              </div>
+            </div>
+            <div className="dt-how-step">
+              <span className="dt-how-icon">📈</span>
+              <div>
+                <span className="dt-how-label">Progress</span>
+                <span className="dt-how-desc">Watch your life transform as your comfort zone grows.</span>
+              </div>
+            </div>
           </div>
         </div>
       )}

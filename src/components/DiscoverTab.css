@@ -17,32 +17,68 @@
 .dt-how-card {
   background: #ffffff;
   border: 1px solid #e9ecef;
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 22px 20px 18px;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+}
+.dt-how-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 20px 20px 0 0;
 }
 .dt-how-close {
   position: absolute;
-  top: 12px; right: 14px;
+  top: 14px; right: 14px;
   background: none; border: none;
-  font-size: 20px; color: #adb5bd;
+  font-size: 18px; color: #ccc;
   cursor: pointer; line-height: 1;
-  padding: 0;
+  padding: 0; z-index: 1;
 }
 .dt-how-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   color: #1a1a2e;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  letter-spacing: -0.2px;
 }
-.dt-how-steps p {
+.dt-how-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dt-how-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.dt-how-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f0;
+  border-radius: 10px;
+}
+.dt-how-label {
+  display: block;
   font-size: 13px;
-  color: rgba(0, 0, 0, 0.5);
-  line-height: 1.5;
-  margin: 0 0 6px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 2px;
 }
-.dt-how-steps p:last-child { margin-bottom: 0; }
-.dt-how-steps strong { color: #1a1a2e; }
+.dt-how-desc {
+  display: block;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 1.4;
+}
 
 /* Revisit label (when direction section is shown) */
 .dt-revisit-label {
