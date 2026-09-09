@@ -47,7 +47,7 @@ export const DOME_DIMENSIONS = [
     type: 'qualitative',
     maxLevel: 5,
     levels: [
-      { level: 1, label: 'Fully shielded', description: 'Anonymous, scripted, behind a screen, within a team' },
+      { level: 1, label: 'Fully shielded', description: 'Haven\'t put myself out there yet, or completely hidden' },
       { level: 2, label: 'Name on it', description: 'Your name is attached but you\'re behind structure' },
       { level: 3, label: 'Face visible', description: 'In person or on camera, but within a professional context' },
       { level: 4, label: 'Unscripted', description: 'Just you, no preparation or role to fall back on' },
@@ -63,7 +63,7 @@ export const DOME_DIMENSIONS = [
     type: 'qualitative',
     maxLevel: 4,
     levels: [
-      { level: 1, label: 'Nothing to lose', description: 'Worst case, it\'s awkward for a moment' },
+      { level: 1, label: 'Nothing to lose', description: 'Haven\'t put anything on the line yet' },
       { level: 2, label: 'Ego on the line', description: 'Embarrassment, rejection, small money lost' },
       { level: 3, label: 'Real consequences', description: 'Reputation, meaningful money, relationship strained' },
       { level: 4, label: 'Major bet', description: 'Significant money, career move, hard to undo' },
@@ -114,7 +114,7 @@ export const DOME_DIMENSIONS = [
     // Context = ALL surrounding conditions: physical place, platform, format, support structure, delivery method.
     // NOT just geography. A new platform or format counts as unfamiliar context.
     levels: [
-      { level: 1, label: 'Home turf', description: 'Your space, your people, your platform, your routine' },
+      { level: 1, label: 'Home turf', description: 'Haven\'t left familiar territory yet' },
       { level: 2, label: 'Mostly familiar', description: 'Known setup, one new variable (new format, new venue, or solo for the first time)' },
       { level: 3, label: 'Mixed', description: 'Some things familiar, some not (known format + new city, or new platform + familiar audience)' },
       { level: 4, label: 'Mostly foreign', description: 'Multiple unfamiliar factors stacking' },

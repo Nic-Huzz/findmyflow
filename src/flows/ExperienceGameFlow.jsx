@@ -21,10 +21,10 @@ const NS_STATES = [
 ]
 
 const INTRO_LINES = [
-  { type: 'heading', text: 'Life is the most magical game in the world.' },
-  { type: 'body', text: 'The purpose? Have experiences you love.' },
-  { type: 'body', text: "We believe there's a life path uniquely yours." },
-  { type: 'accent', text: 'This app turns finding that path into a game.' },
+  { type: 'heading', text: 'On the next screen, tick experiences you\'ve tried or love.' },
+  { type: 'body', text: 'We\'ll use what lights you up to find your path.' },
+  { type: 'body', text: 'The more you tick, the clearer it gets.' },
+  { type: 'accent', text: 'Ready?' },
 ]
 
 // Branch order: common/relatable first, niche last

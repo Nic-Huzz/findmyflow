@@ -78,7 +78,7 @@ Vulnerability is META to the action, not about what content you share. It's abou
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Fully shielded | Anonymous, scripted, behind a screen, within a team |
+| 1 | Fully shielded | Haven't put myself out there yet, or completely hidden |
 | 2 | Name on it | Your name is attached but you're behind structure |
 | 3 | Face visible | In person or on camera, but within a professional context |
 | 4 | Unscripted | Just you, no preparation or role to fall back on |
@@ -99,7 +99,7 @@ Covers all types of risk: financial investment, reputation, relationships, caree
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Nothing to lose | Worst case, it's awkward for a moment |
+| 1 | Nothing to lose | Haven't put anything on the line yet |
 | 2 | Ego on the line | Embarrassment, rejection, small money lost |
 | 3 | Real consequences | Reputation, meaningful money, relationship strained |
 | 4 | Major bet | Significant money, career move, public commitment, hard to undo |
@@ -164,7 +164,7 @@ Merges the old Independence and Location dimensions into one spoke. The NS trigg
 
 | Level | Label | Description |
 |-------|-------|-------------|
-| 1 | Home turf | Your space, your people, your routine |
+| 1 | Home turf | Haven't left familiar territory yet |
 | 2 | Mostly familiar | Known environment, one new variable |
 | 3 | Mixed | Some things familiar, some not (e.g. same format, new city) |
 | 4 | Mostly foreign | Multiple unfamiliar factors stacking |

@@ -65,7 +65,7 @@ export function useChallengeData() {
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search)
     const tabParam = params.get('tab')?.toLowerCase()
-    return TAB_TO_CATEGORY[tabParam] || 'Tune'
+    return TAB_TO_CATEGORY[tabParam] || 'Discover'
   }
 
   // UI State

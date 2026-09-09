@@ -111,14 +111,14 @@ export const OPTION_HINTS = {
     '1000_plus': 'Real income territory.',
   },
   vulnerability: {
-    '1': 'Anonymous, scripted, behind a screen, within a team.',
+    '1': 'Haven\'t put myself out there yet, or completely hidden.',
     '2': 'Your name attached but behind structure.',
     '3': 'In person or on camera, within a professional context.',
     '4': 'Just you, no preparation or role to fall back on.',
     '5': 'Reveals something normally private (body, raw ability, deep beliefs).',
   },
   stakes: {
-    '1': 'Worst case, awkward for a moment.',
+    '1': 'Haven\'t put anything on the line yet.',
     '2': 'Embarrassment, rejection, small money lost.',
     '3': 'Reputation, meaningful money, relationship strained.',
     '4': 'Significant money, career move, hard to undo.',
@@ -138,7 +138,7 @@ export const OPTION_HINTS = {
     '5': 'Complete reinvention.',
   },
   context: {
-    '1': 'Your space, your people, your routine.',
+    '1': 'Haven\'t left familiar territory yet.',
     '2': 'Known environment, one new variable.',
     '3': 'Some familiar, some not.',
     '4': 'Multiple unfamiliar factors stacking.',
