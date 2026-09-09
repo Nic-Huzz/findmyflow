@@ -309,37 +309,23 @@ function ChallengeOnboarding({
               <span className="notifications-icon">🔔</span>
               <h1>Stay on Track</h1>
               <p className="notifications-subtitle">
-                Enable notifications to receive gentle reminders and celebrate your wins throughout the challenge.
+                We'll send one reminder per day if you haven't opened the app. That's it. No spam.
               </p>
             </div>
 
             <div className="notification-benefits">
               <div className="benefit-item">
-                <span className="benefit-icon">🌅</span>
+                <span className="benefit-icon">🔔</span>
                 <div className="benefit-content">
-                  <strong>Morning Motivation</strong>
-                  <span>Start your day with a quick quest reminder</span>
+                  <strong>Daily nudge</strong>
+                  <span>One gentle reminder per day if you haven't checked in</span>
                 </div>
               </div>
               <div className="benefit-item">
-                <span className="benefit-icon">🎯</span>
+                <span className="benefit-icon">👋</span>
                 <div className="benefit-content">
-                  <strong>Midday Check-in</strong>
-                  <span>A gentle nudge to keep momentum</span>
-                </div>
-              </div>
-              <div className="benefit-item">
-                <span className="benefit-icon">🌙</span>
-                <div className="benefit-content">
-                  <strong>Evening Reflection</strong>
-                  <span>Log your flow before bed</span>
-                </div>
-              </div>
-              <div className="benefit-item">
-                <span className="benefit-icon">🏆</span>
-                <div className="benefit-content">
-                  <strong>Celebrations</strong>
-                  <span>Get notified when you unlock achievements</span>
+                  <strong>We know when to stop</strong>
+                  <span>After 7 days of inactivity, we pause notifications until you're back</span>
                 </div>
               </div>
             </div>

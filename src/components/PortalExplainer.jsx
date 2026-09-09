@@ -6,26 +6,25 @@ function PortalExplainer({ onClose }) {
 
   const slides = [
     {
-      title: "Welcome to Your Flow Portal! 🌊",
+      title: "Here's how this works",
       content: (
         <>
-          <p>Each week, you'll complete quests across four tabs to help you find your flow and amplify your impact.</p>
-          <p>Let's take a quick tour to show you how everything works!</p>
+          <p><strong>Discover</strong> — tick experiences you love. The more you tick, the clearer your path gets.</p>
+          <p><strong>Paths</strong> — turn those experiences into life paths with projects and courage challenges.</p>
+          <p><strong>Progress</strong> — watch your comfort zone grow as you take action.</p>
         </>
       )
     },
     {
-      title: "Your Space, Your Rules 🔒",
+      title: "This is your private space",
       content: (
         <>
-          <p>This portal is deeply personal. Here's how we protect it:</p>
+          <p>The app asks you to be honest and vulnerable. Here's how we protect that:</p>
           <ul className="privacy-list">
-            <li>✅ Your reflections, voice logs, and healing responses are yours alone. No one else can see them.</li>
-            <li>✅ Leaderboards only show your name and points, never your answers.</li>
-            <li>✅ We never sell or share your data with third parties.</li>
-            <li>✅ You can request full deletion of your data at any time.</li>
+            <li>Your reflections and healing responses are yours alone. No one else can see them.</li>
+            <li>We never sell or share your data.</li>
+            <li>You can delete everything at any time.</li>
           </ul>
-          <p className="quest-tip">💡 <strong>Why this matters:</strong> The quests here ask you to be vulnerable. We take that seriously.</p>
         </>
       )
     }

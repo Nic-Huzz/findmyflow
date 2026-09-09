@@ -35,6 +35,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
   const [domeExpanded, setDomeExpanded] = useState(false)
   const [hasCurrentJob, setHasCurrentJob] = useState(false)
   const [hasChosenQuests, setHasChosenQuests] = useState(false)
+  const [showHowItWorks, setShowHowItWorks] = useState(() => !localStorage.getItem('hasSeenPortalExplainer'))
 
   useEffect(() => {
     if (!userId) return
@@ -161,6 +162,19 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {/* Phase 1 content */}
       {heroStage >= 8 && (
         <div className="dt-revisit-label">Revisit</div>
+      )}
+
+      {/* How it works — dismissible card for first-time users */}
+      {showHowItWorks && (
+        <div className="dt-how-card">
+          <button className="dt-how-close" onClick={() => { setShowHowItWorks(false); localStorage.setItem('hasSeenPortalExplainer', 'true') }}>×</button>
+          <div className="dt-how-title">Here's how this works</div>
+          <div className="dt-how-steps">
+            <p><strong>Discover</strong> — tick experiences you love. The more you tick, the clearer your path gets.</p>
+            <p><strong>Paths</strong> — turn those experiences into life paths with projects and courage challenges.</p>
+            <p><strong>Progress</strong> — watch your comfort zone grow as you take action.</p>
+          </div>
+        </div>
       )}
 
       {/* Experience to try this week */}

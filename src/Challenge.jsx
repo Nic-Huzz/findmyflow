@@ -1467,7 +1467,7 @@ function Challenge() {
 
   return (
     <div className="challenge-container content-enter">
-      {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
+      {/* Portal explainer moved inline to DiscoverTab */}
       {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => {
         setShowDailyCheckin(false)
         setCapacityRefresh(n => n + 1)

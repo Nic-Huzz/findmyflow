@@ -13,6 +13,37 @@
   font-size: 14px;
 }
 
+/* How it works card */
+.dt-how-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+}
+.dt-how-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none; border: none;
+  font-size: 20px; color: #adb5bd;
+  cursor: pointer; line-height: 1;
+  padding: 0;
+}
+.dt-how-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+}
+.dt-how-steps p {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+.dt-how-steps p:last-child { margin-bottom: 0; }
+.dt-how-steps strong { color: #1a1a2e; }
+
 /* Revisit label (when direction section is shown) */
 .dt-revisit-label {
   font-size: 13px;
