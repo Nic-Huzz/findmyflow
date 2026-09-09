@@ -1,5 +1,11 @@
-# FindMyFlow x Category Pirates
+# FindMyFlow x Category Pirates (Historical Reference)
 *Mapping the overlap between two frameworks. Original analysis: Huzz Hurrell / FindMyFlow. April 2026.*
+
+> **⚠️ This doc is the historical evolution, not the current strategy.**
+>
+> **Current strategy doc:** `docs/frameworks/vibe-rise-category-strategy.md` — follows the Category Pirates framework structure (Beliefs → Size of Prize → Flywheel → Pricing → Strikes → Content → Strategy) with Vibe Rise answers for each section.
+>
+> **Why we split (September 2026):** This doc grew to 1,400+ lines across three versions (v1 Apr '26, v2 Jul '26, v3 Sep '26). It started as a mapping exercise ("CP says X, FMF calls it Y") and accumulated strategy updates, implementation status, specs, and rewrites. Navigating it became harder than useful. The new doc follows CP's own structure and answers each framework directly for Vibe Rise with the School of Experience framing. This doc is kept as reference for how the thinking evolved — the mapping work, confidence ratings, and version history are still valuable context.
 
 ---
 
