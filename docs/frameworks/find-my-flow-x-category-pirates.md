@@ -5,108 +5,272 @@
 
 ## v3 Update (September 2026)
 
-v2 focused on the Creator Portal and Sessions. v3 adds the **consumer app's three-phase journey** and **lead magnet strategy** — the category design for how people enter Vibe Rise.
+### The Premise We Reject
 
-### Consumer App: Three-Phase Stacking Model
+"More knowledge leads to a better career."
 
-v2 presented three products as separate categories. v3 recognises they **stack** — users don't leave Phase 1 when they enter Phase 2. The dome keeps expanding, courage challenges keep happening, the NS measurement runs through all three. This means the category design isn't three separate DAMs. It's one category with three entry points.
+University sold you this. So did the MBA, the bootcamp, the online course, the career coach. They all run the same playbook: learn more, earn more, live better. The School of Theory.
+
+But Seth Godin doesn't get hired because of what he knows. He gets hired because he's known. The difference matters. Knowing is theory. Being known is experience. You become known by doing remarkable things, not by studying them.
+
+### The Qualifier: Mapped Careers vs Find Your Flow Careers
+
+Some careers have a map. University, law school, medical school — they draw the river for you. Your comfort zone still matters (it decides how far you go), but the path is clear.
+
+Find My Flow is for the careers that don't have a map. The ones you create. Where there's no degree, no defined ladder, no credential that qualifies you. Just your experience, your courage, and the brand you build by doing remarkable things.
+
+What if the path you want isn't in any course catalogue? Then knowledge isn't the bottleneck. Your comfort zone is.
+
+**"Find your flow"** = find the career path that's uniquely yours, that no course catalogue contains, by expanding your comfort zone until the life you want fits inside it.
+
+**For careers you don't find in any course catalogue.**
+
+### The Different Problem
+
+The problem isn't knowledge. It's experience. Your brand is built on experience — the things you've done, the trust you've built by showing up and doing remarkable things. Not credentials. Not courses. But your experience has a ceiling: your comfort zone. If your comfort zone is small, your experiences stay small, your brand stays invisible, and you compete with everyone else who has the same degree. Expand the comfort zone, the experience expands, the brand compounds, and you become the person who gets a yes wherever they go.
+
+There is no such thing as work and life. It's all life. Your career IS what makes you feel alive. To live that, you need to heal (remove the blocks), have courage (do the scary thing), and build the experience that makes you undeniable. The traditional pathways — university, corporate ladders, career coaches — separated "career" from "who you are." We refuse the separation.
+
+### Who This Is For
+
+Two types arrive at Vibe Rise. Both believe there's an ikigai — a unique path meant for them. Both know the traditional pathways didn't serve them in finding it.
+
+**The Stuck:** "I know exactly what my path is. I just can't get there." They can see the life they want but their comfort zone won't let them walk toward it. They need courage, not clarity. Best entry: Ambition Radar (shows the gap between dream and reality is a comfort zone gap, not a knowledge gap).
+
+**The Seeker:** "I know it's not this. I don't know what it is yet." They left or are leaving the traditional path but haven't found what replaces it. They need discovery before courage. Best entry: Experience Game (dome reveals what lights them up) or Aliveness Quiz (names which channels shut down).
+
+Both types end up in the same place: expanding their comfort zone until the life they want fits inside it.
+
+### The Different Future
+
+You won't find your flow in a course catalogue. You'll find it by mapping what makes you alive, then having the courage to build a life around it.
+
+### DAM Statement
+
+"You think you need another course. But there's no course for the career you want — it doesn't exist in any catalogue. The bottleneck isn't what you know. It's what your comfort zone will let you do. Expand the comfort zone, expand the experience, become undeniable."
+
+### One-Sentence Strategy
+
+"For careers you don't find in any course catalogue. Vibe Rise expands your comfort zone until the life you want fits inside it."
+
+### The Category
+
+**School of Theory** (old category): University, MBA, bootcamps, online courses, career coaches, personality tests, self-help books. All assume knowledge is the bottleneck.
+
+**School of Experience** (new category): Vibe Rise. Your comfort zone decides your experience. Your experience decides whether you're known. Being known decides your career.
+
+**How Vibe Rise solves it:** Three stacking phases. Each one answers a different question. Each one builds on the last.
+
+### Three Phases, One Category
+
+Phases stack. Users don't leave Phase 1 when they enter Phase 2. The dome keeps expanding, courage challenges keep happening, the NS measurement runs through all three. One category with three entry points, not three separate products.
 
 ```
-Phase 1: DISCOVERY (free)          Phase 2: EXPANSION (app)         Phase 3: BUILD (Scale)
-"What lights me up?"               "How far can I take it?"         "How do I live from it?"
+Phase 1: DISCOVERY                 Phase 2: EXPANSION                Phase 3: BUILD
+"What is my path?"                 "How do I walk this path?"        "How do I get paid?"
+Answered by: What lights me up?    Answered by: Comfort zone grows   Answered by: Business model
+                                                                     + accountability
 ┌─────────────────┐                ┌─────────────────┐              ┌─────────────────┐
-│  Experience      │                │  Quest Board     │              │  Business        │
-│  Dome            │  stacks into → │  Courage         │ stacks into →│  Accelerator     │
-│  54 experiences  │                │  Challenges      │              │  Offer Stack     │
-│  NS rating       │                │  Healing Flows   │              │  CRM + Scale     │
-│  Dome shape      │                │  Zone Matrix     │              │  Score           │
+│  Experience Game │                │  Quest Board     │              │  Direction       │
+│  ~90 experiences │  stacks into → │  Courage         │ stacks into →│  Bridge          │
+│  Dome shape      │                │  Challenges      │              │  Money Models    │
+│  NS rating       │                │  Healing Flows   │              │  Income Tracking │
+│  Essence Mirror  │                │  Weekly Review   │              │  Scale Score     │
 └─────────────────┘                └─────────────────┘              └─────────────────┘
      FREE lead magnets              FIND MY FLOW APP                  SCALE PORTAL
      /try/experience-game           (trial → paid)                   ($499 + $99/mo)
      /try/aliveness
      /try/ambition-radar
+
+BRIDGES:
+  Phase 1→2: Choose Quests (/choose-quests)
+    Dome experiences → AI suggests paths → quest creation → identity declaration
+  Phase 2→3: Direction Bridge (5 cards on Discover tab, stage 8+)
+    Life Map Review → Problem Motivation → Multiplication Reveal → Money Model → First Income
 ```
 
-**Key difference from v2:** Income tracking appears at Phase 2 (hero stage 8+) as a courage milestone, then accumulates as a revenue metric in Phase 3. The weekly review captures both. This is stacking in action.
+**How the phases stack:** Phase 1 discovers what lights you up. Phase 2 turns those into quests and expands your comfort zone through courage challenges and healing. Phase 3 (stage 8+) surfaces the career direction that was hiding in your action data all along. Income tracking appears as a courage milestone in Phase 2, then accumulates as a revenue metric in Phase 3. The weekly review captures both.
 
-### Three Lead Magnets, Three DAMs
+### Three Lead Magnets — Each Intercepts a Different Old Category (All Live)
 
-Each lead magnet intercepts from a different "old category" and redirects to Vibe Rise. They're the top of the funnel for Phase 1.
+Each lead magnet DAMs demand from a different corner of the School of Theory and redirects to the School of Experience. All three are built, deployed, and collecting funnel data. Each one serves a different user type at a different stage of readiness.
 
-**Lead Magnet 1: Experience Game** (`/try/experience-game`)
+**Lead Magnet 1: Experience Game** (`/try/experience-game`) — LIVE
+*Intercepts: personality tests, career quizzes (Myers-Briggs, DISC, StrengthsFinder)*
+*Serves: The Seeker ("I don't know what my path is yet")*
 
-| CP Element | Implementation |
-|---|---|
-| **Old category** | Personality tests, career quizzes (Myers-Briggs, DISC, StrengthsFinder) |
-| **What's wrong (Q2)** | They tell you what you ARE, not what makes you ALIVE. Static labels from answering questions about preferences. No body signal, no experience data, no courage required. |
-| **How we solve it (Q3)** | Tick experiences you've actually done. Rate each with your nervous system. See your dome shape — the unique pattern of what makes YOU come alive. Not a label. A map. |
-| **DAM Statement** | "You think you need a personality test. But a quiz about your preferences can't tell you what makes you alive. What you actually need is to map the experiences your body responds to. That's the dome." |
-| **Entry point** | Phase 1 (Discovery). User ticks ~54 experiences across 10 branches, rates each with NS state, sees their dome shape. |
-| **Conversion path** | Dome shape → "Want to expand this?" → signup → Phase 2 courage challenges |
+| What they think they need | What's actually wrong | How we solve it |
+|---|---|---|
+| A personality test to figure out their path | The School of Theory again — answer questions about preferences, get a label. No body signal, no experience data, no courage required. Labels don't reveal paths. Experience does. | Tick ~90 experiences you've actually done. Rate each with your nervous system. See your dome shape — the unique pattern of what makes YOU come alive. Not a label. A map of your School of Experience. |
 
-**Lead Magnet 2: Aliveness Quiz** (`/try/aliveness`)
+**DAM:** "You think you need a personality test. But a quiz about your preferences can't tell you what makes you alive. What you actually need is to map the experiences your body responds to. That's the dome."
 
-| CP Element | Implementation |
-|---|---|
-| **Old category** | "Am I on the right path?" quizzes, life satisfaction assessments |
-| **What's wrong (Q2)** | They measure satisfaction or personality type. Neither tracks what your body actually responds to. They diagnose the symptom ("you're unhappy") without naming the mechanism ("your aliveness channels are shut down"). |
-| **How we solve it (Q3)** | Four questions, one per channel: Choice, Connection, Mastery, Meaning. Your body knows which channels closed. The quiz names them. Then gives you one thing to try today for each closed channel. |
-| **DAM Statement** | "You think you need another self-help quiz. But knowing you're 'stressed' or '62% satisfied' doesn't tell you what to do. What you actually need is to see which of your four aliveness channels got shut down, and reopen one today." |
-| **Entry point** | Phase 1 (pre-Discovery). Lighter than the dome — 4 questions, immediate result. |
-| **Conversion path** | Diagnosis → "Want to reopen what closed?" → signup → dome → Phase 2 |
+**Best for:** Seekers who need clarity before courage. 5-10 min. Email gate after dome (earned the data first).
+**Conversion:** Dome shape → "Want to expand this?" → signup → Phase 2 courage challenges.
 
-**Lead Magnet 3: Ambition Radar** (`/try/ambition-radar`)
+**Lead Magnet 2: Aliveness Quiz** (`/try/aliveness`) — LIVE
+*Intercepts: "am I on the right path?" quizzes, life satisfaction assessments*
+*Serves: The Seeker (early stage — in pain, wants a quick answer)*
 
-| CP Element | Implementation |
-|---|---|
-| **Old category** | Goal-setting apps, vision boards, "dream big" workshops |
-| **What's wrong (Q2)** | They ask what you WANT but ignore what your body can HANDLE. The gap between ambition and capacity is the real problem. You can visualise your dream life all day — if your nervous system says "not safe" when you try to pursue it, the vision board is decoration. |
-| **How we solve it (Q3)** | Type your dream. See it on a radar across 8 dimensions. Then see where you actually are. The gap between the two shapes IS your comfort zone. The gold ring is your ambition. The purple dome is your current capacity. Vibe Rise closes the gap. |
-| **DAM Statement** | "You think you need a vision board. But you already know what you want. The problem is the gap between what you dream and what your body can handle. What you actually need is to see that gap on a radar and start closing it one courage challenge at a time." |
-| **Entry point** | Phase 1→2 bridge. Uses dome dimensions, so it primes users for the expansion game. |
-| **Conversion path** | Radar gap → "Want help closing this gap?" → signup → choose quests → Phase 2 |
+| What they think they need | What's actually wrong | How we solve it |
+|---|---|---|
+| Another quiz to diagnose what's wrong | They diagnose the symptom ("you're unhappy") without naming the mechanism. You don't need to know you're stuck. You need to know WHICH parts of your aliveness got shut down by the traditional path. | Four questions, one per channel: Choice, Connection, Mastery, Meaning. Your body knows which channels the School of Theory closed. The quiz names them. Then gives you one thing to try today. |
 
-### How the Three Magnets Differ (A/B Test Strategy)
+**DAM:** "You think you need another self-help quiz. But knowing you're 'stressed' or '62% satisfied' doesn't tell you what to do. What you actually need is to see which of your four aliveness channels got shut down, and reopen one today."
+
+**Best for:** Seekers in pain who need a quick answer. 2-3 min. Email gate before results (exchange value).
+**Conversion:** Diagnosis → "Want to reopen what closed?" → signup → dome → Phase 2.
+
+**Lead Magnet 3: Ambition Radar** (`/try/ambition-radar`) — LIVE
+*Intercepts: goal-setting apps, vision boards, courses/qualifications (alternate copy)*
+*Serves: The Stuck ("I know what I want, I can't get there")*
+
+| What they think they need | What's actually wrong | How we solve it |
+|---|---|---|
+| A vision board, a goal-setting app, or another qualification to close the gap | They all assume the gap is knowledge or planning. It's not. The gap between where you are and where you want to be is a comfort zone gap. You can visualise and study forever — if your nervous system says "not safe," nothing moves. | Type your dream. See it on a radar across 8 dimensions. Then see where you actually are. The gap between the two shapes IS your comfort zone. The gold ring is your ambition. The purple dome is your current capacity. |
+
+**DAM (vision board intercept):** "You think you need a vision board. But you already know what you want. The problem is the gap between what you dream and what your body can handle. What you actually need is to see that gap on a radar and start closing it one courage challenge at a time."
+
+**DAM (course/qualification intercept):** "You think you need another qualification to get the life you want. But the gap between where you are and where you want to be isn't a knowledge gap. It's a comfort zone gap. See for yourself."
+
+**Best for:** Stuck users who know their path but can't walk it. 3-5 min. Email gate before results (exchange value). The course-seeker DAM can run as alternate ad/landing page copy pointing to the same flow.
+**Conversion:** Radar gap → "Want help closing this gap?" → signup → choose quests → Phase 2.
+
+### How the Three Magnets Differ
 
 | Dimension | Experience Game | Aliveness Quiz | Ambition Radar |
 |---|---|---|---|
-| **Time to complete** | 5-10 min (54 experiences) | 2-3 min (4 questions) | 3-5 min (dream + 8 dims + precursor) |
+| **User type** | The Seeker (exploratory) | The Seeker (in pain) | The Stuck (knows the path) |
+| **Time to complete** | 5-10 min (~90 experiences) | 2-3 min (4 questions) | 3-5 min (dream + 8 dims + precursor) |
 | **Depth** | Deep (real experience data) | Shallow (self-report) | Medium (ambition vs reality) |
 | **Reveal moment** | Dome shape emerging | Channel diagnosis card | Radar gap animation |
 | **Shareability** | Dome image (visual, unique shape) | Verdict headline (text-first) | Radar overlay (visual, gap is the story) |
-| **Emotional hook** | "I didn't know Play was my thing" | "My Connection channel is starved" | "I'm further from my dream than I thought" |
-| **Best for** | Curious explorers who want to play | People in pain who want a quick answer | Ambitious people who feel stuck |
-| **Email gate position** | After dome (earned the data first) | Before results (exchange value) | Before results (exchange value) |
+| **Emotional hook** | "I didn't know Play was my thing" | "My Connection channel is starved" | "The gap isn't knowledge. It's my comfort zone." |
+| **School of Theory it replaces** | Personality tests | Life satisfaction quizzes | Vision boards / courses |
 
-**What to track per magnet:**
-- Step-level drop-off (funnel tracking built, table: `lead_funnel_events`)
-- Email gate conversion (step N-1 → email submitted)
-- Time-on-reveal (did they look at their result?)
-- Share rate (share button taps)
-- 7/14/30 day signup conversion (`public_leads` → `auth.users`)
+### Funnel Tracking (All Live)
 
-### Life Fuel: The Motivation Layer
+All three magnets feed into the same measurement stack:
+- **Step-level drop-off** — `lead_funnel_events` table, wired to all three flows via `createFunnelTracker()`
+- **Email capture** — `public_leads` table with source flow, results JSONB, personalization tokens
+- **Conversion tracking** — `public_leads` → `auth.users` (7/14/30 day windows)
+- **Share rate** — share button taps per magnet
+- **Time-on-reveal** — how long they look at their result
 
-Not in v1 or v2. Life Fuel (Choice, Connection, Mastery, Meaning) captures **why users pursue expansion paths over their current situation**. Tracked via checkboxes after courage challenges. This is the motivational substrate under the NS measurement — the NS tells you HOW your body responds, Life Fuel tells you WHY you're pursuing this path at all.
+### Life Fuel: The Motivation Layer (Live)
 
-The four channels map to the aliveness quiz — a user who scores low on Connection in the quiz will likely select Connection as a Life Fuel when defining their expansion paths. The quiz diagnoses, the fuel sustains.
+Life Fuel (Choice, Connection, Mastery, Meaning) captures **why clients pursue expansion paths over their current situation**. Tracked via checkboxes after courage challenges. The NS tells you HOW your body responds. Life Fuel tells you WHY you're pursuing this path at all.
+
+The four channels map to the aliveness quiz — a client who scores low on Connection in the quiz will likely select Connection as a Life Fuel when defining their expansion paths. The quiz diagnoses, the fuel sustains.
+
+### The "Become Known" Mechanism (How Experience Becomes Brand)
+
+The School of Experience chain: comfort zone → experience → brand → career. The product covers comfort zone → experience. The "become known" layer closes the loop. Three parts:
+
+**1. Native shareable content the app creates (live + roadmap)**
+
+What's live now:
+- Dome shape image (unique visual, shareable after Experience Game and on /me)
+- Ambition Radar overlay (gap visualization, shareable)
+- Aliveness Quiz verdict card (text-first, shareable)
+- Weekly review highlights (completions, dome growth, identity statements)
+
+Roadmap — experience portfolio:
+- Shareable profile page: "Here's my dome. Here's what I've done. Here are my quests."
+- Courage challenge proof gallery (screenshots, reflections, before/after dome)
+- "Year in Review" style progress summary (dome growth over time, total courage challenges, comfort zone expansion)
+- Think Strava year-in-review or GitHub contribution graph — making the experience data visible
+
+**2. Prompts and templates that help users create + share about their experience**
+
+Not built yet. The idea: after completing a courage challenge, the app suggests a shareable moment:
+- "You just did [scary thing] for the first time. Here's a template to share what you learned."
+- "Your dome grew in [dimension] this month. Here's how to talk about that."
+- "You've completed [N] courage challenges this quarter. Here's your experience story."
+
+This is not a content creation tool. It's prompts that turn real experience into shareable evidence. The experience IS the content. The app just helps you frame it.
+
+**⚠️ NEEDS SPEC:** Both native shareable content and post-courage prompts/templates need a full feature spec before building. Key questions: what formats (image cards, story templates, text snippets)? Which moments trigger them (post-courage, weekly review, dome milestone, quest completion)? How much is auto-generated vs user-edited? Where do they share to (Instagram, LinkedIn, WhatsApp, in-app)? How do we avoid feeling like "share this to your socials" spam? Spec should live at `docs/features/shareable-experience-content-spec.md`.
+
+**3. The compound effect**
+
+Each shared experience builds the brand. Each piece of evidence makes the next opportunity easier. The app tracks the experience. The user shares the evidence. The brand compounds. This is the School of Experience flywheel: do → share → become known → more opportunities → do more.
+
+### The Retention Problem (Why They Stay)
+
+The School of Theory retains through sunk cost: $50K tuition, 3-year commitment, social pressure to finish. You stay because you paid.
+
+The School of Experience can't use that mechanism (and shouldn't). It needs to retain through something stronger: **visible progress on something that matters to you.**
+
+**What currently retains (live):**
+
+| Mechanism | What it does | CP equivalent |
+|---|---|---|
+| **Dome expansion** | Visual proof your comfort zone is growing — the shape changes, the edges push out | Progress you can SEE. Like watching your body change at the gym. |
+| **Hero stages** (12 levels) | Getting Started → Movement Maker. Each stage unlocks new capabilities. | Gamified progression. You don't quit at level 6. |
+| **Quest board** | Your life paths with tasks, courage challenges, healing flows attached | Sunk cost in YOUR specific paths — not generic content |
+| **Weekly review** | Sunday/Monday ritual: identity shift, procrastination, courage, dome growth | Habit loop. The review is the accountability the School of Theory charges $50K for. |
+| **Identity statements** | "I'm someone who..." declarations after courage challenges | Identity shift. Once you say "I'm someone who does cold plunge," quitting means losing that identity. |
+| **Healing flows** | 7-step per-task flows that address WHY your comfort zone is small | Depth. Generic apps don't touch this. You can't get this from a course. |
+| **Aftertaste test** | "Do you want to do that again?" after every courage challenge — yes/not sure/no | Alignment filter. The app learns what's genuinely yours vs what's forced. |
+| **Rise Points** | XP system across all activities, visible level progression | The score goes up. Simple but effective. |
+
+**What's missing for retention:**
+
+| Gap | What it would do | Priority |
+|---|---|---|
+| **Community/social layer** | See others' progress, share within the app, crew accountability | High — Vibe Rise sessions provide this in person, app doesn't yet |
+| **Shareable evidence** | Native content + prompts (see "Become Known" above) | High — closes the brand loop AND creates external accountability |
+| **Streak mechanics** | Consecutive days/weeks of courage challenges or practices | Medium — Duolingo-style, already have daily practices in Tune tab |
+| **Notification/nudge system** | "Your dome hasn't grown in 2 weeks" or "You have an unfinished courage challenge" | Medium — web push is live, but nudge content isn't personalized |
+
+**The deeper retention thesis:** The School of Theory retains through money. The School of Experience retains through identity. Once your dome has a shape, your quests have names, and you've said "I'm someone who..." — quitting means abandoning who you're becoming. That's stronger than sunk cost. But it takes time to build (weeks, not days), which means the first 2 weeks are the danger zone. The lead magnets and onboarding need to create enough identity investment in the first session to survive until the identity hooks take hold.
+
+### Implementation Status
+
+| Feature | Status |
+|---|---|
+| Experience Game (`/try/experience-game`) | **Live** — ~90 experiences, dome viz, funnel tracking, email gate |
+| Aliveness Quiz (`/try/aliveness`) | **Live** — 4-channel diagnosis, funnel tracking, email gate |
+| Ambition Radar (`/try/ambition-radar`) | **Live** — 8-dim radar, gap animation, funnel tracking, email gate |
+| Essence Mirror onboarding | **Live** — 9-step essence discovery, 12 archetypes, hero avatar |
+| Choose Quests bridge (Phase 1→2) | **Live** — dome → AI paths → quest creation with voice picker |
+| Direction Bridge (Phase 2→3) | **Live** — 5 cards: Life Map Review → Problem → Multiply → Money Model → First Income |
+| Income tracking | **Live** — weekly review captures income, hero stages 8→9→10 |
+| Funnel tracking (`lead_funnel_events`) | **Live** — step-level drop-off for all 3 magnets |
+| Email capture (`public_leads`) | **Live** — source flow, results, personalization tokens |
+| Life Fuel channels | **Live** — Choice/Connection/Mastery/Meaning tracked post-courage |
+| My Movement card (DAM statement) | **Live** — in CreatorHome, auto-populated from RemarkableFlow |
+| Strike Design flow (`/create/strike`) | **Live** — 5-step: Outcome → Type → Fuel → Write → Quality |
+| Shareable experience portfolio | **Not built** — profile page, proof gallery, year-in-review |
+| Content prompts/templates | **Not built** — post-courage shareable moments, experience story templates |
+| Community/social layer | **Not built** — in-app crew visibility, shared progress |
+| Strike Lab / group call infrastructure | **Not built** — call structure designed (see below), no app support |
+| WOM tracking on challenges | **Not built** — proposed fields for shares/reach/new contacts |
 
 ### What Changed From v2
 
 | Element | v2 | v3 |
 |---|---|---|
+| **Category framing** | "Vibe Rise" as brand = category | School of Experience vs School of Theory |
+| **Premise rejected** | "You're broken and need fixing" | "More knowledge leads to a better career" |
 | **Product model** | Three separate categories | Three stacking phases, one category |
-| **Lead magnets** | `/try/experience-game` only | Three magnets, each DAMs from a different old category |
-| **Income tracking** | Not addressed in consumer app | Phase 2 courage milestone (first dollar) + Phase 3 revenue metric (weekly accumulation) |
+| **Target audience** | Burnt-out professionals | Two types: The Stuck (knows path, needs courage) + The Seeker (needs clarity first) |
+| **Phase intentions** | Not defined | Phase 1: What is my path? Phase 2: How do I walk it? Phase 3: How do I get paid? |
+| **Lead magnets** | `/try/experience-game` only | Three magnets, each DAMs from a different School of Theory tool — all live |
+| **Ambition Radar** | Vision board intercept only | Dual DAM: vision boards + courses/qualifications (same flow, different copy) |
+| **Phase bridges** | Not addressed | Choose Quests (1→2) and Direction Bridge (2→3) — both live |
+| **"Become known" layer** | Not addressed | Native shareables (live) + content prompts + experience portfolio (roadmap) |
+| **Retention thesis** | Not addressed | Identity-based retention vs sunk-cost retention |
+| **Income tracking** | Not addressed in consumer app | Phase 2 courage milestone + Phase 3 revenue metric |
 | **Life Fuel** | Not present | Choice/Connection/Mastery/Meaning as motivational layer |
-| **DAM Statement** | One (brand-level) | One brand-level + three magnet-specific |
-| **Conversion funnel** | Not mapped | Step-level drop-off tracking via `lead_funnel_events` |
+| **DAM Statement** | One (brand-level) | One brand-level + three magnet-specific + course-seeker variant |
+| **Conversion funnel** | Not mapped | Step-level drop-off tracking — live and collecting |
 
 ### What Still Holds From v2
 
-- Brand-level DAM statement — still the north star
 - Sessions as the product, app as the ledger — still true
-- 3 Movement Questions (Q1/Q2/Q3) — still the core discovery tool
+- 3 Movement Questions (Q1/Q2/Q3) — still the core discovery tool for creators
 - "CP is the strategic playbook, FMF is the emotional operating system" — still true
 - All framework-to-framework mappings (Movement = Category POV etc.) — unchanged
 
@@ -114,9 +278,122 @@ The four channels map to the aliveness quiz — a user who scores low on Connect
 
 ## v2 Update (July 2026)
 
-The April 2026 analysis below remains accurate for the framework-to-framework mappings. The following has evolved since then:
+> **v3 reconciliation (September 2026):**
+>
+> v2 was written when Sessions were the primary product and the app was "just the ledger." Several things have shifted:
+>
+> **What v3 supersedes:**
+> - "Three products, three categories" → now **one category (School of Experience), three phases, three delivery mechanisms** (app = primary product, sessions = premium Phase 2 for removing trauma blocks, creator portal = Phase 3 tool)
+> - "App is the progress ledger, not the product" → now **app IS the product** — a guide + report for real-life experience. The Strava analogy still holds: real life is the experience, the app captures and guides it. Sessions are the premium Phase 2 offering via paid seasons, focused on removing deeper trauma blocks with facilitated healing.
+> - v2 premise ("you're broken and need fixing") → still valid but scoped to **Phase 2 healing flows specifically.** The brand-level premise is now v3's: "more knowledge leads to a better career."
+> - v2 one-sentence strategy → still powerful but needs rewording for Seeker vs Stuck audiences. **⚠️ Flagged for Hopkins skill review alongside v3 strategy.**
+> - v2 different future ("I do Vibe Rise like I go to the gym") → now scoped to the **Phase 2 sessions experience.** Brand-level different future is v3's: "Get paid to do what you love, from wherever you want." **⚠️ Flagged for Hopkins review — may be too generic.**
+>
+> **What still holds from v2:**
+> - Session format (connection circle → healing → courage challenge → identity close) — unchanged
+> - Strava analogy for how app + sessions relate — still valid, sessions just aren't the primary product anymore
+> - 3 Movement Questions for creators — still the core discovery tool
+> - Creator Portal pipeline (Remarkable → Reach → Growth → Scale Score) — still the structure
+> - Phase 3 Theory (Rule Break Tree, meta-patterns, modality map) — unchanged
+>
+> **Two old category enemies, different scopes:**
+> - **Brand level / lead magnets:** School of Theory (university, MBA, courses, career coaches, personality tests)
+> - **Phase 2 healing flows:** Therapy, wellness retreats, meditation apps, self-help books ("you're broken and need fixing")
+> - Both are valid. The brand-level enemy gets people in the door. The Phase 2 enemy is what the healing flows address once they're inside.
 
-### The Category
+### v3: The Category (September 2026)
+
+**Category name:** School of Experience
+
+**One-sentence strategy:** "For careers you don't find in any course catalogue. Vibe Rise expands your comfort zone until the life you want fits inside it."
+
+**The premise we reject:** "More knowledge leads to a better career." University sold you this. So did the MBA, the bootcamp, the online course. The School of Theory. But you don't get hired because of what you know. You get hired because you're known. For careers that don't have a map, knowledge isn't the bottleneck. Your comfort zone is.
+
+**The different future:** You won't find your flow in a course catalogue. You'll find it by mapping what makes you alive, then having the courage to build a life around it.
+
+**DAM statement:** "You think you need another course. But there's no course for the career you want — it doesn't exist in any catalogue. The bottleneck isn't what you know. It's what your comfort zone will let you do. Expand the comfort zone, expand the experience, become undeniable."
+
+### v3: One Category, Three Phases, Three Delivery Mechanisms
+
+```
+SCHOOL OF EXPERIENCE — One category, three phases
+
+PHASE 1: DISCOVERY — "What is my path?"
+  Delivery: App (free lead magnets)
+  What it does: Map ~90 experiences to your nervous system, see your dome shape
+  DAMs from: personality tests, career quizzes (School of Theory)
+  Entry points: /try/experience-game, /try/aliveness, /try/ambition-radar
+
+PHASE 2: EXPANSION — "How do I walk this path?"
+  Delivery: App (primary) + Sessions (premium, paid seasons)
+  What it does: Courage challenges expand comfort zone, healing flows remove blocks
+  DAMs from: therapy, wellness retreats, meditation apps ("you're broken")
+  App: guide + report for real-life experience (like Strava for running)
+  Sessions: premium Phase 2 for removing deeper trauma blocks with facilitated healing
+
+PHASE 3: BUILD — "How do I get paid?"
+  Delivery: App (Direction Bridge) + Creator Portal (Scale)
+  What it does: Surface career direction from action data, money models, income tracking
+  DAMs from: HubSpot, coaching platforms, generic CRMs
+  Creator Portal: Remarkable Results → Reach → Growth → Scale Score pipeline
+  Revenue: $499 + $99/mo
+```
+
+**How they relate:**
+- **App** = the product. Guide + report for real-life experience. All three phases.
+- **Sessions** = premium Phase 2. Weekly, 90-120 min, 15-30 people. Connection circle → Healing experience → Courage challenge → Identity close. Facilitated trauma block removal that the app alone can't do.
+- **Creator Portal** = Phase 3 tool. For people who want to run their own sessions/experiences. Scale Score certifies readiness: 12+/15 = "You're ready to host."
+
+**Superconsumers:** Repeat session attendees who become hosts (3% chain). They graduate from consumer (Phase 2) to creator (Phase 3).
+
+### v3: The 3 Movement Questions
+
+**Q1: "How does the world currently solve this problem?"**
+> Courses. Degrees. Bootcamps. Career coaches. Personality tests. All assume the problem is that you don't know enough. The School of Theory: learn more, earn more, live better.
+
+**Q2: "What's wrong with that?"**
+> There's no course for the career you want. It doesn't exist in any catalogue. And the real block isn't knowledge — it's fear of judgement. Fear of what people will think when you leave the safe path. Fear of failing publicly. Fear of being seen trying something that doesn't have a name yet. So you take another course instead, because learning FEELS like progress without the risk of being judged. But it's avoidance. The comfort zone stays the same size. Your experiences stay small. Your brand stays invisible. And you compete with everyone who has the same degree.
+
+**Q3: "How do you solve it?"**
+> Gamify it. The app shows you your comfort zone as a shape and your ambitions as a bigger shape. The gap between them is the game. You get an essence archetype, paths built from what you love, and a protective voice you're learning to override. Every courage challenge grows a dimension of your comfort zone. Every dimension has a score. You watch the gap close. Nike Run Club tracks your kilometres. We track your comfort zone. Same game — map where you are, see where you're going, do the work, watch the shape change.
+
+**DAM Statement (v3):**
+> "You think you need another course. But there's no course for the career you want. What you actually need is to expand your comfort zone until the life you want fits inside it. That's Find My Flow."
+
+### Blow Up Brand Pipeline (Creator Portal — unchanged)
+
+v1 called this "Blow Up Brand." v2 is a sequential 4-flow pipeline:
+1. **Remarkable Results** (`/create/remarkable`) — find your rule break (was "Blow Up Brand")
+2. **Remarkable Reach** (`/create/narrative-builder`) — how your story spreads (was "Narrative Builder," now includes Vehicle Discovery with 3 types)
+3. **Remarkable Growth** (`/create/access-architecture`) — remove barriers (was "Access Architecture")
+4. **Scale Score** (`/scale-diagnostic`) — 3-pillar diagnostic: RETURN, BREAK, TRIBAL (was "Scale Diagnostic" with 4 AQAL questions, now /15 not /100)
+
+Each flow locks until the previous is completed.
+
+### Scale Score (unchanged)
+
+v1: 4 questions (Body, Culture, Identity, Access), scored /100.
+v2: 3 pillars (RETURN, BREAK, TRIBAL), 6 questions + branch selection, scored /15. Phase classification: 12+ Phase 3, 9-11 Strong Phase 3, 6-8 Phase 2.5, <6 Phase 2. Public lead magnet at `/try/facilitator-score`.
+
+### Phase 3 Theory (unchanged)
+
+Not in v1. The entire Rule Break Tree thesis, Phase 2→3 transformation theory, and supporting frameworks were developed Jun-Jul 2026. Key additions:
+
+- **Rule Break Ingredients Framework** — Vehicle break (Type A: new medium, Type B: new action on existing medium) vs Results break. A results break gives you the vehicle break for free because novel results = novel content. Remarkability has a half-life.
+- **5 Meta-Patterns** — Merge pattern (blow-ups at branch intersections), Pendulum overshoot (Phase 3 swings past baseline = remarkability), Phase 2 decline signal (timing), Phase 2.5 trap (digital caps transformation), Bimodal blow-up (category creators fast, evolvers slow).
+- **Phase 3 Modality Map** — 132 modality cells across 10 branches with Phase 2 companies, Phase 3 companies, gaps, and merge opportunities.
+- **Capacity Spectrum** — For each modality: ancestral baseline → deviation → L1-L5 training progression → overshoot. Identity consistently forms at L3 (communal + committed + visible).
+- **The L3 Rule** — Design your flagship experience at L3 or above. Below L3, people do it but don't identify with it.
+
+All saved to Obsidian vault at `Frameworks/` and `Insights/`. Key notes: Phase 3 Viability Diagnostic, Rule Break Ingredients Framework, Phase 3 Modality Map, Capacity Spectrum Per Branch, Five Meta-Patterns From The Tree, Format Change Is The Rule Break, Phase 2 Market Size Is Not a Factor.
+
+---
+
+*v2 original sections preserved below for historical context.*
+
+---
+
+### The Category (v2 — July 2026)
 
 v1 framed the category as "Playful Healing" for experience creators. v2 defines **Vibe Rise as its own category** (brand = category, like CrossFit):
 
@@ -126,11 +403,11 @@ v1 framed the category as "Playful Healing" for experience creators. v2 defines 
 
 **The different future:** A world where "I do Vibe Rise" is as normal as "I go to the gym." Where expanding what feels safe is a weekly practice, not a crisis response.
 
-**Session format:** Weekly, 90-120 min, 15-30 people. Structure: Connection circle (wins/learnings/surprises) → Healing experience (host or special guest) → Wahoo experience (community member facilitates) → Identity close ("I'm someone who ___"). See `docs/vibe-rise-sessions.md` for full format, pricing, variants, and scaling plan.
+**Session format:** Weekly, 90-120 min, 15-30 people. Structure: Connection circle (wins/learnings/surprises) → Healing experience (host or special guest) → Courage challenge (community member facilitates) → Identity close ("I'm someone who ___"). See `docs/vibe-rise-sessions.md` for full format, pricing, variants, and scaling plan.
 
 **The app is the progress ledger, not the product.** Like Strava for runners: the app tracks practice between sessions, makes progress visible to the community, but the experience is physical and communal. Strava data: athletes in a club are 2x more likely to train weekly. Digital as bridge, not replacement.
 
-### Three Products, Three Categories
+### Three Products, Three Categories (v2 — July 2026)
 
 The ecosystem has three distinct layers, each its own category:
 
@@ -167,33 +444,6 @@ Each layer has its own Category Pirates analysis:
 
 The Scale Score in the Creator Portal becomes the tool that certifies new Vibe Rise hosts: "Your experience scores 12+/15 (Phase 3). You're ready to run sessions."
 
-### Blow Up Brand Pipeline (renamed)
-
-v1 called this "Blow Up Brand." v2 is a sequential 4-flow pipeline:
-1. **Remarkable Results** (`/create/remarkable`) — find your rule break (was "Blow Up Brand")
-2. **Remarkable Reach** (`/create/narrative-builder`) — how your story spreads (was "Narrative Builder," now includes Vehicle Discovery with 3 types)
-3. **Remarkable Growth** (`/create/access-architecture`) — remove barriers (was "Access Architecture")
-4. **Scale Score** (`/scale-diagnostic`) — 3-pillar diagnostic: RETURN, BREAK, TRIBAL (was "Scale Diagnostic" with 4 AQAL questions, now /15 not /100)
-
-Each flow locks until the previous is completed.
-
-### Scale Score (replaces Scale Diagnostic)
-
-v1: 4 questions (Body, Culture, Identity, Access), scored /100.
-v2: 3 pillars (RETURN, BREAK, TRIBAL), 6 questions + branch selection, scored /15. Phase classification: 12+ Phase 3, 9-11 Strong Phase 3, 6-8 Phase 2.5, <6 Phase 2. Public lead magnet at `/try/facilitator-score`.
-
-### Phase 3 Theory (new IP layer)
-
-Not in v1. The entire Rule Break Tree thesis, Phase 2→3 transformation theory, and supporting frameworks were developed Jun-Jul 2026. Key additions:
-
-- **Rule Break Ingredients Framework** — Vehicle break (Type A: new medium, Type B: new action on existing medium) vs Results break. A results break gives you the vehicle break for free because novel results = novel content. Remarkability has a half-life.
-- **5 Meta-Patterns** — Merge pattern (blow-ups at branch intersections), Pendulum overshoot (Phase 3 swings past baseline = remarkability), Phase 2 decline signal (timing), Phase 2.5 trap (digital caps transformation), Bimodal blow-up (category creators fast, evolvers slow).
-- **Phase 3 Modality Map** — 132 modality cells across 10 branches with Phase 2 companies, Phase 3 companies, gaps, and merge opportunities.
-- **Capacity Spectrum** — For each modality: ancestral baseline → deviation → L1-L5 training progression → overshoot. Identity consistently forms at L3 (communal + committed + visible).
-- **The L3 Rule** — Design your flagship experience at L3 or above. Below L3, people do it but don't identify with it.
-
-All saved to Obsidian vault at `Frameworks/` and `Insights/`. Key notes: Phase 3 Viability Diagnostic, Rule Break Ingredients Framework, Phase 3 Modality Map, Capacity Spectrum Per Branch, Five Meta-Patterns From The Tree, Format Change Is The Rule Break, Phase 2 Market Size Is Not a Factor.
-
 ### What still holds from v1
 
 - Movement = Category POV (92%) — identical mechanism
@@ -204,7 +454,7 @@ All saved to Obsidian vault at `Frameworks/` and `Insights/`. Key notes: Phase 3
 - The full Strike Design Flow (10 steps) — architecturally sound, not yet built in app
 - "CP is the strategic playbook, FMF is the emotional operating system" — still true
 
-### The 3 Movement Questions (v2 answers)
+### The 3 Movement Questions (v2 answers — Phase 2 healing scope)
 
 **Q1: "How does the world currently solve this problem?"**
 > Therapy. Meditation apps. Self-help books. Wellness retreats. All assume the problem is that you're broken and need fixing, or that you don't know what you want.
