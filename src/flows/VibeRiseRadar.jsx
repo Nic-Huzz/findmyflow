@@ -189,7 +189,7 @@ function getVerdict(scores) {
   }
   if (pct >= 60) return {
     headline: 'Some channels are open. Some are closed.',
-    summary: `${high.length > 0 ? high.map(d => d.name).join(' and ') + ' are alive. ' : ''}But ${low.length > 0 ? low.map(d => d.name).join(' and ') : 'some dimensions'} need attention. The gap between where you are and where you could be is your comfort zone.`,
+    summary: `${high.length > 0 ? high.map(d => d.name).join(' and ') + ' are alive. ' : ''}${low.length > 0 ? low.map(d => d.name).join(' and ') + ' need attention. ' : 'You are in the middle on most dimensions. '}The gap between where you are and where you could be is your comfort zone.`,
     state: 'fun',
   }
   if (pct >= 40) return {
