@@ -204,3 +204,44 @@ Chosen 3 times across 3 different paths. Not assigned — selected repeatedly. T
 | 9. Superconsumers | ❌ Need users | 0% | Need time + users |
 
 **Verdict:** The app can auto-generate a strong 70-80% draft for requirements 1-7. Requirements 8-9 need real users. The paid 1:1 adds value on requirements 1, 3, 5 — where human judgement turns a data pattern into a crisp category definition.
+
+---
+
+## Passive Category Data Collection (Post-Courage Reflections)
+
+Instead of asking category design questions at Phase 2→3, collect the data gradually after each courage challenge. The user thinks they're journaling. The app is building their category.
+
+### One Rotating Question After Each Courage Challenge
+
+Cycles through 6 questions. After ~60 challenges (~10 per question), the app has enough data to auto-generate the category definition.
+
+| # | Question (what user sees) | What it feeds | CP Requirement |
+|---|---|---|---|
+| 1 | "What would the old you have done instead?" | Names what the category REPLACES | #2 — Name what it replaces |
+| 2 | "What did you learn about yourself?" | Names the PATTERN forming | #1 — Name it |
+| 3 | "What belief did you challenge today?" | Builds the UNCOMFORTABLE POV | #4 — POV that makes incumbents uncomfortable |
+| 4 | "What are you building toward?" | Paints the DIFFERENT FUTURE | #5 — Different future |
+| 5 | "How would you describe what you just did to a friend?" | Creates LANGUAGE for sharing | #8 — Language for friends |
+| 6 | "Who does this challenge serve, if anyone?" | Identifies who they're becoming FOR | #9 — Superconsumers (who benefits from their path) |
+
+### What the App Accumulates
+
+After 60 challenges:
+- 10 descriptions of "the old way" → patterns → names the old category
+- 10 self-insights → patterns → names what they're becoming
+- 10 challenged beliefs → patterns → their POV crystallizes
+- 10 "building toward" answers → patterns → their different future
+- 10 friend descriptions → the BEST one is their category language
+- 10 "who does this serve" answers → patterns → their audience/superconsumers emerge
+
+### The Phase 2→3 Reveal
+
+At stage 8+, the app surfaces:
+
+> "Over your last [N] challenges, here's what we noticed. You keep describing the old way as [pattern]. You keep saying you're building toward [pattern]. The belief you challenge most is [pattern]. When you describe this to friends, you say [most common language]. The people this serves are [pattern]. Here's your category draft."
+
+No extra survey. No "define your category" flow. It surfaces from data already given.
+
+### Content Double-Use
+
+Every answer is also a potential shareable. "What belief did you challenge today?" → user writes "That I need permission to dance in public" → that's a post. The reflection IS the content.
