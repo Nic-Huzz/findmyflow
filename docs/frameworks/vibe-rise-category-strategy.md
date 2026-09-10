@@ -20,6 +20,8 @@
 
 Nobody owns courage as a product category. Everyone talks about it. Nobody measures it. Nobody gamifies it. Nobody shows you your courage as a shape that grows. We're the first.
 
+**Pathless Path differentiation:** Paul Millerd described the problem beautifully — "The Pathless Path" names the experience of leaving traditional careers. But it's School of Theory ABOUT the School of Experience. You read about leaving the traditional path. Vibe Rise is the game you play to actually walk it. He described the destination. We built the vehicle. "The Pathless Path told you the map is wrong. Find My Flow gives you the compass."
+
 **Old category (School of Theory):** University, MBA, bootcamps, online courses, career coaches, personality tests, self-help books. All assume knowledge is the bottleneck.
 
 **New category (Courage: Gamified):** Vibe Rise. Your comfort zone decides your experience. Your experience decides whether you're known. Being known decides your career. Courage is how you expand the comfort zone.
