@@ -8,11 +8,21 @@
 
 ## 1. The Category
 
-**Category name:** School of Experience
+### Category Definition
+
+> **Courage: Gamified.** Track your comfort zone, do courage challenges, watch your life transform. Nike Run Club for courage.
+
+### The Category Structure
+
+- **Courage** = the category we own (what you actually DO)
+- **School of Experience** = the philosophy (WHY it works — experience beats theory)
+- **Find My Flow / Vibe Rise** = the product (the game that delivers it)
+
+Nobody owns courage as a product category. Everyone talks about it. Nobody measures it. Nobody gamifies it. Nobody shows you your courage as a shape that grows. We're the first.
 
 **Old category (School of Theory):** University, MBA, bootcamps, online courses, career coaches, personality tests, self-help books. All assume knowledge is the bottleneck.
 
-**New category (School of Experience):** Vibe Rise. Your comfort zone decides your experience. Your experience decides whether you're known. Being known decides your career.
+**New category (Courage: Gamified):** Vibe Rise. Your comfort zone decides your experience. Your experience decides whether you're known. Being known decides your career. Courage is how you expand the comfort zone.
 
 **The qualifier:** For careers you don't find in any course catalogue — because you create them. Some careers have a map — university, law school, medical school draw the river for you. Find My Flow is for the careers that don't have a map. The ones you create.
 
