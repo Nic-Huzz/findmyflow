@@ -416,30 +416,204 @@ The tour already happened. 100 people dancing in front of the Eiffel Tower with 
 | **Air Game** | Huzz = the person who quit the safe path and built this. The person you think of when you think "alternative career." |
 | **Ground Game** | "Want to see your comfort zone?" → Experience Game or Ambition Radar → app signup → event waitlist for next tour/event |
 
+### The Confirmed Strike Plan
+
+**Format:** Concentrated content burst (2-4 weeks) using Monument Rave footage. Multiple pieces with different hooks until one catches. Not one flagship piece — multiple swings. Social media virality is random. You fire rounds until one connects.
+
+**Platform:** Instagram (primary). Reddit is a future Super-Geo but no active account yet.
+
+**Audience:** Both The Stuck and The Seeker via different hooks on the same platform.
+
+**CTA:** ManyChat. "DM me [KEYWORD] to see your comfort zone" → auto-sends Ambition Radar link. Secondary: direct app signup for people already sold.
+
+**Why Ambition Radar:** The Stuck sees the Monument Rave footage and thinks "I want that life." The radar shows them the gap between where they are and that life. The gap IS the comfort zone. Perfect bridge from inspiration to action.
+
+### The Content Rounds (Different Hooks to Test)
+
+| # | Hook | Opening Line | Targets | CTA |
+|---|---|---|---|---|
+| 1 | The quit story | "I quit my $150K job because I was building a life I needed to escape from" | The Stuck | DM [KEYWORD] |
+| 2 | The visual spectacle | Best Eiffel Tower footage, minimal caption | Broad / viral | DM [KEYWORD] |
+| 3 | The comfort zone proof | "3 years ago this would have terrified me. Last week I did it in front of the Eiffel Tower" | The Seeker | DM [KEYWORD] |
+| 4 | The category naming | "There's no course for this career. Because I created it." | Both | DM [KEYWORD] |
+| 5 | The belief line | "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" over footage | Both | DM [KEYWORD] |
+| 6 | The joy flip | "Stop building a life you need to escape from" | The Stuck | DM [KEYWORD] |
+
+**The principle:** Footage is the hook (stops the scroll). Story is the reason to talk (gets the share). ManyChat is the cash register (captures the lead). Every piece has all three.
+
+### 4 Mechanics — Confirmed
+
+| Mechanic | Answer |
+|---|---|
+| **1. Find Supers** | The Stuck + The Seeker on Instagram. Different hooks, same platform. |
+| **2. Exciting reason to talk** | Footage hooks them (100 people Eiffel Tower silent disco). Story converts them ("I quit VC, no course taught me this, my comfort zone did"). Without the story it's entertainment. With the story it's a Lightning Strike. |
+| **3. Moment market can't ignore** | Concentrated 2-4 week content burst. Multiple pieces, different hooks, until one catches. Not a slow drip. |
+| **4. Cash register sings** | ManyChat DM trigger → Ambition Radar lead magnet → email captured → app signup funnel. |
+
+### 3 Pillars — Confirmed
+
+| Pillar | How It's Hit |
+|---|---|
+| **Information Game** | The story educates without naming the framework. "No course taught me this. My comfort zone did." People get the School of Experience concept without being told the label. |
+| **Air Game** | Huzz is on camera leading 100 people at the Eiffel Tower. The leader is visible. People associate the life with the person. |
+| **Ground Game** | Every piece ends with ManyChat CTA. DM → Ambition Radar → email → app. No dead ends. |
+
 ### What Needs to Happen
 
-1. Frame the Monument Rave content with the School of Experience narrative (not just "cool event" — the WHY)
-2. Create the retrospective courage content (3 years of challenges → radar growth → current life)
-3. Attach CTAs to lead magnets on every piece
-4. Publish consistently — the Strike is one concentrated push, not a trickle
+1. Set up ManyChat keyword automation → Ambition Radar link
+2. Update Instagram bio to reference comfort zone / Vibe Rise
+3. Edit Monument Rave footage into multiple pieces (6+ rounds with different hooks)
+4. Write captions/voiceovers using the hook table above
+5. Publish concentrated burst over 2-4 weeks
+6. Track: which hook gets most DMs? Which converts to Ambition Radar completion? Which converts to app signup?
+7. Double down on the hook that works
 
-[TODO: Specific content plan — which pieces, which platforms, which order, which CTAs. Could use content-council or content-strategy skill to design the rollout.]
+[TODO: Specific content plan — edit list, posting schedule, caption drafts. Could use content-council skill to design the rollout.]
 
 ---
 
 ## 11. Content Pyramid
 
-> **Source:** CP content flywheel structure
+> **Source:** CP content flywheel structure — three layers, each feeds the next. Base → Middle → Top → attracts Supers → more Base → repeat.
 
-[TODO — answer together. Three layers: Base (raw data from users), Middle (POV content), Top (Lightning Strikes). Key question: what content educates the market about the School of Experience?]
+### The Split (3x/week + team scaling)
+
+| Layer | What | Frequency | Who |
+|---|---|---|---|
+| **Top (spectacle)** | Monument Rave footage, event highlights, "can't believe this is real" moments | 1x/week | Video editing team cuts from existing footage |
+| **Middle (educate)** | School of Experience POV — the missing layer. Turns "cool lifestyle guy" into "the person who figured out something I need to learn" | 1-2x/week | Huzz writes/voices, team produces |
+| **Base (personal)** | You + girlfriend, behind-the-scenes, real life, the human side | 1x/week | Huzz, low production, authentic |
+
+**Why this split:** Top gets discovered (algorithm loves spectacle). Middle converts followers to believers. Base retains (people stay for the human). Currently have Top and Base but ZERO Middle — that's why followers watch but don't convert. Middle is the bridge.
+
+### The Middle Layer Content (Ready to Create)
+
+These pieces come directly from the category strategy work in this doc. Each one teaches the School of Experience concept without naming it.
+
+| # | Piece | Format | Hook |
+|---|---|---|---|
+| 1 | The quit story | Talking head or voiceover + old photos | "I quit my $150K job because I was building a life I needed to escape from" |
+| 2 | The comfort zone belief | Text on screen over footage | "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" |
+| 3 | Cook vs chef | Story time, personal | "I stopped following recipes and started creating my own" |
+| 4 | The joy flip | Carousel or Reel | "For one, joy is tied to money. For another, money is a by-product of joy" |
+| 5 | No course for this | Voiceover + Monument Rave footage | "There's no course for this career. Because I created it." |
+| 6 | Retrospective courage reflections | Radar screenshot + story | "This challenge 2 years ago grew my [dimension]. Here's how it led to [current thing]" |
+| 7 | The escape line | Short, punchy, text-first | "Stop building a life you need to escape from" |
+| 8 | The School of Theory | Educational, comparative | "University sold you a playbook: learn more, earn more, live better. Here's what actually happened." |
+| 9 | Fear of judgement | Personal, vulnerable | "The real reason I didn't quit sooner wasn't money. It was what people would think." |
+| 10 | The radar before/after | 3-story tap-through (specced) | "Where my comfort zone started → 3 years later → where I'm still growing" |
+
+### Team Setup
+
+- **Video editing team** (hiring): cuts Top layer from event footage, produces Middle layer from Huzz's voiceovers/scripts
+- **Huzz**: writes Middle layer scripts, voices them, creates Base layer raw/authentic content
+- **Base layer stays raw** — don't overpolish the personal stuff. The girlfriend collabs perform best because they're real.
+
+### The Flywheel
+
+```
+Base (your life, your data)
+    ↓
+Middle (your framing — "here's what I learned")
+    ↓
+Top (Monument Rave, events — spectacle that stops the scroll)
+    ↓
+Attracts Supers → they DM keyword → Ambition Radar → app → their data
+    ↓
+Their data becomes YOUR Base layer content ("user went from X to Y")
+    ↓
+Repeat
+```
+
+### Current State
+
+- **Top layer:** Monument Rave content exists, needs editing into multiple pieces
+- **Middle layer:** Zero published. This doc contains all the raw material. Ready to script.
+- **Base layer:** Exists (personal + girlfriend content). Keep doing it.
+- **Best performing content historically:** Collabs with girlfriend about personal story (Base layer)
+- **Instagram:** ~3K followers, built from real-life encounters. People meet Huzz → visit the page.
 
 ---
 
 ## 12. Superconsumers
 
-> **Source:** CP Superconsumer framework — top 10%, Super of 9, Super-Geos
+> **Source:** CP Superconsumer framework — top 10%, Super of 9, Super-Geos. Every Super of one category is also a Super of 9 others.
 
-[TODO — answer together. Who are the Superconsumers of the School of Experience? Where do they cluster (Super-Geos)? What 9 adjacent categories are they Supers of?]
+### Who Are Our Superconsumers?
+
+**For the app (School of Experience):**
+
+| Type | Description |
+|---|---|
+| **Career sabbatical** | Took time off the traditional path, searching for what's next |
+| **Uni dropouts / gap year never-enders** | Left or skipped the School of Theory, need an alternative |
+| **Mid-life crisis** | Successful by traditional metrics, empty inside. "Is this it?" |
+| **Digital nomads** | Already living the School of Experience but don't have a framework or measurement for it |
+| **Travel lovers** | Seeking experiences, not possessions. Already values-aligned. |
+| **Career changers** | Leaving corporate, entering the unknown. The Stuck archetype. |
+| **Side-project dreamers** | Have the idea, haven't made the leap. Fear of judgement is the block. |
+| **Burnout survivors** | The Crack happened. Looking for what comes after. |
+
+**For the dance events (distinct but overlapping):**
+
+| Type | Description |
+|---|---|
+| **Recovery addicts** | Feeling this level of high naturally for the first time. The experience replaces the substance. |
+| **Misfits** | LGBTQ+ community, ADHD brains — people who've had their expression suppressed. Finding space to be themselves. |
+| **Wellness practitioners / spiritual dancers** | Already in the healing world, love to dance. The experience IS their modality. |
+
+### Super of 9 — Adjacent Categories
+
+[TODO — need to validate with real attendee data. Hypotheses below.]
+
+**App Supers are likely also Supers of:**
+
+| # | Adjacent Category | Why |
+|---|---|---|
+| 1 | Travel / backpacking | Experience-seekers, not possession-seekers |
+| 2 | Yoga / breathwork / cold plunge | Body-based growth, not theory-based |
+| 3 | Podcasts (Huberman, Rich Roll, Jay Shetty) | Pre-educated on nervous system science |
+| 4 | Creator economy tools (Notion, Figma, Canva) | Building careers that don't have maps |
+| 5 | Co-working / digital nomad platforms (Nomad List) | Already living outside traditional structures |
+| 6 | Self-help books (but frustrated with them) | Tried the School of Theory, it didn't work |
+| 7 | Fitness / CrossFit | Already understand progressive training — same logic, different domain |
+| 8 | Meditation / mindfulness apps (but churned) | Tried Headspace/Calm, felt passive, wanted action |
+| 9 | Plant medicine / psychedelic experiences | Threshold-crossing experiences, comfort zone expansion through altered states |
+
+### Super-Geos (Where They Cluster)
+
+**Physical:**
+- Bali — co-working spaces, wellness communities, digital nomad hubs
+- Daybreaker attendees, yoga festival alumni
+- CrossFit boxes (the social ones, not competitive)
+- Entrepreneurship meetups (people who value growth)
+
+**Digital:**
+- r/findapath, r/careerguidance, r/careerchange, r/decidingtobebetter
+- r/breathwork, r/coldshowers, r/wimhof, r/getdisciplined
+- Digital nomad communities (Nomad List, remote work Slack groups)
+- Burnout/career-change forums
+
+**Instagram:**
+- Accounts they follow: travel creators, alternative lifestyle, breathwork facilitators, dance event pages
+- Hashtags: #digitalnomad, #quitmy9to5, #findyourflow, #ikigai, #alternativecareer
+
+### Vibe Rise Radar (Event-Specific — PARKED)
+
+> **⚠️ Revisit later.** Not for this launch phase but a strong future idea.
+
+A live event radar measuring 6 dimensions of the experience (distinct from the 8 comfort zone dimensions in the app):
+
+| Dimension | What It Measures |
+|---|---|
+| **Permission** | How free do you feel to express? |
+| **Safety** | How safe do you feel to let go? |
+| **Intensity** | How fully are you expressing? |
+| **Rarity** | How unique/novel is this experience? |
+| **Connection** | How connected do you feel to the group? |
+| **Presence** | How fully are you HERE? |
+
+Connects to the Find My Flow dome — event experience feeds into comfort zone expansion data. Park for now, revisit when events and app are integrated.
 
 ---
 
