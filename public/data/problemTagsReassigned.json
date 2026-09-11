@@ -51,7 +51,7 @@
       "problem": "the isolation of disability when no one adapts to reach you",
       "confidence": "high",
       "evidence": "Switched from formal curriculum to spelling words into Helen's palm whenever Helen reached for something, building 575 words in six months through patience.",
-      "category": "kids_deserved_better"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Janusz Korczak",
@@ -147,7 +147,7 @@
       "problem": "poor people dying of treatable diseases because the system decided they weren't worth treating",
       "confidence": "high",
       "evidence": "Argued that the rural poor deserved the same treatment standards as patients at Harvard hospitals. Walked eight hours to reach one patient as a clinical standard.",
-      "category": "pain_not_believed"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Paul Farmer",
@@ -155,7 +155,7 @@
       "problem": "global health policies sacrificing individuals for cost efficiency",
       "confidence": "high",
       "evidence": "Fought the WHO's protocol that assumed first-line TB drugs would work, insisting second-line drugs had to be given even at higher cost to patients with drug-resistant TB.",
-      "category": "pain_not_believed"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Virginia Apgar",
@@ -195,7 +195,7 @@
       "problem": "children being murdered for the crime of being born Jewish",
       "confidence": "high",
       "evidence": "Helped smuggle Jewish children out of the Warsaw Ghetto and buried lists of their names in glass jars so families could be reunited after the war.",
-      "category": "kids_deserved_better"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Irena Sendler",
@@ -203,7 +203,7 @@
       "problem": "identities being erased along with lives",
       "confidence": "high",
       "evidence": "Kept paper lists recording each child's original name, new name, and current hiding place, preserving identity through the worst attempt to destroy it.",
-      "category": "voice_taken"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Wangari Maathai",
@@ -219,7 +219,7 @@
       "problem": "authoritarian suppression of civil society",
       "confidence": "high",
       "evidence": "Was beaten unconscious at Uhuru Park, attacked at Karura Forest, and kept returning each time the Moi government tried to silence her.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "John Wooden",
@@ -227,7 +227,7 @@
       "problem": "people chasing winning instead of building character",
       "confidence": "high",
       "evidence": "Built the Pyramid of Success around character traits, not basketball skills, and told players their career should read as a life first, a game second.",
-      "category": "forgot_what_for"
+      "category": "kids_deserved_better"
     },
     {
       "person": "John Wooden",
@@ -235,7 +235,7 @@
       "problem": "excellence being undermined by ignoring small details",
       "confidence": "high",
       "evidence": "Demonstrated how to put on socks on the first day of practice each season, teaching that nothing at the elite level was beneath attention.",
-      "category": "forgot_what_for"
+      "category": "feeling_stupid"
     },
     {
       "person": "Carl Sagan",
@@ -251,7 +251,7 @@
       "problem": "critical thinking being absent from public life",
       "confidence": "high",
       "evidence": "Laid out the Baloney Detection Kit, nine heuristics for critical thinking, and taught a Cornell senior seminar on the same material.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "David Attenborough",
@@ -275,7 +275,7 @@
       "problem": "absolute certainty turning humans into monsters",
       "confidence": "high",
       "evidence": "Walked into the ash pond at Auschwitz and said: 'When people believe that they have absolute knowledge, with no test in reality, this is how they behave.'",
-      "category": "stopped_wondering"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jacob Bronowski",
@@ -283,7 +283,7 @@
       "problem": "specialisation letting scientists abandon moral responsibility for their work",
       "confidence": "high",
       "evidence": "Refused to specialise, arguing that specialisation was the mechanism by which scientists surrendered their moral claims over their own work.",
-      "category": "stopped_wondering"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Oliver Sacks",
@@ -323,7 +323,7 @@
       "problem": "positive liberty becoming the door through which tyrannies enter",
       "confidence": "high",
       "evidence": "Argued that positive liberty, well-intentioned, had historically been the gateway for tyranny, drawing the distinction that structured most writing on freedom.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Isaiah Berlin",
@@ -331,7 +331,7 @@
       "problem": "intellectual rigidity from seeing the world through only one organizing idea",
       "confidence": "medium",
       "evidence": "Divided thinkers into hedgehogs and foxes, claiming Tolstoy was a fox who wanted to be a hedgehog, valuing the many-perspectives approach.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Lynn Margulis",
@@ -339,7 +339,7 @@
       "problem": "scientific orthodoxy rejecting correct ideas because they came from the wrong person",
       "confidence": "high",
       "evidence": "Had her paper rejected by roughly fifteen journals before publication. Twelve years later the genetic evidence proved her right about endosymbiosis.",
-      "category": "stopped_wondering"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Lynn Margulis",
@@ -347,7 +347,7 @@
       "problem": "the gravitational pull of a famous male partner on a young woman scientist",
       "confidence": "high",
       "evidence": "Treated the Sagan years as a cautionary tale, saying she had to learn twice to hold her own ground, once in marriage and once in her field.",
-      "category": "voice_taken"
+      "category": "lonely_disconnected"
     },
     {
       "person": "E.O. Wilson",
@@ -371,7 +371,7 @@
       "problem": "people unable to recognize their own life story as meaningful",
       "confidence": "high",
       "evidence": "Proposed the monomyth, a universal hero's journey pattern underlying all cultures' myths, giving people a framework to understand their own path.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Joseph Campbell",
@@ -379,7 +379,7 @@
       "problem": "confusing bliss with pleasure instead of vocation",
       "confidence": "high",
       "evidence": "Sometimes wished he had said 'follow your blisters' instead of 'follow your bliss,' meaning the thing that was worth being hurt by.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Susan Sontag",
@@ -395,7 +395,7 @@
       "problem": "serious criticism being too afraid to engage with popular culture",
       "confidence": "high",
       "evidence": "Notes on Camp took a sensibility unnamed outside gay subcultures and gave it critical treatment, reframing what a serious critic was allowed to take seriously.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Susan Sontag",
@@ -403,7 +403,7 @@
       "problem": "watching suffering from a safe distance without being changed by it",
       "confidence": "high",
       "evidence": "Flew into besieged Sarajevo to direct a play, saying she had not gone to document the siege but to be useful inside it.",
-      "category": "forgot_what_for"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Claude Lévi-Strauss",
@@ -411,7 +411,7 @@
       "problem": "Western thought treating other cultures as primitive rather than structurally complex",
       "confidence": "high",
       "evidence": "Spent decades showing that myths from the Amazon through Central America to the Arctic followed transformation grids as rigorous as any Western system.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Claude Lévi-Strauss",
@@ -419,7 +419,7 @@
       "problem": "the human mind being assumed to work differently in different cultures",
       "confidence": "high",
       "evidence": "Spent decades mapping myth-complexes across continents, arguing that structural relations between elements were universal, not culturally contingent.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Svante Pääbo",
@@ -443,7 +443,7 @@
       "problem": "cities being destroyed by planners who never walked the streets they designed",
       "confidence": "high",
       "evidence": "Attacked the entire mid-century consensus of urban renewal from her apartment, naming phenomena like 'eyes on the street' and 'sidewalk ballet.'",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jane Jacobs",
@@ -451,7 +451,7 @@
       "problem": "powerful institutions bulldozing communities that have no voice",
       "confidence": "high",
       "evidence": "Led the fight that defeated Robert Moses's ten-lane expressway through Lower Manhattan, the first time Moses had ever lost a highway fight.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ella Baker",
@@ -459,7 +459,7 @@
       "problem": "movements dying when their charismatic leader is removed",
       "confidence": "high",
       "evidence": "Argued that a leader-centred organisation could be decapitated by assassination or scandal. Her most quoted line: 'Strong people don't need strong leaders.'",
-      "category": "life_not_yours"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Ella Baker",
@@ -467,7 +467,7 @@
       "problem": "local people being overlooked by visiting celebrity organisers",
       "confidence": "high",
       "evidence": "Built NAACP branches by listening for who was already trusted on the ground and building around that person rather than a visiting organiser.",
-      "category": "life_not_yours"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Dorothy Height",
@@ -475,7 +475,7 @@
       "problem": "Black women being erased from the movements they helped build",
       "confidence": "high",
       "evidence": "Was a core organiser of the 1963 March on Washington but was not invited to speak. No Black woman was. She objected in writing and kept objecting for decades.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Dorothy Height",
@@ -483,7 +483,7 @@
       "problem": "women doing the institutional work while men take the microphones",
       "confidence": "high",
       "evidence": "Ran the NCNW for 32 years providing infrastructure behind many initiatives credited to male-led organisations.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Bayard Rustin",
@@ -491,7 +491,7 @@
       "problem": "gay people being forced out of the movements they built",
       "confidence": "high",
       "evidence": "Was pushed out of the SCLC to protect King after Adam Clayton Powell threatened to float a false rumour of an affair. He kept organising in harder-to-see roles.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Bayard Rustin",
@@ -499,7 +499,7 @@
       "problem": "nonviolence being misunderstood as passivity rather than a strategic discipline",
       "confidence": "high",
       "evidence": "Argued King into removing the gun and sending guards away during the Montgomery boycott, reframing it as a nonviolent action rather than defensive.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Fannie Lou Hamer",
@@ -507,7 +507,7 @@
       "problem": "Black people being systematically prevented from voting",
       "confidence": "high",
       "evidence": "Was failed on the literacy test, fired for attempting to register, retook the test twice, then had to pay two years of poll tax before she could actually vote.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Fannie Lou Hamer",
@@ -515,7 +515,7 @@
       "problem": "poor Black women having their bodies violated by the state without consent",
       "confidence": "high",
       "evidence": "Coined 'Mississippi appendectomy' to describe forced sterilisation of poor Black women under cover of other procedures, after her own uninformed hysterectomy.",
-      "category": "pain_not_believed"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Fannie Lou Hamer",
@@ -523,7 +523,7 @@
       "problem": "voting rights being meaningless if people still cannot eat",
       "confidence": "high",
       "evidence": "Founded Freedom Farm Cooperative with a pig bank, concluding that voting rights alone weren't enough if Black families in Sunflower County still could not eat.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Grace Lee Boggs",
@@ -531,7 +531,7 @@
       "problem": "communities being abandoned by everyone who could leave",
       "confidence": "high",
       "evidence": "Refused to relocate from Detroit for 62 years, saying you could not organise a place you did not live in.",
-      "category": "left_behind"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Grace Lee Boggs",
@@ -539,7 +539,7 @@
       "problem": "young people in declining cities being treated as problems rather than repair crews",
       "confidence": "high",
       "evidence": "Founded Detroit Summer at 77, mobilising young people to plant gardens and rehabilitate buildings instead of treating them as a population to be managed.",
-      "category": "left_behind"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Saul Alinsky",
@@ -547,7 +547,7 @@
       "problem": "ordinary people having no power against institutions that control their lives",
       "confidence": "high",
       "evidence": "Built the modern template for community organising rooted in institutions people already belonged to, like parishes and unions, not abstract movements.",
-      "category": "life_not_yours"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Saul Alinsky",
@@ -555,7 +555,7 @@
       "problem": "communities being too fragmented to fight back against exploitation",
       "confidence": "high",
       "evidence": "Organised the Back of the Yards neighbourhood by bringing together Polish, Lithuanian, Slovak, Mexican and African American residents through their existing institutions.",
-      "category": "life_not_yours"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Václav Havel",
@@ -563,7 +563,7 @@
       "problem": "citizens being forced to perform lies they no longer believe",
       "confidence": "high",
       "evidence": "Described post-totalitarianism as a condition where citizens were forced to 'live within a lie,' using the example of a greengrocer displaying a sign from fear, not conviction.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Václav Havel",
@@ -571,7 +571,7 @@
       "problem": "individual creative expression being criminalized by the state",
       "confidence": "high",
       "evidence": "Co-wrote Charter 77 in direct response to the prosecution of the Plastic People of the Universe for their underground music.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Harriet Tubman",
@@ -579,7 +579,7 @@
       "problem": "people being owned as property",
       "confidence": "high",
       "evidence": "Escaped slavery and returned to the South roughly 13 times to guide approximately 70 enslaved people to freedom. There is no record of her ever losing a passenger.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Harriet Tubman",
@@ -587,7 +587,7 @@
       "problem": "the elderly having nowhere to be cared for with dignity",
       "confidence": "medium",
       "evidence": "Founded the Harriet Tubman Home for the Aged and eventually moved into it herself as a resident.",
-      "category": "left_behind"
+      "category": "pain_not_believed"
     },
     {
       "person": "Frederick Douglass",
@@ -595,7 +595,7 @@
       "problem": "an entire race being enslaved while the country celebrated freedom",
       "confidence": "high",
       "evidence": "Delivered 'What to the Slave is the Fourth of July?' identifying the holiday as a mockery from the standpoint of the enslaved.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Frederick Douglass",
@@ -603,7 +603,7 @@
       "problem": "Black people being assumed incapable of eloquence or intelligence",
       "confidence": "high",
       "evidence": "Wrote his Narrative partly because Northern audiences had started to disbelieve that a man who spoke so well could actually have been enslaved.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jane Addams",
@@ -611,7 +611,7 @@
       "problem": "poor immigrants having no access to the resources that could change their lives",
       "confidence": "high",
       "evidence": "Opened Hull House with activities from night school to art gallery to bathhouse, making a single door lead to any of it for 2,000 visitors a week.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Jane Addams",
@@ -619,7 +619,7 @@
       "problem": "charity from a distance not working because it never gets close enough",
       "confidence": "high",
       "evidence": "Argued that the volunteer had to move in to the neighbourhood she was trying to change, a principle she lived by for 46 years.",
-      "category": "locked_out"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Dorothy Day",
@@ -627,7 +627,7 @@
       "problem": "homeless people being asked to prove they deserve help",
       "confidence": "high",
       "evidence": "Houses of Hospitality offered food and shelter without intake forms, conditions or proselytising. Staff lived alongside the people they served.",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Dorothy Day",
@@ -635,7 +635,7 @@
       "problem": "poverty and war being treated as separate issues from faith",
       "confidence": "high",
       "evidence": "Combined radical pacifism, Catholic social teaching and direct hospitality for the homeless for nearly 50 years.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Studs Terkel",
@@ -643,7 +643,7 @@
       "problem": "ordinary people's stories being erased from their own country's history",
       "confidence": "high",
       "evidence": "Turned cab drivers, waitresses and steelworkers into the authors of America's history through oral histories like Working and Hard Times.",
-      "category": "left_behind"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Studs Terkel",
@@ -659,7 +659,7 @@
       "problem": "neglected tropical diseases killing people nobody powerful cared about",
       "confidence": "high",
       "evidence": "Personally followed the Guinea worm programme for decades, reducing cases from 3.5 million to 14 by visiting affected villages into his 90s.",
-      "category": "pain_not_believed"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jimmy Carter",
@@ -667,7 +667,7 @@
       "problem": "elections being stolen while the world looks away",
       "confidence": "high",
       "evidence": "Observed 115 elections in 40 countries, publishing frank reports including on elections inside the United States.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jimmy Carter",
@@ -675,7 +675,7 @@
       "problem": "the post-presidency being wasted on ceremony instead of service",
       "confidence": "medium",
       "evidence": "Founded the Carter Center and spent 44 years on disease eradication, election monitoring, and Habitat house-building.",
-      "category": "left_behind"
+      "category": "feeling_lost"
     },
     {
       "person": "Desmond Tutu",
@@ -683,7 +683,7 @@
       "problem": "an entire population being dehumanized by law based on skin colour",
       "confidence": "high",
       "evidence": "Spent decades confronting apartheid, from writing warnings to the Prime Minister to chairing the Truth and Reconciliation Commission.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Desmond Tutu",
@@ -691,7 +691,7 @@
       "problem": "countries torn apart by violence having no way to process the truth without more violence",
       "confidence": "high",
       "evidence": "Insisted TRC hearings include testimony from both sides, with amnesty conditional on full disclosure, creating a template exported to Rwanda and Colombia.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Nawal El Saadawi",
@@ -699,7 +699,7 @@
       "problem": "women's bodies being controlled and mutilated in the name of tradition",
       "confidence": "high",
       "evidence": "Her 1972 book Women and Sex confronted female circumcision and domestic violence using clinical, first-person prose from her rural medical practice.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Nawal El Saadawi",
@@ -707,7 +707,7 @@
       "problem": "women being punished for speaking about what is done to them",
       "confidence": "high",
       "evidence": "Lost three positions in one year for one book. Was imprisoned for publishing a feminist magazine. Used eyebrow pencil on toilet paper to keep writing.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Toni Morrison",
@@ -715,7 +715,7 @@
       "problem": "Black stories being absent from the literary canon they helped build",
       "confidence": "high",
       "evidence": "As senior editor at Random House she acquired Muhammad Ali, Angela Davis, and The Black Book, while writing novels that finished the canon with the other hand.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Toni Morrison",
@@ -723,7 +723,7 @@
       "problem": "the horror of slavery being too abstract for modern readers to feel",
       "confidence": "high",
       "evidence": "Found the true story of Margaret Garner in The Black Book project, an enslaved woman who killed her daughter rather than let her be returned. That fragment became Beloved.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "James Baldwin",
@@ -731,7 +731,7 @@
       "problem": "private racial humiliation that white America refuses to acknowledge",
       "confidence": "high",
       "evidence": "Translated private humiliation into public argument, debating Buckley at Cambridge on how the American Dream was achieved at the expense of the American Negro.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "James Baldwin",
@@ -739,7 +739,7 @@
       "problem": "the distance between the powerful and the people they claim to represent",
       "confidence": "high",
       "evidence": "Organised a meeting with Robert Kennedy that ended badly, treating it as proof that the distance between the administration and the movement was factual, not rhetorical.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Seamus Heaney",
@@ -747,7 +747,7 @@
       "problem": "political violence pressuring artists to become propagandists",
       "confidence": "high",
       "evidence": "Held the line of 'silence-breaking rather than rabble-rousing' across four decades of the Troubles, refusing to let his poems be read as IRA anthems.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Seamus Heaney",
@@ -755,7 +755,7 @@
       "problem": "having your identity claimed by a country that is not yours",
       "confidence": "high",
       "evidence": "Published a verse reply when included without permission in a British poetry anthology: 'My passport's green. No glass of ours was ever raised / To toast The Queen.'",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mahmoud Darwish",
@@ -763,7 +763,7 @@
       "problem": "an entire people being stateless and having no words recognized by the world",
       "confidence": "high",
       "evidence": "Read 'Identity Card' aloud and was placed under house arrest for it. Drafted the Palestinian Declaration of Independence in literary Arabic.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mahmoud Darwish",
@@ -771,7 +771,7 @@
       "problem": "exile being treated as a one-time event when it repeats with every return",
       "confidence": "high",
       "evidence": "Was allowed to return on a four-day permit after 20+ years to bury a friend, writing about exile afterwards as a repeating act rather than a single event.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Audre Lorde",
@@ -779,7 +779,7 @@
       "problem": "people being forced to hide parts of their identity to be accepted",
       "confidence": "high",
       "evidence": "Published her self-description 'Black, lesbian, feminist, socialist, mother, warrior, poet' repeatedly, refusing to be listed in a narrower set of identities.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Audre Lorde",
@@ -787,7 +787,7 @@
       "problem": "the feminist movement excluding women of colour",
       "confidence": "high",
       "evidence": "Delivered 'The Master's Tools' speech criticising conference organisers for including only two women of colour, and co-founded Kitchen Table: Women of Color Press.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Audre Lorde",
@@ -803,7 +803,7 @@
       "problem": "Black talent being rejected by institutions that claim to value merit",
       "confidence": "high",
       "evidence": "Applied to Curtis Institute in 1950 and was rejected. She believed it was racial. Curtis sent an honorary degree two days before her death in 2003.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Nina Simone",
@@ -811,7 +811,7 @@
       "problem": "Black children being murdered and the country expecting silence",
       "confidence": "high",
       "evidence": "Wrote Mississippi Goddam in less than an hour after the Birmingham church bombing killed four Black girls, saying it ended her commercial career and began her political one.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mercedes Sosa",
@@ -819,7 +819,7 @@
       "problem": "military dictatorships silencing artists who give people a voice",
       "confidence": "high",
       "evidence": "Was arrested on stage mid-performance in 1979 along with her entire audience. Forced into exile for three years.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mercedes Sosa",
@@ -827,7 +827,7 @@
       "problem": "a continent needing songs it can sing together when it cannot agree on anything else",
       "confidence": "high",
       "evidence": "Performed Gracias a la Vida at nearly every concert for 38 years, becoming the voice of Latin American solidarity.",
-      "category": "voice_taken"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Fela Kuti",
@@ -835,7 +835,7 @@
       "problem": "military governments crushing dissent with violence and no accountability",
       "confidence": "high",
       "evidence": "Released Zombie mocking the army. 1,000 soldiers raided his compound, beat him severely, and threw his mother from a window. He delivered her coffin to the military headquarters.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Fela Kuti",
@@ -851,7 +851,7 @@
       "problem": "speaking truth to power costing you your country",
       "confidence": "high",
       "evidence": "Testified at the UN asking for an arms embargo on South Africa. The government revoked her citizenship, leaving her stateless for nearly 30 years.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Miriam Makeba",
@@ -859,7 +859,7 @@
       "problem": "a woman losing everything for who she marries",
       "confidence": "high",
       "evidence": "After marrying Stokely Carmichael, her US concerts were cancelled, recording contract dropped, and visa refused. The cost of one marriage was almost her entire American career.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Maya Angelou",
@@ -867,7 +867,7 @@
       "problem": "childhood trauma stealing a person's voice",
       "confidence": "high",
       "evidence": "Was mute for nearly five years after being raped at age eight. A family friend coaxed her out of silence by asking her to read poetry aloud.",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Maya Angelou",
@@ -875,7 +875,7 @@
       "problem": "Black women's stories being absent from American literature",
       "confidence": "high",
       "evidence": "I Know Why the Caged Bird Sings was one of the first widely read memoirs by a Black woman in America, returning to the bestseller list 24 years after publication.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Frida Kahlo",
@@ -915,7 +915,7 @@
       "problem": "childhood betrayal living inside the body for decades with no outlet",
       "confidence": "high",
       "evidence": "Revealed publicly at age 70 that her childhood governess had been her father's mistress and that her sculpture imagery was wholly autobiographical.",
-      "category": "work_treated_nothing"
+      "category": "minds_hurting"
     },
     {
       "person": "Louise Bourgeois",
@@ -939,7 +939,7 @@
       "problem": "grief too deep to speak about directly",
       "confidence": "medium",
       "evidence": "Did not write about his brother's suicide until fifty years later, titling the chapter 'A Story I Don't Want to Tell.' The silence itself was the form.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Gabriel García Márquez",
@@ -955,7 +955,7 @@
       "problem": "governments silencing journalists who expose the truth",
       "confidence": "high",
       "evidence": "His 1955 shipwreck investigation contradicted the government's version of events. The government shut down the paper.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Georgia O'Keeffe",
@@ -971,7 +971,7 @@
       "problem": "losing the ability to create and refusing to accept it",
       "confidence": "high",
       "evidence": "Lost most of her central vision at 84 but did not stop working, turning to clay and painting with assistants for fourteen more years.",
-      "category": "work_treated_nothing"
+      "category": "feeling_lost"
     },
     {
       "person": "Chinua Achebe",
@@ -979,7 +979,7 @@
       "problem": "African people being reduced to props in Western psychological dramas",
       "confidence": "high",
       "evidence": "Argued that Conrad was 'a bloody racist' and Heart of Darkness reduced Africans to props. The lecture became a founding text of postcolonial literary criticism.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Chinua Achebe",
@@ -987,7 +987,7 @@
       "problem": "an entire continent's literary voice needing a vehicle to be heard",
       "confidence": "high",
       "evidence": "Things Fall Apart introduced English that could carry Igbo proverbs without footnotes, establishing the publishing infrastructure for Africa's literary canon.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Clarice Lispector",
@@ -1011,7 +1011,7 @@
       "problem": "sacred architecture taking longer than a human lifetime to complete",
       "confidence": "high",
       "evidence": "Devoted his final decade exclusively to the Sagrada Familia, living on the building site and begging door to door for stonemason wages.",
-      "category": "work_treated_nothing"
+      "category": "feeling_lost"
     },
     {
       "person": "Antoni Gaudí",
@@ -1027,7 +1027,7 @@
       "problem": "design treating different media as separate problems instead of one",
       "confidence": "high",
       "evidence": "Treated a chair, a house, and a film about the universe as the same design problem, working across furniture, film, exhibition and architecture.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Charles and Ray Eames",
@@ -1035,7 +1035,7 @@
       "problem": "good design being too expensive for ordinary people",
       "confidence": "medium",
       "evidence": "Assembled their home from off-the-shelf industrial steel components ordered from a catalogue, and the Lounge Chair was designed as a one-off gift.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Gertrude Jekyll",
@@ -1051,7 +1051,7 @@
       "problem": "rural crafts and knowledge vanishing without being recorded",
       "confidence": "medium",
       "evidence": "Published Old West Surrey photographing and sketching vanishing wheelwrights, ironwork, and cottage interiors before they disappeared.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Malcolm X",
@@ -1059,7 +1059,7 @@
       "problem": "Black Americans being denied their own identity and self-determination",
       "confidence": "high",
       "evidence": "Delivered The Ballot or the Bullet laying out the stark choice: work within the electoral system or defend themselves with arms.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Malcolm X",
@@ -1067,7 +1067,7 @@
       "problem": "racial hatred being taught as religious truth",
       "confidence": "high",
       "evidence": "After making Hajj he publicly repudiated twelve years of preaching racial separation, saying it was not supported by Islam as he now understood it.",
-      "category": "stopped_wondering"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mahatma Gandhi",
@@ -1075,7 +1075,7 @@
       "problem": "an entire nation being ruled by a foreign power through everyday compliance",
       "confidence": "high",
       "evidence": "Developed satyagraha as mass nonviolent resistance, from the Salt March to daily spinning as concrete boycott of British textile imports.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mahatma Gandhi",
@@ -1083,7 +1083,7 @@
       "problem": "exploitative contracts that rob peasants of their livelihood",
       "confidence": "high",
       "evidence": "Stayed for months in Champaran interviewing thousands of peasants forced by British indigo planters under exploitative contracts, submitting statements to a commission.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Gloria Steinem",
@@ -1091,7 +1091,7 @@
       "problem": "women's exploitation being hidden behind glamour",
       "confidence": "high",
       "evidence": "Went undercover as a Playboy Bunny and exposed the exploitative working conditions, invasive medical exams, and low pay.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Gloria Steinem",
@@ -1099,7 +1099,7 @@
       "problem": "women having no mass-market voice of their own",
       "confidence": "high",
       "evidence": "Co-founded Ms. magazine when there was no mass-market feminist periodical in the US. The test issue sold out in eight days.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Gloria Steinem",
@@ -1107,7 +1107,7 @@
       "problem": "women being absent from political office at every level",
       "confidence": "high",
       "evidence": "Co-founded the National Women's Political Caucus to push women into office with training, funding, and endorsements. Roughly a quarter of women who served in Congress passed through its pipeline.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Cesar Chavez",
@@ -1115,7 +1115,7 @@
       "problem": "farmworkers being exploited with no legal protection or representation",
       "confidence": "high",
       "evidence": "Co-founded the NFWA and led the Delano grape strike that secured the first significant contracts for agricultural workers in US history.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Cesar Chavez",
@@ -1123,7 +1123,7 @@
       "problem": "the temptation of violence destroying a movement from within",
       "confidence": "high",
       "evidence": "Fasted for 25 days as a response to growing pressure to use violent tactics, subordinating his own body to hold the nonviolent line.",
-      "category": "life_not_yours"
+      "category": "feeling_lost"
     },
     {
       "person": "Marie Curie",
@@ -1131,7 +1131,7 @@
       "problem": "the physical world containing forces nobody had yet isolated or measured",
       "confidence": "high",
       "evidence": "Processed a tonne of pitchblende in a leaking shed to yield one tenth of a gram of radium, doing heavy industrial work disguised as chemistry.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Marie Curie",
@@ -1139,7 +1139,7 @@
       "problem": "wounded soldiers dying because field hospitals lacked basic diagnostic tools",
       "confidence": "high",
       "evidence": "Directed installation of 20 mobile X-ray vehicles and 200+ field units in WWI, personally driving some vans and training 150 women as operators.",
-      "category": "pain_not_believed"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Rosalind Franklin",
@@ -1147,7 +1147,7 @@
       "problem": "women scientists having their work used without permission or credit",
       "confidence": "high",
       "evidence": "Her colleague showed Photograph 51 to Watson without her permission. Watson and Crick produced their model weeks later. Her papers were published as supporting confirmation.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Rosalind Franklin",
@@ -1155,7 +1155,7 @@
       "problem": "rigorous pattern extraction taking so long that others publish first",
       "confidence": "medium",
       "evidence": "Was working carefully through competing A form data before publishing the B form results. Watson and Crick completed their model the day after her papers arrived.",
-      "category": "stopped_wondering"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Barbara McClintock",
@@ -1163,7 +1163,7 @@
       "problem": "a scientific discovery being ignored for 35 years because the field wasn't ready",
       "confidence": "high",
       "evidence": "Discovered transposable genetic elements in 1948. The field responded with puzzlement and hostility. She won the Nobel in 1983, 35 years later.",
-      "category": "stopped_wondering"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Barbara McClintock",
@@ -1171,7 +1171,7 @@
       "problem": "research depending on patience and sensory attention in a system that rewards speed",
       "confidence": "high",
       "evidence": "Her method was hours in the maize field, waiting for patterns to declare themselves. She called it 'a feeling for the organism.'",
-      "category": "stopped_wondering"
+      "category": "work_hollows"
     },
     {
       "person": "Katherine Johnson",
@@ -1179,7 +1179,7 @@
       "problem": "Black women's mathematical brilliance being invisible inside segregated institutions",
       "confidence": "high",
       "evidence": "Worked in a segregated computing section at NACA. Her transfer is one of the first documented cases of a Black woman mathematician being poached from a segregated pool.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Katherine Johnson",
@@ -1187,7 +1187,7 @@
       "problem": "machines replacing human judgment before anyone checks the machines",
       "confidence": "medium",
       "evidence": "John Glenn refused to fly until Katherine Johnson had checked the computer's orbital trajectory calculations by hand.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jane Goodall",
@@ -1195,7 +1195,7 @@
       "problem": "humanity defining itself by what separates it from animals rather than what connects it",
       "confidence": "high",
       "evidence": "Observed chimpanzees making tools, ending the working definition of Homo sapiens as 'the tool-using animal.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jane Goodall",
@@ -1219,7 +1219,7 @@
       "problem": "scientific truth being attacked by corporate interests",
       "confidence": "high",
       "evidence": "The chemical industry responded with legal threats. She kept her cancer diagnosis secret so her credibility could not be attacked on grounds of illness.",
-      "category": "world_losing"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Aldo Leopold",
@@ -1243,7 +1243,7 @@
       "problem": "state violence against civilians being hidden because journalists are too afraid to report it",
       "confidence": "high",
       "evidence": "Reported on the Second Chechen War for seven years, travelling alone into villages Russian forces had swept, interviewing civilians. Was assassinated on Putin's birthday.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Anna Politkovskaya",
@@ -1251,7 +1251,7 @@
       "problem": "truth-tellers being murdered to maintain silence",
       "confidence": "high",
       "evidence": "Warned 'People sometimes pay with their lives for saying aloud what they think.' Was shot dead in her elevator ten months later.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Viktor Frankl",
@@ -1259,7 +1259,7 @@
       "problem": "meaninglessness as the central human suffering",
       "confidence": "high",
       "evidence": "Founded logotherapy defining the search for meaning as the primary human motivation, specifying three ways meaning could be realised including through unavoidable suffering.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Viktor Frankl",
@@ -1267,7 +1267,7 @@
       "problem": "people unable to find purpose after extreme trauma",
       "confidence": "high",
       "evidence": "Lost his wife, brother, and mother in the camps. Chose to remain in Vienna, resume practice, and rebuild, applying his own theory of choosing attitude toward unchangeable facts.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "George Kennan",
@@ -1275,7 +1275,7 @@
       "problem": "a superpower having no strategic framework for understanding its main adversary",
       "confidence": "high",
       "evidence": "Dispatched a 5,363-word telegram reframing Soviet behaviour as a function of Russian insecurity plus ideology, changing an administration's entire analytical frame.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "George Kennan",
@@ -1283,7 +1283,7 @@
       "problem": "good strategy being corrupted beyond recognition by the institutions that adopt it",
       "confidence": "high",
       "evidence": "Spent decades criticising every expansion of the containment doctrine he authored, including Vietnam, saying 'I never meant it to be primarily military.'",
-      "category": "left_behind"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Frank Lloyd Wright",
@@ -1291,7 +1291,7 @@
       "problem": "affordable housing being treated as beneath great architecture",
       "confidence": "high",
       "evidence": "Designed Usonian houses as modest, affordable single-family homes costing about $5,500 in 1940, influencing American postwar housing more than his famous buildings.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Frank Lloyd Wright",
@@ -1299,7 +1299,7 @@
       "problem": "architectural apprenticeship being replaced by institutional education",
       "confidence": "high",
       "evidence": "Founded the Taliesin Fellowship as a workshop-style apprenticeship, training 625 people during his lifetime.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Florence Nightingale",
@@ -1307,7 +1307,7 @@
       "problem": "hospitals killing patients faster than battlefields",
       "confidence": "high",
       "evidence": "Established that roughly ten times as many soldiers died of disease as combat wounds. The hospital as configured was the most dangerous place for a wounded soldier.",
-      "category": "pain_not_believed"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Florence Nightingale",
@@ -1323,7 +1323,7 @@
       "problem": "families with no way to find out what happened to their missing soldiers",
       "confidence": "high",
       "evidence": "Processed 41,855 letters from families and located 22,000 soldiers through cross-referencing prison records, burial lists, and hospital admissions.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Clara Barton",
@@ -1331,7 +1331,7 @@
       "problem": "disaster victims having no organized civilian relief system",
       "confidence": "high",
       "evidence": "Founded the American Red Cross and personally led the Johnstown Flood response, establishing the default American civilian disaster agency.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jaime Escalante",
@@ -1403,7 +1403,7 @@
       "problem": "traumatised children being fixed instead of understood",
       "confidence": "high",
       "evidence": "Coined the PACE stance: 'If you're not curious, you're fixing. And traumatised children know when they are being fixed.'",
-      "category": "kids_deserved_better"
+      "category": "minds_hurting"
     },
     {
       "person": "Dan Hughes",
@@ -1411,7 +1411,7 @@
       "problem": "the invisible daily work of repairing attachment after trauma",
       "confidence": "high",
       "evidence": "Described parenting traumatised children as 'almost entirely repair. That sentence, said 400 times across a year, is the therapy.'",
-      "category": "kids_deserved_better"
+      "category": "minds_hurting"
     },
     {
       "person": "Donald Winnicott",
@@ -1435,7 +1435,7 @@
       "problem": "women being told they cannot attain the highest spiritual realization in a female body",
       "confidence": "high",
       "evidence": "Made a vow to attain enlightenment in a woman's body no matter how many lifetimes it took, repeating it publicly at a conference attended by the Dalai Lama.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tenzin Palmo",
@@ -1443,7 +1443,7 @@
       "problem": "spiritual retreat becoming an end in itself rather than preparation for service",
       "confidence": "high",
       "evidence": "Said 'I prefer the cave. But the cave was for me. The nunnery is for them. The point of retreat is to come back with something useful.'",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Joyce Banda",
@@ -1451,7 +1451,7 @@
       "problem": "women trapped in abusive marriages with no way out",
       "confidence": "high",
       "evidence": "Left an abusive first marriage with three small children and no money, then founded NABW to come back for other women still inside houses like that.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Joyce Banda",
@@ -1459,7 +1459,7 @@
       "problem": "rural women never hearing their own name said with respect",
       "confidence": "high",
       "evidence": "Required every NABW meeting to begin with each woman saying her name and her business out loud, because most had never been addressed with respect.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Phil Jackson",
@@ -1467,7 +1467,7 @@
       "problem": "teams of talented individuals who cannot connect to something larger than themselves",
       "confidence": "high",
       "evidence": "Used sitting meditation and tribal leadership stages to push teams from 'I'm great' to 'we're great,' saying 'You can't run the triangle at stage three.'",
-      "category": "forgot_what_for"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Phil Jackson",
@@ -1475,7 +1475,7 @@
       "problem": "athletes being treated as positions instead of people",
       "confidence": "medium",
       "evidence": "Gave each player a personally chosen book at the start of every season. 'I wanted them to know I saw them as a person, not a position.'",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Pat Summitt",
@@ -1483,7 +1483,7 @@
       "problem": "women athletes not being taken seriously enough to be held to the highest standard",
       "confidence": "high",
       "evidence": "Won 1,098 games with a 100% graduation rate. 'I promise you one thing. Your daughter will leave here with a degree. The basketball is extra.'",
-      "category": "voice_taken"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Pat Summitt",
@@ -1507,7 +1507,7 @@
       "problem": "racial hatred growing in classrooms where nobody names it",
       "confidence": "high",
       "evidence": "Stopped the class after a racial caricature and said 'This is how the Holocaust started. With a drawing.' Several students had never heard of the Holocaust.",
-      "category": "kids_deserved_better"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Sebastian Junger",
@@ -1515,7 +1515,7 @@
       "problem": "veterans suffering not from war but from coming home to a society with no container for them",
       "confidence": "high",
       "evidence": "Argued in Tribe that veterans' suffering is less about combat and more about returning to an individualist society. 'Coming back to America took that away.'",
-      "category": "left_behind"
+      "category": "minds_hurting"
     },
     {
       "person": "Sebastian Junger",
@@ -1523,7 +1523,7 @@
       "problem": "civilians being too afraid of the answer to ask veterans what it was like",
       "confidence": "high",
       "evidence": "Created Vets Town Hall: veterans speak, civilians listen without responding. 'The town hall removes the fear on both sides.'",
-      "category": "left_behind"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Hans Rosling",
@@ -1539,7 +1539,7 @@
       "problem": "the overdramatic worldview preventing people from seeing what is actually happening",
       "confidence": "high",
       "evidence": "Refused the optimist label, calling himself a possibilist: 'someone who neither hopes without reason nor fears without reason.'",
-      "category": "feeling_stupid"
+      "category": "feeling_lost"
     },
     {
       "person": "Mary Roach",
@@ -1579,7 +1579,7 @@
       "problem": "professionals assuming they have stopped improving when they have just stopped getting feedback",
       "confidence": "medium",
       "evidence": "Hired a retired surgeon to watch him operate because his complication rate had stopped falling after eight years.",
-      "category": "stopped_wondering"
+      "category": "work_hollows"
     },
     {
       "person": "Neil deGrasse Tyson",
@@ -1603,7 +1603,7 @@
       "problem": "people believing the world is getting worse when the data shows otherwise",
       "confidence": "high",
       "evidence": "Plotted every dataset he could find for every kind of violence across every period in Better Angels, arguing with over 100 graphs that violence has declined.",
-      "category": "feeling_stupid"
+      "category": "feeling_lost"
     },
     {
       "person": "Steven Pinker",
@@ -1611,7 +1611,7 @@
       "problem": "questions about human nature being treated as too dangerous to ask",
       "confidence": "high",
       "evidence": "In The Blank Slate he took on claims most psychologists avoided, arguing 'There is no question that science is forbidden to ask.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Sal Khan",
@@ -1619,7 +1619,7 @@
       "problem": "education being inaccessible to anyone who can't afford it",
       "confidence": "high",
       "evidence": "Turned down multi-million-dollar commercialisation offers and registered Khan Academy as a non-profit: 'I could not tell Nadia her tutoring was free and then charge her daughter.'",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Sal Khan",
@@ -1675,7 +1675,7 @@
       "problem": "people suffering in their intimate lives because they cannot name what they need",
       "confidence": "high",
       "evidence": "'If you cannot name it you cannot ask for it, and if you cannot ask for it you cannot have it.' Refused all euphemisms on air for decades.",
-      "category": "feeling_stupid"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Ruth Westheimer",
@@ -1683,7 +1683,7 @@
       "problem": "sex being surrounded by shame instead of treated as a normal part of adult life",
       "confidence": "high",
       "evidence": "Said she would not call a penis anything except a penis. 'If I say schmeckel, people laugh at the word. If I say penis, people can ask a question.'",
-      "category": "feeling_stupid"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Henry Louis Gates Jr.",
@@ -1691,7 +1691,7 @@
       "problem": "Black Americans being disconnected from their own family history by slavery's erasure",
       "confidence": "high",
       "evidence": "Built Finding Your Roots around the 'reveal' moment: 'What they are crying about is not the document. It is the fact that somebody bothered.'",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Henry Louis Gates Jr.",
@@ -1699,7 +1699,7 @@
       "problem": "Black literature not receiving the same forensic respect as white literature",
       "confidence": "high",
       "evidence": "Spent a year authenticating The Bondwoman's Narrative: 'Our literature deserves the same forensic respect as theirs.'",
-      "category": "work_treated_nothing"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jacques Pepin",
@@ -1739,7 +1739,7 @@
       "problem": "rich countries telling poor countries to do the opposite of what made them rich",
       "confidence": "high",
       "evidence": "Showed through archival trade policy histories that 19th-century Britain, Germany, and the US did exactly what they now tell developing countries not to do.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ha-Joon Chang",
@@ -1747,7 +1747,7 @@
       "problem": "economics pretending to have one right answer when nine schools each say something true",
       "confidence": "medium",
       "evidence": "'I am a pluralist on purpose. If you pick one school you end up defending its errors. I would rather be embarrassed by nine schools than loyal to one.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Eugenia Cheng",
@@ -1763,7 +1763,7 @@
       "problem": "gender categories contaminating conversations about human traits",
       "confidence": "medium",
       "evidence": "Introduced 'ingressive' and 'congressive' to replace masculine and feminine traits because the gendered words carried unearned baggage.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Matthew Walker",
@@ -1803,7 +1803,7 @@
       "problem": "women's voices being silenced in public life for thousands of years",
       "confidence": "high",
       "evidence": "Traced silencing from Homer's Odyssey to Hillary Clinton, quoting Telemachus telling his mother to go and weave: 'That line is 2,800 years old and it still works in 2017.'",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mary Beard",
@@ -1811,7 +1811,7 @@
       "problem": "history being told as the biography of the man at the top",
       "confidence": "high",
       "evidence": "Structured SPQR around ordinary inhabitants, slaves, and women rather than emperors: 'The sources tell a different story if you read them sideways.'",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Trevor Noah",
@@ -1819,7 +1819,7 @@
       "problem": "being born into a world where your own existence is illegal",
       "confidence": "high",
       "evidence": "His birth certificate was a criminal document under apartheid's Immorality Act. His mother walked on one side of the street while he and his father walked on the other.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Trevor Noah",
@@ -1827,7 +1827,7 @@
       "problem": "people from different backgrounds being strangers to each other because nobody speaks the other's language",
       "confidence": "medium",
       "evidence": "His mother insisted he learn six languages because 'if I could speak to a person in their own language I would never be a stranger in my own country.'",
-      "category": "left_behind"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Iain McGilchrist",
@@ -1835,7 +1835,7 @@
       "problem": "Western civilization losing the ability to see the whole because it has catalogued every part",
       "confidence": "high",
       "evidence": "Argues the left hemisphere has usurped the right: 'You get a civilisation that cannot see the forest because every tree has been catalogued.'",
-      "category": "stopped_wondering"
+      "category": "feeling_lost"
     },
     {
       "person": "Iain McGilchrist",
@@ -1843,7 +1843,7 @@
       "problem": "certainty being mistaken for wisdom",
       "confidence": "high",
       "evidence": "'Those who believe they are certainly right are certainly wrong.' The patients he could not help were always the ones who were certain.",
-      "category": "stopped_wondering"
+      "category": "minds_hurting"
     },
     {
       "person": "Karen Armstrong",
@@ -1851,7 +1851,7 @@
       "problem": "religions being used to divide rather than connect people",
       "confidence": "high",
       "evidence": "Assembled Muslim, Jewish, Christian, Hindu, and Buddhist clerics until they agreed on the Golden Rule. The Charter for Compassion was the result.",
-      "category": "forgot_what_for"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Karen Armstrong",
@@ -1859,7 +1859,7 @@
       "problem": "compassion being treated as a feeling rather than a practice",
       "confidence": "high",
       "evidence": "'Nobody gets compassionate by thinking about compassion. You get compassionate by practising it badly for years until you are less bad at it.'",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Robin Wall Kimmerer",
@@ -1875,7 +1875,7 @@
       "problem": "scientific knowledge and Indigenous knowledge being treated as incompatible",
       "confidence": "high",
       "evidence": "Every essay had to pass two editors: 'The botanist who wanted a data source, and the grandmother who wanted to know if the sentence would make sense.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jill Lepore",
@@ -1883,7 +1883,7 @@
       "problem": "American history being ceded to people who will tell it badly because nobody is willing to tell the whole story",
       "confidence": "high",
       "evidence": "'If we do not tell the whole story we cede it to people who will tell it badly. So I wrote it in one voice, in one arc, knowing the gaps.'",
-      "category": "feeling_stupid"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jill Lepore",
@@ -1891,7 +1891,7 @@
       "problem": "historians being afraid to tell the whole American story because it seems arrogant",
       "confidence": "high",
       "evidence": "'Nobody in my generation was writing the whole story. If we do not tell it we cede it to people who will tell it badly.'",
-      "category": "feeling_stupid"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Yuval Noah Harari",
@@ -1907,7 +1907,7 @@
       "problem": "constant information consumption preventing clear thought",
       "confidence": "medium",
       "evidence": "Takes annual 30-60 day silent retreats. 'I cannot write about human history if I am constantly consuming opinions about human history.'",
-      "category": "stopped_wondering"
+      "category": "feeling_lost"
     },
     {
       "person": "Michael Pollan",
@@ -1931,7 +1931,7 @@
       "problem": "hope being confused with optimism when it is actually the refusal to decide yet",
       "confidence": "high",
       "evidence": "'Hope is not a lottery ticket you can sit on the sofa and clutch. It is an axe you break down doors with in an emergency.'",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Rebecca Solnit",
@@ -1939,7 +1939,7 @@
       "problem": "the myth that humans are naturally selfish",
       "confidence": "high",
       "evidence": "Went into disaster archives expecting chaos and found soup kitchens and strangers sharing blankets. 'Disaster movies lie.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Timothy Snyder",
@@ -1947,7 +1947,7 @@
       "problem": "democracies collapsing because citizens obey in advance without being asked",
       "confidence": "high",
       "evidence": "'Most of the power of authoritarianism is freely given. The Nazis did not have to demand compliance from most institutions. The institutions offered it.'",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Timothy Snyder",
@@ -1955,7 +1955,7 @@
       "problem": "people not learning from historical patterns of tyranny",
       "confidence": "high",
       "evidence": "Drafted On Tyranny in an afternoon from 25 years of reading about the collapse of European democracies, because urgency required it.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "David Graeber",
@@ -1979,7 +1979,7 @@
       "problem": "suppressed voices in early Christianity being lost because nobody opened the box",
       "confidence": "high",
       "evidence": "Chose to work on the Nag Hammadi Gnostic texts that most of her cohort considered marginal. The decision shaped her entire career.",
-      "category": "left_behind"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Elaine Pagels",
@@ -1987,7 +1987,7 @@
       "problem": "grief forcing a scholar to read sacred texts not as scholarship but as survival",
       "confidence": "high",
       "evidence": "After losing her son and husband in consecutive years, reread the Gospel of Thomas as a text about how to stay alive inside unbearable loss.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Zadie Smith",
@@ -1995,7 +1995,7 @@
       "problem": "multicultural London needing a literary voice that sounds like it actually sounds",
       "confidence": "high",
       "evidence": "Returns to the same north-west London corner across multiple novels, going deeper into the same streets, bus routes, and estates.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Zadie Smith",
@@ -2003,7 +2003,7 @@
       "problem": "multicultural communities being written about from outside rather than from the kitchen table",
       "confidence": "high",
       "evidence": "Returns to the same north-west London streets across multiple novels because 'I know it. I don't know any other place as well.'",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Lech Wałęsa",
@@ -2011,7 +2011,7 @@
       "problem": "workers having no independent voice in an authoritarian state",
       "confidence": "high",
       "evidence": "Climbed over the shipyard fence to join the strike. Within weeks Solidarity grew to 10 million members, the first independent trade union in a communist country.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Lech Wałęsa",
@@ -2019,7 +2019,7 @@
       "problem": "entire populations complying with authoritarian rule because they see no alternative",
       "confidence": "high",
       "evidence": "The Gdansk Agreement legalised an independent trade union in a communist country. Within weeks Solidarity grew to 10 million members.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Krista Tippett",
@@ -2027,7 +2027,7 @@
       "problem": "public conversation being too shallow to hold what people actually experience",
       "confidence": "high",
       "evidence": "'I can disagree with your opinion, but I can't disagree with your experience.' Built entire interview method around this rule.",
-      "category": "forgot_what_for"
+      "category": "feeling_stupid"
     },
     {
       "person": "Krista Tippett",
@@ -2035,7 +2035,7 @@
       "problem": "political categories being thinner and more porous than they look",
       "confidence": "medium",
       "evidence": "Walked between East and West Berlin seeing how quickly supposedly settled certainties could crack. Asks questions that test categories rather than confirm them.",
-      "category": "stopped_wondering"
+      "category": "feeling_lost"
     },
     {
       "person": "John Hume",
@@ -2043,7 +2043,7 @@
       "problem": "violence being treated as the only option when borders feel like existential threats",
       "confidence": "high",
       "evidence": "Used the France-Germany European integration story repeatedly: the point of peace is not abolishing the border but making it matter less.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "John Hume",
@@ -2051,7 +2051,7 @@
       "problem": "political enemies refusing to talk to each other while people die",
       "confidence": "high",
       "evidence": "Held secret talks with Gerry Adams for years when publicly condemned for it. The offer took years to land but produced the 1994 IRA ceasefire.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Martti Ahtisaari",
@@ -2059,7 +2059,7 @@
       "problem": "armed conflicts being called intractable when they are actually unsolved",
       "confidence": "high",
       "evidence": "'Peace is a question of will. All conflicts can be settled, and there are no excuses for allowing them to become eternal.'",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Martti Ahtisaari",
@@ -2067,7 +2067,7 @@
       "problem": "mediators needing physical presence and patience that international institutions can't provide",
       "confidence": "high",
       "evidence": "Held all Aceh sessions face to face in the same building, arguing physical presence forced concessions that shuttle diplomacy would not have produced.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tawakkol Karman",
@@ -2075,7 +2075,7 @@
       "problem": "press freedom being crushed by authoritarian governments",
       "confidence": "high",
       "evidence": "Co-founded Women Journalists Without Chains and organised weekly sit-ins for three years protesting press restrictions before the revolution arrived.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tawakkol Karman",
@@ -2083,7 +2083,7 @@
       "problem": "women being excluded from political movements in the Arab world",
       "confidence": "high",
       "evidence": "First Arab woman to win the Peace Prize. Addressed the prize to 'the young people of the Arab Spring,' handing recognition back to the movement.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tarana Burke",
@@ -2091,7 +2091,7 @@
       "problem": "sexual violence survivors having no one who will say 'me too'",
       "confidence": "high",
       "evidence": "Built the Me Too programme for eleven years in church basements and school gyms before the hashtag went viral, starting from a moment she couldn't find the words.",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Tarana Burke",
@@ -2099,7 +2099,7 @@
       "problem": "survivors being defined by punishment of abusers rather than their own healing",
       "confidence": "high",
       "evidence": "Pushes back against Me Too being about punishment: 'Me too is not a moment, it is a movement, and it is about the survivors.'",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Ta-Nehisi Coates",
@@ -2107,7 +2107,7 @@
       "problem": "the mechanics of racial wealth theft being invisible to white Americans",
       "confidence": "high",
       "evidence": "Spent two years researching The Case for Reparations following one man's ledger through contract buying, blockbusting, and federal redlining maps.",
-      "category": "life_not_yours"
+      "category": "money_stress"
     },
     {
       "person": "Ta-Nehisi Coates",
@@ -2115,7 +2115,7 @@
       "problem": "a Black father not being able to offer his son both honesty and comfort about race in America",
       "confidence": "high",
       "evidence": "Wrote Between the World and Me as a letter to his son to avoid the temptation of reassurance, because honesty and comfort were mutually exclusive.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Chimamanda Ngozi Adichie",
@@ -2123,7 +2123,7 @@
       "problem": "people and places being reduced to a single story",
       "confidence": "high",
       "evidence": "Her TEDGlobal talk argued that when there is only one story told about a place, that story becomes the place. Over 27 million views.",
-      "category": "voice_taken"
+      "category": "feeling_stupid"
     },
     {
       "person": "Chimamanda Ngozi Adichie",
@@ -2131,7 +2131,7 @@
       "problem": "feminism needing to be explained as if it were controversial",
       "confidence": "high",
       "evidence": "'We Should All Be Feminists' was sampled by Beyonce, routing the argument to a pop audience of tens of millions.",
-      "category": "voice_taken"
+      "category": "feeling_stupid"
     },
     {
       "person": "Patti Smith",
@@ -2139,7 +2139,7 @@
       "problem": "grief needing decades to find its form",
       "confidence": "high",
       "evidence": "Mapplethorpe asked her to write their story before he died. It took twenty years. Just Kids won the National Book Award.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Patti Smith",
@@ -2147,7 +2147,7 @@
       "problem": "women in rock being expected to perform femininity instead of art",
       "confidence": "medium",
       "evidence": "Deliberately wanted to look androgynous on the Horses cover, 'like Rimbaud at a Patti Smith concert.' Refused to replace the image.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Wisława Szymborska",
@@ -2155,7 +2155,7 @@
       "problem": "certainty being the tool of dictators and torturers",
       "confidence": "high",
       "evidence": "Argued in her Nobel lecture that the most important words were 'I don't know,' contrasting this with dictators whose distinguishing feature was certainty.",
-      "category": "stopped_wondering"
+      "category": "feeling_lost"
     },
     {
       "person": "Wisława Szymborska",
@@ -2163,7 +2163,7 @@
       "problem": "writers producing volume when restraint would be more honest",
       "confidence": "high",
       "evidence": "Published fewer than 350 poems in fifty years. 'I have a trash can in my home.' Treated the bin as an editor.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Aretha Franklin",
@@ -2171,7 +2171,7 @@
       "problem": "women's demand for respect being dismissed as a request",
       "confidence": "high",
       "evidence": "Turned Otis Redding's pleading husband song into a civil-rights-era anthem of non-negotiable self-assertion with the R-E-S-P-E-C-T arrangement.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Aretha Franklin",
@@ -2179,7 +2179,7 @@
       "problem": "sacred music being separated from secular life as if they were different instruments",
       "confidence": "medium",
       "evidence": "Returned to church to record Amazing Grace, the best-selling live gospel album ever, refusing to separate the worship from the career.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Luciano Pavarotti",
@@ -2187,7 +2187,7 @@
       "problem": "classical music being locked inside institutions the public never enters",
       "confidence": "high",
       "evidence": "The Three Tenors concert sold over ten million copies. His position: the purity argument was a luxury available only to people with other platforms.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Luciano Pavarotti",
@@ -2195,7 +2195,7 @@
       "problem": "concrete crises needing money that purity arguments cannot generate",
       "confidence": "high",
       "evidence": "Pavarotti and Friends concerts raised millions for refugee relief while purists criticised the crossover as dilution.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Tupac Shakur",
@@ -2203,7 +2203,7 @@
       "problem": "the reality of Black poverty and incarceration needing a voice that refuses to abstract it",
       "confidence": "high",
       "evidence": "Dear Mama catalogues specific facts of his mother's crack addiction, prison time, and cooking. The Library of Congress added it to the National Recording Registry.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tupac Shakur",
@@ -2211,7 +2211,7 @@
       "problem": "Black mothers surviving impossible conditions with no acknowledgment",
       "confidence": "high",
       "evidence": "Wrote the song as an itemised bill of specific love and specific failure, refusing to abstract his mother into a symbol.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Lin-Manuel Miranda",
@@ -2219,7 +2219,7 @@
       "problem": "the founding story of America not sounding like the people who actually built it",
       "confidence": "high",
       "evidence": "Rapped about Alexander Hamilton at the White House to initial laughter, then spent a year on a single song to make the historical voice match the hip-hop form.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Lin-Manuel Miranda",
@@ -2227,7 +2227,7 @@
       "problem": "immigrant stories being absent from the stages that define national identity",
       "confidence": "high",
       "evidence": "In the Heights was written as a sophomore about his own Washington Heights community. Hamilton cast people of colour as the Founding Fathers.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ira Glass",
@@ -2251,7 +2251,7 @@
       "problem": "modern life disconnecting people from each other and from their own creativity",
       "confidence": "high",
       "evidence": "Argues in On Connection that creative work exists to break the spell of the 'culture of distraction.' 'Creativity is the ability to feel connection.'",
-      "category": "forgot_what_for"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Kae Tempest",
@@ -2259,7 +2259,7 @@
       "problem": "working-class stories being absent from the stages that claim to represent them",
       "confidence": "medium",
       "evidence": "Brand New Ancients treats south-east London residents as figures from Greek mythology, reintroducing epic oral form to British theatre.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Wong Kar-wai",
@@ -2291,7 +2291,7 @@
       "problem": "the urge to create being impossible to stop even when the body wants to",
       "confidence": "medium",
       "evidence": "Has announced retirement multiple times and returned each time. 'I keep making work because there is no point to life if I don't.'",
-      "category": "work_treated_nothing"
+      "category": "feeling_lost"
     },
     {
       "person": "Yayoi Kusama",
@@ -2299,7 +2299,7 @@
       "problem": "mental illness that threatens to swallow you unless you put it on paper",
       "confidence": "high",
       "evidence": "Began having vivid hallucinations at age 10. 'The only way to survive the visions was to put them onto paper before they closed over her.'",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Yayoi Kusama",
@@ -2331,7 +2331,7 @@
       "problem": "being a beneficiary of a system that caused immense suffering",
       "confidence": "high",
       "evidence": "Two recurring characters are openly drawn versions of himself: a white industrialist and a naked weeping alter ego, staging the contradictions of being a white South African artist.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "William Kentridge",
@@ -2339,7 +2339,7 @@
       "problem": "memory being erased by those who want to forget",
       "confidence": "medium",
       "evidence": "His technique never wipes drawings clean; each film bears the ghost of every previous state. The eraser marks are memory.",
-      "category": "voice_taken"
+      "category": "feeling_stupid"
     },
     {
       "person": "Marcel Duchamp",
@@ -2379,7 +2379,7 @@
       "problem": "information being disorganized in ways that exclude people from using public systems",
       "confidence": "high",
       "evidence": "Designed the NYC subway diagram and the National Park Service's Unigrid system so a visitor to any park could find the same information in the same place.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Massimo Vignelli",
@@ -2387,7 +2387,7 @@
       "problem": "designers using variety as a substitute for clarity",
       "confidence": "high",
       "evidence": "Argued a designer really only needs about five typefaces. 'Using a special typeface for every occasion is like being a chef who uses a different plate for every dish.'",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Tadao Ando",
@@ -2395,7 +2395,7 @@
       "problem": "architecture assuming you need institutional credentials to build",
       "confidence": "high",
       "evidence": "Never enrolled in architecture school. Self-taught from books and travel. Founded his practice at 27 with no degree. The Pritzker jury cited it explicitly.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tadao Ando",
@@ -2427,7 +2427,7 @@
       "problem": "women architects being told their designs are unbuildable when the real issue is who drew them",
       "confidence": "high",
       "evidence": "Was dismissed as a 'paper architect' for sixteen years until the Vitra Fire Station proved the drawings could become buildings.",
-      "category": "work_treated_nothing"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Zaha Hadid",
@@ -2435,7 +2435,7 @@
       "problem": "women having to be twice as good to be treated as equal in architecture",
       "confidence": "high",
       "evidence": "First woman to win the Pritzker in 25 years. Used every public appearance to speak about underrepresentation of women in architecture.",
-      "category": "work_treated_nothing"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jan Gehl",
@@ -2443,7 +2443,7 @@
       "problem": "cities being designed for cars instead of people",
       "confidence": "high",
       "evidence": "Counted people on Copenhagen's pedestrianised street by hand for decades, building the empirical spine for the argument that streets should serve pedestrians.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jan Gehl",
@@ -2451,7 +2451,7 @@
       "problem": "urban design being done from plans instead of from observation of real behaviour",
       "confidence": "high",
       "evidence": "'Go out there and see what works. Look out of your windows, spend time in the streets, learn from reality.' The instruction is a direct polemic against design from plans.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Piet Oudolf",
@@ -2475,7 +2475,7 @@
       "problem": "girls being denied education under threat of death",
       "confidence": "high",
       "evidence": "Blogged for BBC Urdu at age 11 describing life under Taliban rule including closure of girls' schools. Was shot by the Taliban for it at 15.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Malala Yousafzai",
@@ -2483,7 +2483,7 @@
       "problem": "international NGOs building parallel structures instead of funding local women who already do the work",
       "confidence": "high",
       "evidence": "The Malala Fund supports 'country leaders,' local women already running girls' education projects, with unrestricted grants rather than building its own schools.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Greta Thunberg",
@@ -2499,7 +2499,7 @@
       "problem": "neurodivergent people being told their different way of seeing is a deficit",
       "confidence": "medium",
       "evidence": "Describes her autism as the precondition of her activism: 'I don't easily fall for lies, I can see through things.'",
-      "category": "voice_taken"
+      "category": "pain_not_believed"
     },
     {
       "person": "Al Gore",
@@ -2515,7 +2515,7 @@
       "problem": "political loss being treated as the end instead of a redirection",
       "confidence": "medium",
       "evidence": "Used his 2000 election loss to become a full-time climate campaigner, training 50,000 presenters in 190 countries.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Dolores Huerta",
@@ -2523,7 +2523,7 @@
       "problem": "farmworkers being exploited with no one willing to negotiate on their behalf",
       "confidence": "high",
       "evidence": "Personally negotiated with A&P supermarket chains to pull non-union grapes, producing the first contracts in UFW history.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Dolores Huerta",
@@ -2531,7 +2531,7 @@
       "problem": "women organisers being beaten and still coming back",
       "confidence": "high",
       "evidence": "Had ribs broken and spleen ruptured by police at 58 during a peaceful protest. Resumed protesting as soon as she recovered.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Naomi Klein",
@@ -2539,7 +2539,7 @@
       "problem": "disasters being exploited to push through economic changes that would be impossible under normal conditions",
       "confidence": "high",
       "evidence": "The Shock Doctrine proposes that disaster creates openings for rapid neoliberal reforms, tested against Chile, Iraq, Katrina, and Sri Lanka.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Naomi Klein",
@@ -2571,7 +2571,7 @@
       "problem": "institutional protection of harassers at the expense of employees",
       "confidence": "high",
       "evidence": "Documented HR's explicit refusal to discipline a 'high performer' and the pattern of retaliation that followed her complaints at Uber.",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Susan Fowler",
@@ -2579,7 +2579,7 @@
       "problem": "forced arbitration clauses preventing employees from speaking up",
       "confidence": "high",
       "evidence": "Petitioned the Supreme Court on forced arbitration, the same clauses that nearly stopped her own account from becoming public.",
-      "category": "work_hollows"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Cathy O'Neil",
@@ -2587,7 +2587,7 @@
       "problem": "algorithms discriminating against vulnerable people while hiding behind mathematical authority",
       "confidence": "high",
       "evidence": "Coined WMD to describe predictive algorithms in hiring, policing, and credit that operated as hidden discriminatory systems.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Cathy O'Neil",
@@ -2603,7 +2603,7 @@
       "problem": "brilliant women being typecast as decorative and nothing more",
       "confidence": "high",
       "evidence": "Hollywood gave her 'maybe two pages of dialogue a film.' She set up a drafting table in her trailer and invented between takes out of boredom.",
-      "category": "work_treated_nothing"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Hedy Lamarr",
@@ -2683,7 +2683,7 @@
       "problem": "people fooling themselves and calling it science",
       "confidence": "high",
       "evidence": "'The first principle is that you must not fool yourself, and you are the easiest person to fool.' Defined scientific integrity as leaning over backwards to show how you might be wrong.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Richard Feynman",
@@ -2691,7 +2691,7 @@
       "problem": "bureaucratic systems hiding failures behind complexity",
       "confidence": "high",
       "evidence": "Dropped an O-ring into ice water on live television during the Challenger investigation, making the failure visible in a way no one could deny.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jerome Bruner",
@@ -2707,7 +2707,7 @@
       "problem": "psychology ignoring how humans actually make sense of their lives",
       "confidence": "medium",
       "evidence": "Argued psychology had overinvested in logical thought and ignored that human beings made sense of their lives almost entirely through stories.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Harold McGee",
@@ -2731,7 +2731,7 @@
       "problem": "the mind being its own worst enemy every morning",
       "confidence": "high",
       "evidence": "Wrote self-talk to get himself out of bed: 'I have to go to work, as a human being.' The earliest surviving example of written morning practice in Western literature.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Marcus Aurelius",
@@ -2739,7 +2739,7 @@
       "problem": "external events feeling like threats when they are actually judgments",
       "confidence": "high",
       "evidence": "Used the Stoic exercise of the view from above, deliberately zooming out so the crisis of the hour was seen in the scale of the universe.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Epictetus",
@@ -2747,7 +2747,7 @@
       "problem": "people suffering over things they cannot control while ignoring what they can",
       "confidence": "high",
       "evidence": "'Some things are up to us and some are not.' The entire Stoic method flows from this single division, given by a freed slave to the sons of wealthy Romans.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Epictetus",
@@ -2755,7 +2755,7 @@
       "problem": "disturbance coming from judgments, not from events",
       "confidence": "high",
       "evidence": "'It is not things that disturb us, but our judgements about things.' The line is now the epigraph of most cognitive behavioural therapy textbooks.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Tim Gowers",
@@ -2763,7 +2763,7 @@
       "problem": "mathematics being done alone when collaboration could break new ground",
       "confidence": "high",
       "evidence": "Posted a problem on his blog and asked if mathematics could be done in an open comment thread. Dozens contributed and produced a new proof.",
-      "category": "stopped_wondering"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Tim Gowers",
@@ -2771,7 +2771,7 @@
       "problem": "mathematical research being done in isolation when open collaboration could produce breakthroughs",
       "confidence": "high",
       "evidence": "The Polymath Project proved that dozens of mathematicians contributing in an open comment thread could produce a new proof collaboratively.",
-      "category": "stopped_wondering"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "George Steiner",
@@ -2803,7 +2803,7 @@
       "problem": "great literature being locked inside languages its potential readers cannot access",
       "confidence": "medium",
       "evidence": "Spent two years translating Don Quixote, asking how Cervantes would sound in contemporary English, opening the novel to a new generation.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Gregory Rabassa",
@@ -2811,7 +2811,7 @@
       "problem": "literary works from other languages never reaching readers who need them",
       "confidence": "high",
       "evidence": "García Márquez waited three years for Rabassa, who then translated forward without reading ahead, encountering the novel at the reader's pace.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Gregory Rabassa",
@@ -2827,7 +2827,7 @@
       "problem": "cultures being explained rather than described in their full complexity",
       "confidence": "high",
       "evidence": "Introduced thick description: 'Culture is a context within which events can be intelligibly described,' not a power that causally explains them.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Clifford Geertz",
@@ -2835,7 +2835,7 @@
       "problem": "anthropologists pretending they are objective reporters rather than authors",
       "confidence": "high",
       "evidence": "In Works and Lives argued anthropologists should be judged as authors with distinct signatures, changing how a generation wrote fieldwork.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Bruno Latour",
@@ -2843,7 +2843,7 @@
       "problem": "modern society pretending it has separated nature from culture when it has done the opposite",
       "confidence": "high",
       "evidence": "Argued the modern constitution officially separated nature and culture while unofficially producing hybrids at an accelerating pace.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Bruno Latour",
@@ -2851,7 +2851,7 @@
       "problem": "scientific facts being treated as discoveries rather than constructions",
       "confidence": "high",
       "evidence": "Spent two years inside the Salk Institute showing how papers cited papers until a tentative sentence hardened into an accepted fact.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Donella Meadows",
@@ -2867,7 +2867,7 @@
       "problem": "people trying to control systems instead of dancing with them",
       "confidence": "high",
       "evidence": "'We can't control systems or figure them out. But we can dance with them.' Her final essay concedes humility was the real method.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Fritjof Capra",
@@ -2875,7 +2875,7 @@
       "problem": "Western science and Eastern wisdom being treated as incompatible worldviews",
       "confidence": "high",
       "evidence": "Put quantum theory alongside the Avatamsaka Sutra's net of Indra, arguing both described the same basic oneness of the universe.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Fritjof Capra",
@@ -2907,7 +2907,7 @@
       "problem": "the sacred being invisible to modern eyes because nobody teaches how to notice it",
       "confidence": "high",
       "evidence": "Coined hierophany to designate the act of the sacred showing itself, from a stone to the incarnation of God, building comparative religion from that coinage.",
-      "category": "forgot_what_for"
+      "category": "feeling_stupid"
     },
     {
       "person": "Mircea Eliade",
@@ -2915,7 +2915,7 @@
       "problem": "modern people having lost the ability to recognise when the sacred is showing itself",
       "confidence": "high",
       "evidence": "Argued that sacred space was never homogeneous. A temple, altar, or marked tree was a way of saying 'here is where the world begins.'",
-      "category": "forgot_what_for"
+      "category": "feeling_stupid"
     },
     {
       "person": "David Bohm",
@@ -2923,7 +2923,7 @@
       "problem": "fragmentation being a disease of thought, not a feature of the world",
       "confidence": "high",
       "evidence": "'What is needed is for man to give attention to his habit of fragmentary thought, to be aware of it, and thus bring it to an end.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "David Bohm",
@@ -2931,7 +2931,7 @@
       "problem": "groups being unable to think together because everyone defends their assumptions",
       "confidence": "high",
       "evidence": "Instructed dialogue participants to notice assumptions, name them, and hold them visible without defending or abandoning them.",
-      "category": "stopped_wondering"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Gregory Bateson",
@@ -2955,7 +2955,7 @@
       "problem": "entire fields of Renaissance thought being lost because standard histories ignored them",
       "confidence": "high",
       "evidence": "Recovered the memory palace tradition and the Hermetic tradition that standard histories of science had written out.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Frances Yates",
@@ -2963,7 +2963,7 @@
       "problem": "entire intellectual traditions being written out of history because they don't fit the standard narrative",
       "confidence": "high",
       "evidence": "Argued Bruno was a Renaissance magus, not a martyr of modern science, reopening the question of how the scientific revolution connected to esoteric thought.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Martha Nussbaum",
@@ -2971,7 +2971,7 @@
       "problem": "emotions being treated as the opposite of reason instead of part of it",
       "confidence": "high",
       "evidence": "'Emotions are not just fuel. They are parts, highly complex and messy parts, of this creature's reasoning itself.'",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Martha Nussbaum",
@@ -2979,7 +2979,7 @@
       "problem": "human neediness being treated as weakness rather than an essential feature of being alive",
       "confidence": "high",
       "evidence": "Reclaimed neediness as one of the essential features of being human, noting it is 'invariably shrouded in negative judgement and shame.'",
-      "category": "forgot_what_for"
+      "category": "feeling_stupid"
     },
     {
       "person": "Myles Horton",
@@ -2987,7 +2987,7 @@
       "problem": "poor people being told they need outside experts when they already know the answers",
       "confidence": "high",
       "evidence": "Ran Highlander on the belief that the teacher's job is to set conditions for people to discover what they already know.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Myles Horton",
@@ -2995,7 +2995,7 @@
       "problem": "Black Americans never having experienced an integrated space where they were treated as equals",
       "confidence": "high",
       "evidence": "Rosa Parks attended Highlander four months before her bus protest and later said it was the first integrated setting where Black and white people ate together.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Paulo Freire",
@@ -3003,7 +3003,7 @@
       "problem": "education treating students as containers to be filled instead of humans with their own knowledge",
       "confidence": "high",
       "evidence": "Called traditional education 'banking' where teachers fill receptacles. Proposed problem-posing education where teacher and student investigate the world together.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Paulo Freire",
@@ -3011,7 +3011,7 @@
       "problem": "illiterate adults being taught to read with words that have nothing to do with their lives",
       "confidence": "high",
       "evidence": "In Brazilian literacy campaigns, peasants learned to read starting from the words that named their actual work.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "William Shakespeare",
@@ -3019,7 +3019,7 @@
       "problem": "the interior life needing a public form before an audience can recognise it as their own",
       "confidence": "high",
       "evidence": "Staged Hamlet's mind working through the question of existence aloud in meter, in front of a paying audience at the Globe.",
-      "category": "forgot_what_for"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Rumi",
@@ -3027,7 +3027,7 @@
       "problem": "the soul's longing for wholeness after being separated from its source",
       "confidence": "high",
       "evidence": "The Masnavi opens with the reed flute's complaint of separation. 'The reed has been cut from the reed bed and its music is the sound of that wound.'",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Rumi",
@@ -3035,7 +3035,7 @@
       "problem": "grief closing language down when it should open it up",
       "confidence": "high",
       "evidence": "After Shams disappeared, Rumi composed tens of thousands of verses to his missing friend. The loss opened the language instead of closing it.",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Ursula K. Le Guin",
@@ -3051,7 +3051,7 @@
       "problem": "technology being defined as electronics when it is really how a society copes with physical reality",
       "confidence": "medium",
       "evidence": "'Clay pots, chopsticks, and the way a carpenter drives a nail are all technology.' Used a plain sentence to dismantle a lazy category.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Haruki Murakami",
@@ -3075,7 +3075,7 @@
       "problem": "the history of slavery being too abstract for modern readers to feel in their bodies",
       "confidence": "high",
       "evidence": "In Kindred a contemporary Black woman is pulled back to an antebellum plantation and loses an arm. Butler wanted to make slavery physically present.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Octavia Butler",
@@ -3091,7 +3091,7 @@
       "problem": "communities losing their own memory because no one treats the stories as rescue missions",
       "confidence": "high",
       "evidence": "Insisted writing was community work. Her novel opens with 'Are you sure, sweetheart, that you want to be well?' The question is the book.",
-      "category": "left_behind"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Toni Cade Bambara",
@@ -3107,7 +3107,7 @@
       "problem": "artists having to choose between artistic integrity and paying rent",
       "confidence": "high",
       "evidence": "Drove a taxi and worked as an unlicensed plumber until 41 so that his music would not have to pay the rent.",
-      "category": "work_treated_nothing"
+      "category": "money_stress"
     },
     {
       "person": "Philip Glass",
@@ -3123,7 +3123,7 @@
       "problem": "people losing their connection to making things with their hands",
       "confidence": "high",
       "evidence": "'If we reduce the range of our tactile experiences, as we do when we reduce the necessity to form things ourselves, we grow lopsided.'",
-      "category": "work_treated_nothing"
+      "category": "feeling_lost"
     },
     {
       "person": "Anni Albers",
@@ -3139,7 +3139,7 @@
       "problem": "cinema being reduced to storytelling when it should be sculpting in time",
       "confidence": "high",
       "evidence": "'The filmmaker, from a lump of time, cuts off whatever he does not need, leaving only what is to be an element of the finished film.'",
-      "category": "work_treated_nothing"
+      "category": "feeling_lost"
     },
     {
       "person": "Andrei Tarkovsky",
@@ -3147,7 +3147,7 @@
       "problem": "art being pressured to justify its existence to censors and committees",
       "confidence": "high",
       "evidence": "'The artist exists because the world is not perfect.' Written under Soviet censorship where the pressure was not only metaphysical.",
-      "category": "work_treated_nothing"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Kenya Hara",
@@ -3171,7 +3171,7 @@
       "problem": "cities being illegible to the people who live in them",
       "confidence": "high",
       "evidence": "Argued legibility was close to a civic right: a city whose structure you could not read was a city you could not fully use, a form of exclusion as real as a locked door.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Kevin Lynch",
@@ -3179,7 +3179,7 @@
       "problem": "city designers planning buildings and roads but not the spaces where life actually happens",
       "confidence": "high",
       "evidence": "Interviewed residents who drew their cities from memory. The five-element vocabulary came from those hand-drawn maps, not from planning doctrine.",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Achille Castiglioni",
@@ -3203,7 +3203,7 @@
       "problem": "movements failing because leaders cannot translate values into action through story",
       "confidence": "high",
       "evidence": "Developed Public Narrative: Story of Self, Us, and Now. Used in the Obama campaign, movement building in South Africa, and hundreds of non-profits.",
-      "category": "life_not_yours"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Marshall Ganz",
@@ -3211,7 +3211,7 @@
       "problem": "small organisations losing to larger opponents by trying to fight on their terms",
       "confidence": "high",
       "evidence": "'David prevails not by emulating Goliath, but by wisely using the tools available to him.'",
-      "category": "life_not_yours"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Marshall McLuhan",
@@ -3219,7 +3219,7 @@
       "problem": "people being shaped by media they cannot see because they only notice content",
       "confidence": "high",
       "evidence": "'The personal and social consequences of any medium result from the new scale introduced into our affairs by each extension of ourselves.'",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Marshall McLuhan",
@@ -3227,7 +3227,7 @@
       "problem": "people being reshaped by technologies they cannot see because they only notice the content",
       "confidence": "high",
       "evidence": "A light bulb has no content but enables human activity after dark. 'The personal and social consequences of any medium result from the new scale it introduces.'",
-      "category": "left_behind"
+      "category": "feeling_stupid"
     },
     {
       "person": "Carl von Clausewitz",
@@ -3235,7 +3235,7 @@
       "problem": "plans falling apart on contact with reality and nobody having a name for why",
       "confidence": "high",
       "evidence": "Introduced friction: 'Everything in war is very simple, but the simplest thing is difficult. The difficulties accumulate and produce a kind of friction.'",
-      "category": "left_behind"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Carl von Clausewitz",
@@ -3243,7 +3243,7 @@
       "problem": "war being treated as its own domain when it never stops being political",
       "confidence": "high",
       "evidence": "'War is nothing but the continuation of policy with other means.' Insisted any general who forgot that was a menace to his own state.",
-      "category": "stopped_wondering"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Steve Jobs",
@@ -3275,7 +3275,7 @@
       "problem": "giving being unsystematic when it could be as rigorous as business",
       "confidence": "medium",
       "evidence": "Turned to 'scientific philanthropy,' applying the same systematic, data-driven approach to giving that he'd applied to business.",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Brunello Cucinelli",
@@ -3299,7 +3299,7 @@
       "problem": "systems being assumed unbeatable when mathematical analysis proves otherwise",
       "confidence": "high",
       "evidence": "Applied probability theory to blackjack and then to financial markets, proving that what seemed like gambling could be made systematic.",
-      "category": "stopped_wondering"
+      "category": "money_stress"
     },
     {
       "person": "Sol Price",
@@ -3307,7 +3307,7 @@
       "problem": "retail customers subsidising unnecessary overhead and markup",
       "confidence": "high",
       "evidence": "Invented the warehouse club model, stripping away retail extras to pass savings directly to members.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Yvon Chouinard",
@@ -3331,7 +3331,7 @@
       "problem": "women being sold products they could never try first",
       "confidence": "high",
       "evidence": "Pioneered the free sample and personal demonstration, believing women needed to touch and experience a product before trusting it with their face.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Warren Buffett",
@@ -3339,7 +3339,7 @@
       "problem": "investors being driven by speculation rather than understanding what they own",
       "confidence": "high",
       "evidence": "Built Berkshire Hathaway on the principle of buying businesses he understood at fair prices and holding them forever.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Warren Buffett",
@@ -3355,7 +3355,7 @@
       "problem": "bad decisions coming from narrow thinking and single-discipline frameworks",
       "confidence": "high",
       "evidence": "Advocated for mental models from multiple disciplines, arguing that using only one framework guaranteed you would get it wrong.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Charlie Munger",
@@ -3363,7 +3363,7 @@
       "problem": "smart people making terrible decisions because they use only one mental framework",
       "confidence": "high",
       "evidence": "Collected mental models across psychology, physics, biology, and economics, arguing any single-discipline approach was guaranteed to produce blind spots.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jeff Bezos",
@@ -3379,7 +3379,7 @@
       "problem": "computing power being locked inside institutions instead of on every desk",
       "confidence": "high",
       "evidence": "Microsoft's mission was 'a computer on every desk and in every home,' democratising access to computing.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Bill Gates",
@@ -3387,7 +3387,7 @@
       "problem": "personal computing being locked inside institutions that ordinary people could not access",
       "confidence": "high",
       "evidence": "Microsoft's founding vision was 'a computer on every desk and in every home' when computers were million-dollar machines in corporate basements.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Larry Ellison",
@@ -3475,7 +3475,7 @@
       "problem": "automobiles being luxury items only the wealthy could afford",
       "confidence": "high",
       "evidence": "Built the Model T and the assembly line to make cars affordable for ordinary workers, paying his own employees enough to buy the product.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Henry Ford",
@@ -3483,7 +3483,7 @@
       "problem": "workers not being paid enough to buy the products they make",
       "confidence": "medium",
       "evidence": "Paid workers $5 a day (double the standard wage) so they could afford the Model T they were building.",
-      "category": "work_hollows"
+      "category": "money_stress"
     },
     {
       "person": "Andrew Carnegie",
@@ -3491,7 +3491,7 @@
       "problem": "knowledge being locked behind doors that only the rich could open",
       "confidence": "high",
       "evidence": "Built 2,509 public libraries, believing that access to books was the ladder that could lift anyone out of poverty.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Andrew Carnegie",
@@ -3499,7 +3499,7 @@
       "problem": "talented people being trapped in poverty because they have no access to books or knowledge",
       "confidence": "high",
       "evidence": "Built 2,509 public libraries because he believed a library had changed his own life and could change anyone's.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Richard Branson",
@@ -3515,7 +3515,7 @@
       "problem": "unnecessary middlemen adding cost without adding value",
       "confidence": "high",
       "evidence": "Built Dell on the direct model, eliminating retail markup by letting customers configure and order computers straight from the manufacturer.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Sam Walton",
@@ -3523,7 +3523,7 @@
       "problem": "rural Americans paying more for goods because nobody built stores where they lived",
       "confidence": "high",
       "evidence": "Built Walmart in small towns that larger retailers ignored, driven by the belief that everyone deserved low prices.",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Sam Walton",
@@ -3531,7 +3531,7 @@
       "problem": "small-town Americans being forgotten by retailers who only serve big cities",
       "confidence": "high",
       "evidence": "Deliberately built Walmart in towns that larger retailers ignored, starting with the premise that rural people deserved the same prices as anyone.",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Coco Chanel",
@@ -3539,7 +3539,7 @@
       "problem": "women's clothing being designed to restrict their bodies and movement",
       "confidence": "high",
       "evidence": "Liberated women from corsets and created clothing that allowed them to move freely, treating comfort as elegance.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Coco Chanel",
@@ -3547,7 +3547,7 @@
       "problem": "women's fashion treating beauty and freedom as opposites",
       "confidence": "high",
       "evidence": "Freed women from corsets and proved that elegance and comfort could be the same thing. Her little black dress became a uniform of liberated simplicity.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "David Ogilvy",
@@ -3579,7 +3579,7 @@
       "problem": "people letting their background define what they are allowed to become",
       "confidence": "high",
       "evidence": "Arrived in America with an accent and a bodybuilder's frame and systematically achieved the top of three separate fields through vision and discipline.",
-      "category": "locked_out"
+      "category": "feeling_lost"
     },
     {
       "person": "P.T. Barnum",
@@ -3587,7 +3587,7 @@
       "problem": "wonder and spectacle being reserved for the cultural elite",
       "confidence": "high",
       "evidence": "Made entertainment accessible and affordable to the masses, believing everyone deserved the experience of astonishment.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Todd Graves",
@@ -3595,7 +3595,7 @@
       "problem": "the business world insisting you need variety when one thing done perfectly is the real competitive advantage",
       "confidence": "high",
       "evidence": "His single-item restaurant concept was called the worst business plan his professor had ever seen. He built Raising Cane's into a multi-billion-dollar chain.",
-      "category": "stopped_wondering"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Kobe Bryant",
@@ -3603,7 +3603,7 @@
       "problem": "natural talent being wasted by people who think hard work is beneath them",
       "confidence": "high",
       "evidence": "Practiced at 4am, studied every opponent's tendencies, and called his work ethic the Mamba Mentality, treating mastery as an infinite discipline.",
-      "category": "work_treated_nothing"
+      "category": "feeling_lost"
     },
     {
       "person": "Rick Rubin",
@@ -3627,7 +3627,7 @@
       "problem": "valuable things being thrown away because nobody has the nerve to buy them at the bottom",
       "confidence": "high",
       "evidence": "Built a real estate fortune by buying distressed assets others had abandoned, applying contrarian analysis to see value where others saw risk.",
-      "category": "stopped_wondering"
+      "category": "money_stress"
     },
     {
       "person": "Ben Franklin",
@@ -3635,7 +3635,7 @@
       "problem": "civic life lacking the institutions that let ordinary citizens improve themselves",
       "confidence": "high",
       "evidence": "Founded libraries, fire departments, universities, and mutual improvement societies, building the infrastructure of American civic life.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ben Franklin",
@@ -3643,7 +3643,7 @@
       "problem": "ordinary citizens having no institutions through which to improve themselves or their community",
       "confidence": "high",
       "evidence": "Founded libraries, fire departments, hospitals, and the Junto mutual improvement society, building the civic infrastructure of self-governance.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Thomas Edison",
@@ -3667,7 +3667,7 @@
       "problem": "working people needing clothing that lasts and nobody designing for them",
       "confidence": "high",
       "evidence": "Partnered with Jacob Davis to make riveted denim work pants for Gold Rush labourers, creating the most durable everyday garment in history.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "George Lucas",
@@ -3699,7 +3699,7 @@
       "problem": "deaf people being isolated from spoken communication",
       "confidence": "high",
       "evidence": "Started as a teacher of the deaf. His mother and wife were both deaf. The telephone grew from his obsession with sound and communication.",
-      "category": "locked_out"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Alexander Graham Bell",
@@ -3707,7 +3707,7 @@
       "problem": "deaf people being cut off from the hearing world with no bridge between them",
       "confidence": "high",
       "evidence": "His mother and wife were both deaf. He started as a teacher of the deaf. The telephone grew from his lifelong obsession with making sound accessible.",
-      "category": "locked_out"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Joseph Pulitzer",
@@ -3715,7 +3715,7 @@
       "problem": "newspapers serving the powerful instead of the public",
       "confidence": "high",
       "evidence": "Built his papers around the principle that journalism should serve ordinary citizens and hold power accountable.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Joseph Pulitzer",
@@ -3723,7 +3723,7 @@
       "problem": "journalism serving the powerful instead of holding them accountable for the public",
       "confidence": "high",
       "evidence": "Built his papers to serve ordinary citizens, establishing the prize that still defines excellence in public-interest journalism.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Andre Agassi",
@@ -3731,7 +3731,7 @@
       "problem": "being forced to perform an identity that was chosen for you",
       "confidence": "high",
       "evidence": "Was pushed into tennis by his father from age three despite hating the sport. Spent years rebelling before finally finding his own relationship with the game.",
-      "category": "voice_taken"
+      "category": "feeling_lost"
     },
     {
       "person": "Andre Agassi",
@@ -3763,7 +3763,7 @@
       "problem": "establishments underestimating immigrants and then being outmaneuvered by them",
       "confidence": "high",
       "evidence": "A penniless 14-year-old immigrant who built a fruit empire by finding gaps nobody else was looking at, eventually taking over the company that looked down on him.",
-      "category": "locked_out"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Sam Zemurray",
@@ -3771,7 +3771,7 @@
       "problem": "immigrants being underestimated and excluded from the establishment",
       "confidence": "high",
       "evidence": "The WASP elite of United Fruit called him 'the little fellow from down there.' He took over the entire company in a boardroom coup.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Oprah Winfrey",
@@ -3779,7 +3779,7 @@
       "problem": "childhood trauma and shame being carried in silence because nobody models speaking about it",
       "confidence": "high",
       "evidence": "Was molested as a child, became pregnant at 14. Turned that trauma into radical honesty on television, modelling vulnerability for millions.",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Oprah Winfrey",
@@ -3787,7 +3787,7 @@
       "problem": "women being told they are too emotional to be taken seriously",
       "confidence": "high",
       "evidence": "Was stripped of her co-anchor role for crying during stories. The reassignment to a talk show became the most influential platform in television history.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Howard Schultz",
@@ -3827,7 +3827,7 @@
       "problem": "wealth being hoarded when it could transform lives",
       "confidence": "high",
       "evidence": "'I had one idea that never changed: you should use your wealth to help people.' Secretly gave away nearly all of his $8 billion fortune, completing his mission to die broke.",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Chuck Feeney",
@@ -3835,7 +3835,7 @@
       "problem": "the wealthy hoarding resources while others lack the basics",
       "confidence": "high",
       "evidence": "Gave away nearly all of his $8 billion fortune in secret, completing his mission to die broke because 'you should use your wealth to help people.'",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Jim Simons",
@@ -3843,7 +3843,7 @@
       "problem": "financial markets being treated as random when mathematical structure exists",
       "confidence": "high",
       "evidence": "Applied pure mathematics to detect patterns in market data, building the most successful quantitative fund in history.",
-      "category": "stopped_wondering"
+      "category": "feeling_stupid"
     },
     {
       "person": "Sara Blakely",
@@ -3851,7 +3851,7 @@
       "problem": "failure being treated as something to be ashamed of instead of learned from",
       "confidence": "high",
       "evidence": "Her father asked at dinner not 'What did you succeed at?' but 'What did you fail at today?' She built Spanx with $5,000 and zero fashion experience.",
-      "category": "work_hollows"
+      "category": "feeling_lost"
     },
     {
       "person": "Sara Blakely",
@@ -3859,7 +3859,7 @@
       "problem": "women's undergarments being designed without asking women what they actually want",
       "confidence": "medium",
       "evidence": "Cut the feet off her pantyhose, couldn't find what she needed, and built Spanx from $5,000 and the insight that women's comfort had been ignored.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Melanie Perkins",
@@ -3867,7 +3867,7 @@
       "problem": "design tools being too complex for anyone without professional training",
       "confidence": "high",
       "evidence": "'I want to empower everyone in the world to design anything.' Pitched 100+ investors who said no, then built Canva to prove it.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Melanie Perkins",
@@ -3875,7 +3875,7 @@
       "problem": "professional design tools being too expensive and complex for non-designers",
       "confidence": "high",
       "evidence": "Was teaching students who struggled with design software and saw that the tools themselves were the barrier, not the students' ability.",
-      "category": "locked_out"
+      "category": "feeling_stupid"
     },
     {
       "person": "Tobi Lütke",
@@ -3883,7 +3883,7 @@
       "problem": "small businesses being shut out of online selling by complex technology",
       "confidence": "high",
       "evidence": "'Amazon is trying to build an empire, and Shopify is trying to arm the rebels.' Built Shopify from his own frustration selling snowboards online.",
-      "category": "locked_out"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Tobi Lütke",
@@ -3891,7 +3891,7 @@
       "problem": "small business owners having to become software engineers just to sell online",
       "confidence": "high",
       "evidence": "Tried to sell snowboards online and found no tools that worked. Built Shopify so small businesses could sell without needing technical expertise.",
-      "category": "locked_out"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Ratan Tata",
@@ -3899,7 +3899,7 @@
       "problem": "corporate feudalism preventing modernization that could serve more people",
       "confidence": "high",
       "evidence": "Transformed Tata Group from a feudal structure where subsidiary heads resisted centralization into a modern global conglomerate.",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Ratan Tata",
@@ -3907,7 +3907,7 @@
       "problem": "Indian families dying in unsafe three-wheelers because nobody builds a car they can afford",
       "confidence": "high",
       "evidence": "Launched the Tata Nano, the world's cheapest car, after seeing a family of four on a scooter in the rain and thinking there had to be a safer option.",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jack Ma",
@@ -3915,7 +3915,7 @@
       "problem": "small businesses in developing countries having no way to reach customers",
       "confidence": "high",
       "evidence": "Built Alibaba as the customer advocate despite zero technical skills, connecting small Chinese businesses to the world.",
-      "category": "locked_out"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Jack Ma",
@@ -3923,7 +3923,7 @@
       "problem": "small businesses being invisible to international buyers because they have no technology access",
       "confidence": "high",
       "evidence": "Built Alibaba to connect small Chinese businesses to global customers after seeing the internet for the first time and finding zero Chinese content.",
-      "category": "locked_out"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Whitney Wolfe Herd",
@@ -3931,7 +3931,7 @@
       "problem": "women having to wait to be chosen instead of making the first move",
       "confidence": "high",
       "evidence": "Founded Bumble after a public harassment lawsuit, turning personal crisis into a dating app where women make the first move.",
-      "category": "voice_taken"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Whitney Wolfe Herd",
@@ -3939,7 +3939,7 @@
       "problem": "online dating reinforcing the power dynamic where women wait to be chosen",
       "confidence": "high",
       "evidence": "Built Bumble where women make the first move, turning the traditional dating power dynamic on its head.",
-      "category": "voice_taken"
+      "category": "lonely_disconnected"
     },
     {
       "person": "James Sinegal",
@@ -3963,7 +3963,7 @@
       "problem": "talented women losing themselves in domesticity and feeling the restless itch that something more is possible",
       "confidence": "high",
       "evidence": "Spent years as a stay-at-home mom feeling a gnawing restlessness, then created Drybar by focusing on one thing done perfectly.",
-      "category": "work_hollows"
+      "category": "feeling_lost"
     },
     {
       "person": "Alli Webb",
@@ -3971,7 +3971,7 @@
       "problem": "women losing professional identity during years of full-time parenting",
       "confidence": "high",
       "evidence": "Spent years as a stay-at-home mom feeling restless, then channelled her hairstyling skills into creating Drybar from the recognition that she needed to build something of her own.",
-      "category": "work_hollows"
+      "category": "feeling_lost"
     },
     {
       "person": "Mackenzie Scott",
@@ -3979,7 +3979,7 @@
       "problem": "philanthropy being slow, controlling, and centered on the giver's ego",
       "confidence": "high",
       "evidence": "Pioneered trust-based philanthropy giving billions with no strings attached, saying 'I want to de-emphasize privileged voices.'",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Mackenzie Scott",
@@ -3987,7 +3987,7 @@
       "problem": "philanthropy being designed to glorify the giver rather than serve the recipient",
       "confidence": "high",
       "evidence": "Gives billions with no strings attached, no naming rights, no public requirements, saying 'I want to de-emphasize privileged voices.'",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tadashi Yanai",
@@ -4003,7 +4003,7 @@
       "problem": "visionary companies dying for lack of capital because investors lack conviction",
       "confidence": "high",
       "evidence": "Made the largest individual venture capital bets in history, funding companies others wouldn't touch because he believed in 30-year timeframes.",
-      "category": "locked_out"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Arianna Huffington",
@@ -4011,7 +4011,7 @@
       "problem": "burnout being glorified as the price of success",
       "confidence": "high",
       "evidence": "'Burnout is not the price we have to pay for success.' Pivoted from media mogul to wellness advocate after collapsing from exhaustion.",
-      "category": "pain_not_believed"
+      "category": "work_hollows"
     },
     {
       "person": "Arianna Huffington",
@@ -4019,7 +4019,7 @@
       "problem": "success culture treating exhaustion as proof of dedication",
       "confidence": "high",
       "evidence": "Collapsed from exhaustion, broke her cheekbone on her desk, then spent years building Thrive Global to change how the world thinks about burnout.",
-      "category": "pain_not_believed"
+      "category": "work_hollows"
     },
     {
       "person": "Hamdi Ulukaya",
@@ -4027,7 +4027,7 @@
       "problem": "refugees being defined by their displacement instead of their capability",
       "confidence": "high",
       "evidence": "'The minute a refugee gets a job is the minute they stop being a refugee.' Hired refugees at Chobani and advocated for their employment.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Hamdi Ulukaya",
@@ -4035,7 +4035,7 @@
       "problem": "factory communities being abandoned when corporations leave town",
       "confidence": "high",
       "evidence": "Bought a shuttered Kraft factory and hired local workers, then hired refugees, proving a factory could serve a community instead of extracting from it.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Tory Burch",
@@ -4043,7 +4043,7 @@
       "problem": "fashionable clothing requiring women to choose between looking good and paying rent",
       "confidence": "high",
       "evidence": "Saw the gap between luxury and accessible and built a brand in that space, selling $7M on her website's first day.",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Bobbi Brown",
@@ -4051,7 +4051,7 @@
       "problem": "cosmetics making women look like someone else instead of a better version of themselves",
       "confidence": "high",
       "evidence": "'All women are pretty without makeup, but with the right makeup can be pretty powerful.' Started with 10 lipsticks and a philosophy of looking like yourself.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Bobbi Brown",
@@ -4059,7 +4059,7 @@
       "problem": "the beauty industry making women look artificial rather than like enhanced versions of themselves",
       "confidence": "high",
       "evidence": "Started with 10 lipsticks designed to look like lips, not like product. 'Women should look like themselves, only better and more confident.'",
-      "category": "voice_taken"
+      "category": "feeling_stupid"
     },
     {
       "person": "Jose Andres",
@@ -4067,7 +4067,7 @@
       "problem": "people going hungry in disasters because relief systems are too slow",
       "confidence": "high",
       "evidence": "Founded World Central Kitchen serving over 350 million meals in disaster zones worldwide, proving food could be the fastest first responder.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Jose Andres",
@@ -4075,7 +4075,7 @@
       "problem": "disaster relief prioritising logistics over the most basic human need: a hot meal",
       "confidence": "high",
       "evidence": "World Central Kitchen serves meals within hours of disasters, proving food is the fastest first responder when conventional relief takes days.",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Rose Marcario",
@@ -4099,7 +4099,7 @@
       "problem": "enterprise software being designed for procurement departments instead of actual humans",
       "confidence": "high",
       "evidence": "'We don't sell saddles here. We're selling organizational transformation.' Made enterprise communication feel human with Slack.",
-      "category": "feeling_stupid"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Stewart Butterfield",
@@ -4107,7 +4107,7 @@
       "problem": "workplace communication tools being designed for IT departments instead of the people who use them",
       "confidence": "high",
       "evidence": "Built Slack to feel human in a category that was gray and joyless, winning users bottom-up rather than through procurement departments.",
-      "category": "feeling_stupid"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Jesse Itzler",
@@ -4115,7 +4115,7 @@
       "problem": "people living safely within their comfort zone and never testing their actual limits",
       "confidence": "high",
       "evidence": "Ran a 100-mile ultramarathon without proper training. Uses the 40% rule: when you think you're done, you're only 40% done.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Daymond John",
@@ -4123,7 +4123,7 @@
       "problem": "hip-hop culture having no clothing brand made by the community for the community",
       "confidence": "high",
       "evidence": "Spotted the gap in 1992 and sewed his first batch of hats from his mother's house in Queens, getting LL Cool J to wear them for free.",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Daymond John",
@@ -4131,7 +4131,7 @@
       "problem": "Black and hip-hop culture being commercialized by outsiders who don't represent it",
       "confidence": "high",
       "evidence": "Spotted that no clothing brand was made by the hip-hop community for the community. Built FUBU from his mother's house to fill that gap.",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Sophia Amoruso",
@@ -4139,7 +4139,7 @@
       "problem": "young women being told they need credentials to be taken seriously",
       "confidence": "high",
       "evidence": "Had no education or professional network but taught herself every skill she needed, letting results speak for her.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Sophia Amoruso",
@@ -4147,7 +4147,7 @@
       "problem": "young people being told they need permission and credentials before they can build something",
       "confidence": "high",
       "evidence": "Dropped out of school, taught herself every skill, and built Nasty Gal from an eBay hustle to $100M+ by trusting her own instincts over institutional validation.",
-      "category": "locked_out"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Vera Wang",
@@ -4155,7 +4155,7 @@
       "problem": "being redirected by failure into a path you never planned",
       "confidence": "high",
       "evidence": "Failed at Olympic skating and was passed over for Vogue editor-in-chief. Started her own bridal line at 40 and redefined the wedding industry.",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Vera Wang",
@@ -4171,7 +4171,7 @@
       "problem": "companies treating customer service as a cost center instead of the whole point",
       "confidence": "high",
       "evidence": "Bet everything on Zappos, proving online shoe sales could work through radical customer service including free shipping both ways.",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Tony Hsieh",
@@ -4179,7 +4179,7 @@
       "problem": "companies treating customer happiness as a cost to minimize rather than the core product",
       "confidence": "high",
       "evidence": "Built Zappos around the idea that customer service was not a department but the entire company, offering free returns both ways.",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Indra Nooyi",
@@ -4187,7 +4187,7 @@
       "problem": "large corporations being unable to pivot toward healthier products because Wall Street punishes long-term thinking",
       "confidence": "high",
       "evidence": "Transformed PepsiCo with 'Performance with Purpose' toward healthier products, a strategy critics mocked until revenues proved them wrong.",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "Indra Nooyi",
@@ -4195,7 +4195,7 @@
       "problem": "giant food corporations being unable to change course because short-term investors punish any pivot",
       "confidence": "high",
       "evidence": "Pushed PepsiCo toward healthier products with 'Performance with Purpose' while analysts mocked her. The revenue results eventually vindicated the strategy.",
-      "category": "work_hollows"
+      "category": "teams_leaders_broken"
     },
     {
       "person": "John Gottman",
@@ -4203,7 +4203,7 @@
       "problem": "couples destroying each other through patterns neither can see",
       "confidence": "high",
       "evidence": "Built the Love Lab to make invisible relationship patterns visible through physiological monitoring, identified the Four Horsemen that predict divorce with 90%+ accuracy",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "John Gottman",
@@ -4219,7 +4219,7 @@
       "problem": "adults crying out for love in a language their partner cannot hear",
       "confidence": "high",
       "evidence": "Built EFT around the insight that couple arguments are attachment cries disguised as complaints, and that the real questions are 'Are you there for me? Can I count on you?'",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Sue Johnson",
@@ -4227,7 +4227,7 @@
       "problem": "therapists treating relationship pain like a communication problem when it is a survival response",
       "confidence": "high",
       "evidence": "Showed that couple distress activates the same brain regions as physical pain, and that treating it as a skills deficit misses the neurobiology entirely",
-      "category": "feeling_stupid"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Harville Hendrix",
@@ -4235,7 +4235,7 @@
       "problem": "repeating your parents' worst patterns with the person you chose to love",
       "confidence": "high",
       "evidence": "Developed Imago theory from his own divorce, showing that we unconsciously choose partners who resemble the caregivers who wounded us",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Harville Hendrix",
@@ -4243,7 +4243,7 @@
       "problem": "childhood wounds running your adult relationships without your permission",
       "confidence": "high",
       "evidence": "Mapped how unmet childhood needs create an 'Imago' template that drives partner selection and conflict patterns in adult relationships",
-      "category": "kids_deserved_better"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Terry Real",
@@ -4251,7 +4251,7 @@
       "problem": "men drowning in depression they have been trained not to name",
       "confidence": "high",
       "evidence": "Identified 'covert depression' in men, showing it manifests as rage, addiction, and workaholism rather than sadness, making it invisible to standard diagnostic criteria",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Terry Real",
@@ -4259,7 +4259,7 @@
       "problem": "boys having their emotional range amputated before they are old enough to protest",
       "confidence": "high",
       "evidence": "Documented how boys are systematically trained out of vulnerability starting around age five, tracing this to his own father's violence and depression",
-      "category": "voice_taken"
+      "category": "kids_deserved_better"
     },
     {
       "person": "Gary Chapman",
@@ -4267,7 +4267,7 @@
       "problem": "people who genuinely love each other still feeling completely unloved",
       "confidence": "high",
       "evidence": "Observed in decades of pastoral counselling that couples expressing love in mismatched 'languages' feel unloved despite both partners' genuine effort",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Gary Chapman",
@@ -4283,7 +4283,7 @@
       "problem": "your nervous system picking a fight before your mouth opens",
       "confidence": "high",
       "evidence": "Built PACT therapy around the insight that couples' bodies enter threat responses before conscious thought, and that the therapist must read physiology, not just words",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Stan Tatkin",
@@ -4299,7 +4299,7 @@
       "problem": "the most important things in life being the ones nobody teaches you",
       "confidence": "high",
       "evidence": "Founded The School of Life to teach relationships, work, anxiety, and death, subjects that formal education ignores entirely",
-      "category": "forgot_what_for"
+      "category": "feeling_stupid"
     },
     {
       "person": "Alain de Botton",
@@ -4307,7 +4307,7 @@
       "problem": "Romanticism teaching people that love should be effortless, then leaving them alone when it is not",
       "confidence": "high",
       "evidence": "Argued in The Course of Love that the Romantic myth of effortless love is the primary cause of relationship failure, because it makes difficulty feel like proof of the wrong partner",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Gabor Mate",
@@ -4315,7 +4315,7 @@
       "problem": "addicted people being punished for pain nobody ever treated",
       "confidence": "high",
       "evidence": "12 years working with Vancouver's most addicted patients, hearing childhood trauma in every history, reframing 'Why the addiction?' as 'Why the pain?'",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Gabor Mate",
@@ -4323,7 +4323,7 @@
       "problem": "a society producing epidemics of anxiety and depression and calling itself normal",
       "confidence": "high",
       "evidence": "The Myth of Normal argued that Western culture itself is the pathology, treating symptoms while ignoring the conditions that produce them",
-      "category": "left_behind"
+      "category": "minds_hurting"
     },
     {
       "person": "Johann Hari",
@@ -4331,7 +4331,7 @@
       "problem": "a world treating addiction as a chemical problem when it is a loneliness problem",
       "confidence": "high",
       "evidence": "Popularised Rat Park experiment showing rats in social environments ignore morphine, and travelled nine countries documenting the connection between isolation and addiction",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Johann Hari",
@@ -4339,7 +4339,7 @@
       "problem": "governments putting people in cages for being in pain",
       "confidence": "high",
       "evidence": "Traced the war on drugs from Anslinger's 1930s racism through to present-day mass incarceration, documenting Portugal's successful decriminalisation as the counter-example",
-      "category": "life_not_yours"
+      "category": "minds_hurting"
     },
     {
       "person": "Maia Szalavitz",
@@ -4347,7 +4347,7 @@
       "problem": "the addiction field lying to itself about what addiction actually is",
       "confidence": "high",
       "evidence": "Challenged both the moral model and the disease model by proposing addiction as a developmental learning disorder, grounded in her own lived experience and neuroscience research",
-      "category": "stopped_wondering"
+      "category": "minds_hurting"
     },
     {
       "person": "Maia Szalavitz",
@@ -4363,7 +4363,7 @@
       "problem": "an entire field of science built on assumptions nobody bothered to test",
       "confidence": "high",
       "evidence": "Ran controlled experiments showing most crack and meth users chose small cash rewards over another hit, directly contradicting the dominant 'irresistibly addictive' narrative",
-      "category": "stopped_wondering"
+      "category": "minds_hurting"
     },
     {
       "person": "Carl Hart",
@@ -4371,7 +4371,7 @@
       "problem": "Black communities being destroyed by a drug war designed to destroy them",
       "confidence": "high",
       "evidence": "Grew up in poverty in Miami during the crack era, entered neuroscience to prove the drug-war narrative, then watched his own data dismantle everything he had believed",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Holly Whitaker",
@@ -4379,7 +4379,7 @@
       "problem": "women being sold alcohol as self-care and then shamed when they cannot stop",
       "confidence": "high",
       "evidence": "Quit Like a Woman documented how the alcohol industry markets specifically to women as empowerment, while the recovery industry then demands surrender and powerlessness",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Holly Whitaker",
@@ -4387,7 +4387,7 @@
       "problem": "recovery programmes designed for 1930s white men being treated as the only option in 2020",
       "confidence": "high",
       "evidence": "Found the scientific evidence for AA surprisingly thin, built Tempest as an alternative that replaced surrender-based language with agency-based tools",
-      "category": "left_behind"
+      "category": "minds_hurting"
     },
     {
       "person": "Russell Brand",
@@ -4395,7 +4395,7 @@
       "problem": "recovery being treated as something shameful instead of something heroic",
       "confidence": "high",
       "evidence": "Used his global celebrity platform to rewrite the 12 steps in contemporary language and testified before the UK parliament about his own crack and heroin addiction",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Russell Brand",
@@ -4403,7 +4403,7 @@
       "problem": "famous people going through the darkest moments of their lives with cameras rolling and nobody helping",
       "confidence": "medium",
       "evidence": "Publicly described his own addiction spiralling while maintaining a career in entertainment, then used that visibility to advocate for abstinence-based treatment",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Bill Wilson",
@@ -4411,7 +4411,7 @@
       "problem": "alcoholics dying alone because nobody believed one drunk could help another",
       "confidence": "high",
       "evidence": "Founded AA on the principle that mutual aid between alcoholics was more powerful than any medical or spiritual intervention, grew it to 2 million members in 180 countries",
-      "category": "pain_not_believed"
+      "category": "minds_hurting"
     },
     {
       "person": "Bill Wilson",
@@ -4419,7 +4419,7 @@
       "problem": "building something that outlives you by removing yourself from it",
       "confidence": "high",
       "evidence": "Designed anonymity and anti-personality principles into AA's structure, ensuring the movement survived its founders without a CEO, board, or marketing budget",
-      "category": "forgot_what_for"
+      "category": "minds_hurting"
     },
     {
       "person": "Louise Aronson",
@@ -4435,7 +4435,7 @@
       "problem": "a country with 50 million people over 65 and only 7,000 doctors trained to care for them",
       "confidence": "high",
       "evidence": "Documented the geriatrics recruitment crisis, showing that medical students avoid the field because it pays less and carries less prestige",
-      "category": "left_behind"
+      "category": "pain_not_believed"
     },
     {
       "person": "Bill Thomas",
@@ -4443,7 +4443,7 @@
       "problem": "old people dying of loneliness in buildings designed for efficiency instead of life",
       "confidence": "high",
       "evidence": "Introduced animals, plants, and children to Chase Memorial Nursing Home and saw mortality drop 15%, then built Green House homes to replace institutional care entirely",
-      "category": "left_behind"
+      "category": "pain_not_believed"
     },
     {
       "person": "Bill Thomas",
@@ -4451,7 +4451,7 @@
       "problem": "nursing homes warehousing people instead of caring for them",
       "confidence": "high",
       "evidence": "Named loneliness, helplessness, and boredom as the 'three plagues' of institutional care and proved through the Eden Alternative that addressing them reduced mortality and drug costs",
-      "category": "pain_not_believed"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Ai-jen Poo",
@@ -4459,7 +4459,7 @@
       "problem": "the women who care for our parents being paid poverty wages with no protections",
       "confidence": "high",
       "evidence": "Won the first Domestic Workers' Bill of Rights in New York State in 2010, covering 200,000 nannies, housekeepers, and elder care workers",
-      "category": "work_hollows"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ai-jen Poo",
@@ -4467,7 +4467,7 @@
       "problem": "domestic workers being explicitly excluded from labour protections since the 1930s because of who they were",
       "confidence": "high",
       "evidence": "Organised workers excluded from the NLRA and FLSA, exclusions originally designed to deny protections to Black and immigrant workers",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ai-jen Poo",
@@ -4475,7 +4475,7 @@
       "problem": "a country approaching a caregiving crisis and treating it as a personal family problem instead of infrastructure",
       "confidence": "high",
       "evidence": "The Age of Dignity framed elder care as an infrastructure problem on the scale of the interstate highway system, connecting domestic workers' rights to the aging crisis",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Marc Freedman",
@@ -4483,7 +4483,7 @@
       "problem": "a society warehousing its most experienced people at exactly the age they have the most to give",
       "confidence": "high",
       "evidence": "Built Encore.org and Experience Corps to deploy people over 55 as tutors and mentors, with Johns Hopkins research showing health benefits for the volunteers themselves",
-      "category": "left_behind"
+      "category": "feeling_lost"
     },
     {
       "person": "Marc Freedman",
@@ -4491,7 +4491,7 @@
       "problem": "old and young people being segregated into separate worlds that impoverish both",
       "confidence": "high",
       "evidence": "How to Live Forever documented the damage of age-segregated housing and championed intergenerational programmes as the repair",
-      "category": "forgot_what_for"
+      "category": "lonely_disconnected"
     },
     {
       "person": "Judith Heumann",
@@ -4499,7 +4499,7 @@
       "problem": "disabled people being locked out of buildings, schools, and jobs by a world designed without them",
       "confidence": "high",
       "evidence": "Sued for the right to teach after being denied a licence because her wheelchair made her 'a fire hazard,' then led the 25-day Section 504 sit-in",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Judith Heumann",
@@ -4507,7 +4507,7 @@
       "problem": "an entire population's civil rights sitting unsigned on a bureaucrat's desk",
       "confidence": "high",
       "evidence": "Led 150 disabled activists in the longest occupation of a federal building in US history to force the signing of Section 504",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Stella Young",
@@ -4515,7 +4515,7 @@
       "problem": "disabled people being used as motivational props for people who can walk",
       "confidence": "high",
       "evidence": "Coined 'inspiration porn' in her TEDxSydney talk, calling out images of disabled people doing ordinary things captioned to make non-disabled people feel better",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Stella Young",
@@ -4523,7 +4523,7 @@
       "problem": "being given an achievement award for nothing except existing with a disability",
       "confidence": "high",
       "evidence": "Nominated for a community achievement award at age 15 for no accomplishment other than attending school while disabled",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Haben Girma",
@@ -4531,7 +4531,7 @@
       "problem": "every digital system being built as if blind and deaf people do not exist",
       "confidence": "high",
       "evidence": "Advocated for website and app accessibility under the ADA, arguing that an inaccessible website is the digital equivalent of stairs at a building entrance",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Haben Girma",
@@ -4539,7 +4539,7 @@
       "problem": "the world calling disability a limitation when the real limitation is the design",
       "confidence": "high",
       "evidence": "Responded to dinner-party sympathy by asking whether the guest 'suffered' from not being able to echolocate like a bat, reframing disability as the presence of barriers, not the absence of ability",
-      "category": "feeling_stupid"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ed Roberts",
@@ -4547,7 +4547,7 @@
       "problem": "disabled people being told they are too broken to contribute",
       "confidence": "high",
       "evidence": "The Department of Rehabilitation called him 'too severely disabled to ever work.' He later became Director of that same agency.",
-      "category": "life_not_yours"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ed Roberts",
@@ -4555,7 +4555,7 @@
       "problem": "disabled people having their lives run by institutions that see patients instead of people",
       "confidence": "high",
       "evidence": "Founded the first Centre for Independent Living in 1972, based on the principle that disabled people are the experts on their own lives",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Alice Wong",
@@ -4563,7 +4563,7 @@
       "problem": "disabled people's stories being told by everyone except disabled people",
       "confidence": "high",
       "evidence": "Built the Disability Visibility Project as a StoryCorps partnership to collect first-person disability narratives, then edited an anthology that centred disabled voices exclusively",
-      "category": "voice_taken"
+      "category": "work_treated_nothing"
     },
     {
       "person": "Alice Wong",
@@ -4571,7 +4571,7 @@
       "problem": "a pandemic treating ventilator users as expendable",
       "confidence": "high",
       "evidence": "Dedicated Year of the Tiger to 'all the disabled people who didn't survive the pandemic, not because of COVID but because of ableism'",
-      "category": "left_behind"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Muhammad Yunus",
@@ -4579,7 +4579,7 @@
       "problem": "the poorest people on earth being denied credit not because they are risky but because they are poor",
       "confidence": "high",
       "evidence": "Lent $27 to 42 women making bamboo stools, got every cent back, and built Grameen Bank to over $30 billion in loans with a 98% repayment rate",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Muhammad Yunus",
@@ -4587,7 +4587,7 @@
       "problem": "women trapped in poverty by moneylenders charging rates that guarantee they stay poor",
       "confidence": "high",
       "evidence": "Found women in Jobra earning two cents a day because usurious lending ate all their margins, then built a bank owned by borrowers with 97% women members",
-      "category": "life_not_yours"
+      "category": "money_stress"
     },
     {
       "person": "Tiffany Aliche",
@@ -4603,7 +4603,7 @@
       "problem": "Black women being invisible to the financial education industry",
       "confidence": "high",
       "evidence": "Built a financial education platform specifically for women, especially Black women, after losing her own savings in 2008 and finding no resources that spoke to her experience",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Jose Quinonez",
@@ -4611,7 +4611,7 @@
       "problem": "millions of people being financially responsible but financially invisible because the system does not recognise how they manage money",
       "confidence": "high",
       "evidence": "Formalised lending circles (tandas) by reporting payments to credit bureaus, making an existing practice visible to a system that had always ignored it",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Jose Quinonez",
@@ -4619,7 +4619,7 @@
       "problem": "growing up without a Social Security number and being unable to open a bank account in the country you call home",
       "confidence": "high",
       "evidence": "Crossed the border at age nine undocumented, grew up financially competent but financially invisible, and built Mission Asset Fund from that lived experience",
-      "category": "left_behind"
+      "category": "money_stress"
     },
     {
       "person": "Suze Orman",
@@ -4627,7 +4627,7 @@
       "problem": "people pretending to afford a life that is bankrupting them because nobody taught them how money works",
       "confidence": "high",
       "evidence": "Ran 'Can I Afford It?' on CNBC for 13 years, telling people to their faces on national television that they could not afford the purchase they wanted to make",
-      "category": "feeling_stupid"
+      "category": "money_stress"
     },
     {
       "person": "Suze Orman",
@@ -4635,7 +4635,7 @@
       "problem": "a waitress losing seven years of savings because a broker she trusted did not explain the risk",
       "confidence": "high",
       "evidence": "Lost $50,000 to a Merrill Lynch broker who invested her savings in high-risk options without proper disclosure, then built her entire career on the outrage",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Dave Ramsey",
@@ -4643,7 +4643,7 @@
       "problem": "ordinary families drowning in debt they were told was normal",
       "confidence": "high",
       "evidence": "Went bankrupt at 26 from leveraged real estate, rebuilt using total debt elimination, and taught the debt snowball to millions through Financial Peace University",
-      "category": "feeling_stupid"
+      "category": "money_stress"
     },
     {
       "person": "Dave Ramsey",
@@ -4651,7 +4651,7 @@
       "problem": "a culture that normalises borrowing money for everything and calls it financial sophistication",
       "confidence": "high",
       "evidence": "Built a media empire on the single message that all consumer debt is dangerous, reaching 18 million radio listeners weekly and 10 million Financial Peace University graduates",
-      "category": "stopped_wondering"
+      "category": "money_stress"
     },
     {
       "person": "Suze Orman",
@@ -4659,7 +4659,7 @@
       "problem": "women taking care of everyone else's money and neglecting their own",
       "confidence": "high",
       "evidence": "Women and Money argued that women's financial neglect of themselves is a specific emotional pattern, not just a knowledge gap",
-      "category": "forgot_what_for"
+      "category": "money_stress"
     },
     {
       "person": "Jose Quinonez",
@@ -4667,7 +4667,7 @@
       "problem": "a credit system that defines 'creditworthy' around products that exclude the people who need credit most",
       "confidence": "high",
       "evidence": "MacArthur Fellowship citation highlighted his insight that millions of Americans are not financially irresponsible but financially invisible",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Gabor Mate",
@@ -4675,7 +4675,7 @@
       "problem": "a doctor buying classical CDs compulsively while his patients waited, and recognising the same wound driving both behaviours",
       "confidence": "high",
       "evidence": "Disclosed his own compulsive spending in Hungry Ghosts, tracing it to his infancy in Nazi-occupied Budapest when his mother handed him to a stranger to save his life",
-      "category": "kids_deserved_better"
+      "category": "minds_hurting"
     },
     {
       "person": "Maia Szalavitz",
@@ -4683,7 +4683,7 @@
       "problem": "people with lived experience of addiction being dismissed as unreliable witnesses to their own condition",
       "confidence": "high",
       "evidence": "Used her own history of cocaine and heroin injection as epistemological authority, arguing she knows when the literature is wrong because the experience does not match",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Carl Hart",
@@ -4691,7 +4691,7 @@
       "problem": "a tenured professor having to disclose heroin use to force people to reconcile their assumptions",
       "confidence": "medium",
       "evidence": "Disclosed regular heroin use in Drug Use for Grown-Ups to confront the gap between the public image of a Columbia professor and assumptions about who uses drugs",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Judith Heumann",
@@ -4699,7 +4699,7 @@
       "problem": "a world that sees wheelchairs as tragedies instead of stairs as the problem",
       "confidence": "high",
       "evidence": "Four decades of advocacy consistently argued that disabled people do not need pity, they need access, from teaching in schools to advising the World Bank",
-      "category": "voice_taken"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Ed Roberts",
@@ -4707,7 +4707,7 @@
       "problem": "disability being created by inaccessible environments, not by the person's body",
       "confidence": "high",
       "evidence": "Championed the social model of disability for decades, arguing that the built environment, not the impairment, creates the handicap",
-      "category": "feeling_stupid"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Bill Thomas",
@@ -4715,7 +4715,7 @@
       "problem": "aging being treated as a problem to solve instead of a stage of life to design for",
       "confidence": "high",
       "evidence": "Took his message on a theatrical tour, deliberately choosing non-medical venues to reach audiences who would never attend a geriatrics conference",
-      "category": "forgot_what_for"
+      "category": "feeling_lost"
     },
     {
       "person": "Marc Freedman",
@@ -4723,7 +4723,7 @@
       "problem": "a culture that believes innovation belongs exclusively to the young",
       "confidence": "high",
       "evidence": "Created the Purpose Prize to award $100,000 to social innovators over 60, building counter-narratives to the cult of youth in entrepreneurship",
-      "category": "left_behind"
+      "category": "feeling_lost"
     },
     {
       "person": "Holly Whitaker",
@@ -4731,7 +4731,7 @@
       "problem": "sobriety being framed as a confession of failure instead of an act of power",
       "confidence": "high",
       "evidence": "Reframed quitting drinking as a feminist act in a culture that sells wine as women's empowerment",
-      "category": "voice_taken"
+      "category": "minds_hurting"
     },
     {
       "person": "Russell Brand",
@@ -4739,7 +4739,7 @@
       "problem": "punishing drug users being treated as policy when it is cruelty",
       "confidence": "high",
       "evidence": "Told the UK Home Affairs Select Committee that criminalisation was 'cruel and pointless,' testifying from direct personal experience of crack and heroin addiction",
-      "category": "life_not_yours"
+      "category": "minds_hurting"
     },
     {
       "person": "Bill Wilson",
@@ -4747,7 +4747,7 @@
       "problem": "a drunk in a hotel lobby with no one to call",
       "confidence": "high",
       "evidence": "The founding moment of AA was Wilson desperately calling strangers from the Mayflower Hotel in Akron because he needed to talk to another alcoholic to avoid drinking",
-      "category": "left_behind"
+      "category": "minds_hurting"
     },
     {
       "person": "Tiffany Aliche",
@@ -4755,7 +4755,7 @@
       "problem": "a preschool teacher earning $39,000 losing everything to a financial con artist because nobody taught her how to spot one",
       "confidence": "high",
       "evidence": "Lost nearly all her savings in 2008, was also laid off, and rebuilt from zero into a platform that has helped participants save and pay off over $250 million",
-      "category": "locked_out"
+      "category": "money_stress"
     },
     {
       "person": "Muhammad Yunus",
@@ -4763,7 +4763,7 @@
       "problem": "for-profit imitators turning microfinance into a debt trap",
       "confidence": "medium",
       "evidence": "Acknowledged criticism of microfinance but argued the problems came from for-profit companies that abandoned the social mission and borrower-ownership model",
-      "category": "work_hollows"
+      "category": "money_stress"
     },
     {
       "person": "Haben Girma",
@@ -4771,7 +4771,7 @@
       "problem": "Harvard being designed for people who can see and hear, and nobody noticing until someone who cannot shows up",
       "confidence": "high",
       "evidence": "Navigated Harvard Law by reverse-engineering access from systems built without her in mind, using a braille display and real-time transcription",
-      "category": "locked_out"
+      "category": "people_treated_unfairly"
     },
     {
       "person": "Dave Ramsey",
@@ -4779,7 +4779,7 @@
       "problem": "the humiliation of bankruptcy teaching you things prosperity never could",
       "confidence": "high",
       "evidence": "Built a $4 million portfolio on debt by age 26, went bankrupt when the bank called in his notes, and turned the lesson into a 30-year crusade against consumer debt",
-      "category": "forgot_what_for"
+      "category": "money_stress"
     }
   ]
 }

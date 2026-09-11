@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-07",
-    "totalProfiles": 299,
+    "totalProfiles": 319,
     "confidenceDistribution": {
       "high": 296,
       "medium": 1,
@@ -41,7 +41,7 @@
         "lessonsForUser": "If you design and care about craft: strip everything to its essence, then build an ecosystem around one perfect product"
       },
       "confidence": "high",
-      "oneLiner": "We're here to put a dent in the universe \u2014 otherwise why even be here?",
+      "oneLiner": "We're here to put a dent in the universe — otherwise why even be here?",
       "primaryPersona": "visionaries"
     },
     {
@@ -68,7 +68,7 @@
         "lessonsForUser": "If you lead and care about systems: control the bottleneck in your industry, not the flashy part"
       },
       "confidence": "high",
-      "oneLiner": "I believe the power to make money is a gift from God \u2014 to be developed and used to the best of our ability for the good of mankind.",
+      "oneLiner": "I believe the power to make money is a gift from God — to be developed and used to the best of our ability for the good of mankind.",
       "primaryPersona": "builders"
     },
     {
@@ -95,14 +95,14 @@
         "lessonsForUser": "If you design and care about dignity: charge premium prices that fund the treatment of people you believe they deserve"
       },
       "confidence": "high",
-      "oneLiner": "I want to be a guardian of human dignity, combining profit with a gift back to humanity \u2014 a humanistic capitalism.",
+      "oneLiner": "I want to be a guardian of human dignity, combining profit with a gift back to humanity — a humanistic capitalism.",
       "primaryPersona": "nurturers"
     },
     {
       "name": "Ed Thorp",
       "source": "founder",
       "domain": "quantitative finance",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "building",
@@ -130,7 +130,7 @@
       "name": "Sol Price",
       "source": "founder",
       "domain": "retail",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "building",
@@ -208,10 +208,10 @@
       "primaryPersona": "creators"
     },
     {
-      "name": "Est\u00e9e Lauder",
+      "name": "Estée Lauder",
       "source": "founder",
       "domain": "cosmetics",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "speaking_up",
         "performing",
@@ -240,7 +240,7 @@
       "name": "Warren Buffett",
       "source": "founder",
       "domain": "investment",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "coaching",
@@ -268,7 +268,7 @@
       "name": "Charlie Munger",
       "source": "founder",
       "domain": "investment and law",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "coaching",
@@ -318,14 +318,14 @@
         "lessonsForUser": "If you lead and care about customers: build the infrastructure first, profit second, and let compounding handle the rest"
       },
       "confidence": "high",
-      "oneLiner": "If you're not stubborn, you'll give up on experiments too soon \u2014 if you're not flexible, you'll pound your head against the wall and won't see a different solution to a problem you're trying to solve.",
+      "oneLiner": "If you're not stubborn, you'll give up on experiments too soon — if you're not flexible, you'll pound your head against the wall and won't see a different solution to a problem you're trying to solve.",
       "primaryPersona": "builders"
     },
     {
       "name": "Bill Gates",
       "source": "founder",
       "domain": "software",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "storytelling"
@@ -494,7 +494,7 @@
       "name": "Henry Ford",
       "source": "founder",
       "domain": "automotive manufacturing",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "building"
@@ -514,14 +514,14 @@
         "lessonsForUser": "If you build and care about access: figure out how to make the expensive thing cheap, and your market becomes everyone"
       },
       "confidence": "high",
-      "oneLiner": "Don't find fault, find a remedy \u2014 anybody can complain.",
+      "oneLiner": "Don't find fault, find a remedy — anybody can complain.",
       "primaryPersona": "builders"
     },
     {
       "name": "Andrew Carnegie",
       "source": "founder",
       "domain": "steel manufacturing",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "connecting"
@@ -603,7 +603,7 @@
       "name": "Michael Dell",
       "source": "founder",
       "domain": "personal computers",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "building"
@@ -658,7 +658,7 @@
       "name": "Sam Walton",
       "source": "founder",
       "domain": "retail",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "coaching"
@@ -678,14 +678,14 @@
         "lessonsForUser": "If you lead and care about the customer: obsessively reduce costs and pass every saving along, creating loyalty through value"
       },
       "confidence": "high",
-      "oneLiner": "There is only one boss \u2014 the customer. And he can fire everybody in the company from the chairman on down, simply by spending his money somewhere else.",
+      "oneLiner": "There is only one boss — the customer. And he can fire everybody in the company from the chairman on down, simply by spending his money somewhere else.",
       "primaryPersona": "protectors"
     },
     {
       "name": "Coco Chanel",
       "source": "founder",
       "domain": "fashion",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "designing"
@@ -765,7 +765,7 @@
       "name": "Arnold Schwarzenegger",
       "source": "founder",
       "domain": "bodybuilding, film, politics",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "performing",
         "storytelling",
@@ -795,7 +795,7 @@
       "name": "Dietrich Mateschitz",
       "source": "founder",
       "domain": "energy drinks",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "creating",
@@ -823,7 +823,7 @@
       "name": "Todd Graves",
       "source": "founder",
       "domain": "fast food",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "building"
@@ -849,7 +849,7 @@
       "name": "Kobe Bryant",
       "source": "founder",
       "domain": "basketball and venture capital",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "performing",
@@ -906,7 +906,7 @@
       "name": "Sam Zell",
       "source": "founder",
       "domain": "real estate investment",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "building",
@@ -934,7 +934,7 @@
       "name": "Ben Franklin",
       "source": "founder",
       "domain": "printing, science, diplomacy",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "connecting"
@@ -990,7 +990,7 @@
       "name": "Levi Strauss",
       "source": "founder",
       "domain": "apparel manufacturing",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "building"
@@ -1071,7 +1071,7 @@
       "name": "Alexander Graham Bell",
       "source": "founder",
       "domain": "telecommunications",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "teaching",
         "building",
@@ -1125,7 +1125,7 @@
       "name": "Joseph Pulitzer",
       "source": "founder",
       "domain": "newspaper publishing",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "speaking_up",
         "storytelling",
@@ -1152,7 +1152,7 @@
       "name": "Andre Agassi",
       "source": "founder",
       "domain": "tennis and philanthropy",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "speaking_up",
@@ -1209,7 +1209,7 @@
       "name": "Sam Zemurray",
       "source": "founder",
       "domain": "agriculture and shipping",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "building"
@@ -1236,7 +1236,7 @@
       "name": "Oprah Winfrey",
       "source": "founder",
       "domain": "media and entertainment",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "storytelling",
@@ -1322,7 +1322,7 @@
       "name": "Chuck Feeney",
       "source": "founder",
       "domain": "duty-free retail and philanthropy",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "building",
@@ -1342,14 +1342,14 @@
         "lessonsForUser": "If you lead and care about impact: giving while living lets you see the results and improve your approach"
       },
       "confidence": "high",
-      "oneLiner": "I had one idea that never changed in my mind \u2014 that you should use your wealth to help people.",
+      "oneLiner": "I had one idea that never changed in my mind — that you should use your wealth to help people.",
       "primaryPersona": "nurturers"
     },
     {
       "name": "Jim Simons",
       "source": "founder",
       "domain": "quantitative finance",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "connecting",
         "building",
@@ -1405,7 +1405,7 @@
       "name": "Melanie Perkins",
       "source": "founder",
       "domain": "design software",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "designing",
         "creating",
@@ -1431,10 +1431,10 @@
       "primaryPersona": "builders"
     },
     {
-      "name": "Tobi L\u00fctke",
+      "name": "Tobi Lütke",
       "source": "founder",
       "domain": "e-commerce platform",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "building",
         "leading"
@@ -1489,7 +1489,7 @@
       "name": "Jack Ma",
       "source": "founder",
       "domain": "e-commerce",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "performing",
         "storytelling",
@@ -1517,7 +1517,7 @@
       "name": "Whitney Wolfe Herd",
       "source": "founder",
       "domain": "dating app",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "speaking_up",
@@ -1597,7 +1597,7 @@
       "name": "Mackenzie Scott",
       "source": "founder",
       "domain": "philanthropy and literature",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "coaching",
         "storytelling",
@@ -1650,7 +1650,7 @@
       "name": "Masayoshi Son",
       "source": "founder",
       "domain": "technology investment",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "performing",
         "speaking_up",
@@ -1706,7 +1706,7 @@
       "name": "Hamdi Ulukaya",
       "source": "founder",
       "domain": "food manufacturing",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "building",
         "coaching"
@@ -1732,7 +1732,7 @@
       "name": "Tory Burch",
       "source": "founder",
       "domain": "fashion",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "creating",
         "designing",
@@ -1761,7 +1761,7 @@
       "name": "Bobbi Brown",
       "source": "founder",
       "domain": "cosmetics",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "teaching",
         "coaching",
@@ -1782,7 +1782,7 @@
         "lessonsForUser": "If you teach and care about authenticity: build a brand around helping people be more themselves, not someone else"
       },
       "confidence": "high",
-      "oneLiner": "I believe that all women are pretty without makeup \u2014 but with the right makeup can be pretty powerful.",
+      "oneLiner": "I believe that all women are pretty without makeup — but with the right makeup can be pretty powerful.",
       "primaryPersona": "creators"
     },
     {
@@ -1841,7 +1841,7 @@
       "name": "Daymond John",
       "source": "founder",
       "domain": "fashion and venture capital",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "speaking_up",
         "coaching",
@@ -1871,7 +1871,7 @@
       "name": "Sophia Amoruso",
       "source": "founder",
       "domain": "fashion e-commerce",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "designing",
@@ -1899,7 +1899,7 @@
       "name": "Vera Wang",
       "source": "founder",
       "domain": "bridal fashion",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "designing"
@@ -1947,7 +1947,7 @@
         "lessonsForUser": "If you connect and care about customer experience: remove every risk the customer faces, and they'll become your marketing team"
       },
       "confidence": "high",
-      "oneLiner": "Chase the vision, not the money \u2014 the money will end up following you.",
+      "oneLiner": "Chase the vision, not the money — the money will end up following you.",
       "primaryPersona": "seekers"
     },
     {
@@ -2337,7 +2337,7 @@
       "name": "John Wooden",
       "source": "nonfounder",
       "domain": "basketball coaching and teaching",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "teaching"
@@ -2421,7 +2421,7 @@
       "name": "Jacob Bronowski",
       "source": "nonfounder",
       "domain": "mathematics and science history",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "storytelling",
         "speaking_up",
@@ -2506,7 +2506,7 @@
       "name": "Isaiah Berlin",
       "source": "nonfounder",
       "domain": "history of ideas",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "storytelling",
         "connecting"
@@ -2533,7 +2533,7 @@
       "name": "Lynn Margulis",
       "source": "nonfounder",
       "domain": "evolutionary biology",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "speaking_up"
@@ -2611,10 +2611,10 @@
       "primaryPersona": "challengers"
     },
     {
-      "name": "Claude L\u00e9vi-Strauss",
+      "name": "Claude Lévi-Strauss",
       "source": "nonfounder",
       "domain": "structural anthropology",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "teaching",
@@ -2638,7 +2638,7 @@
       "primaryPersona": "seekers"
     },
     {
-      "name": "Svante P\u00e4\u00e4bo",
+      "name": "Svante Pääbo",
       "source": "nonfounder",
       "domain": "paleogenetics",
       "primaryProblem": "feeling_stupid",
@@ -2669,7 +2669,7 @@
       "name": "Jane Jacobs",
       "source": "nonfounder",
       "domain": "urbanism and journalism",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "performing",
         "speaking_up",
@@ -2697,7 +2697,7 @@
       "name": "Dorothy Height",
       "source": "nonfounder",
       "domain": "civil rights and women's rights",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "leading",
@@ -2724,7 +2724,7 @@
       "name": "Bayard Rustin",
       "source": "nonfounder",
       "domain": "civil rights organizing",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "speaking_up"
@@ -2750,7 +2750,7 @@
       "name": "Fannie Lou Hamer",
       "source": "nonfounder",
       "domain": "voting rights organizing",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "storytelling",
@@ -2778,7 +2778,7 @@
       "name": "Saul Alinsky",
       "source": "nonfounder",
       "domain": "community organizing",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "connecting",
@@ -2806,7 +2806,7 @@
       "name": "Harriet Tubman",
       "source": "nonfounder",
       "domain": "abolition and rescue",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "connecting",
@@ -2833,7 +2833,7 @@
       "name": "Frederick Douglass",
       "source": "nonfounder",
       "domain": "abolition and oratory",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "speaking_up"
@@ -2860,7 +2860,7 @@
       "name": "Dorothy Day",
       "source": "nonfounder",
       "domain": "Catholic Worker movement",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "coaching",
         "storytelling",
@@ -2888,7 +2888,7 @@
       "name": "Studs Terkel",
       "source": "nonfounder",
       "domain": "oral history and radio",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "coaching",
         "performing",
@@ -2944,7 +2944,7 @@
       "name": "Desmond Tutu",
       "source": "nonfounder",
       "domain": "truth and reconciliation",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "speaking_up",
@@ -2973,7 +2973,7 @@
       "name": "Nawal El Saadawi",
       "source": "nonfounder",
       "domain": "feminist activism and psychiatry",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "creating",
@@ -3002,7 +3002,7 @@
       "name": "Toni Morrison",
       "source": "nonfounder",
       "domain": "fiction and editing",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "coaching",
         "storytelling",
@@ -3030,7 +3030,7 @@
       "name": "James Baldwin",
       "source": "nonfounder",
       "domain": "essays and fiction",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "storytelling"
@@ -3057,7 +3057,7 @@
       "name": "Seamus Heaney",
       "source": "nonfounder",
       "domain": "poetry",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "storytelling",
         "speaking_up",
@@ -3085,7 +3085,7 @@
       "name": "Mahmoud Darwish",
       "source": "nonfounder",
       "domain": "poetry",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "performing",
         "creating",
@@ -3113,7 +3113,7 @@
       "name": "Audre Lorde",
       "source": "nonfounder",
       "domain": "poetry and essays",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "building",
@@ -3141,7 +3141,7 @@
       "name": "Miriam Makeba",
       "source": "nonfounder",
       "domain": "South African song and activism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "performing",
@@ -3168,7 +3168,7 @@
       "name": "Maya Angelou",
       "source": "nonfounder",
       "domain": "memoir and poetry",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "storytelling",
         "performing",
@@ -3299,7 +3299,7 @@
       "primaryPersona": "creators"
     },
     {
-      "name": "Gabriel Garc\u00eda M\u00e1rquez",
+      "name": "Gabriel García Márquez",
       "source": "nonfounder",
       "domain": "fiction",
       "primaryProblem": "work_treated_nothing",
@@ -3356,7 +3356,7 @@
       "name": "Chinua Achebe",
       "source": "nonfounder",
       "domain": "fiction",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "speaking_up",
@@ -3408,7 +3408,7 @@
       "primaryPersona": "creators"
     },
     {
-      "name": "Antoni Gaud\u00ed",
+      "name": "Antoni Gaudí",
       "source": "nonfounder",
       "domain": "architecture",
       "primaryProblem": "work_treated_nothing",
@@ -3437,7 +3437,7 @@
       "name": "Charles and Ray Eames",
       "source": "nonfounder",
       "domain": "furniture, film, and exhibition design",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "building",
         "creating"
@@ -3490,7 +3490,7 @@
       "name": "Malcolm X",
       "source": "nonfounder",
       "domain": "civil rights oratory",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "speaking_up"
@@ -3516,7 +3516,7 @@
       "name": "Mahatma Gandhi",
       "source": "nonfounder",
       "domain": "nonviolent resistance",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "performing"
@@ -3542,7 +3542,7 @@
       "name": "Cesar Chavez",
       "source": "nonfounder",
       "domain": "farmworker organizing",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "performing",
@@ -3570,7 +3570,7 @@
       "name": "Marie Curie",
       "source": "nonfounder",
       "domain": "physics and chemistry",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "leading",
         "building"
@@ -3596,7 +3596,7 @@
       "name": "Rosalind Franklin",
       "source": "nonfounder",
       "domain": "X-ray crystallography",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "teaching",
         "building"
@@ -3621,7 +3621,7 @@
       "name": "Barbara McClintock",
       "source": "nonfounder",
       "domain": "genetics",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "teaching",
         "creating"
@@ -3646,7 +3646,7 @@
       "name": "Katherine Johnson",
       "source": "nonfounder",
       "domain": "applied mathematics and orbital mechanics",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "building",
         "teaching"
@@ -3671,7 +3671,7 @@
       "name": "Jane Goodall",
       "source": "nonfounder",
       "domain": "primatology and field ethology",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "performing",
         "coaching"
@@ -3752,7 +3752,7 @@
       "name": "Anna Politkovskaya",
       "source": "nonfounder",
       "domain": "investigative journalism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "speaking_up",
@@ -3779,7 +3779,7 @@
       "name": "Viktor Frankl",
       "source": "nonfounder",
       "domain": "psychiatry and logotherapy",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "storytelling",
         "coaching"
@@ -3806,7 +3806,7 @@
       "name": "George Kennan",
       "source": "nonfounder",
       "domain": "US diplomacy and Cold War strategy",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "storytelling",
@@ -3833,7 +3833,7 @@
       "name": "Frank Lloyd Wright",
       "source": "nonfounder",
       "domain": "architecture",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "designing",
         "creating",
@@ -3889,7 +3889,7 @@
       "name": "Clara Barton",
       "source": "nonfounder",
       "domain": "battlefield relief and Red Cross",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "building",
@@ -3996,7 +3996,7 @@
       "name": "Tenzin Palmo",
       "source": "nonfounder",
       "domain": "Tibetan Buddhism and monasticism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "building",
@@ -4025,7 +4025,7 @@
       "name": "Joyce Banda",
       "source": "nonfounder",
       "domain": "politics and women's development",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "coaching",
         "connecting",
@@ -4052,7 +4052,7 @@
       "name": "Phil Jackson",
       "source": "nonfounder",
       "domain": "basketball coaching",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "connecting"
@@ -4078,7 +4078,7 @@
       "name": "Pat Summitt",
       "source": "nonfounder",
       "domain": "women's basketball coaching",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "coaching",
         "speaking_up",
@@ -4106,7 +4106,7 @@
       "name": "Sebastian Junger",
       "source": "nonfounder",
       "domain": "war journalism and veteran support",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "connecting",
         "performing",
@@ -4276,7 +4276,7 @@
       "name": "Sal Khan",
       "source": "nonfounder",
       "domain": "online education",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "kids_deserved_better",
       "primarySkills": [
         "teaching",
         "building",
@@ -4417,7 +4417,7 @@
       "name": "Henry Louis Gates Jr.",
       "source": "nonfounder",
       "domain": "African American studies",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -4502,7 +4502,7 @@
       "name": "Ha-Joon Chang",
       "source": "nonfounder",
       "domain": "heterodox economics",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -4612,7 +4612,7 @@
       "name": "Mary Beard",
       "source": "nonfounder",
       "domain": "classics",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "performing",
         "storytelling",
@@ -4641,7 +4641,7 @@
       "name": "Trevor Noah",
       "source": "nonfounder",
       "domain": "comedy and cross-cultural explanation",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "storytelling",
         "connecting",
@@ -4671,7 +4671,7 @@
       "name": "Iain McGilchrist",
       "source": "nonfounder",
       "domain": "psychiatry and neuropsychology",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -4698,7 +4698,7 @@
       "name": "Karen Armstrong",
       "source": "nonfounder",
       "domain": "comparative religion",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "connecting",
         "coaching",
@@ -4836,7 +4836,7 @@
       "name": "Rebecca Solnit",
       "source": "nonfounder",
       "domain": "essays and cultural history",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "speaking_up",
         "storytelling",
@@ -4865,7 +4865,7 @@
       "name": "Timothy Snyder",
       "source": "nonfounder",
       "domain": "Eastern European history",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "coaching"
@@ -4918,7 +4918,7 @@
       "name": "Elaine Pagels",
       "source": "nonfounder",
       "domain": "religious history and gnosticism",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "teaching",
         "storytelling"
@@ -4944,7 +4944,7 @@
       "name": "Zadie Smith",
       "source": "nonfounder",
       "domain": "fiction and essays",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "teaching",
@@ -4969,10 +4969,10 @@
       "primaryPersona": "creators"
     },
     {
-      "name": "Lech Wa\u0142\u0119sa",
+      "name": "Lech Wałęsa",
       "source": "nonfounder",
       "domain": "trade union organizing",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "performing",
@@ -5000,7 +5000,7 @@
       "name": "Krista Tippett",
       "source": "nonfounder",
       "domain": "interview and public theology",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "connecting",
         "coaching",
@@ -5029,7 +5029,7 @@
       "name": "John Hume",
       "source": "nonfounder",
       "domain": "Northern Irish politics",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "performing",
@@ -5058,7 +5058,7 @@
       "name": "Tawakkol Karman",
       "source": "nonfounder",
       "domain": "journalism and peace activism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "performing",
         "connecting",
@@ -5086,7 +5086,7 @@
       "name": "Ta-Nehisi Coates",
       "source": "nonfounder",
       "domain": "journalism and essays",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "teaching"
@@ -5114,7 +5114,7 @@
       "name": "Chimamanda Ngozi Adichie",
       "source": "nonfounder",
       "domain": "fiction and essays",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "storytelling",
         "speaking_up"
@@ -5141,7 +5141,7 @@
       "name": "Patti Smith",
       "source": "nonfounder",
       "domain": "poetry and rock",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "performing",
@@ -5167,10 +5167,10 @@
       "primaryPersona": "creators"
     },
     {
-      "name": "Wis\u0142awa Szymborska",
+      "name": "Wisława Szymborska",
       "source": "nonfounder",
       "domain": "poetry",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "storytelling",
@@ -5197,7 +5197,7 @@
       "name": "Aretha Franklin",
       "source": "nonfounder",
       "domain": "soul music",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "performing",
@@ -5225,7 +5225,7 @@
       "name": "Tupac Shakur",
       "source": "nonfounder",
       "domain": "hip hop",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "storytelling",
         "creating",
@@ -5335,7 +5335,7 @@
       "primaryPersona": "creators"
     },
     {
-      "name": "Bj\u00f6rk",
+      "name": "Björk",
       "source": "nonfounder",
       "domain": "pop and electronic music",
       "primaryProblem": "work_treated_nothing",
@@ -5366,7 +5366,7 @@
       "name": "William Kentridge",
       "source": "nonfounder",
       "domain": "animation and drawing",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "speaking_up",
@@ -5448,7 +5448,7 @@
       "name": "Massimo Vignelli",
       "source": "nonfounder",
       "domain": "graphic design",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "creating",
@@ -5476,7 +5476,7 @@
       "name": "Tadao Ando",
       "source": "nonfounder",
       "domain": "architecture",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "designing",
         "building",
@@ -5560,7 +5560,7 @@
       "name": "Jan Gehl",
       "source": "nonfounder",
       "domain": "public-space urbanism",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "designing",
         "teaching",
@@ -5616,7 +5616,7 @@
       "name": "Malala Yousafzai",
       "source": "nonfounder",
       "domain": "girls' education advocacy",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "kids_deserved_better",
       "primarySkills": [
         "storytelling",
         "performing",
@@ -5702,7 +5702,7 @@
       "name": "Dolores Huerta",
       "source": "nonfounder",
       "domain": "labor organizing",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "performing",
         "connecting",
@@ -5731,7 +5731,7 @@
       "name": "Naomi Klein",
       "source": "nonfounder",
       "domain": "journalism and activism",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "speaking_up"
@@ -5755,7 +5755,7 @@
       "primaryPersona": "visionaries"
     },
     {
-      "name": "C\u00e9dric Villani",
+      "name": "Cédric Villani",
       "source": "nonfounder",
       "domain": "mathematics",
       "primaryProblem": "feeling_stupid",
@@ -5813,7 +5813,7 @@
       "name": "Cathy O'Neil",
       "source": "nonfounder",
       "domain": "mathematics and algorithmic audit",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "teaching",
         "speaking_up"
@@ -5946,7 +5946,7 @@
       "name": "Richard Feynman",
       "source": "nonfounder",
       "domain": "theoretical physics and teaching",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "speaking_up"
@@ -6027,7 +6027,7 @@
       "name": "Marcus Aurelius",
       "source": "nonfounder",
       "domain": "philosophy and Roman governance",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -6052,7 +6052,7 @@
       "name": "Epictetus",
       "source": "nonfounder",
       "domain": "Stoic philosophy",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "coaching"
@@ -6077,7 +6077,7 @@
       "name": "Tim Gowers",
       "source": "nonfounder",
       "domain": "combinatorial mathematics",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "connecting"
@@ -6156,7 +6156,7 @@
       "name": "Gregory Rabassa",
       "source": "nonfounder",
       "domain": "Latin American literary translation",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "storytelling"
@@ -6175,14 +6175,14 @@
         "lessonsForUser": "If you create and care about connection: be the bridge between two worlds, because both need you"
       },
       "confidence": "high",
-      "oneLiner": "Was paid in the original author's astonishment when Garc\u00eda M\u00e1rquez said the English was better than the Spanish.",
+      "oneLiner": "Was paid in the original author's astonishment when García Márquez said the English was better than the Spanish.",
       "primaryPersona": "creators"
     },
     {
       "name": "Clifford Geertz",
       "source": "nonfounder",
       "domain": "anthropology",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "storytelling",
         "teaching",
@@ -6208,7 +6208,7 @@
       "name": "Bruno Latour",
       "source": "nonfounder",
       "domain": "sociology of science",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "creating",
@@ -6261,7 +6261,7 @@
       "name": "Fritjof Capra",
       "source": "nonfounder",
       "domain": "physics and systems thinking",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "coaching"
@@ -6314,7 +6314,7 @@
       "name": "Mircea Eliade",
       "source": "nonfounder",
       "domain": "history of religion",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -6367,7 +6367,7 @@
       "name": "Frances Yates",
       "source": "nonfounder",
       "domain": "Renaissance intellectual history",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "creating",
         "teaching",
@@ -6393,7 +6393,7 @@
       "name": "Martha Nussbaum",
       "source": "nonfounder",
       "domain": "philosophy and ethics",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "teaching",
@@ -6422,7 +6422,7 @@
       "name": "Rumi",
       "source": "nonfounder",
       "domain": "Sufi poetry",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "speaking_up",
         "storytelling",
@@ -6505,7 +6505,7 @@
       "name": "Octavia Butler",
       "source": "nonfounder",
       "domain": "speculative fiction",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "work_treated_nothing",
       "primarySkills": [
         "creating",
         "leading"
@@ -6532,7 +6532,7 @@
       "name": "Toni Cade Bambara",
       "source": "nonfounder",
       "domain": "fiction, film, and community activism",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "creating",
         "connecting",
@@ -6673,7 +6673,7 @@
       "name": "Kevin Lynch",
       "source": "nonfounder",
       "domain": "urban design",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "designing"
@@ -6726,7 +6726,7 @@
       "name": "Marshall McLuhan",
       "source": "nonfounder",
       "domain": "media theory",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "teaching",
         "performing"
@@ -6753,7 +6753,7 @@
       "name": "Carl von Clausewitz",
       "source": "nonfounder",
       "domain": "military strategy",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "teaching",
@@ -6778,7 +6778,7 @@
       "name": "Gary Chapman",
       "source": "nonfounder",
       "domain": "relationship counselling",
-      "primaryProblem": "pain_not_believed",
+      "primaryProblem": "lonely_disconnected",
       "primarySkills": [
         "teaching",
         "coaching"
@@ -6806,7 +6806,7 @@
       "name": "Gabor Mate",
       "source": "nonfounder",
       "domain": "addiction medicine / trauma",
-      "primaryProblem": "pain_not_believed",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "teaching",
         "coaching",
@@ -6835,7 +6835,7 @@
       "name": "Johann Hari",
       "source": "nonfounder",
       "domain": "journalism / addiction and mental health",
-      "primaryProblem": "pain_not_believed",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "storytelling",
         "speaking_up"
@@ -6863,7 +6863,7 @@
       "name": "Maia Szalavitz",
       "source": "nonfounder",
       "domain": "addiction science journalism",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "storytelling",
         "speaking_up"
@@ -6890,7 +6890,7 @@
       "name": "Carl Hart",
       "source": "nonfounder",
       "domain": "neuroscience / drug policy",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "teaching",
         "speaking_up"
@@ -6918,7 +6918,7 @@
       "name": "Russell Brand",
       "source": "nonfounder",
       "domain": "entertainment / addiction advocacy",
-      "primaryProblem": "pain_not_believed",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "performing",
         "storytelling",
@@ -6977,7 +6977,7 @@
       "name": "Ai-jen Poo",
       "source": "nonfounder",
       "domain": "domestic workers' rights / elder care",
-      "primaryProblem": "work_hollows",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "connecting",
@@ -7006,7 +7006,7 @@
       "name": "Judith Heumann",
       "source": "nonfounder",
       "domain": "disability rights",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "leading",
@@ -7035,7 +7035,7 @@
       "name": "Stella Young",
       "source": "nonfounder",
       "domain": "disability rights / comedy / journalism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "storytelling",
@@ -7063,7 +7063,7 @@
       "name": "Haben Girma",
       "source": "nonfounder",
       "domain": "disability rights / law / technology",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "speaking_up",
         "teaching"
@@ -7091,7 +7091,7 @@
       "name": "Ed Roberts",
       "source": "nonfounder",
       "domain": "disability rights / independent living",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "speaking_up",
@@ -7119,7 +7119,7 @@
       "name": "Alice Wong",
       "source": "nonfounder",
       "domain": "disability media / activism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "connecting",
         "storytelling",
@@ -7148,7 +7148,7 @@
       "name": "Muhammad Yunus",
       "source": "nonfounder",
       "domain": "microfinance / social business",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "money_stress",
       "primarySkills": [
         "leading",
         "teaching",
@@ -7177,7 +7177,7 @@
       "name": "Jose Quinonez",
       "source": "nonfounder",
       "domain": "financial inclusion",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "money_stress",
       "primarySkills": [
         "leading",
         "connecting",
@@ -7233,11 +7233,11 @@
       "primaryPersona": "teachers"
     },
     {
-      "name": "Bren\u00e9 Brown",
-      "source": "non-founder",
+      "name": "Brené Brown",
+      "source": "nonfounder",
       "domain": "vulnerability research / leadership development",
       "oneLiner": "Turned the thing everyone hides from into the thing everyone needs.",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "speaking_up",
         "teaching",
@@ -7264,10 +7264,10 @@
     },
     {
       "name": "Tony Robbins",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "peak performance / live transformation events",
       "oneLiner": "Built a cathedral of transformation you walk through in four days and leave different.",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "performing",
         "coaching",
@@ -7294,7 +7294,7 @@
     },
     {
       "name": "Wim Hof",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "breathwork / cold exposure / human performance",
       "oneLiner": "Proved that a freezing river can teach you more about yourself than ten years of therapy.",
       "primaryProblem": "pain_not_believed",
@@ -7324,10 +7324,10 @@
     },
     {
       "name": "Esther Perel",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "relational intelligence / couples therapy",
       "oneLiner": "Made the mess of relationships into something you could finally talk about without shame.",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "lonely_disconnected",
       "primarySkills": [
         "coaching",
         "storytelling",
@@ -7354,10 +7354,10 @@
     },
     {
       "name": "Priya Parker",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "gathering design / facilitation",
       "oneLiner": "Proved that how you gather people is itself an act of leadership.",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "lonely_disconnected",
       "primarySkills": [
         "connecting",
         "designing",
@@ -7383,10 +7383,10 @@
     },
     {
       "name": "Jay Shetty",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "mindfulness / purpose coaching / media",
       "oneLiner": "Translated ancient monastic wisdom into content a scrolling generation would actually stop for.",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "coaching",
@@ -7412,10 +7412,10 @@
     },
     {
       "name": "Gabby Bernstein",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "spiritual development / manifestation / sobriety",
       "oneLiner": "Made spirituality accessible to the woman who still drinks oat milk lattes and checks her phone.",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "teaching",
@@ -7444,7 +7444,7 @@
       "name": "Eckhart Tolle",
       "source": "nonfounder",
       "domain": "presence-based spiritual teaching",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -7473,7 +7473,7 @@
       "name": "Deepak Chopra",
       "source": "nonfounder",
       "domain": "integrative mind-body wellness",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -7505,7 +7505,7 @@
       "name": "Jack Kornfield",
       "source": "nonfounder",
       "domain": "mindfulness meditation / Buddhist psychology",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "coaching",
@@ -7594,7 +7594,7 @@
       "name": "Seane Corn",
       "source": "nonfounder",
       "domain": "yoga and social activism",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "teaching",
         "performing",
@@ -7655,7 +7655,7 @@
       "name": "Aubrey Marcus",
       "source": "nonfounder",
       "domain": "human optimization and conscious leadership",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "storytelling",
@@ -7686,7 +7686,7 @@
       "name": "Ram Dass",
       "source": "nonfounder",
       "domain": "spirituality and consciousness",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "storytelling",
         "teaching",
@@ -7715,7 +7715,7 @@
       "name": "Sadhguru",
       "source": "nonfounder",
       "domain": "yoga and spiritual education",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "leading",
@@ -7746,7 +7746,7 @@
       "name": "Marianne Williamson",
       "source": "nonfounder",
       "domain": "spiritual teaching / A Course in Miracles",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "storytelling",
         "teaching",
@@ -7775,7 +7775,7 @@
       "name": "Mooji",
       "source": "nonfounder",
       "domain": "Advaita Vedanta / self-inquiry",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "teaching",
@@ -7803,7 +7803,7 @@
       "name": "Yung Pueblo",
       "source": "nonfounder",
       "domain": "inner work poetry / self-healing",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "creating",
         "storytelling",
@@ -7832,7 +7832,7 @@
       "name": "Sahara Rose",
       "source": "nonfounder",
       "domain": "Ayurveda / dharma coaching / sacred feminine",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "creating",
@@ -7892,7 +7892,7 @@
     },
     {
       "name": "Vishen Lakhiani",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "personal growth / consciousness education / edtech",
       "oneLiner": "Built a $100M personal growth university from a $700 laptop in a Starbucks, without ever taking a dollar of venture capital.",
       "primaryProblem": "feeling_stupid",
@@ -7924,10 +7924,10 @@
     },
     {
       "name": "Michael Singer",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "meditation / surrender philosophy / inner freedom",
       "oneLiner": "A PhD dropout who built a billion-dollar software company by accident while trying to sit quietly in the woods.",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "building",
@@ -7953,10 +7953,10 @@
     },
     {
       "name": "Michael Beckwith",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "spiritual leadership / visioning / New Thought ministry",
       "oneLiner": "Grew a living room prayer group into a 9,000-person weekly congregation that Oprah called her spiritual home.",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "coaching",
         "performing",
@@ -7983,10 +7983,10 @@
     },
     {
       "name": "Radha Agrawal",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "community building / sober movement / belonging",
       "oneLiner": "Proved that the most radical party you can throw starts at 6am, sober, with a thousand strangers dancing together.",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "lonely_disconnected",
       "primarySkills": [
         "connecting",
         "creating",
@@ -8013,10 +8013,10 @@
     },
     {
       "name": "Meghan Pappenheim",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "wellness festivals / yoga community / social entrepreneurship",
       "oneLiner": "Built the world's most beloved yoga festival by treating Bali like a village that needed a town square, not a brand.",
-      "primaryProblem": "left_behind",
+      "primaryProblem": "lonely_disconnected",
       "primarySkills": [
         "connecting",
         "building",
@@ -8043,10 +8043,10 @@
     },
     {
       "name": "Jeff Krasno",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "wellness events / online learning / mindful living",
       "oneLiner": "Took everything he knew about filling music venues and pointed it at yoga mats instead.",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "building",
         "connecting",
@@ -8073,10 +8073,10 @@
     },
     {
       "name": "Gabrielle Roth",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "conscious dance / movement as meditation / ecstatic dance",
       "oneLiner": "Proved that the fastest way to stillness is to dance until your ego gives up.",
-      "primaryProblem": "voice_taken",
+      "primaryProblem": "minds_hurting",
       "primarySkills": [
         "performing",
         "creating",
@@ -8103,10 +8103,10 @@
     },
     {
       "name": "Larry Harvey",
-      "source": "non-founder",
+      "source": "nonfounder",
       "domain": "participatory art / counter-culture community / radical self-expression",
       "oneLiner": "Burned a wooden man on a beach and accidentally started a civilisation.",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "leading",
         "designing",
@@ -8134,7 +8134,7 @@
       "name": "Walt Disney",
       "source": "founder",
       "domain": "entertainment and theme parks",
-      "primaryProblem": "stopped_wondering",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "creating",
         "storytelling",
@@ -8182,7 +8182,7 @@
         "trajectory": "Failed businesses -> bought museum -> hoaxes and spectacles -> circus empire -> mayor and philanthropist",
         "keyDecision": "Merged with rival Bailey instead of competing, creating the greatest show on earth",
         "scaleModel": "Make the ordinary extraordinary through storytelling and spectacle",
-        "lessonsForUser": "If you perform and tell stories: the show IS the marketing \u2014 make everything an event"
+        "lessonsForUser": "If you perform and tell stories: the show IS the marketing — make everything an event"
       },
       "confidence": "high",
       "oneLiner": "The noblest art is that of making others happy.",
@@ -8192,7 +8192,7 @@
       "name": "Jose Andres",
       "source": "founder",
       "domain": "restaurant and humanitarian food relief",
-      "primaryProblem": "locked_out",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "creating",
         "leading",
@@ -8220,7 +8220,7 @@
       "name": "Jesse Itzler",
       "source": "founder",
       "domain": "lifestyle brands and endurance",
-      "primaryProblem": "forgot_what_for",
+      "primaryProblem": "work_hollows",
       "primarySkills": [
         "performing",
         "building",
@@ -8308,7 +8308,7 @@
       "name": "Naval Ravikant",
       "source": "founder",
       "domain": "technology investing and philosophy",
-      "primaryProblem": "life_not_yours",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "teaching",
         "building",
@@ -8331,6 +8331,584 @@
       "confidence": "high",
       "oneLiner": "Seek wealth, not money or status. Wealth is having assets that earn while you sleep.",
       "primaryPersona": "visionaries"
+    },
+    {
+      "name": "Patty McCord",
+      "source": "nonfounder",
+      "domain": "Organizational culture and HR transformation",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "designing",
+        "teaching",
+        "connecting",
+        "building"
+      ],
+      "careerModel": {
+        "type": "culture_architect_consultant",
+        "primaryRevenue": "Speaking engagements, consulting with Fortune 500 companies, and board advisory roles.",
+        "revenueStreams": [
+          "corporate consulting",
+          "executive speaking",
+          "board positions",
+          "media appearances"
+        ],
+        "trajectory": "Netflix HR executive -> Founded McCord Consulting -> Global organizational culture advisor",
+        "keyDecision": "Chose to leave Netflix at its peak to teach leaders how to build psychologically safe, high-performing teams.",
+        "scaleModel": "Built methodology taught in corporate training programs; scaled through book 'Powerful,' speaking tour, and direct advisory relationships with C-suite executives.",
+        "lessonsForUser": "If you design and care about organizational culture: Transparency about performance expectations and context is the foundation of trust—make it your first move, not your last."
+      },
+      "confidence": "high",
+      "oneLiner": "People don't leave jobs; they leave managers who don't tell them the truth.",
+      "primaryPersona": "healers"
+    },
+    {
+      "name": "Satya Nadella",
+      "source": "nonfounder",
+      "domain": "Enterprise leadership and organizational renewal",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "leading",
+        "building",
+        "coaching",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "transformational_ceo",
+        "primaryRevenue": "CEO compensation, equity, and performance bonuses from Microsoft's turnaround and growth.",
+        "revenueStreams": [
+          "executive salary",
+          "stock options",
+          "Microsoft board position",
+          "speaking engagements"
+        ],
+        "trajectory": "Microsoft engineer -> Business development executive -> Cloud and Enterprise division leader -> CEO (2014-present) -> Cultural architect of Microsoft's second act",
+        "keyDecision": "Publicly embraced a 'learn-it-all' vs. 'know-it-all' culture and shifted company identity from Windows-centric to cloud-first, requiring wholesale team and leadership mindset change.",
+        "scaleModel": "Scaled through cascading cultural messaging, retraining 140,000+ employees, restructuring management layers, and embedding empathy and growth mindset into hiring and promotion criteria.",
+        "lessonsForUser": "If you lead and care about fixing broken organizations: Personal vulnerability about your own learning journey gives permission for the entire organization to embrace change—model it visibly and often."
+      },
+      "confidence": "high",
+      "oneLiner": "Culture is the oxygen of the organization. Leadership must be intentional about reinventing it.",
+      "primaryPersona": "builders"
+    },
+    {
+      "name": "Margaret Wheatley",
+      "source": "nonfounder",
+      "domain": "Organizational theory and systems thinking",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "teaching",
+        "analysing",
+        "storytelling",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "systems_theorist_educator",
+        "primaryRevenue": "University faculty positions, consulting engagements, book royalties, and speaking fees.",
+        "revenueStreams": [
+          "academic salary",
+          "executive consulting",
+          "book sales",
+          "conference speaking"
+        ],
+        "trajectory": "Organizational development professor -> Leadership author -> Founded Berkana Institute -> Global thought leader on self-organizing systems in organizations",
+        "keyDecision": "Applied physics and systems theory to organizational behavior, fundamentally shifting how leaders think about control, hierarchy, and emergence in teams.",
+        "scaleModel": "Scaled through foundational books like 'Leadership and the New Science,' consulting with nonprofits and social enterprises, and training facilitators in new organizational models.",
+        "lessonsForUser": "If you analyse and care about organizational systems: Stop trying to control the system—create conditions for self-organization and watch emergent leadership appear organically."
+      },
+      "confidence": "high",
+      "oneLiner": "Organizations are living systems, not machines. Leadership is about creating the conditions, not controlling the outcome.",
+      "primaryPersona": "visionaries"
+    },
+    {
+      "name": "Ram Charan",
+      "source": "nonfounder",
+      "domain": "Executive coaching and leadership development",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "coaching",
+        "teaching",
+        "analysing",
+        "leading"
+      ],
+      "careerModel": {
+        "type": "executive_coach_advisor",
+        "primaryRevenue": "Direct executive coaching retainers, corporate advisory board positions, and book sales.",
+        "revenueStreams": [
+          "executive coaching fees",
+          "corporate board advisory",
+          "book royalties",
+          "consulting engagements"
+        ],
+        "trajectory": "Harvard Business School professor -> McKinsey partner -> Independent executive coach to Fortune 50 CEOs -> Author of 30+ management books",
+        "keyDecision": "Left academia to work directly with sitting CEOs facing real-time crises, giving him unique insight into leadership failure and organizational dysfunction.",
+        "scaleModel": "Scaled through prolific writing, teaching inside corporate universities, and mentoring a network of executive coaches who apply his frameworks.",
+        "lessonsForUser": "If you coach and care about fixing leadership: The best leaders obsess over execution and people simultaneously—if either slips, everything breaks down."
+      },
+      "confidence": "high",
+      "oneLiner": "Execution is not just about processes; it's about people, strategy, and culture working in lockstep.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Frances Frei",
+      "source": "nonfounder",
+      "domain": "Organizational trust and culture transformation",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "teaching",
+        "designing",
+        "analysing",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "trust_consultant_academic",
+        "primaryRevenue": "Harvard Business School faculty, consulting and advisory roles with brands in crisis, and speaking engagements.",
+        "revenueStreams": [
+          "academic salary",
+          "consulting retainers",
+          "speaking fees",
+          "course licensing"
+        ],
+        "trajectory": "Operations professor -> Trust and leadership specialist -> Advisor to Uber, Wells Fargo, and other crisis-hit organizations -> Co-founder of Freie (organizational consulting)",
+        "keyDecision": "Shifted focus from abstract operational excellence to trust as the core business metric, advising leaders through high-profile organizational crises.",
+        "scaleModel": "Scaled through Harvard platform, public case studies on organizational recovery, media appearances, and direct engagement with boards and C-suites.",
+        "lessonsForUser": "If you teach and care about rebuilding broken cultures: Trust is asymmetric—you earn it slowly through consistency, but lose it in an instant through misalignment between words and action."
+      },
+      "confidence": "high",
+      "oneLiner": "When trust breaks down, leaders must diagnose whether the problem is competence, care, or integrity—and fix it directly.",
+      "primaryPersona": "healers"
+    },
+    {
+      "name": "Edgar Schein",
+      "source": "nonfounder",
+      "domain": "Organizational culture and change theory",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "teaching",
+        "analysing",
+        "coaching",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "foundational_researcher_educator",
+        "primaryRevenue": "MIT professor emeritus salary, royalties from 30+ books, consulting fees, and speaking honorariums.",
+        "revenueStreams": [
+          "academic compensation",
+          "book sales",
+          "corporate consulting",
+          "conference speaking"
+        ],
+        "trajectory": "Military psychologist -> MIT Sloan professor -> Founder of organizational culture research -> Lifetime thought leader shaping how leaders understand culture",
+        "keyDecision": "Pioneered the concept of organizational culture itself as a diagnostic and change lever, creating a language and framework still used by organizations worldwide.",
+        "scaleModel": "Scaled through academic rigor, prolific publishing, mentoring generations of organizational development professionals, and embedding concepts into business school curricula.",
+        "lessonsForUser": "If you analyse and care about organizational change: Culture is invisible until it resists change—only then do you see its true power; leaders must become anthropologists, not architects."
+      },
+      "confidence": "high",
+      "oneLiner": "The culture of an organization is the accumulated shared learning of the group; changing it requires unfreezing deeply held assumptions.",
+      "primaryPersona": "visionaries"
+    },
+    {
+      "name": "Sheryl Sandberg",
+      "source": "nonfounder",
+      "domain": "Workplace gender equity and leadership development",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "leading",
+        "connecting",
+        "teaching",
+        "building"
+      ],
+      "careerModel": {
+        "type": "operations_executive_advocate",
+        "primaryRevenue": "Facebook/Meta COO salary and equity, book royalties, speaking fees, and foundation grants for nonprofit work.",
+        "revenueStreams": [
+          "executive compensation",
+          "book sales",
+          "speaking engagements",
+          "nonprofit foundation (LeanIn.org)"
+        ],
+        "trajectory": "McKinsey consultant -> Google operations executive -> Facebook COO -> Founder of LeanIn movement and author -> Gender equity advocate",
+        "keyDecision": "Publicly addressed her own impostor syndrome and leadership journey in 'Lean In,' creating a movement that helped women reframe workplace culture and ambition.",
+        "scaleModel": "Scaled through books, global speaking tour, LeanIn.org digital platform with millions of users, partnerships with corporations, and media presence.",
+        "lessonsForUser": "If you build and care about fixing team culture: Make the invisible visible—when you name patterns (like gender bias in leadership), organizations suddenly see what they were trained not to see."
+      },
+      "confidence": "high",
+      "oneLiner": "Women are socialized to make themselves smaller. Organizations benefit when we make space for people to be ambitious.",
+      "primaryPersona": "connectors"
+    },
+    {
+      "name": "Frederic Laloux",
+      "source": "nonfounder",
+      "domain": "Organizational evolution and self-management",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "designing",
+        "analysing",
+        "teaching",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "organizational_theorist_consultant",
+        "primaryRevenue": "Consulting engagements with organizations transitioning to self-managed models, book royalties, and speaking fees.",
+        "revenueStreams": [
+          "organizational consulting",
+          "book sales",
+          "speaking honorariums",
+          "training program licensing"
+        ],
+        "trajectory": "McKinsey consultant -> Organizational theorist -> Author of 'Reinventing Organizations' -> Consultant to companies adopting teal/self-managed models",
+        "keyDecision": "Left consulting to deeply study organizations operating without traditional hierarchies, documenting patterns in a groundbreaking book that shifted how leaders think about structure.",
+        "scaleModel": "Scaled through the viral success of 'Reinventing Organizations,' case studies of real companies, a global community of practitioners, and direct consulting with pioneering organizations.",
+        "lessonsForUser": "If you design and care about organizational structures: Purpose-driven organizations with distributed decision-making outperform traditional hierarchies—but only if you fundamentally trust people."
+      },
+      "confidence": "high",
+      "oneLiner": "The organizations that will thrive are those that evolve beyond command-and-control into purpose-driven networks of self-managed teams.",
+      "primaryPersona": "builders"
+    },
+    {
+      "name": "Jennifer Garvey Berger",
+      "source": "nonfounder",
+      "domain": "Adult development and leadership coaching",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "coaching",
+        "teaching",
+        "connecting",
+        "analysing"
+      ],
+      "careerModel": {
+        "type": "developmental_coach_researcher",
+        "primaryRevenue": "Executive coaching fees, Harvard Continuing Education teaching, workshop facilitation, and book royalties.",
+        "revenueStreams": [
+          "executive coaching retainers",
+          "academic instruction",
+          "corporate workshops",
+          "book sales"
+        ],
+        "trajectory": "Teacher -> Adult education researcher -> Executive coach -> Co-founder of Cultivating Leadership -> Author on adult development in organizations",
+        "keyDecision": "Applied adult developmental theory to executive coaching, discovering that many leadership problems stem from leaders' inability to think in more complex ways about problems.",
+        "scaleModel": "Scaled through coaching practice serving C-suite executives, academic teaching, workshop training for organizations, and books that make developmental theory accessible.",
+        "lessonsForUser": "If you coach and care about fixing leadership: Help leaders develop their thinking capacity, not just their behavior—most organizational problems persist because leaders haven't grown enough to see them."
+      },
+      "confidence": "high",
+      "oneLiner": "The better the leader's thinking, the better the organization. Coaching is about growing capacity for complexity.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Amy C. Edmondson",
+      "source": "nonfounder",
+      "domain": "Psychological safety and team dynamics",
+      "primaryProblem": "teams_leaders_broken",
+      "primarySkills": [
+        "analysing",
+        "teaching",
+        "designing",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "research_academic_consultant",
+        "primaryRevenue": "Harvard Business School professorship, consulting retainers with Fortune 500 companies, book royalties, and speaking fees.",
+        "revenueStreams": [
+          "academic salary",
+          "corporate consulting",
+          "book sales",
+          "conference speaking"
+        ],
+        "trajectory": "Organizational psychologist -> Harvard researcher discovering psychological safety -> Author of 'The Fearless Organization' -> Advisor to teams across industries",
+        "keyDecision": "Pursued decades of research proving that psychological safety predicts team performance, then made it actionable for leaders through consulting and writing.",
+        "scaleModel": "Scaled through rigorous research published in top journals, a bestselling book translated into multiple languages, global consulting, and media presence on leadership topics.",
+        "lessonsForUser": "If you analyse and care about team performance: Psychological safety is not about being nice—it's about creating conditions where people can speak up about failures, mistakes, and half-formed ideas without fear."
+      },
+      "confidence": "high",
+      "oneLiner": "The best teams aren't those with the smartest people; they're the ones where people feel safe to learn, fail, and contribute their real thinking.",
+      "primaryPersona": "visionaries"
+    },
+    {
+      "name": "Ramit Sethi",
+      "source": "founder",
+      "domain": "Personal finance education and behavior change",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "teaching",
+        "building",
+        "storytelling",
+        "analysing"
+      ],
+      "careerModel": {
+        "type": "education_platform_with_premium_tiers",
+        "primaryRevenue": "Subscription-based courses and premium membership programs teaching personal finance automation and psychology.",
+        "revenueStreams": [
+          "online courses",
+          "membership subscriptions",
+          "affiliate partnerships",
+          "sponsored content"
+        ],
+        "trajectory": "Stanford grad writing about finance online (2004) -> bestselling author 'I Will Teach You to Be Rich' (2009) -> IWT platform launch (2013) -> scaled premium education model (2015-present)",
+        "keyDecision": "Focused on behavior change and automation rather than budgeting spreadsheets, which became his differentiation.",
+        "scaleModel": "Built a community-first platform with scripted psychology-based lessons, email sequences, and tiered pricing to scale personalized advice.",
+        "lessonsForUser": "If you teach and care about financial stress: Start by diagnosing the psychology behind money avoidance, not the math—automate ruthlessly to remove willpower entirely."
+      },
+      "confidence": "high",
+      "oneLiner": "Most people don't have a money problem, they have a behavior problem—automate the boring stuff and you'll be rich.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Tori Dunlap",
+      "source": "founder",
+      "domain": "Feminist financial independence and wealth-building",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "storytelling",
+        "building",
+        "connecting",
+        "teaching"
+      ],
+      "careerModel": {
+        "type": "media_and_education_hybrid",
+        "primaryRevenue": "Newsletter subscriptions, online courses, and corporate workshop fees for financial feminist education.",
+        "revenueStreams": [
+          "paid newsletter subscriptions",
+          "online courses",
+          "corporate consulting",
+          "book deals",
+          "sponsorships"
+        ],
+        "trajectory": "Started Feminist Financial newsletter (2014) -> self-published 'Financial Feminist' (2018) -> launched HerFirst media platform (2019) -> corporate partnerships and course expansion (2020-present)",
+        "keyDecision": "Centered gender inequality and systemic barriers in financial advice rather than generic personal finance.",
+        "scaleModel": "Built a community of 100k+ newsletter subscribers and scaled through corporate partnerships addressing workplace financial stress.",
+        "lessonsForUser": "If you tell stories and care about financial stress: Anchor your narrative to a community identity (not just individual responsibility) to create movements, not just audiences."
+      },
+      "confidence": "high",
+      "oneLiner": "Personal finance advice that ignores systemic inequality is just blaming the victim.",
+      "primaryPersona": "visionaries"
+    },
+    {
+      "name": "Derek Sall",
+      "source": "founder",
+      "domain": "Debt payoff tracking and community support",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "building",
+        "leading",
+        "connecting",
+        "analysing"
+      ],
+      "careerModel": {
+        "type": "saas_community_platform",
+        "primaryRevenue": "Freemium subscription model with paid tiers for the DebtFree app and community platform.",
+        "revenueStreams": [
+          "app subscriptions",
+          "affiliate partnerships",
+          "sponsored educational content",
+          "premium community features"
+        ],
+        "trajectory": "Paid off $110k personal debt (2007-2013) -> launched DebtFree app (2016) -> built community features and tracking tools (2017-2020) -> expanded to financial coaching partnerships (2021-present)",
+        "keyDecision": "Built a community-first platform instead of a personal brand, allowing thousands to find peer support in debt repayment.",
+        "scaleModel": "Used the accountability and social proof of thousands tracking debt payoff together as the primary retention and acquisition driver.",
+        "lessonsForUser": "If you build and care about financial stress: Make the invisible (debt progress) visible and shareable; people are more motivated by community momentum than any guru advice."
+      },
+      "confidence": "high",
+      "oneLiner": "Debt is often a lonely, shameful journey—we made it a community victory lap instead.",
+      "primaryPersona": "builders"
+    },
+    {
+      "name": "Kara Perez",
+      "source": "founder",
+      "domain": "Financial inclusion for communities of color and low-income women",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "teaching",
+        "analysing",
+        "connecting",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "nonprofit_and_media_hybrid",
+        "primaryRevenue": "Grant funding for nonprofit work and revenue-sharing from financial education content and sponsorships.",
+        "revenueStreams": [
+          "foundation grants",
+          "sponsored content",
+          "speaking fees",
+          "media partnerships",
+          "consulting"
+        ],
+        "trajectory": "Started as freelance writer covering racial wealth gap (2014) -> founded Bravely Go media (2017) -> published 'The Infographic Guide to Personal Finance' (2018) -> nonprofit work and policy advocacy (2019-present)",
+        "keyDecision": "Chose to center racial and gender equity in financial literacy rather than adopt mainstream personal finance frameworks.",
+        "scaleModel": "Combined media reach (millions of impressions) with nonprofit partnerships to scale financial education to underserved communities.",
+        "lessonsForUser": "If you teach and care about financial stress: Don't just explain money—explain the systems (redlining, wage discrimination) that make money feel unmanageable for certain groups."
+      },
+      "confidence": "high",
+      "oneLiner": "Financial advice without context is just privilege pretending to be universal.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Nir Eyal",
+      "source": "nonfounder",
+      "domain": "Behavioral psychology and habit design",
+      "primaryProblem": "lonely_disconnected",
+      "primarySkills": [
+        "teaching",
+        "analysing",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "thought_leader_writer",
+        "primaryRevenue": "Books, speaking engagements, consulting, and online courses on behavioral design",
+        "revenueStreams": [
+          "book royalties",
+          "speaking fees",
+          "consulting",
+          "courses",
+          "podcasts"
+        ],
+        "trajectory": "Studied behavioral psychology → Worked in gaming → Wrote Hooked → Shifted focus to ethics and healthy habits → Teaching how tech affects connection",
+        "keyDecision": "Moving from teaching companies how to hook users to teaching people how to reclaim their attention and build real relationships",
+        "scaleModel": "Millions of readers across books and online education; built a platform teaching behavioral psychology accessible to general audiences",
+        "lessonsForUser": "If you teach and care about connection: Understand the psychology of attachment before designing systems—know how your work affects loneliness."
+      },
+      "confidence": "high",
+      "oneLiner": "Technology isn't the problem. How we design it to exploit our psychology is.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Wally Amos",
+      "source": "nonfounder",
+      "domain": "Community building and uplift through empowerment",
+      "primaryProblem": "lonely_disconnected",
+      "primarySkills": [
+        "connecting",
+        "healing",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "community_activist_author",
+        "primaryRevenue": "Speaking, writing, nonprofit leadership, and mentorship programs",
+        "revenueStreams": [
+          "speaking fees",
+          "book sales",
+          "nonprofit donations",
+          "mentoring programs"
+        ],
+        "trajectory": "Started as talent agent → Founded Famous Amos cookies → Pivoted to literacy and community work → Dedicated to helping isolated youth find belonging",
+        "keyDecision": "Leaving business success to focus full-time on mentoring at-risk youth and building community programs for the isolated",
+        "scaleModel": "Built through nonprofit partnerships and mentorship networks that create ripple effects across generations",
+        "lessonsForUser": "If you heal and care about belonging: Use whatever platform you have to shine light on invisible people—your visibility becomes their permission."
+      },
+      "confidence": "high",
+      "oneLiner": "Success means nothing if you leave people behind.",
+      "primaryPersona": "healers"
+    },
+    {
+      "name": "Jeannie Gaffigan",
+      "source": "nonfounder",
+      "domain": "Comedy and family culture commentary",
+      "primaryProblem": "lonely_disconnected",
+      "primarySkills": [
+        "performing",
+        "storytelling",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "performer_cultural_commentator",
+        "primaryRevenue": "Stand-up comedy tours, TV specials, podcasting, and brand partnerships",
+        "revenueStreams": [
+          "ticket sales",
+          "Netflix/streaming specials",
+          "podcast ads",
+          "brand deals"
+        ],
+        "trajectory": "Struggled with isolation in comedy → Built career with husband as comedy partner → Uses humor to normalize loneliness and belonging → Built massive fanbase through authentic storytelling",
+        "keyDecision": "Being vulnerable about depression, isolation, and marital struggles on stage instead of hiding behind persona",
+        "scaleModel": "Mass reach through comedy specials and social media; created permission structure for audiences to feel less alone through shared laughter",
+        "lessonsForUser": "If you perform and care about belonging: Vulnerability sells because audiences hunger for proof they're not alone—your honest struggle is your superpower."
+      },
+      "confidence": "high",
+      "oneLiner": "I'm not fine. And that's okay.",
+      "primaryPersona": "creators"
+    },
+    {
+      "name": "David McRaney",
+      "source": "nonfounder",
+      "domain": "Science communication and psychology writing",
+      "primaryProblem": "lonely_disconnected",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "analysing"
+      ],
+      "careerModel": {
+        "type": "science_writer_podcaster",
+        "primaryRevenue": "Book sales, podcast sponsorships, Patreon, and speaking engagements",
+        "revenueStreams": [
+          "book royalties",
+          "podcast ads",
+          "Patreon donations",
+          "speaking fees"
+        ],
+        "trajectory": "Started as humor blogger → Studied psychology → Wrote You Are Not So Smart → Built podcast exploring human connection and behavior",
+        "keyDecision": "Shifting from entertainment to rigorous exploration of psychology and belonging through accessible science communication",
+        "scaleModel": "Built audience through books reaching millions; podcast creates ongoing intimate connection with listeners",
+        "lessonsForUser": "If you teach and care about belonging: Make psychology accessible and demystified—people crave scientific permission to understand their loneliness."
+      },
+      "confidence": "high",
+      "oneLiner": "Understanding why we connect wrong is the first step to connecting right.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Bailey Parnell",
+      "source": "founder",
+      "domain": "Digital wellness and mindful tech education",
+      "primaryProblem": "lonely_disconnected",
+      "primarySkills": [
+        "teaching",
+        "designing",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "edtech_founder_speaker",
+        "primaryRevenue": "Corporate workshops, school programs, speaking fees, and digital wellness courses",
+        "revenueStreams": [
+          "corporate training",
+          "educational programs",
+          "speaking engagements",
+          "courses"
+        ],
+        "trajectory": "Tech startup experience → Became concerned about tech's isolation effects → Founded UNFOLD to teach digital wellness → Built global speaker platform",
+        "keyDecision": "Leaving profitable tech roles to educate people on how to use technology for genuine connection instead of fake engagement",
+        "scaleModel": "Reached millions through TED talks and corporate workshops teaching healthy digital habits for teams and families",
+        "lessonsForUser": "If you teach and care about belonging: People know tech isolates them but don't know how to rewire—fill that gap with practical, destigmatized solutions."
+      },
+      "confidence": "high",
+      "oneLiner": "Technology isn't the enemy. Unconscious use of technology is.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Cleo Wade",
+      "source": "nonfounder",
+      "domain": "Art activism and emotional wellness messaging",
+      "primaryProblem": "lonely_disconnected",
+      "primarySkills": [
+        "performing",
+        "storytelling",
+        "healing"
+      ],
+      "careerModel": {
+        "type": "artist_activist_author",
+        "primaryRevenue": "Art sales, book deals, speaking engagements, and brand collaborations",
+        "revenueStreams": [
+          "art sales",
+          "book royalties",
+          "speaking fees",
+          "brand partnerships",
+          "social media"
+        ],
+        "trajectory": "Studied art and social work → Created emotionally resonant public art → Published books on self-worth → Built massive platform normalizing mental health and belonging",
+        "keyDecision": "Using art and activism to create culturally visible permission for people to feel less alone in their pain",
+        "scaleModel": "Reached millions through books, social media, and public installations that make invisible emotions visible and shared",
+        "lessonsForUser": "If you create and care about belonging: Make the invisible visible—people need to see their loneliness reflected in art before they can heal it."
+      },
+      "confidence": "high",
+      "oneLiner": "Your loneliness is not a character flaw. It's a call to connection.",
+      "primaryPersona": "creators"
     }
   ]
 }

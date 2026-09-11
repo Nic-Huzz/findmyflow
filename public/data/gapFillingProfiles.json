@@ -19,8 +19,11 @@
       "region": "US",
       "bio": "Psychologist who can predict divorce with over 90% accuracy from watching a couple interact for 15 minutes. Built the Love Lab at the University of Washington and turned decades of clinical observation into a therapist certification empire.",
       "oneLiner": "Watched thousands of couples fight and discovered that contempt, not anger, kills a marriage.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["forgot_what_for", "kids_deserved_better"],
+      "primaryCategoryIntent": "lonely_disconnected",
+      "secondaryCategoryIntents": [
+        "feeling_lost",
+        "kids_deserved_better"
+      ],
       "narratives": [
         {
           "title": "The Love Lab",
@@ -47,8 +50,10 @@
       "region": "Canada / UK",
       "bio": "Clinical psychologist who created Emotionally Focused Therapy (EFT) in the 1980s and proved that couple distress is fundamentally an attachment problem, not a communication problem.",
       "oneLiner": "Showed therapists that the couple fighting about dishes is actually fighting about whether anyone will be there when they call.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["forgot_what_for"],
+      "primaryCategoryIntent": "lonely_disconnected",
+      "secondaryCategoryIntents": [
+        "feeling_lost"
+      ],
       "narratives": [
         {
           "title": "Building EFT from Bowlby's blueprint",
@@ -75,8 +80,11 @@
       "region": "US",
       "bio": "Therapist and author who developed Imago Relationship Therapy, arguing that we unconsciously choose partners who resemble the caregivers who wounded us, and that the relationship itself becomes the vehicle for healing.",
       "oneLiner": "Proved that the person who drives you crazy is the exact person your psyche picked for the job.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["kids_deserved_better", "forgot_what_for"],
+      "primaryCategoryIntent": "lonely_disconnected",
+      "secondaryCategoryIntents": [
+        "kids_deserved_better",
+        "feeling_lost"
+      ],
       "narratives": [
         {
           "title": "The Oprah interview that changed everything",
@@ -99,8 +107,11 @@
       "region": "US",
       "bio": "Family therapist who spent decades naming the specific ways men are taught to disconnect from their own emotions and then destroy their relationships with the same disconnection.",
       "oneLiner": "Told men the truth about what patriarchy costs them personally, not just the women around them.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["voice_taken", "forgot_what_for"],
+      "primaryCategoryIntent": "lonely_disconnected",
+      "secondaryCategoryIntents": [
+        "minds_hurting",
+        "feeling_lost"
+      ],
       "narratives": [
         {
           "title": "I Don't Want to Talk About It",
@@ -123,8 +134,10 @@
       "region": "US",
       "bio": "Baptist pastor and counsellor who wrote The Five Love Languages, a framework so simple it entered everyday conversation and has sold over 20 million copies worldwide.",
       "oneLiner": "Gave millions of couples a shared vocabulary for why they keep missing each other.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["feeling_stupid"],
+      "primaryCategoryIntent": "lonely_disconnected",
+      "secondaryCategoryIntents": [
+        "feeling_stupid"
+      ],
       "narratives": [
         {
           "title": "The Five Love Languages",
@@ -147,8 +160,10 @@
       "region": "US",
       "bio": "Clinician who built the PACT (Psychobiological Approach to Couple Therapy) model by combining attachment theory with neuroscience, teaching couples to regulate each other's nervous systems in real time.",
       "oneLiner": "Taught couples that their bodies are already in the argument before their mouths open.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["feeling_stupid"],
+      "primaryCategoryIntent": "lonely_disconnected",
+      "secondaryCategoryIntents": [
+        "feeling_stupid"
+      ],
       "narratives": [
         {
           "title": "PACT: reading the body, not the story",
@@ -171,8 +186,11 @@
       "region": "UK / Switzerland",
       "bio": "Philosopher and author who founded The School of Life to make emotional intelligence and philosophical wisdom accessible to people who would never set foot in a university philosophy department.",
       "oneLiner": "Built a global school for the emotions that philosophy departments forgot to teach.",
-      "primaryCategoryIntent": "forgot_what_for",
-      "secondaryCategoryIntents": ["pain_not_believed", "feeling_stupid"],
+      "primaryCategoryIntent": "feeling_lost",
+      "secondaryCategoryIntents": [
+        "pain_not_believed",
+        "feeling_stupid"
+      ],
       "narratives": [
         {
           "title": "The School of Life",
@@ -199,8 +217,11 @@
       "region": "Canada / Hungary",
       "bio": "Physician who spent 12 years working in Vancouver's Downtown Eastside with patients in the most severe stages of drug addiction and concluded that addiction is not a choice or a disease but a response to childhood pain.",
       "oneLiner": "Worked with the most addicted people in North America and said the question is never 'Why the addiction?' but always 'Why the pain?'",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["kids_deserved_better", "left_behind"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "kids_deserved_better",
+        "lonely_disconnected"
+      ],
       "narratives": [
         {
           "title": "Twelve years on the Downtown Eastside",
@@ -227,8 +248,11 @@
       "region": "UK / Switzerland",
       "bio": "Journalist who travelled to drug war frontlines across nine countries and concluded that the opposite of addiction is not sobriety but connection.",
       "oneLiner": "Told a world obsessed with chemical hooks that the real hook is loneliness.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "Chasing the Scream",
@@ -251,8 +275,11 @@
       "region": "US",
       "bio": "Journalist and former cocaine and heroin user who became one of the most rigorous science writers covering addiction, arguing that addiction is a learning disorder, not a moral failing or a brain disease.",
       "oneLiner": "Used her own needle marks as credentials to demand that addiction science stop lying to itself.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["stopped_wondering", "feeling_stupid"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "feeling_lost",
+        "feeling_stupid"
+      ],
       "narratives": [
         {
           "title": "Unbroken Brain",
@@ -275,8 +302,11 @@
       "region": "US",
       "bio": "Columbia University neuroscientist who ran controlled experiments giving drugs to people in laboratory settings and found that the vast majority of drug users are not addicted, challenging the narrative that certain substances are irresistibly addictive.",
       "oneLiner": "Gave people drugs in a lab, measured what happened, and told the world most of what it believes about addiction is wrong.",
-      "primaryCategoryIntent": "stopped_wondering",
-      "secondaryCategoryIntents": ["pain_not_believed", "life_not_yours"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "pain_not_believed",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "The lab experiments nobody expected",
@@ -299,8 +329,11 @@
       "region": "US",
       "bio": "Founder of Tempest (formerly Hip Sobriety) who built an alternative to Alcoholics Anonymous, arguing that the 12-step model was designed by and for white men in the 1930s and fails women, queer people, and people of colour.",
       "oneLiner": "Looked at the rooms of AA and asked why a programme designed by men in 1935 was still the only option on the table.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "Quit Like a Woman",
@@ -323,8 +356,11 @@
       "region": "UK",
       "bio": "Comedian and actor who used his public platform and personal history of heroin and crack addiction to advocate loudly for a compassionate, abstinence-based approach to recovery, bringing the language of 12-step programmes to millions who had never heard it.",
       "oneLiner": "Took the language of the rooms to the biggest stages in the world and made recovery look like something other than defeat.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["forgot_what_for", "voice_taken"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "feeling_lost",
+        "minds_hurting"
+      ],
       "narratives": [
         {
           "title": "Recovery: Freedom from Our Addictions",
@@ -347,8 +383,11 @@
       "region": "US",
       "bio": "Co-founder of Alcoholics Anonymous, a stockbroker who got sober in 1934 and, together with Dr. Bob Smith, built the most influential mutual aid movement of the 20th century.",
       "oneLiner": "A failed stockbroker who discovered that one drunk talking to another drunk was more powerful than any doctor or preacher.",
-      "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["left_behind", "forgot_what_for"],
+      "primaryCategoryIntent": "minds_hurting",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "feeling_lost"
+      ],
       "narratives": [
         {
           "title": "The hospital room revelation",
@@ -376,7 +415,10 @@
       "bio": "Geriatrician and professor at UCSF who wrote Elderhood to argue that old age is not a disease to be treated but a distinct phase of life that medicine and society refuse to take seriously.",
       "oneLiner": "Told medicine that treating old age as a disease is the disease.",
       "primaryCategoryIntent": "pain_not_believed",
-      "secondaryCategoryIntents": ["left_behind", "feeling_stupid"],
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "feeling_stupid"
+      ],
       "narratives": [
         {
           "title": "Elderhood",
@@ -399,8 +441,11 @@
       "region": "US",
       "bio": "Geriatrician who looked at nursing homes and saw institutions designed for efficiency rather than life, then spent 30 years building alternatives that treat old people as people rather than patients.",
       "oneLiner": "Put dogs, cats, birds, and children into a nursing home and watched the death rate drop.",
-      "primaryCategoryIntent": "left_behind",
-      "secondaryCategoryIntents": ["pain_not_believed", "life_not_yours"],
+      "primaryCategoryIntent": "kids_deserved_better",
+      "secondaryCategoryIntents": [
+        "pain_not_believed",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "The Eden Alternative",
@@ -423,8 +468,11 @@
       "region": "US",
       "bio": "Labour organiser who built the National Domestic Workers Alliance to fight for the rights of nannies, housekeepers, and home care workers, then connected that fight to the aging crisis by arguing that caring for the elderly is the civil rights issue of the 21st century.",
       "oneLiner": "Organised the workforce that America depends on but refuses to protect: the women who care for our parents.",
-      "primaryCategoryIntent": "work_hollows",
-      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "primaryCategoryIntent": "people_treated_unfairly",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "The New York Domestic Workers' Bill of Rights",
@@ -447,8 +495,11 @@
       "region": "US",
       "bio": "Social entrepreneur who founded Encore.org (now CoGenerate) to challenge the idea that people over 60 are finished contributing, and to build bridges between older and younger generations.",
       "oneLiner": "Looked at a country warehousing its most experienced people and asked what would happen if they were deployed instead.",
-      "primaryCategoryIntent": "left_behind",
-      "secondaryCategoryIntents": ["forgot_what_for", "work_hollows"],
+      "primaryCategoryIntent": "feeling_lost",
+      "secondaryCategoryIntents": [
+        "feeling_lost",
+        "work_hollows"
+      ],
       "narratives": [
         {
           "title": "Experience Corps",
@@ -471,8 +522,11 @@
       "region": "US",
       "bio": "Wheelchair user from age 18 months who became the leading disability rights activist of the 20th century, from suing the New York City Board of Education for the right to teach to leading the longest occupation of a federal building in US history.",
       "oneLiner": "Told a world that saw wheelchairs as tragedies that the real tragedy was the stairs.",
-      "primaryCategoryIntent": "locked_out",
-      "secondaryCategoryIntents": ["life_not_yours", "voice_taken"],
+      "primaryCategoryIntent": "people_treated_unfairly",
+      "secondaryCategoryIntents": [
+        "people_treated_unfairly",
+        "minds_hurting"
+      ],
       "narratives": [
         {
           "title": "Suing for the right to teach",
@@ -499,8 +553,11 @@
       "region": "Australia",
       "bio": "Comedian, journalist, and disability activist who coined the term 'inspiration porn' to describe the media habit of using disabled people as motivational props for non-disabled audiences.",
       "oneLiner": "Told the world that being disabled does not make you brave, and that calling it brave is the problem.",
-      "primaryCategoryIntent": "voice_taken",
-      "secondaryCategoryIntents": ["locked_out", "pain_not_believed"],
+      "primaryCategoryIntent": "people_treated_unfairly",
+      "secondaryCategoryIntents": [
+        "people_treated_unfairly",
+        "pain_not_believed"
+      ],
       "narratives": [
         {
           "title": "The TED talk that named it",
@@ -523,8 +580,11 @@
       "region": "US / Eritrea",
       "bio": "The first deafblind graduate of Harvard Law School, who has spent her career using law and technology to argue that disability is a failure of design, not a failure of the person.",
       "oneLiner": "Graduated from Harvard Law without hearing or seeing the lectures, then turned around and sued the institutions that made it harder than it needed to be.",
-      "primaryCategoryIntent": "locked_out",
-      "secondaryCategoryIntents": ["voice_taken", "feeling_stupid"],
+      "primaryCategoryIntent": "people_treated_unfairly",
+      "secondaryCategoryIntents": [
+        "minds_hurting",
+        "feeling_stupid"
+      ],
       "narratives": [
         {
           "title": "Harvard Law, deafblind",
@@ -551,8 +611,11 @@
       "region": "US",
       "bio": "Paralysed from the neck down by polio at age 14, Roberts fought his way into UC Berkeley, founded the first Centre for Independent Living, and built the philosophical framework that disability is a social construct, not a medical one.",
       "oneLiner": "Lived in an iron lung and still became the person who redesigned how an entire country thinks about disability.",
-      "primaryCategoryIntent": "life_not_yours",
-      "secondaryCategoryIntents": ["locked_out", "voice_taken"],
+      "primaryCategoryIntent": "people_treated_unfairly",
+      "secondaryCategoryIntents": [
+        "people_treated_unfairly",
+        "minds_hurting"
+      ],
       "narratives": [
         {
           "title": "Getting into Berkeley",
@@ -575,8 +638,11 @@
       "region": "US",
       "bio": "Founder of the Disability Visibility Project, a community partnership with StoryCorps that collects and amplifies first-person stories from disabled people, and editor of the anthology that became a movement text.",
       "oneLiner": "Built a megaphone for the stories that the disability rights movement had always told but that the mainstream had always ignored.",
-      "primaryCategoryIntent": "voice_taken",
-      "secondaryCategoryIntents": ["left_behind", "locked_out"],
+      "primaryCategoryIntent": "people_treated_unfairly",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "The Disability Visibility Project",
@@ -603,8 +669,11 @@
       "region": "Bangladesh",
       "bio": "Economist who lent $27 to 42 women in a Bangladeshi village in 1976 and built that experiment into Grameen Bank, proving that the poorest people on earth are creditworthy if someone will lend to them.",
       "oneLiner": "Lent $27 to a village and proved that poor people pay back loans more reliably than rich ones.",
-      "primaryCategoryIntent": "locked_out",
-      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "primaryCategoryIntent": "money_stress",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "The $27 loan",
@@ -631,8 +700,11 @@
       "region": "US",
       "bio": "Former preschool teacher who lost her savings in the 2008 financial crisis, rebuilt from zero, and became 'The Budgetnista,' teaching millions of women, especially Black women, to build wealth using language that sounds like a friend at the kitchen table.",
       "oneLiner": "Lost everything in 2008 and turned the wreckage into a financial education movement for the women nobody else was teaching.",
-      "primaryCategoryIntent": "locked_out",
-      "secondaryCategoryIntents": ["feeling_stupid", "left_behind"],
+      "primaryCategoryIntent": "money_stress",
+      "secondaryCategoryIntents": [
+        "feeling_stupid",
+        "lonely_disconnected"
+      ],
       "narratives": [
         {
           "title": "From preschool teacher to financial educator",
@@ -655,8 +727,11 @@
       "region": "US / Mexico",
       "bio": "Undocumented immigrant from Mexico who became a MacArthur Fellow by building Mission Asset Fund, an organisation that makes the financial lives of immigrant families visible to the credit system by formalising the lending circles they already use.",
       "oneLiner": "Did not invent lending circles. He just made the credit bureaus notice they existed.",
-      "primaryCategoryIntent": "locked_out",
-      "secondaryCategoryIntents": ["left_behind", "life_not_yours"],
+      "primaryCategoryIntent": "money_stress",
+      "secondaryCategoryIntents": [
+        "lonely_disconnected",
+        "people_treated_unfairly"
+      ],
       "narratives": [
         {
           "title": "Lending Circles",
@@ -679,8 +754,11 @@
       "region": "US",
       "bio": "Financial advisor and television host who built a media empire by treating money as an emotional subject, not a mathematical one, and by telling her audience hard truths with the energy of a close friend who loves you too much to lie.",
       "oneLiner": "Told millions of Americans they could not afford the life they were pretending to live, and they kept tuning in because she said it like she cared.",
-      "primaryCategoryIntent": "feeling_stupid",
-      "secondaryCategoryIntents": ["locked_out", "forgot_what_for"],
+      "primaryCategoryIntent": "money_stress",
+      "secondaryCategoryIntents": [
+        "people_treated_unfairly",
+        "feeling_lost"
+      ],
       "narratives": [
         {
           "title": "The waitress who lost everything to a broker",
@@ -703,8 +781,11 @@
       "region": "US",
       "bio": "Radio host and author who went bankrupt in his twenties, rebuilt by following an intensely disciplined approach to debt elimination, and then taught that approach to millions through a media empire built on the principle that debt is the enemy.",
       "oneLiner": "Went bankrupt, clawed back to zero, and spent the next 30 years screaming at Americans to cut up their credit cards.",
-      "primaryCategoryIntent": "feeling_stupid",
-      "secondaryCategoryIntents": ["locked_out", "forgot_what_for"],
+      "primaryCategoryIntent": "money_stress",
+      "secondaryCategoryIntents": [
+        "people_treated_unfairly",
+        "feeling_lost"
+      ],
       "narratives": [
         {
           "title": "The bankruptcy that built the brand",
