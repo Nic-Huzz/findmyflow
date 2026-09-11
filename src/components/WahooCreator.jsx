@@ -87,6 +87,8 @@ export default function WahooCreator({
   const [healingTaskId, setHealingTaskId] = useState(null)
   const [expansionDims, setExpansionDims] = useState([])
   const [dimensionValues, setDimensionValues] = useState({})
+  const [selectedExpId, setSelectedExpId] = useState(null)
+  const [questExperiences, setQuestExperiences] = useState([])
   const [predictedDifficulty, setPredictedDifficulty] = useState(null)
   // Drill-in: which dimension is currently being leveled (null = show grid)
   const [drilledDim, setDrilledDim] = useState(null)
@@ -140,9 +142,9 @@ export default function WahooCreator({
       })
   }, [userId])
 
-  // Load quest dimensions when quest is linked
+  // Load quest dimensions + experiences when quest is linked
   useEffect(() => {
-    if (!linkedQuestId) { setQuestDims(null); return }
+    if (!linkedQuestId) { setQuestDims(null); setQuestExperiences([]); setSelectedExpId(null); return }
     supabase.from('quests')
       .select('current_dimensions, dream_dimensions')
       .eq('id', linkedQuestId)
@@ -153,6 +155,15 @@ export default function WahooCreator({
         } else {
           setQuestDims(null)
         }
+      })
+    supabase.from('quest_experiences')
+      .select('id, label')
+      .eq('quest_id', linkedQuestId)
+      .eq('status', 'active')
+      .order('sort_order')
+      .then(({ data }) => {
+        setQuestExperiences(data || [])
+        setSelectedExpId(null)
       })
   }, [linkedQuestId])
 
@@ -256,6 +267,7 @@ export default function WahooCreator({
             text: freeText.trim(),
             is_courage_challenge: true,
             groan_challenge_id: dbRecord.id,
+            experience_id: selectedExpId || null,
             sort_order: 0,
           })
         } catch (e) { /* non-blocking */ }
@@ -347,6 +359,7 @@ export default function WahooCreator({
                           text: w.title || w.challenge_text,
                           is_courage_challenge: true,
                           groan_challenge_id: w.id,
+                          experience_id: selectedExpId || null,
                           sort_order: 0,
                         })
                       }
@@ -434,6 +447,21 @@ export default function WahooCreator({
           {!initialQuestId && (
             <QuestSelector userId={userId} value={linkedQuestId}
               onChange={(id) => setLinkedQuestId(id)} />
+          )}
+
+          {questExperiences.length > 0 && (
+            <div className="wc-exp-picker">
+              <div className="wc-exp-label">Project</div>
+              <div className="wc-exp-pills">
+                {questExperiences.map(exp => (
+                  <button key={exp.id}
+                    className={`wc-exp-pill ${selectedExpId === exp.id ? 'active' : ''}`}
+                    onClick={() => { hapticLight(); setSelectedExpId(selectedExpId === exp.id ? null : exp.id) }}>
+                    {exp.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
 
           <div className="wc-step-footer">

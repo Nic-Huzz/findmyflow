@@ -187,6 +187,19 @@
    STEP 2: DIMENSION GRID
    ════════════════════════════════════════════ */
 
+/* === EXPERIENCE PICKER === */
+.wc-exp-picker { margin-top: 12px; }
+.wc-exp-label { font-size: 13px; font-weight: 600; color: #666; margin-bottom: 6px; }
+.wc-exp-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.wc-exp-pill {
+  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  border: 1.5px solid #e0e0e0; background: #fff; color: #333; cursor: pointer;
+  transition: all 0.15s;
+}
+.wc-exp-pill.active {
+  background: #5e17eb; color: #fff; border-color: #5e17eb;
+}
+
 .wc-dim-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

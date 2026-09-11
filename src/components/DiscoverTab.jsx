@@ -101,10 +101,10 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       setLoading(false)
     })
 
-    // Check for current job quest (only counts as done if dimensions are set)
-    supabase.from('quests').select('id, current_dimensions').eq('user_id', userId).eq('is_current_job', true).limit(1)
+    // Check for current job quest
+    supabase.from('quests').select('id').eq('user_id', userId).eq('is_current_job', true).limit(1)
       .then(({ data }) => {
-        if (data?.length > 0 && data[0].current_dimensions && Object.keys(data[0].current_dimensions).length > 0) {
+        if (data?.length > 0) {
           setHasCurrentJob(true)
         }
       })

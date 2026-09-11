@@ -147,6 +147,7 @@ export default function ProgressTab({ userId }) {
 
   // Voice data
   const [voiceData, setVoiceData] = useState(null)
+  const [voiceMonthOffset, setVoiceMonthOffset] = useState(0) // 0 = current, -1 = last month, etc.
   const [unhealedPattern, setUnhealedPattern] = useState(null) // { voice, dimensions, count, message }
   const [showHealing, setShowHealing] = useState(false)
 
@@ -272,9 +273,9 @@ export default function ProgressTab({ userId }) {
         // Process dome check (from matrixData later, but also check here)
         // matrixData is loaded separately via import
 
-        // Process current job (only counts as done if dimensions are set)
+        // Process current job
         const currentJobQuest = currentJobRes.data?.[0]
-        if (currentJobQuest?.current_dimensions && Object.keys(currentJobQuest.current_dimensions).length > 0) {
+        if (currentJobQuest) {
           setHasCurrentJob(true)
         }
 
@@ -350,8 +351,10 @@ export default function ProgressTab({ userId }) {
         const lastMonthKey = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth() + 1).padStart(2, '0')}`
 
         // From challenge voices (predicted_voice from creation + gap_voice from completion)
+        // Only count completed challenges — active ones shouldn't inflate this month's count
         ;(challengeVoicesRes.data || []).forEach(row => {
-          const monthKey = row.completed_at ? row.completed_at.substring(0, 7) : thisMonth
+          if (!row.completed_at) return
+          const monthKey = row.completed_at.substring(0, 7)
           // Count each unique voice per challenge (deduplicate if same voice on both)
           const voices = new Set()
           if (row.predicted_voice) voices.add(row.predicted_voice)
@@ -410,6 +413,8 @@ export default function ProgressTab({ userId }) {
               dropPercent: lastMonthCount > 0
                 ? Math.round(((lastMonthCount - thisMonthCount) / lastMonthCount) * 100)
                 : 0,
+              allMonths: dominantVoice.months,
+              allVoiceCounts: voiceCounts,
             })
           }
         }
@@ -713,54 +718,86 @@ export default function ProgressTab({ userId }) {
       )}
 
       {/* ═══ VOICE SECTION ═══ */}
-      {voiceData && (
+      {voiceData && (() => {
+        const viewDate = new Date()
+        viewDate.setMonth(viewDate.getMonth() + voiceMonthOffset)
+        const viewKey = `${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}`
+        const prevDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1)
+        const prevKey = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}`
+        const viewLabel = viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })
+        // Find dominant voice for the viewed month
+        const voiceEmojis = { ghost: '👻', perfectionist: '🎯', controller: '🧱', people_pleaser: '🪞', auto_pilot: '🤖' }
+        const voiceLabels = { ghost: 'Ghost', perfectionist: 'Perfectionist', controller: 'Controller', people_pleaser: 'People Pleaser', auto_pilot: 'Auto-Pilot' }
+        let monthVoice = voiceData.voice // fallback to overall dominant
+        let monthVoiceCount = 0
+        Object.entries(voiceData.allVoiceCounts).forEach(([v, months]) => {
+          const c = months[viewKey] || 0
+          if (c > monthVoiceCount) { monthVoice = v; monthVoiceCount = c }
+        })
+        const viewCount = monthVoiceCount
+        const prevVoiceCount = voiceData.allVoiceCounts[monthVoice]?.[prevKey] || 0
+        const prevCount = prevVoiceCount
+        const maxDots = Math.max(viewCount, prevCount, 6)
+        const isNow = voiceMonthOffset === 0
+        const allMonthKeys = new Set()
+        Object.values(voiceData.allVoiceCounts).forEach(months => Object.keys(months).forEach(k => allMonthKeys.add(k)))
+        const sortedKeys = [...allMonthKeys].sort()
+        const hasOlder = sortedKeys.length > 0 && sortedKeys[0] < viewKey
+
+        return (
         <>
           <div className="pt-bridge"><span className="pt-bridge-text">{voiceBridge}</span></div>
           <div className="pt-voice-card">
-            <div className="pt-voice-icon">👻</div>
+            <div className="pt-voice-icon">{voiceEmojis[monthVoice] || '👻'}</div>
             <div className="pt-voice-content">
-              <div className="pt-voice-name">Your Ghost</div>
+              <div className="pt-voice-name">Your {voiceLabels[monthVoice] || monthVoice}</div>
+
+              <div className="pt-voice-nav">
+                <button className="pt-voice-nav-btn" onClick={() => setVoiceMonthOffset(o => o - 1)} disabled={!hasOlder}>‹</button>
+                <span className="pt-voice-nav-label">{viewLabel}</span>
+                <button className="pt-voice-nav-btn" onClick={() => setVoiceMonthOffset(o => o + 1)} disabled={isNow}>›</button>
+              </div>
+
               <div className="pt-voice-stat">
-                {voiceData.thisMonth === 0
-                  ? <>Hasn't shown up this month.</>
-                  : voiceData.thisMonth === 1
-                    ? <>Only showed up <strong>once</strong> this month.</>
-                    : <>Shows up most when <strong>{voiceData.topDimension || 'pushing your comfort zone'}</strong> is involved.</>
+                {viewCount === 0
+                  ? <>Didn't show up{isNow ? ' this month' : ''}.</>
+                  : viewCount === 1
+                    ? <>Only showed up <strong>once</strong>{isNow ? ' this month' : ''}.</>
+                    : <>Showed up <strong>{viewCount} times</strong>{isNow ? ' this month' : ''}.</>
                 }
               </div>
               <div className="pt-voice-dots">
                 <div className="pt-voice-dots-row">
-                  <span className="pt-voice-dots-label">Last month</span>
-                  {Array.from({ length: voiceData.maxDots }).map((_, i) => (
-                    <span key={i} className={`pt-voice-dot ${i < voiceData.lastMonth ? 'filled' : 'empty'}`} />
+                  <span className="pt-voice-dots-label">{prevDate.toLocaleString('default', { month: 'short' })}</span>
+                  {Array.from({ length: maxDots }).map((_, i) => (
+                    <span key={i} className={`pt-voice-dot ${i < prevCount ? 'filled' : 'empty'}`} />
                   ))}
                 </div>
                 <div className="pt-voice-dots-row">
-                  <span className="pt-voice-dots-label">This month</span>
-                  {Array.from({ length: voiceData.maxDots }).map((_, i) => (
-                    <span key={i} className={`pt-voice-dot ${i < voiceData.thisMonth ? 'filled' : 'empty'}`} />
+                  <span className="pt-voice-dots-label">{viewDate.toLocaleString('default', { month: 'short' })}</span>
+                  {Array.from({ length: maxDots }).map((_, i) => (
+                    <span key={i} className={`pt-voice-dot ${i < viewCount ? 'filled' : 'empty'}`} />
                   ))}
                 </div>
               </div>
-              {voiceData.isDecreasing && (
+              {viewCount < prevCount && prevCount > 0 && (
                 <div className="pt-voice-trend">
-                  {voiceData.dropPercent >= 50
-                    ? `Down ${voiceData.dropPercent}% ↓`
-                    : 'It\'s getting quieter ↓'
+                  {Math.round(((prevCount - viewCount) / prevCount) * 100) >= 50
+                    ? `Down ${Math.round(((prevCount - viewCount) / prevCount) * 100)}% ↓`
+                    : 'Getting quieter ↓'
                   }
                 </div>
               )}
-              {!voiceData.isDecreasing && voiceData.thisMonth > 0 && (
+              {viewCount >= prevCount && viewCount > 0 && (
                 <div className="pt-voice-trend up">Still showing up</div>
               )}
 
               {/* Unhealed pattern CTA */}
-              {unhealedPattern && (
+              {unhealedPattern && isNow && (
                 <button
                   className="pt-voice-explore"
                   onClick={async () => {
                     setShowHealing(true)
-                    // Mark as started so CTA doesn't persist
                     await supabase.from('voice_pattern_prompts')
                       .update({ healing_started: true })
                       .eq('user_id', userId)
@@ -773,7 +810,8 @@ export default function ProgressTab({ userId }) {
             </div>
           </div>
         </>
-      )}
+        )
+      })()}
 
       {/* Healing modal for pattern exploration */}
       {showHealing && unhealedPattern && (

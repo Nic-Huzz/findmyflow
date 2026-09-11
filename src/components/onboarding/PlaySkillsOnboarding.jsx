@@ -178,6 +178,19 @@ export default function PlaySkillsOnboarding() {
               user_id: newUser.id,
               onboarding_v2_completed: true,
             }, { onConflict: 'user_id' })
+            // Create profile row so leaderboard/community shows real name (if none exists)
+            const { data: existingProfile } = await supabase
+              .from('lead_flow_profiles')
+              .select('id')
+              .eq('user_id', newUser.id)
+              .limit(1)
+            if (!existingProfile?.length) {
+              await supabase.from('lead_flow_profiles').insert({
+                user_id: newUser.id,
+                user_name: userName?.trim() || null,
+                email: email.toLowerCase().trim(),
+              })
+            }
             localStorage.removeItem(STORAGE_KEY)
           }
         } catch (saveErr) {

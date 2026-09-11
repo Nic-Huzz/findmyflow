@@ -22,6 +22,7 @@ import { supabase } from '../lib/supabaseClient'
 import './ChallengeOnboarding.css'
 
 const INSTALL_SEEN_KEY = 'hasSeenChallengeInstallPrompt'
+const NOTIFICATIONS_SEEN_KEY = 'hasSeenNotificationsPrompt'
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
 function ChallengeOnboarding({
@@ -82,6 +83,7 @@ function ChallengeOnboarding({
       // Users will see notifications screen next time they open from PWA
       onStartChallenge()
     } else if (currentScreen === 'enable-notifications') {
+      localStorage.setItem(NOTIFICATIONS_SEEN_KEY, 'true')
       onStartChallenge()
     }
   }

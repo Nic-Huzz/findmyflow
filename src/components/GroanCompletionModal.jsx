@@ -863,7 +863,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
               <div className="gcm-textarea-group">
                 <div className="gcm-label-row">
                   <label>How can you make this 3% better next time?</label>
-                  <button className="gcm-explainer-btn" onClick={() => setShowExplainer(true)}>Explainer</button>
+                  <button className="gcm-explainer-btn" onClick={() => setShowExplainer(true)}>?</button>
                 </div>
                 <textarea placeholder="What small improvement could compound over time?"
                   value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} />

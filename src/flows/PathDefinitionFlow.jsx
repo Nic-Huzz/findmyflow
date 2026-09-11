@@ -15,7 +15,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
-import { DOME_DIMENSIONS } from '../data/domeDimensions'
+import { DOME_DIMENSIONS, calculateCourageScore } from '../data/domeDimensions'
 import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import DomeOfSafety from '../components/DomeOfSafety'
@@ -104,6 +104,10 @@ export default function PathDefinitionFlow() {
   const [stepDimValues, setStepDimValues] = useState({})
   const [stepDrilledDim, setStepDrilledDim] = useState(null)
 
+  // Experience selector for task assignment
+  const [questExperiences, setQuestExperiences] = useState([])
+  const [selectedExpId, setSelectedExpId] = useState(null)
+
   // Essence data (for identity reveal)
   const [essenceName, setEssenceName] = useState(null)
   const [essenceSuperpower, setEssenceSuperpower] = useState(null)
@@ -141,6 +145,15 @@ export default function PathDefinitionFlow() {
           return
         }
         setQuest(data)
+        // Load experiences for this quest
+        supabase.from('quest_experiences')
+          .select('id, label, status')
+          .eq('quest_id', questId)
+          .eq('status', 'active')
+          .order('sort_order')
+          .then(({ data: exps }) => {
+            if (exps?.length) setQuestExperiences(exps)
+          })
         // Pre-fill if quest already has partial data
         if (data.precursor_level) setPrecursor(data.precursor_level)
         if (data.current_dimensions) setCurrentDims(data.current_dimensions)
@@ -286,6 +299,7 @@ export default function PathDefinitionFlow() {
                 text: step,
                 is_courage_challenge: true,
                 groan_challenge_id: groanId,
+                experience_id: selectedExpId || null,
                 sort_order: 0,
               })
             } catch {}
@@ -734,6 +748,22 @@ export default function PathDefinitionFlow() {
                 onChange={e => setStepText(e.target.value)}
                 placeholder="The tiniest possible step..." />
 
+              {/* Experience selector */}
+              {stepText.trim() && questExperiences.length > 0 && (
+                <div style={{ marginTop: 16 }}>
+                  <div className="pdf-q" style={{ fontSize: 14 }}>Which project is this for?</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+                    {questExperiences.map(exp => (
+                      <button key={exp.id}
+                        className={`pdf-fuel-pill ${selectedExpId === exp.id ? 'active' : ''}`}
+                        onClick={() => { hapticLight(); setSelectedExpId(selectedExpId === exp.id ? null : exp.id) }}>
+                        {exp.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Dimension tagging (same UI as WahooCreator) */}
               {stepText.trim() && !stepDrilledDim && (
                 <>
@@ -794,6 +824,12 @@ export default function PathDefinitionFlow() {
                           </div>
                         ) : null
                       })}
+                    </div>
+                  )}
+
+                  {Object.keys(stepDimValues).length > 0 && (
+                    <div className="wc-courage-preview">
+                      Courage score: {calculateCourageScore(stepDimValues).toFixed(1)}
                     </div>
                   )}
 

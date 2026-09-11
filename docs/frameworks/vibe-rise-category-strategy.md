@@ -629,7 +629,89 @@ Connects to the Find My Flow dome — event experience feeds into comfort zone e
 
 ---
 
-## 13. The Product (Three Phases, Three Delivery Mechanisms)
+## 13. Stranger → Subscriber → Supporter → Super Path
+
+> **Source:** CP "Map Origin Story Agent" — map the complete journey from first touch to superfan.
+
+```
+STRANGER — sees Monument Rave Reel on Instagram
+    ↓ (Top layer content hooks them — "cool, what is this?")
+SUBSCRIBER — DMs keyword → ManyChat → lead magnet → email captured
+    ↓ (Lead magnet gives them their shape — "I see my comfort zone")
+SUPPORTER — signs up for app → does first courage challenge → sees dome grow
+    ↓ (Identity kicks in — "I'm someone who does courage challenges")
+SUPERCONSUMER — weekly user → comes to an event → talks about it unprompted → brings friends
+```
+
+**Drop-off risks:**
+- Stranger → Subscriber: hook didn't land (test different hooks, track DM rate per post)
+- Subscriber → Supporter: got lead magnet result but didn't sign up (gap between "cool result" and "I should do this")
+- Supporter → Super: did 1-3 challenges then stopped (identity hasn't formed yet — first 2 weeks are the danger zone, see Retention Thesis)
+
+**What to track:** DM rate, lead magnet completion rate, app signup rate, first courage challenge rate, 7-day retention, 30-day retention. Each transition is a funnel stage in `lead_funnel_events`.
+
+---
+
+## 14. Category Violence
+
+> **Source:** CP "If your POV doesn't make incumbents uncomfortable, you're competing not creating."
+
+**Who loses if Courage: Gamified wins?**
+
+We attack INDUSTRIES, not people. The tone is fun, not aggressive. We point out what's broken about the system, not the individuals in it.
+
+| Industry | What We Say | Tone |
+|---|---|---|
+| **University / MBA industry** | "More knowledge doesn't expand your comfort zone" | Factual, not angry |
+| **Online course industry** | "Courses feel like progress without the risk. That's avoidance." | Honest, from experience ($30K on courses) |
+| **Career coaching industry** | "You don't need someone telling you what to do. You need a game that makes you do it." | Playful — the app replaces the role |
+| **Personality test companies** | "Labels don't tell you what makes you alive" | Direct — Experience Game replaces them |
+| **Self-help publishing** | "You can't think your way to change, you have to live your way there" | Philosophical, not combative |
+
+**The line we walk:** We're the fun option. We don't attack therapists or coaches as people. We say the INDUSTRY model is broken: "The system assumes knowledge changes you. It doesn't. Courage does." That's category violence without being a jerk.
+
+**Our $30K proof:** "I spent $30K on courses. None of them expanded my comfort zone. Doing scary things did." That's personal experience, not an attack. Hardest to argue with.
+
+---
+
+## 15. Magic Triangle Check
+
+> **Source:** CP — Product + Business Model + Category must align.
+
+| Element | What It Is | Aligned? |
+|---|---|---|
+| **Product** | App that gamifies courage — tracks comfort zone as a shape, courage challenges grow dimensions | ✅ Delivers the category promise |
+| **Business Model** | Free lead magnets → free/low app → paid events → $10K coaching | ✅ Sustains the category |
+| **Category** | Courage: Gamified. NRC for courage. | ✅ Attracts the right people |
+
+All three point the same direction. No misalignment.
+
+---
+
+## 16. Data Feedback Loop
+
+> **Source:** CP "Every product is a sensor. Sell products to create data."
+
+| Product/Action | Data Created | What We Learn |
+|---|---|---|
+| Experience Game (lead magnet) | Dome shape, NS ratings for ~90 experiences | What makes THIS person come alive |
+| Ambition Radar (lead magnet) | Dream vs current on 8 dimensions | Where their comfort zone gap is |
+| Vibe Rise Radar (lead magnet) | 6 aliveness dimensions | How alive they are right now |
+| Courage challenges | Dimension growth, predicted vs experienced, gap voice | Which dimensions grow, which voices block |
+| Post-courage reflections | Old way, beliefs challenged, building toward, who it serves | Category definition building over time |
+| Weekly reviews | Identity shifts, dome growth, life fuel, income | Longitudinal transformation |
+| Events | Before/after Vibe Rise Radar shift | Proof the event works |
+
+**The moat:** After 1,000 users, the platform learns how courage works at population scale:
+- "People with high Movement + low Vulnerability tend to be The Stuck"
+- "Ghost voice appears 3x more in Seekers than Stuck"
+- "Users who do 10+ challenges in month one retain at 80%"
+
+Every user makes the platform smarter. That's the data feedback loop. That's the moat no competitor can copy without the data.
+
+---
+
+## 17. The Product (Three Phases, Three Delivery Mechanisms)
 
 One category (School of Experience), three phases:
 
@@ -651,7 +733,140 @@ Answered by: What lights me up?    Answered by: Comfort zone grows   Answered by
 
 ---
 
-## 14. The "Become Known" Mechanism
+## 18. Three Segments (Curious → Question → Quest)
+
+> **Source:** CP "Three Segments" — each segment needs different content, different hooks, different conversion paths. One funnel doesn't fit all.
+
+### The Three Segments for Vibe Rise
+
+| Segment | Mindset | How They Found You | What They Need |
+|---|---|---|---|
+| **Curious** | "That looks fun." No awareness of a problem. Not searching. | Monument Rave Reel, TikTok share, friend forwarded a clip | To see the STORY under the spectacle — then they question |
+| **Question** | "Wait, how did he build this life?" Aware of a gap but not yet acting. | Middle layer content, quit story, comfort zone belief line, personal captions | To see themselves in the story — the radar gives them a mirror |
+| **Quest** | "I need to change. What do I use?" Actively shopping for a solution. | r/findapath, career coach referral, direct search, word of mouth | Proof it works. The product. The data. The case study. |
+
+### Curious Pirates
+
+**Who they are:** They just saw something cool. 100 people dancing at the Eiffel Tower. They thought "that looks fun" and double-tapped. They don't know they have a problem. They're not searching for "how to quit my job." They're scrolling.
+
+**Content that serves them:** Top layer. Spectacle. The footage. The energy. The visual. This is already what Monument Rave content does by default. You don't need to create Curious-specific content — the event footage IS Curious content.
+
+**What converts Curious → Question:**
+
+The shift happens when they see the STORY underneath the footage. Not in the same piece — in the follow-up. The conversion trigger is one of:
+
+1. **The biography reveal.** A follow-up post (24-48hrs later) where the person in the footage turns out to have quit a $150K job, spent $30K on courses, and none of it gave them what dancing at the Eiffel Tower did. The footage was entertainment. The story makes them question their own path.
+
+2. **The reframe.** A caption or voiceover that says "This isn't a dance party. This is what happens when you expand your comfort zone for 3 years." Now the footage means something different. It's not just fun — it's the result of a process.
+
+3. **The shape.** The comfort zone radar appears. A shape. With a before and an after. Now they see this life was BUILT, not stumbled into. That's the moment they ask "how?"
+
+**The timing matters more than the format.** Middle layer content needs to land within 24-48hrs of Top layer — while the Curious person is still paying attention. Same feed, sequenced. The algorithm shows them the Reel (Top), then if they engaged, it shows them the follow-up (Middle). That's when Curious becomes Question.
+
+**Behaviour signals:**
+- They follow after watching a Reel (but haven't DM'd)
+- They save posts (thinking about it later)
+- They watch stories but don't reply
+- They haven't visited the bio link yet
+
+**Goal:** Get them to stay long enough to hit Middle content. Don't try to convert them directly — they're not ready. The Monument Rave footage hooks them. The next 3-5 posts are what shift them.
+
+### Question Pirates
+
+**Who they are:** "Wait, how did he build this life?" They've gone from entertainment to curiosity. They see the gap between their life and what they saw. They're not yet shopping for a solution but they're paying attention differently. They read captions now. They watch full videos. They're starting to see their situation reflected.
+
+**Content that serves them:** Middle layer. Education. POV. The School of Experience philosophy. This is the missing layer (Section 11 identified zero Middle content published).
+
+**Hooks that work for Question:**
+
+| Hook | Why It Converts |
+|---|---|
+| "I quit my $150K job because I was building a life I needed to escape from" | Resonates if they're feeling trapped |
+| "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" | Names the mechanism they feel but can't articulate |
+| "I stopped following recipes and started creating my own" (cook vs chef) | Questions the School of Theory they've been in |
+| "I spent $30K on courses. None of them expanded my comfort zone." | Personal proof — hardest to argue with |
+| "There's no course for this career. Because I created it." | Names the different future |
+
+**What converts Question → Quest:**
+
+The shift happens when they go from "interesting idea" to "I need to see where I am." The lead magnet is the bridge. They DM the keyword not because they're sold on the app — they DM because they want to see their own shape.
+
+Conversion triggers:
+1. **The mirror moment.** They see someone else's radar result and think "I want to see mine." That's why shareable radar cards matter (Section 18) — other people's results convert Question to Quest.
+2. **The vulnerability.** A personal post that reveals fear of judgement, not just the highlights. "The real reason I didn't quit sooner wasn't money. It was what people would think." Question people recognise themselves in the fear, not just the aspiration.
+3. **The "is this it?" moment.** Middle content that names the feeling they've been avoiding. "You took the safe path, got the job, hit the milestone — and felt nothing." That's when they DM.
+
+**Behaviour signals:**
+- They DM the keyword (ManyChat trigger → lead magnet)
+- They reply to stories
+- They click the bio link
+- They start engaging with Middle content (comments, saves, shares)
+
+**Conversion path:** DM keyword → ManyChat → Ambition Radar (for The Stuck) or Experience Game (for The Seeker) → email captured → app signup CTA in email sequence.
+
+### Quest Pirates
+
+**Who they are:** "I need to change. What do I use?" They've named the problem. They're actively shopping. They've probably already tried courses, coaching, personality tests — the School of Theory. They know it didn't work. They're looking for the alternative.
+
+**Where they come from:**
+- r/findapath and career-change subreddits (searching for solutions)
+- Word of mouth ("my friend told me about this app")
+- Google search (when the category has a name)
+- Career coach referral ("I can't help you with this — try this app")
+- Graduated from Question through your content
+
+**Content that serves them:** Bottom of funnel. Proof. Product. Data. They don't need the philosophy — they already believe it. They need to see the app works.
+
+| Content Type | What It Proves |
+|---|---|
+| Before/after radar screenshots | "This is what 3 months of courage challenges looks like" |
+| Testimonials / user stories | "Someone like me did this and it worked" — currently limited (case study of 1) |
+| Product walkthrough | "Here's what the game looks like from inside" — show the dome, the quests, the weekly review |
+| The data | "Users who do 10+ challenges in month one..." — available once there are users |
+| The comparison | "Here's what you get from a $200 personality test. Here's what you get from 30 days in the app." |
+
+**Conversion path:** Direct app signup. Skip the lead magnet. They want in. If they came from a lead magnet, the email sequence pushes app signup within 3-5 emails.
+
+**Behaviour signals:**
+- They visit the app store / signup page
+- They complete a lead magnet AND click through to app signup in the same session
+- They ask "how much does this cost?" or "is there an app?"
+- They share their result with someone else (recruiting for the category)
+
+### Content Calendar by Segment
+
+| Day | Content | Layer | Targets |
+|---|---|---|---|
+| Mon | Monument Rave Reel or event footage | Top | Curious |
+| Tue | Follow-up: story/reframe/radar under the footage | Middle | Curious → Question conversion |
+| Wed | POV piece (quit story, cook vs chef, belief line) | Middle | Question |
+| Thu | Personal / behind-the-scenes / girlfriend collab | Base | All (retention) |
+| Fri | Product proof (radar growth, challenge reflection, before/after) | Middle/Bottom | Question → Quest conversion |
+| Sat/Sun | Rest or spontaneous Base content | Base | All |
+
+**The principle:** Top content on Monday hooks Curious. Middle on Tuesday converts them to Question while they're still paying attention. Middle on Wednesday deepens it. Base on Thursday keeps them human. Friday's proof content converts Question to Quest. Not rigid — but the SEQUENCE matters: spectacle first, story second, proof third.
+
+### Segment Sizing (Current State)
+
+| Segment | Estimated % of Audience | Source |
+|---|---|---|
+| **Curious** | ~10-15% | Recent Reel-driven followers who haven't engaged beyond a follow |
+| **Question** | ~50-60% | Core audience — met Huzz in person, follow consistently, read captions |
+| **Quest** | ~25-30% | Active believers — would sign up tomorrow, some already have |
+
+**Post-launch shift:** Once Monument Rave content goes out consistently, Curious grows to 40-50%. That's the growth audience. The Middle layer becomes the most important conversion lever.
+
+### What Each Segment Doesn't Need
+
+| Segment | What to Avoid |
+|---|---|
+| **Curious** | Don't explain the app. Don't use category language. Don't say "comfort zone" or "School of Experience." They're not ready. Just show the life. |
+| **Question** | Don't hard-sell the product. They need philosophy, not features. The lead magnet is a soft ask, not a product pitch. |
+| **Quest** | Don't re-educate them on the philosophy. They already believe. Skip the story, show the proof. |
+
+---
+
+## 19. The "Become Known" Mechanism
 
 The School of Experience chain: comfort zone → experience → brand → career.
 
@@ -663,7 +878,7 @@ The School of Experience chain: comfort zone → experience → brand → career
 
 ---
 
-## 15. Retention Thesis
+## 20. Retention Thesis
 
 School of Theory retains through sunk cost ($50K tuition). School of Experience retains through identity.
 

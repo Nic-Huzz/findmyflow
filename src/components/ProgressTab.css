@@ -469,6 +469,20 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
+.progress-tab .pt-voice-nav {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.progress-tab .pt-voice-nav-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #e0e0e0;
+  background: #fff; font-size: 16px; font-weight: 600; color: #333;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s;
+}
+.progress-tab .pt-voice-nav-btn:disabled { opacity: 0.25; cursor: default; }
+.progress-tab .pt-voice-nav-label {
+  font-size: 13px; font-weight: 600; color: #555;
+}
+
 .progress-tab .pt-voice-trend {
   font-size: 12px;
   font-weight: 700;

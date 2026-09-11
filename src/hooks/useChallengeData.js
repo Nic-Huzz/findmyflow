@@ -31,6 +31,10 @@ import { getEssenceDisplayName } from '../lib/essencePreferences'
 // Default community group — all new challenges auto-join this group
 const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
+// Onboarding localStorage keys (must match ChallengeOnboarding.jsx)
+const INSTALL_SEEN_KEY = 'hasSeenChallengeInstallPrompt'
+const NOTIFICATIONS_SEEN_KEY = 'hasSeenNotificationsPrompt'
+
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
   'play-list': 'Paths',
@@ -1663,9 +1667,40 @@ export function useChallengeData() {
         checkFlowFinderComplete(),
         loadStageProgress(),
         // Note: loadValidationResponseCounts is triggered by selectedProject useEffect below
-      ]).finally(() => setLoading(false))
+      ]).finally(() => {
+        setLoading(false)
+        // Check if notification onboarding should show
+        checkNotificationOnboarding()
+      })
     }
   }, [user])
+
+  // Show notification onboarding if user hasn't set up push notifications
+  const checkNotificationOnboarding = async () => {
+    if (!user?.id) return
+
+    const hasSeenInstall = localStorage.getItem(INSTALL_SEEN_KEY)
+    if (!hasSeenInstall) {
+      setOnboardingScreen('install-app')
+      setShowOnboarding(true)
+      return
+    }
+
+    // Already installed — check if push notifications are set up
+    const hasSeenNotifications = localStorage.getItem(NOTIFICATIONS_SEEN_KEY)
+    if (hasSeenNotifications) return
+
+    const { data: pushSub } = await supabase
+      .from('push_subscriptions')
+      .select('id')
+      .eq('user_id', user.id)
+      .limit(1)
+
+    if (!pushSub || pushSub.length === 0) {
+      setOnboardingScreen('enable-notifications')
+      setShowOnboarding(true)
+    }
+  }
 
   // Reload validation response counts when project changes
   useEffect(() => {
