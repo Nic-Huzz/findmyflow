@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "generatedAt": "2026-04-07",
-    "totalProfiles": 319,
+    "totalProfiles": 325,
     "confidenceDistribution": {
       "high": 296,
       "medium": 1,
@@ -130,7 +130,7 @@
       "name": "Sol Price",
       "source": "founder",
       "domain": "retail",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "building",
@@ -211,7 +211,7 @@
       "name": "Estée Lauder",
       "source": "founder",
       "domain": "cosmetics",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "money_stress",
       "primarySkills": [
         "speaking_up",
         "performing",
@@ -494,7 +494,7 @@
       "name": "Henry Ford",
       "source": "founder",
       "domain": "automotive manufacturing",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "building"
@@ -521,7 +521,7 @@
       "name": "Andrew Carnegie",
       "source": "founder",
       "domain": "steel manufacturing",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "money_stress",
       "primarySkills": [
         "leading",
         "connecting"
@@ -547,7 +547,7 @@
       "name": "Howard Hughes",
       "source": "founder",
       "domain": "aviation and entertainment",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_lost",
       "primarySkills": [
         "building",
         "creating"
@@ -603,7 +603,7 @@
       "name": "Michael Dell",
       "source": "founder",
       "domain": "personal computers",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "building"
@@ -658,7 +658,7 @@
       "name": "Sam Walton",
       "source": "founder",
       "domain": "retail",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "coaching"
@@ -795,7 +795,7 @@
       "name": "Dietrich Mateschitz",
       "source": "founder",
       "domain": "energy drinks",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "leading",
         "creating",
@@ -990,7 +990,7 @@
       "name": "Levi Strauss",
       "source": "founder",
       "domain": "apparel manufacturing",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "money_stress",
       "primarySkills": [
         "leading",
         "building"
@@ -1043,7 +1043,7 @@
       "name": "Bernard Arnault",
       "source": "founder",
       "domain": "luxury goods",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "work_hollows",
       "primarySkills": [
         "leading",
         "designing"
@@ -1071,7 +1071,7 @@
       "name": "Alexander Graham Bell",
       "source": "founder",
       "domain": "telecommunications",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "pain_not_believed",
       "primarySkills": [
         "teaching",
         "building",
@@ -1209,7 +1209,7 @@
       "name": "Sam Zemurray",
       "source": "founder",
       "domain": "agriculture and shipping",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "work_hollows",
       "primarySkills": [
         "leading",
         "building"
@@ -3570,7 +3570,7 @@
       "name": "Marie Curie",
       "source": "nonfounder",
       "domain": "physics and chemistry",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "leading",
         "building"
@@ -3671,7 +3671,7 @@
       "name": "Jane Goodall",
       "source": "nonfounder",
       "domain": "primatology and field ethology",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "world_losing",
       "primarySkills": [
         "performing",
         "coaching"
@@ -4078,7 +4078,7 @@
       "name": "Pat Summitt",
       "source": "nonfounder",
       "domain": "women's basketball coaching",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "coaching",
         "speaking_up",
@@ -4417,7 +4417,7 @@
       "name": "Henry Louis Gates Jr.",
       "source": "nonfounder",
       "domain": "African American studies",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "teaching",
         "storytelling",
@@ -4612,7 +4612,7 @@
       "name": "Mary Beard",
       "source": "nonfounder",
       "domain": "classics",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "feeling_stupid",
       "primarySkills": [
         "performing",
         "storytelling",
@@ -4641,7 +4641,7 @@
       "name": "Trevor Noah",
       "source": "nonfounder",
       "domain": "comedy and cross-cultural explanation",
-      "primaryProblem": "work_treated_nothing",
+      "primaryProblem": "people_treated_unfairly",
       "primarySkills": [
         "storytelling",
         "connecting",
@@ -8352,8 +8352,8 @@
           "board positions",
           "media appearances"
         ],
-        "trajectory": "Netflix HR executive -> Founded McCord Consulting -> Global organizational culture advisor",
-        "keyDecision": "Chose to leave Netflix at its peak to teach leaders how to build psychologically safe, high-performing teams.",
+        "trajectory": "Netflix Chief Talent Officer (1998-2012) -> authored the Netflix Culture Deck -> wrote Powerful (2018) -> launched consulting practice advising companies on radical talent practices",
+        "keyDecision": "Co-authored the Netflix Culture Deck which was viewed 15M+ times and redefined how tech companies think about talent and freedom",
         "scaleModel": "Built methodology taught in corporate training programs; scaled through book 'Powerful,' speaking tour, and direct advisory relationships with C-suite executives.",
         "lessonsForUser": "If you design and care about organizational culture: Transparency about performance expectations and context is the foundation of trust—make it your first move, not your last."
       },
@@ -8654,7 +8654,7 @@
     {
       "name": "Tori Dunlap",
       "source": "founder",
-      "domain": "Feminist financial independence and wealth-building",
+      "domain": "Financial feminism and money education",
       "primaryProblem": "money_stress",
       "primarySkills": [
         "storytelling",
@@ -8664,17 +8664,17 @@
       ],
       "careerModel": {
         "type": "media_and_education_hybrid",
-        "primaryRevenue": "Newsletter subscriptions, online courses, and corporate workshop fees for financial feminist education.",
+        "primaryRevenue": "Online courses, book sales, podcast sponsorships, and brand partnerships through Her First $100K",
         "revenueStreams": [
-          "paid newsletter subscriptions",
           "online courses",
-          "corporate consulting",
-          "book deals",
-          "sponsorships"
+          "book sales (HarperCollins)",
+          "podcast sponsorships",
+          "brand partnerships",
+          "speaking fees"
         ],
-        "trajectory": "Started Feminist Financial newsletter (2014) -> self-published 'Financial Feminist' (2018) -> launched HerFirst media platform (2019) -> corporate partnerships and course expansion (2020-present)",
+        "trajectory": "Saved $100K by age 25 (2019) -> founded Her First $100K -> built massive TikTok/Instagram following -> published Financial Feminist with HarperCollins (2022) -> podcast and course expansion",
         "keyDecision": "Centered gender inequality and systemic barriers in financial advice rather than generic personal finance.",
-        "scaleModel": "Built a community of 100k+ newsletter subscribers and scaled through corporate partnerships addressing workplace financial stress.",
+        "scaleModel": "Built a community of millions through TikTok and Instagram, then monetised through courses and a traditionally published book",
         "lessonsForUser": "If you tell stories and care about financial stress: Anchor your narrative to a community identity (not just individual responsibility) to create movements, not just audiences."
       },
       "confidence": "high",
@@ -8684,7 +8684,7 @@
     {
       "name": "Derek Sall",
       "source": "founder",
-      "domain": "Debt payoff tracking and community support",
+      "domain": "Debt payoff education and personal finance blogging",
       "primaryProblem": "money_stress",
       "primarySkills": [
         "building",
@@ -8693,21 +8693,21 @@
         "analysing"
       ],
       "careerModel": {
-        "type": "saas_community_platform",
-        "primaryRevenue": "Freemium subscription model with paid tiers for the DebtFree app and community platform.",
+        "type": "blog_and_courses",
+        "primaryRevenue": "Blog advertising, affiliate partnerships, and online courses through Life and My Finances",
         "revenueStreams": [
-          "app subscriptions",
+          "blog ad revenue",
           "affiliate partnerships",
-          "sponsored educational content",
-          "premium community features"
+          "Teachable courses",
+          "debt payoff spreadsheet tools"
         ],
-        "trajectory": "Paid off $110k personal debt (2007-2013) -> launched DebtFree app (2016) -> built community features and tracking tools (2017-2020) -> expanded to financial coaching partnerships (2021-present)",
-        "keyDecision": "Built a community-first platform instead of a personal brand, allowing thousands to find peer support in debt repayment.",
-        "scaleModel": "Used the accountability and social proof of thousands tracking debt payoff together as the primary retention and acquisition driver.",
+        "trajectory": "Paid off $110K personal debt -> started Life and My Finances blog -> built debt snowball spreadsheet tools -> expanded to online courses and affiliate content",
+        "keyDecision": "Documented his own debt payoff journey publicly, turning personal experience into a repeatable teaching framework",
+        "scaleModel": "SEO-driven blog content attracting people searching for debt help, monetised through affiliate partnerships and digital products",
         "lessonsForUser": "If you build and care about financial stress: Make the invisible (debt progress) visible and shareable; people are more motivated by community momentum than any guru advice."
       },
       "confidence": "high",
-      "oneLiner": "Debt is often a lonely, shameful journey—we made it a community victory lap instead.",
+      "oneLiner": "I paid off $110K in debt and built a business teaching others to do the same.",
       "primaryPersona": "builders"
     },
     {
@@ -8800,29 +8800,29 @@
     {
       "name": "Jeannie Gaffigan",
       "source": "nonfounder",
-      "domain": "Comedy and family culture commentary",
+      "domain": "Comedy writing, producing, and family storytelling",
       "primaryProblem": "lonely_disconnected",
       "primarySkills": [
-        "performing",
         "storytelling",
+        "designing",
         "connecting"
       ],
       "careerModel": {
-        "type": "performer_cultural_commentator",
-        "primaryRevenue": "Stand-up comedy tours, TV specials, podcasting, and brand partnerships",
+        "type": "writer_producer",
+        "primaryRevenue": "TV writing and producing credits, memoir book sales, and speaking engagements",
         "revenueStreams": [
-          "ticket sales",
-          "Netflix/streaming specials",
-          "podcast ads",
-          "brand deals"
+          "TV writing/producing (The Jim Gaffigan Show)",
+          "book sales (When Life Gives You Pears)",
+          "speaking fees",
+          "brand partnerships"
         ],
-        "trajectory": "Struggled with isolation in comedy → Built career with husband as comedy partner → Uses humor to normalize loneliness and belonging → Built massive fanbase through authentic storytelling",
-        "keyDecision": "Being vulnerable about depression, isolation, and marital struggles on stage instead of hiding behind persona",
-        "scaleModel": "Mass reach through comedy specials and social media; created permission structure for audiences to feel less alone through shared laughter",
+        "trajectory": "Co-created and wrote The Jim Gaffigan Show with husband Jim -> diagnosed with brain tumor (2017) -> survived and wrote memoir When Life Gives You Pears -> became advocate for vulnerability and community in crisis",
+        "keyDecision": "Chose to write publicly about her brain tumor experience, turning a terrifying medical crisis into a story about the power of community and connection",
+        "scaleModel": "Leveraged existing comedy audience to reach millions with an authentic vulnerability story; memoir and speaking expanded her beyond comedy writing",
         "lessonsForUser": "If you perform and care about belonging: Vulnerability sells because audiences hunger for proof they're not alone—your honest struggle is your superpower."
       },
       "confidence": "high",
-      "oneLiner": "I'm not fine. And that's okay.",
+      "oneLiner": "When you almost die, you find out very quickly who your people are.",
       "primaryPersona": "creators"
     },
     {
@@ -8865,16 +8865,16 @@
       ],
       "careerModel": {
         "type": "edtech_founder_speaker",
-        "primaryRevenue": "Corporate workshops, school programs, speaking fees, and digital wellness courses",
+        "primaryRevenue": "Corporate workshops, speaking fees, and educational programs through SkillsCamp",
         "revenueStreams": [
-          "corporate training",
-          "educational programs",
+          "corporate training (SkillsCamp)",
           "speaking engagements",
-          "courses"
+          "educational programs",
+          "research consulting"
         ],
-        "trajectory": "Tech startup experience → Became concerned about tech's isolation effects → Founded UNFOLD to teach digital wellness → Built global speaker platform",
-        "keyDecision": "Leaving profitable tech roles to educate people on how to use technology for genuine connection instead of fake engagement",
-        "scaleModel": "Reached millions through TED talks and corporate workshops teaching healthy digital habits for teams and families",
+        "trajectory": "Researched social media's impact on mental health -> TEDx talk went viral -> founded SkillsCamp (soft skills training) -> established Center for Digital Wellbeing",
+        "keyDecision": "Pivoted from tech industry to educating people on healthy technology use after researching its effects on isolation and mental health",
+        "scaleModel": "Viral TEDx talk drove inbound demand; scaled through corporate training programs teaching teams digital wellness and soft skills",
         "lessonsForUser": "If you teach and care about belonging: People know tech isolates them but don't know how to rewire—fill that gap with practical, destigmatized solutions."
       },
       "confidence": "high",
@@ -8909,6 +8909,174 @@
       "confidence": "high",
       "oneLiner": "Your loneliness is not a character flaw. It's a call to connection.",
       "primaryPersona": "creators"
+    },
+    {
+      "name": "Tiffany Aliche",
+      "source": "founder",
+      "domain": "financial education and debt elimination",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "teaching",
+        "connecting",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "education_platform",
+        "primaryRevenue": "Online courses, book sales, and corporate partnerships through Live Richer Academy",
+        "revenueStreams": [
+          "online courses",
+          "book sales (NYT bestseller)",
+          "corporate partnerships",
+          "speaking fees"
+        ],
+        "trajectory": "Preschool teacher -> lost savings in a financial scam -> started free financial literacy classes (2008) -> NYT bestselling author -> helped 2M+ women save $350M+ and pay off $200M+ in debt",
+        "keyDecision": "Lobbied for mandatory financial education in NJ schools, got a state law named after her (The Budgetnista Law, 2019)",
+        "scaleModel": "Free content funnel into paid courses and community; legislative advocacy expanded impact beyond her direct audience",
+        "lessonsForUser": "If you teach and care about financial stress: start by giving away your best knowledge for free — the trust you build becomes the business"
+      },
+      "confidence": "high",
+      "oneLiner": "Financial education is not a luxury — it is a basic human right.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Bola Sokunbi",
+      "source": "founder",
+      "domain": "financial literacy for women",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "teaching",
+        "building",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "media_platform",
+        "primaryRevenue": "Free educational content monetised through courses, books, and brand partnerships via Clever Girl Finance",
+        "revenueStreams": [
+          "online courses",
+          "book sales",
+          "brand sponsorships",
+          "corporate workshops"
+        ],
+        "trajectory": "Nigerian-American who accumulated credit card debt in college -> taught herself personal finance -> saved $100K+ by 25 -> built Clever Girl Finance into one of the largest personal finance platforms for women",
+        "keyDecision": "Kept core financial education free and accessible while monetising through courses and partnerships, specifically targeting women of color underserved by the finance industry",
+        "scaleModel": "SEO and social-first free content attracting women searching for financial help; scaled through books and course upsells",
+        "lessonsForUser": "If you teach and care about financial stress: serve the audience the industry ignores — they become your most loyal community"
+      },
+      "confidence": "high",
+      "oneLiner": "You do not need to earn more money to start building wealth — you need to know what to do with the money you have.",
+      "primaryPersona": "teachers"
+    },
+    {
+      "name": "Lynnette Khalfani-Cox",
+      "source": "founder",
+      "domain": "debt elimination coaching and financial media",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "teaching",
+        "storytelling",
+        "coaching"
+      ],
+      "careerModel": {
+        "type": "media_and_coaching",
+        "primaryRevenue": "Book sales, media appearances, speaking fees, and financial coaching through TheMoneyCoach.net",
+        "revenueStreams": [
+          "book sales (15 books, NYT bestseller)",
+          "speaking fees",
+          "media appearances (1000+ TV segments)",
+          "coaching programs"
+        ],
+        "trajectory": "Wall Street Journal reporter at CNBC -> accumulated six-figure credit card debt -> paid it off in 3 years -> pivoted to financial education -> 15 books including NYT bestseller Zero Debt",
+        "keyDecision": "Went public with her own six-figure debt story, turning personal shame into a credibility asset that made her advice trustworthy",
+        "scaleModel": "Media credibility (Oprah, Dr. Phil, GMA) drove book sales and speaking demand; authenticity of her own debt story was the marketing engine",
+        "lessonsForUser": "If you coach and care about financial stress: your worst financial moment is your most powerful teaching credential"
+      },
+      "confidence": "high",
+      "oneLiner": "I had $100,000 in credit card debt. I paid it off in three years. Now I teach others to do the same.",
+      "primaryPersona": "healers"
+    },
+    {
+      "name": "Patrice Washington",
+      "source": "founder",
+      "domain": "financial psychology and purpose-driven wealth",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "coaching",
+        "storytelling",
+        "teaching"
+      ],
+      "careerModel": {
+        "type": "coaching_and_media",
+        "primaryRevenue": "Coaching programs, podcast revenue, speaking fees, and media through the Redefining Wealth brand",
+        "revenueStreams": [
+          "coaching programs",
+          "podcast (20M+ downloads)",
+          "speaking fees",
+          "PBS appearances"
+        ],
+        "trajectory": "Licensed real estate broker at 21 -> firm collapsed in 2008 recession -> $2M in debt -> Chapter 7 bankruptcy (2011) -> rebuilt as financial psychology coach -> PBS featured expert",
+        "keyDecision": "Shifted from teaching financial tactics to addressing the emotional and psychological roots of money stress after earning a Certification in Financial Psychology",
+        "scaleModel": "Podcast (Redefining Wealth) reached 20M+ downloads; PBS show Opportunity Knocks expanded to mass audience",
+        "lessonsForUser": "If you coach and care about financial stress: chase purpose, not money — the people who fix their relationship with money first are the ones who build real wealth"
+      },
+      "confidence": "high",
+      "oneLiner": "Stop chasing money. Chase purpose, and let money chase you.",
+      "primaryPersona": "healers"
+    },
+    {
+      "name": "Chelsea Fagan",
+      "source": "founder",
+      "domain": "financial media for young adults",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "storytelling",
+        "building",
+        "connecting"
+      ],
+      "careerModel": {
+        "type": "media_company",
+        "primaryRevenue": "YouTube ad revenue, book sales, brand partnerships, and courses through The Financial Diet",
+        "revenueStreams": [
+          "YouTube revenue (1M+ subscribers)",
+          "book sales",
+          "brand partnerships",
+          "digital products"
+        ],
+        "trajectory": "Started a personal blog to track her own budget struggles (2014) -> grew into cross-platform media company -> 1M+ YouTube subscribers -> two bestselling books",
+        "keyDecision": "Treated money as a culture and identity topic, not just a math topic, which made financial content shareable for a generation that finds traditional finance media alienating",
+        "scaleModel": "YouTube-first content strategy built a loyal audience; books and brand deals monetised the trust",
+        "lessonsForUser": "If you tell stories and care about financial stress: talk about money the way your friends actually talk about it, not the way financial advisors do"
+      },
+      "confidence": "high",
+      "oneLiner": "The biggest lie about money is that talking about it is tacky.",
+      "primaryPersona": "creators"
+    },
+    {
+      "name": "Yanely Espinal",
+      "source": "nonfounder",
+      "domain": "financial literacy education and youth advocacy",
+      "primaryProblem": "money_stress",
+      "primarySkills": [
+        "teaching",
+        "connecting",
+        "storytelling"
+      ],
+      "careerModel": {
+        "type": "advocacy_and_education",
+        "primaryRevenue": "Salary as Director of Educational Outreach at Next Gen Personal Finance, plus speaking fees and content partnerships",
+        "revenueStreams": [
+          "nonprofit salary",
+          "speaking fees",
+          "content creation (@MissBeHelpful)",
+          "educational consulting"
+        ],
+        "trajectory": "Brooklyn-raised daughter of Dominican immigrants -> accumulated $20K+ in credit card debt after college -> paid it off in 18 months -> built @MissBeHelpful brand -> joined Next Gen Personal Finance",
+        "keyDecision": "Pivoted from individual content creation to systemic advocacy, helping increase the number of US states mandating financial literacy from 5 to 22 between 2018 and 2023",
+        "scaleModel": "Policy advocacy multiplied impact beyond personal audience; one legislative win reaches every student in a state",
+        "lessonsForUser": "If you teach and care about financial stress: individual education scales linearly, but policy advocacy scales exponentially"
+      },
+      "confidence": "high",
+      "oneLiner": "Nobody taught me about money — so I made it my mission to make sure the next generation never has to say that.",
+      "primaryPersona": "teachers"
     }
   ]
 }
