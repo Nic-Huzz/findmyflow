@@ -1,0 +1,385 @@
+@import '../styles/flow-base.css';
+
+/* ── Zone Cal Radar ── */
+
+.zcr {
+  min-height: 100dvh;
+  background: #f5f5f0;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.zcr .zcr-inner {
+  max-width: 480px;
+  width: 100%;
+  padding: 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Hook ── */
+
+.zcr-hook {
+  text-align: center;
+  padding-top: 3rem;
+}
+
+.zcr-hook-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.zcr-hook h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.zcr-hook-sub {
+  font-size: 1rem;
+  color: #5e17eb;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.zcr-hook-desc {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Questions ── */
+
+.zcr-question {
+  text-align: center;
+  width: 100%;
+  padding-top: 1.5rem;
+  position: relative;
+}
+
+.zcr-progress {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.zcr-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e0ddd8;
+  transition: all 0.3s ease;
+}
+
+.zcr-progress-dot.active {
+  background: #5e17eb;
+}
+
+.zcr-progress-dot.current {
+  transform: scale(1.3);
+}
+
+.zcr-phase-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #999;
+  margin-bottom: 1.5rem;
+}
+
+.zcr-back {
+  position: absolute;
+  top: 1.5rem;
+  left: 0;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-family: inherit;
+}
+
+.zcr-q-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.zcr-q-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #5e17eb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.zcr-q-text {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+/* ── Tier cards ── */
+
+.zcr-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.zcr-tier {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 2px solid #e0ddd8;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.zcr-tier:hover {
+  border-color: #5e17eb;
+  background: #faf9f7;
+}
+
+.zcr-tier.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+}
+
+.zcr-tier-level {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f0eee9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.zcr-tier.selected .zcr-tier-level {
+  background: #5e17eb;
+  color: white;
+}
+
+.zcr-tier-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.zcr-tier-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.zcr-tier-desc {
+  font-size: 0.82rem;
+  color: #888;
+  line-height: 1.35;
+}
+
+/* ── Email gate ── */
+
+.zcr-email {
+  width: 100%;
+  padding-top: 3rem;
+}
+
+/* ── Calculating ── */
+
+.zcr-calculating {
+  text-align: center;
+  padding-top: 6rem;
+}
+
+.zcr-calc-label {
+  margin-top: 1.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* ── Results ── */
+
+.zcr-results {
+  width: 100%;
+  text-align: center;
+}
+
+.zcr-results-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.zcr-results-headline {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.zcr-results-tagline {
+  font-size: 1rem;
+  color: #5e17eb;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.zcr-results-summary {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 1rem 0 0;
+}
+
+/* ── Next spoke card ── */
+
+.zcr-next-spoke {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.zcr-next-spoke h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999;
+  margin-bottom: 0.5rem;
+}
+
+.zcr-spoke-card {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(94, 23, 235, 0.06);
+  border: 2px solid #5e17eb;
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.zcr-spoke-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.zcr-spoke-card strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.zcr-spoke-card p {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ── Dimension breakdown ── */
+
+.zcr-breakdown {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.zcr-breakdown h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999;
+  margin-bottom: 0.75rem;
+}
+
+.zcr-dim-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: white;
+}
+
+.zcr-dim-row.low {
+  background: #fef3f2;
+}
+
+.zcr-dim-row.high {
+  background: #f0fdf4;
+}
+
+.zcr-dim-emoji {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.zcr-dim-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zcr-dim-info strong {
+  font-size: 0.9rem;
+}
+
+.zcr-dim-tier-label {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* ── Share + CTA ── */
+
+.zcr-share-btn {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.zcr-results-cta {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.zcr-results-cta p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.zcr-results-cta .primary-button {
+  width: 100%;
+}

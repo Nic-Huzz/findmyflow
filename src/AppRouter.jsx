@@ -190,6 +190,8 @@ const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
 const AlivenessQuiz = lazyRetry(() => import('./flows/AlivenessQuiz'))
 const AmbitionRadar = lazyRetry(() => import('./flows/AmbitionRadar'))
 const VibeRiseRadar = lazyRetry(() => import('./flows/VibeRiseRadar'))
+const ZoneCalRadar = lazyRetry(() => import('./flows/ZoneCalRadar'))
+const EventRadar = lazyRetry(() => import('./flows/EventRadar'))
 const PathDefinitionFlow = lazyRetry(() => import('./flows/PathDefinitionFlow'))
 const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
 const TryEssenceMirror = lazyRetry(() => import('./flows/TryEssenceMirror'))
@@ -754,6 +756,8 @@ function AppRouter() {
             <Route path="/try/aliveness" element={<AlivenessQuiz />} />
             <Route path="/try/ambition-radar" element={<AmbitionRadar />} />
             <Route path="/try/vibe-rise-radar" element={<VibeRiseRadar />} />
+            <Route path="/try/zone-cal-radar" element={<ZoneCalRadar />} />
+            <Route path="/try/event-radar" element={<EventRadar />} />
             <Route path="/try/play-profile" element={<TryPlayProfile />} />
             <Route path="/try/essence-mirror" element={<TryEssenceMirror />} />
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
