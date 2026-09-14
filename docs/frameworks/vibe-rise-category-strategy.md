@@ -1,8 +1,9 @@
-# Vibe Rise — Category Strategy
+# Vibe Rise — Category Strategy (v4)
 *Following the Category Pirates framework structure. Answers for Vibe Rise / Find My Flow. September 2026.*
 
 > **Source framework:** `/Users/nichuzz/creations/Tools/Category-pirates/category-pirates-master-framework.md`
 > **Historical evolution:** `docs/frameworks/find-my-flow-x-category-pirates.md` — how we got here (v1-v3 mapping work)
+> **v4 pivot (Sep 12, 2026):** Category shifted from "Courage: Gamified" to "Aliveness: Gamified." Courage was the mechanism, not the destination. People don't wake up wanting courage — they wake up wanting to feel alive. Long-term: "Vibe Rise" becomes the category itself once brand has market gravity.
 
 ---
 
@@ -10,41 +11,50 @@
 
 ### Category Definition
 
-> **Courage: Gamified.** Track your comfort zone, do courage challenges, watch your life transform. Nike Run Club for courage.
+> **Aliveness: Gamified.** See how alive your life is, understand what's suppressing it, and play a game that raises it. Nike Run Club for your life.
+
+**Long-term strategy:** Once the brand has enough market gravity, "Vibe Rise" becomes the category itself — like CrossFit is both brand and category. Until then, "Aliveness: Gamified" communicates instantly without requiring education.
 
 ### The Category Structure
 
-- **Courage** = the category we own (what you actually DO)
+- **Aliveness** = the category we own (what you actually WANT)
 - **School of Experience** = the philosophy (WHY it works — experience beats theory)
-- **Find My Flow / Vibe Rise** = the product (the game that delivers it)
+- **Find My Flow / Vibe Rise** = the product (the game that measures and grows it)
+- **Courage + Healing** = the mechanisms (HOW — courage expands capacity through exposure, healing removes the block via the 5Rs)
 
-Nobody owns courage as a product category. Everyone talks about it. Nobody measures it. Nobody gamifies it. Nobody shows you your courage as a shape that grows. We're the first.
+Nobody owns aliveness as a product category. Meditation apps own calm. Therapy apps own mental health. Fitness apps own the body. Nobody measures how alive your LIFE is. Nobody shows you which parts are alive and which went dark. Nobody gamifies the journey from dead inside to fully expressed. We're the first.
 
-**Pathless Path differentiation:** Paul Millerd described the problem beautifully — "The Pathless Path" names the experience of leaving traditional careers. But it's School of Theory ABOUT the School of Experience. You read about leaving the traditional path. Vibe Rise is the game you play to actually walk it. He described the destination. We built the vehicle. "The Pathless Path told you the map is wrong. Find My Flow gives you the compass."
+**Pathless Path differentiation:** Paul Millerd described the problem beautifully — "The Pathless Path" names the experience of leaving traditional careers. But it's School of Theory ABOUT the School of Experience. You read about leaving the traditional path. Vibe Rise is the game you play to actually walk it. He described the destination. We built the vehicle.
 
-**Old category (School of Theory):** University, MBA, bootcamps, online courses, career coaches, personality tests, self-help books. All assume knowledge is the bottleneck.
+**Old category (Optimise for Gain):** University, career ladder, savings plan, retirement. The premise: gain enough and satisfaction follows. The achievement track gains credentials, status, salary. The wellness track gains calm, balance, clarity. Both tracks optimise for what you GET. Neither evaluates what you EXPERIENCE. Nobody asks: "What will Tuesday at 2pm actually feel like?" The entire cultural matrix runs on gain — you're born into the game and play it subconsciously. Gain implies scarcity (you don't have enough yet) and future-living (you'll be happy WHEN). But you do have enough. And the life you want isn't later.
 
-**New category (Courage: Gamified):** Vibe Rise. Your comfort zone decides your experience. Your experience decides whether you're known. Being known decides your career. Courage is how you expand the comfort zone.
+**New category (Aliveness: Gamified):** Vibe Rise. Safety is ONE axis, not the whole game. The other axis — expression — is what most people have completely shut down. Your nervous system learned to suppress it in childhood. The bodyguards (protective voices) are still running that old programme. The result: you can hold a lot, but you're still *holding*. You built Armour, not Equanimity.
+
+**The equation:** Safety x Expression = Aliveness. Multiplicative. Zero on either side = zero. A life optimised entirely for safety — high safety, zero expression — produces zero aliveness. That's why the promotion, the house, and the relationship can all be "fine" and you still feel dead inside.
 
 **The qualifier:** For careers you don't find in any course catalogue — because you create them. Some careers have a map — university, law school, medical school draw the river for you. Find My Flow is for the careers that don't have a map. The ones you create.
 
 ### The Premise We Reject
 
-"More knowledge leads to a better career."
+"Optimise for gain and the good life follows."
 
-University sold you this. So did the MBA, the bootcamp, the online course, the career coach. They all run the same playbook: learn more, earn more, live better. The School of Theory.
+The career ladder sold you this. So did the retirement plan, the degree, the meditation app. They all run the same playbook: gain more — more credentials, more salary, more calm, more clarity — and eventually you'll feel good. The Optimise for Gain playbook.
 
-But Seth Godin doesn't get hired because of what he knows. He gets hired because he's known. The difference matters. Knowing is theory. Being known is experience. You become known by doing remarkable things, not by studying them.
+But gain without expression isn't progress. It's Armour. You can hold a lot — but you're still holding. You can gain everything and experience nothing. The promotion, the house, the relationship — all "fine" on paper. But hour by hour, day by day, the experience is numb. Because gains don't produce aliveness. Experiences do.
 
 ### The Second Premise We Reject
 
-"Experiences are something you pay for in life."
+"You're broken and need fixing."
 
-The School of Theory charges you for the experience — pay tuition, pay for the course, pay for the retreat, pay for the coach. You consume experiences. Find My Flow rejects this. We believe experiences are what you CREATE in life, and then get paid for. You don't pay for experiences. You create them. Then you get paid for them. The app helps you figure out which ones to create.
+Therapy says you have a disorder. Self-help says you have a mindset problem. Wellness retreats say you need to heal. They all start from deficit: something is WRONG with you.
 
-This connects to the qualifier: "For careers you don't find in any course catalogue — because you create them." You don't consume your way to the life you want. You create it.
+We reject this. Depression isn't something wrong with you — it's something MISSING from your chamber. Depression is suppressed expression. Your expression got shut down by protective voices installed when you were a child. You're not broken. You're running old software. The bodyguard that saved your life at 12 is destroying it at 30.
 
-**The two schools, distilled:**
+### The School of Experience (preserved from v3)
+
+We've got learning backwards. Learning comes after the action, not before. Before the action, it's theoretical. Afterwards, it's experiential. You learn what makes you alive through experience, not passive consumption.
+
+The School of Theory charges you for the experience — pay tuition, pay for the course, pay for the retreat, pay for the coach. You consume experiences. Find My Flow rejects this. We believe experiences are what you CREATE in life, and then get paid for. You don't pay for experiences. You create them. Then you get paid for them.
 
 | School of Theory | School of Experience |
 |---|---|
@@ -54,81 +64,121 @@ This connects to the qualifier: "For careers you don't find in any course catalo
 | Suffer to buy the joy | Suffer to achieve it |
 | Consume experiences | Create experiences |
 | Pick a career from the catalogue | Create a career that doesn't exist yet |
+| Learn first, then do | Do first, then learn what matters |
 
 **The origin story:** "I no longer wanted to be a cook, someone following predefined recipes, but to become a chef, someone who is purposeful in their trade." The shift from consumer to creator. From chasing highs to investing in them. From borrowing joy to compounding it. This is the biographical proof of the School of Experience — Huzz lived it before naming it.
 
 ### The Different Problem
 
-There's no course for the career you want. It doesn't exist in any catalogue. And the real block isn't knowledge — it's fear of judgement. Fear of what people will think when you leave the safe path. Fear of failing publicly. Fear of being seen trying something that doesn't have a name yet. So you take another course instead, because learning FEELS like progress without the risk of being judged. But it's avoidance. The comfort zone stays the same size. Your experiences stay small. Your brand stays invisible. And you compete with everyone who has the same degree.
+When you were a kid, you had natural ways of feeling alive. You danced without thinking about it. You said the weird thing. You cried when you were sad and laughed until you couldn't breathe. You were fully expressed.
+
+Then someone said "sit still." Someone said "that's too much." Someone said "be realistic." And your brain learned: *expressing that isn't safe here.* So it built a guard. The guard's job was to shut down the expression before you got hurt again.
+
+The guard saved you at 12. But it's still running at 30. And now the same programme that protected you is the thing blocking your aliveness. You can't fully experience connection because the guard says "don't be vulnerable." You can't fully experience joy because the guard says "don't be too much." You can't fully experience meaning because the guard says "be realistic."
+
+That's the structural problem nobody names. You're not broken. Your expression isn't gone. It's guarded. And every gain in the world — more money, more knowledge, more calm — doesn't touch the guard. The guard doesn't respond to gains. It responds to safety + expression.
+
+The world's solution? More gains. The achievement track says gain more credentials. The wellness track says gain more calm. Neither touches the guard. Neither restores expression. Neither asks what you're actually experiencing hour by hour. You could be at a dinner with your best friends — the experience of connection is RIGHT THERE — but the guard is filtering it. You experience 30% of what's available because the other 70% is behind a wall you installed at 12.
 
 There is no such thing as work and life. It's all life. Your career IS what makes you feel alive. The traditional pathways separated "career" from "who you are." We refuse the separation.
 
 ### The Different Future
 
-You won't find your flow in a course catalogue. You'll find it by mapping what makes you alive, then having the courage to build a life around it.
+You don't need more knowledge or more therapy. You need to see which parts of your life are alive and which went dark, understand which protective voice shut each one down, and play a game that reopens them — with measurement, not guesswork.
 
-### Two Old Category Enemies (Different Scopes)
+That's Find My Flow. Two radars show you the full picture:
+- **Where you are** on the aliveness journey (Zone Cal — your self-actualisation map)
+- **What's blocking you** from progressing (Dome of Safety — your nervous system constraints)
 
-- **Brand level / lead magnets:** School of Theory (university, MBA, courses, career coaches, personality tests)
-- **Phase 2 healing flows:** Therapy, wellness retreats, meditation apps, self-help books ("you're broken and need fixing")
+Expand the dome. Progress on the map. Feel more alive.
 
-Both are valid. The brand-level enemy gets people in the door. The Phase 2 enemy is what the healing flows address once they're inside.
+The app handles the measurable side (x-axis: capacity, challenges, tracking). The events deliver the side that can't be measured (y-axis: recognition, the unconditional witness, the room). Together = the diagonal to Equanimity.
+
+### Three Old Category Enemies (Different Scopes)
+
+- **Brand level:** Optimise for Gain culture (career ladder, retirement planning, "be realistic" — the gain game as cultural matrix)
+- **Lead magnets:** School of Theory (courses, degrees, personality tests — clarity as bottleneck)
+- **Phase 2 healing flows:** Fix What's Broken (therapy, wellness retreats, self-help — deficit model)
+
+All three share the same blind spot: they optimise for gains, not experiences. They don't measure what you're actually experiencing, and they don't name what's guarding your expression.
 
 ### Who This Is For
 
-Two types arrive at Vibe Rise. Both believe there's an ikigai — a unique path meant for them. Both know the traditional pathways didn't serve them in finding it.
+Two types arrive at Vibe Rise. Both sense their life should feel more alive than it does. Both know the conventional answers aren't working.
 
-**The Stuck:** "I know exactly what my path is. I just can't get there." They can see the life they want but their comfort zone won't let them walk toward it. They need courage, not clarity. Best entry: Ambition Radar.
+**The Stuck:** "I know exactly what my path is. I just can't get there." They can see the life they want but their protective voices won't let them walk toward it. They need courage (the mechanism), not clarity. Best entry: Ambition Radar or Zone Cal Radar.
 
-**The Seeker:** "I know it's not this. I don't know what it is yet." They left or are leaving the traditional path but haven't found what replaces it. They need discovery before courage. Best entry: Experience Game or Aliveness Quiz.
+**The Seeker:** "I know it's not this. I don't know what it is yet." They left or are leaving the conventional path but haven't found what replaces it. They need discovery before courage. Best entry: Experience Game or Aliveness Quiz.
 
-Both types end up in the same place: expanding their comfort zone until the life they want fits inside it.
+Both types end up in the same place: reopening the expression that got guarded, expanding the nervous system capacity that limits it, and watching the shape of their life change.
 
 ---
 
 ## 2. One-Sentence Strategy
 
-> "For careers you don't find in any course catalogue — because you create them. Vibe Rise expands your comfort zone until the life you want fits inside it."
+> "The life you want isn't behind the next gain. It's inside the experiences you're not having. Vibe Rise shows you why and gives you a game to change it."
 
-**Alternative (from Belief 5 — may be stronger):**
+**The belief line (sub-line):**
 
-> "You don't rise to the level of your ambitions. You fall to the level of your comfort zone."
+> "You don't tell your grandkids about your gains. You tell them about your experiences."
 
-This one names the mechanism in a single line. Could work as the tagline, the opening of every piece of content, the line people remember and repeat. The first version is the strategy. This version is the belief.
+Bonnie Ware's research on the top regrets of the dying found #1 was: "I wish I'd had the courage to live a life true to myself, not the life others expected of me." Not "I wish I'd gained more." The grandkids line is the same truth, said warmly.
 
-**Test:** Does it reject the premise? ✅ ("not in any course catalogue" rejects School of Theory). Does it paint the escape? ✅ ("life you want fits inside it"). Is it visceral? ⚠️ The first version needs sharpening. The Belief 5 version is already visceral.
+The strategy names the category rejection and the product. The belief line is the WOM — what someone texts their friend, what sticks in your head at 2am. The first is what you'd put in a pitch deck. The second is what people repeat.
+
+**Test:** Does it reject the premise? ✅ ("isn't behind the next gain" — direct rejection of Optimise for Gain). Does it paint the escape? ✅ ("inside the experiences you're not having" = diagnosis, "shows you why + game to change it" = the product). Would you live and die by it? ✅ Events = give you the experience. App = show you why you're not having them. Game = reopen expression. Everything maps.
+
+**Biographical proof of the belief line:** At Vibe Rise events, Huzz guides participants through a three-selves visualization — dancing with their kid self (before the guard), then calling in their 80-year-old self (the one who knows which experiences mattered). All three dancing together. The grandkids line isn't marketing copy. It's performed live.
 
 ---
 
 ## 3. DAM the Demand
 
 **DAM Statement:**
-> "You think you need another course. But there's no course for the career you want — it doesn't exist in any catalogue. The bottleneck isn't what you know. It's what your comfort zone will let you do. Expand the comfort zone, expand the experience, become undeniable."
+> "You think you need to gain more — more savings, more qualifications, more stability, more clarity. As if the life you want is on the other side of enough. Our entire culture runs on one equation: Struggle + Stress + Sacrifice = Success = Happy Experiences. Suffering experiences now to earn happy experiences later. But later never comes — you're always in the suffering phase, always gaining toward the next thing. The life you want isn't in what you gain. It's in what you experience. And your expression got guarded before you were old enough to notice. Stop optimising for gain. Start designing for experience."
 
-**Differentiating word formula:** "Experience" + career development = School of Experience
+**The equation source:** Michael Neill, *The Inside-Out Revolution*. The world's equation: Struggle + Stress + Sacrifice = Success = Happiness. Simplified: Unhappiness = Happiness. Our reframe through the experiences lens: Suffering Experiences = Happy Experiences. The gain game says have bad experiences now to earn good experiences later. The "later" keeps moving.
 
-**FROTOS (From Old To New):** People shopping for courses, degrees, bootcamps, career coaches, personality tests → redirected to Vibe Rise
+**Differentiating word formula:** "Experience" + life design = Design for Experience (vs Optimise for Gain)
 
-**Three lead-magnet-specific DAMs (all live):**
+**FROTOS (From Old To New):** People shopping for more gains (courses, therapy, meditation apps, career coaching, personality tests, degrees) → redirected to Vibe Rise. Every purchase is another move in the gain game. Another course = gain clarity. Another coach = gain direction. Another app = gain calm. It feels like progress. But none of them change what you're actually experiencing hour by hour. None of them change your Tuesday at 2pm.
+
+**Four lead-magnet-specific DAMs:**
 
 | Lead Magnet | Old Category Intercepted | DAM |
 |---|---|---|
-| Experience Game (`/try/experience-game`) | Personality tests (DISC, MBTI, StrengthsFinder) | "You think you need a personality test. But a quiz about your preferences can't tell you what makes you alive. What you actually need is to map the experiences your body responds to." |
-| Aliveness Quiz (`/try/aliveness`) | Life satisfaction quizzes | "You think you need another self-help quiz. But knowing you're 'stressed' or '62% satisfied' doesn't tell you what to do. What you actually need is to see which of your four aliveness channels got shut down, and reopen one today." |
-| Ambition Radar (`/try/ambition-radar`) | Vision boards, goal-setting, courses | "You think you need another qualification. But the gap between where you are and where you want to be isn't a knowledge gap. It's a comfort zone gap. See for yourself." |
+| Experience Game (`/try/experience-game`) | Personality tests (DISC, MBTI, StrengthsFinder) | "You think you need a personality test — one more thing to gain clarity about who you are. But a quiz about your preferences can't tell you what makes you alive. What you actually need is to map the experiences your body responds to." |
+| Aliveness Quiz (`/try/aliveness`) | Life satisfaction quizzes, mood trackers | "You think you need another self-help quiz. But knowing you're 'stressed' or '62% satisfied' is just another data point to gain. What you actually need is to see how alive your life actually is — and where your expression got guarded." |
+| Ambition Radar (`/try/ambition-radar`) | Vision boards, goal-setting, courses | "You think you need another qualification — one more gain to close the gap. But the gap between where you are and where you want to be isn't a knowledge gap. It's an experience gap. See for yourself." |
+| Zone Cal Radar (`/try/zone-cal`) | Career coaching, life coaches, self-help books | "You think you need a coach to tell you what to do next. But nobody can see your shape for you. What you actually need is a map of where you are on the journey — and which spoke to focus on next." |
 
 ---
 
 ## 4. The 3-Part POV (Movement Questions)
 
-**Q1: "How does the world currently solve this problem?"**
-> Courses. Degrees. Bootcamps. Career coaches. Personality tests. All assume the problem is that you don't know enough. The School of Theory: learn more, earn more, live better.
+**Q1: "How does the world currently solve this problem?"** *(Frame Different Problem)*
+> Two paths, same trap. The western path — the science of achievement: courses, degrees, career coaches. Gain more credentials, more salary, more status. Optimise, grind, earn. The eastern path — the art of fulfillment: therapy, meditation apps, retreats. Need less, surrender more, let go. Both assume the other is incompatible. Achievement people think wellness is soft. Wellness people think achievement is toxic. But both are still playing the gain game — one gains credentials, the other gains calm. Both run the same equation: Struggle + Stress + Sacrifice = Success = Happy Experiences. Suffering experiences now to earn happy experiences later. The entire culture runs on an equation that says you have to be unhappy to be happy. And nobody stops to notice it's insane.
 
-**Q2: "What's wrong with that?"**
-> There's no course for the career you want. It doesn't exist in any catalogue. And the real block isn't knowledge — it's fear of judgement. Fear of what people will think when you leave the safe path. Fear of failing publicly. Fear of being seen trying something that doesn't have a name yet. So you take another course instead, because learning FEELS like progress without the risk of being judged. But it's avoidance. The comfort zone stays the same size. Your experiences stay small. Your brand stays invisible. And you compete with everyone who has the same degree.
+**Q2: "What's wrong with that?"** *(Evangelize Different Future)*
+> They're not incompatible. They're both incomplete. The missing piece is viewing life through the lens of experience. You can achieve AND be fulfilled — when achievement is in service of experiences you love, not gains that look good on paper. The reason nobody sees this is the guard — the programme your brain installed as a kid to shut down your expression. Someone said "sit still." Someone said "that's too much." The guard is still running at 30. It's why you can gain everything and experience nothing. But the guard can be seen, measured, and retired. Your expression isn't gone. It's guarded. That changes everything.
 
-**Q3: "How do you solve it?"**
-> Gamify it. The app shows you your comfort zone as a shape and your ambitions as a bigger shape. The gap between them is the game. You get an essence archetype, paths built from what you love, and a protective voice you're learning to override. Every courage challenge grows a dimension of your comfort zone. Every dimension has a score. You watch the gap close. Nike Run Club tracks your kilometres. We track your comfort zone. Same game — map where you are, see where you're going, do the work, watch the shape change.
+**Q3: "How do you solve it?"** *(Bridge with Your Offer)*
+> Find Your Flow. The app shows you how alive your life actually is — not what you've gained, but what you're experiencing. Two radars: one shows your shape on the aliveness journey (Zone Cal), the other shows what's guarding your expression (Dome of Safety). The events give you proof — one experience at the Eiffel Tower at sunset and you KNOW what aliveness feels like in your body. Then you redesign everything around that feeling. Nike Run Club tracks your kilometres. We track your aliveness. Same game — see where you are, see what's blocking you, do the work, watch the shape change.
+
+**How events and app marry through this lens:**
+
+| | What it does | Through the experiences lens |
+|---|---|---|
+| **Events** | Gives you an experience that lights you up | The PROOF that aliveness exists — you felt it, in your body, at the Eiffel Tower |
+| **App** | Helps you design a life that lights you up | The TOOL to make every hour of your life evaluated through "will this experience light me up?" |
+
+Events = taste the experience. App = redesign your life around experiences like that.
+
+**The category name — Find Your Flow:**
+- "Find" = discover what's already there, not gain/build/earn. Your flow isn't missing — it's guarded.
+- "Flow" = flow state (peak experience), the river (natural path, not forced), the opposite of grind.
+- The western and eastern paths merge here: achievement IN flow, fulfillment THROUGH flow. Not one or the other.
+- Like "Pathless Path" names the paradox of the journey, "Find Your Flow" names the paradox of the solution: you don't build the life you want — you find it by removing what's blocking it.
 
 ---
 
@@ -138,32 +188,34 @@ This one names the mechanism in a single line. Could work as the tagline, the op
 
 ### Where are we now?
 
-Solo founder. 1 user (myself). $0 app revenue. App fully built — three phases, three lead magnets, gamified courage tracking, healing flows, weekly reviews, 12 hero stages. All live. Running events (dance, experiences) as top of funnel but not yet proven as conversion path to app. Personal brand growing but not yet at scale. Case study of 1: myself — 3 years of comfort zone data.
+Solo founder. 1 user (myself). $0 app revenue. App fully built — three phases, three lead magnets, experience tracking, healing flows, weekly reviews, 12 hero stages. All live. Running events (dance, experiences) as top of funnel but not yet proven as conversion path to app. Personal brand growing but not yet at scale. Case study of 1: myself — 3 years of experience data.
 
 ### Where do we want to go?
 
-The person people think of when someone says "I'm quitting my job to do my own thing." Not the biggest app. The name that comes up. "Follow Huzz" or "talk to Huzz." The app is what they find when they get there.
+People popping up all over the world creating crazy experiences for themselves purely because it makes them feel alive — experiences they'll tell their grandkids about. It doesn't need to be about career. The first step is just doing the things. The compound effect of showing up over time IS the career. The career is the byproduct, not the goal.
 
 Like Wim Hof IS ice breathing. Like James Clear IS atomic habits. Huzz IS the School of Experience. The app is the proof. The method. The thing you hand someone when they ask "how did you build this life?"
+
+**The Growth Game proof:** The Growth Game Scavenger Hunt — 30 crazy experiences, teams in Melbourne, Sydney and Bali had 2 hours to complete as many as possible to score points. That IS Find Your Flow as a live game. Gamified experiences. People doing things they'd tell their grandkids about, competing to do more of them. The app is this energy, made persistent.
 
 ### What's the credible path?
 
 Huzz grows → people ask "how did you build this life?" → the app is the answer.
 
 1. **Personal brand is the top of funnel.** Content, events, dance, story — all of it makes people ask the question.
-2. **The app is the answer.** When they ask, this is what you hand them. Not a course. Not coaching. A game that tracks their comfort zone.
+2. **The app is the answer.** When they ask, this is what you hand them. Not a course. Not coaching. A game that tracks their experiences.
 3. **Events are the Lightning Strike.** Dance and experiences are the visible thing that gets attention. The app converts the attention into a journey.
 4. **The case study compounds.** Every month of using the app, the personal radar grows. Sharing that progress IS the content. The product IS the proof.
 
 ### Our one true strength
 
-**Company.** Specifically: Huzz. The story, the personal brand, the case study. The app could be copied. The timing could be caught. But nobody else has this specific biography, this specific comfort zone journey, this specific combination of dance + healing + tech + Bali + VC dropout. The person IS the moat.
+**Company.** Specifically: Huzz. The story, the personal brand, the case study. The app could be copied. The timing could be caught. But nobody else has this specific biography, this specific experience journey, this specific combination of dance + healing + tech + Bali + VC dropout. The person IS the moat.
 
 ### Additional layers
 
 - **Price elasticity:** App is free or low-cost (School of Experience must be accessible, not another expensive course). Revenue comes from Scale Portal and sessions.
 - **Source of volume:** Personal brand → organic content → word of mouth. Not paid ads. The person IS the distribution.
-- **Specialness level:** Genuinely different. Not a better career app. A different category entirely (School of Experience). No competitor gamifies comfort zone expansion with nervous system measurement.
+- **Specialness level:** Genuinely different. Not a better career app. A different category entirely (Design for Experience). No competitor gamifies experiences with expression measurement.
 
 ---
 
@@ -184,8 +236,8 @@ Life is about experiences. My experience is dance. The app helps you find yours.
 "This path doesn't light me up like dance does, but it feels like my art/soul's need to create this." The throughline: dance is the lived experience, the app is the framework that makes it transferable. Dance is the proof. The app is the method.
 
 **Belief 5: Solve a problem others miss.** ✅
-**"You don't rise to the level of your ambitions. You fall to the level of your comfort zone."**
-Nobody else is framing comfort zone as the career bottleneck. Nobody else is measuring it as a shape. Nobody else is gamifying its expansion. The School of Theory misses this entirely — they keep adding knowledge when the constraint is courage.
+**"You don't tell your grandkids about your gains. You tell them about your experiences."**
+Nobody else is naming the gain game — the cultural equation that says you have to be unhappy to earn the right to be happy. Nobody else is measuring experiences as a shape. Nobody else is gamifying the shift from gain to experience. The whole world is playing the gain game. We built the experience game.
 
 **Belief 6: Missionary conviction.** ✅
 5+ years fighting for this. Through $0 revenue, through building alone, through the path not having a name yet. Missionary, not mercenary.
@@ -212,9 +264,9 @@ Has income (events, other sources). Runway exists. The leap already happened.
 - Self-help books/apps: $10-30/mo (Headspace, Calm, BetterHelp)
 - Retreats/workshops: $500-5K
 
-The money is flowing. It's just flowing to the School of Theory. The opportunity is to DAM it toward the School of Experience.
+The money is flowing. It's just flowing to the gain game — the School of Theory. The opportunity is to DAM it toward the School of Experience.
 
-**The pain is real.** 343-post analysis of r/findapath (Jun 2026) confirmed: these people exist in volume, they're in pain, and the School of Theory isn't solving it for them. They keep asking the same questions because courses don't expand comfort zones.
+**The pain is real.** 343-post analysis of r/findapath (Jun 2026) confirmed: these people exist in volume, they're in pain, and the School of Theory isn't solving it for them. They keep asking the same questions because courses don't change what you experience.
 
 ### Super-Geos (where Superconsumers cluster)
 
@@ -248,9 +300,9 @@ The signal to watch instead: **lead magnet conversion.** Three magnets are live 
 ### The Flywheel
 
 ```
-YOU LIVE IT (dance, events, courage challenges, expanding your comfort zone)
+YOU LIVE IT (dance, events, creating experiences)
     ↓
-YOU SHARE IT (radar growth, tour content, courage reflections, before/after stories)
+YOU SHARE IT (radar growth, tour content, experience reflections, before/after stories)
     ↓
 PEOPLE RESONATE ("that's the life I want" / "how did you build this?")
     ↓
@@ -261,13 +313,13 @@ NEW PEOPLE FIND YOU → ask "how?"
 YOU HAND THEM THE APP → their data feeds YOUR content → repeat
 ```
 
-**The key insight:** Your personal comfort zone data IS the content. The 3-story radar share (start → now → dream) IS the flywheel spinning. You share your dome growing → people ask what it is → they try the app → their dome grows → they share theirs → more people ask.
+**The key insight:** Your personal experience data IS the content. The 3-story radar share (start → now → dream) IS the flywheel spinning. You share your shape changing → people ask what it is → they try the app → their shape changes → they share theirs → more people ask.
 
 ### CP's 3 Phases Applied
 
 **Phase 1: Attract Supers with unique POV**
 - Monument Rave tour content (heap of content ready to publish)
-- Retrospective courage challenge content — go back through past courage challenges, rate how each one fed into the radar, show how they led to your current life. This IS the School of Experience proof: "here's what I did, here's how my comfort zone grew, here's where I am now"
+- Retrospective experience content — go back through past experiences, rate how each one fed into the radar, show how they led to your current life. This IS the School of Experience proof: "here's what I did, here's how my experiences shaped me, here's where I am now"
 - The content strategy is: live it → reflect on it → share the reflection. Not "create content." Document the School of Experience in real time.
 
 **Phase 2: Equip Supers to make more Supers**
@@ -276,7 +328,7 @@ YOU HAND THEM THE APP → their data feeds YOUR content → repeat
 - Events are the Super-factory: someone comes to a dance event → has an experience → tells friends. The app turns that one-time event into an ongoing relationship.
 
 **Phase 3: Delight Supers**
-- The app IS the delight layer. Gamified progress, dome growing, identity statements, weekly reviews, healing flows. Every time they open the app and see their comfort zone bigger than last week, that's delight.
+- The app IS the delight layer. Gamified progress, shape changing, identity statements, weekly reviews, healing flows. Every time they open the app and see their aliveness shape different from last week, that's delight.
 - Not built yet: community features where Supers see each other's progress. Currently the delight is solo. Making it social would accelerate Phase 2.
 
 ### The Zero CAC Flywheel
@@ -285,7 +337,7 @@ CP's dream: zero customer acquisition cost. Your version:
 
 | Input | Cost | What it produces |
 |---|---|---|
-| You live your life (dance, events, courage) | $0 (you're doing it anyway) | Raw content |
+| You live your life (dance, events, experiences) | $0 (you're doing it anyway) | Raw content |
 | You share the journey (radar, reflections) | $0 (time only) | Attracts The Stuck and The Seeker |
 | People experience you (events, content) | $0 | Word of mouth |
 | App converts interest into journey | $0 | User data that feeds more content |
@@ -296,8 +348,8 @@ The flywheel is zero CAC because YOU are the content, the product proof, and the
 
 | Phase | Status |
 |---|---|
-| You live it | ✅ Always on — dance, events, tour, comfort zone expansion |
-| You share it | ⚠️ Not enough yet. Monument Rave content ready to publish. Retrospective courage content planned. |
+| You live it | ✅ Always on — dance, events, tour, creating experiences |
+| You share it | ⚠️ Not enough yet. Monument Rave content ready to publish. Retrospective experience content planned. |
 | People resonate | ✅ Happens in person. Not yet happening at scale digitally. |
 | They tell friends | ✅ In person after events. No digital mechanism yet. |
 | App converts | ⚠️ App is built but nobody's been handed it yet from the content funnel. |
@@ -305,15 +357,15 @@ The flywheel is zero CAC because YOU are the content, the product proof, and the
 
 ### Priority: Start the flywheel
 
-The flywheel isn't stuck on product (app is built). It's stuck on **Phase 1 content volume.** The Monument Rave content + retrospective courage reflections are the immediate unlock. Publish consistently → the flywheel starts spinning.
+The flywheel isn't stuck on product (app is built). It's stuck on **Phase 1 content volume.** The Monument Rave content + retrospective experience reflections are the immediate unlock. Publish consistently → the flywheel starts spinning.
 
 ### Content Thesis
 
-Every piece of content should do one thing: make someone ask "how did you build this life?" Then the answer is always the same: "I expanded my comfort zone. Here's the app."
+Every piece of content should do one thing: make someone ask "how did you build this life?" Then the answer is always the same: "I stopped playing the gain game and started designing for experiences. Here's the app."
 
 Two content types:
 1. **The life** — dance, events, travel, experiences (creates the desire)
-2. **The method** — radar growth, courage challenge reflections, before/after comfort zone (creates the bridge to the app)
+2. **The method** — radar growth, experience reflections, before/after aliveness shape (creates the bridge to the app)
 
 ---
 
@@ -325,10 +377,10 @@ Two content types:
 
 | CP Layer | Product | Price | What They Get |
 |---|---|---|---|
-| **A Good** | Lead magnets (Experience Game, Aliveness Quiz, Ambition Radar) | Free | See your comfort zone as a shape. Instant "aha" moment. |
-| **A Service** | Find My Flow app (guide + report, gamified courage, dome tracking) | TBD | Ongoing comfort zone expansion. Quests, challenges, weekly reviews, healing flows, Rise Points. Nike Run Club for your comfort zone. |
-| **An Experience** | Vibe Rise workshops, 1-day retreats, multi-day retreats | Varies by format | Facilitated healing, community, witnessed courage. The premium Phase 2 — things the app can't do alone. |
-| **A Transformation** | Paid retreat + year-long coaching | ~$10K (10x exercise) | The full School of Experience. Comfort zone expansion with personal guidance over 12 months. You don't just use the app — you transform your life with someone walking beside you. |
+| **A Good** | Lead magnets (Experience Game, Aliveness Quiz, Ambition Radar) | Free | See your life experiences as a shape. Instant "aha" moment. |
+| **A Service** | Find My Flow app (guide + report, experience tracking, dome tracking) | TBD | Ongoing life experience expansion. Quests, challenges, weekly reviews, healing flows, Rise Points. Nike Run Club for your experiences. |
+| **An Experience** | Vibe Rise workshops, 1-day retreats, multi-day retreats | Varies by format | Facilitated healing, community, witnessed expression. The premium Phase 2 — things the app can't do alone. |
+| **A Transformation** | Paid retreat + year-long coaching | ~$10K (10x exercise) | The full School of Experience. Life experience expansion with personal guidance over 12 months. You don't just use the app — you transform your life with someone walking beside you. |
 
 ### What's decided
 
@@ -347,14 +399,14 @@ Two content types:
 
 **"Your price isn't a barrier. It's a signal."** The free tier signals "this is for everyone who's stuck." The $10K tier signals "this is for people ready to transform." Both are right. They attract different Supers.
 
-**"Supers are completists."** Someone who does the free Experience Game → signs up for the app → comes to a workshop → books the retreat → joins year-long coaching. Each tier ladders into the next. You don't sell harder. The comfort zone expansion makes them WANT the next level.
+**"Supers are completists."** Someone who does the free Experience Game → signs up for the app → comes to a workshop → books the retreat → joins year-long coaching. Each tier ladders into the next. You don't sell harder. The experience expansion makes them WANT the next level.
 
 **The ascension path:**
 
 ```
-Free lead magnet → "I see my comfort zone shape"
+Free lead magnet → "I see my life experiences as a shape"
     ↓
-App (free/low) → "I'm expanding it through courage challenges"
+App (free/low) → "I'm expanding my experiences through challenges"
     ↓
 Workshop → "I went deeper with a group"
     ↓
@@ -379,7 +431,7 @@ Year-long coaching → "My life is unrecognisable from where I started"
 
 Cult initiation + educative + fun. All three. This combination is the Vibe Rise energy and no competitor has it:
 
-You teach someone something that permanently shifts their worldview (educative) — "you don't rise to the level of your ambitions, you fall to the level of your comfort zone" — delivered through an experience that feels like crossing a threshold (cult initiation) — they see their comfort zone as a shape for the first time — and the whole thing is wrapped in play and dance and fun (fun/cheeky) — not a lecture, not a seminar, not a TED talk.
+You teach someone something that permanently shifts their worldview (educative) — "you don't tell your grandkids about your gains, you tell them about your experiences" — delivered through an experience that feels like crossing a threshold (cult initiation) — they see their life experiences as a shape for the first time — and the whole thing is wrapped in play and dance and fun (fun/cheeky) — not a lecture, not a seminar, not a TED talk.
 
 **The Vibe Rise energy signature:** You learn something about yourself that you can't unlearn, through an experience that feels like play.
 
@@ -387,15 +439,15 @@ Educative alone = TED talk. Cult initiation alone = intense/heavy. Fun alone = e
 
 ### Premises to Weave Into Strike Content
 
-**Premise 1 (reject):** "More knowledge leads to a better career." → School of Theory vs School of Experience.
+**Premise 1 (reject):** "Optimise for gain and the good life follows." → The gain game vs Design for Experience.
 
 **Premise 2 (reject):** "Life is something that happens to you — you work, you rest, you occasionally escape on holiday, and if you're lucky you feel alive sometimes."
 
-**Premise 2 (replace):** "Life designed around aliveness — that's Vibe Rise."
+**Premise 2 (replace):** "Life designed around experiences you love — that's Vibe Rise."
 
 **The tagline version:** "Stop building a life you need to escape from."
 
-**The belief line:** "You don't rise to the level of your ambitions. You fall to the level of your comfort zone."
+**The belief line:** "You don't tell your grandkids about your gains. You tell them about your experiences."
 
 **The cook vs chef:** "I no longer wanted to be a cook following predefined recipes but a chef purposeful in their trade."
 
@@ -406,7 +458,7 @@ Educative alone = TED talk. Cult initiation alone = intense/heavy. Fun alone = e
 | Mechanic | Our Answer |
 |---|---|
 | **1. Find your Superconsumers** | The Stuck (r/findapath) + The Seeker (Bali nomads, experience seekers) |
-| **2. Deliver an exciting reason to talk** | The School of Experience framing + Huzz's personal 3-year comfort zone journey + the cook vs chef story |
+| **2. Deliver an exciting reason to talk** | The School of Experience framing + Huzz's personal 3-year experience journey + the gain game vs experience game + the cook vs chef story |
 | **3. Create a moment the market can't ignore** | **The Monument Rave Tour.** 100 people, silent discos in front of iconic monuments — Eiffel Tower, and others. Content already shot. This IS the moment. |
 | **4. Make the cash register sing** | CTA to lead magnets (Experience Game / Ambition Radar) → app signup → event waitlist |
 
@@ -417,16 +469,16 @@ The tour already happened. 100 people dancing in front of the Eiffel Tower with 
 **The Strike is the content + the framing together:**
 - The footage = the FUN (people can't stop watching)
 - The voiceover/caption = the EDUCATION ("I quit VC, spent $30K on courses, none of them gave me this")
-- The before/after = the CULT INITIATION ("here's my comfort zone when I started → here's what it looks like after 3 years of doing things like this")
-- The CTA = the GROUND GAME ("want to see your comfort zone? → lead magnet")
+- The before/after = the CULT INITIATION — A/B test: ("here's my experience shape when I started → here's what it looks like after 3 years of creating experiences like this") vs ("here's my comfort zone when I started → here's what it looks like after 3 years of doing things like this")
+- The CTA = the GROUND GAME — A/B test: ("want to see your life experiences as a shape?") vs ("want to see your comfort zone?")
 
 ### The 3 Pillars
 
 | Pillar | How the Monument Rave Strike Hits It |
 |---|---|
-| **Information Game** | People learn the School of Experience exists. The framing educates: this isn't a party, it's a lifestyle built on courage. |
-| **Air Game** | Huzz = the person who quit the safe path and built this. The person you think of when you think "alternative career." |
-| **Ground Game** | "Want to see your comfort zone?" → Experience Game or Ambition Radar → app signup → event waitlist for next tour/event |
+| **Information Game** | People learn the School of Experience exists. The framing educates: this isn't a party, it's a life designed around experiences. |
+| **Air Game** | Huzz = the person who quit the gain game and built this. The person you think of when you think "designing for experience." |
+| **Ground Game** | A/B test: "Want to see your life experiences as a shape?" vs "Want to see your comfort zone?" → Experience Game or Ambition Radar → app signup → event waitlist for next tour/event |
 
 ### The Confirmed Strike Plan
 
@@ -436,9 +488,9 @@ The tour already happened. 100 people dancing in front of the Eiffel Tower with 
 
 **Audience:** Both The Stuck and The Seeker via different hooks on the same platform.
 
-**CTA:** ManyChat. "DM me [KEYWORD] to see your comfort zone" → auto-sends Ambition Radar link. Secondary: direct app signup for people already sold.
+**CTA:** ManyChat. A/B test: "DM me [KEYWORD] to see your experience shape" vs "DM me [KEYWORD] to see your comfort zone" → auto-sends Ambition Radar link. Secondary: direct app signup for people already sold.
 
-**Why Ambition Radar:** The Stuck sees the Monument Rave footage and thinks "I want that life." The radar shows them the gap between where they are and that life. The gap IS the comfort zone. Perfect bridge from inspiration to action.
+**Why Ambition Radar:** The Stuck sees the Monument Rave footage and thinks "I want that life." The radar shows them the gap between where they are and that life. The gap IS the experience gap (what you're not experiencing) which IS the comfort zone (what's constraining your experiences). Both framings work — test which one converts.
 
 ### The Content Rounds (Different Hooks to Test)
 
@@ -446,9 +498,9 @@ The tour already happened. 100 people dancing in front of the Eiffel Tower with 
 |---|---|---|---|---|
 | 1 | The quit story | "I quit my $150K job because I was building a life I needed to escape from" | The Stuck | DM [KEYWORD] |
 | 2 | The visual spectacle | Best Eiffel Tower footage, minimal caption | Broad / viral | DM [KEYWORD] |
-| 3 | The comfort zone proof | "3 years ago this would have terrified me. Last week I did it in front of the Eiffel Tower" | The Seeker | DM [KEYWORD] |
+| 3 | The proof | "3 years ago this would have terrified me. Last week I did it in front of the Eiffel Tower" — A/B: experience framing vs comfort zone framing | The Seeker | DM [KEYWORD] |
 | 4 | The category naming | "There's no course for this career. Because I created it." | Both | DM [KEYWORD] |
-| 5 | The belief line | "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" over footage | Both | DM [KEYWORD] |
+| 5 | The belief line | A/B: "You don't tell your grandkids about your gains. You tell them about your experiences" vs "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" over footage | Both | DM [KEYWORD] |
 | 6 | The joy flip | "Stop building a life you need to escape from" | The Stuck | DM [KEYWORD] |
 
 **The principle:** Footage is the hook (stops the scroll). Story is the reason to talk (gets the share). ManyChat is the cash register (captures the lead). Every piece has all three.
@@ -458,7 +510,7 @@ The tour already happened. 100 people dancing in front of the Eiffel Tower with 
 | Mechanic | Answer |
 |---|---|
 | **1. Find Supers** | The Stuck + The Seeker on Instagram. Different hooks, same platform. |
-| **2. Exciting reason to talk** | Footage hooks them (100 people Eiffel Tower silent disco). Story converts them ("I quit VC, no course taught me this, my comfort zone did"). Without the story it's entertainment. With the story it's a Lightning Strike. |
+| **2. Exciting reason to talk** | Footage hooks them (100 people Eiffel Tower silent disco). Story converts them — A/B: "no course taught me this, creating experiences did" vs "no course taught me this, my comfort zone did." Without the story it's entertainment. With the story it's a Lightning Strike. |
 | **3. Moment market can't ignore** | Concentrated 2-4 week content burst. Multiple pieces, different hooks, until one catches. Not a slow drip. |
 | **4. Cash register sings** | ManyChat DM trigger → Ambition Radar lead magnet → email captured → app signup funnel. |
 
@@ -466,14 +518,14 @@ The tour already happened. 100 people dancing in front of the Eiffel Tower with 
 
 | Pillar | How It's Hit |
 |---|---|
-| **Information Game** | The story educates without naming the framework. "No course taught me this. My comfort zone did." People get the School of Experience concept without being told the label. |
+| **Information Game** | The story educates without naming the framework. A/B: "No course taught me this. Creating experiences did" vs "No course taught me this. My comfort zone did." People get the School of Experience concept without being told the label. |
 | **Air Game** | Huzz is on camera leading 100 people at the Eiffel Tower. The leader is visible. People associate the life with the person. |
 | **Ground Game** | Every piece ends with ManyChat CTA. DM → Ambition Radar → email → app. No dead ends. |
 
 ### What Needs to Happen
 
 1. Set up ManyChat keyword automation → Ambition Radar link
-2. Update Instagram bio to reference comfort zone / Vibe Rise
+2. Update Instagram bio to reference experience / Vibe Rise
 3. Edit Monument Rave footage into multiple pieces (6+ rounds with different hooks)
 4. Write captions/voiceovers using the hook table above
 5. Publish concentrated burst over 2-4 weeks
@@ -505,7 +557,7 @@ These pieces come directly from the category strategy work in this doc. Each one
 | # | Piece | Format | Hook |
 |---|---|---|---|
 | 1 | The quit story | Talking head or voiceover + old photos | "I quit my $150K job because I was building a life I needed to escape from" |
-| 2 | The comfort zone belief | Text on screen over footage | "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" |
+| 2 | The gain game belief | Text on screen over footage | "You don't tell your grandkids about your gains. You tell them about your experiences" |
 | 3 | Cook vs chef | Story time, personal | "I stopped following recipes and started creating my own" |
 | 4 | The joy flip | Carousel or Reel | "For one, joy is tied to money. For another, money is a by-product of joy" |
 | 5 | No course for this | Voiceover + Monument Rave footage | "There's no course for this career. Because I created it." |
@@ -513,7 +565,7 @@ These pieces come directly from the category strategy work in this doc. Each one
 | 7 | The escape line | Short, punchy, text-first | "Stop building a life you need to escape from" |
 | 8 | The School of Theory | Educational, comparative | "University sold you a playbook: learn more, earn more, live better. Here's what actually happened." |
 | 9 | Fear of judgement | Personal, vulnerable | "The real reason I didn't quit sooner wasn't money. It was what people would think." |
-| 10 | The radar before/after | 3-story tap-through (specced) | "Where my comfort zone started → 3 years later → where I'm still growing" |
+| 10 | The radar before/after | 3-story tap-through (specced) | "Where my experience shape started → 3 years later → where I'm still growing" |
 
 ### Team Setup
 
@@ -614,7 +666,7 @@ Repeat
 
 > **⚠️ Revisit later.** Not for this launch phase but a strong future idea.
 
-A live event radar measuring 6 dimensions of the experience (distinct from the 8 comfort zone dimensions in the app):
+A live event radar measuring 6 dimensions of the experience (distinct from the 8 aliveness dimensions in the app):
 
 | Dimension | What It Measures |
 |---|---|
@@ -625,7 +677,7 @@ A live event radar measuring 6 dimensions of the experience (distinct from the 8
 | **Connection** | How connected do you feel to the group? |
 | **Presence** | How fully are you HERE? |
 
-Connects to the Find My Flow dome — event experience feeds into comfort zone expansion data. Park for now, revisit when events and app are integrated.
+Connects to the Find My Flow dome — event experience feeds into experience tracking data. Park for now, revisit when events and app are integrated.
 
 ---
 
@@ -637,7 +689,7 @@ Connects to the Find My Flow dome — event experience feeds into comfort zone e
 STRANGER — sees Monument Rave Reel on Instagram
     ↓ (Top layer content hooks them — "cool, what is this?")
 SUBSCRIBER — DMs keyword → ManyChat → lead magnet → email captured
-    ↓ (Lead magnet gives them their shape — "I see my comfort zone")
+    ↓ (Lead magnet gives them their shape — A/B: "I see my life experiences as a shape" vs "I see my comfort zone")
 SUPPORTER — signs up for app → does first courage challenge → sees dome grow
     ↓ (Identity kicks in — "I'm someone who does courage challenges")
 SUPERCONSUMER — weekly user → comes to an event → talks about it unprompted → brings friends
@@ -656,21 +708,21 @@ SUPERCONSUMER — weekly user → comes to an event → talks about it unprompte
 
 > **Source:** CP "If your POV doesn't make incumbents uncomfortable, you're competing not creating."
 
-**Who loses if Courage: Gamified wins?**
+**Who loses if Find Your Flow wins?**
 
 We attack INDUSTRIES, not people. The tone is fun, not aggressive. We point out what's broken about the system, not the individuals in it.
 
 | Industry | What We Say | Tone |
 |---|---|---|
-| **University / MBA industry** | "More knowledge doesn't expand your comfort zone" | Factual, not angry |
-| **Online course industry** | "Courses feel like progress without the risk. That's avoidance." | Honest, from experience ($30K on courses) |
-| **Career coaching industry** | "You don't need someone telling you what to do. You need a game that makes you do it." | Playful — the app replaces the role |
+| **University / MBA industry** | "More knowledge doesn't change what you experience on a Tuesday at 2pm" | Factual, not angry |
+| **Online course industry** | "Courses feel like progress without the risk. That's the gain game." | Honest, from experience ($30K on courses) |
+| **Career coaching industry** | "You don't need someone telling you what to gain next. You need a game that changes what you experience." | Playful — the app replaces the role |
 | **Personality test companies** | "Labels don't tell you what makes you alive" | Direct — Experience Game replaces them |
-| **Self-help publishing** | "You can't think your way to change, you have to live your way there" | Philosophical, not combative |
+| **Self-help publishing** | "You can't think your way to change, you have to experience your way there" | Philosophical, not combative |
 
 **The line we walk:** We're the fun option. We don't attack therapists or coaches as people. We say the INDUSTRY model is broken: "The system assumes knowledge changes you. It doesn't. Courage does." That's category violence without being a jerk.
 
-**Our $30K proof:** "I spent $30K on courses. None of them expanded my comfort zone. Doing scary things did." That's personal experience, not an attack. Hardest to argue with.
+**Our $30K proof:** A/B: "I spent $30K on courses. None of them changed what I was experiencing. Creating experiences did." vs "I spent $30K on courses. None of them expanded my comfort zone. Doing scary things did." That's personal experience, not an attack. Hardest to argue with.
 
 ---
 
@@ -680,9 +732,9 @@ We attack INDUSTRIES, not people. The tone is fun, not aggressive. We point out 
 
 | Element | What It Is | Aligned? |
 |---|---|---|
-| **Product** | App that gamifies courage — tracks comfort zone as a shape, courage challenges grow dimensions | ✅ Delivers the category promise |
+| **Product** | App that gamifies experiences — tracks comfort zone as a shape, challenges grow dimensions | ✅ Delivers the category promise |
 | **Business Model** | Free lead magnets → free/low app → paid events → $10K coaching | ✅ Sustains the category |
-| **Category** | Courage: Gamified. NRC for courage. | ✅ Attracts the right people |
+| **Category** | Find Your Flow. NRC for your experiences. | ✅ Attracts the right people |
 
 All three point the same direction. No misalignment.
 
@@ -695,7 +747,7 @@ All three point the same direction. No misalignment.
 | Product/Action | Data Created | What We Learn |
 |---|---|---|
 | Experience Game (lead magnet) | Dome shape, NS ratings for ~90 experiences | What makes THIS person come alive |
-| Ambition Radar (lead magnet) | Dream vs current on 8 dimensions | Where their comfort zone gap is |
+| Ambition Radar (lead magnet) | Dream vs current on 8 dimensions | Where their experience gap is (comfort zone gap) |
 | Vibe Rise Radar (lead magnet) | 6 aliveness dimensions | How alive they are right now |
 | Courage challenges | Dimension growth, predicted vs experienced, gap voice | Which dimensions grow, which voices block |
 | Post-courage reflections | Old way, beliefs challenged, building toward, who it serves | Category definition building over time |
@@ -742,7 +794,7 @@ Answered by: What lights me up?    Answered by: Comfort zone grows   Answered by
 | Segment | Mindset | How They Found You | What They Need |
 |---|---|---|---|
 | **Curious** | "That looks fun." No awareness of a problem. Not searching. | Monument Rave Reel, TikTok share, friend forwarded a clip | To see the STORY under the spectacle — then they question |
-| **Question** | "Wait, how did he build this life?" Aware of a gap but not yet acting. | Middle layer content, quit story, comfort zone belief line, personal captions | To see themselves in the story — the radar gives them a mirror |
+| **Question** | "Wait, how did he build this life?" Aware of a gap but not yet acting. | Middle layer content, quit story, belief line (A/B: grandkids vs comfort zone), personal captions | To see themselves in the story — the radar gives them a mirror |
 | **Quest** | "I need to change. What do I use?" Actively shopping for a solution. | r/findapath, career coach referral, direct search, word of mouth | Proof it works. The product. The data. The case study. |
 
 ### Curious Pirates
@@ -757,9 +809,9 @@ The shift happens when they see the STORY underneath the footage. Not in the sam
 
 1. **The biography reveal.** A follow-up post (24-48hrs later) where the person in the footage turns out to have quit a $150K job, spent $30K on courses, and none of it gave them what dancing at the Eiffel Tower did. The footage was entertainment. The story makes them question their own path.
 
-2. **The reframe.** A caption or voiceover that says "This isn't a dance party. This is what happens when you expand your comfort zone for 3 years." Now the footage means something different. It's not just fun — it's the result of a process.
+2. **The reframe.** A caption or voiceover — A/B: "This isn't a dance party. This is what happens when you design for experiences for 3 years" vs "This isn't a dance party. This is what happens when you expand your comfort zone for 3 years." Now the footage means something different. It's not just fun — it's the result of a process.
 
-3. **The shape.** The comfort zone radar appears. A shape. With a before and an after. Now they see this life was BUILT, not stumbled into. That's the moment they ask "how?"
+3. **The shape.** The comfort zone radar (aliveness radar) appears. A shape. With a before and an after. Now they see this life was BUILT, not stumbled into. That's the moment they ask "how?"
 
 **The timing matters more than the format.** Middle layer content needs to land within 24-48hrs of Top layer — while the Curious person is still paying attention. Same feed, sequenced. The algorithm shows them the Reel (Top), then if they engaged, it shows them the follow-up (Middle). That's when Curious becomes Question.
 
@@ -782,9 +834,9 @@ The shift happens when they see the STORY underneath the footage. Not in the sam
 | Hook | Why It Converts |
 |---|---|
 | "I quit my $150K job because I was building a life I needed to escape from" | Resonates if they're feeling trapped |
-| "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" | Names the mechanism they feel but can't articulate |
+| A/B: "You don't tell your grandkids about your gains. You tell them about your experiences" vs "You don't rise to the level of your ambitions. You fall to the level of your comfort zone" | Names the mechanism they feel but can't articulate |
 | "I stopped following recipes and started creating my own" (cook vs chef) | Questions the School of Theory they've been in |
-| "I spent $30K on courses. None of them expanded my comfort zone." | Personal proof — hardest to argue with |
+| A/B: "I spent $30K on courses. None of them changed what I was experiencing" vs "None of them expanded my comfort zone" | Personal proof — hardest to argue with |
 | "There's no course for this career. Because I created it." | Names the different future |
 
 **What converts Question → Quest:**
@@ -860,7 +912,7 @@ Conversion triggers:
 
 | Segment | What to Avoid |
 |---|---|
-| **Curious** | Don't explain the app. Don't use category language. Don't say "comfort zone" or "School of Experience." They're not ready. Just show the life. |
+| **Curious** | Don't explain the app. Don't use category language. Don't say "comfort zone" or "gain game" or "School of Experience." They're not ready. Just show the life. |
 | **Question** | Don't hard-sell the product. They need philosophy, not features. The lead magnet is a soft ask, not a product pitch. |
 | **Quest** | Don't re-educate them on the philosophy. They already believe. Skip the story, show the proof. |
 
@@ -868,7 +920,7 @@ Conversion triggers:
 
 ## 19. The "Become Known" Mechanism
 
-The School of Experience chain: comfort zone → experience → brand → career.
+The School of Experience chain: experience → expression → brand → career.
 
 **Three parts:**
 
