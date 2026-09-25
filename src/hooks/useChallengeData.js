@@ -186,13 +186,14 @@ export function useChallengeData() {
         // Run both queries in parallel - they're independent
         const [userLevelResult, anyPreviousResult] = await Promise.all([
           // Load user-level completions so Flow Finder quests show correct completion state
-          // Ordered newest-first so Supabase's 1000-row server limit drops old data, not new
+          // Supabase default limit is 1000 rows — bump to 5000 so streak calculation sees full history
           supabase
             .from('quest_completions')
             .select('*')
             .eq('user_id', user.id)
             .is('challenge_instance_id', null)
-            .order('completed_at', { ascending: false }),
+            .order('completed_at', { ascending: false })
+            .limit(5000),
           // Check if user has any previous challenges (returning user)
           supabase
             .from('challenge_progress')
@@ -293,6 +294,7 @@ export function useChallengeData() {
           .is('challenge_instance_id', null)
           .or(`project_id.is.null,project_id.eq.${projectData?.id || '00000000-0000-0000-0000-000000000000'}`)
           .order('completed_at', { ascending: false })
+          .limit(5000)
       ])
 
       const { data: challengeCompletions, error: completionsError } = challengeCompletionsResult
@@ -440,6 +442,7 @@ export function useChallengeData() {
           : Promise.resolve({ data: [] }),
         supabase.from('quest_completions').select('*').eq('user_id', user.id).is('challenge_instance_id', null)
           .or(`project_id.is.null,project_id.eq.${selectedProject?.id || '00000000-0000-0000-0000-000000000000'}`)
+          .limit(5000)
       ])
       if (!challengeResult.error && !userLevelResult.error) {
         setCompletions([
