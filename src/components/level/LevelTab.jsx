@@ -30,6 +30,7 @@ import JourneyGraphPopup from '../JourneyGraphPopup'
 import WeeklyFocus from './WeeklyFocus'
 import './WeeklyFocus.css'
 import './LevelTab.css'
+import PayTheBillsSection from '../PayTheBillsSection'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onRefreshPoints = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   const { user } = useAuth()
@@ -512,7 +513,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <a href="/try/life-paths">Complete Life Paths</a> to see your progress map
           </div>
         )}
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').sort((a, b) => {
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).sort((a, b) => {
           const order = { vibe: 0, peace: 1, anxious: 2, shutdown: 3 }
           return (order[a.predicted_state] ?? 4) - (order[b.predicted_state] ?? 4)
         }).map(q => (
@@ -593,6 +594,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
         {/* Zone Matrix moved to Progress tab */}
       </div>
+
+      {/* Pay The Bills — bridge job section */}
+      <PayTheBillsSection
+        quests={quests}
+        userId={userId}
+        onUpdate={loadQuests}
+      />
 
       {/* Struggle Pills — hidden for now, revisit later */}
 
