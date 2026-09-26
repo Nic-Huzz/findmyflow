@@ -36,7 +36,7 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
   if (!hasCompletedCurrentJobFlow) return null
 
   // State 4: Graduated
-  if (graduated) {
+  if (graduated === true) {
     return (
       <div className="ptb-section">
         <div className="ptb-header">
