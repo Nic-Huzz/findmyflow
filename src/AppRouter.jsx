@@ -205,6 +205,7 @@ const BreathworkLanding = lazyRetry(() => import('./pages/BreathworkLanding'))
 const WhyICreatedThis = lazyRetry(() => import('./pages/WhyICreatedThis'))
 
 const CurrentJobFlow = lazyRetry(() => import('./flows/CurrentJobFlow'))
+const FindBridgeFlow = lazyRetry(() => import('./flows/FindBridgeFlow'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
@@ -769,6 +770,7 @@ function AppRouter() {
             <Route path="/choose-quests" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><ChooseQuestsFlow /></Suspense></AuthGate>} />
             <Route path="/path-definition/:questId" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PathDefinitionFlow /></Suspense></AuthGate>} />
             <Route path="/add-current-job" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><CurrentJobFlow /></Suspense></AuthGate>} />
+            <Route path="/find-bridge" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><FindBridgeFlow /></Suspense></AuthGate>} />
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />

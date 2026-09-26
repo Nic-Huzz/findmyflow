@@ -1,0 +1,102 @@
+/* FindBridgeFlow.css — /find-bridge */
+
+.fbf { min-height: 100dvh; background: #f5f5f0; color: #1a1a2e; }
+.fbf-container { max-width: 480px; margin: 0 auto; padding: 20px 20px 120px; }
+
+.fbf-header { text-align: center; margin-bottom: 20px; }
+.fbf-header h2 { font-size: 22px; font-weight: 800; margin: 0 0 4px; }
+.fbf-header p { font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.5; }
+
+.fbf-back {
+  background: none; border: none; padding: 8px 0; margin-bottom: 8px;
+  font-size: 15px; color: rgba(0,0,0,0.4); cursor: pointer; font-family: inherit;
+}
+
+/* Experience cards — ranked list */
+.fbf-list { display: flex; flex-direction: column; gap: 8px; }
+
+.fbf-exp-card {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(0,0,0,0.06);
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.fbf-exp-card:active { transform: scale(0.98); }
+.fbf-exp-card.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); }
+.fbf-exp-card.top-pick { border-color: rgba(94,23,235,0.2); }
+
+.fbf-exp-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+
+.fbf-exp-rates {
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.fbf-exp-rate {
+  font-size: 12px; color: rgba(0,0,0,0.5);
+}
+.fbf-exp-rate-label {
+  font-weight: 600; color: rgba(0,0,0,0.35);
+  text-transform: uppercase; font-size: 10px; letter-spacing: 0.04em;
+}
+.fbf-exp-rate-value { margin-top: 1px; }
+
+.fbf-exp-monthly {
+  font-size: 12px; color: #5e17eb; font-weight: 600; margin-top: 6px;
+}
+
+.fbf-top-label {
+  font-size: 10px; font-weight: 700; color: #5e17eb;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+/* Name input step */
+.fbf-input {
+  width: 100%; padding: 14px 16px;
+  border: 1.5px solid rgba(0,0,0,0.08); border-radius: 14px;
+  background: white; font-size: 16px; font-family: inherit;
+  color: #1a1a2e; box-sizing: border-box;
+}
+.fbf-input:focus { outline: none; border-color: #5e17eb; }
+
+.fbf-earning-context {
+  font-size: 13px; color: rgba(0,0,0,0.4); margin-top: 8px; text-align: center;
+}
+
+/* Status choice */
+.fbf-status-options { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.fbf-status-btn {
+  padding: 14px 16px; border-radius: 14px;
+  border: 1.5px solid rgba(0,0,0,0.08); background: white;
+  font-size: 15px; font-weight: 500; font-family: inherit;
+  cursor: pointer; transition: all 0.15s; text-align: left;
+  display: flex; align-items: center; gap: 12px; color: #1a1a2e;
+}
+.fbf-status-btn:active { transform: scale(0.98); }
+
+/* Empty state */
+.fbf-empty { text-align: center; padding: 24px 0; }
+.fbf-empty p { font-size: 14px; color: rgba(0,0,0,0.4); margin-bottom: 16px; }
+.fbf-empty-actions { display: flex; flex-direction: column; gap: 8px; }
+
+/* Fixed bottom */
+.fbf-fixed {
+  position: fixed; bottom: 0;
+  left: 50%; transform: translateX(-50%);
+  max-width: 480px; width: 100%;
+  padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, #f5f5f0 20%);
+}
+.fbf-fixed button {
+  width: 100%; padding: 16px;
+  border-radius: 14px; border: none;
+  background: #5e17eb; color: white;
+  font-size: 16px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+}
+.fbf-fixed button:disabled {
+  opacity: 0.4; cursor: not-allowed;
+}
