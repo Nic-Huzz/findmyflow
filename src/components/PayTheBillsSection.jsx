@@ -21,7 +21,7 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
 
   // Find relevant quests
   const bridgeQuest = quests.find(q => q.is_bridge_job && q.status === 'active' && q.bridge_status !== 'completed')
-  const currentJobQuest = quests.find(q => q.is_current_job && q.status !== 'reference')
+  const currentJobQuest = quests.find(q => q.is_current_job && q.status !== 'reference' && !q.is_bridge_job)
   const referenceQuest = quests.find(q => q.is_current_job && q.status === 'reference')
   const hasCompletedCurrentJobFlow = quests.some(q => q.is_current_job)
 
@@ -29,7 +29,7 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
   // State 3: Auto-fulfilled — "grow this" + money >= $1K
   if (currentJobQuest?.job_relationship === 'grow_this') {
     const moneyTier = currentJobQuest.current_dimensions?.money
-    if (moneyTier >= MONEY_TIER_5_THRESHOLD) return null // Section hidden
+    if (moneyTier >= MONEY_TIER_5_THRESHOLD && !bridgeQuest) return null // Section hidden unless bridge still needs managing
   }
 
   // Don't show if current job flow not completed

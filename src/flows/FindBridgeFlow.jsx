@@ -75,7 +75,7 @@ export default function FindBridgeFlow() {
         user_id: user.id,
         label: jobTitle.trim(),
         is_bridge_job: true,
-        is_current_job: bridgeStatus === 'active',
+        is_current_job: false,
         status: 'active',
         predicted_state: 'fun',
         job_relationship: 'bridge_found',
@@ -134,7 +134,7 @@ export default function FindBridgeFlow() {
             </div>
 
             <div className="fbf-list">
-              {(showAll ? getAllViableBridgeExperiences() : experiences).map((exp, i) => (
+              {experiences.map((exp, i) => (
                 <div key={exp.nodeId || exp.label}>
                   {i === 0 && !showAll && <div className="fbf-top-label">Top pick</div>}
                   <div
