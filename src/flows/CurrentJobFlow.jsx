@@ -22,7 +22,6 @@ import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
-import { MONEY_TIER_5_THRESHOLD } from '../lib/bridgeJobUtils'
 import './CurrentJobFlow.css'
 
 const NS_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', growth_edge: '😰', bored: '😐', uninterested: '😐' }
