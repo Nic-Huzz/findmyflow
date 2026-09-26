@@ -4,11 +4,13 @@
  * Steps:
  *   1. name_fuel: Name your job + which life fuels it gives you
  *   2. reveal: Pain reveal (what's missing)
- *   3. fork: Pursue this path or find something new?
- *   YES path:
+ *   3. fork: 3-way relationship question
+ *   GROW THIS path (job_relationship: 'grow_this'):
  *     4a. experiences: Pick dome experiences involved in this job
  *     4b. dimensions: Set current + dream dimensions (real dome tiers)
- *   NO path:
+ *   PAY BILLS path (job_relationship: 'pay_bills', is_bridge_job: true):
+ *     4b. pay_bills_dimensions: Current dimensions only (no dream) → /choose-quests
+ *   KEEN TO QUIT path (job_relationship: 'keen_to_quit'):
  *     4c. no_summary: Fuel summary + CTAs to /choose-quests or /7-day-challenge
  */
 import { useState, useEffect } from 'react'
@@ -20,6 +22,7 @@ import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import { DOME_DIMENSIONS } from '../data/domeDimensions'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { MONEY_TIER_5_THRESHOLD } from '../lib/bridgeJobUtils'
 import './CurrentJobFlow.css'
 
 const NS_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', growth_edge: '😰', bored: '😐', uninterested: '😐' }
@@ -137,6 +140,7 @@ export default function CurrentJobFlow() {
         current_dimensions: currentDimensions,
         dream_dimensions: dreamDimensions,
         format_picks: [...selectedIds],
+        job_relationship: 'grow_this',
       }).eq('id', savedQuestId)
       hapticSuccess()
       navigate('/7-day-challenge')
@@ -156,12 +160,33 @@ export default function CurrentJobFlow() {
         await supabase.from('quests').update({
           path_fuels: CHANNEL_IDS.filter(id => fuels[id]),
           status: 'reference',
+          job_relationship: 'keen_to_quit',
         }).eq('id', savedQuestId)
       }
       hapticSuccess()
       setStep('no_summary')
     } catch (err) {
       console.error('Error saving ideal:', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Save as bridge job (PAY BILLS path) — current dimensions only, no dream
+  const handleSavePayBillsPath = async () => {
+    if (!savedQuestId || saving) return
+    setSaving(true)
+    try {
+      await supabase.from('quests').update({
+        is_bridge_job: true,
+        job_relationship: 'pay_bills',
+        bridge_status: 'active',
+        current_dimensions: currentDimensions,
+      }).eq('id', savedQuestId)
+      hapticSuccess()
+      navigate('/choose-quests')
+    } catch (err) {
+      console.error('Error saving pay bills path:', err)
     } finally {
       setSaving(false)
     }
@@ -267,16 +292,31 @@ export default function CurrentJobFlow() {
         {step === 'fork' && (
           <div className="cjf-done">
             <div className="cjf-done-icon">🧭</div>
-            <h2>Do you want this to be your life path?</h2>
-            <p>Is {jobTitle} something you want to keep building on, or do you want something different?</p>
+            <h2>What's your relationship with {jobTitle}?</h2>
+            <p>This helps us figure out what role it plays in your life.</p>
             <div className="cjf-direction-options">
               <button
                 className="cjf-direction-btn"
                 onClick={() => { hapticLight(); setStep('experiences') }}
               >
                 <span className="cjf-direction-emoji">🔥</span>
-                <span className="cjf-direction-text">Yes, I want to grow this</span>
-                <span className="cjf-direction-sub">Pick your skills and set your ambition.</span>
+                <span className="cjf-direction-text">Yes, grow this</span>
+                <span className="cjf-direction-sub">This is my flow. I want to build my life around it.</span>
+              </button>
+              <button
+                className="cjf-direction-btn"
+                onClick={() => {
+                  hapticLight()
+                  // Go to current dimensions only (no experiences, no dream)
+                  const defaults = {}
+                  DOME_DIMENSIONS.forEach(d => { defaults[d.id] = 1 })
+                  setCurrentDimensions(prev => Object.keys(prev).length ? prev : defaults)
+                  setStep('pay_bills_dimensions')
+                }}
+              >
+                <span className="cjf-direction-emoji">💰</span>
+                <span className="cjf-direction-text">Happy for it to pay the bills</span>
+                <span className="cjf-direction-sub">It's not my calling, but it works for now.</span>
               </button>
               <button
                 className="cjf-direction-btn"
@@ -288,8 +328,8 @@ export default function CurrentJobFlow() {
                 }}
               >
                 <span className="cjf-direction-emoji">🌱</span>
-                <span className="cjf-direction-text">No, I want something different</span>
-                <span className="cjf-direction-sub">We'll help you find paths that light you up.</span>
+                <span className="cjf-direction-text">No, keen to quit</span>
+                <span className="cjf-direction-sub">I want to move on from this.</span>
               </button>
             </div>
           </div>
@@ -479,6 +519,58 @@ export default function CurrentJobFlow() {
                 </div>
               </>
             )}
+          </>
+        )}
+
+        {/* ═══ PAY BILLS PATH: Current Dimensions Only ═══ */}
+        {step === 'pay_bills_dimensions' && (
+          <>
+            <button className="cjf-back" onClick={() => setStep('fork')}>&larr; Back</button>
+            <div className="cjf-header">
+              <div className="cjf-step-label">Where you are now</div>
+              <h2>Where is {jobTitle} right now?</h2>
+              <p>Just a quick snapshot so we know where things stand.</p>
+            </div>
+
+            {DOME_DIMENSIONS.map(dim => {
+              const tiers = getDimTiers(dim)
+              const selectedLevel = currentDimensions[dim.id]
+              const selectedDesc = selectedLevel && dim.type === 'qualitative'
+                ? dim.levels.find(l => l.level === selectedLevel)?.description
+                : null
+
+              return (
+                <div key={dim.id} className="cjf-dim-section">
+                  <div className="cjf-dim-label">
+                    {dim.icon} {CURRENT_QUESTIONS[dim.id]}
+                  </div>
+                  <div className="cjf-dim-options">
+                    {tiers.map(t => (
+                      <button
+                        key={t.value}
+                        className={`cjf-dim-pill ${currentDimensions[dim.id] === t.value ? 'selected' : ''}`}
+                        onClick={() => {
+                          hapticLight()
+                          setCurrentDimensions(prev => ({ ...prev, [dim.id]: t.value }))
+                        }}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedDesc && <div className="cjf-dim-desc">{selectedDesc}</div>}
+                </div>
+              )
+            })}
+
+            <div className="cjf-fixed">
+              <button
+                onClick={handleSavePayBillsPath}
+                disabled={saving}
+              >
+                {saving ? 'Saving...' : 'Done'}
+              </button>
+            </div>
           </>
         )}
 
