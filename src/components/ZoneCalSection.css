@@ -1,0 +1,185 @@
+/* ── Zone Cal Section (Progress Tab) ── */
+
+/* Empty state card */
+.zcs-empty-card {
+  background: linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  border: 1px solid rgba(94, 23, 235, 0.12);
+  margin-bottom: 16px;
+}
+
+.zcs-empty-emoji { font-size: 2rem; margin-bottom: 8px; }
+.zcs-empty-title { font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.zcs-empty-sub { font-size: 0.85rem; color: #888; margin-bottom: 16px; line-height: 1.5; }
+.zcs-empty-btn { width: 100%; }
+
+/* Main card */
+.zcs-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+/* Diagnosis */
+.zcs-diagnosis-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.zcs-diagnosis-headline {
+  font-size: 0.9rem;
+  color: #5e17eb;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.zcs-diagnosis-desc {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+
+/* Radar tap target */
+.zcs-radar-tap { cursor: pointer; }
+
+/* Countdown + retake */
+.zcs-countdown {
+  font-size: 0.8rem;
+  color: #999;
+  margin: 8px 0 16px;
+}
+
+.zcs-retake-btn {
+  width: 100%;
+  margin: 8px 0 16px;
+}
+
+/* Transition narrative */
+.zcs-transition {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #faf9f7;
+  border-radius: 12px;
+}
+
+.zcs-transition-old {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.zcs-transition-arrow {
+  font-size: 1rem;
+  color: #ccc;
+  margin: 4px 0;
+}
+
+.zcs-transition-new {
+  font-size: 1rem;
+  color: #5e17eb;
+  font-weight: 600;
+}
+
+.zcs-transition-narrative {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Dimension breakdown */
+.zcs-breakdown {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.zcs-dim-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  background: #faf9f7;
+}
+
+.zcs-dim-row.low { background: #fef3f2; }
+.zcs-dim-row.high { background: #f0fdf4; }
+
+.zcs-dim-emoji { font-size: 1.1rem; flex-shrink: 0; }
+
+.zcs-dim-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zcs-dim-info strong { font-size: 0.85rem; }
+.zcs-dim-tier { font-size: 0.75rem; color: #888; }
+
+/* Next spoke CTA */
+.zcs-next-spoke {
+  text-align: left;
+  margin-top: 16px;
+}
+
+.zcs-spoke-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.zcs-spoke-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(94, 23, 235, 0.06);
+  border: 2px solid #5e17eb;
+  border-radius: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.zcs-spoke-card:hover { background: rgba(94, 23, 235, 0.1); }
+
+.zcs-spoke-emoji { font-size: 1.3rem; flex-shrink: 0; padding-top: 2px; }
+
+.zcs-spoke-card strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.zcs-spoke-card p {
+  font-size: 0.82rem;
+  color: #666;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.zcs-spoke-arrow {
+  margin-left: auto;
+  font-size: 1.1rem;
+  color: #5e17eb;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* Done button (after check-in) */
+.zcs-done-btn {
+  width: 100%;
+  margin-top: 16px;
+}

@@ -11,10 +11,15 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import PerQuestRadar from './PerQuestRadar'
 import HealingFlowModal from './HealingFlowModal'
+import ObservationCard from './ObservationCard'
 import { getVoiceDisplay, buildPatternMessage } from '../lib/voicePatternDetector'
+import { runObservationEngine } from '../lib/observationEngine'
 import { getDimensionById, getNumericTier } from '../data/domeDimensions'
+import { VIBE_RISE_DIMENSIONS } from '../data/vibeRiseDimensions'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import GenericRadar from './GenericRadar'
+import ZoneCalSection from './ZoneCalSection'
 import './ProgressTab.css'
 
 // ── Hero Stages with quadrant coordinates ──
@@ -161,6 +166,17 @@ export default function ProgressTab({ userId }) {
   // Quest names lookup
   const [questNames, setQuestNames] = useState({})
 
+  // Observations (Intelligence Observations system)
+  const [observations, setObservations] = useState([])
+
+  // Zone Cal
+  const [userEmail, setUserEmail] = useState(null)
+
+  // Aliveness baseline card
+  const [baselineNeededQuest, setBaselineNeededQuest] = useState(null) // { id, label } of first quest needing baseline
+  const [showBaselineFlow, setShowBaselineFlow] = useState(false)
+  const [baselineDismissed, setBaselineDismissed] = useState(false)
+
   useEffect(() => {
     if (!userId) return
     let mounted = true
@@ -182,6 +198,12 @@ export default function ProgressTab({ userId }) {
           reviewVoicesRes,
           monthlyGroanRes,
           stageProgressRes,
+          obsChallengesRes,
+          obsNsCheckinsRes,
+          obsDismissedRes,
+          obsPathFuelRes,
+          obsCrossPollinationRes,
+          alivenessBaselineRes,
         ] = await Promise.all([
           // Hero stage
           supabase.from('user_stage_progress')
@@ -218,12 +240,13 @@ export default function ProgressTab({ userId }) {
             .not('dimension_values', 'is', null)
             .gte('completed_at', weekStart + 'T00:00:00')
             .order('completed_at', { ascending: false }),
-          // Life fuel from quest_completions
+          // Completions (life fuel + observations need quest_id, aftertaste)
           supabase.from('quest_completions')
-            .select('reflection_text')
+            .select('reflection_text, quest_id, aftertaste, aftertaste_week_later')
             .eq('user_id', userId)
             .eq('quest_category', 'Groans')
-            .not('reflection_text', 'is', null),
+            .not('reflection_text', 'is', null)
+            .order('created_at', { ascending: true }),
           // Voice data: from challenges
           supabase.from('groan_challenges')
             .select('predicted_voice, gap_voice, completed_at, expansion_dimensions')
@@ -247,6 +270,35 @@ export default function ProgressTab({ userId }) {
             .eq('user_id', userId)
             .order('month_year', { ascending: false })
             .limit(1),
+          // Observations: all completed challenges (voice, dims, prediction, quest)
+          supabase.from('groan_challenges')
+            .select('id, status, gap_voice, dimension_values, completed_at, predicted_difficulty, experienced_difficulty, quest_id')
+            .eq('user_id', userId)
+            .eq('status', 'completed'),
+          // Observations: all NS checkins
+          supabase.from('nervous_system_checkins')
+            .select('before_state, after_state, created_at, source_challenge_id')
+            .eq('user_id', userId)
+            .not('before_state', 'is', null)
+            .order('created_at', { ascending: true }),
+          // Observations: dismissed observation IDs
+          supabase.from('user_dismissed_observations')
+            .select('observation_id')
+            .eq('user_id', userId),
+          // Observations: path fuel reviews
+          supabase.from('path_fuel_reviews')
+            .select('quest_id, choice, connection, mastery, meaning, week_of, created_at')
+            .eq('user_id', userId)
+            .order('week_of', { ascending: true }),
+          // Observations: cross-pollination
+          supabase.from('quest_cross_pollination')
+            .select('source_quest_id, target_quest_id')
+            .eq('user_id', userId),
+          // Aliveness baselines (for retroactive baseline card)
+          supabase.from('quest_aliveness_snapshots')
+            .select('quest_id, snapshot_type')
+            .eq('user_id', userId)
+            .eq('snapshot_type', 'baseline'),
         ])
 
         if (!mounted) return
@@ -254,6 +306,10 @@ export default function ProgressTab({ userId }) {
         // Process hero stage
         setHeroStage(stageRes.data?.current_journey_level || 0)
         setAvatarUrl(stageRes.data?.hero_avatar_url || null)
+
+        // Get user email for Zone Cal lead magnet bridge
+        const { data: { user: authUser } } = await supabase.auth.getUser()
+        if (mounted) setUserEmail(authUser?.email || null)
 
         // Process essence
         const essenceProfile = essenceRes.data?.[0]
@@ -287,6 +343,14 @@ export default function ProgressTab({ userId }) {
         const namesMap = {}
         questsRes.data?.forEach(q => { namesMap[q.id] = q.label })
         setQuestNames(namesMap)
+
+        // Find first quest needing aliveness baseline (most recently active first)
+        const baselineQuestIds = new Set((alivenessBaselineRes.data || []).map(s => s.quest_id))
+        const questsWithoutBaseline = (questsRes.data || [])
+          .filter(q => !baselineQuestIds.has(q.id))
+        if (questsWithoutBaseline.length > 0) {
+          setBaselineNeededQuest(questsWithoutBaseline[0])
+        }
 
         // Process NS checkins for evidence feed
         const groanIds = (groanRes.data || []).map(g => g.id)
@@ -448,6 +512,21 @@ export default function ProgressTab({ userId }) {
           })
         }
 
+        // ── Intelligence Observations ──
+        const dismissedIds = (obsDismissedRes.data || []).map(d => d.observation_id)
+        const obsQueue = runObservationEngine(
+          {
+            completions: completionsRes.data || [],
+            challenges: obsChallengesRes.data || [],
+            nsCheckins: obsNsCheckinsRes.data || [],
+            pathFuelReviews: obsPathFuelRes.data || [],
+            crossPollination: obsCrossPollinationRes.data || [],
+            questNames: namesMap,
+          },
+          dismissedIds
+        )
+        setObservations(obsQueue)
+
         // Check for unhealed voice patterns (shown but not explored)
         const { data: shownPatterns } = await supabase
           .from('voice_pattern_prompts')
@@ -490,6 +569,50 @@ export default function ProgressTab({ userId }) {
   }, [userId])
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
+
+  // Zone Cal Worth CTA → open healing voice selector
+  useEffect(() => {
+    const handler = () => {
+      if (voiceData?.voice) {
+        setUnhealedPattern({
+          voice: voiceData.voice,
+          name: getVoiceDisplay(voiceData.voice),
+          dimensions: ['worth'],
+        })
+      } else {
+        setUnhealedPattern({
+          voice: 'perfectionist',
+          name: 'The Perfectionist',
+          dimensions: ['worth'],
+        })
+      }
+      setShowHealing(true)
+    }
+    window.addEventListener('zonecal:healingVoice', handler)
+    return () => window.removeEventListener('zonecal:healingVoice', handler)
+  }, [voiceData])
+
+  // ── Observation handlers ──
+  const dismissObservation = async (observationId, resolutionKey) => {
+    setObservations(prev => prev.filter(o => o.id !== observationId))
+    const dismissKey = resolutionKey || observationId
+    if (userId) {
+      await supabase
+        .from('user_dismissed_observations')
+        .upsert({
+          user_id: userId,
+          observation_id: dismissKey,
+          dismissed_at: new Date().toISOString(),
+        }, { onConflict: 'user_id,observation_id' })
+    }
+  }
+
+  const handleAskZarlo = (context) => {
+    // Dispatch event to open Zarlo with pre-loaded observation context
+    window.dispatchEvent(new CustomEvent('zarlo:openWithContext', {
+      detail: { context, source: 'observation' }
+    }))
+  }
 
   // Setup completion map
   const setupComplete = useMemo(() => ({
@@ -696,6 +819,9 @@ export default function ProgressTab({ userId }) {
         )}
       </div>
 
+      {/* ═══ ZONE CAL ═══ */}
+      <ZoneCalSection userId={userId} userEmail={userEmail} hasEssence={hasEssence} />
+
       {/* ═══ ESSENCE CARD ═══ */}
       {hasEssence && essenceData && (
         <>
@@ -713,6 +839,75 @@ export default function ProgressTab({ userId }) {
             {essenceData.vision && (
               <div className="pt-essence-vision">{essenceData.vision}</div>
             )}
+          </div>
+        </>
+      )}
+
+      {/* ═══ ALIVENESS BASELINE CARD (retroactive) ═══ */}
+      {baselineNeededQuest && !baselineDismissed && !showBaselineFlow && (
+        <div className="pt-baseline-card" style={{
+          background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
+          borderRadius: 16, padding: '20px 16px', margin: '0 0 16px',
+          border: '1px solid rgba(94, 23, 235, 0.12)',
+        }}>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+            How alive are you on {baselineNeededQuest.label}?
+          </div>
+          <div style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+            Take a 60-second snapshot. 5 questions.
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={() => setShowBaselineFlow(true)}
+              style={{
+                flex: 1, padding: '10px 16px', borderRadius: 10,
+                background: '#5e17eb', color: '#fff', border: 'none',
+                fontWeight: 600, fontSize: 14, cursor: 'pointer',
+              }}>
+              Take snapshot
+            </button>
+            <button
+              onClick={() => setBaselineDismissed(true)}
+              style={{
+                padding: '10px 16px', borderRadius: 10,
+                background: '#f0ede8', color: '#666', border: 'none',
+                fontSize: 14, cursor: 'pointer',
+              }}>
+              Not now
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showBaselineFlow && baselineNeededQuest && (
+        <RetroactiveBaselineFlow
+          userId={userId}
+          quest={baselineNeededQuest}
+          onComplete={() => {
+            setShowBaselineFlow(false)
+            setBaselineNeededQuest(null)
+          }}
+          onDismiss={() => {
+            setShowBaselineFlow(false)
+            setBaselineDismissed(true)
+          }}
+        />
+      )}
+
+      {/* ═══ OBSERVATIONS (Intelligence Observations) ═══ */}
+      {observations.length > 0 && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">what your data shows...</span></div>
+          <div className="obs-section-header">Observations</div>
+          <div className="obs-section">
+            {observations.slice(0, 3).map(obs => (
+              <ObservationCard
+                key={obs.id}
+                observation={obs}
+                onDismiss={dismissObservation}
+                onAskZarlo={handleAskZarlo}
+              />
+            ))}
           </div>
         </>
       )}
@@ -981,6 +1176,121 @@ export default function ProgressTab({ userId }) {
         </>
       )}
 
+    </div>
+  )
+}
+
+/**
+ * RetroactiveBaselineFlow — inline 5-question aliveness baseline for existing paths.
+ * Shows inside ProgressTab, not a separate page.
+ */
+function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
+  const [step, setStep] = useState(0)
+  const [scores, setScores] = useState({})
+  const [saving, setSaving] = useState(false)
+  const allDone = Object.keys(scores).length === VIBE_RISE_DIMENSIONS.length
+  const isReveal = step >= VIBE_RISE_DIMENSIONS.length
+  const dim = VIBE_RISE_DIMENSIONS[step]
+
+  const saveBaseline = async () => {
+    if (saving) return
+    setSaving(true)
+    try {
+      await supabase.from('quest_aliveness_snapshots').insert({
+        user_id: userId,
+        quest_id: quest.id,
+        snapshot_type: 'baseline',
+        scores,
+      })
+    } catch (err) {
+      console.error('Baseline save failed:', err)
+      setSaving(false)
+      return
+    }
+    setSaving(false)
+    onComplete()
+  }
+
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
+      borderRadius: 16, padding: '20px 16px', margin: '0 0 16px',
+      border: '1px solid rgba(94, 23, 235, 0.12)',
+    }}>
+      <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{quest.label}</div>
+
+      {!isReveal && dim && (
+        <>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 16 }}>
+            {VIBE_RISE_DIMENSIONS.map((_, i) => (
+              <div key={i} style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: i < step ? '#5e17eb' : i === step ? '#E9A23B' : '#e0ddd8',
+              }} />
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', fontSize: 24, marginBottom: 4 }}>{dim.emoji}</div>
+          <div style={{ fontSize: 15, fontWeight: 600, textAlign: 'center', marginBottom: 16 }}>{dim.question}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {dim.anchors.map((anchor, i) => {
+              const score = i + 1
+              const selected = scores[dim.id] === score
+              return (
+                <button key={score}
+                  style={{
+                    padding: '10px 14px', borderRadius: 10, border: 'none',
+                    background: selected ? '#5e17eb' : '#f0ede8',
+                    color: selected ? '#fff' : '#333',
+                    fontSize: 13, textAlign: 'left', cursor: 'pointer',
+                    fontWeight: selected ? 600 : 400,
+                  }}
+                  onClick={() => {
+                    setScores(prev => ({ ...prev, [dim.id]: score }))
+                    setTimeout(() => setStep(prev => prev + 1), 300)
+                  }}>
+                  <span style={{ fontWeight: 700, marginRight: 8 }}>{score}</span> {anchor}
+                </button>
+              )
+            })}
+          </div>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+            {step > 0 && (
+              <button onClick={() => setStep(prev => prev - 1)}
+                style={{ padding: '8px 14px', borderRadius: 8, background: '#f0ede8', border: 'none', fontSize: 13, cursor: 'pointer' }}>
+                ← Back
+              </button>
+            )}
+            <button onClick={onDismiss}
+              style={{ padding: '8px 14px', borderRadius: 8, background: 'none', border: 'none', fontSize: 13, color: '#999', cursor: 'pointer' }}>
+              Cancel
+            </button>
+          </div>
+        </>
+      )}
+
+      {isReveal && allDone && (
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>Your aliveness snapshot</div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <GenericRadar
+              dimensions={VIBE_RISE_DIMENSIONS}
+              scores={scores}
+              maxLevel={5}
+              size={240}
+              animate
+            />
+          </div>
+          <button onClick={saveBaseline}
+            disabled={saving}
+            style={{
+              marginTop: 12, padding: '10px 24px', borderRadius: 10,
+              background: '#5e17eb', color: '#fff', border: 'none',
+              fontWeight: 600, fontSize: 14, cursor: 'pointer',
+            }}>
+            {saving ? 'Saving...' : 'Save snapshot'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
