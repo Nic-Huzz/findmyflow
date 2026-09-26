@@ -135,7 +135,7 @@ export default function FindBridgeFlow() {
 
             <div className="fbf-list">
               {(showAll ? getAllViableBridgeExperiences() : experiences).map((exp, i) => (
-                <div key={exp.label}>
+                <div key={exp.nodeId || exp.label}>
                   {i === 0 && !showAll && <div className="fbf-top-label">Top pick</div>}
                   <div
                     className={`fbf-exp-card ${selected?.label === exp.label ? 'selected' : ''} ${i === 0 && !showAll ? 'top-pick' : ''}`}
@@ -250,6 +250,7 @@ export default function FindBridgeFlow() {
                   hapticLight()
                   setExperiences(getAllViableBridgeExperiences())
                   setShowAll(true)
+                  setSelected(null)
                   setStep('pick')
                 }}>
                   <span>📋</span>
