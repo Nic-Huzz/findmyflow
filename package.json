@@ -40,6 +40,7 @@
     "@capacitor/ios": "^8.3.4",
     "@capacitor/local-notifications": "^8.2.1",
     "@capacitor/push-notifications": "^8.1.1",
+    "@heroicons/react": "^2.2.0",
     "@remotion/cli": "^4.0.419",
     "@remotion/google-fonts": "^4.0.419",
     "@remotion/player": "^4.0.419",

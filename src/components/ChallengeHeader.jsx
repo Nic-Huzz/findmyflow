@@ -12,14 +12,23 @@ import { getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS, getLevel } fro
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
+import {
+  FireIcon,
+  Cog6ToothIcon,
+  HomeIcon,
+  BookOpenIcon,
+  BellIcon,
+  TrophyIcon,
+  CursorArrowRaysIcon,
+} from '@heroicons/react/24/solid'
 // FestLeaderboard removed — re-add when user base exists
 
 // Week type display info
 const WEEK_TYPES = {
-  push: { label: 'Push', icon: '🔥', color: '#ef4444' },
+  push: { label: 'Push', icon: <FireIcon style={{ width: 14, height: 14, display: 'inline-block', verticalAlign: 'text-bottom' }} />, color: '#ef4444' },
   flow: { label: 'Flow', icon: '🌊', color: '#3b82f6' },
   rest: { label: 'Rest', icon: '🌙', color: '#8b5cf6' },
-  launch: { label: 'Launch', icon: '🎯', color: '#f59e0b' }
+  launch: { label: 'Launch', icon: <CursorArrowRaysIcon style={{ width: 14, height: 14, display: 'inline-block', verticalAlign: 'text-bottom' }} />, color: '#f59e0b' }
 }
 
 // Lighter variants for category score text in solo mode
@@ -181,7 +190,7 @@ function ChallengeHeader({
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
           <div className="streak-badge">
-            <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
+            <span className={`hero-streak-flame ${getFlameClass()}`}><FireIcon style={{ width: 20, height: 20 }} /></span>
             <span className="streak-badge-num">{streakDays}</span>
           </div>
           {/* Leaderboard + Community removed — re-add when user base exists */}
@@ -191,7 +200,7 @@ function ChallengeHeader({
               title="Settings"
               onClick={() => setShowSettingsMenu(!showSettingsMenu)}
             >
-              ⚙️
+              <Cog6ToothIcon style={{ width: 20, height: 20 }} />
             </button>
             {showSettingsMenu && (
               <div className="settings-dropdown">
@@ -202,7 +211,7 @@ function ChallengeHeader({
                     setShowSettingsMenu(false)
                   }}
                 >
-                  🏠 Home
+                  <HomeIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Home
                 </button>
                 <button
                   className="settings-menu-item"
@@ -211,7 +220,7 @@ function ChallengeHeader({
                     setShowSettingsMenu(false)
                   }}
                 >
-                  📖 Explainer
+                  <BookOpenIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Explainer
                 </button>
                 <button
                   className="settings-menu-item"
@@ -220,7 +229,7 @@ function ChallengeHeader({
                     setShowSettingsMenu(false)
                   }}
                 >
-                  🔔 Notifications
+                  <BellIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Notifications
                 </button>
                 <button
                   className="settings-menu-item"
@@ -229,7 +238,7 @@ function ChallengeHeader({
                     setShowSettingsMenu(false)
                   }}
                 >
-                  🏆 Fantasy League
+                  <TrophyIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Fantasy League
                 </button>
               </div>
             )}

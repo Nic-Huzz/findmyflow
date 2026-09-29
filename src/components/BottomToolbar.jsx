@@ -9,6 +9,19 @@
 
 import { useLocation } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
+import {
+  HomeIcon,
+  BoltIcon,
+  UserIcon,
+  SparklesIcon,
+  StarIcon,
+  ArrowTrendingUpIcon,
+  DevicePhoneMobileIcon,
+  CursorArrowRaysIcon,
+  RocketLaunchIcon,
+  HeartIcon,
+  WrenchScrewdriverIcon,
+} from '@heroicons/react/24/solid'
 import './BottomToolbar.css'
 
 const DMG_ARM64 = 'https://github.com/Nic-Huzz/findmyflow/releases/download/v1.0.0/Vibe-Rise-mac-arm64.dmg'
@@ -19,19 +32,19 @@ const MAIN_NAV_ITEMS = [
   {
     id: 'home',
     label: 'Home',
-    icon: '🏠',
+    icon: <HomeIcon />,
     path: '/me'
   },
   {
     id: 'challenge',
     label: "Let's Play",
-    icon: '⚡',
+    icon: <BoltIcon />,
     path: '/7-day-challenge'
   },
   {
     id: 'profile',
     label: 'Profile',
-    icon: '👤',
+    icon: <UserIcon />,
     path: '/profile-hub'
   }
 ]
@@ -43,32 +56,32 @@ const CREATE_NAV_ITEMS = [
   {
     id: 'identity',
     label: 'Identity',
-    icon: '✨',
+    icon: <SparklesIcon />,
     path: '/create'
   },
   {
     id: 'experiences',
     label: 'Experiences',
-    icon: '🎪',
+    icon: <StarIcon />,
     path: '/create/experiences'
   },
   {
     id: 'growth',
     label: 'Growth',
-    icon: '📈',
+    icon: <ArrowTrendingUpIcon />,
     path: '/create/growth'
   },
   ...(isElectron ? [{
     id: 'ai-portal',
     label: 'Terminal',
-    icon: '⚡',
+    icon: <BoltIcon />,
     path: '/create/terminal'
   }] : []),
   // Profile tab archived — needs creator-specific version, not consumer /profile-hub
   {
     id: 'get-app',
     label: 'Get App',
-    icon: '📲',
+    icon: <DevicePhoneMobileIcon />,
     isModal: true,
   }
 ]
@@ -78,31 +91,31 @@ const CRM_NAV_ITEMS = [
   {
     id: 'home',
     label: 'Home',
-    icon: '🏠',
+    icon: <HomeIcon />,
     path: '/crm'
   },
   {
     id: 'attract',
     label: 'Attract',
-    icon: '🎯',
+    icon: <CursorArrowRaysIcon />,
     path: '/crm/attract'
   },
   {
     id: 'execute',
     label: 'Execute',
-    icon: '🚀',
+    icon: <RocketLaunchIcon />,
     path: '/crm/execute'
   },
   {
     id: 'nurture',
     label: 'Nurture',
-    icon: '💜',
+    icon: <HeartIcon />,
     path: '/crm/nurture'
   },
   {
     id: 'tools',
     label: 'Tools',
-    icon: '🧰',
+    icon: <WrenchScrewdriverIcon />,
     path: '/crm/tools'
   }
 ]
@@ -168,7 +181,7 @@ function DownloadPopup({ onClose }) {
     <div className="dl-popup-overlay">
       <div className="dl-popup" ref={ref}>
         <button className="dl-popup-close" onClick={onClose}>&times;</button>
-        <div className="dl-popup-icon">📲</div>
+        <div className="dl-popup-icon"><DevicePhoneMobileIcon style={{ width: 40, height: 40, color: '#5e17eb' }} /></div>
         <h3 className="dl-popup-title">Get the Scale app</h3>
         <p className="dl-popup-sub">Quick access from your desktop or home screen.</p>
 

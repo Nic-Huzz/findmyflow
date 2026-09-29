@@ -86,8 +86,16 @@ body.project-selector-active .bottom-toolbar {
 }
 
 .toolbar-icon {
-  font-size: 1.5rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.toolbar-icon svg {
+  width: 24px;
+  height: 24px;
 }
 
 .toolbar-label {
@@ -243,7 +251,13 @@ body.project-selector-active .bottom-toolbar {
   }
 
   .toolbar-icon {
-    font-size: 1.25rem;
+    width: 20px;
+    height: 20px;
+  }
+
+  .toolbar-icon svg {
+    width: 20px;
+    height: 20px;
   }
 
   .toolbar-label {
@@ -303,7 +317,13 @@ body.project-selector-active .bottom-toolbar {
   }
 
   .toolbar-icon {
-    font-size: 1.3rem;
+    width: 22px;
+    height: 22px;
+  }
+
+  .toolbar-icon svg {
+    width: 22px;
+    height: 22px;
   }
 
   .toolbar-label {
