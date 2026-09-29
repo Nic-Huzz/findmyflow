@@ -12,6 +12,7 @@ import { getDimensionById } from '../data/domeDimensions'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
+import DomeGrowthOverlay from './DomeGrowthOverlay'
 import WahooCreator from './WahooCreator'
 import {
   BoltIcon,
@@ -63,6 +64,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [healingIntentions, setHealingIntentions] = useState({})
   const [outcomeTaskId, setOutcomeTaskId] = useState(null)
   const [groanModalChallenge, setGroanModalChallenge] = useState(null)
+  const [domeGrowthData, setDomeGrowthData] = useState(null)
   const [signalTaskId, setSignalTaskId] = useState(null)
   const [expandedTaskId, setExpandedTaskId] = useState(null)
   const [collapsedExps, setCollapsedExps] = useState(new Set())
@@ -636,9 +638,12 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
         <GroanCompletionModal
           challenge={groanModalChallenge}
           userId={userId}
-          onComplete={() => { setGroanModalChallenge(null); onUpdate?.() }}
+          onComplete={(data) => { setGroanModalChallenge(null); setDomeGrowthData(data); onUpdate?.() }}
           onClose={() => setGroanModalChallenge(null)}
         />
+      )}
+      {domeGrowthData && (
+        <DomeGrowthOverlay {...domeGrowthData} onDismiss={() => setDomeGrowthData(null)} />
       )}
 
       {/* WahooCreator popup */}

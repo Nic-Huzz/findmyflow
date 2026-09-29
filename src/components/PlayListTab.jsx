@@ -18,6 +18,7 @@ import { getWeekStartLocal } from '../lib/dateUtils'
 import { findSkillSegment } from '../lib/wheelTaxonomy'
 import { hapticLight } from '../lib/haptics'
 import GroanCompletionModal from './GroanCompletionModal'
+import DomeGrowthOverlay from './DomeGrowthOverlay'
 import WahooCreator from './WahooCreator'
 import WahooDiscoveryFlow from './WahooDiscoveryFlow'
 import WahooInspiration from './WahooInspiration'
@@ -37,6 +38,7 @@ export default function PlayListTab({
   const [loading, setLoading] = useState(true)
   const [activeChallenges, setActiveChallenges] = useState([])
   const [completingChallenge, setCompletingChallenge] = useState(null)
+  const [domeGrowthData, setDomeGrowthData] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [wahooCreatorKey, setWahooCreatorKey] = useState(0)
   const [showWahooModal, setShowWahooModal] = useState(false)
@@ -379,13 +381,17 @@ export default function PlayListTab({
           <GroanCompletionModal
             challenge={completingChallenge}
             userId={userId}
-            onComplete={() => {
+            onComplete={(data) => {
               setCompletingChallenge(null)
+              setDomeGrowthData(data)
               fetchActiveChallenges()
               onRefreshPoints?.()
             }}
             onClose={() => setCompletingChallenge(null)}
           />
+        )}
+        {domeGrowthData && (
+          <DomeGrowthOverlay {...domeGrowthData} onDismiss={() => setDomeGrowthData(null)} />
         )}
       </div>
     )
@@ -499,13 +505,17 @@ export default function PlayListTab({
         <GroanCompletionModal
           challenge={completingChallenge}
           userId={userId}
-          onComplete={() => {
+          onComplete={(data) => {
             setCompletingChallenge(null)
+            setDomeGrowthData(data)
             fetchActiveChallenges()
             onRefreshPoints?.()
           }}
           onClose={() => setCompletingChallenge(null)}
         />
+      )}
+      {domeGrowthData && (
+        <DomeGrowthOverlay {...domeGrowthData} onDismiss={() => setDomeGrowthData(null)} />
       )}
 
       {/* Healing flow modal (standalone or resume) */}
