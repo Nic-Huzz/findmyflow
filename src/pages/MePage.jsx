@@ -45,7 +45,7 @@ export default function MePage() {
 
   // First-visit welcome card — persisted in Supabase
   const [showWelcome, setShowWelcome] = useState(false)
-  const [essenceMirrorDone, setEssenceMirrorDone] = useState(true) // default true to avoid flash
+  // essenceMirrorDone removed — welcome banner no longer branches on it
   const [hasWoundMap, setHasWoundMap] = useState(false)
   useEffect(() => {
     if (!user?.id) return
@@ -59,13 +59,13 @@ export default function MePage() {
         .eq('user_id', user.id)
         .limit(1),
     ]).then(([{ data: stageData }, { data: questsData }]) => {
-      setEssenceMirrorDone(!!stageData?.essence_mirror_completed)
+      // essenceMirrorDone check removed — welcome banner no longer branches on it
       // Show welcome banner only if not dismissed AND user has no quests yet
       // (existing active users with quests skip this)
       const hasQuests = questsData?.length > 0
       if (!stageData?.welcome_dismissed && !hasQuests) setShowWelcome(true)
     }).catch(() => {
-      setEssenceMirrorDone(false) // safe fallback: show pre-essence CTA
+      // essenceMirrorDone fallback removed
     })
     // Check wound map completion (4+ stage selections)
     supabase.from('journey_onboarding_selections')
@@ -512,29 +512,15 @@ export default function MePage() {
         </div>
       </section>
 
-      {/* Welcome banner — two states: pre-essence and post-essence */}
-      {!essenceMirrorDone ? (
+      {/* Welcome banner — single CTA to journey hub */}
+      {showWelcome && (
         <section className="welcome-banner">
           <h3 className="welcome-banner-start-here">Start Here:</h3>
-          <div className="welcome-banner-inner">
-            <div className="welcome-banner-icon">✨</div>
-            <h2 className="welcome-banner-title">Discover your essence</h2>
-            <p className="welcome-banner-text">
-              Find out which archetype drives you. It takes 5 minutes and changes how you see yourself.
-            </p>
-            <button className="welcome-banner-cta" onClick={() => navigate('/essence-mirror?returnTo=/me')}>
-              Start Essence Mirror <span>→</span>
-            </button>
-          </div>
-        </section>
-      ) : !showWelcome ? null : (
-        <section className="welcome-banner">
-          <h3 className="welcome-banner-start-here">Next Step:</h3>
           <div className="welcome-banner-inner welcome-banner-play">
-            <div className="welcome-banner-icon">🎮</div>
+            <div className="welcome-banner-icon">⚡</div>
             <h2 className="welcome-banner-title">Start finding your flow</h2>
             <p className="welcome-banner-text">
-              Your essence is discovered. Now it's time to play. Build daily habits, explore your curiosities, and take your first brave action.
+              Discover what lights you up. Turn it into paths. Watch your comfort zone grow.
             </p>
             <button className="welcome-banner-cta" onClick={() => { dismissWelcome(); navigate('/7-day-challenge') }}>
               Let's Play <span>→</span>
@@ -601,44 +587,46 @@ export default function MePage() {
       {/* ============================================================
          SECTION 4: HERO PROFILE
          ============================================================ */}
-      <section className="hero-profile-section">
-        <div className="hero-profile-card" onClick={() => navigate('/archetypes/essence')}>
-          <div className="hp-top">
-            <div className="hp-avatar">
-              <div className="hp-avatar-inner">🎭</div>
+      {archetypes?.essence?.name && (
+        <section className="hero-profile-section">
+          <div className="hero-profile-card" onClick={() => navigate('/archetypes/essence')}>
+            <div className="hp-top">
+              <div className="hp-avatar">
+                <div className="hp-avatar-inner">🎭</div>
+              </div>
+              <div className="hp-identity">
+                <div className="hp-name">Your Hero Profile</div>
+                <div className="hp-tagline">
+                  {archetypes.essence.name}
+                </div>
+              </div>
+              <span className="hp-chevron">›</span>
             </div>
-            <div className="hp-identity">
-              <div className="hp-name">Your Hero Profile</div>
-              <div className="hp-tagline">
-                {archetypes?.essence?.name || 'Your Essence'}
+
+            <div className="hp-divider" />
+
+            {/* Essence */}
+            <div className="hp-essence">
+              <div className="hp-essence-photo">
+                <div className="hp-essence-photo-ring" />
+                <div className="hp-essence-photo-img">
+                  {archetypes.essence.image ? (
+                    <img src={archetypes.essence.image} alt={archetypes.essence.name} />
+                  ) : '✨'}
+                </div>
+              </div>
+              <div className="hp-essence-info">
+                <div className="hp-essence-name">{archetypes.essence.name}</div>
+                <div className="hp-essence-desc">{archetypes.essence.tagline || ''}</div>
               </div>
             </div>
-            <span className="hp-chevron">›</span>
-          </div>
 
-          <div className="hp-divider" />
-
-          {/* Essence */}
-          <div className="hp-essence">
-            <div className="hp-essence-photo">
-              <div className="hp-essence-photo-ring" />
-              <div className="hp-essence-photo-img">
-                {archetypes?.essence?.image ? (
-                  <img src={archetypes.essence.image} alt={archetypes.essence.name} />
-                ) : '✨'}
-              </div>
-            </div>
-            <div className="hp-essence-info">
-              <div className="hp-essence-name">{archetypes?.essence?.name || 'Your Essence'}</div>
-              <div className="hp-essence-desc">{archetypes?.essence?.tagline || ''}</div>
+            <div className="hp-full-link">
+              View Essence Profile <span>→</span>
             </div>
           </div>
-
-          <div className="hp-full-link">
-            View Essence Profile <span>→</span>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   )
 }

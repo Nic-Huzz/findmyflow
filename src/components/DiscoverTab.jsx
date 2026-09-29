@@ -35,7 +35,10 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
   const [domeExpanded, setDomeExpanded] = useState(false)
   const [hasCurrentJob, setHasCurrentJob] = useState(false)
   const [hasChosenQuests, setHasChosenQuests] = useState(false)
-  const [showHowItWorks, setShowHowItWorks] = useState(() => !localStorage.getItem('hasSeenPortalExplainer'))
+  // Step banner dismiss state (initialized from localStorage, immutable after dismiss)
+  const [step2Dismissed, setStep2Dismissed] = useState(() =>
+    localStorage.getItem('step2_banner_dismissed') === 'true'
+  )
 
   useEffect(() => {
     if (!userId) return
@@ -168,35 +171,20 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         <div className="dt-revisit-label">Revisit</div>
       )}
 
-      {/* How it works — dismissible card for first-time users */}
-      {showHowItWorks && (
-        <div className="dt-how-card">
-          <button className="dt-how-close" onClick={() => { setShowHowItWorks(false); localStorage.setItem('hasSeenPortalExplainer', 'true') }}>×</button>
-          <div className="dt-how-accent" />
-          <div className="dt-how-title">Here's how this works</div>
-          <div className="dt-how-steps">
-            <div className="dt-how-step">
-              <span className="dt-how-icon">🎮</span>
-              <div>
-                <span className="dt-how-label">Discover</span>
-                <span className="dt-how-desc">Tick experiences you love. The more you tick, the clearer your path gets.</span>
-              </div>
-            </div>
-            <div className="dt-how-step">
-              <span className="dt-how-icon">🗺️</span>
-              <div>
-                <span className="dt-how-label">Paths</span>
-                <span className="dt-how-desc">Turn those experiences into life paths with projects and courage challenges.</span>
-              </div>
-            </div>
-            <div className="dt-how-step">
-              <span className="dt-how-icon">📈</span>
-              <div>
-                <span className="dt-how-label">Progress</span>
-                <span className="dt-how-desc">Watch your life transform as your comfort zone grows.</span>
-              </div>
-            </div>
-          </div>
+      {/* Step 1 banner — shows until all 3 discovery flows complete */}
+      {!hasChosenQuests && (
+        <div className="dt-step-banner">
+          <span className="dt-step-banner-label">Step 1.</span>
+          <span className="dt-step-banner-text">Discover experiences you love.</span>
+        </div>
+      )}
+
+      {/* Step 2 banner — shows when bridge unlocks */}
+      {hasChosenQuests && !step2Dismissed && (
+        <div className="dt-step-banner">
+          <span className="dt-step-banner-label">Step 2.</span>
+          <span className="dt-step-banner-text">Turn those experiences into life paths with projects and courage challenges.</span>
+          <button className="dt-step-banner-close" onClick={() => { localStorage.setItem('step2_banner_dismissed', 'true'); setStep2Dismissed(true) }}>×</button>
         </div>
       )}
 
@@ -253,37 +241,39 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         </div>
       )}
 
-      {/* Step 1: Essence Mirror */}
-      <button className="dt-card" onClick={() => navigate('/essence-mirror')}>
-        <div className="dt-card-header">
-          <span className="dt-card-icon">{essenceDone ? '✅' : '✨'}</span>
-          <span className="dt-card-title">{essenceDone ? 'Your Essence' : 'Discover Your Essence'}</span>
-        </div>
-        <p className="dt-card-desc">
-          {essenceDone
-            ? 'Revisit your archetype and hero avatar.'
-            : 'Who are you at your core? Your spawn point in the game.'}
-        </p>
-        <span className="dt-card-arrow">→</span>
-      </button>
-
-      {/* Step 2: Experience Dome */}
+      {/* Step 1a: Experience Game — always visible, first action */}
       <button className="dt-card" onClick={() => navigate('/experience-game')}>
         <div className="dt-card-header">
-          <span className="dt-card-icon">{domeCount > 0 ? '✅' : '🎮'}</span>
+          <span className="dt-card-icon">{domeCount > 0 ? '✅' : '⚡'}</span>
           <span className="dt-card-title">{domeCount > 0 ? 'Experience Dome' : 'Play the Experience Game'}</span>
           {domeCount > 0 && <span className="dt-card-badge">{domeCount} rated</span>}
         </div>
         <p className="dt-card-desc">
           {domeCount > 0
             ? 'Revisit or rate more experiences.'
-            : 'What experiences light you up? Rate them with your nervous system.'}
+            : 'What experiences light you up?'}
         </p>
         <span className="dt-card-arrow">→</span>
       </button>
 
-      {/* Current Job CTA — sits under Experience Dome, before the viz */}
+      {/* Step 1b: Essence Mirror — shows after dome has data */}
       {domeCount > 0 && (
+        <button className="dt-card" onClick={() => navigate('/essence-mirror')}>
+          <div className="dt-card-header">
+            <span className="dt-card-icon">{essenceDone ? '✅' : '✨'}</span>
+            <span className="dt-card-title">{essenceDone ? 'Your Essence' : 'Discover Your Essence'}</span>
+          </div>
+          <p className="dt-card-desc">
+            {essenceDone
+              ? 'Revisit your archetype and hero avatar.'
+              : 'Who are you at your core?'}
+          </p>
+          <span className="dt-card-arrow">→</span>
+        </button>
+      )}
+
+      {/* Step 1c: Current Job — shows after essence done */}
+      {essenceDone && domeCount > 0 && (
         <button className="dt-card" onClick={() => navigate('/add-current-job')}>
           <div className="dt-card-header">
             <span className="dt-card-icon">{hasCurrentJob ? '✅' : '💼'}</span>
@@ -292,7 +282,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
           <p className="dt-card-desc">
             {hasCurrentJob
               ? 'Revisit what\'s alive in your job.'
-              : 'Find what\'s already alive in your job. Creates your first path.'}
+              : 'Find what\'s already alive in your job.'}
           </p>
           <span className="dt-card-arrow">→</span>
         </button>

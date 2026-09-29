@@ -12,7 +12,7 @@ import { getLevelProgress, getLevelMaxXP, getLevelNumber, LEVELS, getLevel } fro
 import { FANTASY_CATEGORIES } from '../lib/league/leagueConfig'
 import { useScoreAnimation } from '../hooks/useScoreAnimation'
 import JourneyGraphPopup from './JourneyGraphPopup'
-import FestLeaderboard from './FestLeaderboard'
+// FestLeaderboard removed — re-add when user base exists
 
 // Week type display info
 const WEEK_TYPES = {
@@ -48,7 +48,7 @@ function ChallengeHeader({
 }) {
   const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
-  const [showLeaderboard, setShowLeaderboard] = useState(false)
+  // showLeaderboard removed — re-add when user base exists
   const [fetchedXP, setFetchedXP] = useState(null)
   const prevXPRef = useRef(0)
 
@@ -184,18 +184,7 @@ function ChallengeHeader({
             <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
             <span className="streak-badge-num">{streakDays}</span>
           </div>
-          <button
-            className="challenge-journey-btn"
-            onClick={() => setShowLeaderboard(true)}
-          >
-            🏆 Leaderboard
-          </button>
-          <button
-            className="challenge-journey-btn"
-            onClick={() => navigate('/community')}
-          >
-            📣 Community
-          </button>
+          {/* Leaderboard + Community removed — re-add when user base exists */}
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button
               className="challenge-day settings-badge"
@@ -263,12 +252,7 @@ function ChallengeHeader({
         currentLevel={1}
       />
 
-      {showLeaderboard && (
-        <FestLeaderboard
-          userId={user?.id}
-          onClose={() => setShowLeaderboard(false)}
-        />
-      )}
+      {/* FestLeaderboard removed — re-add when user base exists */}
     </header>
   )
 }

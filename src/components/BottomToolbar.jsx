@@ -25,14 +25,8 @@ const MAIN_NAV_ITEMS = [
   {
     id: 'challenge',
     label: "Let's Play",
-    icon: '🎮',
+    icon: '⚡',
     path: '/7-day-challenge'
-  },
-  {
-    id: 'league',
-    label: 'League',
-    icon: '🏆',
-    path: '/league'
   },
   {
     id: 'profile',

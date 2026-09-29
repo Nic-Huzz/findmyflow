@@ -179,6 +179,11 @@ export function useGhostMatchup({ completions, userId }) {
   // ─── Matchup data (for ChallengeHeader compat) ───
   const matchupData = useMemo(() => {
     if (!ghostRow || loading) return null
+    // Week 1: no ghost to race yet — hide matchup UI entirely
+    const ghostScores = ghostRow.ghost_daily_scores
+    const hasGhostScores = ghostScores && Object.keys(ghostScores).length > 0 &&
+      Object.values(ghostScores).some(day => day && typeof day === 'object' && Object.values(day).some(v => v > 0))
+    if (!hasGhostScores) return null
 
     const categories = comparison.categories.map(cat => ({
       key: cat.key === 'community' ? 'reach' : cat.key,

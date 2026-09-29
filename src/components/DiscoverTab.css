@@ -13,6 +13,43 @@
   font-size: 14px;
 }
 
+/* Step banners — progressive reveal */
+.dt-step-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06));
+  border: 1px solid rgba(94,23,235,0.12);
+  border-radius: 14px;
+  position: relative;
+}
+
+.dt-step-banner-label {
+  font-weight: 800;
+  font-size: 14px;
+  color: #5e17eb;
+  white-space: nowrap;
+}
+
+.dt-step-banner-text {
+  font-size: 14px;
+  color: #1a1a2e;
+  line-height: 1.4;
+}
+
+.dt-step-banner-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+}
+
 /* How it works card */
 .dt-how-card {
   background: #ffffff;

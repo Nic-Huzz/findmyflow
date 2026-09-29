@@ -198,6 +198,19 @@ function Challenge() {
   const [showIntro, setShowIntro] = useState(false)
   const [introChecked, setIntroChecked] = useState(false)
 
+  // NotificationPrompt deferred to second visit — reads once on mount, stays false for first visit
+  const [challengeVisitedOnce] = useState(() =>
+    localStorage.getItem('challenge_visited_once') === 'true'
+  )
+
+  // Step banner dismiss state (Paths + Progress tabs)
+  const [step2PathsSeen, setStep2PathsSeen] = useState(() =>
+    localStorage.getItem('step2_banner_seen_paths') === 'true'
+  )
+  const [step3Seen, setStep3Seen] = useState(() =>
+    localStorage.getItem('step3_banner_seen') === 'true'
+  )
+
   useEffect(() => {
     if (!user?.id) return
     supabase
@@ -228,28 +241,40 @@ function Challenge() {
 
   useEffect(() => {
     if (!user?.id) return
-    const now = new Date()
-    const hour = now.getHours()
 
-    // Determine current window start: midnight, 1pm, or 6pm
-    const windowStart = new Date(now)
-    if (hour >= 18) {
-      windowStart.setHours(18, 0, 0, 0)
-    } else if (hour >= 13) {
-      windowStart.setHours(13, 0, 0, 0)
-    } else {
-      windowStart.setHours(0, 0, 0, 0)
-    }
-
-    supabase
-      .from('nervous_system_checkins')
+    // Don't show NS checkin until user has life paths (completed choose-quests)
+    supabase.from('quests')
       .select('id')
       .eq('user_id', user.id)
-      .eq('checkin_type', 'daily')
-      .gte('created_at', windowStart.toISOString())
+      .eq('is_current_job', false)
+      .eq('status', 'active')
       .limit(1)
-      .then(({ data }) => {
-        if (!data?.length) setShowDailyCheckin(true)
+      .then(({ data: quests }) => {
+        if (!quests?.length) return // No life paths yet
+
+        const now = new Date()
+        const hour = now.getHours()
+
+        // Determine current window start: midnight, 1pm, or 6pm
+        const windowStart = new Date(now)
+        if (hour >= 18) {
+          windowStart.setHours(18, 0, 0, 0)
+        } else if (hour >= 13) {
+          windowStart.setHours(13, 0, 0, 0)
+        } else {
+          windowStart.setHours(0, 0, 0, 0)
+        }
+
+        supabase
+          .from('nervous_system_checkins')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('checkin_type', 'daily')
+          .gte('created_at', windowStart.toISOString())
+          .limit(1)
+          .then(({ data }) => {
+            if (!data?.length) setShowDailyCheckin(true)
+          })
       })
   }, [user?.id])
 
@@ -1368,7 +1393,7 @@ function Challenge() {
   // ============================================
 
   if (showIntro) {
-    return <ChallengeIntro userId={user?.id} onComplete={() => setShowIntro(false)} />
+    return <ChallengeIntro userId={user?.id} onComplete={() => { setShowIntro(false); localStorage.setItem('challenge_visited_once', 'true') }} />
   }
 
   if (showOnboarding) {
@@ -1473,7 +1498,8 @@ function Challenge() {
         setCapacityRefresh(n => n + 1)
         recheckStage()
       }} />}
-      <NotificationPrompt />
+      {/* NotificationPrompt deferred to second visit */}
+      {challengeVisitedOnce && <NotificationPrompt />}
       <ChallengeHeader
         navigate={navigate}
         settingsMenuRef={settingsMenuRef}
@@ -1672,6 +1698,13 @@ function Challenge() {
         )}
 
         {/* Progress Tab — reporting scorecard */}
+        {activeCategory === 'Progress' && !step3Seen && (
+          <div className="dt-step-banner" style={{ margin: '0 0 12px' }}>
+            <span className="dt-step-banner-label">Step 3.</span>
+            <span className="dt-step-banner-text">Watch your life transform as your comfort zone grows.</span>
+            <button className="dt-step-banner-close" onClick={() => { localStorage.setItem('step3_banner_seen', 'true'); setStep3Seen(true) }}>×</button>
+          </div>
+        )}
         {activeCategory === 'Progress' && (
           <ProgressTab userId={user?.id} />
         )}
@@ -1704,6 +1737,13 @@ function Challenge() {
         )}
 
         {/* Level Tab */}
+        {activeCategory === 'Paths' && !step2PathsSeen && (
+          <div className="dt-step-banner" style={{ margin: '0 0 12px' }}>
+            <span className="dt-step-banner-label">Step 2.</span>
+            <span className="dt-step-banner-text">Turn those experiences into life paths with projects and courage challenges.</span>
+            <button className="dt-step-banner-close" onClick={() => { localStorage.setItem('step2_banner_seen_paths', 'true'); setStep2PathsSeen(true) }}>×</button>
+          </div>
+        )}
         {activeCategory === 'Paths' && (
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))

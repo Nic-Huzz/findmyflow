@@ -33,7 +33,7 @@ const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
 
 // Onboarding localStorage keys (must match ChallengeOnboarding.jsx)
 const INSTALL_SEEN_KEY = 'hasSeenChallengeInstallPrompt'
-const NOTIFICATIONS_SEEN_KEY = 'hasSeenNotificationsPrompt'
+// NOTIFICATIONS_SEEN_KEY removed — full-page notification prompt no longer triggered from here
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
@@ -1682,27 +1682,25 @@ export function useChallengeData() {
   const checkNotificationOnboarding = async () => {
     if (!user?.id) return
 
+    // Skip install prompt in native app — already installed
+    const isNative = window.Capacitor?.isNativePlatform?.() ||
+                     window.navigator.standalone === true ||
+                     window.matchMedia('(display-mode: standalone)').matches
+
     const hasSeenInstall = localStorage.getItem(INSTALL_SEEN_KEY)
-    if (!hasSeenInstall) {
+    if (!hasSeenInstall && !isNative) {
       setOnboardingScreen('install-app')
       setShowOnboarding(true)
       return
     }
 
-    // Already installed — check if push notifications are set up
-    const hasSeenNotifications = localStorage.getItem(NOTIFICATIONS_SEEN_KEY)
-    if (hasSeenNotifications) return
-
-    const { data: pushSub } = await supabase
-      .from('push_subscriptions')
-      .select('id')
-      .eq('user_id', user.id)
-      .limit(1)
-
-    if (!pushSub || pushSub.length === 0) {
-      setOnboardingScreen('enable-notifications')
-      setShowOnboarding(true)
+    // Mark as seen if native (so it never fires even after app update)
+    if (isNative && !hasSeenInstall) {
+      localStorage.setItem(INSTALL_SEEN_KEY, 'true')
     }
+
+    // Full-page notification prompt removed — users can enable via Settings
+    // Inline NotificationPrompt banner on Challenge page handles the nudge
   }
 
   // Reload validation response counts when project changes

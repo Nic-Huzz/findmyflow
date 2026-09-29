@@ -13,25 +13,24 @@ import './ChallengeIntro.css'
 
 const SLIDES = [
   {
-    heading: 'Something cracked. That\'s not a breakdown. That\'s your origin story.',
+    heading: 'Step 1.',
     body: [
-      'Every hero starts here. The old version stopped working.',
-      'Good.',
+      'Discover experiences you love.',
     ],
-    duration: 6000,
+    duration: null,
   },
   {
-    heading: 'Here\'s what happens next.',
+    heading: 'Step 2.',
     body: [
-      'Step 1: Discover what lights you up.',
-      'Step 2: Turn them into life paths.',
-      'Step 3: Face what scares you. Watch your comfort zone grow.',
+      'Turn those experiences into life paths with projects and courage challenges.',
     ],
-    duration: 8000,
+    duration: null,
   },
   {
-    heading: 'Your quest starts now.',
-    body: [],
+    heading: 'Step 3.',
+    body: [
+      'Watch your life transform as your comfort zone grows.',
+    ],
     duration: null,
     hasButton: true,
   },
