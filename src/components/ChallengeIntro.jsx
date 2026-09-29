@@ -89,10 +89,12 @@ export default function ChallengeIntro({ userId, onComplete }) {
             ))}
           </div>
         )}
-        {slide.hasButton && (
+        {slide.hasButton ? (
           <button className="challenge-intro-cta" onClick={handleComplete}>
             Begin Your Journey
           </button>
+        ) : (
+          <p className="challenge-intro-tap-hint">Tap to continue</p>
         )}
       </div>
 
