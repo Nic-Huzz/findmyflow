@@ -12,15 +12,34 @@ import { getWeekStartLocal } from '../lib/dateUtils'
 import { getScoringCategory } from '../lib/scoringCategories'
 import { NERVOUS_SYSTEM_STATES } from '../lib/nervousSystemConstants'
 import RegulationCard from './RegulationCard'
+import {
+  BoltIcon,
+  FaceSmileIcon,
+  ExclamationTriangleIcon,
+  MinusCircleIcon,
+  BriefcaseIcon,
+  UserIcon,
+  HomeIcon,
+  DevicePhoneMobileIcon,
+  ClipboardDocumentListIcon,
+} from '@heroicons/react/24/solid'
 import './DailyCheckin.css'
 
 const DRAIN_CATEGORIES = [
-  { id: 'drain_work', label: 'Work', icon: '💼' },
-  { id: 'drain_people', label: 'People', icon: '👤' },
-  { id: 'drain_environment', label: 'Environment', icon: '🏠' },
-  { id: 'drain_content', label: 'Content', icon: '📱' },
-  { id: 'drain_commitment', label: 'Commitment', icon: '📋' },
+  { id: 'drain_work', label: 'Work', icon: <BriefcaseIcon style={{ width: 18, height: 18 }} /> },
+  { id: 'drain_people', label: 'People', icon: <UserIcon style={{ width: 18, height: 18 }} /> },
+  { id: 'drain_environment', label: 'Environment', icon: <HomeIcon style={{ width: 18, height: 18 }} /> },
+  { id: 'drain_content', label: 'Content', icon: <DevicePhoneMobileIcon style={{ width: 18, height: 18 }} /> },
+  { id: 'drain_commitment', label: 'Commitment', icon: <ClipboardDocumentListIcon style={{ width: 18, height: 18 }} /> },
 ]
+
+// Map NS state IDs to Heroicon components for the daily checkin buttons
+const NS_ICONS = {
+  vibe_rise: <BoltIcon style={{ width: 24, height: 24 }} />,
+  ventral: <FaceSmileIcon style={{ width: 24, height: 24 }} />,
+  sympathetic: <ExclamationTriangleIcon style={{ width: 24, height: 24 }} />,
+  dorsal: <MinusCircleIcon style={{ width: 24, height: 24 }} />,
+}
 
 const isDysregulated = (state) => state === 'sympathetic' || state === 'dorsal'
 
@@ -111,7 +130,7 @@ export default function DailyCheckin({ userId, onComplete }) {
             }}>
               Skip
             </button>
-            <span className="daily-checkin-emoji">🧠</span>
+            <span className="daily-checkin-emoji"><BoltIcon style={{ width: 32, height: 32, color: '#5e17eb' }} /></span>
             <h3 className="daily-checkin-title">How are you right now?</h3>
             <p className="daily-checkin-sub">Quick daily check-in to track your nervous system</p>
             <div className="daily-checkin-states">
@@ -122,7 +141,7 @@ export default function DailyCheckin({ userId, onComplete }) {
                   className={`daily-checkin-btn ${selectedState === state.id ? 'selected' : ''} ${state.id === 'vibe_rise' ? 'daily-checkin-vibe-rise' : ''}`}
                   onClick={() => handleSelect(state.id)}
                 >
-                  <span className="daily-checkin-btn-emoji">{state.emoji}</span>
+                  <span className="daily-checkin-btn-emoji">{NS_ICONS[state.id] || state.emoji}</span>
                   <span className="daily-checkin-btn-text">
                     <span className="daily-checkin-btn-name">{state.name}</span>
                     <span className="daily-checkin-btn-label">{state.label}</span>
@@ -139,7 +158,9 @@ export default function DailyCheckin({ userId, onComplete }) {
               ← Back
             </button>
             <span className="daily-checkin-emoji">
-              {selectedState === 'dorsal' ? '😶' : '😬'}
+              {selectedState === 'dorsal'
+                ? <MinusCircleIcon style={{ width: 32, height: 32, color: '#6b7280' }} />
+                : <ExclamationTriangleIcon style={{ width: 32, height: 32, color: '#ef4444' }} />}
             </span>
             <h3 className="daily-checkin-title">What created this?</h3>
             <p className="daily-checkin-sub">Naming it is the first step back</p>

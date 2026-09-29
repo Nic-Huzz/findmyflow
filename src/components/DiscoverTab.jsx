@@ -13,6 +13,16 @@ import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { isDomeVisibleNode } from '../lib/experienceDomeConfig'
 import DomeRadar from './DomeRadar'
 import DirectionSection from './direction/DirectionSection'
+import {
+  BoltIcon,
+  SparklesIcon,
+  BriefcaseIcon,
+  CheckCircleIcon,
+  FireIcon,
+  FaceSmileIcon,
+  ExclamationTriangleIcon,
+  MinusCircleIcon,
+} from '@heroicons/react/24/solid'
 import './DiscoverTab.css'
 
 const WEEK_KEY = 'weekly_experience_focus_'
@@ -200,10 +210,10 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
                 <p className="dt-weekly-ns-prompt">How did it feel?</p>
                 <div className="dt-weekly-ns-buttons">
                   {[
-                    { id: 'vibe_rise', label: 'Vibe Rise', color: '#E9A23B', icon: '✦' },
-                    { id: 'fun', label: 'Fun', color: '#10b981', icon: '○' },
-                    { id: 'pressure', label: 'Stressful', color: '#ef4444', icon: '◇' },
-                    { id: 'bored', label: 'Bored', color: '#6b7280', icon: '—' },
+                    { id: 'vibe_rise', label: 'Vibe Rise', color: '#E9A23B', icon: <FireIcon style={{ width: 16, height: 16 }} /> },
+                    { id: 'fun', label: 'Fun', color: '#10b981', icon: <FaceSmileIcon style={{ width: 16, height: 16 }} /> },
+                    { id: 'pressure', label: 'Stressful', color: '#ef4444', icon: <ExclamationTriangleIcon style={{ width: 16, height: 16 }} /> },
+                    { id: 'bored', label: 'Bored', color: '#6b7280', icon: <MinusCircleIcon style={{ width: 16, height: 16 }} /> },
                   ].map(ns => (
                     <button
                       key={ns.id}
@@ -244,7 +254,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {/* Step 1a: Experience Game — always visible, first action */}
       <button className="dt-card" onClick={() => navigate('/experience-game')}>
         <div className="dt-card-header">
-          <span className="dt-card-icon">{domeCount > 0 ? '✅' : '⚡'}</span>
+          <span className="dt-card-icon">{domeCount > 0 ? <CheckCircleIcon style={{ width: 18, height: 18, color: '#10b981' }} /> : <BoltIcon style={{ width: 18, height: 18 }} />}</span>
           <span className="dt-card-title">{domeCount > 0 ? 'Experience Dome' : 'Play the Experience Game'}</span>
           {domeCount > 0 && <span className="dt-card-badge">{domeCount} rated</span>}
         </div>
@@ -260,7 +270,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {domeCount > 0 && (
         <button className="dt-card" onClick={() => navigate('/essence-mirror')}>
           <div className="dt-card-header">
-            <span className="dt-card-icon">{essenceDone ? '✅' : '✨'}</span>
+            <span className="dt-card-icon">{essenceDone ? <CheckCircleIcon style={{ width: 18, height: 18, color: '#10b981' }} /> : <SparklesIcon style={{ width: 18, height: 18 }} />}</span>
             <span className="dt-card-title">{essenceDone ? 'Your Essence' : 'Discover Your Essence'}</span>
           </div>
           <p className="dt-card-desc">
@@ -276,7 +286,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       {essenceDone && domeCount > 0 && (
         <button className="dt-card" onClick={() => navigate('/add-current-job')}>
           <div className="dt-card-header">
-            <span className="dt-card-icon">{hasCurrentJob ? '✅' : '💼'}</span>
+            <span className="dt-card-icon">{hasCurrentJob ? <CheckCircleIcon style={{ width: 18, height: 18, color: '#10b981' }} /> : <BriefcaseIcon style={{ width: 18, height: 18 }} />}</span>
             <span className="dt-card-title">{hasCurrentJob ? 'Your current work' : 'Map your current work'}</span>
           </div>
           <p className="dt-card-desc">

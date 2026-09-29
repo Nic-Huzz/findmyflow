@@ -13,6 +13,18 @@ import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
 import WahooCreator from './WahooCreator'
+import {
+  BoltIcon,
+  HeartIcon,
+  CheckCircleIcon,
+  PauseCircleIcon,
+  ClockIcon,
+  FireIcon,
+  MinusCircleIcon,
+  MoonIcon,
+  FaceSmileIcon,
+  ExclamationTriangleIcon,
+} from '@heroicons/react/24/solid'
 import './QuestBoardCard.css'
 
 const STATE_LABELS = {
@@ -22,7 +34,12 @@ const STATE_LABELS = {
   uninterested: 'Bored',
 }
 
-const STATE_EMOJI = { vibe_rise: '🔥', fun: '😊', pressure: '😰', uninterested: '😐' }
+const STATE_ICONS = {
+  vibe_rise: <FireIcon style={{ width: 16, height: 16, color: '#E9A23B' }} />,
+  fun: <FaceSmileIcon style={{ width: 16, height: 16, color: '#10b981' }} />,
+  pressure: <ExclamationTriangleIcon style={{ width: 16, height: 16, color: '#ef4444' }} />,
+  uninterested: <MinusCircleIcon style={{ width: 16, height: 16, color: '#6b7280' }} />,
+}
 
 export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate }) {
   const navigate = useNavigate()
@@ -319,10 +336,10 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               setHealingTaskText(task.text || '')
               setHealingExistingData(healingIntentions[task.id] || null)
             }} title={!task.done ? 'Feeling stuck?' : undefined}>
-              <span className="qbc-icon-courage">⚡</span>
+              <span className="qbc-icon-courage"><BoltIcon style={{ width: 14, height: 14 }} /></span>
             </button>
           )}
-          {healingIntentions[task.id] && <span className="qbc-icon-heal">💚</span>}
+          {healingIntentions[task.id] && <span className="qbc-icon-heal"><HeartIcon style={{ width: 14, height: 14, color: '#10b981' }} /></span>}
           {hasDims && <span className="qbc-dim-hint">{isTaskExpanded ? '▴' : '▾'}</span>}
         </div>
       </div>
@@ -352,9 +369,9 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
       )}
       {signalTaskId === task.id && (
         <div className="qbc-signal-row">
-          <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}>🔥 Lit me up</button>
-          <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'was_okay')}>😐 Was okay</button>
-          <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'bored')}>😴 Bored</button>
+          <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'lit_me_up')}><FireIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Lit me up</button>
+          <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'was_okay')}><MinusCircleIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Was okay</button>
+          <button className="qbc-signal-btn" onClick={() => handleTaskSignal(task.id, 'bored')}><MoonIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Bored</button>
         </div>
       )}
     </div>
@@ -367,8 +384,8 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
         <div className="qbc-task-text">{task.text}</div>
       </div>
       <div className="qbc-task-icons">
-        {task.is_courage_challenge && <span className="qbc-icon-courage">⚡</span>}
-        {healingIntentions[task.id] && <span className="qbc-icon-heal">💚</span>}
+        {task.is_courage_challenge && <span className="qbc-icon-courage"><BoltIcon style={{ width: 14, height: 14 }} /></span>}
+        {healingIntentions[task.id] && <span className="qbc-icon-heal"><HeartIcon style={{ width: 14, height: 14, color: '#10b981' }} /></span>}
       </div>
     </div>
   )
@@ -414,9 +431,9 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             ) : (
               <div className="qbc-close-options">
                 <div className="qbc-close-title">Close "{quest.label}"?</div>
-                <button className="qbc-close-btn achieved" onClick={() => closeQuest('achieved')}>🎉 I achieved it!</button>
-                <button className="qbc-close-btn lost" onClick={() => closeQuest('lost_interest')}>🤔 Lost interest</button>
-                <button className="qbc-close-btn paused" onClick={() => closeQuest('not_right_time')}>⏳ Not the right time</button>
+                <button className="qbc-close-btn achieved" onClick={() => closeQuest('achieved')}><CheckCircleIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom' }} /> I achieved it!</button>
+                <button className="qbc-close-btn lost" onClick={() => closeQuest('lost_interest')}><PauseCircleIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom' }} /> Lost interest</button>
+                <button className="qbc-close-btn paused" onClick={() => closeQuest('not_right_time')}><ClockIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom' }} /> Not the right time</button>
                 <button className="qbc-close-cancel" onClick={() => { setShowClose(false); setShowMenu(false) }}>Cancel</button>
               </div>
             )}
@@ -475,7 +492,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
                         <button key={s}
                           className={`qbc-rerate-btn qbc-rerate-btn--${s} ${exp.capacity_state === s ? 'current' : ''}`}
                           onClick={() => reRateExperience(exp.id, s)}>
-                          {STATE_EMOJI[s]}
+                          {STATE_ICONS[s]}
                         </button>
                       ))}
                     </div>
@@ -562,7 +579,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               setWahooCreatorText('')
               setShowWahooCreator(true)
             }}>
-              ⚡ Add courage challenge
+              <BoltIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Add courage challenge
             </button>
             <button className="qbc-add-task-btn" onClick={() => { setShowTaskInput(true); setTimeout(() => inputRef.current?.focus(), 50) }}>
               + Add task
