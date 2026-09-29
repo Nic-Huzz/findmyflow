@@ -49,8 +49,9 @@
 }
 
 .daily-checkin-emoji {
-  font-size: 36px;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 8px;
 }
 
@@ -107,8 +108,9 @@
 }
 
 .daily-checkin-btn-emoji {
-  font-size: 26px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 

@@ -10,11 +10,39 @@
 
 import { useEffect } from 'react'
 import {
+  BoltIcon,
+  FaceSmileIcon,
+  ExclamationTriangleIcon,
+  MinusCircleIcon,
+  EyeSlashIcon,
+  ShieldCheckIcon,
+  CpuChipIcon,
+  AdjustmentsHorizontalIcon,
+  UsersIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/solid'
+import {
   NERVOUS_SYSTEM_STATES,
   getArchetypesForState,
   needsArchetype,
 } from '../lib/nervousSystemConstants'
 import './NervousSystemCheckin.css'
+
+const NS_ICONS = {
+  vibe_rise: <BoltIcon style={{ width: 22, height: 22 }} />,
+  ventral: <FaceSmileIcon style={{ width: 22, height: 22 }} />,
+  sympathetic: <ExclamationTriangleIcon style={{ width: 22, height: 22 }} />,
+  dorsal: <MinusCircleIcon style={{ width: 22, height: 22 }} />,
+}
+
+const ARCH_ICONS = {
+  Controller: <ShieldCheckIcon style={{ width: 18, height: 18 }} />,
+  Ghost: <EyeSlashIcon style={{ width: 18, height: 18 }} />,
+  Perfectionist: <AdjustmentsHorizontalIcon style={{ width: 18, height: 18 }} />,
+  'Auto-Pilot': <CpuChipIcon style={{ width: 18, height: 18 }} />,
+  'People Pleaser': <UsersIcon style={{ width: 18, height: 18 }} />,
+  unsure: <QuestionMarkCircleIcon style={{ width: 18, height: 18 }} />,
+}
 
 export default function NervousSystemCheckin({
   mode = 'both',
@@ -63,7 +91,7 @@ export default function NervousSystemCheckin({
             className={`nsci-state-btn ${value === state.id ? 'active' : ''} ${state.id === 'vibe_rise' ? 'nsci-vibe-rise' : ''}`}
             onClick={() => onChange(state.id)}
           >
-            <span className="nsci-emoji">{state.emoji}</span>
+            <span className="nsci-emoji">{NS_ICONS[state.id]}</span>
             <span className="nsci-text">
               <span className="nsci-name">{state.name}</span>
               <span className="nsci-label">{state.label}</span>
@@ -102,7 +130,7 @@ export default function NervousSystemCheckin({
                 className={`nsci-archetype-btn ${protectiveArchetype === arch.id ? 'active' : ''}`}
                 onClick={() => onArchetypeChange(arch.id)}
               >
-                <span className="nsci-arch-icon">{arch.icon}</span>
+                <span className="nsci-arch-icon">{ARCH_ICONS[arch.id] || arch.icon}</span>
                 <span className="nsci-arch-name">{arch.label}</span>
               </button>
             ))}
