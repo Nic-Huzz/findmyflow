@@ -498,14 +498,14 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         <div className="quest-section-header">
           <span className="quest-section-title">Your Paths</span>
         </div>
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && !hasLifePaths && (
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
             <span style={{ fontSize: 20 }}>🔒</span>
             <p>Complete discovery first to unlock your paths</p>
             <a href="/try/life-paths" className="quest-locked-link">Start Life Paths →</a>
           </div>
         )}
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work').length === 0 && hasLifePaths && (
+        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && hasLifePaths && (
           <div className="quest-empty">No active paths yet. Add one from your life paths below.</div>
         )}
         {!hasLifePaths && quests.length > 0 && (
