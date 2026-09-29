@@ -413,3 +413,22 @@
   background: rgba(233, 162, 59, 0.08);
   border: 1px solid rgba(233, 162, 59, 0.2);
 }
+
+/* ── New 3-screen flow additions ── */
+.gcm-back-btn {
+  position: absolute; top: 16px; left: 16px;
+  background: none; border: none; font-size: 20px;
+  color: #6b7280; cursor: pointer; padding: 4px 8px; z-index: 2;
+}
+
+.gcm-question {
+  font-size: 18px; font-weight: 600; margin: 16px 0 12px; color: #1a1a2e;
+}
+
+.gcm-voice-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+}
+
+.gcm-saving {
+  text-align: center; color: #6b7280; font-size: 14px; margin-top: 12px;
+}
