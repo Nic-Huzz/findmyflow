@@ -144,9 +144,13 @@ function GapCheckReflection({ challengeId, userId, predictedDifficulty, onSaved 
 
   async function handleSave() {
     setSaving(true)
-    await saveReflection({ userId, challengeId, field: 'preaction_difficulty', value: preaction })
-    await saveReflection({ userId, challengeId, field: 'experienced_difficulty', value: experienced })
-    onSaved()
+    try {
+      await saveReflection({ userId, challengeId, field: 'preaction_difficulty', value: preaction })
+      await saveReflection({ userId, challengeId, field: 'experienced_difficulty', value: experienced })
+      onSaved()
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -467,6 +471,13 @@ export default function ProgressTab({ userId }) {
     let parsed = {}
     try { parsed = JSON.parse(comp?.reflection_text || '{}') } catch {}
 
+    // Check cross-pollination persistence
+    const { data: crossRows } = await supabase.from('quest_cross_pollination')
+      .select('id')
+      .eq('groan_challenge_id', challengeId)
+      .limit(1)
+      .catch(() => ({ data: null }))
+
     setReflections(prev => ({ ...prev, [challengeId]: {
       loaded: true,
       wahoo: parsed.wahoo_classification,
@@ -474,8 +485,10 @@ export default function ProgressTab({ userId }) {
       gap_done: ch?.preaction_difficulty != null,
       identity_done: parsed.identity_statement != null || parsed.voice_objection != null,
       universe_done: ch?.universe_response != null,
+      cross_done: crossRows?.length > 0,
       three_percent_done: parsed.reflection != null && parsed.reflection !== '',
       life_fuel_done: parsed.life_fuel != null,
+      share_done: !!parsed.shared,
       predicted_difficulty: ch?.predicted_difficulty,
       gap_voice: ch?.gap_voice,
       source_quest_id: ch?.quest_id,
@@ -1380,10 +1393,10 @@ export default function ProgressTab({ userId }) {
                         { key: 'gap', done: r.gap_done, label: 'Gap Check', desc: 'Was it scarier than expected?' },
                         { key: 'identity', done: r.identity_done, label: 'Identity', desc: "I've proven I'm someone who..." },
                         { key: 'universe', done: r.universe_done, label: 'Universe', desc: 'Did the universe speak back?' },
-                        { key: 'cross', done: false, label: 'Cross-pollinate', desc: 'Did this feed another path?' },
+                        { key: 'cross', done: !!r.cross_done, label: 'Cross-pollinate', desc: 'Did this feed another path?' },
                         { key: 'three_percent', done: r.three_percent_done, label: '3% Better', desc: 'How to improve next time?' },
                         { key: 'life_fuel', done: r.life_fuel_done, label: 'Life Fuel', desc: 'Choice / Connection / Mastery / Meaning' },
-                        { key: 'share', done: false, label: 'Share', desc: 'Share your win' },
+                        { key: 'share', done: !!r.share_done, label: 'Share', desc: 'Share your win' },
                       ]
                       const doneCount = reflectItems.filter(ri => ri.done).length
                       return (
