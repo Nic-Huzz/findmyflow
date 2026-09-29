@@ -11,6 +11,13 @@
 
 import { useState } from 'react'
 import { deriveDirection, getDirectionLabel } from '../lib/compassEntryHelper'
+import {
+  MapPinIcon,
+  FireIcon,
+  MoonIcon,
+  SparklesIcon,
+  ArrowUpIcon,
+} from '@heroicons/react/24/solid'
 import './CompassCheck.css'
 
 function CompassCheck({ onComplete, onSkip }) {
@@ -30,7 +37,7 @@ function CompassCheck({ onComplete, onSkip }) {
   return (
     <div className="compass-check">
       <div className="compass-check-header">
-        <span className="compass-check-icon">🧭</span>
+        <span className="compass-check-icon"><MapPinIcon style={{ width: 24, height: 24 }} /></span>
         <h4 className="compass-check-title">Quick Compass Check</h4>
         <p className="compass-check-subtitle">How are you feeling right now?</p>
       </div>
@@ -43,14 +50,14 @@ function CompassCheck({ onComplete, onSkip }) {
             className={`compass-check-btn ${internalState === 'excited' ? 'selected' : ''}`}
             onClick={() => setInternalState('excited')}
           >
-            <span className="compass-check-emoji">🔥</span>
+            <span className="compass-check-emoji"><FireIcon style={{ width: 20, height: 20 }} /></span>
             <span>Excited</span>
           </button>
           <button
             className={`compass-check-btn ${internalState === 'tired' ? 'selected' : ''}`}
             onClick={() => setInternalState('tired')}
           >
-            <span className="compass-check-emoji">😴</span>
+            <span className="compass-check-emoji"><MoonIcon style={{ width: 20, height: 20 }} /></span>
             <span>Tired</span>
           </button>
         </div>
@@ -64,14 +71,14 @@ function CompassCheck({ onComplete, onSkip }) {
             className={`compass-check-btn ${externalState === 'ease' ? 'selected' : ''}`}
             onClick={() => setExternalState('ease')}
           >
-            <span className="compass-check-emoji">✨</span>
+            <span className="compass-check-emoji"><SparklesIcon style={{ width: 20, height: 20 }} /></span>
             <span>Great</span>
           </button>
           <button
             className={`compass-check-btn ${externalState === 'resistance' ? 'selected' : ''}`}
             onClick={() => setExternalState('resistance')}
           >
-            <span className="compass-check-emoji">🧗</span>
+            <span className="compass-check-emoji"><ArrowUpIcon style={{ width: 20, height: 20 }} /></span>
             <span>Facing resistance</span>
           </button>
         </div>

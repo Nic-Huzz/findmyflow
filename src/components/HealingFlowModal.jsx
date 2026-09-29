@@ -10,14 +10,22 @@ import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { postFeedEvent } from '../lib/communityFeed'
+import {
+  EyeSlashIcon,
+  ShieldCheckIcon,
+  CpuChipIcon,
+  AdjustmentsHorizontalIcon,
+  UsersIcon,
+  HeartIcon,
+} from '@heroicons/react/24/solid'
 import './HealingFlowModal.css'
 
 const PATTERNS = [
-  { id: 'ghost', name: 'The Ghost', icon: '👻', desc: 'I want to disappear. Hide. Go quiet.' },
-  { id: 'controller', name: 'The Controller', icon: '🧱', desc: 'I want to know how this ends before I do it.' },
-  { id: 'auto_pilot', name: 'The Auto-Pilot', icon: '🤖', desc: 'I\'m going through the motions. I\'ve checked out.' },
-  { id: 'perfectionist', name: 'The Perfectionist', icon: '🎯', desc: 'It\'s not good enough yet. I need more time.' },
-  { id: 'people_pleaser', name: 'The People Pleaser', icon: '🪞', desc: 'I\'d rather say yes than deal with their reaction.' },
+  { id: 'ghost', name: 'The Ghost', icon: <EyeSlashIcon style={{ width: 20, height: 20 }} />, desc: 'I want to disappear. Hide. Go quiet.' },
+  { id: 'controller', name: 'The Controller', icon: <ShieldCheckIcon style={{ width: 20, height: 20 }} />, desc: 'I want to know how this ends before I do it.' },
+  { id: 'auto_pilot', name: 'The Auto-Pilot', icon: <CpuChipIcon style={{ width: 20, height: 20 }} />, desc: 'I\'m going through the motions. I\'ve checked out.' },
+  { id: 'perfectionist', name: 'The Perfectionist', icon: <AdjustmentsHorizontalIcon style={{ width: 20, height: 20 }} />, desc: 'It\'s not good enough yet. I need more time.' },
+  { id: 'people_pleaser', name: 'The People Pleaser', icon: <UsersIcon style={{ width: 20, height: 20 }} />, desc: 'I\'d rather say yes than deal with their reaction.' },
 ]
 
 export default function HealingFlowModal({ taskText, userId, questTaskId, existingData, onComplete, onClose }) {
@@ -168,7 +176,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
       <div className="hfm-modal" onClick={e => e.stopPropagation()}>
         <div className="hfm-header">
           <div className="hfm-header-left">
-            <span className="hfm-header-icon">💚</span>
+            <span className="hfm-header-icon"><HeartIcon style={{ width: 20, height: 20, color: '#10b981' }} /></span>
             <div>
               <div className="hfm-title">Healing Flow</div>
               <div className="hfm-task-name">{taskText}</div>
@@ -348,7 +356,7 @@ export default function HealingFlowModal({ taskText, userId, questTaskId, existi
             )}
             <button className="hfm-next" disabled={!canContinue() || saving}
               onClick={handleNext}>
-              {saving ? 'Saving...' : step === 7 ? 'Complete 💚' : 'Continue →'}
+              {saving ? 'Saving...' : step === 7 ? <>Complete <HeartIcon style={{ width: 14, height: 14, color: '#10b981', verticalAlign: 'text-bottom' }} /></> : 'Continue →'}
             </button>
           </div>
         )}

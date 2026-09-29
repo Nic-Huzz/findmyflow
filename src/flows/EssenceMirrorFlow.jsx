@@ -20,21 +20,34 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { ESSENCE_ARCHETYPES, SUPERPOWER_ROUNDS, getArchetype, getArchetypesByIds } from '../data/essenceArchetypes'
 import { onEssenceMirrorComplete } from '../lib/brain/autoPopulate'
+import {
+  FireIcon,
+  PaintBrushIcon,
+  FaceSmileIcon,
+  SparklesIcon,
+  BoltIcon,
+  HeartIcon,
+  ShieldCheckIcon,
+  Cog6ToothIcon,
+  MapPinIcon,
+  GlobeAltIcon,
+  StarIcon,
+} from '@heroicons/react/24/solid'
 
-// Emoji per archetype for card display
-const ARCHETYPE_EMOJI = {
-  radiant_rebel: '🔥',
-  playful_creator: '🎨',
-  sacred_jester: '🃏',
-  mystic_messenger: '🔮',
-  truth_teller: '⚡',
-  heart_alchemist: '💛',
-  grounded_guardian: '🛡️',
-  heart_holder: '💗',
-  rhythm_architect: '⚙️',
-  wise_sage: '🧭',
-  cosmic_connector: '🌌',
-  compassionate_leader: '👑',
+// Icon per archetype for card display (fallback when no swipe image)
+const ARCHETYPE_ICON = {
+  radiant_rebel: <FireIcon style={{ width: 28, height: 28 }} />,
+  playful_creator: <PaintBrushIcon style={{ width: 28, height: 28 }} />,
+  sacred_jester: <FaceSmileIcon style={{ width: 28, height: 28 }} />,
+  mystic_messenger: <SparklesIcon style={{ width: 28, height: 28 }} />,
+  truth_teller: <BoltIcon style={{ width: 28, height: 28 }} />,
+  heart_alchemist: <HeartIcon style={{ width: 28, height: 28, color: '#E9A23B' }} />,
+  grounded_guardian: <ShieldCheckIcon style={{ width: 28, height: 28 }} />,
+  heart_holder: <HeartIcon style={{ width: 28, height: 28, color: '#ec4899' }} />,
+  rhythm_architect: <Cog6ToothIcon style={{ width: 28, height: 28 }} />,
+  wise_sage: <MapPinIcon style={{ width: 28, height: 28 }} />,
+  cosmic_connector: <GlobeAltIcon style={{ width: 28, height: 28 }} />,
+  compassionate_leader: <StarIcon style={{ width: 28, height: 28 }} />,
 }
 import '../styles/flow-base.css'
 import './EssenceMirrorFlow.css'
@@ -547,7 +560,7 @@ export default function EssenceMirrorFlow() {
                     onError={(e) => { e.target.style.display = 'none' }}
                   />
                 )}
-                {!currentArch.swipeImage && <div className="em-swipe-emoji">{ARCHETYPE_EMOJI[currentId]}</div>}
+                {!currentArch.swipeImage && <div className="em-swipe-emoji">{ARCHETYPE_ICON[currentId]}</div>}
                 <div className="em-swipe-text">
                   {currentArch.superpower.split(/(?<=[.?!])\s+/).map((s, i) => (
                     <p key={i}>{s}</p>

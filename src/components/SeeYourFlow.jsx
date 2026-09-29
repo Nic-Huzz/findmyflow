@@ -21,6 +21,13 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import confetti from 'canvas-confetti'
+import {
+  FireIcon,
+  MoonIcon,
+  SparklesIcon,
+  ArrowUpIcon,
+  CheckCircleIcon,
+} from '@heroicons/react/24/solid'
 import './SeeYourFlow.css'
 
 // Step constants
@@ -547,14 +554,14 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                         className={`option-btn ${journeyData.currentInternal === 'excited' ? 'selected' : ''}`}
                         onClick={() => setJourneyData(prev => ({ ...prev, currentInternal: 'excited' }))}
                       >
-                        <span className="option-emoji">🔥</span>
+                        <span className="option-emoji"><FireIcon style={{ width: 20, height: 20 }} /></span>
                         <span>Excited</span>
                       </button>
                       <button
                         className={`option-btn ${journeyData.currentInternal === 'tired' ? 'selected' : ''}`}
                         onClick={() => setJourneyData(prev => ({ ...prev, currentInternal: 'tired' }))}
                       >
-                        <span className="option-emoji">😴</span>
+                        <span className="option-emoji"><MoonIcon style={{ width: 20, height: 20 }} /></span>
                         <span>Tired</span>
                       </button>
                     </div>
@@ -567,14 +574,14 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                         className={`option-btn ${journeyData.currentExternal === 'ease' ? 'selected' : ''}`}
                         onClick={() => setJourneyData(prev => ({ ...prev, currentExternal: 'ease' }))}
                       >
-                        <span className="option-emoji">✨</span>
+                        <span className="option-emoji"><SparklesIcon style={{ width: 20, height: 20 }} /></span>
                         <span>Great</span>
                       </button>
                       <button
                         className={`option-btn ${journeyData.currentExternal === 'resistance' ? 'selected' : ''}`}
                         onClick={() => setJourneyData(prev => ({ ...prev, currentExternal: 'resistance' }))}
                       >
-                        <span className="option-emoji">🧗</span>
+                        <span className="option-emoji"><ArrowUpIcon style={{ width: 20, height: 20 }} /></span>
                         <span>Facing resistance</span>
                       </button>
                     </div>
@@ -638,7 +645,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                       <div key={index} className="entry-card highlight-card">
                         <div className="card-header">
                           <span className="card-number">Highlight {index + 1}</span>
-                          <span className="card-emoji">✨</span>
+                          <span className="card-emoji"><SparklesIcon style={{ width: 20, height: 20 }} /></span>
                         </div>
 
                         <input
@@ -699,7 +706,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                       <div key={index} className="entry-card challenge-card">
                         <div className="card-header">
                           <span className="card-number">Challenge {index + 1}</span>
-                          <span className="card-emoji">🧗</span>
+                          <span className="card-emoji"><ArrowUpIcon style={{ width: 20, height: 20 }} /></span>
                         </div>
 
                         <input
@@ -728,13 +735,13 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                               className={`option-btn small ${challenge.internal === 'excited' ? 'selected' : ''}`}
                               onClick={() => updateChallenge(index, 'internal', 'excited')}
                             >
-                              🔥 Excited
+                              <FireIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Excited
                             </button>
                             <button
                               className={`option-btn small ${challenge.internal === 'tired' ? 'selected' : ''}`}
                               onClick={() => updateChallenge(index, 'internal', 'tired')}
                             >
-                              😴 Tired
+                              <MoonIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Tired
                             </button>
                           </div>
                         </div>
@@ -772,7 +779,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
               {currentStep === STEPS.SUMMARY && (
                 <div className="step-content summary-step">
                   <div className="summary-celebration">
-                    <span className="celebration-emoji">🎉</span>
+                    <span className="celebration-emoji"><CheckCircleIcon style={{ width: 24, height: 24, color: '#10b981' }} /></span>
                     <h3 className="summary-title">Your journey is mapped!</h3>
                   </div>
 
@@ -812,14 +819,14 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                     className={`option-btn ${checkInData.internal === 'excited' ? 'selected' : ''}`}
                     onClick={() => setCheckInData(prev => ({ ...prev, internal: 'excited' }))}
                   >
-                    <span className="option-emoji">🔥</span>
+                    <span className="option-emoji"><FireIcon style={{ width: 20, height: 20 }} /></span>
                     <span>Excited</span>
                   </button>
                   <button
                     className={`option-btn ${checkInData.internal === 'tired' ? 'selected' : ''}`}
                     onClick={() => setCheckInData(prev => ({ ...prev, internal: 'tired' }))}
                   >
-                    <span className="option-emoji">😴</span>
+                    <span className="option-emoji"><MoonIcon style={{ width: 20, height: 20 }} /></span>
                     <span>Tired</span>
                   </button>
                 </div>
@@ -832,14 +839,14 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
                     className={`option-btn ${checkInData.external === 'ease' ? 'selected' : ''}`}
                     onClick={() => setCheckInData(prev => ({ ...prev, external: 'ease' }))}
                   >
-                    <span className="option-emoji">✨</span>
+                    <span className="option-emoji"><SparklesIcon style={{ width: 20, height: 20 }} /></span>
                     <span>Great</span>
                   </button>
                   <button
                     className={`option-btn ${checkInData.external === 'resistance' ? 'selected' : ''}`}
                     onClick={() => setCheckInData(prev => ({ ...prev, external: 'resistance' }))}
                   >
-                    <span className="option-emoji">🧗</span>
+                    <span className="option-emoji"><ArrowUpIcon style={{ width: 20, height: 20 }} /></span>
                     <span>Facing resistance</span>
                   </button>
                 </div>

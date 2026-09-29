@@ -16,6 +16,23 @@ import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import FlowMapRiver from './components/FlowMapRiver'
 import SeeYourFlow from './components/SeeYourFlow'
 import AIMirrorsCollection from './components/MysteryBox/AIMirrorsCollection'
+import {
+  ChartBarIcon,
+  SparklesIcon,
+  ArrowTrendingUpIcon,
+  MapPinIcon,
+  BookOpenIcon,
+  InformationCircleIcon,
+  ChatBubbleLeftIcon,
+  SunIcon,
+  CalendarIcon,
+  FlagIcon,
+  FireIcon,
+  HandRaisedIcon,
+  RocketLaunchIcon,
+  KeyIcon,
+  MoonIcon,
+} from '@heroicons/react/24/solid'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -731,10 +748,10 @@ const Profile = () => {
 
         <ul className="nav-menu">
           <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
-            📊 Dashboard
+            <ChartBarIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Dashboard
           </li>
           <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
-            ✨ Archetypes
+            <SparklesIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Archetypes
           </li>
           <li
             className="nav-item"
@@ -743,19 +760,19 @@ const Profile = () => {
               setSidebarOpen(false)
             }}
           >
-            📈 7-Day Challenge
+            <ArrowTrendingUpIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> 7-Day Challenge
           </li>
           <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
-            🧭 Flow Compass
+            <MapPinIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Flow Compass
           </li>
           <li className="nav-item" onClick={() => { navigate('/library'); setSidebarOpen(false); }}>
-            📚 Library of Answers
+            <BookOpenIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Library of Answers
           </li>
           <li className="nav-item" onClick={handleOpenOnboarding}>
-            📖 Explainer
+            <InformationCircleIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Explainer
           </li>
           <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
-            💬 Give Feedback
+            <ChatBubbleLeftIcon style={{ width: 16, height: 16, marginRight: 6, verticalAlign: 'text-bottom' }} /> Give Feedback
           </li>
         </ul>
 
@@ -921,7 +938,7 @@ const Profile = () => {
           </div>
         ) : (
           <div className="no-project-prompt">
-            <div className="prompt-icon">🚀</div>
+            <div className="prompt-icon"><RocketLaunchIcon style={{ width: 32, height: 32, color: '#5e17eb' }} /></div>
             <h3>Create Your First Project</h3>
             <p>Set up a project to start tracking your flow and progress.</p>
             <button
@@ -955,19 +972,19 @@ const Profile = () => {
 
             <div className="progress-stats-row">
               <div className="progress-stat-item">
-                <span className="progress-stat-icon">☀️</span>
+                <span className="progress-stat-icon"><SunIcon style={{ width: 18, height: 18 }} /></span>
                 <span className="progress-stat-value">{questProgress.dailyDone}/{questProgress.dailyTotal}</span>
                 <span className="progress-stat-label">Daily</span>
               </div>
 
               <div className="progress-stat-item">
-                <span className="progress-stat-icon">📅</span>
+                <span className="progress-stat-icon"><CalendarIcon style={{ width: 18, height: 18 }} /></span>
                 <span className="progress-stat-value">{questProgress.weeklyDone}/{questProgress.weeklyTotal}</span>
                 <span className="progress-stat-label">Weekly</span>
               </div>
 
               <div className="progress-stat-item">
-                <span className="progress-stat-icon">🎯</span>
+                <span className="progress-stat-icon"><FlagIcon style={{ width: 18, height: 18 }} /></span>
                 <span className="progress-stat-value">{primaryProject.current_stage ?? 1}/7</span>
                 <span className="progress-stat-label">Stage</span>
               </div>
@@ -998,7 +1015,7 @@ const Profile = () => {
         <div className="streak-display">
           <div className="streak-item daily">
             <span className={`streak-flame ${streakData.dailyStreak >= 7 ? 'legendary' : streakData.dailyStreak >= 5 ? 'hot' : streakData.dailyStreak >= 3 ? 'warm' : streakData.dailyStreak >= 1 ? '' : 'cold'}`}>
-              {streakData.dailyStreak > 0 ? '🔥' : '💤'}
+              {streakData.dailyStreak > 0 ? <FireIcon style={{ width: 20, height: 20 }} /> : <MoonIcon style={{ width: 20, height: 20, color: '#6b7280' }} />}
             </span>
             <div className="streak-info">
               <span className="streak-value">{streakData.dailyStreak}</span>
@@ -1007,7 +1024,7 @@ const Profile = () => {
           </div>
           <div className="streak-item groan">
             <span className={`streak-flame ${streakData.groanStreak >= 4 ? 'legendary' : streakData.groanStreak >= 2 ? 'warm' : ''}`}>
-              {streakData.groanStreak > 0 ? '💪' : '🌱'}
+              {streakData.groanStreak > 0 ? <HandRaisedIcon style={{ width: 20, height: 20 }} /> : <SparklesIcon style={{ width: 20, height: 20, color: '#10b981' }} />}
             </span>
             <div className="streak-info">
               <span className="streak-value">{streakData.groanStreak}</span>
@@ -1022,7 +1039,7 @@ const Profile = () => {
             className="action-btn primary"
             onClick={() => navigate('/7-day-challenge')}
           >
-            🎯 {hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge'}
+            <FlagIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom' }} /> {hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge'}
           </button>
           <a
             className="action-btn support"
@@ -1062,7 +1079,7 @@ const Profile = () => {
               {generatedKey && (
                 <div className="agent-key-reveal">
                   <div className="agent-key-reveal-header">
-                    <span className="agent-key-reveal-icon">🔑</span>
+                    <span className="agent-key-reveal-icon"><KeyIcon style={{ width: 16, height: 16 }} /></span>
                     <span>Your new API key (shown once):</span>
                   </div>
                   <div className="agent-key-reveal-value">
