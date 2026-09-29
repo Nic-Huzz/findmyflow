@@ -19,6 +19,7 @@ import usePriorityTab from '../hooks/usePriorityTab'
 import PriorityOnboardingCard from './PriorityOnboardingCard'
 import PriorityWeekPicker from './PriorityWeekPicker'
 import GroanCompletionModal from './GroanCompletionModal'
+import DomeGrowthOverlay from './DomeGrowthOverlay'
 import HealingCompletionModal from './HealingCompletionModal'
 import './PriorityTab.css'
 
@@ -69,6 +70,7 @@ export default function PriorityTab({
   }, [refreshAcceptedChallenge])
 
   const [completingChallenge, setCompletingChallenge] = useState(null)
+  const [domeGrowthData, setDomeGrowthData] = useState(null)
   const [loadingChallengeId, setLoadingChallengeId] = useState(null)
   const [healingModalQuest, setHealingModalQuest] = useState(null)
 
@@ -312,12 +314,16 @@ export default function PriorityTab({
         <GroanCompletionModal
           challenge={completingChallenge}
           userId={userId}
-          onComplete={() => {
+          onComplete={(data) => {
             setCompletingChallenge(null)
+            setDomeGrowthData(data || null)
             refreshData()
           }}
           onClose={() => setCompletingChallenge(null)}
         />
+      )}
+      {domeGrowthData && (
+        <DomeGrowthOverlay {...domeGrowthData} onDismiss={() => setDomeGrowthData(null)} />
       )}
 
       {healingModalQuest && (

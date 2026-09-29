@@ -192,8 +192,12 @@ function LifeFuelReflection({ challengeId, userId, onSaved }) {
 
   async function handleSave() {
     setSaving(true)
-    await saveReflection({ userId, challengeId, field: 'life_fuel', value: selected })
-    onSaved()
+    try {
+      const { success } = await saveReflection({ userId, challengeId, field: 'life_fuel', value: selected })
+      if (success) onSaved()
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -232,17 +236,21 @@ function CrossPollinationReflection({ challengeId, userId, sourceQuestId, onSave
 
   async function handleSave() {
     setSaving(true)
-    if (selected.length > 0 && sourceQuestId) {
-      const rows = selected.map(targetId => ({
-        user_id: userId,
-        source_quest_id: sourceQuestId,
-        target_quest_id: targetId,
-        groan_challenge_id: challengeId,
-      }))
-      await supabase.from('quest_cross_pollination').insert(rows).catch(() => {})
+    try {
+      if (selected.length > 0 && sourceQuestId) {
+        const rows = selected.map(targetId => ({
+          user_id: userId,
+          source_quest_id: sourceQuestId,
+          target_quest_id: targetId,
+          groan_challenge_id: challengeId,
+        }))
+        await supabase.from('quest_cross_pollination').insert(rows).catch(() => {})
+      }
+      const { success } = await saveReflection({ userId, challengeId, field: 'cross_pollination', value: selected })
+      if (success) onSaved()
+    } finally {
+      setSaving(false)
     }
-    await saveReflection({ userId, challengeId, field: 'cross_pollination', value: selected })
-    onSaved()
   }
 
   if (!loaded) return <p className="pt-reflect-desc">Loading paths...</p>
@@ -271,12 +279,16 @@ function ShareReflection({ challengeId, userId, challengeTitle, wahoo, onSaved }
 
   async function handleShare() {
     setSaving(true)
-    const emoji = { vibe: '🔥', peace: '☺️', anxious: '😰', shutdown: '😶' }[wahoo] || '⚡'
-    await import('../lib/communityFeed').then(m =>
-      m.postFeedEvent(userId, 'courage_share', `${emoji} ${challengeTitle || 'Completed a courage challenge'}`)
-    ).catch(() => {})
-    await saveReflection({ userId, challengeId, field: 'shared', value: true })
-    onSaved()
+    try {
+      const emoji = { vibe: '🔥', peace: '☺️', anxious: '😰', shutdown: '😶' }[wahoo] || '⚡'
+      await import('../lib/communityFeed').then(m =>
+        m.postFeedEvent(userId, 'courage_share', `${emoji} ${challengeTitle || 'Completed a courage challenge'}`)
+      ).catch(() => {})
+      const { success } = await saveReflection({ userId, challengeId, field: 'shared', value: true })
+      if (success) onSaved()
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (

@@ -18,11 +18,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Cleanup advance timer on unmount
   useEffect(() => () => clearTimeout(advanceTimer.current), [])
 
-  // If closed after save happened, still refresh the UI
+  // Close handler — save path already calls onComplete, so just close here
   const handleClose = useCallback(() => {
-    if (savedRef.current) onComplete?.({ dimensionValues: challenge?.dimension_values, wahooClassification, afterState, rpAwarded: null })
     onClose()
-  }, [onComplete, onClose, challenge, wahooClassification, afterState])
+  }, [onClose])
 
   const [screen, setScreen] = useState(1) // 1=wahoo, 2=aftertaste, 3=voice
   const [saving, setSaving] = useState(false)

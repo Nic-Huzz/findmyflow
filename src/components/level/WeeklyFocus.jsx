@@ -18,6 +18,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { getWeekStartLocal } from '../../lib/dateUtils'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
 import GroanCompletionModal from '../GroanCompletionModal'
+import DomeGrowthOverlay from '../DomeGrowthOverlay'
 import HealingFlowModal from '../HealingFlowModal'
 import WahooCreator from '../WahooCreator'
 
@@ -32,6 +33,7 @@ export default function WeeklyFocus({ quests, questTasks, userId, courageCount =
   const [picking, setPicking] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [groanChallenge, setGroanChallenge] = useState(null) // for GroanCompletionModal
+  const [domeGrowthData, setDomeGrowthData] = useState(null)
   const [healingOpen, setHealingOpen] = useState(false) // for HealingFlowModal
   const [wahooQuestId, setWahooQuestId] = useState(null) // quest ID for WahooCreator
   const [wahooQuestLabel, setWahooQuestLabel] = useState('')
@@ -138,9 +140,10 @@ export default function WeeklyFocus({ quests, questTasks, userId, courageCount =
   }
 
   // After GroanCompletionModal finishes
-  const handleCompletionDone = () => {
+  const handleCompletionDone = (data) => {
     setGroanChallenge(null)
     setCompleting(false)
+    setDomeGrowthData(data || null)
     const key = getWeekKey()
     localStorage.setItem(key, JSON.stringify({ taskId: focusId, completed: true }))
     setCompleted(true)
@@ -192,6 +195,9 @@ export default function WeeklyFocus({ quests, questTasks, userId, courageCount =
             onComplete={handleCompletionDone}
             onClose={() => { setGroanChallenge(null); setCompleting(false) }}
           />
+        )}
+        {domeGrowthData && (
+          <DomeGrowthOverlay {...domeGrowthData} onDismiss={() => setDomeGrowthData(null)} />
         )}
 
         {/* Healing flow for when they're stuck */}
