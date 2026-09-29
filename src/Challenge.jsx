@@ -1587,16 +1587,29 @@ function Challenge() {
             <button
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
-              onClick={() => !isLocked && setActiveCategory(category)}
-              disabled={isLocked}
-              title={isComingSoon ? 'Coming soon' : isLocked ? 'Complete Level onboarding to unlock' : undefined}
+              onClick={() => {
+                if (isLocked && category === 'Paths') {
+                  setActiveCategory('Discover')
+                } else if (!isLocked) {
+                  setActiveCategory(category)
+                }
+              }}
+              disabled={isComingSoon}
             >
               {category}
-              {isComingSoon ? <span className="lock-icon" style={{ fontSize: '0.7em', opacity: 0.6 }}>Soon</span> : isLocked && <span className="lock-icon">🔒</span>}
+              {isComingSoon && <span className="lock-icon" style={{ fontSize: '0.7em', opacity: 0.6 }}>Soon</span>}
+              {isLocked && !isComingSoon && <span className="lock-icon">🔒</span>}
             </button>
           )
         })}
       </div>
+
+      {/* Lock explanation — visible when Paths is locked */}
+      {!unlockedTabs.has('Paths') && activeCategory === 'Discover' && (
+        <div className="paths-lock-hint">
+          Complete discovery to unlock Paths
+        </div>
+      )}
 
       {/* Healing tab — new per-task intentions only, no legacy cards */}
 
