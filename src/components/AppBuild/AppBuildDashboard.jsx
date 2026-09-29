@@ -10,6 +10,7 @@
 
 import { useNavigate } from 'react-router-dom'
 import useAppBuildData from '../../hooks/useAppBuildData'
+import { ClipboardDocumentListIcon } from '@heroicons/react/24/solid'
 import './AppBuildDashboard.css'
 
 // SVG progress ring constants
@@ -85,7 +86,7 @@ export default function AppBuildDashboard() {
         onClick={() => navigate('/create/build-app/prework')}
       >
         <div className="abd-prework-top">
-          <div className="abd-prework-icon">📋</div>
+          <div className="abd-prework-icon"><ClipboardDocumentListIcon style={{ width: 24, height: 24 }} /></div>
           <div className="abd-prework-info">
             <p className="abd-prework-title">Define Your Product</p>
             <p className="abd-prework-desc">

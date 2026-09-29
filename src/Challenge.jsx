@@ -56,6 +56,7 @@ import './components/ProgressTab.css'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
+import { BoltIcon } from '@heroicons/react/24/solid'
 import { checkHeroGraduation } from './lib/heroStageChecker'
 import { postFeedEvent } from './lib/communityFeed'
 import { checkStreakBox } from './lib/mysteryBoxes'
@@ -1604,7 +1605,7 @@ function Challenge() {
         {weeklyReviewNeeded && !weeklyReviewDismissed && !showWeeklyReview && (
           <div className="wr-cta-card" onClick={() => setShowWeeklyReview(true)}>
             <div className="wr-cta-left">
-              <span className="wr-cta-icon">⚡</span>
+              <span className="wr-cta-icon"><BoltIcon style={{ width: 20, height: 20 }} /></span>
               <div className="wr-cta-text">
                 <span className="wr-cta-title">Weekly Review</span>
                 <span className="wr-cta-sub">60s audit · +15 RP</span>

@@ -17,6 +17,20 @@ import { detectShift } from '../lib/shiftDetection'
 import { detectNewPattern, markPatternShown, buildPatternMessage } from '../lib/voicePatternDetector'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import HealingFlowModal from './HealingFlowModal'
+import {
+  EyeSlashIcon,
+  AdjustmentsHorizontalIcon,
+  UsersIcon,
+  ShieldCheckIcon,
+  CpuChipIcon,
+  FireIcon,
+  FaceSmileIcon,
+  ExclamationTriangleIcon,
+  QuestionMarkCircleIcon,
+  CheckCircleIcon,
+  StopIcon,
+  SparklesIcon,
+} from '@heroicons/react/24/solid'
 import './GroanCompletionModal.css'
 
 // Auto-skip component (avoids setState during render)
@@ -486,14 +500,14 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 className={`gcm-wahoo-btn gcm-wahoo-hell-yes ${wahooClassification === 'vibe' ? 'selected' : ''}`}
                 onClick={() => { setWahooClassification('vibe'); setAfterState('vibe_rise') }}
               >
-                <span className="gcm-wahoo-emoji">🔥</span>
+                <span className="gcm-wahoo-emoji"><FireIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Vibe Rise</span>
               </button>
               <button
                 className={`gcm-wahoo-btn gcm-wahoo-alive ${wahooClassification === 'peace' ? 'selected' : ''}`}
                 onClick={() => { setWahooClassification('peace'); setAfterState('ventral') }}
               >
-                <span className="gcm-wahoo-emoji">☺️</span>
+                <span className="gcm-wahoo-emoji"><FaceSmileIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Fun</span>
               </button>
               <button
@@ -501,7 +515,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => { setWahooClassification('anxious'); setAfterState('sympathetic') }}
                 style={wahooClassification === 'anxious' ? { borderColor: '#ef4444', background: 'rgba(239,68,68,0.06)', color: '#ef4444' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">😰</span>
+                <span className="gcm-wahoo-emoji"><ExclamationTriangleIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Stressful</span>
               </button>
               <button
@@ -509,7 +523,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => { setWahooClassification('shutdown'); setAfterState('dorsal') }}
                 style={wahooClassification === 'shutdown' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">😶</span>
+                <span className="gcm-wahoo-emoji"><StopIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Bored</span>
               </button>
             </div>
@@ -593,7 +607,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => { hapticLight(); setAftertaste('yes') }}
                 style={aftertaste === 'yes' ? { borderColor: '#E9A23B', background: 'rgba(233,162,59,0.06)', color: '#E9A23B' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">🔥</span>
+                <span className="gcm-wahoo-emoji"><FireIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Yes</span>
               </button>
               <button
@@ -601,7 +615,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => { hapticLight(); setAftertaste('not_sure') }}
                 style={aftertaste === 'not_sure' ? { borderColor: '#5e17eb', background: 'rgba(94,23,235,0.06)', color: '#5e17eb' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">🤔</span>
+                <span className="gcm-wahoo-emoji"><QuestionMarkCircleIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Not sure</span>
               </button>
               <button
@@ -609,7 +623,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => { hapticLight(); setAftertaste('no') }}
                 style={aftertaste === 'no' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">😶</span>
+                <span className="gcm-wahoo-emoji"><StopIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">No</span>
               </button>
             </div>
@@ -699,11 +713,11 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                   <p className="gcm-gap-q">Your body reacted more than you expected. Which voice showed up?</p>
                   <div className="gcm-gap-pills">
                     {[
-                      { id: 'ghost', icon: '👻', label: 'Ghost' },
-                      { id: 'perfectionist', icon: '🎯', label: 'Perfectionist' },
-                      { id: 'people_pleaser', icon: '🪞', label: 'People Pleaser' },
-                      { id: 'controller', icon: '🎮', label: 'Controller' },
-                      { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot' },
+                      { id: 'ghost', icon: <EyeSlashIcon style={{ width: 18, height: 18 }} />, label: 'Ghost' },
+                      { id: 'perfectionist', icon: <AdjustmentsHorizontalIcon style={{ width: 18, height: 18 }} />, label: 'Perfectionist' },
+                      { id: 'people_pleaser', icon: <UsersIcon style={{ width: 18, height: 18 }} />, label: 'People Pleaser' },
+                      { id: 'controller', icon: <ShieldCheckIcon style={{ width: 18, height: 18 }} />, label: 'Controller' },
+                      { id: 'auto_pilot', icon: <CpuChipIcon style={{ width: 18, height: 18 }} />, label: 'Auto-Pilot' },
                     ].map(v => (
                       <button
                         key={v.id}
@@ -792,7 +806,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => setExpectationResult('better')}
                 style={expectationResult === 'better' ? { borderColor: '#E9A23B', background: 'rgba(233,162,59,0.06)', color: '#E9A23B' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">✨</span>
+                <span className="gcm-wahoo-emoji"><SparklesIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Better than expected</span>
               </button>
               <button
@@ -800,7 +814,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => setExpectationResult('expected')}
                 style={expectationResult === 'expected' ? { borderColor: '#5e17eb', background: 'rgba(94,23,235,0.06)', color: '#5e17eb' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">👌</span>
+                <span className="gcm-wahoo-emoji"><CheckCircleIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">As expected</span>
               </button>
               <button
@@ -808,7 +822,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => setExpectationResult('worse')}
                 style={expectationResult === 'worse' ? { borderColor: '#6b7280', background: 'rgba(107,114,128,0.06)', color: '#6b7280' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">😬</span>
+                <span className="gcm-wahoo-emoji"><ExclamationTriangleIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Worse than expected</span>
               </button>
             </div>

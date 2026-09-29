@@ -9,21 +9,21 @@ export const STATES = ['vibe', 'peace', 'anxious', 'shutdown']
 export const STUCK_REASONS = [
   { id: 'too_busy', label: 'Too busy', emoji: '⏰' },
   { id: 'need_money', label: 'Need more money', emoji: '💰' },
-  { id: 'need_learn', label: 'Need to learn more', emoji: '📚' },
-  { id: 'scared', label: 'Scared of failing', emoji: '😰' },
-  { id: 'waiting', label: 'Waiting for the right time', emoji: '⏳' },
-  { id: 'dont_know', label: "Don't know where to start", emoji: '🤷' },
+  { id: 'need_learn', label: 'Need to learn more', emoji: '📚', iconName: 'BookOpenIcon' },
+  { id: 'scared', label: 'Scared of failing', emoji: '😰', iconName: 'ExclamationTriangleIcon' },
+  { id: 'waiting', label: 'Waiting for the right time', emoji: '⏳', iconName: 'ClockIcon' },
+  { id: 'dont_know', label: "Don't know where to start", emoji: '🤷', iconName: 'QuestionMarkCircleIcon' },
 ]
 
 export const STATE_META = {
-  vibe:      { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', felt: 'alive, lit up' },
-  vibe_rise: { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', felt: 'alive, lit up' },
-  peace:     { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', felt: 'fun, settled' },
-  fun:       { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', felt: 'fun, settled' },
-  anxious:   { y: 380, color: '#ef4444', label: 'Stressful',       emoji: '😰', felt: 'stressed, tight' },
-  pressure:  { y: 380, color: '#ef4444', label: 'Stressful',       emoji: '😰', felt: 'stressed, tight' },
-  shutdown:  { y: 520, color: '#6b7280', label: 'Bored',           emoji: '😶', felt: 'bored, flat' },
-  bored:     { y: 520, color: '#6b7280', label: 'Bored',           emoji: '😶', felt: 'bored, flat' },
+  vibe:      { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', iconName: 'FireIcon', felt: 'alive, lit up' },
+  vibe_rise: { y: 80,  color: '#E9A23B', label: 'Vibe Rise',     emoji: '🔥', iconName: 'FireIcon', felt: 'alive, lit up' },
+  peace:     { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', iconName: 'FaceSmileIcon', felt: 'fun, settled' },
+  fun:       { y: 210, color: '#10b981', label: 'Fun',            emoji: '😌', iconName: 'FaceSmileIcon', felt: 'fun, settled' },
+  anxious:   { y: 380, color: '#ef4444', label: 'Stressful',       emoji: '😰', iconName: 'ExclamationTriangleIcon', felt: 'stressed, tight' },
+  pressure:  { y: 380, color: '#ef4444', label: 'Stressful',       emoji: '😰', iconName: 'ExclamationTriangleIcon', felt: 'stressed, tight' },
+  shutdown:  { y: 520, color: '#6b7280', label: 'Bored',           emoji: '😶', iconName: 'MinusCircleIcon', felt: 'bored, flat' },
+  bored:     { y: 520, color: '#6b7280', label: 'Bored',           emoji: '😶', iconName: 'MinusCircleIcon', felt: 'bored, flat' },
 }
 
 export function stateY(s) { return STATE_META[s]?.y ?? TRUNK_Y }

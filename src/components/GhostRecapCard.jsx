@@ -4,6 +4,7 @@
  */
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { SunIcon, FireIcon, MegaphoneIcon } from '@heroicons/react/24/solid'
 
 export default function GhostRecapCard({ recapData }) {
   const navigate = useNavigate()
@@ -20,9 +21,9 @@ export default function GhostRecapCard({ recapData }) {
   const resultClass = result === 'win' ? 'grc-win' : result === 'loss' ? 'grc-loss' : 'grc-draw'
 
   const categories = [
-    { label: 'Tune', icon: '☀️', current: recapData.currentTune, ghost: recapData.ghostTune },
-    { label: 'Courage', icon: '🔥', current: recapData.currentCourage, ghost: recapData.ghostCourage },
-    { label: 'Community', icon: '📣', current: recapData.currentCommunity, ghost: recapData.ghostCommunity },
+    { label: 'Tune', icon: <SunIcon style={{ width: 16, height: 16 }} />, current: recapData.currentTune, ghost: recapData.ghostTune },
+    { label: 'Courage', icon: <FireIcon style={{ width: 16, height: 16 }} />, current: recapData.currentCourage, ghost: recapData.ghostCourage },
+    { label: 'Community', icon: <MegaphoneIcon style={{ width: 16, height: 16 }} />, current: recapData.currentCommunity, ghost: recapData.ghostCommunity },
   ]
 
   const dismiss = () => {
@@ -73,7 +74,7 @@ export default function GhostRecapCard({ recapData }) {
 
       {/* Footer: streak + inline CTA */}
       <div className="grc-footer">
-        {streak > 1 && <span className="grc-streak">🔥 {streak}w streak</span>}
+        {streak > 1 && <span className="grc-streak"><FireIcon style={{ width: 14, height: 14, display: 'inline-block', verticalAlign: 'middle' }} /> {streak}w streak</span>}
         <span className="grc-details-link">View Details →</span>
       </div>
     </div>

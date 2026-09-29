@@ -11,6 +11,7 @@ import { useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getChallenge } from '../../data/appBuildChallenges'
 import useAppBuildData from '../../hooks/useAppBuildData'
+import { CubeIcon } from '@heroicons/react/24/solid'
 import './AppBuildChallenge.css'
 
 // ─── Inline markdown: render **bold** spans ───────────────────────
@@ -269,7 +270,7 @@ export default function AppBuildChallenge() {
       {/* ── LEGO Parallel ──────────────────────────────────── */}
       {challenge.lego_parallel && (
         <div className="card lego-card">
-          <div className="card-icon">🧱</div>
+          <div className="card-icon"><CubeIcon style={{ width: 24, height: 24 }} /></div>
           <h3>{challenge.lego_parallel.title}</h3>
           <p>{challenge.lego_parallel.description}</p>
         </div>

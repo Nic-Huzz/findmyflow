@@ -10,6 +10,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getLevel } from '../lib/crm/statsService'
+import { ShieldCheckIcon, SparklesIcon } from '@heroicons/react/24/solid'
 import './FestLeaderboard.css'
 
 const RANK_MEDALS = ['🥇', '🥈', '🥉']
@@ -108,7 +109,7 @@ export default function FestLeaderboard({ userId, onClose }) {
                   <span className="fl-level">{p.level.emoji} {p.level.name}: {p.rp} RP</span>
                 </div>
                 <div className="fl-scores">
-                  <span className="fl-axes">🛡️ {p.safety} x ✨ {p.expression}</span>
+                  <span className="fl-axes"><ShieldCheckIcon style={{ width: 14, height: 14, verticalAlign: 'text-bottom' }} /> {p.safety} x <SparklesIcon style={{ width: 14, height: 14, verticalAlign: 'text-bottom' }} /> {p.expression}</span>
                   <span className={`fl-capacity fl-capacity-${p.zone}`}>{p.capacity}</span>
                 </div>
               </div>

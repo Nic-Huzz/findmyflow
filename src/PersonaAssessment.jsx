@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { SparklesIcon, ShieldCheckIcon, UserIcon, EyeSlashIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
@@ -446,11 +447,11 @@ function PersonaAssessment() {
             </p>
           </div>
           <div className="pattern-list">
-            <span className="pattern-item"><span className="pattern-icon">✨</span> The Perfectionist</span>
+            <span className="pattern-item"><span className="pattern-icon"><SparklesIcon style={{ width: 16, height: 16 }} /></span> The Perfectionist</span>
             <span className="pattern-item"><span className="pattern-icon">🤝</span> The People Pleaser</span>
-            <span className="pattern-item"><span className="pattern-icon">🎮</span> The Controller</span>
-            <span className="pattern-item"><span className="pattern-icon">🎭</span> The Performer</span>
-            <span className="pattern-item"><span className="pattern-icon">👻</span> The Ghost</span>
+            <span className="pattern-item"><span className="pattern-icon"><ShieldCheckIcon style={{ width: 16, height: 16 }} /></span> The Controller</span>
+            <span className="pattern-item"><span className="pattern-icon"><UserIcon style={{ width: 16, height: 16 }} /></span> The Performer</span>
+            <span className="pattern-item"><span className="pattern-icon"><EyeSlashIcon style={{ width: 16, height: 16 }} /></span> The Ghost</span>
           </div>
           <div className="animated-text">
             <p className="intro-text" style={{ animationDelay: '1.2s' }}>
@@ -461,7 +462,7 @@ function PersonaAssessment() {
             </p>
           </div>
           <div className="time-estimate">
-            <span>⏱️</span>
+            <span><ClockIcon style={{ width: 16, height: 16 }} /></span>
             <span>Takes ~2 minutes</span>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.PROTECTIVE_FLOW)}>
@@ -582,7 +583,7 @@ function PersonaAssessment() {
                 <span className="arrow-head">→</span>
               </div>
               <div className="journey-to">
-                <span className="journey-emoji">🎉</span>
+                <span className="journey-emoji"><CheckCircleIcon style={{ width: 20, height: 20, color: '#10b981' }} /></span>
                 <span className="journey-text">Hosting events at Bali Beach Clubs<br/><strong>with 350 headsets</strong></span>
               </div>
             </div>

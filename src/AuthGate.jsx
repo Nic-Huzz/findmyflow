@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { SparklesIcon, FlagIcon, ChartBarIcon, ExclamationTriangleIcon, EnvelopeIcon } from '@heroicons/react/24/solid'
 import { useAuth } from './auth/AuthProvider'
 
 const AuthGate = ({ children }) => {
@@ -84,15 +85,15 @@ const AuthGate = ({ children }) => {
           <p>Join a community of aspiring Movement Makers gamifying their ambitions.</p>
           <div className="auth-features">
             <div className="auth-feature">
-              <span className="feature-icon">✨</span>
+              <span className="feature-icon"><SparklesIcon style={{ width: 20, height: 20 }} /></span>
               <span>Discover your unique archetypes</span>
             </div>
             <div className="auth-feature">
-              <span className="feature-icon">🎯</span>
+              <span className="feature-icon"><FlagIcon style={{ width: 20, height: 20 }} /></span>
               <span>Complete the 7-Day Challenge</span>
             </div>
             <div className="auth-feature">
-              <span className="feature-icon">📊</span>
+              <span className="feature-icon"><ChartBarIcon style={{ width: 20, height: 20 }} /></span>
               <span>Track your personal growth</span>
             </div>
           </div>
@@ -140,7 +141,7 @@ const AuthGate = ({ children }) => {
 
               {message && message !== 'no_account' && (
                 <div className={`auth-message ${message.includes('Check your email') ? 'success' : 'error'}`}>
-                  {message.includes('Check your email') ? '✉️ ' : '⚠️ '}
+                  {message.includes('Check your email') ? <EnvelopeIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom', display: 'inline-block' }} /> : <ExclamationTriangleIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom', display: 'inline-block' }} />}
                   {message}
                 </div>
               )}
@@ -193,7 +194,7 @@ const AuthGate = ({ children }) => {
 
               {message && (
                 <div className="auth-message error">
-                  ⚠️ {message}
+                  <ExclamationTriangleIcon style={{ width: 16, height: 16, marginRight: 4, verticalAlign: 'text-bottom', display: 'inline-block' }} /> {message}
                 </div>
               )}
 

@@ -15,6 +15,16 @@ import {
   createImplementation,
   CATEGORY_TO_FLOW_TYPE
 } from '../../lib/crm/implementationService'
+import {
+  ClipboardDocumentListIcon,
+  LightBulbIcon,
+  SparklesIcon,
+  CheckCircleIcon,
+  ChartBarIcon,
+  FlagIcon,
+  PrinterIcon,
+  ArrowDownTrayIcon,
+} from '@heroicons/react/24/solid'
 import './ChecklistDisplay.css'
 
 // Map flow type to category
@@ -216,7 +226,7 @@ function ChecklistDisplay({ flowType, offerId, offerName, projectId: propProject
         className="checklist-toggle"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <span className="checklist-toggle-icon">{isExpanded ? '📋' : '📋'}</span>
+        <span className="checklist-toggle-icon"><ClipboardDocumentListIcon style={{ width: 18, height: 18 }} /></span>
         <span className="checklist-toggle-text">
           {isExpanded ? 'Hide' : 'Show'} Implementation Checklist
         </span>
@@ -250,7 +260,7 @@ function ChecklistDisplay({ flowType, offerId, offerName, projectId: propProject
           {/* Hormozi Principle */}
           {checklist.hormozi_principle && (
             <div className="checklist-principle">
-              <span className="principle-icon">💡</span>
+              <span className="principle-icon"><LightBulbIcon style={{ width: 18, height: 18, color: '#E9A23B' }} /></span>
               <p>"{checklist.hormozi_principle}"</p>
             </div>
           )}
@@ -298,7 +308,7 @@ function ChecklistDisplay({ flowType, offerId, offerName, projectId: propProject
               <h4>Quick Wins</h4>
               <ul>
                 {checklist.quick_wins.map((win, index) => (
-                  <li key={index}>✨ {win}</li>
+                  <li key={index}><SparklesIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> {win}</li>
                 ))}
               </ul>
             </div>
@@ -312,7 +322,7 @@ function ChecklistDisplay({ flowType, offerId, offerName, projectId: propProject
               <div className="tracking-existing">
                 <div className="tracking-progress">
                   <span className="tracking-status">
-                    {existingImpl.status === 'completed' ? '✅ Completed' : '📊 In Progress'}
+                    {existingImpl.status === 'completed' ? <><CheckCircleIcon style={{ width: 14, height: 14, color: '#10b981', marginRight: 4, verticalAlign: 'text-bottom' }} /> Completed</> : <><ChartBarIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> In Progress</>}
                   </span>
                   <span className="tracking-count">
                     {existingImpl.completed_tasks?.length || 0}/{existingImpl.total_tasks || totalTasks} tasks
@@ -335,7 +345,7 @@ function ChecklistDisplay({ flowType, offerId, offerName, projectId: propProject
                   onClick={handleStartTracking}
                   disabled={creatingImpl || !projectId}
                 >
-                  {creatingImpl ? 'Creating...' : '🎯 Start Tracking This Implementation'}
+                  {creatingImpl ? 'Creating...' : <><FlagIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Start Tracking This Implementation</>}
                 </button>
                 {!projectId && (
                   <p className="tracking-note">
@@ -349,10 +359,10 @@ function ChecklistDisplay({ flowType, offerId, offerName, projectId: propProject
           {/* Export Actions */}
           <div className="checklist-actions">
             <button className="checklist-action-btn" onClick={handlePrint}>
-              🖨️ Print Checklist
+              <PrinterIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Print Checklist
             </button>
             <button className="checklist-action-btn" onClick={handleDownload}>
-              📥 Download Markdown
+              <ArrowDownTrayIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Download Markdown
             </button>
           </div>
         </div>

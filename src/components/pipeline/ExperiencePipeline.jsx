@@ -12,6 +12,7 @@ import useExperiencePipeline from '../../hooks/useExperiencePipeline'
 import PipelineNodeDetail from './PipelineNodeDetail'
 import MetricInputSheet from './MetricInputSheet'
 import { hapticLight } from '../../lib/haptics'
+import { CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import './pipeline.css'
 
 export default function ExperiencePipeline({ experienceId, onBack }) {
@@ -123,7 +124,7 @@ export default function ExperiencePipeline({ experienceId, onBack }) {
                 }}
               >
                 <div className={`pl-ring ${node.status}`}>
-                  <span className="pl-ring-icon">{node.status === 'good' ? '✅' : node.status === 'warn' ? '⚠️' : node.status === 'bad' ? '❌' : '○'}</span>
+                  <span className="pl-ring-icon">{node.status === 'good' ? <CheckCircleIcon style={{ width: 16, height: 16, color: '#10b981' }} /> : node.status === 'warn' ? <ExclamationTriangleIcon style={{ width: 16, height: 16, color: '#f59e0b' }} /> : node.status === 'bad' ? <XCircleIcon style={{ width: 16, height: 16, color: '#ef4444' }} /> : '○'}</span>
                   <svg viewBox="0 0 40 40">
                     <circle className="pl-ring-bg" cx="20" cy="20" r="17" />
                     <circle
