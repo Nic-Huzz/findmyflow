@@ -3,6 +3,19 @@ import { supabase } from '../lib/supabaseClient'
 import { hapticLight } from '../lib/haptics'
 import confetti from 'canvas-confetti'
 import { saveChallengeCompletion } from '../lib/challengeCompletionService'
+import {
+  EyeSlashIcon,
+  AdjustmentsHorizontalIcon,
+  UsersIcon,
+  ShieldCheckIcon,
+  CpuChipIcon,
+  FireIcon,
+  FaceSmileIcon,
+  ExclamationTriangleIcon,
+  QuestionMarkCircleIcon,
+  CheckCircleIcon,
+  StopIcon,
+} from '@heroicons/react/24/solid'
 import './GroanCompletionModal.css'
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
@@ -95,11 +108,11 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   }
 
   const voices = [
-    { id: 'ghost', icon: '👻', label: 'Ghost' },
-    { id: 'perfectionist', icon: '🎯', label: 'Perfectionist' },
-    { id: 'people_pleaser', icon: '🪞', label: 'People Pleaser' },
-    { id: 'controller', icon: '🎮', label: 'Controller' },
-    { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot' },
+    { id: 'ghost', icon: <EyeSlashIcon style={{ width: 18, height: 18 }} />, label: 'Ghost' },
+    { id: 'perfectionist', icon: <AdjustmentsHorizontalIcon style={{ width: 18, height: 18 }} />, label: 'Perfectionist' },
+    { id: 'people_pleaser', icon: <UsersIcon style={{ width: 18, height: 18 }} />, label: 'People Pleaser' },
+    { id: 'controller', icon: <ShieldCheckIcon style={{ width: 18, height: 18 }} />, label: 'Controller' },
+    { id: 'auto_pilot', icon: <CpuChipIcon style={{ width: 18, height: 18 }} />, label: 'Auto-Pilot' },
   ]
 
   return (
@@ -204,7 +217,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
                 onClick={() => { hapticLight(); setGapVoice('none'); handleSave(null) }}
                 style={gapVoice === 'none' ? { borderColor: '#16a34a', background: 'rgba(22,163,74,0.06)', color: '#16a34a' } : undefined}
               >
-                <span className="gcm-wahoo-emoji">✅</span>
+                <span className="gcm-wahoo-emoji"><CheckCircleIcon style={{ width: 20, height: 20 }} /></span>
                 <span className="gcm-wahoo-label">Nope</span>
               </button>
             </div>
