@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise — UX Flow Chart</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #5e17eb;
+  --gold: #E9A23B;
+  --essential: #16a34a;
+  --essential-bg: #f0fdf4;
+  --useful: #d97706;
+  --useful-bg: #fffbeb;
+  --nice: #64748b;
+  --nice-bg: #f8fafc;
+  --fluff: #dc2626;
+  --fluff-bg: #fef2f2;
+  --break: #ef4444;
+  --bg: #fafaf7;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --line: #d1d5db;
+  --phase1: #ede9fe;
+  --phase2: #fef3c7;
+  --phase3: #d1fae5;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Header ─── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250,250,247,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  background: linear-gradient(135deg, var(--purple), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.legend-dot.essential { background: var(--essential); }
+.legend-dot.useful { background: var(--useful); }
+.legend-dot.nice { background: var(--nice); }
+.legend-dot.fluff { background: var(--fluff); }
+.legend-dot.breakpoint { background: var(--break); border-radius: 2px; transform: rotate(45deg); width: 8px; height: 8px; }
+
+/* ─── Core Loop Banner ─── */
+.core-loop {
+  max-width: 960px;
+  margin: 40px auto 0;
+  padding: 0 24px;
+}
+.core-loop-card {
+  background: linear-gradient(135deg, rgba(94,23,235,0.04), rgba(233,162,59,0.04));
+  border: 1px solid rgba(94,23,235,0.12);
+  border-radius: 16px;
+  padding: 28px 32px;
+  text-align: center;
+}
+.core-loop-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--purple);
+  margin-bottom: 20px;
+}
+.core-loop-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.core-step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.core-step-node {
+  background: var(--card);
+  border: 2px solid var(--purple);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--purple);
+  white-space: nowrap;
+}
+.core-step-node span { font-size: 18px; margin-right: 6px; }
+.core-arrow {
+  color: var(--gold);
+  font-size: 20px;
+  padding: 0 8px;
+  font-weight: 700;
+}
+.core-loop-sub {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─── Flow Container ─── */
+.flow-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  position: relative;
+}
+
+/* ─── Phase Section ─── */
+.phase {
+  margin-bottom: 48px;
+  position: relative;
+}
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid;
+}
+.phase-header.p1 { border-color: var(--purple); }
+.phase-header.p2 { border-color: var(--gold); }
+.phase-header.p3 { border-color: var(--essential); }
+.phase-header.always { border-color: var(--nice); }
+
+.phase-number {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.phase-number.p1 { background: var(--phase1); color: var(--purple); }
+.phase-number.p2 { background: var(--phase2); color: #92400e; }
+.phase-number.p3 { background: var(--phase3); color: #065f46; }
+.phase-number.always { background: #f1f5f9; color: var(--nice); }
+
+.phase-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.phase-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ─── Flow Path (vertical spine) ─── */
+.flow-path {
+  position: relative;
+  padding-left: 40px;
+}
+.flow-path::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+
+/* ─── Node ─── */
+.node {
+  position: relative;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.node:hover { transform: translateX(4px); }
+.node:last-child { margin-bottom: 0; }
+
+.node-dot {
+  position: absolute;
+  left: -33px;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+.node:hover .node-dot { transform: scale(1.3); }
+.node.essential .node-dot { border-color: var(--essential); background: var(--essential); }
+.node.useful .node-dot { border-color: var(--useful); background: var(--useful); }
+.node.nice .node-dot { border-color: var(--nice); background: var(--nice); }
+.node.fluff .node-dot { border-color: var(--fluff); background: var(--fluff); }
+
+.node-card {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.node:hover .node-card {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.1);
+}
+.node.essential .node-card { border-left: 3px solid var(--essential); }
+.node.useful .node-card { border-left: 3px solid var(--useful); }
+.node.nice .node-card { border-left: 3px solid var(--nice); }
+.node.fluff .node-card { border-left: 3px solid var(--fluff); }
+
+.node-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.node-emoji { font-size: 20px; flex-shrink: 0; }
+.node-info { flex: 1; min-width: 0; }
+.node-name {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+.node-route {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Sans', monospace;
+  margin-top: 2px;
+}
+.node-verdict {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.node.essential .node-verdict { background: var(--essential-bg); color: var(--essential); }
+.node.useful .node-verdict { background: var(--useful-bg); color: var(--useful); }
+.node.nice .node-verdict { background: var(--nice-bg); color: var(--nice); }
+.node.fluff .node-verdict { background: var(--fluff-bg); color: var(--fluff); }
+
+.node-expand {
+  font-size: 14px;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+.node.open .node-expand { transform: rotate(180deg); }
+
+.node-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ─── Expandable Sub-steps ─── */
+.node-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.node.open .node-details {
+  max-height: 800px;
+}
+.node-substeps {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.substep {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.4;
+  padding: 4px 0;
+}
+.substep-num {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  background: rgba(0,0,0,0.05);
+  color: var(--muted);
+  border-radius: 4px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.substep-text { flex: 1; }
+.substep-text strong { font-weight: 600; }
+
+/* ─── Breakpoint Pin ─── */
+.breakpoint-pin {
+  position: relative;
+  margin: 12px 0 12px;
+  padding-left: 0;
+}
+.bp-card {
+  background: linear-gradient(135deg, #fef2f2, #fff5f5);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.bp-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--break);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: 'Outfit', sans-serif;
+}
+.bp-content { flex: 1; }
+.bp-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--break);
+  margin-bottom: 2px;
+}
+.bp-desc {
+  font-size: 12px;
+  color: #991b1b;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+/* ─── Bridge Connector ─── */
+.bridge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 12px 0;
+}
+.bridge-line {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 8px, transparent 8px, transparent 14px);
+}
+.bridge-label {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--gold);
+  white-space: nowrap;
+  padding: 4px 12px;
+  background: rgba(233,162,59,0.08);
+  border-radius: 6px;
+}
+
+/* ─── New Badge ─── */
+.new-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, var(--purple), var(--gold));
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* ─── Stats Footer ─── */
+.stats {
+  max-width: 960px;
+  margin: 0 auto 60px;
+  padding: 0 24px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -1px;
+}
+.stat-num.essential { color: var(--essential); }
+.stat-num.useful { color: var(--useful); }
+.stat-num.nice { color: var(--nice); }
+.stat-num.fluff { color: var(--fluff); }
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 640px) {
+  .header { flex-direction: column; gap: 10px; padding: 12px 16px; }
+  .legend { justify-content: center; }
+  .core-loop-steps { flex-direction: column; gap: 4px; }
+  .core-arrow { transform: rotate(90deg); padding: 2px 0; }
+  .phase-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .phase-subtitle { margin-left: 0; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .flow-container { padding: 24px 16px 60px; }
+}
+
+/* ─── Animations ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.phase { animation: fadeUp 0.4s ease both; }
+.phase:nth-child(2) { animation-delay: 0.1s; }
+.phase:nth-child(3) { animation-delay: 0.2s; }
+.phase:nth-child(4) { animation-delay: 0.3s; }
+.phase:nth-child(5) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Vibe Rise — UX Flow Chart</h1>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot essential"></div>Essential</div>
+    <div class="legend-item"><div class="legend-dot useful"></div>Useful</div>
+    <div class="legend-item"><div class="legend-dot nice"></div>Nice-to-have</div>
+    <div class="legend-item"><div class="legend-dot fluff"></div>Fluff</div>
+    <div class="legend-item"><div class="legend-dot breakpoint"></div>Breakpoint</div>
+  </div>
+</div>
+
+<!-- Core Loop -->
+<div class="core-loop">
+  <div class="core-loop-card">
+    <div class="core-loop-title">The Core Loop</div>
+    <div class="core-loop-steps">
+      <div class="core-step">
+        <div class="core-step-node"><span>🎮</span> Discover</div>
+        <div class="core-arrow">→</div>
+      </div>
+      <div class="core-step">
+        <div class="core-step-node"><span>🗺️</span> Choose</div>
+        <div class="core-arrow">→</div>
+      </div>
+      <div class="core-step">
+        <div class="core-step-node"><span>⚡</span> Do</div>
+        <div class="core-arrow">→</div>
+      </div>
+      <div class="core-step">
+        <div class="core-step-node"><span>💰</span> Earn</div>
+      </div>
+    </div>
+    <div class="core-loop-sub">Every feature should serve one of these 4 moves. If it doesn't, it's fluff.</div>
+  </div>
+</div>
+
+<div class="flow-container">
+
+  <!-- ═══════════ PHASE 0: ENTRY ═══════════ -->
+  <div class="phase">
+    <div class="phase-header p1">
+      <span class="phase-number p1">Entry</span>
+      <span class="phase-title">First Touch</span>
+      <span class="phase-subtitle">New user, no account</span>
+    </div>
+    <div class="flow-path">
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🌐</span>
+            <div class="node-info">
+              <div class="node-name">Landing Page</div>
+              <div class="node-route">/</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">Slide-chat lead magnet flow. First impression.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Hook slides</strong> — 3 swipeable visual storytelling slides</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Archetype swipe</strong> — Pick Essence + Protective archetypes</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Email capture</strong> — Name + email → magic link sent</span></div>
+              <div class="substep"><span class="substep-num">4</span><span class="substep-text"><strong>Verify</strong> — 6-digit code → account created → redirect to /me</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🔐</span>
+            <div class="node-info">
+              <div class="node-name">AI Consent Modal</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Apple 5.1.1 compliance. One-time gate before any AI features.</div>
+        </div>
+      </div>
+
+      <div class="breakpoint-pin">
+        <div class="bp-card">
+          <div class="bp-icon">10</div>
+          <div class="bp-content">
+            <div class="bp-title">"What's the point?"</div>
+            <div class="bp-desc">The app's thesis (burnout → discover → push comfort zone → earn) is never stated in one sentence. A 12yo needs that on day one.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🏠</span>
+            <div class="node-info">
+              <div class="node-name">Bottom Toolbar Appears</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">3 icons: Home (/me) · Let's Play (/7-day-challenge) · Profile (/profile-hub). League removed.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 1: DISCOVERY ═══════════ -->
+  <div class="phase">
+    <div class="phase-header p1">
+      <span class="phase-number p1">Phase 1</span>
+      <span class="phase-title">Discovery</span>
+      <span class="phase-subtitle">Stages 0–7 · "What lights me up?"</span>
+    </div>
+    <div class="flow-path">
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">⚡</span>
+            <div class="node-info">
+              <div class="node-name">Step 1a: Experience Game</div>
+              <div class="node-route">/experience-game</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">FIRST action. Always visible. ~94 experiences across 11 primals.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Tick</strong> — "Which have you experienced?" (checkbox per branch)</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Rate</strong> — "How did it feel?" (Vibe Rise / Fun / Stressful / Bored)</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Dome</strong> — Radar visualization builds between branches</span></div>
+              <div class="substep"><span class="substep-num">4</span><span class="substep-text"><strong>Insight</strong> — Signature analysis + recommended courage challenge</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">✨</span>
+            <div class="node-info">
+              <div class="node-name">Step 1b: Essence Mirror</div>
+              <div class="node-route">/essence-mirror</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">Appears after dome has data. 9-step identity anchor.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1–3</span><span class="substep-text">Superpower card selection (multiple rounds)</span></div>
+              <div class="substep"><span class="substep-num">4</span><span class="substep-text">Vision confirmation</span></div>
+              <div class="substep"><span class="substep-num">5</span><span class="substep-text">AI Mirror reveal — your archetype explained</span></div>
+              <div class="substep"><span class="substep-num">6</span><span class="substep-text">Pixar hero avatar generated (Gemini 3.1 Flash)</span></div>
+              <div class="substep"><span class="substep-num">7</span><span class="substep-text">Name your hero</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">💼</span>
+            <div class="node-info">
+              <div class="node-name">Step 1c: Add Current Job</div>
+              <div class="node-route">/add-current-job</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Appears after essence done. What's your current job? Unlocks Paths tab.</div>
+        </div>
+      </div>
+
+      <div class="bridge">
+        <div class="bridge-line"></div>
+        <div class="bridge-label">Bridge 1 → 2</div>
+        <div class="bridge-line"></div>
+      </div>
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🗺️</span>
+            <div class="node-info">
+              <div class="node-name">Choose Quests</div>
+              <div class="node-route">/choose-quests</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">THE BIG BRIDGE. Converts scattered interests into life paths.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Select</strong> — Pick dome experiences you love most</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Deep Dive</strong> — Format sub-nodes (HOW) + career vectors (Do/Guide/Build/Hobby)</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>AI Projects</strong> — Edge function suggests life paths, user can add/remove</span></div>
+              <div class="substep"><span class="substep-num">4</span><span class="substep-text"><strong>Cluster</strong> — Projects grouped into life paths</span></div>
+              <div class="substep"><span class="substep-num">5</span><span class="substep-text"><strong>Review</strong> — Rename paths, move projects, toggle selection</span></div>
+              <div class="substep"><span class="substep-num">6</span><span class="substep-text"><strong>Path Definition</strong> — 3 screens per path: setup, framing, commitment</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential" style="margin-bottom: 8px;">
+        <div class="node-dot" style="background: #16a34a; border-color: #16a34a;"></div>
+        <div class="node-card" style="border-left: 3px solid #16a34a; background: #f0fdf4;">
+          <div class="node-top">
+            <span class="node-emoji">✅</span>
+            <div class="node-info">
+              <div class="node-name">Paths Lock Hint</div>
+            </div>
+            <span class="node-verdict" style="background: #dcfce7; color: #16a34a;">Fixed</span>
+          </div>
+          <div class="node-desc">Visible text "Complete discovery to unlock Paths" replaces invisible tooltip. Tapping locked Paths tab redirects to Discover.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 2: ACTION ═══════════ -->
+  <div class="phase">
+    <div class="phase-header p2">
+      <span class="phase-number p2">Phase 2</span>
+      <span class="phase-title">Action</span>
+      <span class="phase-subtitle">Stages 3–7 · "Push my comfort zone"</span>
+    </div>
+    <div class="flow-path">
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🃏</span>
+            <div class="node-info">
+              <div class="node-name">Paths Tab — Quest Board</div>
+              <div class="node-route">/7-day-challenge → Paths</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Each life path = a quest card. Tasks, courage challenges, mini dome, zone matrix.</div>
+        </div>
+      </div>
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">⚡</span>
+            <div class="node-info">
+              <div class="node-name">Create Courage Challenge</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">The engine. No growth without action. Dome only grows through completed challenges.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Describe</strong> — What's the scary thing? Link to a quest.</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Dimensions</strong> — Tag 1+ dome dimensions (People, Money, etc) with levels</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Predict</strong> — "How does your body feel thinking about this?" (1-5)</span></div>
+              <div class="substep"><span class="substep-num">4</span><span class="substep-text"><strong>Voice</strong> — "Any voice holding you back?" (5 protective voices)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🎯</span>
+            <div class="node-info">
+              <div class="node-name">Complete Courage Challenge</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">3 tap-and-go screens. Down from 11. Dome grows immediately after.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>How did it feel?</strong> — Vibe Rise / Fun / Stressful / Bored (auto-advance)</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Do that again?</strong> — Yes / Not sure / No (auto-advance)</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Voice check</strong> — "Did a protective voice show up?" 5 voices + Nope (triggers save)</span></div>
+              <div class="substep"><span class="substep-num">→</span><span class="substep-text"><strong>Dome grows</strong> — animated radar overlay shows comfort zone expansion + RP</span></div>
+              <div class="substep"><span class="substep-num">+</span><span class="substep-text"><strong>7 reflections</strong> move to Progress tab evidence feed as optional expandable cards</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential" style="margin-bottom: 8px;">
+        <div class="node-dot" style="background: #16a34a; border-color: #16a34a;"></div>
+        <div class="node-card" style="border-left: 3px solid #16a34a; background: #f0fdf4;">
+          <div class="node-top">
+            <span class="node-emoji">✅</span>
+            <div class="node-info">
+              <div class="node-name">Completion Flow Simplified</div>
+            </div>
+            <span class="node-verdict" style="background: #dcfce7; color: #16a34a;">Fixed</span>
+          </div>
+          <div class="node-desc">Was 11 screens. Now 3 taps + dome animation. Reflections moved to Progress tab.</div>
+        </div>
+      </div>
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🛡️</span>
+            <div class="node-info">
+              <div class="node-name">Dome of Safety</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">The scoreboard. Visual proof your comfort zone is expanding.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text"><strong>Purple fill</strong> — Integrated capacity (Vibe Rise / Fun states)</span></div>
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text"><strong>Gold dashed</strong> — Growth zone (Stressful states, edge ring)</span></div>
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text">8 dimensions: People, Money, Vulnerability, Stakes, Rarity, Identity, Context, Biz Commitment</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential" style="margin-bottom: 8px;">
+        <div class="node-dot" style="background: #16a34a; border-color: #16a34a;"></div>
+        <div class="node-card" style="border-left: 3px solid #16a34a; background: #f0fdf4;">
+          <div class="node-top">
+            <span class="node-emoji">✅</span>
+            <div class="node-info">
+              <div class="node-name">Dome Growth Visible</div>
+            </div>
+            <span class="node-verdict" style="background: #dcfce7; color: #16a34a;">Fixed</span>
+          </div>
+          <div class="node-desc">DomeGrowthOverlay animates radar growth immediately after completion. Reward connected to action.</div>
+        </div>
+      </div>
+
+      <div class="breakpoint-pin">
+        <div class="bp-card">
+          <div class="bp-icon">5</div>
+          <div class="bp-content">
+            <div class="bp-title">"I don't know what the dome means"</div>
+            <div class="bp-desc">Abstract labels like "Vulnerability dimension level 3." Need: "How brave you are with people" instead of "People dimension."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🔁</span>
+            <div class="node-info">
+              <div class="node-name">Prediction Error (Gap)</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">"It wasn't as scary as I thought." The learning signal that rewires fear. Predicted vs experienced.</div>
+        </div>
+      </div>
+
+      <div class="node useful" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">💚</span>
+            <div class="node-info">
+              <div class="node-name">Healing Flow</div>
+            </div>
+            <span class="node-verdict">Useful</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">Per-task, 7 steps. Valuable when triggered by real patterns, but steps 6-7 feel like therapy, not a game.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Pattern</strong> — "Which voice shows up?"</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Fear</strong> — "What's the worst that could happen?"</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Origin</strong> — "When did you first learn this wasn't safe?"</span></div>
+              <div class="substep"><span class="substep-num">4</span><span class="substep-text"><strong>Insight</strong> — Auto-generated integration card</span></div>
+              <div class="substep"><span class="substep-num">5</span><span class="substep-text"><strong>Rewire</strong> — "What's true now that wasn't true then?"</span></div>
+              <div class="substep"><span class="substep-num">6</span><span class="substep-text"><strong>Go Deeper</strong> — Somatic upsell (book session)</span></div>
+              <div class="substep"><span class="substep-num">7</span><span class="substep-text"><strong>Expect Best</strong> — Positive visualization</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">📋</span>
+            <div class="node-info">
+              <div class="node-name">Weekly Review</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">Sunday/Monday. Reflection loop. +15 RP. Second Clock validates whether growth stuck.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">Q0</span><span class="substep-text"><strong>Second Clock</strong> — Follow-up on last week's "not sure" aftertaste</span></div>
+              <div class="substep"><span class="substep-num">Q1</span><span class="substep-text"><strong>Universe Check</strong> — Follow-up on "not sure" universe responses</span></div>
+              <div class="substep"><span class="substep-num">Q2</span><span class="substep-text"><strong>Protective Voice</strong> — "Did your voice win this week?"</span></div>
+              <div class="substep"><span class="substep-num">Q3</span><span class="substep-text"><strong>Coping Pattern</strong> — Why didn't you complete [challenge]?</span></div>
+              <div class="substep"><span class="substep-num">Q4</span><span class="substep-text"><strong>Essence Honour</strong> — "How did you honour your essence?"</span></div>
+              <div class="substep"><span class="substep-num">Q5</span><span class="substep-text"><strong>New You</strong> — Vision + identity declaration</span></div>
+              <div class="substep"><span class="substep-num">Q6</span><span class="substep-text"><strong>Life Fuel per Path</strong> — Choice/Connection/Mastery/Meaning per quest</span></div>
+              <div class="substep"><span class="substep-num">$</span><span class="substep-text"><strong>Income</strong> — [Stage 8+] Per-quest income entries</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">⚙️</span>
+            <div class="node-info">
+              <div class="node-name">Tune Tab — Daily Maintenance</div>
+              <div class="node-route">/7-day-challenge → Tune</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Maintenance (sleep, exercise, meals), Safety (meditation, connection), Expression (style, voice). Stalls + Drains trackers.</div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">💰</span>
+            <div class="node-info">
+              <div class="node-name">Pay The Bills<span class="new-badge">New</span></div>
+              <div class="node-route">Paths tab section</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Bridge job tracker. Solves #1 objection: "I can't afford to explore." Track or find bridge jobs.</div>
+        </div>
+      </div>
+
+      <div class="node useful">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🧭</span>
+            <div class="node-info">
+              <div class="node-name">Zone Cal<span class="new-badge">New</span></div>
+              <div class="node-route">Tune tab section</div>
+            </div>
+            <span class="node-verdict">Useful</span>
+          </div>
+          <div class="node-desc">21-day NS self-report. 8-spoke diagnostic. Could fold into daily practices instead of separate section.</div>
+        </div>
+      </div>
+
+      <div class="node nice" onclick="toggleNode(this)">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🧘</span>
+            <div class="node-info">
+              <div class="node-name">Pattern Interrupt Tools<span class="new-badge">New</span></div>
+            </div>
+            <span class="node-verdict">Nice-to-have</span>
+            <span class="node-expand">▾</span>
+          </div>
+          <div class="node-desc">4 separate somatic flows. One "calm down" button would do.</div>
+          <div class="node-details">
+            <div class="node-substeps">
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text"><strong>ADAC</strong> — 4-step emotional defusing (Name → Dissociate → Anchor → Integrate)</span></div>
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text"><strong>Garbage Can</strong> — Evening hygiene (clear bad → frame good → sleep)</span></div>
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text"><strong>Pattern Interrupt</strong> — Voice rescript pills or write your own</span></div>
+              <div class="substep"><span class="substep-num">•</span><span class="substep-text"><strong>Triple Warmer</strong> — I AM tapping with identity declarations</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ BRIDGE 2→3 ═══════════ -->
+  <div class="bridge">
+    <div class="bridge-line"></div>
+    <div class="bridge-label">Bridge 2 → 3 · Stage 8+</div>
+    <div class="bridge-line"></div>
+  </div>
+
+  <div class="breakpoint-pin" style="margin-bottom: 24px;">
+    <div class="bp-card">
+      <div class="bp-icon">9</div>
+      <div class="bp-content">
+        <div class="bp-title">"I don't know what stage I'm at"</div>
+        <div class="bp-desc">Hero stages (0-12) drive everything but the user never sees "You are at stage 7." The system is invisible. Need a visible level indicator.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 3: DIRECTION ═══════════ -->
+  <div class="phase">
+    <div class="phase-header p3">
+      <span class="phase-number p3">Phase 3</span>
+      <span class="phase-title">Direction</span>
+      <span class="phase-subtitle">Stages 8–12 · "Turn what I love into income"</span>
+    </div>
+    <div class="flow-path">
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">📖</span>
+            <div class="node-info">
+              <div class="node-name">Card 1: Life Map Review</div>
+              <div class="node-route">Discover tab → DirectionSection</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Era summary of your life so far. Append new reflections.</div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🎯</span>
+            <div class="node-info">
+              <div class="node-name">Card 2: Problem Motivation</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Taxonomy categories ranked by frequency. Pick 1-3 problems you want to solve.</div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">✨</span>
+            <div class="node-info">
+              <div class="node-name">Card 3: Multiplication Reveal</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Progressive 4-beat: Skill → Problem → "turns into" → Dome fuel. The "aha" moment.</div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">💵</span>
+            <div class="node-info">
+              <div class="node-name">Card 4: Money Model</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Pick business stage → see relevant models + strategies + domain pricing. Revenue tags from dome.</div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🎉</span>
+            <div class="node-info">
+              <div class="node-name">Card 5: First Income</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Celebration-framed. Currency picker → report first income → triggers stage 9. You made money doing what you love.</div>
+        </div>
+      </div>
+
+      <div class="node essential">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">📈</span>
+            <div class="node-info">
+              <div class="node-name">Stage Progression</div>
+            </div>
+            <span class="node-verdict">Essential</span>
+          </div>
+          <div class="node-desc">Stage 8→9: first income. Stage 9→10: 3+ months income. Stage 10→11: income ≥ expenses.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ ALWAYS PRESENT ═══════════ -->
+  <div class="phase">
+    <div class="phase-header always">
+      <span class="phase-number always">Always</span>
+      <span class="phase-title">Floating & Side Features</span>
+      <span class="phase-subtitle">Present across all phases</span>
+    </div>
+    <div class="flow-path">
+
+      <div class="node nice">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🌞</span>
+            <div class="node-info">
+              <div class="node-name">Zarlo AI Widget</div>
+            </div>
+            <span class="node-verdict">Nice-to-have</span>
+          </div>
+          <div class="node-desc">Floating bottom-right. Dome insight + scoreboard context injected. Support tool, not core.</div>
+        </div>
+      </div>
+
+      <div class="node nice">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🪞</span>
+            <div class="node-info">
+              <div class="node-name">Figurine Mentor</div>
+            </div>
+            <span class="node-verdict">Nice-to-have</span>
+          </div>
+          <div class="node-desc">Floating bottom-left FAB. 3 convos/day. Phase-gated intelligence. Redundant with Zarlo.</div>
+        </div>
+      </div>
+
+      <div class="breakpoint-pin">
+        <div class="bp-card">
+          <div class="bp-icon">4</div>
+          <div class="bp-content">
+            <div class="bp-title">"Two robots talking to me"</div>
+            <div class="bp-desc">Zarlo (bottom-right) + Figurine (bottom-left) simultaneously. A 12yo doesn't know which one to talk to. Pick one.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="node nice">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🏆</span>
+            <div class="node-info">
+              <div class="node-name">Ghost Self-League</div>
+              <div class="node-route">/league (removed from toolbar)</div>
+            </div>
+            <span class="node-verdict">Nice-to-have</span>
+          </div>
+          <div class="node-desc">Removed from bottom toolbar + header. Still accessible via direct URL. No users yet.</div>
+        </div>
+      </div>
+
+      <div class="node nice">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">📊</span>
+            <div class="node-info">
+              <div class="node-name">Progress Tab</div>
+              <div class="node-route">/7-day-challenge → Progress</div>
+            </div>
+            <span class="node-verdict">Nice-to-have</span>
+          </div>
+          <div class="node-desc">Hero stage journey, voice trends, evidence feed, observations. Power-user dashboard.</div>
+        </div>
+      </div>
+
+      <div class="node nice">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">🔍</span>
+            <div class="node-info">
+              <div class="node-name">Mirror / Quest Map / Curiosity Map / Career Alignment</div>
+            </div>
+            <span class="node-verdict">Nice-to-have</span>
+          </div>
+          <div class="node-desc">Multiple exploration surfaces that overlap. Mirror re-rates clusters, Quest Map visualises paths, Curiosity Map explores, Career Alignment finds direction.</div>
+        </div>
+      </div>
+
+      <div class="node fluff">
+        <div class="node-dot"></div>
+        <div class="node-card">
+          <div class="node-top">
+            <span class="node-emoji">📚</span>
+            <div class="node-info">
+              <div class="node-name">Guidebook / Codex / Skill Tree / NS Flow</div>
+            </div>
+            <span class="node-verdict">Fluff</span>
+          </div>
+          <div class="node-desc">Educational content, encyclopedia, invisible XP system, NS explainer. Nobody opens a textbook inside a game.</div>
+        </div>
+      </div>
+
+      <div class="breakpoint-pin">
+        <div class="bp-card">
+          <div class="bp-icon">7</div>
+          <div class="bp-content">
+            <div class="bp-title">"Too many things called different names"</div>
+            <div class="bp-desc">Rise Points, hero stages, levels, dome dimensions, NS states, courage challenges, quests, tasks, life paths, nodes, primals, career vectors, life fuels, channels. A 12yo tracks ~3 concepts. Need: Points, Level, Paths, Challenges, Dome.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num essential">12</div>
+      <div class="stat-label">Essential</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num useful">8</div>
+      <div class="stat-label">Useful</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num nice">15</div>
+      <div class="stat-label">Nice-to-have</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num fluff">6</div>
+      <div class="stat-label">Fluff</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleNode(el) {
+  el.classList.toggle('open')
+}
+
+// Intersection observer for scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1'
+      entry.target.style.transform = 'translateY(0)'
+    }
+  })
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
+
+document.querySelectorAll('.node, .breakpoint-pin').forEach(el => {
+  el.style.opacity = '0'
+  el.style.transform = 'translateY(16px)'
+  el.style.transition = 'opacity 0.4s ease, transform 0.4s ease'
+  observer.observe(el)
+})
+</script>
+
+</body>
+</html>

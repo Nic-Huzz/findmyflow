@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Rise — Decision Flow Chart</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #5e17eb;
+  --gold: #E9A23B;
+  --green: #16a34a;
+  --red: #dc2626;
+  --bg: #fafaf7;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --line: #c4b5fd;
+  --yes: #16a34a;
+  --no: #dc2626;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: auto;
+}
+
+/* ─── Header ─── */
+.hdr {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,247,0.9); backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 14px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.hdr h1 {
+  font-weight: 800; font-size: 18px;
+  background: linear-gradient(135deg, var(--purple), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hdr-legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); font-weight: 500; }
+.hdr-legend span { display: flex; align-items: center; gap: 5px; }
+
+.verdict-tag {
+  display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; padding: 2px 6px; border-radius: 3px; margin-top: 4px;
+}
+
+/* ─── Canvas ─── */
+.canvas {
+  min-width: 1100px;
+  padding: 40px 60px 100px;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* ─── Nodes ─── */
+.row { display: flex; align-items: flex-start; justify-content: center; position: relative; }
+
+/* Vertical connector */
+.vline {
+  width: 2px; background: var(--line); margin: 0 auto;
+}
+.vline.short { height: 20px; }
+.vline.med { height: 28px; }
+.vline.long { height: 36px; }
+
+/* Arrow head (down) */
+.arrow-down {
+  width: 0; height: 0; margin: 0 auto;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--line);
+}
+
+/* Process box */
+.proc {
+  background: var(--card);
+  border: 1.5px solid rgba(94,23,235,0.15);
+  border-radius: 10px;
+  padding: 10px 18px;
+  text-align: center;
+  min-width: 180px;
+  max-width: 280px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  position: relative;
+}
+.proc-name { font-weight: 600; font-size: 14px; line-height: 1.3; }
+.proc-sub { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: 'DM Mono', monospace; }
+.proc-note { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; font-weight: 400; }
+.proc.start { background: linear-gradient(135deg, var(--purple), #7c3aed); color: white; border: none; }
+.proc.start .proc-sub { color: rgba(255,255,255,0.7); }
+.proc.end { background: linear-gradient(135deg, var(--gold), #f59e0b); color: white; border: none; }
+.proc.essential { border-left: 3px solid var(--green); }
+.proc.warning { border-left: 3px solid var(--red); }
+.proc.step-box { min-width: 120px; max-width: 160px; padding: 6px 10px; border-radius: 8px; }
+.proc.step-box .proc-name { font-size: 11px; }
+.proc.step-box .proc-sub { font-size: 9px; }
+
+/* Decision diamond */
+.diamond-wrap { display: flex; flex-direction: column; align-items: center; position: relative; }
+.diamond {
+  width: 140px; height: 70px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.diamond-bg {
+  position: absolute; inset: 0;
+  background: #fef3c7;
+  border: 2px solid var(--gold);
+  transform: rotate(45deg) scale(0.68);
+  border-radius: 6px;
+}
+.diamond-text {
+  position: relative; z-index: 1;
+  font-weight: 600; font-size: 12px;
+  text-align: center; line-height: 1.3;
+  color: #92400e;
+  padding: 0 8px;
+}
+
+/* Branch container */
+.branch {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.branch-arm {
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 160px;
+  position: relative;
+}
+.branch-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  padding: 2px 8px; border-radius: 4px; margin-bottom: 4px;
+}
+.branch-label.yes { background: #dcfce7; color: var(--yes); }
+.branch-label.no { background: #fef2f2; color: var(--no); }
+
+/* Horizontal connector for branches */
+.hconn {
+  display: flex; align-items: flex-start; justify-content: center;
+  position: relative;
+}
+.hline {
+  height: 2px; background: var(--line); width: 60px; margin-top: 0;
+}
+.hline.long { width: 100px; }
+
+/* ─── Section divider ─── */
+.section-div {
+  width: 100%; max-width: 800px;
+  display: flex; align-items: center; gap: 12px;
+  margin: 32px 0 20px;
+}
+.section-div-line { flex: 1; height: 1px; background: rgba(0,0,0,0.08); }
+.section-div-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--muted);
+  padding: 4px 14px; border-radius: 6px;
+  white-space: nowrap;
+}
+.section-div-label.p1 { background: #ede9fe; color: var(--purple); }
+.section-div-label.p2 { background: #fef3c7; color: #92400e; }
+.section-div-label.p3 { background: #d1fae5; color: #065f46; }
+
+/* ─── Breakpoint callout ─── */
+.bp {
+  background: #fef2f2; border: 1px solid rgba(220,38,38,0.2);
+  border-radius: 8px; padding: 8px 14px; margin-top: 8px;
+  max-width: 260px; text-align: center;
+}
+.bp-title { font-size: 11px; font-weight: 700; color: var(--red); }
+.bp-desc { font-size: 10px; color: #991b1b; margin-top: 2px; line-height: 1.3; }
+
+/* ─── Steps row (horizontal sub-flow) ─── */
+.steps-row {
+  display: flex; align-items: center; gap: 0; justify-content: center;
+  flex-wrap: wrap; max-width: 900px;
+}
+.step-arrow {
+  color: var(--line); font-size: 16px; padding: 0 4px; font-weight: 700;
+  flex-shrink: 0;
+}
+.steps-label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  margin-bottom: 6px; text-align: center;
+}
+
+/* ─── Complexity meter ─── */
+.complexity {
+  max-width: 700px; margin: 40px auto 0;
+  background: var(--card); border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px; padding: 28px 32px; text-align: center;
+}
+.complexity h2 { font-weight: 800; font-size: 20px; margin-bottom: 6px; }
+.complexity p { font-size: 14px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+.complexity-stats { display: flex; justify-content: center; gap: 32px; }
+.complexity-stat { text-align: center; }
+.complexity-num { font-weight: 800; font-size: 36px; letter-spacing: -1px; }
+.complexity-num.bad { color: var(--red); }
+.complexity-num.warn { color: var(--gold); }
+.complexity-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ─── Simplified version ─── */
+.simple-section {
+  max-width: 700px; margin: 40px auto 60px; text-align: center;
+}
+.simple-section h2 {
+  font-weight: 800; font-size: 20px; margin-bottom: 4px;
+  color: var(--green);
+}
+.simple-section p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+.simple-flow {
+  display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap;
+}
+.simple-node {
+  background: var(--card); border: 2px solid var(--green);
+  border-radius: 12px; padding: 14px 22px; text-align: center;
+  min-width: 140px;
+}
+.simple-emoji { font-size: 28px; display: block; margin-bottom: 4px; }
+.simple-label { font-weight: 700; font-size: 15px; color: var(--text); }
+.simple-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.simple-arrow { font-size: 24px; color: var(--gold); padding: 0 10px; font-weight: 800; }
+.simple-decision {
+  font-size: 11px; font-weight: 600; color: var(--gold);
+  margin: 4px 0; padding: 2px 8px;
+  background: #fffbeb; border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .canvas { min-width: unset; padding: 20px 12px 60px; }
+  .hdr { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>Vibe Rise — Decision Flow</h1>
+  <div class="hdr-legend">
+    <span>◇ = Decision</span>
+    <span>▢ = Action</span>
+    <span style="color:var(--yes)">● Yes</span>
+    <span style="color:var(--no)">● No</span>
+    <span style="color:var(--red)">⚠ Breakpoint</span>
+  </div>
+</div>
+
+<div class="canvas">
+
+  <!-- ═══ START ═══ -->
+  <div class="proc start">
+    <div class="proc-name">User Opens App</div>
+    <div class="proc-sub">viberise.nichuzz.com</div>
+  </div>
+  <div class="vline med"></div>
+  <div class="arrow-down"></div>
+
+  <!-- ═══ LOGGED IN? ═══ -->
+  <div class="diamond-wrap">
+    <div class="diamond"><div class="diamond-bg"></div><div class="diamond-text">Logged in?</div></div>
+  </div>
+
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc">
+        <div class="proc-name">Landing Page</div>
+        <div class="proc-sub">/</div>
+        <div class="proc-note">Slide-chat lead magnet</div>
+      </div>
+      <div class="vline short"></div>
+      <div class="arrow-down"></div>
+      <div class="proc">
+        <div class="proc-name">Sign Up</div>
+        <div class="proc-note">Name + email + archetype swipe</div>
+      </div>
+      <div class="vline short"></div>
+      <div class="arrow-down"></div>
+      <div class="proc">
+        <div class="proc-name">Verify Code</div>
+        <div class="proc-note">6-digit magic link</div>
+      </div>
+      <div class="vline short"></div>
+      <div class="arrow-down"></div>
+      <div class="proc" style="border: 1.5px dashed var(--line); background: #faf5ff;">
+        <div class="proc-name" style="font-size:11px; color: var(--muted);">→ merges back ↓</div>
+      </div>
+    </div>
+
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label yes">Yes</div>
+      <div class="vline" style="height: 232px;"></div>
+      <div class="arrow-down"></div>
+    </div>
+  </div>
+
+  <!-- ═══ AI CONSENT ═══ -->
+  <div class="diamond-wrap">
+    <div class="diamond"><div class="diamond-bg"></div><div class="diamond-text">AI consent given?</div></div>
+  </div>
+
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc">
+        <div class="proc-name">AI Consent Modal</div>
+        <div class="proc-note">Apple 5.1.1 compliance</div>
+      </div>
+      <div class="vline short"></div>
+      <div class="proc" style="border: 1.5px dashed var(--line); background: #faf5ff;">
+        <div class="proc-name" style="font-size:11px; color: var(--muted);">→ merges ↓</div>
+      </div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label yes">Yes</div>
+      <div class="vline" style="height: 110px;"></div>
+      <div class="arrow-down"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN NAV ═══ -->
+  <div class="proc" style="min-width: 300px; border: 2px solid var(--purple);">
+    <div class="proc-name">Bottom Toolbar</div>
+    <div class="proc-note">4 icons appear</div>
+  </div>
+  <div class="vline med"></div>
+  <div class="arrow-down"></div>
+
+  <!-- ═══ WHICH TAB? ═══ -->
+  <div class="diamond-wrap">
+    <div class="diamond" style="width: 160px;"><div class="diamond-bg"></div><div class="diamond-text">Which icon?</div></div>
+  </div>
+
+  <div class="branch" style="gap: 12px;">
+    <div class="branch-arm">
+      <div class="branch-label" style="background:#f0fdf4; color:#166534;">Home</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name">MePage</div><div class="proc-sub">/me</div></div>
+    </div>
+    <div class="branch-arm" style="min-width: 200px;">
+      <div class="branch-label" style="background: var(--phase1); color: var(--purple);">Let's Play ⭐</div>
+      <div class="vline short"></div>
+      <div class="proc" style="border: 2px solid var(--purple);"><div class="proc-name">Main Hub</div><div class="proc-sub">/7-day-challenge</div><div class="proc-note">↓ continues below</div></div>
+    </div>
+    <div class="branch-arm">
+      <div class="branch-label" style="background:#fef3c7; color:#92400e;">League</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name">Ghost League</div><div class="proc-sub">/league</div></div>
+    </div>
+    <div class="branch-arm">
+      <div class="branch-label" style="background:#f1f5f9; color:#64748b;">Profile</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name">ProfileHub</div><div class="proc-sub">/profile-hub</div></div>
+    </div>
+  </div>
+
+  <!-- breakpoint -->
+  <div class="bp" style="margin-top: 16px;">
+    <div class="bp-title">⚠ Breakpoint: "What do I do first?"</div>
+    <div class="bp-desc">4 toolbar icons, 4 hub tabs, 2 AI helpers. No single "do this" signal.</div>
+  </div>
+
+  <div class="vline long"></div>
+  <div class="arrow-down"></div>
+
+  <!-- ═══ HUB TABS ═══ -->
+  <div class="diamond-wrap">
+    <div class="diamond" style="width: 160px;"><div class="diamond-bg"></div><div class="diamond-text">Which tab?</div></div>
+  </div>
+
+  <div class="branch" style="gap: 12px;">
+    <div class="branch-arm" style="min-width: 200px;">
+      <div class="branch-label" style="background: var(--phase1); color: var(--purple);">Discover ⭐</div>
+      <div class="vline short"></div>
+      <div class="proc" style="border: 2px solid var(--purple);">
+        <div class="proc-name">Discover Tab</div>
+        <div class="proc-note">↓ continues below</div>
+      </div>
+    </div>
+    <div class="branch-arm">
+      <div class="branch-label" style="background:#fef3c7; color:#92400e;">Paths</div>
+      <div class="vline short"></div>
+      <div class="diamond-wrap">
+        <div class="diamond" style="width: 120px; height: 60px;"><div class="diamond-bg"></div><div class="diamond-text" style="font-size:10px;">Unlocked?</div></div>
+      </div>
+      <div class="branch" style="gap: 4px;">
+        <div class="branch-arm" style="min-width: 70px;">
+          <div class="branch-label no" style="font-size:9px;">No 🔒</div>
+          <div class="bp" style="margin-top: 4px; max-width: 140px; padding: 6px;">
+            <div class="bp-title" style="font-size:9px;">⚠ "Why locked?"</div>
+          </div>
+        </div>
+        <div class="branch-arm" style="min-width: 70px;">
+          <div class="branch-label yes" style="font-size:9px;">Yes</div>
+          <div class="vline short"></div>
+          <div class="proc step-box"><div class="proc-name">Quest Board</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="branch-arm">
+      <div class="branch-label" style="background:#d1fae5; color:#065f46;">Tune</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name">Daily Practices</div><div class="proc-sub">15+ items</div></div>
+    </div>
+    <div class="branch-arm">
+      <div class="branch-label" style="background:#f1f5f9; color:#64748b;">Progress</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name">Scorecard</div><div class="proc-sub">stats + stages</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: DISCOVER TAB ═══ -->
+  <div class="section-div"><div class="section-div-line"></div><span class="section-div-label p1">Discover Tab Flow</span><div class="section-div-line"></div></div>
+
+  <div class="diamond-wrap">
+    <div class="diamond"><div class="diamond-bg"></div><div class="diamond-text">Essence done?</div></div>
+  </div>
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc essential"><div class="proc-name">Essence Mirror</div><div class="proc-sub">/essence-mirror</div><div class="proc-note">9 steps → archetype + avatar</div></div>
+      <div class="vline short"></div>
+      <div class="proc" style="border: 1.5px dashed var(--line); background: #faf5ff;"><div class="proc-name" style="font-size:11px; color:var(--muted);">→ back to Discover ↓</div></div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label yes">Yes</div>
+      <div class="vline" style="height: 132px;"></div>
+      <div class="arrow-down"></div>
+    </div>
+  </div>
+
+  <div class="diamond-wrap">
+    <div class="diamond"><div class="diamond-bg"></div><div class="diamond-text">Dome ticks > 0?</div></div>
+  </div>
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc essential"><div class="proc-name">Experience Game</div><div class="proc-sub">/experience-game</div><div class="proc-note">tick → rate → dome → insight</div></div>
+      <div class="vline short"></div>
+      <div class="proc" style="border: 1.5px dashed var(--line); background: #faf5ff;"><div class="proc-name" style="font-size:11px; color:var(--muted);">→ back to Discover ↓</div></div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label yes">Yes</div>
+      <div class="vline" style="height: 132px;"></div>
+      <div class="arrow-down"></div>
+    </div>
+  </div>
+
+  <div class="diamond-wrap">
+    <div class="diamond"><div class="diamond-bg"></div><div class="diamond-text">Current job added?</div></div>
+  </div>
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc essential"><div class="proc-name">Add Current Job</div><div class="proc-sub">/add-current-job</div></div>
+      <div class="vline short"></div>
+      <div class="proc" style="border: 1.5px dashed var(--line); background: #faf5ff;"><div class="proc-name" style="font-size:11px; color:var(--muted);">→ back ↓</div></div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label yes">Yes</div>
+      <div class="vline" style="height: 100px;"></div>
+      <div class="arrow-down"></div>
+    </div>
+  </div>
+
+  <!-- breakpoint -->
+  <div class="bp">
+    <div class="bp-title">⚠ Breakpoint: "When am I done discovering?"</div>
+    <div class="bp-desc">No progress bar. No trigger. Bridge CTA exists but invisible.</div>
+  </div>
+  <div class="vline med"></div>
+  <div class="arrow-down"></div>
+
+  <div class="proc essential" style="min-width: 260px;">
+    <div class="proc-name">Choose Quests Bridge</div>
+    <div class="proc-sub">/choose-quests</div>
+    <div class="proc-note">6 steps: Select → Deep Dive → AI Projects → Cluster → Review → Path Definition</div>
+  </div>
+  <div class="vline short"></div>
+  <div class="arrow-down"></div>
+  <div class="proc" style="border: 2px solid var(--gold); background: #fffbeb;">
+    <div class="proc-name" style="color: #92400e;">Paths Tab Unlocks</div>
+  </div>
+
+  <!-- ═══ SECTION: PATHS TAB (ACTION) ═══ -->
+  <div class="section-div"><div class="section-div-line"></div><span class="section-div-label p2">Paths Tab — The Action Loop</span><div class="section-div-line"></div></div>
+
+  <div class="proc essential"><div class="proc-name">Quest Board</div><div class="proc-note">Each life path = a quest card with tasks</div></div>
+  <div class="vline med"></div>
+  <div class="arrow-down"></div>
+
+  <div class="diamond-wrap">
+    <div class="diamond" style="width: 180px;"><div class="diamond-bg"></div><div class="diamond-text">Pick a task. Courage challenge?</div></div>
+  </div>
+
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No — regular task</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name">Complete</div><div class="proc-sub">+1-5 RP</div></div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px; min-width: 240px;">
+      <div class="branch-label yes">Yes — courage challenge</div>
+      <div class="vline short"></div>
+      <div class="proc essential" style="min-width: 220px;">
+        <div class="proc-name">Create Challenge</div>
+        <div class="proc-note">4 steps: Describe → Dimensions → Predict → Voice</div>
+      </div>
+      <div class="vline short"></div>
+      <div class="arrow-down"></div>
+      <div class="proc" style="border: 1px dashed var(--muted);">
+        <div class="proc-name" style="font-size: 12px; color: var(--muted);">...go do the scary thing in real life...</div>
+      </div>
+      <div class="vline short"></div>
+      <div class="arrow-down"></div>
+      <div class="proc essential" style="min-width: 220px;">
+        <div class="proc-name">Complete Challenge</div>
+        <div class="proc-note">↓ 11-step flow below</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 11-STEP COMPLETION ═══ -->
+  <div class="section-div"><div class="section-div-line"></div><span class="section-div-label p2">Completion Flow (was 11 steps, now 3)</span><div class="section-div-line"></div></div>
+
+  <div class="steps-row">
+    <div class="proc step-box" style="border-left: 3px solid var(--green);"><div class="proc-name">1. How did it feel?</div><div class="proc-sub">4 buttons, auto-advance</div></div>
+    <span class="step-arrow">→</span>
+    <div class="proc step-box" style="border-left: 3px solid var(--green);"><div class="proc-name">2. Do that again?</div><div class="proc-sub">yes/not sure/no</div></div>
+    <span class="step-arrow">→</span>
+    <div class="proc step-box" style="border-left: 3px solid var(--green);"><div class="proc-name">3. Voice check</div><div class="proc-sub">5 voices + nope</div></div>
+    <span class="step-arrow">→</span>
+    <div class="proc end" style="min-width: 140px;"><div class="proc-name">Dome Grows</div><div class="proc-sub" style="color:rgba(255,255,255,0.7);">animated radar + RP</div></div>
+  </div>
+
+  <div style="text-align: center; margin-top: 8px; font-size: 11px; color: var(--muted);">
+    7 reflections (Gap Check, Identity, Universe, Cross-pollinate, 3% Better, Life Fuel, Share) move to Progress tab evidence feed as optional expandable cards
+  </div>
+
+  <div class="vline med"></div>
+  <div class="arrow-down"></div>
+
+  <!-- POST COMPLETION -->
+  <div class="diamond-wrap">
+    <div class="diamond" style="width: 200px;"><div class="diamond-bg"></div><div class="diamond-text">NS state = Vibe Rise or Ventral?</div></div>
+  </div>
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label yes">Yes</div>
+      <div class="vline short"></div>
+      <div class="proc essential" style="border: 2px solid var(--green); background: #f0fdf4;">
+        <div class="proc-name" style="color: var(--green);">Dome Grows</div>
+        <div class="proc-note">Comfort zone expands on tagged dimensions</div>
+      </div>
+      <div class="bp" style="max-width: 200px;">
+        <div class="bp-title">⚠ "Where's my progress?"</div>
+        <div class="bp-desc">Growth doesn't animate during the 11-step flow. Disconnected reward.</div>
+      </div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label no">No — stressed/bored</div>
+      <div class="vline short"></div>
+      <div class="proc step-box" style="border-left: 3px solid var(--gold);"><div class="proc-name">Edge Ring Only</div><div class="proc-sub">gold dashed, not integrated</div></div>
+    </div>
+  </div>
+
+  <div class="vline med"></div>
+  <div class="arrow-down"></div>
+
+  <div class="diamond-wrap">
+    <div class="diamond" style="width: 200px;"><div class="diamond-bg"></div><div class="diamond-text">Same voice 3+ times on same dims?</div></div>
+  </div>
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label yes">Yes — pattern</div>
+      <div class="vline short"></div>
+      <div class="proc" style="border-left: 3px solid var(--useful);">
+        <div class="proc-name">Healing Flow</div>
+        <div class="proc-note">7 steps: Pattern → Fear → Origin → Insight → Rewire → Somatic → Expect Best</div>
+      </div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc step-box" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+        <div class="proc-name" style="font-size: 12px; color: var(--green);">← back to Quest Board</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION: PHASE 3 ═══ -->
+  <div class="section-div"><div class="section-div-line"></div><span class="section-div-label p3">Phase 3 — Direction (Stage 8+)</span><div class="section-div-line"></div></div>
+
+  <div class="diamond-wrap">
+    <div class="diamond"><div class="diamond-bg"></div><div class="diamond-text">Hero stage ≥ 8?</div></div>
+  </div>
+  <div class="branch">
+    <div class="branch-arm" style="margin-right: 40px;">
+      <div class="branch-label no">No</div>
+      <div class="vline short"></div>
+      <div class="proc step-box"><div class="proc-name" style="font-size: 12px;">Keep doing Phase 2</div></div>
+      <div class="bp" style="max-width: 180px; margin-top: 6px;">
+        <div class="bp-title" style="font-size:9px;">⚠ "I don't know my stage"</div>
+        <div class="bp-desc" style="font-size:9px;">Stages are invisible. No level indicator.</div>
+      </div>
+    </div>
+    <div class="branch-arm" style="margin-left: 40px; min-width: 240px;">
+      <div class="branch-label yes">Yes — Direction unlocks</div>
+      <div class="vline short"></div>
+      <div class="steps-row" style="flex-direction: column; gap: 6px; max-width: 240px;">
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Card 1: Life Map Review</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Card 2: Problem Motivation</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Card 3: Multiplication Reveal</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Card 4: Money Model</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc end" style="width: 100%;"><div class="proc-name">Card 5: First Income</div><div class="proc-sub" style="color:rgba(255,255,255,0.7);">→ Stage 9</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ COMPLEXITY VERDICT ═══ -->
+<div class="complexity">
+  <h2>The Verdict</h2>
+  <p>Every decision point the user navigates before doing something meaningful.</p>
+  <div class="complexity-stats">
+    <div class="complexity-stat">
+      <div class="complexity-num warn">12</div>
+      <div class="complexity-label">Decision points</div>
+    </div>
+    <div class="complexity-stat">
+      <div class="complexity-num" style="color: var(--green);">3</div>
+      <div class="complexity-label">Steps to complete (was 11)</div>
+    </div>
+    <div class="complexity-stat">
+      <div class="complexity-num warn">6</div>
+      <div class="complexity-label">Navigation layers (was 8)</div>
+    </div>
+    <div class="complexity-stat">
+      <div class="complexity-num" style="color: var(--green);">4</div>
+      <div class="complexity-label">Breakpoints fixed</div>
+    </div>
+  </div>
+  <p style="margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--green);">
+    Getting simpler. Completion flow: 11 → 3. Toolbar: 4 → 3. Discovery: progressive reveal. Lock: explained.
+  </p>
+</div>
+
+<!-- ═══ SIMPLIFIED VERSION ═══ -->
+<div class="simple-section">
+  <h2>What It Should Be</h2>
+  <p>A 12-year-old's version. 4 moves, zero decision paralysis.</p>
+
+  <div class="simple-flow">
+    <div class="simple-node">
+      <span class="simple-emoji">🎮</span>
+      <div class="simple-label">Discover</div>
+      <div class="simple-sub">Tick what you love</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="simple-arrow">→</div>
+      <div class="simple-decision">auto-prompt</div>
+    </div>
+    <div class="simple-node">
+      <span class="simple-emoji">🗺️</span>
+      <div class="simple-label">Choose</div>
+      <div class="simple-sub">Pick your paths</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="simple-arrow">→</div>
+      <div class="simple-decision">1 CTA per path</div>
+    </div>
+    <div class="simple-node">
+      <span class="simple-emoji">⚡</span>
+      <div class="simple-label">Do</div>
+      <div class="simple-sub">Scary thing → 2 questions</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="simple-arrow">→</div>
+      <div class="simple-decision">dome grows live</div>
+    </div>
+    <div class="simple-node">
+      <span class="simple-emoji">💰</span>
+      <div class="simple-label">Earn</div>
+      <div class="simple-sub">Money from what you love</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
