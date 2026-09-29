@@ -332,7 +332,7 @@ function BottomToolbar() {
             <a
               key={item.id}
               href={item.locked ? undefined : item.path}
-              className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''} ${item.locked ? 'locked-item' : ''}`}
+              className={`toolbar-item toolbar-${item.id} ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''} ${item.locked ? 'locked-item' : ''}`}
               aria-label={item.label}
               aria-current={isActive(item) ? 'page' : undefined}
               onClick={item.locked ? (e) => e.preventDefault() : undefined}

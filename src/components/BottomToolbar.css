@@ -213,6 +213,24 @@ body.project-selector-active .bottom-toolbar {
   background: var(--toolbar-active-bg);
 }
 
+/* Let's Play — always purple to signal primary action */
+.main-toolbar .toolbar-challenge {
+  background: #5e17eb;
+  color: #fff;
+  border-radius: 14px;
+  padding: 8px 16px;
+}
+
+.main-toolbar .toolbar-challenge:hover {
+  background: #4e12c9;
+  color: #fff;
+}
+
+.main-toolbar .toolbar-challenge.active {
+  background: #5e17eb;
+  color: #fff;
+}
+
 /* Responsive: mobile adjustments */
 @media (max-width: 480px) {
   :root {
