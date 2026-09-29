@@ -1005,6 +1005,153 @@
   margin-bottom: 20px;
 }
 
+/* ═══ REFLECTION CARDS ═══════════════════════════════ */
+
+.progress-tab .pt-evidence-card {
+  cursor: pointer;
+}
+
+.progress-tab .pt-evidence-card--expanded {
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.12);
+}
+
+.progress-tab .pt-chip-reflect {
+  font-size: 11px;
+  font-weight: 600;
+  color: #5e17eb;
+  background: rgba(94, 23, 235, 0.07);
+  border-radius: 20px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.progress-tab .pt-reflect-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.progress-tab .pt-reflect-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.progress-tab .pt-reflect-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress-tab .pt-reflect-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+  flex-wrap: wrap;
+}
+
+.progress-tab .pt-reflect-item.done {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.progress-tab .pt-reflect-check {
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.progress-tab .pt-reflect-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.progress-tab .pt-reflect-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.progress-tab .pt-reflect-desc {
+  display: block;
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 1px;
+}
+
+.progress-tab .pt-reflect-form {
+  width: 100%;
+  margin-top: 8px;
+  padding-left: 22px;
+}
+
+.progress-tab .pt-reflect-q {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.progress-tab .pt-reflect-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  background: white;
+  box-sizing: border-box;
+}
+
+.progress-tab .pt-reflect-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.progress-tab .pt-reflect-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.progress-tab .pt-reflect-pill {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.progress-tab .pt-reflect-pill.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
+  color: #5e17eb;
+  font-weight: 600;
+}
+
+.progress-tab .pt-reflect-save {
+  padding: 8px 20px;
+  background: #5e17eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.progress-tab .pt-reflect-save:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* ═══ REDUCED MOTION ═════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {

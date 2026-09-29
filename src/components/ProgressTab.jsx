@@ -9,6 +9,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { saveReflection } from '../lib/challengeCompletionService'
 import PerQuestRadar from './PerQuestRadar'
 import HealingFlowModal from './HealingFlowModal'
 import ObservationCard from './ObservationCard'
@@ -131,6 +132,276 @@ const SETUP_CHECKLIST = [
   { key: 'current_job', label: 'Map your current work', sub: 'See what\'s missing' },
 ]
 
+// ── Reflection sub-components ─────────────────────────────────────────────────
+// Each is a proper React function component with its own useState hooks.
+// Defined here so they can access supabase + saveReflection (module scope).
+
+function GapCheckReflection({ challengeId, userId, predictedDifficulty, onSaved }) {
+  const [preaction, setPreaction] = useState(null)
+  const [experienced, setExperienced] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const labels = ['Relaxed', 'Alert', 'Butterflies', 'Racing', 'Frozen']
+
+  async function handleSave() {
+    setSaving(true)
+    await saveReflection({ userId, challengeId, field: 'preaction_difficulty', value: preaction })
+    await saveReflection({ userId, challengeId, field: 'experienced_difficulty', value: experienced })
+    onSaved()
+  }
+
+  return (
+    <>
+      <label className="pt-reflect-q">Right before you did it, what was your body doing?</label>
+      <div className="pt-reflect-pills">
+        {labels.map((s, i) => (
+          <button key={s} className={`pt-reflect-pill${preaction === i + 1 ? ' selected' : ''}`}
+            onClick={() => setPreaction(i + 1)}>{s}</button>
+        ))}
+      </div>
+      <label className="pt-reflect-q">And while you were doing it?</label>
+      <div className="pt-reflect-pills">
+        {labels.map((s, i) => (
+          <button key={s} className={`pt-reflect-pill${experienced === i + 1 ? ' selected' : ''}`}
+            onClick={() => setExperienced(i + 1)}>{s}</button>
+        ))}
+      </div>
+      {predictedDifficulty && preaction && experienced && (
+        <p className="pt-reflect-desc" style={{ marginBottom: 8 }}>
+          {experienced < predictedDifficulty
+            ? 'Less scary than you expected. Your body learned something.'
+            : experienced > predictedDifficulty
+            ? 'Scarier than expected. That takes guts.'
+            : 'Exactly what you predicted. Your self-awareness is sharp.'}
+        </p>
+      )}
+      <button className="pt-reflect-save" disabled={!preaction || !experienced || saving}
+        onClick={handleSave}>{saving ? 'Saving...' : 'Save'}</button>
+    </>
+  )
+}
+
+function LifeFuelReflection({ challengeId, userId, onSaved }) {
+  const [selected, setSelected] = useState([])
+  const [saving, setSaving] = useState(false)
+  const fuels = ['choice', 'connection', 'mastery', 'meaning']
+  const labels = { choice: '🔓 Choice', connection: '🤝 Connection', mastery: '📈 Mastery', meaning: '✨ Meaning' }
+
+  async function handleSave() {
+    setSaving(true)
+    await saveReflection({ userId, challengeId, field: 'life_fuel', value: selected })
+    onSaved()
+  }
+
+  return (
+    <>
+      <label className="pt-reflect-q">Which were true during this?</label>
+      <div className="pt-reflect-pills">
+        {fuels.map(f => (
+          <button key={f}
+            className={`pt-reflect-pill${selected.includes(f) ? ' selected' : ''}`}
+            onClick={() => setSelected(prev => prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f])}>
+            {labels[f]}
+          </button>
+        ))}
+      </div>
+      <button className="pt-reflect-save" disabled={selected.length === 0 || saving}
+        onClick={handleSave}>{saving ? 'Saving...' : 'Save'}</button>
+    </>
+  )
+}
+
+function CrossPollinationReflection({ challengeId, userId, sourceQuestId, onSaved }) {
+  const [quests, setQuests] = useState([])
+  const [selected, setSelected] = useState([])
+  const [saving, setSaving] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    supabase.from('quests').select('id, label')
+      .eq('user_id', userId).eq('status', 'active')
+      .neq('label', 'Healing Work')
+      .then(({ data }) => {
+        setQuests((data || []).filter(q => q.id !== sourceQuestId))
+        setLoaded(true)
+      })
+  }, [userId, sourceQuestId])
+
+  async function handleSave() {
+    setSaving(true)
+    if (selected.length > 0 && sourceQuestId) {
+      const rows = selected.map(targetId => ({
+        user_id: userId,
+        source_quest_id: sourceQuestId,
+        target_quest_id: targetId,
+        groan_challenge_id: challengeId,
+      }))
+      await supabase.from('quest_cross_pollination').insert(rows).catch(() => {})
+    }
+    await saveReflection({ userId, challengeId, field: 'cross_pollination', value: selected })
+    onSaved()
+  }
+
+  if (!loaded) return <p className="pt-reflect-desc">Loading paths...</p>
+  if (quests.length === 0) return <p className="pt-reflect-desc">No other paths to cross-pollinate with yet.</p>
+
+  return (
+    <>
+      <label className="pt-reflect-q">Did this also feed another path?</label>
+      <div className="pt-reflect-pills">
+        {quests.map(q => (
+          <button key={q.id}
+            className={`pt-reflect-pill${selected.includes(q.id) ? ' selected' : ''}`}
+            onClick={() => setSelected(prev => prev.includes(q.id) ? prev.filter(x => x !== q.id) : [...prev, q.id])}>
+            {q.label}
+          </button>
+        ))}
+      </div>
+      <button className="pt-reflect-save" disabled={saving}
+        onClick={handleSave}>{saving ? 'Saving...' : selected.length ? 'Save' : 'None'}</button>
+    </>
+  )
+}
+
+function ShareReflection({ challengeId, userId, challengeTitle, wahoo, onSaved }) {
+  const [saving, setSaving] = useState(false)
+
+  async function handleShare() {
+    setSaving(true)
+    const emoji = { vibe: '🔥', peace: '☺️', anxious: '😰', shutdown: '😶' }[wahoo] || '⚡'
+    await import('../lib/communityFeed').then(m =>
+      m.postFeedEvent(userId, 'courage_share', `${emoji} ${challengeTitle || 'Completed a courage challenge'}`)
+    ).catch(() => {})
+    await saveReflection({ userId, challengeId, field: 'shared', value: true })
+    onSaved()
+  }
+
+  return (
+    <>
+      <label className="pt-reflect-q">Share this win with the community?</label>
+      <button className="pt-reflect-save" disabled={saving}
+        onClick={handleShare}>{saving ? 'Sharing...' : 'Share your win'}</button>
+    </>
+  )
+}
+
+function ReflectionItem({ item, challengeId, userId, reflectionData, onSaved }) {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  if (item.done) {
+    return (
+      <div className="pt-reflect-item done">
+        <span className="pt-reflect-check">☑</span>
+        <span className="pt-reflect-label">{item.label}</span>
+      </div>
+    )
+  }
+
+  async function handleSave(field, val) {
+    setSaving(true)
+    await saveReflection({ userId, challengeId, field, value: val })
+    onSaved(item.key)
+    setSaving(false)
+    setOpen(false)
+  }
+
+  return (
+    <div className="pt-reflect-item">
+      <span className="pt-reflect-check" onClick={() => setOpen(o => !o)}>☐</span>
+      <div className="pt-reflect-text" onClick={() => setOpen(o => !o)}>
+        <span className="pt-reflect-label">{item.label}</span>
+        {!open && <span className="pt-reflect-desc">{item.desc}</span>}
+      </div>
+      {open && (
+        <div className="pt-reflect-form">
+          {item.key === 'gap' && (
+            <GapCheckReflection
+              challengeId={challengeId}
+              userId={userId}
+              predictedDifficulty={reflectionData.predicted_difficulty}
+              onSaved={() => onSaved('gap')}
+            />
+          )}
+          {item.key === 'identity' && (
+            <>
+              <label className="pt-reflect-q">
+                {reflectionData.wahoo === 'anxious'
+                  ? 'What did the voice say before you did it?'
+                  : "I've proven I'm someone who..."}
+              </label>
+              <input type="text" className="pt-reflect-input" value={value}
+                onChange={e => setValue(e.target.value)} placeholder="..." maxLength={100} />
+              <button className="pt-reflect-save" disabled={!value.trim() || saving}
+                onClick={() => handleSave(
+                  reflectionData.wahoo === 'anxious' ? 'voice_objection' : 'identity_statement',
+                  value.trim()
+                )}>{saving ? 'Saving...' : 'Save'}</button>
+            </>
+          )}
+          {item.key === 'universe' && (
+            <>
+              <label className="pt-reflect-q">Did the universe speak back?</label>
+              <div className="pt-reflect-pills">
+                {[
+                  { v: 'compliment', l: '💬 Compliment' },
+                  { v: 'opportunity', l: '🚪 Opportunity' },
+                  { v: 'both', l: '✨ Both' },
+                  { v: 'not_sure', l: '🤔 Not sure' },
+                  { v: 'none', l: '😶 Not this time' },
+                ].map(o => (
+                  <button key={o.v} className={`pt-reflect-pill${value === o.v ? ' selected' : ''}`}
+                    onClick={() => setValue(o.v)}>{o.l}</button>
+                ))}
+              </div>
+              <button className="pt-reflect-save" disabled={!value || saving}
+                onClick={() => handleSave('universe_response', value)}>
+                {saving ? 'Saving...' : 'Save'}
+              </button>
+            </>
+          )}
+          {item.key === 'cross' && (
+            <CrossPollinationReflection
+              challengeId={challengeId}
+              userId={userId}
+              sourceQuestId={reflectionData.source_quest_id}
+              onSaved={() => onSaved('cross')}
+            />
+          )}
+          {item.key === 'three_percent' && (
+            <>
+              <label className="pt-reflect-q">How can you make this 3% better next time?</label>
+              <input type="text" className="pt-reflect-input" value={value}
+                onChange={e => setValue(e.target.value)} placeholder="..." maxLength={200} />
+              <button className="pt-reflect-save" disabled={!value.trim() || saving}
+                onClick={() => handleSave('reflection', value.trim())}>
+                {saving ? 'Saving...' : 'Save'}
+              </button>
+            </>
+          )}
+          {item.key === 'life_fuel' && (
+            <LifeFuelReflection
+              challengeId={challengeId}
+              userId={userId}
+              onSaved={() => onSaved('life_fuel')}
+            />
+          )}
+          {item.key === 'share' && (
+            <ShareReflection
+              challengeId={challengeId}
+              userId={userId}
+              challengeTitle={reflectionData.title}
+              wahoo={reflectionData.wahoo}
+              onSaved={() => onSaved('share')}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+// ── End reflection sub-components ─────────────────────────────────────────────
+
 export default function ProgressTab({ userId }) {
   const navigate = useNavigate()
   const [heroStage, setHeroStage] = useState(0)
@@ -160,6 +431,10 @@ export default function ProgressTab({ userId }) {
   const [evidenceFeed, setEvidenceFeed] = useState([])
   const [trajectoryData, setTrajectoryData] = useState(null)
 
+  // Reflection cards (expandable on evidence items)
+  const [expandedId, setExpandedId] = useState(null)
+  const [reflections, setReflections] = useState({})
+
   // Income data (stage 8+)
   const [incomeData, setIncomeData] = useState(null)
 
@@ -176,6 +451,36 @@ export default function ProgressTab({ userId }) {
   const [baselineNeededQuest, setBaselineNeededQuest] = useState(null) // { id, label } of first quest needing baseline
   const [showBaselineFlow, setShowBaselineFlow] = useState(false)
   const [baselineDismissed, setBaselineDismissed] = useState(false)
+
+  // Load reflection data for a single evidence card (on expand)
+  const loadReflections = async (challengeId) => {
+    if (reflections[challengeId]?.loaded) return
+
+    const { data: ch } = await supabase.from('groan_challenges')
+      .select('preaction_difficulty, experienced_difficulty, gap_rescript, universe_response, universe_response_note, gap_voice, predicted_difficulty, quest_id')
+      .eq('id', challengeId).maybeSingle()
+
+    const questId = `play_list_challenge_${challengeId}`
+    const { data: comp } = await supabase.from('quest_completions')
+      .select('reflection_text').eq('user_id', userId).eq('quest_id', questId).maybeSingle()
+
+    let parsed = {}
+    try { parsed = JSON.parse(comp?.reflection_text || '{}') } catch {}
+
+    setReflections(prev => ({ ...prev, [challengeId]: {
+      loaded: true,
+      wahoo: parsed.wahoo_classification,
+      title: parsed.source_label,
+      gap_done: ch?.preaction_difficulty != null,
+      identity_done: parsed.identity_statement != null || parsed.voice_objection != null,
+      universe_done: ch?.universe_response != null,
+      three_percent_done: parsed.reflection != null && parsed.reflection !== '',
+      life_fuel_done: parsed.life_fuel != null,
+      predicted_difficulty: ch?.predicted_difficulty,
+      gap_voice: ch?.gap_voice,
+      source_quest_id: ch?.quest_id,
+    }}))
+  }
 
   useEffect(() => {
     if (!userId) return
@@ -1037,24 +1342,82 @@ export default function ProgressTab({ userId }) {
                 <div className="pt-section-meta">{evidenceFeed.length} challenge{evidenceFeed.length !== 1 ? 's' : ''}</div>
               </div>
 
-              {evidenceFeed.map(item => (
-                <div key={item.id} className="pt-evidence-card" data-state={item.nsState}>
-                  {item.questId && questNames[item.questId] && (
-                    <div className="pt-evidence-quest">{questNames[item.questId]}</div>
-                  )}
-                  <div className="pt-evidence-title">{item.title}</div>
-                  <div className="pt-evidence-chips">
-                    {item.growthChips.map(chip => (
-                      <span key={chip.dimId} className="pt-chip-growth">
-                        {chip.icon} {chip.label} <span className="pt-chip-growth-arrow">→</span> {chip.level}
+              {evidenceFeed.map(item => {
+                const isExpanded = expandedId === item.id
+                const r = reflections[item.id]
+                return (
+                  <div
+                    key={item.id}
+                    className={`pt-evidence-card${isExpanded ? ' pt-evidence-card--expanded' : ''}`}
+                    data-state={item.nsState}
+                    onClick={() => {
+                      if (isExpanded) {
+                        setExpandedId(null)
+                      } else {
+                        setExpandedId(item.id)
+                        loadReflections(item.id)
+                      }
+                    }}
+                  >
+                    {item.questId && questNames[item.questId] && (
+                      <div className="pt-evidence-quest">{questNames[item.questId]}</div>
+                    )}
+                    <div className="pt-evidence-title">{item.title}</div>
+                    <div className="pt-evidence-chips">
+                      {item.growthChips.map(chip => (
+                        <span key={chip.dimId} className="pt-chip-growth">
+                          {chip.icon} {chip.label} <span className="pt-chip-growth-arrow">→</span> {chip.level}
+                        </span>
+                      ))}
+                      <span className="pt-chip-state" data-state={item.nsState}>
+                        {item.nsEmoji} {item.nsLabel}
                       </span>
-                    ))}
-                    <span className="pt-chip-state" data-state={item.nsState}>
-                      {item.nsEmoji} {item.nsLabel}
-                    </span>
+                      <span className="pt-chip-reflect">{isExpanded ? '▲ Close' : '▼ Reflect deeper'}</span>
+                    </div>
+
+                    {isExpanded && r?.loaded && (() => {
+                      const reflectItems = [
+                        { key: 'gap', done: r.gap_done, label: 'Gap Check', desc: 'Was it scarier than expected?' },
+                        { key: 'identity', done: r.identity_done, label: 'Identity', desc: "I've proven I'm someone who..." },
+                        { key: 'universe', done: r.universe_done, label: 'Universe', desc: 'Did the universe speak back?' },
+                        { key: 'cross', done: false, label: 'Cross-pollinate', desc: 'Did this feed another path?' },
+                        { key: 'three_percent', done: r.three_percent_done, label: '3% Better', desc: 'How to improve next time?' },
+                        { key: 'life_fuel', done: r.life_fuel_done, label: 'Life Fuel', desc: 'Choice / Connection / Mastery / Meaning' },
+                        { key: 'share', done: false, label: 'Share', desc: 'Share your win' },
+                      ]
+                      const doneCount = reflectItems.filter(ri => ri.done).length
+                      return (
+                        <div className="pt-reflect-section" onClick={e => e.stopPropagation()}>
+                          <div className="pt-reflect-header">Reflect deeper ({doneCount} of {reflectItems.length})</div>
+                          <div className="pt-reflect-list">
+                            {reflectItems.map(ri => (
+                              <ReflectionItem
+                                key={ri.key}
+                                item={ri}
+                                challengeId={item.id}
+                                userId={userId}
+                                reflectionData={r}
+                                onSaved={(field) => {
+                                  setReflections(prev => ({
+                                    ...prev,
+                                    [item.id]: { ...prev[item.id], [`${field}_done`]: true },
+                                  }))
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })()}
+
+                    {isExpanded && !r?.loaded && (
+                      <div className="pt-reflect-section" onClick={e => e.stopPropagation()}>
+                        <div className="pt-reflect-header" style={{ color: '#adb5bd' }}>Loading...</div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
 
               {/* Trajectory summary */}
               {trajectoryData && (
