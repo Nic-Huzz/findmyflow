@@ -179,8 +179,8 @@ export async function saveChallengeCompletion({
   }
 
   // 5. Sync linked quest_tasks: mark done + set safety_status
+  // expectationResult removed from completion flow — safety derived from NS state only
   const isSafe = ['vibe', 'peace'].includes(wahooClassification)
-    && ['better', 'expected'].includes(expectationResult)
   await supabase
     .from('quest_tasks')
     .update({
@@ -333,25 +333,32 @@ export async function saveReflection({ userId, challengeId, field, value }) {
     'universe_response_note',
   ]
 
-  if (groanFields.includes(field)) {
-    await supabase.from('groan_challenges')
-      .update({ [field]: value })
-      .eq('id', challengeId)
-  } else {
-    // Save to quest_completions.reflection_text (merge into existing JSON)
-    const { data: existing } = await supabase
-      .from('quest_completions')
-      .select('reflection_text')
-      .eq('user_id', userId)
-      .eq('quest_id', questId)
-      .maybeSingle()
-    let parsed = {}
-    try { parsed = JSON.parse(existing?.reflection_text || '{}') } catch {}
-    parsed[field] = value
-    await supabase.from('quest_completions')
-      .update({ reflection_text: JSON.stringify(parsed) })
-      .eq('user_id', userId)
-      .eq('quest_id', questId)
+  try {
+    if (groanFields.includes(field)) {
+      const { error } = await supabase.from('groan_challenges')
+        .update({ [field]: value })
+        .eq('id', challengeId)
+      if (error) throw error
+    } else {
+      // Save to quest_completions.reflection_text (merge into existing JSON)
+      const { data: existing } = await supabase
+        .from('quest_completions')
+        .select('reflection_text')
+        .eq('user_id', userId)
+        .eq('quest_id', questId)
+        .maybeSingle()
+      let parsed = {}
+      try { parsed = JSON.parse(existing?.reflection_text || '{}') } catch {}
+      parsed[field] = value
+      const { error } = await supabase.from('quest_completions')
+        .update({ reflection_text: JSON.stringify(parsed) })
+        .eq('user_id', userId)
+        .eq('quest_id', questId)
+      if (error) throw error
+    }
+  } catch (e) {
+    console.warn('saveReflection write error:', e)
+    return { success: false }
   }
 
   // Award 1 RP
