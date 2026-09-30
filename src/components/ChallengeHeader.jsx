@@ -57,7 +57,8 @@ function ChallengeHeader({
 }) {
   const { user } = useAuth()
   const [showGraph, setShowGraph] = useState(false)
-  // showLeaderboard removed — re-add when user base exists
+  const [showScoreDropdown, setShowScoreDropdown] = useState(false)
+  const [heroAvatarUrl, setHeroAvatarUrl] = useState(null)
   const [fetchedXP, setFetchedXP] = useState(null)
   const prevXPRef = useRef(0)
 
@@ -77,6 +78,15 @@ function ChallengeHeader({
         if (!error && data?.lifetime_total_score != null) {
           setFetchedXP(data.lifetime_total_score)
         }
+      })
+    // Fetch hero avatar
+    supabase
+      .from('user_stage_progress')
+      .select('hero_avatar_url')
+      .eq('user_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.hero_avatar_url) setHeroAvatarUrl(data.hero_avatar_url)
       })
   }, [user?.id])
 
@@ -123,48 +133,21 @@ function ChallengeHeader({
 
   return (
     <header className="challenge-header">
-      {/* Team matchup banner — taps to matchup details page */}
-      {matchupData && (
-        <div
-          className="challenge-matchup-banner"
-          onClick={() => navigate(matchupData.opponentName === 'Ghost' ? '/league' : '/league/matchup')}
-          style={{ cursor: 'pointer' }}
-        >
-          <span className="challenge-matchup-team-name">You</span>
-          <span className="challenge-matchup-pill">
-            <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
-              {matchupData.myWins}
-            </span>
-            -
-            <span className={matchupData.oppWins > matchupData.myWins ? 'winning' : matchupData.oppWins < matchupData.myWins ? 'losing' : ''}>
-              {matchupData.oppWins}
-            </span>
-          </span>
-          <span className="challenge-matchup-vs">vs</span>
-          <span>Last Week You</span>
-        </div>
-      )}
-
       <h1 className="challenge-app-title">Find My Flow</h1>
 
-      {/* Score block: total left, category pills right */}
-      <div className={`challenge-score-block${matchupLoading ? ' loading' : ''}`}>
+      {/* Score block: total pts + hero avatar */}
+      <div className={`challenge-score-block${matchupLoading ? ' loading' : ''}${!heroAvatarUrl ? ' centered' : ''}`}>
         <div className="challenge-total">
           <span className="challenge-total-value">{animatedWeeklyPoints.pts ?? weeklyPoints}</span>
           <span className="challenge-total-label">
-            {matchupData ? 'total pts' : 'weekly pts'}
+weekly pts
           </span>
         </div>
-        <div className="challenge-divider" />
-        <div className="challenge-category-pills">
-          {bars.map(bar => (
-            <div key={bar.key} className="challenge-pill" style={bar.textColor ? { color: bar.textColor } : undefined}>
-              <span className="challenge-pill-icon">{bar.icon}</span>
-              <span className="challenge-pill-score">{bar.score}</span>
-              <span className="challenge-pill-label">{bar.label}</span>
-            </div>
-          ))}
-        </div>
+        {heroAvatarUrl && (
+          <div className="challenge-hero-avatar" onClick={() => navigate('/me')}>
+            <img src={heroAvatarUrl} alt="Hero" />
+          </div>
+        )}
       </div>
 
       {/* Vibe Rank Bar */}
@@ -186,22 +169,45 @@ function ChallengeHeader({
         )
       })()}
 
-      {/* Bottom row: Streak + actions */}
-      <div className="challenge-header-top">
-        <div className="challenge-header-badges">
-          <div className="streak-badge">
-            <span className={`hero-streak-flame ${getFlameClass()}`}><FireIcon style={{ width: 20, height: 20 }} /></span>
-            <span className="streak-badge-num">{streakDays}</span>
+      {/* Bottom row: Streak + Matchup banner + Settings */}
+      <div className="challenge-header-top-row">
+        <div className="streak-badge">
+          <span className={`hero-streak-flame ${getFlameClass()}`}><FireIcon style={{ width: 20, height: 20 }} /></span>
+          <span className="streak-badge-num">{streakDays}</span>
+        </div>
+
+        {matchupData ? (
+          <div
+            className="challenge-matchup-banner"
+            onClick={() => setShowScoreDropdown(prev => !prev)}
+            style={{ cursor: 'pointer' }}
+          >
+            <span className="challenge-matchup-team-name">You</span>
+            <span className="challenge-matchup-pill">
+              <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
+                {matchupData.myWins}
+              </span>
+              -
+              <span className={matchupData.oppWins > matchupData.myWins ? 'winning' : matchupData.oppWins < matchupData.myWins ? 'losing' : ''}>
+                {matchupData.oppWins}
+              </span>
+            </span>
+            <span className="challenge-matchup-vs">vs</span>
+            <span>Last Week You</span>
+            <span className={`challenge-matchup-chevron ${showScoreDropdown ? 'open' : ''}`}>&#x25BE;</span>
           </div>
-          {/* Leaderboard + Community removed — re-add when user base exists */}
-          <div className="settings-menu-container" ref={settingsMenuRef}>
-            <button
-              className="challenge-day settings-badge"
-              title="Settings"
-              onClick={() => setShowSettingsMenu(!showSettingsMenu)}
-            >
-              <Cog6ToothIcon style={{ width: 20, height: 20 }} />
-            </button>
+        ) : (
+          <div style={{ flex: 1 }} />
+        )}
+
+        <div className="settings-menu-container" ref={settingsMenuRef}>
+          <button
+            className="challenge-day settings-badge"
+            title="Settings"
+            onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+          >
+            <Cog6ToothIcon style={{ width: 20, height: 20 }} />
+          </button>
             {showSettingsMenu && (
               <div className="settings-dropdown">
                 <button
@@ -243,25 +249,33 @@ function ChallengeHeader({
               </div>
             )}
           </div>
-          {/* Week Type Badge */}
-          {weekTypeInfo && (
-            <div
-              className="challenge-day week-type-bubble"
-              style={{ backgroundColor: weekTypeInfo.color, color: 'white' }}
-            >
-              {weekTypeInfo.icon} {weekTypeInfo.label.toUpperCase()}
-            </div>
-          )}
-        </div>
       </div>
+
+      {/* Score dropdown — category pills revealed on matchup banner tap */}
+      {matchupData && showScoreDropdown && (
+        <div className="challenge-score-dropdown">
+          {bars.map(bar => (
+            <div key={bar.key} className="challenge-pill" style={bar.textColor ? { color: bar.textColor } : undefined}>
+              <span className="challenge-pill-icon">{bar.icon}</span>
+              <span className="challenge-pill-score">{bar.score}</span>
+              <span className="challenge-pill-label">{bar.label}</span>
+            </div>
+          ))}
+          <div
+            className="challenge-pill challenge-pill-matchup-link"
+            onClick={(e) => { e.stopPropagation(); navigate(matchupData.opponentName === 'Ghost' ? '/league' : '/league/matchup') }}
+            style={{ cursor: 'pointer', opacity: 0.6 }}
+          >
+            <span className="challenge-pill-label">View matchup →</span>
+          </div>
+        </div>
+      )}
 
       <JourneyGraphPopup
         isOpen={showGraph}
         onClose={() => setShowGraph(false)}
         currentLevel={1}
       />
-
-      {/* FestLeaderboard removed — re-add when user base exists */}
     </header>
   )
 }
