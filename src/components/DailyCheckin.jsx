@@ -35,10 +35,10 @@ const DRAIN_CATEGORIES = [
 
 // Map NS state IDs to Heroicon components for the daily checkin buttons
 const NS_ICONS = {
-  vibe_rise: <BoltIcon style={{ width: 24, height: 24 }} />,
-  ventral: <FaceSmileIcon style={{ width: 24, height: 24 }} />,
-  sympathetic: <ExclamationTriangleIcon style={{ width: 24, height: 24 }} />,
-  dorsal: <MinusCircleIcon style={{ width: 24, height: 24 }} />,
+  vibe_rise: <BoltIcon style={{ width: 24, height: 24, color: '#E9A23B' }} />,
+  ventral: <FaceSmileIcon style={{ width: 24, height: 24, color: '#E9A23B' }} />,
+  sympathetic: <ExclamationTriangleIcon style={{ width: 24, height: 24, color: '#E9A23B' }} />,
+  dorsal: <MinusCircleIcon style={{ width: 24, height: 24, color: '#E9A23B' }} />,
 }
 
 const isDysregulated = (state) => state === 'sympathetic' || state === 'dorsal'
