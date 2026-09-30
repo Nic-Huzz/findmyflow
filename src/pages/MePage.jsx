@@ -26,6 +26,7 @@ import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 import SeeYourFlow from '../components/SeeYourFlow'
 import StageCard from '../components/StageCard'
 import { hasPendingJourneyData, persistJourneyOnboarding, hasPendingPlaySkillsData, persistPlaySkillsOnboarding } from '../lib/journeyOnboarding'
+import { BoltIcon } from '@heroicons/react/24/solid'
 import './MePage.css'
 
 // Stat ring circumference for r=22
@@ -493,7 +494,7 @@ export default function MePage() {
             {archetypes?.essence?.image ? (
               <img src={archetypes.essence.image} alt={archetypes?.essence?.name || 'Essence'} />
             ) : (
-              '✨'
+              <BoltIcon style={{ width: 48, height: 48, color: '#5e17eb' }} />
             )}
           </div>
         </div>
