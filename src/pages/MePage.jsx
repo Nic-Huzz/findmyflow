@@ -487,7 +487,7 @@ export default function MePage() {
           </div>
         </div>
 
-        <div className="hero-avatar-container flow-scale-in">
+        <div className="hero-avatar-container flow-scale-in" onClick={() => navigate('/profile-hub')} style={{ cursor: 'pointer' }}>
           <div className="avatar-ring-bg" />
           <div className="avatar-ring-inner">
             {archetypes?.essence?.image ? (
@@ -584,49 +584,7 @@ export default function MePage() {
       </section>
       */}
 
-      {/* ============================================================
-         SECTION 4: HERO PROFILE
-         ============================================================ */}
-      {archetypes?.essence?.name && (
-        <section className="hero-profile-section">
-          <div className="hero-profile-card" onClick={() => navigate('/archetypes/essence')}>
-            <div className="hp-top">
-              <div className="hp-avatar">
-                <div className="hp-avatar-inner">🎭</div>
-              </div>
-              <div className="hp-identity">
-                <div className="hp-name">Your Hero Profile</div>
-                <div className="hp-tagline">
-                  {archetypes.essence.name}
-                </div>
-              </div>
-              <span className="hp-chevron">›</span>
-            </div>
-
-            <div className="hp-divider" />
-
-            {/* Essence */}
-            <div className="hp-essence">
-              <div className="hp-essence-photo">
-                <div className="hp-essence-photo-ring" />
-                <div className="hp-essence-photo-img">
-                  {archetypes.essence.image ? (
-                    <img src={archetypes.essence.image} alt={archetypes.essence.name} />
-                  ) : '✨'}
-                </div>
-              </div>
-              <div className="hp-essence-info">
-                <div className="hp-essence-name">{archetypes.essence.name}</div>
-                <div className="hp-essence-desc">{archetypes.essence.tagline || ''}</div>
-              </div>
-            </div>
-
-            <div className="hp-full-link">
-              View Essence Profile <span>→</span>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Hero Profile section removed — avatar on /me navigates to profile */}
     </div>
   )
 }
