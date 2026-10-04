@@ -41,6 +41,10 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
   const [voiceWhich, setVoiceWhich] = useState(null)
   const [voiceText, setVoiceText] = useState('')
 
+  // New You Protocol + Identity Reframe
+  const [newYouVision, setNewYouVision] = useState('')
+  const [identityDeclaration, setIdentityDeclaration] = useState('I am someone who ')
+
   // Per-path fuel reviews: { questId: { choice: bool, connection: bool, mastery: bool, meaning: bool } | 'skip' }
   const [pathFuels, setPathFuels] = useState({})
 
@@ -245,6 +249,8 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
           identity_did: voiceWon,
           identity_text: voiceWon ? `${voiceWhich || 'unknown'}: ${voiceText.trim()}` : null,
           compounding_text: compoundingText.trim() || null,
+          new_you_vision: newYouVision.trim() || null,
+          identity_declaration: identityDeclaration.trim() !== 'I am someone who' ? identityDeclaration.trim() || null : null,
         })
         .select()
         .single()
@@ -655,6 +661,35 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
               </button>
             </div>
           )}
+
+          {/* New You Protocol + Identity Reframe */}
+          <div className="wr-question">
+            <div className="wr-question-top">
+              <span className="wr-question-icon">✨</span>
+              <span className="wr-question-label">Next week</span>
+            </div>
+            <p className="wr-question-text">
+              Picture the version of you who already lives next week's focus. What are they doing?
+            </p>
+            <textarea
+              className="wr-textarea"
+              value={newYouVision}
+              onChange={e => setNewYouVision(e.target.value)}
+              placeholder="I see myself..."
+              rows={3}
+              maxLength={500}
+            />
+            <p className="wr-question-text" style={{ marginTop: 16 }}>
+              Now declare it. Not "I'll try to..." Who are you?
+            </p>
+            <input
+              type="text"
+              className="wr-text-input"
+              value={identityDeclaration}
+              onChange={e => setIdentityDeclaration(e.target.value)}
+              maxLength={100}
+            />
+          </div>
 
         </div>
 
