@@ -228,12 +228,11 @@ export default function ProgressTab({ userId }) {
             .not('dimension_values', 'is', null)
             .gte('completed_at', weekStart + 'T00:00:00')
             .order('completed_at', { ascending: false }),
-          // Completions (life fuel + observations need quest_id, aftertaste)
+          // Completions (observations need quest_id, aftertaste — no reflection_text filter)
           supabase.from('quest_completions')
             .select('reflection_text, quest_id, aftertaste, aftertaste_week_later')
             .eq('user_id', userId)
             .eq('quest_category', 'Groans')
-            .not('reflection_text', 'is', null)
             .order('created_at', { ascending: true }),
           // Voice data: from challenges
           supabase.from('groan_challenges')
@@ -263,11 +262,10 @@ export default function ProgressTab({ userId }) {
             .select('id, status, gap_voice, dimension_values, completed_at, predicted_difficulty, experienced_difficulty, quest_id')
             .eq('user_id', userId)
             .eq('status', 'completed'),
-          // Observations: all NS checkins
+          // Observations: all NS checkins (unfiltered — detectNsBaselineShift filters internally)
           supabase.from('nervous_system_checkins')
             .select('before_state, after_state, created_at, source_challenge_id')
             .eq('user_id', userId)
-            .not('before_state', 'is', null)
             .order('created_at', { ascending: true }),
           // Observations: dismissed observation IDs
           supabase.from('user_dismissed_observations')

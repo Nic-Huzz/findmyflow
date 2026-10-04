@@ -200,6 +200,7 @@ function ZarloChat({ onClose, challengeTab = null, injectedContext = null, injec
   const prevContextKeyRef = useRef(injectedContextKey)
   useEffect(() => {
     if (!injectedContextKey || injectedContextKey === prevContextKeyRef.current) return
+    if (!userContext) return // data hasn't loaded yet
     prevContextKeyRef.current = injectedContextKey
     // Reset conversation and re-greet with new observation context
     setMessages([])
@@ -207,7 +208,7 @@ function ZarloChat({ onClose, challengeTab = null, injectedContext = null, injec
     setUserMessageCount(0)
     setIsStreaming(false)
     showAIGreeting(userContext, skills, recentActions)
-  }, [injectedContextKey])
+  }, [injectedContextKey, userContext, skills, recentActions]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Cleanup: abort any in-flight stream on unmount
   useEffect(() => {
