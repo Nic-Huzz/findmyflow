@@ -354,7 +354,7 @@
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Meditation / Breathwork",
-      "description": "Drop in, connect with your essence, build vagal tone. Try: breathe into the space behind your sternum. Feel it expand on the inhale.",
+      "description": "We recommend meditating for at least 10 minutes or breathwork using the 7-11 breath (inhale for 7 counts, exhale for 11) to activate the rest-and-digest response.",
       "points": 5,
       "inputType": "checkbox",
       "healing_checkin": true,
@@ -422,6 +422,18 @@
       "points": 4,
       "inputType": "checkbox",
       "healing_checkin": true,
+      "capacityType": "expression"
+    },
+    {
+      "id": "practice_triple_warmer",
+      "category": "Tune",
+      "type": "Practice",
+      "frequency": "daily",
+      "name": "I AM Tapping",
+      "description": "Tap between your ring and pinky finger knuckles while saying your identity declarations out loud. 2 minutes to install self-belief at a neurological level.",
+      "points": 5,
+      "inputType": "guided",
+      "healing_checkin": false,
       "capacityType": "expression"
     },
     {
@@ -537,6 +549,18 @@
       "inputType": "checkbox",
       "learnMore": "Savouring isn't adding a new experience -- it's removing autopilot from one you're already having.\n\nEat a meal without your phone. Feel the hot water in the shower. Notice the temperature of air on your skin. Walk without earbuds and hear what's there.\n\nThe practice: pick one moment this week and be fully IN it. No multitasking. No optimising. Just presence.\n\nThis rebuilds the capacity for pleasure that got trained out -- not through adding more, but through actually tasting what's already here.",
       "healing_checkin": true,
+      "capacityType": "safety"
+    },
+    {
+      "id": "safety_garbage_can",
+      "category": "Tune",
+      "type": "Reconnect",
+      "frequency": "daily",
+      "name": "Clear the Day",
+      "description": "Process today's drains: freeze-frame the bad moments, shrink them to black and white, throw them away. Then amplify one good moment.",
+      "points": 4,
+      "inputType": "guided",
+      "healing_checkin": false,
       "capacityType": "safety"
     },
     {
