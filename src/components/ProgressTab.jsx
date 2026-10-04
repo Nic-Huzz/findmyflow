@@ -15,6 +15,8 @@ import { getVoiceDisplay, buildPatternMessage } from '../lib/voicePatternDetecto
 import { getDimensionById, getNumericTier } from '../data/domeDimensions'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import ObservationCard from './ObservationCard'
+import { runObservationEngine } from '../lib/observationEngine'
 import './ProgressTab.css'
 
 // ── Hero Stages with quadrant coordinates ──
@@ -161,6 +163,9 @@ export default function ProgressTab({ userId }) {
   // Quest names lookup
   const [questNames, setQuestNames] = useState({})
 
+  // Observations (Intelligence Observations system)
+  const [observations, setObservations] = useState([])
+
   useEffect(() => {
     if (!userId) return
     let mounted = true
@@ -182,6 +187,11 @@ export default function ProgressTab({ userId }) {
           reviewVoicesRes,
           monthlyGroanRes,
           stageProgressRes,
+          obsChallengesRes,
+          obsNsCheckinsRes,
+          obsDismissedRes,
+          obsPathFuelRes,
+          obsCrossPollinationRes,
         ] = await Promise.all([
           // Hero stage
           supabase.from('user_stage_progress')
@@ -218,12 +228,13 @@ export default function ProgressTab({ userId }) {
             .not('dimension_values', 'is', null)
             .gte('completed_at', weekStart + 'T00:00:00')
             .order('completed_at', { ascending: false }),
-          // Life fuel from quest_completions
+          // Completions (life fuel + observations need quest_id, aftertaste)
           supabase.from('quest_completions')
-            .select('reflection_text')
+            .select('reflection_text, quest_id, aftertaste, aftertaste_week_later')
             .eq('user_id', userId)
             .eq('quest_category', 'Groans')
-            .not('reflection_text', 'is', null),
+            .not('reflection_text', 'is', null)
+            .order('created_at', { ascending: true }),
           // Voice data: from challenges
           supabase.from('groan_challenges')
             .select('predicted_voice, gap_voice, completed_at, expansion_dimensions')
@@ -247,6 +258,30 @@ export default function ProgressTab({ userId }) {
             .eq('user_id', userId)
             .order('month_year', { ascending: false })
             .limit(1),
+          // Observations: all completed challenges (voice, dims, prediction, quest)
+          supabase.from('groan_challenges')
+            .select('id, status, gap_voice, dimension_values, completed_at, predicted_difficulty, experienced_difficulty, quest_id')
+            .eq('user_id', userId)
+            .eq('status', 'completed'),
+          // Observations: all NS checkins
+          supabase.from('nervous_system_checkins')
+            .select('before_state, after_state, created_at, source_challenge_id')
+            .eq('user_id', userId)
+            .not('before_state', 'is', null)
+            .order('created_at', { ascending: true }),
+          // Observations: dismissed observation IDs
+          supabase.from('user_dismissed_observations')
+            .select('observation_id')
+            .eq('user_id', userId),
+          // Observations: path fuel reviews
+          supabase.from('path_fuel_reviews')
+            .select('quest_id, choice, connection, mastery, meaning, week_of, created_at')
+            .eq('user_id', userId)
+            .order('week_of', { ascending: true }),
+          // Observations: cross-pollination
+          supabase.from('quest_cross_pollination')
+            .select('source_quest_id, target_quest_id')
+            .eq('user_id', userId),
         ])
 
         if (!mounted) return
@@ -448,6 +483,21 @@ export default function ProgressTab({ userId }) {
           })
         }
 
+        // ── Intelligence Observations ──
+        const dismissedIds = (obsDismissedRes.data || []).map(d => d.observation_id)
+        const obsQueue = runObservationEngine(
+          {
+            completions: completionsRes.data || [],
+            challenges: obsChallengesRes.data || [],
+            nsCheckins: obsNsCheckinsRes.data || [],
+            pathFuelReviews: obsPathFuelRes.data || [],
+            crossPollination: obsCrossPollinationRes.data || [],
+            questNames: namesMap,
+          },
+          dismissedIds
+        )
+        setObservations(obsQueue)
+
         // Check for unhealed voice patterns (shown but not explored)
         const { data: shownPatterns } = await supabase
           .from('voice_pattern_prompts')
@@ -490,6 +540,27 @@ export default function ProgressTab({ userId }) {
   }, [userId])
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
+
+  // ── Observation handlers ──
+  const dismissObservation = async (observationId, resolutionKey) => {
+    setObservations(prev => prev.filter(o => o.id !== observationId))
+    const dismissKey = resolutionKey || observationId
+    if (userId) {
+      await supabase
+        .from('user_dismissed_observations')
+        .upsert({
+          user_id: userId,
+          observation_id: dismissKey,
+          dismissed_at: new Date().toISOString(),
+        }, { onConflict: 'user_id,observation_id' })
+    }
+  }
+
+  const handleAskZarlo = (context) => {
+    window.dispatchEvent(new CustomEvent('zarlo:openWithContext', {
+      detail: { context, source: 'observation' }
+    }))
+  }
 
   // Setup completion map
   const setupComplete = useMemo(() => ({
@@ -713,6 +784,24 @@ export default function ProgressTab({ userId }) {
             {essenceData.vision && (
               <div className="pt-essence-vision">{essenceData.vision}</div>
             )}
+          </div>
+        </>
+      )}
+
+      {/* ═══ OBSERVATIONS (Intelligence Observations) ═══ */}
+      {observations.length > 0 && (
+        <>
+          <div className="pt-bridge"><span className="pt-bridge-text">what your data shows...</span></div>
+          <div className="obs-section-header">Observations</div>
+          <div className="obs-section">
+            {observations.slice(0, 3).map(obs => (
+              <ObservationCard
+                key={obs.id}
+                observation={obs}
+                onDismiss={dismissObservation}
+                onAskZarlo={handleAskZarlo}
+              />
+            ))}
           </div>
         </>
       )}
