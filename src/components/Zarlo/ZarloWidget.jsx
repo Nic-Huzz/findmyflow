@@ -176,6 +176,24 @@ function ZarloWidget({ activeChat, setActiveChat }) {
     checkProactiveInsights()
   }, [checkProactiveInsights])
 
+  // Listen for observation "Ask Zarlo" — opens chat with pre-loaded context
+  const [injectedContext, setInjectedContext] = useState(null)
+  const [injectedContextKey, setInjectedContextKey] = useState(null)
+  useEffect(() => {
+    const handler = (e) => {
+      const ctx = e.detail?.context
+      if (ctx) {
+        setInjectedContext(ctx)
+        setInjectedContextKey(Date.now()) // unique key so ZarloChat detects re-opens
+        setIsOpen(true)
+        setActiveChat?.('zarlo')
+        window.dispatchEvent(new CustomEvent('activeChatChanged', { detail: 'zarlo' }))
+      }
+    }
+    window.addEventListener('zarlo:openWithContext', handler)
+    return () => window.removeEventListener('zarlo:openWithContext', handler)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (shouldHide) return null
 
   const handleToggle = () => {
@@ -208,8 +226,10 @@ function ZarloWidget({ activeChat, setActiveChat }) {
       {isOpen && (
         <div className="zarlo-chat-wrapper">
           <ZarloChat
-            onClose={handleClose}
+            onClose={() => { handleClose(); setInjectedContext(null); setInjectedContextKey(null) }}
             challengeTab={getChallengeTab()}
+            injectedContext={injectedContext}
+            injectedContextKey={injectedContextKey}
           />
         </div>
       )}

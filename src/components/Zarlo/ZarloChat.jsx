@@ -140,7 +140,7 @@ function getNextBestAction(userContext) {
   return null
 }
 
-function ZarloChat({ onClose, challengeTab = null }) {
+function ZarloChat({ onClose, challengeTab = null, injectedContext = null, injectedContextKey = null }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -195,6 +195,19 @@ function ZarloChat({ onClose, challengeTab = null }) {
     initializedRef.current = true
     initializeZarlo()
   }, [])
+
+  // Re-initialize when a new observation context arrives while already open
+  const prevContextKeyRef = useRef(injectedContextKey)
+  useEffect(() => {
+    if (!injectedContextKey || injectedContextKey === prevContextKeyRef.current) return
+    prevContextKeyRef.current = injectedContextKey
+    // Reset conversation and re-greet with new observation context
+    setMessages([])
+    setConversationHistory([])
+    setUserMessageCount(0)
+    setIsStreaming(false)
+    showAIGreeting(userContext, skills, recentActions)
+  }, [injectedContextKey])
 
   // Cleanup: abort any in-flight stream on unmount
   useEffect(() => {
@@ -352,9 +365,14 @@ function ZarloChat({ onClose, challengeTab = null }) {
 
     try {
       abortRef.current = new AbortController()
-      const pageContext = getPageContextString()
+      let pageContext = getPageContextString()
+      if (injectedContext) {
+        pageContext += `\n\nOBSERVATION CONTEXT (the user tapped "Ask Zarlo" on an intelligence observation card): ${injectedContext}`
+      }
       const systemPrompt = buildZarloPrompt(ctx, userSkills, actions, pageContext)
-      const greetingPrompt = [{ role: 'user', content: 'Greet me briefly. Reference what I\'ve been up to recently or my current state if you have data. Keep it to 1-2 sentences.' }]
+      const greetingPrompt = injectedContext
+        ? [{ role: 'user', content: `An observation card spotted a pattern in my data: "${injectedContext}" — help me explore what this means and what I could do about it. Be warm and curious, not clinical.` }]
+        : [{ role: 'user', content: 'Greet me briefly. Reference what I\'ve been up to recently or my current state if you have data. Keep it to 1-2 sentences.' }]
 
       const fullText = await streamZarloResponse(systemPrompt, greetingPrompt, (textSoFar) => {
         setMessages(prev => prev.map(m =>
@@ -425,7 +443,10 @@ function ZarloChat({ onClose, challengeTab = null }) {
 
     try {
       abortRef.current = new AbortController()
-      const pageContext = getPageContextString()
+      let pageContext = getPageContextString()
+      if (injectedContext) {
+        pageContext += `\n\nOBSERVATION CONTEXT (the user is exploring an intelligence observation): ${injectedContext}`
+      }
       const systemPrompt = buildZarloPrompt(userContext, skills, recentActions, pageContext)
 
       const fullText = await streamZarloResponse(systemPrompt, aiMessages, (textSoFar) => {
