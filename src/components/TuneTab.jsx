@@ -23,6 +23,10 @@ import HealingCompletionModal from './HealingCompletionModal'
 import QuadrantCard from './level/QuadrantCard'
 import useCapacityScore from '../hooks/useCapacityScore'
 import RegulationCard from './RegulationCard'
+import PatternInterruptFlow from './PatternInterruptFlow'
+import ADACFlow from './ADACFlow'
+import TripleWarmerFlow from './TripleWarmerFlow'
+import GarbageCanFlow from './GarbageCanFlow'
 import { REGULATION_EXERCISES } from '../lib/nervousSystemConstants'
 import { createGroanChallenge, acceptGroanChallenge } from '../lib/crm/groanChallengeService'
 import QuestSelector from './QuestSelector'
@@ -92,10 +96,12 @@ const DAILY_PRACTICE_IDS = [
   'practice_connect_friend',
   'safety_self_compassion',
   'safety_savouring',
+  'safety_garbage_can',
   // Expression
   'practice_own_style',
   'practice_voice_work',
   'practice_social_media',
+  'practice_triple_warmer',
   'weekly_peak_state',
 ]
 
@@ -114,6 +120,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
   const [loading, setLoading] = useState(true)
   const [completingQuestId, setCompletingQuestId] = useState(null)
   const [healingModalQuest, setHealingModalQuest] = useState(null) // for Reconnect multi-step
+  const [guidedFlowId, setGuidedFlowId] = useState(null) // for guided micro-flows (Triple Warmer, Garbage Can)
 
   // Weekly Focus state
   const [weeklyFocus, setWeeklyFocus] = useState(null)
@@ -149,6 +156,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
   // Regulation overlay after drain/stall save
   const [regulationState, setRegulationState] = useState(null)
+  const [regulationVoice, setRegulationVoice] = useState(null) // voice for Pattern Interrupt
+  const [regulationCheckinId, setRegulationCheckinId] = useState(null) // checkin id for rescript/adac save
+  const [regulationType, setRegulationType] = useState(null) // 'drain' | 'stall' — drives which flow shows
+  const [regulationFlowDone, setRegulationFlowDone] = useState(false) // true after PI/ADAC completes, shows divider + RegulationCard
 
   // Recovery tracking
   const [recoveryItem, setRecoveryItem] = useState(null)
@@ -563,14 +574,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     const savedState = drainState // capture before reset for regulation overlay
 
     try {
-      const { error } = await supabase.from('nervous_system_checkins').insert({
+      const { data: insertedRow, error } = await supabase.from('nervous_system_checkins').insert({
         user_id: userId,
         before_state: null,
         after_state: drainState,
         checkin_type: 'drain',
         source_quest_id: drainCategory,
         drain_note: drainNote.trim() || null,
-      })
+      }).select().single()
 
       if (error) throw error
 
@@ -581,6 +592,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setDrainNote('')
       setDrainState(null)
       setRegulationState(savedState) // show regulation exercises overlay
+      setRegulationType('drain')
+      setRegulationCheckinId(insertedRow?.id || null)
 
       // Refresh recent drains
       const { data } = await supabase
@@ -607,7 +620,8 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
     const savedState = stallState // capture before reset for regulation overlay
 
     try {
-      const { error } = await supabase.from('nervous_system_checkins').insert({
+      const savedVoice = stallVoice
+      const { data: insertedRow, error } = await supabase.from('nervous_system_checkins').insert({
         user_id: userId,
         before_state: null,
         after_state: stallState,
@@ -615,7 +629,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         source_quest_id: stallCategory,
         drain_note: stallNote.trim() || null,
         protective_voice: stallVoice,
-      })
+      }).select().single()
 
       if (error) throw error
 
@@ -626,6 +640,9 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
       setStallState(null)
       setStallVoice(null)
       setRegulationState(savedState) // show regulation exercises overlay
+      setRegulationVoice(savedVoice)
+      setRegulationType('stall')
+      setRegulationCheckinId(insertedRow?.id || null)
 
       const { data } = await supabase
         .from('nervous_system_checkins')
@@ -858,6 +875,13 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         </div>
         {completed ? (
           <span className="ht-item-action done-action">Done</span>
+        ) : quest.inputType === 'guided' ? (
+          <button
+            className="ht-item-action"
+            onClick={() => setGuidedFlowId(quest.id)}
+          >
+            Start
+          </button>
         ) : useInlineComplete ? (
           <button
             className="ht-item-action"
@@ -1302,13 +1326,89 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
 
       {/* Regulation overlay after drain/stall save */}
       {regulationState && (
-        <div className="tt-info-overlay" onClick={() => setRegulationState(null)}>
+        <div className="tt-info-overlay" onClick={() => { setRegulationState(null); setRegulationVoice(null); setRegulationCheckinId(null); setRegulationType(null); setRegulationFlowDone(false) }}>
           <div className="tt-info-modal tt-regulation-modal" onClick={e => e.stopPropagation()}>
-            <RegulationCard
-              state={regulationState}
-              onDone={() => setRegulationState(null)}
-              onSkip={() => setRegulationState(null)}
-            />
+            {/* Stall: Pattern Interrupt (voice rescript) */}
+            {regulationType === 'stall' && regulationVoice && (
+              <PatternInterruptFlow
+                voice={regulationVoice}
+                onComplete={async (rescriptText) => {
+                  if (regulationCheckinId && rescriptText) {
+                    const { data: row } = await supabase
+                      .from('nervous_system_checkins')
+                      .select('drain_note')
+                      .eq('id', regulationCheckinId)
+                      .single()
+                    const existingNote = row?.drain_note || ''
+                    const newNote = existingNote
+                      ? `${existingNote}\n[rescript] ${rescriptText}`
+                      : `[rescript] ${rescriptText}`
+                    await supabase
+                      .from('nervous_system_checkins')
+                      .update({ drain_note: newNote })
+                      .eq('id', regulationCheckinId)
+                  }
+                  await supabase.rpc('increment_scores', {
+                    p_user_id: userId,
+                    p_project_id: null,
+                    p_category: 'healing',
+                    p_points: 3,
+                    p_week_start: getWeekStartLocal(),
+                  }).catch(() => {})
+                  onRefreshPoints?.()
+                  setRegulationFlowDone(true)
+                  setRegulationVoice(null)
+                  setRegulationType(null)
+                }}
+                onSkip={() => { setRegulationVoice(null); setRegulationType(null) }}
+              />
+            )}
+            {/* Drain: ADAC (emotional defusing) */}
+            {regulationType === 'drain' && (
+              <ADACFlow
+                onComplete={async (feeling, anchor) => {
+                  if (regulationCheckinId) {
+                    const { data: row } = await supabase
+                      .from('nervous_system_checkins')
+                      .select('drain_note')
+                      .eq('id', regulationCheckinId)
+                      .single()
+                    const existingNote = row?.drain_note || ''
+                    const adacNote = `[adac] feeling: ${feeling}, anchor: ${anchor}`
+                    const newNote = existingNote
+                      ? `${existingNote}\n${adacNote}`
+                      : adacNote
+                    await supabase
+                      .from('nervous_system_checkins')
+                      .update({ drain_note: newNote })
+                      .eq('id', regulationCheckinId)
+                  }
+                  await supabase.rpc('increment_scores', {
+                    p_user_id: userId,
+                    p_project_id: null,
+                    p_category: 'healing',
+                    p_points: 5,
+                    p_week_start: getWeekStartLocal(),
+                  }).catch(() => {})
+                  onRefreshPoints?.()
+                  setRegulationFlowDone(true)
+                  setRegulationType(null)
+                }}
+                onSkip={() => setRegulationType(null)}
+              />
+            )}
+            {regulationFlowDone && (
+              <div className="pif-body-divider">
+                <span>Want to ground your body too?</span>
+              </div>
+            )}
+            {(regulationFlowDone || (!regulationVoice && regulationType !== 'stall' && regulationType !== 'drain')) && (
+              <RegulationCard
+                state={regulationState}
+                onDone={() => { setRegulationState(null); setRegulationVoice(null); setRegulationCheckinId(null); setRegulationType(null); setRegulationFlowDone(false) }}
+                onSkip={() => { setRegulationState(null); setRegulationVoice(null); setRegulationCheckinId(null); setRegulationType(null); setRegulationFlowDone(false) }}
+              />
+            )}
           </div>
         </div>
       )}
@@ -1459,6 +1559,52 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             </div>
           </div>
         </div>
+      )}
+
+      {/* Guided flow modals (Triple Warmer, Garbage Can) */}
+      {guidedFlowId === 'practice_triple_warmer' && (
+        <TripleWarmerFlow
+          userId={userId}
+          onComplete={async () => {
+            await handleInlineComplete({ id: 'practice_triple_warmer', type: 'Practice', points: 5 })
+            setGuidedFlowId(null)
+          }}
+          onClose={() => setGuidedFlowId(null)}
+        />
+      )}
+      {guidedFlowId === 'safety_garbage_can' && (
+        <GarbageCanFlow
+          userId={userId}
+          onComplete={async (reflectionData) => {
+            try {
+              await supabase.from('quest_completions').insert({
+                user_id: userId,
+                quest_id: 'safety_garbage_can',
+                quest_category: 'Tune',
+                quest_type: 'Reconnect',
+                points_earned: 4,
+                challenge_instance_id: null,
+                challenge_day: 0,
+                project_id: null,
+                reflection_text: JSON.stringify(reflectionData),
+              })
+              await supabase.rpc('increment_scores', {
+                p_user_id: userId,
+                p_project_id: null,
+                p_category: getScoringCategory('Tune'),
+                p_points: 4,
+                p_week_start: getWeekStartLocal(),
+              })
+            } catch (err) {
+              console.error('Garbage Can save error:', err)
+            }
+            hapticSuccess()
+            confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } })
+            setGuidedFlowId(null)
+            onRefreshPoints?.()
+          }}
+          onClose={() => setGuidedFlowId(null)}
+        />
       )}
     </div>
   )
