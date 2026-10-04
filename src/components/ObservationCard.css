@@ -1,0 +1,154 @@
+/* ═══ OBSERVATION CARDS ════════════════════════════════ */
+/* Scoped to .progress-tab parent per project convention */
+
+.progress-tab .obs-card-wrap {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform;
+}
+
+.progress-tab .obs-card-wrap.obs-dismissing {
+  transform: translateX(-120%) !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.progress-tab .obs-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-left: 4px solid #5e17eb;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Header row ── */
+
+.progress-tab .obs-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.progress-tab .obs-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.progress-tab .obs-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-tab .obs-badge-pattern {
+  color: #5e17eb;
+}
+
+.progress-tab .obs-badge-compass {
+  color: #7c3aed;
+}
+
+.progress-tab .obs-badge-milestone {
+  color: #22c55e;
+}
+
+.progress-tab .obs-badge-prompt {
+  color: #f59e0b;
+}
+
+.progress-tab .obs-dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.progress-tab .obs-dismiss:hover {
+  color: #333;
+}
+
+/* ── Content ── */
+
+.progress-tab .obs-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.progress-tab .obs-body {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ── CTA button ── */
+
+.progress-tab .obs-cta {
+  margin-top: 12px;
+  background: none;
+  border: 1px solid #5e17eb;
+  color: #5e17eb;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.progress-tab .obs-cta:hover {
+  background: #5e17eb;
+  color: #fff;
+}
+
+/* ═══ OBSERVATIONS SECTION ═════════════════════════════ */
+
+.progress-tab .obs-section-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #adb5bd;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.progress-tab .obs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Entrance animation */
+@keyframes obsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.progress-tab .obs-card-wrap {
+  animation: obsFadeIn 0.35s ease forwards;
+}
+
+.progress-tab .obs-card-wrap:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.progress-tab .obs-card-wrap:nth-child(3) {
+  animation-delay: 0.16s;
+}
