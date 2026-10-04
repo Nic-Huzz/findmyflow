@@ -135,37 +135,42 @@ const Profile = () => {
 
     try {
       // Get daily streak from quest completions
+      // Supabase default limit is 1000 — bump to 5000 so streak sees full history
       const { data: completions } = await supabase
         .from('quest_completions')
         .select('completed_at')
         .eq('user_id', user.id)
         .order('completed_at', { ascending: false })
+        .limit(5000)
 
       // Calculate daily streak (using local dates, not UTC)
+      // Forgiving: allows 1 missed day per gap without breaking the streak
+      // Matches ChallengeHeader algorithm in useChallengeData.js
       let dailyStreak = 0
       if (completions?.length > 0) {
-        const daysWithCompletions = new Set(
+        const completionDates = new Set(
           completions
             .filter(c => c.completed_at)
             .map(c => new Date(c.completed_at).toLocaleDateString('en-CA'))
         )
-        const sortedDays = Array.from(daysWithCompletions).sort().reverse()
-        const today = new Date().toLocaleDateString('en-CA')
-        const yest = new Date()
-        yest.setDate(yest.getDate() - 1)
-        const yesterday = yest.toLocaleDateString('en-CA')
 
-        // Check if today or yesterday has completions
-        if (sortedDays.includes(today) || sortedDays.includes(yesterday)) {
-          let checkDate = new Date(sortedDays[0] + 'T12:00:00')
-          for (const dayStr of sortedDays) {
-            const expected = checkDate.toLocaleDateString('en-CA')
-            if (dayStr === expected) {
-              dailyStreak++
-              checkDate.setDate(checkDate.getDate() - 1)
-            } else {
-              break
-            }
+        let checkDate = new Date()
+        let missesUsed = 0
+        const MAX_MISSES = 1
+
+        for (let i = 0; i < 200; i++) {
+          const dateKey = checkDate.toLocaleDateString('en-CA')
+          if (completionDates.has(dateKey)) {
+            dailyStreak++
+            missesUsed = 0
+            checkDate.setDate(checkDate.getDate() - 1)
+          } else if (i === 0) {
+            checkDate.setDate(checkDate.getDate() - 1)
+          } else if (missesUsed < MAX_MISSES) {
+            missesUsed++
+            checkDate.setDate(checkDate.getDate() - 1)
+          } else {
+            break
           }
         }
       }
