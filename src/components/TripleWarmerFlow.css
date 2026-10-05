@@ -1,0 +1,175 @@
+/* TripleWarmerFlow — I AM Tapping guided flow */
+
+.twf-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: twf-overlay-in 0.2s ease;
+}
+
+@keyframes twf-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.twf-modal {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  animation: twf-modal-in 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes twf-modal-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.twf-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #9ca3af;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.twf-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.twf-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: twf-spin 0.8s linear infinite;
+}
+
+@keyframes twf-spin { to { transform: rotate(360deg); } }
+
+.twf-screen {
+  text-align: center;
+  animation: twf-modal-in 0.2s ease;
+}
+
+.twf-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.twf-copy {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.twf-hand-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
+  border: 1.5px solid rgba(94, 23, 235, 0.1);
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.twf-hand-emoji {
+  font-size: 32px;
+}
+
+.twf-hand-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5e17eb;
+}
+
+.twf-start {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
+  transition: transform 0.15s;
+}
+
+.twf-start:hover { transform: scale(0.98); }
+.twf-start:active { transform: scale(0.96); }
+
+/* Declarations screen */
+.twf-declarations {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.twf-declaration {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  line-height: 1.4;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
+  border: 1.5px solid rgba(94, 23, 235, 0.1);
+  border-radius: 16px;
+  animation: twf-declaration-in 0.4s ease both;
+}
+
+.twf-declaration:nth-child(2) { animation-delay: 0.15s; }
+.twf-declaration:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes twf-declaration-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.twf-instruction {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 0 0 20px;
+  font-style: italic;
+}
+
+.twf-done {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b955 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: transform 0.15s;
+}
+
+.twf-done:hover { transform: scale(0.98); }
+.twf-done:active { transform: scale(0.96); }

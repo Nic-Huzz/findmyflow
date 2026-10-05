@@ -1,0 +1,291 @@
+/* GarbageCanFlow — Evening emotional hygiene */
+
+.gcf-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: gcf-overlay-in 0.2s ease;
+}
+
+@keyframes gcf-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.gcf-modal {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  animation: gcf-modal-in 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes gcf-modal-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gcf-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #9ca3af;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.gcf-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.gcf-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: gcf-spin 0.8s linear infinite;
+}
+
+@keyframes gcf-spin { to { transform: rotate(360deg); } }
+
+.gcf-screen {
+  text-align: center;
+  animation: gcf-modal-in 0.2s ease;
+}
+
+.gcf-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.gcf-copy {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+/* Drain/stall cards */
+.gcf-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.gcf-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid #eef0f3;
+  border-radius: 14px;
+  background: #f8f8fa;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.gcf-card:hover:not(.thrown) {
+  border-color: #d1d5db;
+}
+
+.gcf-card.thrown {
+  opacity: 0;
+  transform: scale(0.3);
+  filter: grayscale(100%);
+  max-height: 0;
+  padding: 0 16px;
+  margin: 0;
+  border: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+.gcf-card-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.gcf-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.gcf-card-type {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.gcf-card-note {
+  display: block;
+  font-size: 13px;
+  color: #374151;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gcf-card-action {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+/* Custom bad moment input */
+.gcf-custom-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #eef0f3;
+  border-radius: 14px;
+  background: #f8f8fa;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+  outline: none;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.gcf-custom-input:focus {
+  border-color: #5e17eb;
+  background: white;
+}
+
+.gcf-throw-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid #ef4444;
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.05);
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 16px;
+}
+
+.gcf-throw-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.gcf-throw-btn:not(:disabled):hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.gcf-thrown-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: #9ca3af;
+  padding: 20px 0;
+  font-style: italic;
+}
+
+.gcf-step1-actions {
+  margin-top: 8px;
+}
+
+.gcf-skip-link {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 8px 0;
+}
+
+/* Good moment input */
+.gcf-framed-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #eef0f3;
+  border-radius: 14px;
+  background: #f8f8fa;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+  outline: none;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.gcf-framed-input:focus {
+  border-color: #E9A23B;
+  background: rgba(233, 162, 59, 0.03);
+}
+
+.gcf-amplify {
+  font-size: 13px;
+  color: #E9A23B;
+  font-weight: 600;
+  font-style: italic;
+  margin: 0 0 20px;
+}
+
+/* Action buttons */
+.gcf-next {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
+  transition: transform 0.15s;
+}
+
+.gcf-next:hover { transform: scale(0.98); }
+.gcf-next:active { transform: scale(0.96); }
+
+.gcf-done {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E9A23B 0%, #f0b955 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: transform 0.15s;
+}
+
+.gcf-done:hover { transform: scale(0.98); }
+.gcf-done:active { transform: scale(0.96); }

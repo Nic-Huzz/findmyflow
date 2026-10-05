@@ -1,0 +1,193 @@
+/* PatternInterruptFlow — voice rescript single screen */
+
+.pif-container {
+  text-align: center;
+  padding: 4px 0 0;
+  animation: pif-fade-in 0.25s ease;
+}
+
+@keyframes pif-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pif-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.pif-prompt {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 16px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Rescript pills */
+.pif-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.pif-pill {
+  padding: 10px 18px;
+  border: 1.5px solid #eef0f3;
+  border-radius: 24px;
+  background: #f8f8fa;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pif-pill:hover {
+  border-color: #d1d5db;
+  background: #f3f4f6;
+}
+
+.pif-pill.selected {
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
+  border-color: #5e17eb;
+  color: #5e17eb;
+  box-shadow: 0 2px 12px rgba(94, 23, 235, 0.1);
+}
+
+.pif-pill-voice {
+  border-color: rgba(233, 162, 59, 0.3);
+}
+
+/* Write your own */
+.pif-custom-toggle {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-bottom: 16px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pif-custom-toggle:hover {
+  color: #6b7280;
+}
+
+.pif-custom-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border: 1.5px solid #5e17eb;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
+}
+
+.pif-custom-prefix {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5e17eb;
+  white-space: nowrap;
+}
+
+.pif-custom-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+  outline: none;
+  min-width: 0;
+}
+
+.pif-custom-input::placeholder {
+  color: #c4b5fd;
+}
+
+/* Actions */
+.pif-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pif-skip {
+  padding: 14px 20px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  background: white;
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pif-skip:hover {
+  border-color: #d1d5db;
+  color: #6b7280;
+}
+
+.pif-done {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
+}
+
+.pif-done:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pif-done:not(:disabled):hover {
+  transform: scale(0.98);
+}
+
+.pif-done:not(:disabled):active {
+  transform: scale(0.96);
+}
+
+/* Divider between PI and RegulationCard (used by TuneTab) */
+.pif-body-divider {
+  text-align: center;
+  margin: 20px 0 16px;
+  position: relative;
+}
+
+.pif-body-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.pif-body-divider span {
+  position: relative;
+  background: white;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.2px;
+}
