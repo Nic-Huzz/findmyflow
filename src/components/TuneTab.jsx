@@ -1600,6 +1600,14 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             }
             hapticSuccess()
             confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } })
+            // Refresh completions so "Start" flips to "Done"
+            const { data } = await supabase
+              .from('quest_completions')
+              .select('quest_id, completed_at')
+              .eq('user_id', userId)
+              .in('quest_category', ['Tune', 'Healing'])
+              .gte('completed_at', getWeekStartLocal())
+            if (data) setCompletions(data)
             setGuidedFlowId(null)
             onRefreshPoints?.()
           }}

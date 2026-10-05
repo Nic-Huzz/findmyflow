@@ -38,6 +38,7 @@ export default function GarbageCanFlow({ userId, onComplete, onClose }) {
 
   useEffect(() => {
     if (!userId) return
+    let cancelled = false
     const todayStart = getTodayLocal()
 
     supabase
@@ -47,10 +48,12 @@ export default function GarbageCanFlow({ userId, onComplete, onClose }) {
       .gte('created_at', todayStart)
       .order('created_at', { ascending: false })
       .then(({ data }) => {
+        if (cancelled) return
         setTodayCheckins(data || [])
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
   }, [userId])
 
   const hasCheckins = todayCheckins.length > 0
