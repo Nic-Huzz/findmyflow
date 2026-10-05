@@ -57,11 +57,11 @@ docs/               # Specs, handoffs, research
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
 
-**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
+**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`, `/choose-quests`, `/path-definition/:questId`, `/quest-map`, `/scope-map`, `/shift-scorecard`
 
 **CRM**: `/crm/*` (Dashboard, Attract/Nurture/Tools towers, contacts, email-sequences, content, marketing, sales)
 
-**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`
+**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`, `/login` → `/log-in`, `/scale-diagnostic` → `/create/scale-diagnostic`
 
 ## Key Features
 
@@ -143,11 +143,14 @@ Sequential: Remarkable Results → Reach → Growth → Scale Score. Creator Pos
 - **Figurine Mentor**: Bottom-left FAB. 3 convos/day. `useFigurine.js`.
 - **Play Profile**: 33 experience creators matched via 5D Euclidean distance. `founder_dna_results`.
 - **Experience Creator Matching**: 59 creators, 6 archetypes, per-layer recommendations.
-- **Scope Map**: River system diagnostic (Stream/Lake/Waterfall/River) at `/create`.
+- **Scope Map**: River system diagnostic (Stream/Lake/Waterfall/River) at `/scope-map` (also linked from `/create`).
 - **Fantasy League**: Solo 4-week seasons. 3 scoring categories. `score-league-matchups` edge function.
 - **CRM**: Three towers (Attract/Nurture/Tools). 20+ services in `src/lib/crm/`.
 - **Stripe**: Consumer stages 1-7 locked. Creator: `CreateGate.jsx`. Webhook: `stripe-webhook/index.ts`.
 - **PlaySkill Taxonomies**: 10 skills, 12 problems. Lookup via `wheelTaxonomy.js`.
+- **Intelligence Observations**: Engine that surfaces pattern-based insights at 6 insertion points in ProgressTab. Dismissed state tracked in `user_dismissed_observations`.
+- **Aliveness Compass**: 5-dimension baseline radar added to path definition flow and available as lead magnet at `/try/aliveness`.
+- **Pain Point Tools**: PatternInterrupt, ADAC, TripleWarmer, GarbageCanFlow integrated into TuneTab for regulation support.
 
 ## Architecture Patterns
 
@@ -193,7 +196,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `user_stage_progress` | `user_projects` | `flow_sessions` | `flow_entries` | `milestone_completions` | `quest_completions` (aftertaste text, aftertaste_week_later text) | `user_level_progress` | `boss_fight_sessions`
 
 ### Dome of Safety + Prediction Error
-`groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)
+`groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text, `gap_rescript` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)
 
 ### Quests + Courage
 `quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
@@ -206,6 +209,11 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 
 ### Direction Bridge
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
+
+### Intelligence + Aliveness
+`user_dismissed_observations` (user_id, observation_id, dismissed_at, UNIQUE user_id+observation_id) | `quest_aliveness_snapshots` (user_id, quest_id, snapshot_type baseline/checkin, scores jsonb, UNIQUE baseline per user+quest)
+
+`weekly_reviews` additions: `new_you_vision` text, `identity_declaration` text
 
 ### Other
 `nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
