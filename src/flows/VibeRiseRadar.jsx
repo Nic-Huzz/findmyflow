@@ -8,8 +8,8 @@ import './VibeRiseRadar.css'
  * VibeRiseRadar — Free lead magnet at /try/vibe-rise-radar
  * "How alive are you right now?"
  *
- * 6 dimensions: Permission, Safety, Freedom, Connection, Presence, Joy
- * Flow: Hook → 6 questions (1-5 slider each) → Email Gate → Radar Results
+ * 5 dimensions: Permission, Safety, Connection, Engagement, Alignment
+ * Flow: Hook → 5 questions (1-5 slider each) → Email Gate → Radar Results
  */
 
 const DIMENSIONS = [
@@ -17,55 +17,46 @@ const DIMENSIONS = [
     id: 'permission',
     name: 'Permission',
     emoji: '🚪',
-    question: 'How free do you feel to express yourself right now?',
-    low: 'Holding back. Something is stopping you from expressing what you feel.',
-    high: 'You feel fully allowed to be yourself. No filter needed.',
-    anchors: ['Completely held back', 'Slightly constrained', 'Neutral', 'Mostly free', 'Fully free to express'],
+    question: 'How accepted do you feel doing the things you care about?',
+    low: 'People around you question your choices. You feel like you need to justify yourself.',
+    high: 'Your world supports what you do. Nobody questions why.',
+    anchors: ['Not accepted at all', 'Mostly questioned', 'Mixed reactions', 'Mostly accepted', 'Fully accepted'],
   },
   {
     id: 'safety',
     name: 'Safety',
     emoji: '🛡️',
-    question: 'How safe do you feel to let go right now?',
-    low: 'Guarded. Your body is bracing for something.',
-    high: 'You trust the room. You could fall and be caught.',
-    anchors: ['Completely guarded', 'On edge', 'Neutral', 'Mostly safe', 'Fully safe to let go'],
-  },
-  {
-    id: 'freedom',
-    name: 'Freedom',
-    emoji: '🦅',
-    question: 'Are you being fully yourself right now, or holding back?',
-    low: 'You know who you could be here, but you are not being that person yet.',
-    high: 'You are fully yourself. Nothing held back.',
-    anchors: ['Completely holding back', 'Mostly holding back', 'Half and half', 'Mostly myself', 'Fully myself'],
+    question: 'How comfortable do you feel being seen doing what you love?',
+    low: 'You hide parts of yourself. Being watched feels exposing.',
+    high: 'You could do your thing in front of anyone. Being seen feels natural.',
+    anchors: ['Very uncomfortable being seen', 'Mostly uncomfortable', 'Depends on who is watching', 'Mostly comfortable', 'Fully comfortable being seen'],
   },
   {
     id: 'connection',
     name: 'Connection',
     emoji: '🤝',
-    question: 'How connected do you feel to the people around you?',
-    low: 'Alone in a crowd. People are here but you do not feel bonded to them.',
-    high: 'Deeply connected. You feel part of something.',
-    anchors: ['Completely alone', 'Mostly alone', 'Some connection', 'Mostly connected', 'Deeply connected'],
+    question: 'How connected do you feel to people who share your interests?',
+    low: 'You do not know anyone in your world. No community, no peers, no mentors.',
+    high: 'You have your people. Peers, mentors, a community that gets it.',
+    anchors: ['No one in my world', 'A few loose contacts', 'Some connections', 'A solid network', 'Deep community'],
   },
   {
-    id: 'presence',
-    name: 'Presence',
-    emoji: '👁️',
-    question: 'How fully are you here right now?',
-    low: 'In your head. Thinking about the past, the future, your phone, anything but this moment.',
-    high: 'Fully here. Nothing else exists right now.',
-    anchors: ['Completely in my head', 'Mostly distracted', 'Half here', 'Mostly present', 'Fully here'],
+    id: 'engagement',
+    name: 'Engagement',
+    emoji: '🔥',
+    question: 'How energised are you by the activities in your life, not just the outcomes?',
+    low: 'The process drains you. You tolerate it for the result.',
+    high: 'The process itself fuels you. You would do it even if nobody paid you.',
+    anchors: ['Completely drained by it', 'Mostly grinding', 'Some parts energise me', 'Mostly energised', 'The process itself fuels me'],
   },
   {
-    id: 'joy',
-    name: 'Joy',
+    id: 'alignment',
+    name: 'Alignment',
     emoji: '✨',
-    question: 'How alive do you feel right now?',
-    low: 'Flat. Going through the motions.',
-    high: 'Buzzing. This is what being alive feels like.',
-    anchors: ['Completely flat', 'Low energy', 'Neutral', 'Feeling good', 'Fully alive'],
+    question: 'How much does your life feel like the real you?',
+    low: 'This feels like someone else\'s life. You are performing, not living.',
+    high: 'This is you. When you describe your life, you light up.',
+    anchors: ['Not me at all', 'Mostly not me', 'Parts of it feel like me', 'Mostly me', 'This is completely me'],
   },
 ]
 
@@ -245,7 +236,7 @@ export default function VibeRiseRadar() {
 
   useEffect(() => {
     if (stage !== 'calculating') return
-    const labels = ['Reading your responses...', 'Mapping your 6 dimensions...', 'Measuring your aliveness...', 'Building your radar...']
+    const labels = ['Reading your responses...', 'Mapping your 5 dimensions...', 'Measuring your aliveness...', 'Building your radar...']
     let i = 0
     const interval = setInterval(() => {
       i++
@@ -281,7 +272,7 @@ export default function VibeRiseRadar() {
     setCalcStep(0)
     setStage('calculating')
 
-    const verdictState = Object.keys(answers).length === 6
+    const verdictState = Object.keys(answers).length === DIMENSIONS.length
       ? getVerdict(answers).state
       : 'incomplete'
 
@@ -344,7 +335,7 @@ export default function VibeRiseRadar() {
     }
   }, [])
 
-  const verdict = Object.keys(answers).length === 6 ? getVerdict(answers) : null
+  const verdict = Object.keys(answers).length === DIMENSIONS.length ? getVerdict(answers) : null
   const lowDims = DIMENSIONS.filter(d => (answers[d.id] || 0) <= 2)
   const highDims = DIMENSIONS.filter(d => (answers[d.id] || 0) >= 4)
 
@@ -358,7 +349,7 @@ export default function VibeRiseRadar() {
             <div className="vrr-hook-emoji">✨</div>
             <h1>How alive are you right now?</h1>
             <p className="vrr-hook-sub">
-              6 questions. 60 seconds. See your aliveness as a shape.
+              5 questions. 60 seconds. See your aliveness as a shape.
             </p>
             <p className="vrr-hook-desc">
               Most people are running at half power and don't even know it.
@@ -430,7 +421,7 @@ export default function VibeRiseRadar() {
           <div className="vrr-calculating">
             <div className="typing-indicator"><span /><span /><span /></div>
             <p className="vrr-calc-label">
-              {['Reading your responses...', 'Mapping your 6 dimensions...', 'Measuring your aliveness...', 'Building your radar...'][calcStep]}
+              {['Reading your responses...', 'Mapping your 5 dimensions...', 'Measuring your aliveness...', 'Building your radar...'][calcStep]}
             </p>
           </div>
         )}
