@@ -63,6 +63,14 @@
   border-color: rgba(233, 162, 59, 0.3);
 }
 
+.pif-pill-past {
+  width: 100%;
+  background: linear-gradient(135deg, #fef9ee 0%, #fff8e8 100%);
+  border-color: #E9A23B;
+  color: #92600a;
+  font-size: 13px;
+}
+
 /* Write your own */
 .pif-custom-toggle {
   background: none;

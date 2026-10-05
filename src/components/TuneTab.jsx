@@ -1332,6 +1332,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             {regulationType === 'stall' && regulationVoice && (
               <PatternInterruptFlow
                 voice={regulationVoice}
+                userId={userId}
                 onComplete={async (rescriptText) => {
                   if (regulationCheckinId && rescriptText) {
                     const { data: row } = await supabase
@@ -1366,6 +1367,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
             {/* Drain: ADAC (emotional defusing) */}
             {regulationType === 'drain' && (
               <ADACFlow
+                userId={userId}
                 onComplete={async (feeling, anchor) => {
                   if (regulationCheckinId) {
                     const { data: row } = await supabase
