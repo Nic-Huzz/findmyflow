@@ -56,6 +56,11 @@ import './EssenceMirrorFlow.css'
 
 const HOOK_SLIDES = [
   {
+    text: 'Is it worth spending 5 minutes identifying the version of you who makes you feel most alive?',
+    subtext: 'A short visual exercise that reveals your core essence, the thing that makes you, you.',
+    button: 'Show me',
+  },
+  {
     text: 'I believe you have a unique essence.',
     button: 'Tell me more',
   },
