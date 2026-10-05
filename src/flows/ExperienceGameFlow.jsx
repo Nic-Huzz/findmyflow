@@ -697,7 +697,7 @@ export default function ExperienceGameFlow() {
   const { user } = useAuth()
   const { domeStates, loading: domeLoading, bulkSetStates } = useDomeData(user?.id)
   const branches = useMemo(buildBranches, [])
-  const [phase, setPhase] = useState('intro')
+  const [phase, setPhase] = useState('framing')
   const [checked, setChecked] = useState({})
   const [ratings, setRatings] = useState({})
   const [hydrated, setHydrated] = useState(false)
@@ -848,6 +848,17 @@ export default function ExperienceGameFlow() {
     navigate('/7-day-challenge?tab=discover')
   }, [user, branches, navigate])
 
+
+  if (phase === 'framing') {
+    return (
+      <div className="exp-game">
+        <div className="exp-game-framing">
+          <h1>Is it worth spending 5 minutes to identify paths you may walk for the next 30+ years?</h1>
+          <button onClick={() => setPhase('intro')}>Let's find out →</button>
+        </div>
+      </div>
+    )
+  }
 
   if (phase === 'intro') {
     return (
