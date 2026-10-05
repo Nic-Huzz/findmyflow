@@ -705,7 +705,7 @@ export default function ExperienceGameFlow() {
 
   // Track each phase reached
   useEffect(() => {
-    const phases = ['intro', 'play', 'insight']
+    const phases = ['framing', 'intro', 'play', 'insight']
     const idx = phases.indexOf(phase)
     if (idx >= 0) tracker.current.step(phase, idx)
   }, [phase])
