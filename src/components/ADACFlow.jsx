@@ -6,21 +6,44 @@
  * CSS prefix: adac-
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { supabase } from '../lib/supabaseClient'
 import './ADACFlow.css'
 
 const FEELING_PILLS = [
   'Angry', 'Frustrated', 'Hurt', 'Anxious', 'Drained', 'Resentful', 'Sad',
 ]
 
-export default function ADACFlow({ onComplete, onSkip }) {
+export default function ADACFlow({ userId, onComplete, onSkip }) {
   const [step, setStep] = useState(1)
   const [feeling, setFeeling] = useState(null)
   const [customFeeling, setCustomFeeling] = useState('')
   const [showCustom, setShowCustom] = useState(false)
   const [anchor, setAnchor] = useState('')
+  const [lastAnchor, setLastAnchor] = useState(null)
   const [done, setDone] = useState(false)
+
+  // Load last anchor from previous ADAC sessions
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    supabase
+      .from('nervous_system_checkins')
+      .select('drain_note')
+      .eq('user_id', userId)
+      .eq('checkin_type', 'drain')
+      .not('drain_note', 'is', null)
+      .like('drain_note', '%[adac]%')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (cancelled || !data?.[0]?.drain_note) return
+        const match = data[0].drain_note.match(/anchor:\s*(.+?)(?:\n|$)/)
+        if (match?.[1]) setLastAnchor(match[1].trim())
+      })
+    return () => { cancelled = true }
+  }, [userId])
 
   const feelingText = feeling === 'custom' ? customFeeling.trim() : feeling
 
@@ -114,6 +137,16 @@ export default function ADACFlow({ onComplete, onSkip }) {
           <p className="adac-copy">
             Think of a time you felt completely calm and in control. Where were you? What could you see?
           </p>
+          {lastAnchor && !anchor && (
+            <button
+              type="button"
+              className="adac-pill selected"
+              style={{ marginBottom: 12 }}
+              onClick={() => { hapticLight(); setAnchor(lastAnchor) }}
+            >
+              {lastAnchor}
+            </button>
+          )}
           <input
             type="text"
             className="adac-anchor-input"
@@ -121,7 +154,7 @@ export default function ADACFlow({ onComplete, onSkip }) {
             onChange={e => setAnchor(e.target.value)}
             placeholder="I was..."
             maxLength={100}
-            autoFocus
+            autoFocus={!lastAnchor}
           />
           <div className="adac-actions">
             <button type="button" className="adac-skip" onClick={onSkip}>Skip</button>

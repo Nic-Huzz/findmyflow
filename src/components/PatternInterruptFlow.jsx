@@ -6,8 +6,9 @@
  * CSS prefix: pif-
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
+import { supabase } from '../lib/supabaseClient'
 import './PatternInterruptFlow.css'
 
 const VOICE_RESCRIPTS = {
@@ -18,19 +19,52 @@ const VOICE_RESCRIPTS = {
   auto_pilot:     { icon: '🛋️', label: 'Auto-Pilot',     rescript: '...show up fully' },
 }
 
-export default function PatternInterruptFlow({ voice, onComplete, onSkip }) {
+export default function PatternInterruptFlow({ voice, userId, onComplete, onSkip }) {
   const [selected, setSelected] = useState(voice)
   const [showCustom, setShowCustom] = useState(false)
   const [customText, setCustomText] = useState('')
+  const [pastRescript, setPastRescript] = useState(null)
+
+  // Load most-used rescript for this voice (shows after 2+ uses)
+  useEffect(() => {
+    if (!userId || !voice) return
+    let cancelled = false
+    supabase
+      .from('nervous_system_checkins')
+      .select('drain_note')
+      .eq('user_id', userId)
+      .eq('checkin_type', 'stall')
+      .eq('protective_voice', voice)
+      .not('drain_note', 'is', null)
+      .like('drain_note', '%[rescript]%')
+      .order('created_at', { ascending: false })
+      .limit(10)
+      .then(({ data }) => {
+        if (cancelled || !data?.length) return
+        const counts = {}
+        data.forEach(row => {
+          const match = row.drain_note.match(/\[rescript\]\s*(.+?)(?:\n|$)/)
+          if (match?.[1]) {
+            const text = match[1].trim()
+            counts[text] = (counts[text] || 0) + 1
+          }
+        })
+        const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1])
+        if (sorted[0] && sorted[0][1] >= 2) setPastRescript(sorted[0][0])
+      })
+    return () => { cancelled = true }
+  }, [userId, voice])
 
   const voiceData = VOICE_RESCRIPTS[voice]
   if (!voiceData) return null
 
   const rescriptText = selected === 'custom'
     ? customText.trim()
-    : selected
-      ? `I choose to ${VOICE_RESCRIPTS[selected]?.rescript?.replace('...', '') || selected}`
-      : null
+    : selected === 'past'
+      ? pastRescript
+      : selected
+        ? `I choose to ${VOICE_RESCRIPTS[selected]?.rescript?.replace('...', '') || selected}`
+        : null
 
   function handleDone() {
     if (!rescriptText) return
@@ -44,6 +78,15 @@ export default function PatternInterruptFlow({ voice, onComplete, onSkip }) {
       <p className="pif-prompt">I'm done with that. I choose to...</p>
 
       <div className="pif-pills">
+        {pastRescript && (
+          <button
+            type="button"
+            className={`pif-pill pif-pill-past ${selected === 'past' ? 'selected' : ''}`}
+            onClick={() => { hapticLight(); setSelected('past'); setShowCustom(false) }}
+          >
+            Your go-to: {pastRescript.replace(/^I choose to\s*/i, '...')}
+          </button>
+        )}
         {Object.entries(VOICE_RESCRIPTS).map(([id, data]) => (
           <button
             key={id}
