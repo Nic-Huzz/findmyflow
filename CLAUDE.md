@@ -45,7 +45,7 @@ docs/               # Specs, handoffs, research
 
 **Core**: `/` | `/log-in` | `/me` | `/7-day-challenge` | `/library` | `/flow-compass` | `/feedback` | `/hero-profile` | `/guidebook`
 
-**Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`
+**Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`, `/dome-onboarding`
 
 **Levels**: `/zone-diagnosis/:levelNumber`, `/tension-assessment`
 
@@ -57,7 +57,9 @@ docs/               # Specs, handoffs, research
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
 
-**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
+**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/newsfeed`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`, `/choose-quests`, `/path-definition/:questId`, `/quest-map`, `/shift-scorecard`, `/experience-game`
+
+**Try (Public)**: `/try/ambition-radar`, `/try/vibe-rise-radar`, `/try/play-profile`, `/try/essence-mirror`, `/try/career-clarity`, `/try/experience-game`, `/try/nervous-system`, `/try/aliveness`, `/try/earthquake`, `/try/life-paths`, `/try/ai-diagnostic`, `/try/facilitator-score`
 
 **CRM**: `/crm/*` (Dashboard, Attract/Nurture/Tools towers, contacts, email-sequences, content, marketing, sales)
 
@@ -199,7 +201,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
 
 ### Clusters + Skills
-`nikigai_clusters` (resonance_state, behavioral_evidence, skill_tags, problem_tags) | `user_skill_progress` (user_id, skill_id, xp, level) | `curiosity_clusters`
+`nikigai_clusters` (resonance_state, resonance_rating, resonance_updated_at, behavioral_evidence, is_removed, skill_tags, problem_tags) | `user_skill_progress` (user_id, skill_id, xp, level) | `curiosity_clusters`
 
 ### Life Paths
 `life_path_sessions` (careers JSON, stuck_points JSON) | `curiosity_inputs`
@@ -208,7 +210,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
 
 ### Other
-`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
+`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations` | `community_feed` (event_type, title, subtitle, image_url, metadata) | `community_feed_reactions` (feed_item_id FK, user_id, reaction_type) | `essence_avatar_memory` (user_id, memory_type, content, source, confidence)
 
 RPCs: `increment_skill_xp`, `increment_behavioral_evidence`, `get_user_id_by_email`
 
