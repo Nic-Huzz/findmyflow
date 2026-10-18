@@ -47,9 +47,9 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`
 
-**Levels**: `/zone-diagnosis/:levelNumber`, `/tension-assessment`
+**Levels**: `/zone-diagnosis/:levelNumber`
 
-**Create Portal**: `/create`, `/create/experience/new`, `/create/experience/:id`, `/create/remarkable`, `/create/narrative-builder`, `/create/access-architecture`, `/create/scale-diagnostic`, `/try/facilitator-score`
+**Create Portal**: `/create`, `/create/experience/new`, `/create/experience/:id`, `/create/experience/:id/:nodeKey`, `/create/remarkable`, `/create/narrative-builder`, `/create/access-architecture`, `/create/scale-diagnostic`, `/create/growth`, `/create/plays`, `/create/bridge`, `/create/experiences`, `/create/inspiration`, `/create/attraction-stack`, `/create/marketing-campaign`, `/create/scale-income`, `/create/pay-rent`, `/create/terminal`, `/create/profile`, `/create/build-app/*`, `/try/facilitator-score`
 
 **Direction**: `/career-clarity`, `/people`, `/experience-creators`
 
@@ -57,11 +57,11 @@ docs/               # Specs, handoffs, research
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
 
-**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
+**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`, `/choose-quests`, `/path-definition/:questId`, `/quest-map`, `/dome-onboarding`, `/experience-game`, `/agent-access`, `/scope-map`, `/shift-scorecard`, `/report-card`, `/profile-hub`, `/user-settings`, `/settings/notifications`
 
 **CRM**: `/crm/*` (Dashboard, Attract/Nurture/Tools towers, contacts, email-sequences, content, marketing, sales)
 
-**Redirects**: `/business` → `/create`, `/nikigai/*` → `/life-map`, `/shadow-work` → `/life-map`
+**Redirects**: `/business` → `/create`, `/nikigai/skills|problems|persona|integration` → `/life-map`, `/shadow-work` → `/life-map`
 
 ## Key Features
 
@@ -190,7 +190,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 ## Database Schema
 
 ### Core
-`user_stage_progress` | `user_projects` | `flow_sessions` | `flow_entries` | `milestone_completions` | `quest_completions` (aftertaste text, aftertaste_week_later text) | `user_level_progress` | `boss_fight_sessions`
+`user_stage_progress` | `user_projects` | `flow_sessions` | `flow_entries` | `milestone_completions` | `quest_completions` (aftertaste text, aftertaste_week_later text, response_data jsonb) | `user_level_progress` | `boss_fight_sessions`
 
 ### Dome of Safety + Prediction Error
 `groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)
@@ -208,7 +208,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
 
 ### Other
-`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
+`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations` | `agent_api_keys` (user_id, key_hash, key_prefix, label, permissions jsonb, last_used_at, is_active) | `product_suite_maps` (user_id, chain_data jsonb, UNIQUE user_id)
 
 RPCs: `increment_skill_xp`, `increment_behavioral_evidence`, `get_user_id_by_email`
 
