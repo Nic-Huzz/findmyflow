@@ -47,7 +47,7 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`
 
-**Levels**: `/zone-diagnosis/:levelNumber`, `/tension-assessment`
+**Levels**: `/zone-diagnosis/:levelNumber`
 
 **Create Portal**: `/create`, `/create/experience/new`, `/create/experience/:id`, `/create/remarkable`, `/create/narrative-builder`, `/create/access-architecture`, `/create/scale-diagnostic`, `/try/facilitator-score`
 
@@ -57,7 +57,9 @@ docs/               # Specs, handoffs, research
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
 
-**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
+**Flows**: `/choose-quests`, `/path-definition/:questId`, `/dome-onboarding`, `/experience-game`, `/wound-map`
+
+**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`, `/scope-map`, `/shift-scorecard`, `/limiting-belief-rewire`
 
 **CRM**: `/crm/*` (Dashboard, Attract/Nurture/Tools towers, contacts, email-sequences, content, marketing, sales)
 
@@ -143,7 +145,7 @@ Sequential: Remarkable Results → Reach → Growth → Scale Score. Creator Pos
 - **Figurine Mentor**: Bottom-left FAB. 3 convos/day. `useFigurine.js`.
 - **Play Profile**: 33 experience creators matched via 5D Euclidean distance. `founder_dna_results`.
 - **Experience Creator Matching**: 59 creators, 6 archetypes, per-layer recommendations.
-- **Scope Map**: River system diagnostic (Stream/Lake/Waterfall/River) at `/create`.
+- **Scope Map**: River system diagnostic (Stream/Lake/Waterfall/River) at `/scope-map`.
 - **Fantasy League**: Solo 4-week seasons. 3 scoring categories. `score-league-matchups` edge function.
 - **CRM**: Three towers (Attract/Nurture/Tools). 20+ services in `src/lib/crm/`.
 - **Stripe**: Consumer stages 1-7 locked. Creator: `CreateGate.jsx`. Webhook: `stripe-webhook/index.ts`.
@@ -208,7 +210,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
 
 ### Other
-`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
+`nervous_system_checkins` (before_state, after_state, source_challenge_id, checkin_type, protective_voice text) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
 
 RPCs: `increment_skill_xp`, `increment_behavioral_evidence`, `get_user_id_by_email`
 
