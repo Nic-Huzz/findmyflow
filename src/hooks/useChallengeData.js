@@ -93,6 +93,7 @@ export function useChallengeData() {
   const [questInputs, setQuestInputs] = useState({})
   const [userData, setUserData] = useState(null)
   const [stageProgress, setStageProgress] = useState(null)
+  const [alivenessSnapshots, setAlivenessSnapshots] = useState([])
 
   // Group/Leaderboard State
   const [groupMode, setGroupMode] = useState(null)
@@ -374,6 +375,20 @@ export function useChallengeData() {
       setStageProgress(progress)
     } catch (error) {
       console.error('Error loading stage progress:', error)
+    }
+  }
+
+  const loadAlivenessSnapshots = async () => {
+    if (!user?.id) return
+    try {
+      const { data } = await supabase
+        .from('quest_aliveness_snapshots')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      if (data) setAlivenessSnapshots(data)
+    } catch (error) {
+      console.error('Error loading aliveness snapshots:', error)
     }
   }
 
@@ -1669,6 +1684,7 @@ export function useChallengeData() {
         checkHealingCompassComplete(),
         checkFlowFinderComplete(),
         loadStageProgress(),
+        loadAlivenessSnapshots(),
         // Note: loadValidationResponseCounts is triggered by selectedProject useEffect below
       ]).finally(() => {
         setLoading(false)
@@ -1852,6 +1868,8 @@ export function useChallengeData() {
     setQuestInputs,
     userData,
     stageProgress,
+    alivenessSnapshots,
+    loadAlivenessSnapshots,
 
     // Group/Leaderboard
     groupMode,

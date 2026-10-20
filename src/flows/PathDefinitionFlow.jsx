@@ -2,23 +2,26 @@
  * PathDefinitionFlow.jsx — /path-definition/:questId
  *
  * Standalone commitment flow for a single quest. Loads quest from DB,
- * guides user through Setup > The Shift > The Commitment, saves back to DB.
+ * guides user through Aliveness > Setup > The Shift > The Commitment, saves back to DB.
  *
- * Screen 0: Setup (precursor + all 8 dimensions current/aspiration)
- * Screen 1: The Shift (life fuels + buts + voice picker + reframe with voice attribution)
- * Screen 2: The Commitment (fear + identity contrast cards + editable identity + smallest step)
+ * Screen 0: Aliveness baseline (5 Vibe Rise dimensions, pentagon radar reveal)
+ * Screen 1: Setup (precursor + all 8 dimensions current/aspiration)
+ * Screen 2: The Shift (life fuels + buts + voice picker + reframe with voice attribution)
+ * Screen 3: The Commitment (fear + identity contrast cards + editable identity + smallest step)
  *
  * Follows the Robbins x Dispenza leverage sequence:
  * Voice moves earlier (after buts), identity becomes a reveal (not blank input),
  * smallest step moves to last position.
  */
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { DOME_DIMENSIONS, calculateCourageScore } from '../data/domeDimensions'
 import { PRECURSOR_LEVELS, PRECURSOR_DEFAULTS } from '../data/precursorDefaults'
 import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
+import { VIBE_RISE_DIMENSIONS } from '../data/vibeRiseDimensions'
 import DomeOfSafety from '../components/DomeOfSafety'
+import GenericRadar from '../components/GenericRadar'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { getWeekStartLocal } from '../lib/dateUtils'
@@ -80,7 +83,13 @@ export default function PathDefinitionFlow() {
   // Screen navigation
   const [screen, setScreen] = useState(0)
 
-  // Screen 0: Setup
+  // Screen 0: Aliveness baseline
+  const [alivenessStep, setAlivenessStep] = useState(0) // 0-4 = questions, 5 = reveal
+  const [alivenessScores, setAlivenessScores] = useState({})
+  const [baselineExists, setBaselineExists] = useState(false)
+  const [savingBaseline, setSavingBaseline] = useState(false)
+
+  // Screen 1: Setup
   const [precursor, setPrecursor] = useState(null)
   const [currentDims, setCurrentDims] = useState({})
   const [aspirationDims, setAspirationDims] = useState({})
@@ -167,7 +176,21 @@ export default function PathDefinitionFlow() {
         if (data.fear_outcome) setFearText(data.fear_outcome)
         if (data.identity_declaration) setIdentityText(data.identity_declaration)
         if (data.protective_voice) setVoice(data.protective_voice)
-        setLoading(false)
+        // Check if baseline already exists (must complete before setLoading)
+        supabase.from('quest_aliveness_snapshots')
+          .select('id, scores')
+          .eq('user_id', user.id)
+          .eq('quest_id', questId)
+          .eq('snapshot_type', 'baseline')
+          .limit(1)
+          .then(({ data: snapshots }) => {
+            if (snapshots?.length) {
+              setBaselineExists(true)
+              setAlivenessScores(snapshots[0].scores || {})
+              setScreen(1) // skip to Setup if baseline already done
+            }
+            setLoading(false)
+          })
       })
   }, [user?.id, questId])
 
@@ -194,9 +217,9 @@ export default function PathDefinitionFlow() {
       })
   }, [user?.id])
 
-  // Pre-fill identity input from essence superpower when arriving at Screen 2
+  // Pre-fill identity input from essence superpower when arriving at Screen 3
   useEffect(() => {
-    if (screen === 2 && essenceSuperpower && !identityPrefilled && !identityText) {
+    if (screen === 3 && essenceSuperpower && !identityPrefilled && !identityText) {
       setIdentityText(essenceSuperpower)
       setIdentityPrefilled(true)
     }
@@ -309,7 +332,7 @@ export default function PathDefinitionFlow() {
 
       hapticSuccess()
       setSaving(false)
-      setScreen(3) // done
+      setScreen(4) // done
     } catch (err) {
       console.error('Path definition save failed:', err)
       setError('Something went wrong saving. Please try again.')
@@ -317,7 +340,16 @@ export default function PathDefinitionFlow() {
     }
   }, [user, questId, quest, precursor, currentDims, aspirationDims,
     stayingFuels, pathFuels, buts, stepText, fearText, identityText, voice,
-    stepDims, stepDimValues])
+    stepDims, stepDimValues, selectedExpId])
+
+  // Skip to Setup if baseline already exists (useEffect avoids render-time state update)
+  useEffect(() => {
+    if (screen === 0 && baselineExists) goScreen(1)
+  }, [screen, baselineExists, goScreen])
+
+  // Ref guards (must be before early returns per Rules of Hooks)
+  const savingBaselineRef = useRef(false)
+  const advanceTimerRef = useRef(null)
 
   // ── Loading ──
   if (loading) {
@@ -347,8 +379,148 @@ export default function PathDefinitionFlow() {
     )
   }
 
-  // ── SCREEN 0: SETUP ──
-  if (screen === 0) {
+  // ── SCREEN 0: ALIVENESS BASELINE ──
+  if (screen === 0 && !baselineExists) {
+    const currentDim = VIBE_RISE_DIMENSIONS[alivenessStep]
+    const allAnswered = Object.keys(alivenessScores).length === VIBE_RISE_DIMENSIONS.length
+    const isReveal = alivenessStep >= VIBE_RISE_DIMENSIONS.length
+
+    const saveBaseline = async () => {
+      if (!user?.id || !questId || savingBaselineRef.current) return
+      savingBaselineRef.current = true
+      setSavingBaseline(true)
+      try {
+        await supabase.from('quest_aliveness_snapshots').insert({
+          user_id: user.id,
+          quest_id: questId,
+          snapshot_type: 'baseline',
+          scores: alivenessScores,
+        })
+        setBaselineExists(true)
+        hapticSuccess()
+        goScreen(1)
+      } catch (err) {
+        // Unique constraint = baseline already saved, just advance
+        if (err?.code === '23505') { goScreen(1); return }
+        console.error('Baseline save failed:', err)
+      } finally {
+        savingBaselineRef.current = false
+        setSavingBaseline(false)
+      }
+    }
+
+    return (
+      <div className="pdf">
+        <div className="pdf-container">
+          <div className="pdf-path-name">{quest.label}</div>
+
+          {!isReveal && currentDim && (
+            <>
+              <div className="pdf-section" style={{ textAlign: 'center', paddingTop: 24 }}>
+                {alivenessStep === 0 && (
+                  <>
+                    <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+                      Before we define your path, let's take a snapshot.
+                    </div>
+                    <div style={{ fontSize: 14, color: '#888', marginBottom: 32 }}>
+                      How alive are you on this path? 5 questions. 60 seconds.
+                    </div>
+                  </>
+                )}
+                <div style={{ fontSize: 32, marginBottom: 8 }}>{currentDim.emoji}</div>
+                <div className="pdf-q" style={{ marginBottom: 24 }}>{currentDim.question}</div>
+
+                {/* Progress dots */}
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 24 }}>
+                  {VIBE_RISE_DIMENSIONS.map((_, i) => (
+                    <div key={i} style={{
+                      width: 8, height: 8, borderRadius: '50%',
+                      background: i < alivenessStep ? '#5e17eb' : i === alivenessStep ? '#E9A23B' : '#e0ddd8',
+                    }} />
+                  ))}
+                </div>
+
+                {/* 1-5 anchor buttons */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {currentDim.anchors.map((anchor, i) => {
+                    const score = i + 1
+                    const selected = alivenessScores[currentDim.id] === score
+                    return (
+                      <button key={score}
+                        className={`pdf-cta ${selected ? 'pdf-cta-gold' : 'pdf-cta-secondary'}`}
+                        style={{ textAlign: 'left', padding: '12px 16px', fontSize: 14 }}
+                        onClick={() => {
+                          hapticLight()
+                          setAlivenessScores(prev => ({ ...prev, [currentDim.id]: score }))
+                          // Debounced auto-advance: cancel prior timer to prevent skipping
+                          if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current)
+                          advanceTimerRef.current = setTimeout(() => {
+                            setAlivenessStep(prev =>
+                              prev < VIBE_RISE_DIMENSIONS.length ? prev + 1 : prev
+                            )
+                            advanceTimerRef.current = null
+                          }, 300)
+                        }}>
+                        <span style={{ fontWeight: 700, marginRight: 8 }}>{score}</span> {anchor}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {alivenessStep > 0 && (
+                <div className="pdf-fixed">
+                  <button className="pdf-cta pdf-cta-secondary"
+                    onClick={() => setAlivenessStep(prev => prev - 1)}>
+                    ← Back
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+
+          {isReveal && allAnswered && (
+            <div className="pdf-section" style={{ textAlign: 'center', paddingTop: 24 }}>
+              <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>Your aliveness snapshot</div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <GenericRadar
+                  dimensions={VIBE_RISE_DIMENSIONS}
+                  scores={alivenessScores}
+                  maxLevel={5}
+                  size={280}
+                  animate
+                />
+              </div>
+              <div className="pdf-fixed">
+                <button className="pdf-cta pdf-cta-gold"
+                  disabled={savingBaseline}
+                  onClick={saveBaseline}>
+                  {savingBaseline ? 'Saving...' : 'Next →'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isReveal && !allAnswered && (
+            <div className="pdf-section" style={{ textAlign: 'center', paddingTop: 24 }}>
+              <div style={{ fontSize: 16, color: '#888', marginBottom: 16 }}>
+                Looks like a question was skipped. Tap back to fill it in.
+              </div>
+              <div className="pdf-fixed">
+                <button className="pdf-cta pdf-cta-secondary"
+                  onClick={() => setAlivenessStep(prev => prev - 1)}>
+                  ← Back
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ── SCREEN 1: SETUP ──
+  if (screen === 1) {
     const guessLevels = precursor ? PRECURSOR_DEFAULTS[precursor] || {} : {}
     const hasAspiration = Object.keys(aspirationDims).length >= 4
 
@@ -474,11 +646,11 @@ export default function PathDefinitionFlow() {
           <div className="pdf-fixed">
             <button className="pdf-cta pdf-cta-gold"
               disabled={!precursor || !hasAspiration}
-              onClick={() => goScreen(1)}>
+              onClick={() => goScreen(2)}>
               {!precursor ? 'Pick where you are' : !hasAspiration ? 'Set aspirations for 4+ dimensions' : 'Next →'}
             </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
-              ← Back to paths
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => baselineExists ? navigate('/7-day-challenge?tab=Paths') : goScreen(0)}>
+              {baselineExists ? '← Back to paths' : '← Back'}
             </button>
           </div>
         </div>
@@ -486,8 +658,8 @@ export default function PathDefinitionFlow() {
     )
   }
 
-  // ── SCREEN 1: THE SHIFT ──
-  if (screen === 1) {
+  // ── SCREEN 2: THE SHIFT ──
+  if (screen === 2) {
     const fuelsPicked = pathFuels.size > 0
     const canAdvance = fuelsPicked && buts.length > 0 && voice && showReframe
 
@@ -616,18 +788,18 @@ export default function PathDefinitionFlow() {
           <div className="pdf-fixed">
             <button className="pdf-cta pdf-cta-gold"
               disabled={!canAdvance}
-              onClick={() => goScreen(2)}>
+              onClick={() => goScreen(3)}>
               {!fuelsPicked ? 'Pick what this path gives you' : buts.length === 0 ? 'Add at least one "but"' : !voice ? 'Pick which voice says that' : 'Next →'}
             </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(0)}>← Back to setup</button>
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(1)}>← Back to setup</button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ── SCREEN 2: THE COMMITMENT (progressive reveal) ──
-  if (screen === 2) {
+  // ── SCREEN 3: THE COMMITMENT (progressive reveal) ──
+  if (screen === 3) {
     const hasEssence = essenceSuperpower && essenceVision && essenceName
     const canSave = fearText.trim() && voice && stepText.trim() && identityText.trim()
     const voiceName = VOICES.find(v => v.id === voice)?.label || 'voice'
@@ -903,7 +1075,7 @@ export default function PathDefinitionFlow() {
                 !stepText.trim() ? 'Add your first step' :
                 'Define this path →'}
             </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(1)}>← Back to the shift</button>
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => goScreen(2)}>← Back to the shift</button>
           </div>
         </div>
       </div>
@@ -911,7 +1083,7 @@ export default function PathDefinitionFlow() {
   }
 
   // ── DONE ──
-  if (screen === 3) {
+  if (screen === 4) {
     return (
       <div className="pdf">
         <div className="pdf-container">

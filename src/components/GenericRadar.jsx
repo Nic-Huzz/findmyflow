@@ -5,8 +5,9 @@ import './GenericRadar.css'
  *
  * Props:
  *  - dimensions   — [{ id, name, emoji }]
- *  - scores       — { dimId: number } (primary fill, purple)
- *  - scores2      — optional { dimId: number } (secondary fill, gold/amber, rendered underneath)
+ *  - scores       — { dimId: number } (primary fill, purple — "now")
+ *  - scores2      — optional { dimId: number } (secondary fill, gold/amber dashed — "baseline")
+ *  - scores3      — optional { dimId: number } (tertiary fill, grey dotted — "previous check-in")
  *  - maxLevel     — number (default 5)
  *  - size         — number (default 300)
  *  - showLabels   — boolean (default true)
@@ -22,8 +23,9 @@ function polarToXY(cx, cy, angle, radius) {
 
 export default function GenericRadar({
   dimensions,
-  scores,
+  scores = {},
   scores2,
+  scores3,
   maxLevel = 5,
   size = 300,
   showLabels = true,
@@ -55,7 +57,19 @@ export default function GenericRadar({
     return { x1: cx, y1: cy, x2: end.x, y2: end.y }
   })
 
-  // Secondary data polygon (scores2 — rendered underneath)
+  // Tertiary data polygon (scores3 — "previous check-in", rendered bottommost)
+  const polygon3 = scores3
+    ? dimensions
+        .map((dim, i) => {
+          const val = scores3[dim.id] || 0
+          const ratio = Math.max(val / maxLevel, 0.05)
+          return polarToXY(cx, cy, i * angleStep, ratio * maxRadius)
+        })
+        .map(p => `${p.x},${p.y}`)
+        .join(' ')
+    : null
+
+  // Secondary data polygon (scores2 — "baseline", rendered underneath primary)
   const polygon2 = scores2
     ? dimensions
         .map((dim, i) => {
@@ -115,13 +129,42 @@ export default function GenericRadar({
           />
         ))}
 
-        {/* Secondary polygon (scores2) — underneath */}
+        {/* Tertiary polygon (scores3 — previous check-in) — bottommost */}
+        {polygon3 && (
+          <>
+            <polygon
+              points={polygon3}
+              fill="rgba(156, 163, 175, 0.08)"
+              stroke="#9ca3af"
+              strokeWidth={1.5}
+              strokeDasharray="2 3"
+              className={animate ? 'gr-polygon-animate' : ''}
+            />
+            {dimensions.map((dim, i) => {
+              const val = scores3[dim.id] || 0
+              const ratio = Math.max(val / maxLevel, 0.05)
+              const pos = polarToXY(cx, cy, i * angleStep, ratio * maxRadius)
+              return (
+                <circle
+                  key={`v3-${dim.id}`}
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={2.5}
+                  fill="#9ca3af"
+                  opacity={0.5}
+                />
+              )
+            })}
+          </>
+        )}
+
+        {/* Secondary polygon (scores2 — baseline) — underneath primary */}
         {polygon2 && (
           <>
             <polygon
               points={polygon2}
               fill="rgba(245, 166, 35, 0.12)"
-              stroke="#f5a623"
+              stroke="#E9A23B"
               strokeWidth={2}
               strokeDasharray="4 4"
               className={animate ? 'gr-polygon-animate' : ''}
@@ -136,7 +179,7 @@ export default function GenericRadar({
                   cx={pos.x}
                   cy={pos.y}
                   r={3}
-                  fill="#f5a623"
+                  fill="#E9A23B"
                   opacity={0.7}
                 />
               )

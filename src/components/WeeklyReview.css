@@ -280,7 +280,6 @@
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-
 .wr-text-input:focus {
   border-color: #5e17eb;
   box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
