@@ -553,6 +553,7 @@ export default function ProgressTab({ userId }) {
           obsPathFuelRes,
           obsCrossPollinationRes,
           alivenessBaselineRes,
+          domeCountRes,
         ] = await Promise.all([
           // Hero stage
           supabase.from('user_stage_progress')
@@ -647,6 +648,10 @@ export default function ProgressTab({ userId }) {
             .select('quest_id, snapshot_type')
             .eq('user_id', userId)
             .eq('snapshot_type', 'baseline'),
+          // Dome check (fast count to avoid flash of "Play Experience Game" CTA)
+          supabase.from('experience_dome_ratings')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', userId),
         ])
 
         if (!mounted) return
@@ -674,8 +679,8 @@ export default function ProgressTab({ userId }) {
           })
         }
 
-        // Process dome check (from matrixData later, but also check here)
-        // matrixData is loaded separately via import
+        // Process dome check (fast count from loadAllData, not the slow matrixData import)
+        if ((domeCountRes.count || 0) > 0) setHasDome(true)
 
         // Process current job
         const currentJobQuest = currentJobRes.data?.[0]
