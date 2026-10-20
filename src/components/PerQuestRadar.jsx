@@ -217,28 +217,32 @@ function QuestRadarCard({ quest, actualProgress, fuel }) {
       )}
 
       {/* Life fuel bars */}
-      {fuel && fuel.weeks > 0 && (
-        <div className="pqr-fuel">
-          <div className="pqr-fuel-title">Life Fuel</div>
-          {FUEL_CHANNELS.map(ch => (
-            <div key={ch.id} className="pqr-fuel-row">
-              <span className="pqr-fuel-label">{ch.emoji} {ch.name}</span>
-              <div className="pqr-fuel-track">
-                <div className="pqr-fuel-fill" style={{ width: `${fuel[ch.id]}%` }} />
-              </div>
-              <span className="pqr-fuel-pct">{fuel[ch.id]}%</span>
+      <div className="pqr-fuel">
+        <div className="pqr-fuel-title">Life Fuel</div>
+        {FUEL_CHANNELS.map(ch => (
+          <div key={ch.id} className="pqr-fuel-row">
+            <span className="pqr-fuel-label">{ch.emoji} {ch.name}</span>
+            <div className="pqr-fuel-track">
+              <div className="pqr-fuel-fill" style={{ width: `${fuel?.[ch.id] || 0}%` }} />
             </div>
-          ))}
-          <div className="pqr-fuel-weeks">{fuel.weeks} week{fuel.weeks !== 1 ? 's' : ''}</div>
-          {(() => {
-            const strong = FUEL_CHANNELS.filter(ch => fuel[ch.id] >= 75)
-            const weak = FUEL_CHANNELS.filter(ch => fuel[ch.id] < 50)
-            if (strong.length === 4) return <div className="pqr-fuel-insight">All four fuels are active on this path.</div>
-            if (weak.length > 0) return <div className="pqr-fuel-insight">This path is missing {weak.map(ch => `${ch.emoji} ${ch.name}`).join(' and ')}.</div>
-            return null
-          })()}
-        </div>
-      )}
+            <span className="pqr-fuel-pct">{fuel?.[ch.id] || 0}%</span>
+          </div>
+        ))}
+        {fuel && fuel.weeks > 0 ? (
+          <>
+            <div className="pqr-fuel-weeks">{fuel.weeks} week{fuel.weeks !== 1 ? 's' : ''}</div>
+            {(() => {
+              const strong = FUEL_CHANNELS.filter(ch => fuel[ch.id] >= 75)
+              const weak = FUEL_CHANNELS.filter(ch => fuel[ch.id] < 50)
+              if (strong.length === 4) return <div className="pqr-fuel-insight">All four fuels are active on this path.</div>
+              if (weak.length > 0) return <div className="pqr-fuel-insight">This path is missing {weak.map(ch => `${ch.emoji} ${ch.name}`).join(' and ')}.</div>
+              return null
+            })()}
+          </>
+        ) : (
+          <div className="pqr-fuel-insight">Complete a courage challenge to see your fuel.</div>
+        )}
+      </div>
     </div>
   )
 }
@@ -328,7 +332,12 @@ export default function PerQuestRadar({ userId }) {
           }
         }
 
-        setQuests(questData.map(q => ({ ...q, _courageCount: counts[q.id] || 0 })))
+        // Only show quests that have path definition (current_dimensions or dream_dimensions)
+        const definedQuests = questData.filter(q =>
+          (q.current_dimensions && Object.keys(q.current_dimensions).length > 0) ||
+          (q.dream_dimensions && Object.keys(q.dream_dimensions).length > 0)
+        )
+        setQuests(definedQuests.map(q => ({ ...q, _courageCount: counts[q.id] || 0 })))
         setProgress(progressMap)
         setFuelData(fuelMap)
         setLoading(false)
