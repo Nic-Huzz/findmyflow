@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { ZONE_CAL_DIMENSIONS, getDiagnosis, getNextSpoke } from '../data/zoneCalDimensions'
@@ -76,8 +76,9 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
   const [loading, setLoading] = useState(true)
   const [showCheckin, setShowCheckin] = useState(false)
   const [showBreakdown, setShowBreakdown] = useState(false)
-  const [completionResult, setCompletionResult] = useState(null) // { scores, diagnosis, narrative }
-  const [bridgeAttempted, setBridgeAttempted] = useState(false)
+  const [completionResult, setCompletionResult] = useState(null) // { scores, diagnosis, narrative, previousScores }
+  const bridgeAttemptedRef = useRef(false)
+  const isSubmitting = useRef(false)
 
   // Load snapshots
   useEffect(() => {
@@ -101,8 +102,8 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
       }
 
       // No snapshots — try lead magnet bridge
-      if (!bridgeAttempted && userEmail) {
-        setBridgeAttempted(true)
+      if (!bridgeAttemptedRef.current && userEmail) {
+        bridgeAttemptedRef.current = true
         const { data: leads } = await supabase
           .from('lead_captures')
           .select('scores, created_at')
@@ -141,7 +142,7 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
 
     load()
     return () => { mounted = false }
-  }, [userId, userEmail, bridgeAttempted])
+  }, [userId, userEmail])
 
   // Derived state
   const latest = snapshots?.[0] || null
@@ -158,6 +159,8 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
 
   // Check-in complete handler
   const handleCheckinComplete = async (scores) => {
+    if (isSubmitting.current) return
+    isSubmitting.current = true
     const newDiagnosis = getDiagnosis(scores)
 
     await supabase.from('zone_cal_snapshots').insert({
@@ -167,17 +170,18 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
       source: 'in_app',
     })
 
-    // Build completion result for narrative
+    // Build completion result for narrative (capture previousScores before refetch)
     if (latest) {
       const oldDiagnosis = getDiagnosis(latest.scores)
       setCompletionResult({
         scores,
         diagnosis: newDiagnosis,
         oldDiagnosis,
+        previousScores: latest.scores,
         narrative: getChangeNarrative(latest.scores, scores, oldDiagnosis, newDiagnosis),
       })
     } else {
-      setCompletionResult({ scores, diagnosis: newDiagnosis, oldDiagnosis: null, narrative: null })
+      setCompletionResult({ scores, diagnosis: newDiagnosis, oldDiagnosis: null, previousScores: null, narrative: null })
     }
 
     setShowCheckin(false)
@@ -190,6 +194,7 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
       .order('created_at', { ascending: false })
       .limit(2)
     setSnapshots(data || [])
+    isSubmitting.current = false
   }
 
   // CTA click handler
@@ -247,14 +252,24 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
       <>
         <div className="pt-bridge"><span className="pt-bridge-text">your shape</span></div>
         <div className="zcs-card">
-          {/* Diagnosis change narrative */}
-          {cr.oldDiagnosis && cr.narrative && (
+          {/* Diagnosis change narrative (different diagnosis) */}
+          {cr.oldDiagnosis && cr.oldDiagnosis.id !== cr.diagnosis.id && (
             <div className="zcs-transition">
               <div className="zcs-transition-old">You were in <strong>{cr.oldDiagnosis.name}</strong></div>
               <div className="zcs-transition-arrow">↓</div>
               <div className="zcs-transition-new">Now you're in <strong>{cr.diagnosis.name}</strong></div>
+              <div className="zcs-diagnosis-headline">{cr.diagnosis.headline}</div>
               <div className="zcs-transition-narrative">{cr.narrative}</div>
             </div>
+          )}
+
+          {/* Same diagnosis on retake */}
+          {cr.oldDiagnosis && cr.oldDiagnosis.id === cr.diagnosis.id && (
+            <>
+              <div className="zcs-diagnosis-name">{cr.diagnosis.name}</div>
+              <div className="zcs-diagnosis-headline">{cr.diagnosis.headline}</div>
+              <div className="zcs-transition-narrative">{cr.narrative}</div>
+            </>
           )}
 
           {/* First-time result (no previous) */}
@@ -268,7 +283,7 @@ export default function ZoneCalSection({ userId, userEmail, hasEssence }) {
           <GenericRadar
             dimensions={ZONE_CAL_DIMENSIONS}
             scores={cr.scores}
-            scores3={latest?.scores || null}
+            scores3={cr.previousScores}
             maxLevel={5}
             size={280}
           />
