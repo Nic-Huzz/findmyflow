@@ -258,6 +258,34 @@
   margin-top: 8px;
 }
 
+.wr-option-row.wr-option-wrap {
+  flex-wrap: wrap;
+}
+
+.wr-option-wrap .wr-option-btn {
+  flex: 0 0 calc(50% - 3px);
+}
+
+.wr-text-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #ffffff;
+  outline: none;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.wr-text-input:focus {
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
+}
+
 /* Number input */
 .wr-number-row {
   display: flex;

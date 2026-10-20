@@ -164,7 +164,16 @@ export async function saveChallengeCompletion({
 
   // 4c. First vibe rise
   if (wahooClassification === 'vibe') {
-    postFeedEvent(userId, 'first_vibe_rise', 'Reached Vibe Rise for the first time')
+    try {
+      const { count } = await supabase
+        .from('nervous_system_checkins')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('after_state', 'vibe_rise')
+      if (count === 1) {
+        postFeedEvent(userId, 'first_vibe_rise', 'Reached Vibe Rise for the first time')
+      }
+    } catch {}
   }
 
   // 4d. Mystery box: new wahoo category check

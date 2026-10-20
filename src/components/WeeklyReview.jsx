@@ -41,6 +41,12 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
   const [voiceWhich, setVoiceWhich] = useState(null)
   const [voiceText, setVoiceText] = useState('')
 
+  // Universe check: prior-week 'not_sure' universe responses
+  const [universeReviews, setUniverseReviews] = useState([]) // [{ id, title, answer, note }]
+
+  // Coping pattern: old uncompleted challenges
+  const [incompleteChallenges, setIncompleteChallenges] = useState([]) // [{ id, title, answer }]
+
   // Per-path fuel reviews: { questId: { choice: bool, connection: bool, mastery: bool, meaning: bool } | 'skip' }
   const [pathFuels, setPathFuels] = useState({})
 
@@ -107,6 +113,58 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
           return { id: row.id, title: title || 'a courage challenge' }
         })
         setAftertasteReviews(reviews)
+      })
+    return () => { cancelled = true }
+  }, [userId, weekStart])
+
+  // Load 'not_sure' universe response challenges from previous week
+  useEffect(() => {
+    if (!userId || !weekStart) return
+    let cancelled = false
+    const priorWeekStart = new Date(weekStart + 'T00:00:00')
+    priorWeekStart.setDate(priorWeekStart.getDate() - 7)
+    supabase
+      .from('groan_challenges')
+      .select('id, title, source_label, quest_id, quests(label)')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .eq('universe_response', 'not_sure')
+      .gte('completed_at', priorWeekStart.toISOString())
+      .lt('completed_at', weekStart + 'T00:00:00')
+      .then(({ data }) => {
+        if (cancelled || !data) return
+        setUniverseReviews(data.map(row => ({
+          id: row.id,
+          title: row.source_label || row.title || 'a courage challenge',
+          questLabel: row.quests?.label || null,
+          answer: null,
+          note: '',
+        })))
+      })
+    return () => { cancelled = true }
+  }, [userId, weekStart])
+
+  // Load uncompleted challenges created before this week (coping pattern)
+  useEffect(() => {
+    if (!userId || !weekStart) return
+    let cancelled = false
+    supabase
+      .from('groan_challenges')
+      .select('id, title, source_label, quest_id, quests(label)')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .is('coping_mechanism', null)
+      .lt('created_at', weekStart + 'T00:00:00')
+      .order('created_at', { ascending: false })
+      .limit(10)
+      .then(({ data }) => {
+        if (cancelled || !data) return
+        setIncompleteChallenges(data.map(row => ({
+          id: row.id,
+          title: row.source_label || row.title || 'a courage challenge',
+          questLabel: row.quests?.label || null,
+          answer: null,
+        })))
       })
     return () => { cancelled = true }
   }, [userId, weekStart])
@@ -413,6 +471,107 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
                           hapticLight()
                           setAftertasteReviews(prev => prev.map(r => r.id === review.id ? { ...r, answer: opt.value } : r))
                           supabase.from('quest_completions').update({ aftertaste_week_later: opt.value }).eq('id', review.id).then(() => {})
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Universe Check: delayed universe responses from prior week */}
+          {universeReviews.length > 0 && (
+            <div className="wr-question">
+              <div className="wr-question-top">
+                <span className="wr-question-icon">✨</span>
+                <span className="wr-question-label">Universe check</span>
+              </div>
+              {universeReviews.map(review => (
+                <div key={review.id} className="wr-aftertaste-item">
+                  <p className="wr-question-text">
+                    You did <strong>{review.title}</strong>{review.questLabel ? ` on ${review.questLabel}` : ''} last week. Did the universe speak back since then?
+                  </p>
+                  <div className="wr-option-row wr-option-wrap">
+                    {[
+                      { value: 'compliment', label: 'Compliment' },
+                      { value: 'opportunity', label: 'Opportunity' },
+                      { value: 'both', label: 'Both' },
+                      { value: 'none', label: 'Nope' },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`wr-option-btn ${review.answer === opt.value ? 'selected' : ''}`}
+                        disabled={!!review.answer}
+                        onClick={() => {
+                          hapticLight()
+                          setUniverseReviews(prev => prev.map(r => r.id === review.id ? { ...r, answer: opt.value } : r))
+                          const updateFields = { universe_response: opt.value }
+                          if (opt.value !== 'none') updateFields.universe_response_updated_at = new Date().toISOString()
+                          supabase.from('groan_challenges').update(updateFields).eq('id', review.id).then(() => {})
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                  {review.answer && review.answer !== 'none' && (
+                    <input
+                      type="text"
+                      className="wr-text-input"
+                      value={review.note}
+                      onChange={e => setUniverseReviews(prev => prev.map(r => r.id === review.id ? { ...r, note: e.target.value } : r))}
+                      onBlur={() => {
+                        supabase.from('groan_challenges').update({
+                          universe_response_note: review.note.trim() || null,
+                        }).eq('id', review.id).then(() => {})
+                      }}
+                      placeholder="What happened?"
+                      maxLength={200}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Coping Pattern: uncompleted challenges from prior weeks */}
+          {incompleteChallenges.length > 0 && (
+            <div className="wr-question">
+              <div className="wr-question-top">
+                <span className="wr-question-icon">🪞</span>
+                <span className="wr-question-label">Coping pattern</span>
+              </div>
+              <p className="wr-question-text">
+                You created these but haven't done them yet. Why not?
+              </p>
+              {incompleteChallenges.map(ch => (
+                <div key={ch.id} className="wr-aftertaste-item">
+                  <p className="wr-question-text">
+                    <strong>{ch.title}</strong>{ch.questLabel ? <span style={{ fontWeight: 400, color: '#6b7280' }}> · {ch.questLabel}</span> : ''}
+                  </p>
+                  <div className="wr-option-row wr-option-wrap">
+                    {[
+                      { value: 'learning', label: 'Learning' },
+                      { value: 'procrastination', label: 'Procrastination' },
+                      { value: 'avoidance', label: 'Avoidance' },
+                      { value: 'people_pleasing', label: 'People pleasing' },
+                      { value: 'external_block', label: 'External block' },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`wr-option-btn ${ch.answer === opt.value ? 'selected' : ''}`}
+                        disabled={!!ch.answer}
+                        onClick={() => {
+                          hapticLight()
+                          setIncompleteChallenges(prev => prev.map(c => c.id === ch.id ? { ...c, answer: opt.value } : c))
+                          supabase.from('groan_challenges').update({
+                            coping_mechanism: opt.value,
+                          }).eq('id', ch.id).then(() => {})
                         }}
                       >
                         {opt.label}

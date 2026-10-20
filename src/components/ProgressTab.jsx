@@ -303,6 +303,7 @@ function ShareReflection({ challengeId, userId, challengeTitle, wahoo, onSaved }
 function ReflectionItem({ item, challengeId, userId, reflectionData, onSaved }) {
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState('')
+  const [noteValue, setNoteValue] = useState('')
   const [saving, setSaving] = useState(false)
 
   if (item.done) {
@@ -363,15 +364,27 @@ function ReflectionItem({ item, challengeId, userId, reflectionData, onSaved }) 
                   { v: 'compliment', l: '💬 Compliment' },
                   { v: 'opportunity', l: '🚪 Opportunity' },
                   { v: 'both', l: '✨ Both' },
-                  { v: 'not_sure', l: '🤔 Not sure' },
                   { v: 'none', l: '😶 Not this time' },
                 ].map(o => (
                   <button key={o.v} className={`pt-reflect-pill${value === o.v ? ' selected' : ''}`}
                     onClick={() => setValue(o.v)}>{o.l}</button>
                 ))}
               </div>
+              {value && value !== 'none' && (
+                <input type="text" className="pt-reflect-input" value={noteValue}
+                  onChange={e => setNoteValue(e.target.value)} placeholder="What happened?" maxLength={200} />
+              )}
               <button className="pt-reflect-save" disabled={!value || saving}
-                onClick={() => handleSave('universe_response', value)}>
+                onClick={async () => {
+                  setSaving(true)
+                  await saveReflection({ userId, challengeId, field: 'universe_response', value })
+                  if (noteValue.trim()) {
+                    await saveReflection({ userId, challengeId, field: 'universe_response_note', value: noteValue.trim() })
+                  }
+                  onSaved(item.key)
+                  setSaving(false)
+                  setOpen(false)
+                }}>
                 {saving ? 'Saving...' : 'Save'}
               </button>
             </>
@@ -570,12 +583,11 @@ export default function ProgressTab({ userId }) {
             .not('dimension_values', 'is', null)
             .gte('completed_at', weekStart + 'T00:00:00')
             .order('completed_at', { ascending: false }),
-          // Completions (life fuel + observations need quest_id, aftertaste)
+          // Completions (observations need quest_id, aftertaste — unfiltered)
           supabase.from('quest_completions')
             .select('reflection_text, quest_id, aftertaste, aftertaste_week_later')
             .eq('user_id', userId)
             .eq('quest_category', 'Groans')
-            .not('reflection_text', 'is', null)
             .order('created_at', { ascending: true }),
           // Voice data: from challenges
           supabase.from('groan_challenges')
@@ -906,7 +918,7 @@ export default function ProgressTab({ userId }) {
       if (voiceData?.voice) {
         setUnhealedPattern({
           voice: voiceData.voice,
-          name: getVoiceDisplay(voiceData.voice),
+          name: getVoiceDisplay(voiceData.voice).name,
           dimensions: ['worth'],
         })
       } else {

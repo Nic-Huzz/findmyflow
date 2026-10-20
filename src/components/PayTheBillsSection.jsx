@@ -23,7 +23,7 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
   const bridgeQuest = quests.find(q => q.is_bridge_job && q.status === 'active' && q.bridge_status !== 'completed')
   const currentJobQuest = quests.find(q => q.is_current_job && q.status !== 'reference' && !q.is_bridge_job)
   const referenceQuest = quests.find(q => q.is_current_job && q.status === 'reference')
-  const hasCompletedCurrentJobFlow = quests.some(q => q.is_current_job)
+  const hasCompletedCurrentJobFlow = quests.some(q => q.is_current_job && !q.is_bridge_job)
 
   // Determine section state
   // State 3: Auto-fulfilled — "grow this" + money >= $1K
@@ -81,7 +81,6 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
     try {
       await supabase.from('quests').update({
         bridge_status: 'active',
-        is_current_job: true,
       }).eq('id', bridgeQuest.id)
       hapticSuccess()
       onUpdate?.()
