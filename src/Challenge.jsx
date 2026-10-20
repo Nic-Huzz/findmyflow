@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
@@ -51,7 +51,7 @@ import LevelTab from './components/level/LevelTab'
 import JourneyTab from './components/JourneyTab'
 import DiscoverTab from './components/DiscoverTab'
 import './components/DiscoverTab.css'
-import ProgressTab from './components/ProgressTab'
+const ProgressTab = lazy(() => import('./components/ProgressTab'))
 import './components/ProgressTab.css'
 import { getLevelConfig } from './components/level/LevelConfig'
 import { getWeekStartLocal } from './lib/dateUtils'
@@ -1720,7 +1720,9 @@ function Challenge() {
           </div>
         )}
         {activeCategory === 'Progress' && (
-          <ProgressTab userId={user?.id} />
+          <Suspense fallback={<div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Loading...</div>}>
+            <ProgressTab userId={user?.id} />
+          </Suspense>
         )}
 
         {/* Courage Tab (legacy, hidden from tabs but kept for deep links) */}
