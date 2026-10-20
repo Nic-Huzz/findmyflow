@@ -317,10 +317,13 @@ function ReflectionItem({ item, challengeId, userId, reflectionData, onSaved }) 
 
   async function handleSave(field, val) {
     setSaving(true)
-    await saveReflection({ userId, challengeId, field, value: val })
-    onSaved(item.key)
-    setSaving(false)
-    setOpen(false)
+    try {
+      await saveReflection({ userId, challengeId, field, value: val })
+      onSaved(item.key)
+      setOpen(false)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -377,13 +380,16 @@ function ReflectionItem({ item, challengeId, userId, reflectionData, onSaved }) 
               <button className="pt-reflect-save" disabled={!value || saving}
                 onClick={async () => {
                   setSaving(true)
-                  await saveReflection({ userId, challengeId, field: 'universe_response', value })
-                  if (noteValue.trim()) {
-                    await saveReflection({ userId, challengeId, field: 'universe_response_note', value: noteValue.trim() })
+                  try {
+                    await saveReflection({ userId, challengeId, field: 'universe_response', value })
+                    if (noteValue.trim()) {
+                      await saveReflection({ userId, challengeId, field: 'universe_response_note', value: noteValue.trim() })
+                    }
+                    onSaved(item.key)
+                    setOpen(false)
+                  } finally {
+                    setSaving(false)
                   }
-                  onSaved(item.key)
-                  setSaving(false)
-                  setOpen(false)
                 }}>
                 {saving ? 'Saving...' : 'Save'}
               </button>
@@ -1588,6 +1594,7 @@ function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
   const [step, setStep] = useState(0)
   const [scores, setScores] = useState({})
   const [saving, setSaving] = useState(false)
+  const [advancing, setAdvancing] = useState(false)
   const allDone = Object.keys(scores).length === VIBE_RISE_DIMENSIONS.length
   const isReveal = step >= VIBE_RISE_DIMENSIONS.length
   const dim = VIBE_RISE_DIMENSIONS[step]
@@ -1644,9 +1651,12 @@ function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
                     fontSize: 13, textAlign: 'left', cursor: 'pointer',
                     fontWeight: selected ? 600 : 400,
                   }}
+                  disabled={advancing}
                   onClick={() => {
+                    if (advancing) return
+                    setAdvancing(true)
                     setScores(prev => ({ ...prev, [dim.id]: score }))
-                    setTimeout(() => setStep(prev => prev + 1), 300)
+                    setTimeout(() => { setStep(prev => prev + 1); setAdvancing(false) }, 300)
                   }}>
                   <span style={{ fontWeight: 700, marginRight: 8 }}>{score}</span> {anchor}
                 </button>

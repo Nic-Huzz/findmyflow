@@ -93,12 +93,19 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
 
   // Remove bridge handler
   const handleRemove = async () => {
-    if (!bridgeQuest) return
-    await supabase.from('quests').update({
-      status: 'closed',
-      bridge_status: null,
-    }).eq('id', bridgeQuest.id)
-    onUpdate?.()
+    if (!bridgeQuest || updatingStatus) return
+    setUpdatingStatus(true)
+    try {
+      await supabase.from('quests').update({
+        status: 'closed',
+        bridge_status: null,
+      }).eq('id', bridgeQuest.id)
+      onUpdate?.()
+    } catch (err) {
+      console.error('Error removing bridge:', err)
+    } finally {
+      setUpdatingStatus(false)
+    }
   }
 
   // State 1: Fulfilled — bridge quest exists

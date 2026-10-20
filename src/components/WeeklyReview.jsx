@@ -387,6 +387,12 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
     }
   }
 
+  // Format week label
+  const weekLabel = (() => {
+    const d = new Date(weekStart + 'T00:00:00')
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  })()
+
   async function handleShare() {
     if (!savedReview) return
     try {
@@ -409,12 +415,6 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
       console.error('Share bonus error:', err)
     }
   }
-
-  // Format week label
-  const weekLabel = (() => {
-    const d = new Date(weekStart + 'T00:00:00')
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  })()
 
   if (savedReview) {
     return (
@@ -515,8 +515,10 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
                         onClick={() => {
                           hapticLight()
                           setUniverseReviews(prev => prev.map(r => r.id === review.id ? { ...r, answer: opt.value } : r))
-                          const updateFields = { universe_response: opt.value }
-                          if (opt.value !== 'none') updateFields.universe_response_updated_at = new Date().toISOString()
+                          const updateFields = {
+                            universe_response: opt.value,
+                            universe_response_updated_at: new Date().toISOString(),
+                          }
                           supabase.from('groan_challenges').update(updateFields).eq('id', review.id).then(() => {})
                         }}
                       >
@@ -531,9 +533,15 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
                       value={review.note}
                       onChange={e => setUniverseReviews(prev => prev.map(r => r.id === review.id ? { ...r, note: e.target.value } : r))}
                       onBlur={() => {
-                        supabase.from('groan_challenges').update({
-                          universe_response_note: review.note.trim() || null,
-                        }).eq('id', review.id).then(() => {})
+                        setUniverseReviews(prev => {
+                          const current = prev.find(r => r.id === review.id)
+                          if (current) {
+                            supabase.from('groan_challenges').update({
+                              universe_response_note: current.note.trim() || null,
+                            }).eq('id', review.id).then(() => {})
+                          }
+                          return prev
+                        })
                       }}
                       placeholder="What happened?"
                       maxLength={200}

@@ -61,8 +61,10 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     advanceTimer.current = setTimeout(() => setScreen(next), 300)
   }
 
+  const savingRef = useRef(false)
   const handleSave = async (selectedVoice) => {
-    if (savedRef.current || saving) return
+    if (savedRef.current || savingRef.current) return
+    savingRef.current = true
     setSaving(true)
     setError(null)
     try {
@@ -80,6 +82,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
       }
 
       savedRef.current = true
+      setSaving(false)
       onComplete?.({
         dimensionValues: challenge.dimension_values,
         wahooClassification,
@@ -89,6 +92,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     } catch (err) {
       console.error('Save error:', err)
       setError('Something went wrong. Try again.')
+      savingRef.current = false
       setSaving(false)
     }
   }
