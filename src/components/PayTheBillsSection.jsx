@@ -144,8 +144,8 @@ export default function PayTheBillsSection({ quests, userId, onUpdate }) {
                   {graduating ? 'Celebrating...' : 'My flow covers my bills now'}
                 </button>
               )}
-              <button className="ptb-remove-btn" onClick={handleRemove}>
-                Remove
+              <button className="ptb-remove-btn" onClick={handleRemove} disabled={updatingStatus}>
+                {updatingStatus ? 'Removing...' : 'Remove'}
               </button>
             </div>
           )}
