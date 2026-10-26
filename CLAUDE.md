@@ -47,7 +47,7 @@ docs/               # Specs, handoffs, research
 
 **Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`
 
-**Levels**: `/zone-diagnosis/:levelNumber`, `/tension-assessment`
+**Levels**: `/zone-diagnosis/:levelNumber`
 
 **Create Portal**: `/create`, `/create/experience/new`, `/create/experience/:id`, `/create/remarkable`, `/create/narrative-builder`, `/create/access-architecture`, `/create/scale-diagnostic`, `/try/facilitator-score`
 
@@ -57,7 +57,7 @@ docs/               # Specs, handoffs, research
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
 
-**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
+**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`, `/choose-quests`, `/path-definition/:questId`, `/find-bridge`, `/quest-map`, `/scope-map`
 
 **CRM**: `/crm/*` (Dashboard, Attract/Nurture/Tools towers, contacts, email-sequences, content, marketing, sales)
 
@@ -144,7 +144,7 @@ Sequential: Remarkable Results → Reach → Growth → Scale Score. Creator Pos
 - **Play Profile**: 33 experience creators matched via 5D Euclidean distance. `founder_dna_results`.
 - **Experience Creator Matching**: 59 creators, 6 archetypes, per-layer recommendations.
 - **Scope Map**: River system diagnostic (Stream/Lake/Waterfall/River) at `/create`.
-- **Fantasy League**: Solo 4-week seasons. 3 scoring categories. `score-league-matchups` edge function.
+- **Ghost Self League**: Solo weekly format (replaced PvP fantasy league). 3 scoring categories: Tune, Courage, Community. Tables: `ghost_weekly_results`, `ghost_streaks`, `ghost_content_submissions`.
 - **CRM**: Three towers (Attract/Nurture/Tools). 20+ services in `src/lib/crm/`.
 - **Stripe**: Consumer stages 1-7 locked. Creator: `CreateGate.jsx`. Webhook: `stripe-webhook/index.ts`.
 - **PlaySkill Taxonomies**: 10 skills, 12 problems. Lookup via `wheelTaxonomy.js`.
@@ -196,7 +196,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)
 
 ### Quests + Courage
-`quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
+`quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text, experience_id uuid FK nullable) | `quest_experiences` (quest_id FK, user_id, label, capacity_state, status, sort_order) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage) | `quest_context_mappings` (user_id, quest_id FK, context_type, context_identifier, UNIQUE user+type+identifier)
 
 ### Clusters + Skills
 `nikigai_clusters` (resonance_state, behavioral_evidence, skill_tags, problem_tags) | `user_skill_progress` (user_id, skill_id, xp, level) | `curiosity_clusters`
@@ -206,6 +206,12 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 
 ### Direction Bridge
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
+
+### Experience Dome Ratings
+`experience_dome_ratings` (user_id, node_id, ns_state enum(vibe_rise/fun/growth_edge/pressure/bored), UNIQUE user+node)
+
+### Ghost Self League (replaces PvP fantasy league)
+`ghost_weekly_results` (user_id, week_start, ghost/user daily scores JSONB, tune/courage/community scores, result enum(pending/win/loss/draw), UNIQUE user+week) | `ghost_streaks` (user_id UNIQUE, current/longest streaks, wins/losses/draws, pb scores per category) | `ghost_content_submissions` (user_id, week_start, content_type, points_value)
 
 ### Other
 `nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
