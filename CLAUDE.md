@@ -45,11 +45,11 @@ docs/               # Specs, handoffs, research
 
 **Core**: `/` | `/log-in` | `/me` | `/7-day-challenge` | `/library` | `/flow-compass` | `/feedback` | `/hero-profile` | `/guidebook`
 
-**Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`
+**Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`, `/choose-quests`, `/path-definition/:questId`
 
-**Levels**: `/zone-diagnosis/:levelNumber`, `/tension-assessment`
+**Levels**: `/zone-diagnosis/:levelNumber`
 
-**Create Portal**: `/create`, `/create/experience/new`, `/create/experience/:id`, `/create/remarkable`, `/create/narrative-builder`, `/create/access-architecture`, `/create/scale-diagnostic`, `/try/facilitator-score`
+**Create Portal**: `/create`, `/create/experience/new`, `/create/experience/:id`, `/create/remarkable`, `/create/narrative-builder`, `/create/access-architecture`, `/create/scale-diagnostic`, `/try/facilitator-score`, `/try/vibe-rise-radar`
 
 **Direction**: `/career-clarity`, `/people`, `/experience-creators`
 
