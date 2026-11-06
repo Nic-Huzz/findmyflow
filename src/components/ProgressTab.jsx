@@ -21,6 +21,7 @@ import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import GenericRadar from './GenericRadar'
 import ZoneCalSection from './ZoneCalSection'
+import { JOURNEY_CHAPTERS, getChapterForStage } from '../data/journeyChapters'
 import './ProgressTab.css'
 
 // ── Hero Stages with quadrant coordinates ──
@@ -121,7 +122,7 @@ const SETUP_CHECKS = [
   { key: 'dome', title: 'What lights you up?', sub: 'Tick experiences you love.', route: '/experience-game', ctaText: 'Play the Experience Game', icon: '🎮' },
   { key: 'essence', title: 'Who are you really?', sub: 'Find out in 3 minutes.', route: '/essence-mirror', ctaText: 'Start the Essence Mirror', icon: '✨' },
   { key: 'paths', title: 'Choose your paths', sub: 'Turn experiences into life paths.', route: '/choose-quests', ctaText: 'Choose your paths', icon: '🗺️' },
-  { key: 'current_job', title: 'Where are you now?', sub: 'Map your current work.', route: '/add-current-job', ctaText: 'Map your current work', icon: '🧭' },
+  { key: 'money_map', title: 'Financial security', sub: 'Make sure your bills are covered.', route: '/money-map', ctaText: 'Set up your engine', icon: '🛡️' },
 ]
 
 // Checklist items for onboarding
@@ -129,7 +130,7 @@ const SETUP_CHECKLIST = [
   { key: 'dome', label: 'Play the Experience Game', sub: 'Find what lights you up' },
   { key: 'essence', label: 'Discover your essence', sub: 'Meet who you really are' },
   { key: 'paths', label: 'Choose your paths', sub: 'Pick what you want to pursue' },
-  { key: 'current_job', label: 'Map your current work', sub: 'See what\'s missing' },
+  { key: 'money_map', label: 'Set up financial security', sub: 'Keep the lights on while you build' },
 ]
 
 // ── Reflection sub-components ─────────────────────────────────────────────────
@@ -447,7 +448,7 @@ export default function ProgressTab({ userId }) {
   // Data availability flags
   const [hasEssence, setHasEssence] = useState(false)
   const [hasDome, setHasDome] = useState(false)
-  const [hasCurrentJob, setHasCurrentJob] = useState(false)
+  const [hasMoneyMap, setHasMoneyMap] = useState(false)
   const [hasPaths, setHasPaths] = useState(false)
 
   // Essence data
@@ -538,7 +539,7 @@ export default function ProgressTab({ userId }) {
         const [
           stageRes,
           essenceRes,
-          currentJobRes,
+          moneyMapRes,
           pathRes,
           questsRes,
           groanRes,
@@ -565,12 +566,11 @@ export default function ProgressTab({ userId }) {
             .eq('user_id', userId)
             .order('created_at', { ascending: false })
             .limit(1),
-          // Current job check
-          supabase.from('quests')
-            .select('id, label, life_fuel_baseline, current_dimensions')
+          // Money Map check
+          supabase.from('user_stage_progress')
+            .select('money_map_completed')
             .eq('user_id', userId)
-            .eq('is_current_job', true)
-            .limit(1),
+            .maybeSingle(),
           // Paths check (non-current-job active quests)
           supabase.from('quests')
             .select('id', { count: 'exact', head: true })
@@ -682,10 +682,9 @@ export default function ProgressTab({ userId }) {
         // Process dome check (fast count from loadAllData, not the slow matrixData import)
         if ((domeCountRes.count || 0) > 0) setHasDome(true)
 
-        // Process current job
-        const currentJobQuest = currentJobRes.data?.[0]
-        if (currentJobQuest) {
-          setHasCurrentJob(true)
+        // Process money map
+        if (moneyMapRes.data?.money_map_completed) {
+          setHasMoneyMap(true)
         }
 
         // Process paths
@@ -971,12 +970,12 @@ export default function ProgressTab({ userId }) {
   const setupComplete = useMemo(() => ({
     dome: hasDome,
     essence: hasEssence,
-    current_job: hasCurrentJob,
+    money_map: hasMoneyMap,
     paths: hasPaths,
-  }), [hasDome, hasEssence, hasCurrentJob, hasPaths])
+  }), [hasDome, hasEssence, hasMoneyMap, hasPaths])
 
   // Are all 4 setup steps done?
-  const allSetupDone = setupComplete.dome && setupComplete.essence && setupComplete.current_job && setupComplete.paths
+  const allSetupDone = setupComplete.dome && setupComplete.essence && setupComplete.money_map && setupComplete.paths
 
   // Smart CTA: first missing item
   const nextCta = useMemo(() => {
@@ -1137,6 +1136,32 @@ export default function ProgressTab({ userId }) {
                         </text>
                       )}
                     </g>
+                  )
+                })}
+
+                {/* Chapter labels — positioned at midpoint of each chapter's stages */}
+                {JOURNEY_CHAPTERS.map(ch => {
+                  const chapterStages = ch.steps
+                    .filter(s => s.heroStage !== null)
+                    .map(s => HERO_STAGES.find(h => h.stage === s.heroStage))
+                    .filter(Boolean)
+                  if (chapterStages.length === 0) return null
+                  const midX = chapterStages.reduce((s, h) => s + h.x, 0) / chapterStages.length
+                  const midY = Math.min(...chapterStages.map(h => h.y)) - 18
+                  const isActive = ch.id === getChapterForStage(heroStage).chapter.id
+                  return (
+                    <text
+                      key={ch.id}
+                      x={midX}
+                      y={midY}
+                      textAnchor="middle"
+                      className={`sc-svg-chapter-label ${isActive ? 'sc-svg-chapter-active' : ''}`}
+                      fontSize="10"
+                      fontWeight={isActive ? '700' : '400'}
+                      fill={isActive ? '#E9A23B' : 'rgba(94, 23, 235, 0.5)'}
+                    >
+                      {ch.name}
+                    </text>
                   )
                 })}
               </svg>
