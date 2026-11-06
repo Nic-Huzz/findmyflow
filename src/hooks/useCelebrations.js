@@ -9,7 +9,7 @@ import {
   triggerFireConfetti,
   triggerSideCannons
 } from '../components/Celebrations'
-import { isChapterTransition, getChapterBelief, JOURNEY_CHAPTERS } from '../data/journeyChapters'
+import { isChapterTransition, JOURNEY_CHAPTERS } from '../data/journeyChapters'
 
 /**
  * Hook for managing celebration animations

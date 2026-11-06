@@ -316,13 +316,13 @@ export default function JourneyTab({ userId, onUnlockTab }) {
               </a>
             </div>
           )}
-          {chapter.id === 'challenge' && heroStage === 8 && (
+          {chapter.id === 'breakthrough' && heroStage === 8 && !currentStep?.nextAction && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">You've been through the fire. Check in when you're ready.</span>
             </div>
           )}
-          {chapter.id === 'breakthrough' && (
+          {chapter.id === 'breakthrough' && (heroStage !== 8 || currentStep?.nextAction) && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">{currentStep?.nextAction || 'Your life paths are connecting. Watch for where they overlap.'}</span>
