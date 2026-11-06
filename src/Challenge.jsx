@@ -58,6 +58,8 @@ import { getWeekStartLocal } from './lib/dateUtils'
 // CreatorHome moved to standalone /create route
 import { BoltIcon } from '@heroicons/react/24/solid'
 import { checkHeroGraduation } from './lib/heroStageChecker'
+import { getDirectionStatus, isAllDirectionComplete } from './lib/directionEngine'
+import StageCard from './components/StageCard'
 import { postFeedEvent } from './lib/communityFeed'
 import { checkStreakBox } from './lib/mysteryBoxes'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
@@ -409,6 +411,7 @@ function Challenge() {
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
   const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Tune', 'Progress']))
+  const [directionComplete, setDirectionComplete] = useState(false)
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
   const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
@@ -468,6 +471,14 @@ function Challenge() {
 
     loadStageAndCheckGraduation()
   }, [user?.id, stageCheckTrigger])
+
+  // Fetch direction completion status (only relevant at stage 8+)
+  useEffect(() => {
+    if (!user?.id || currentJourneyLevel < 8) return
+    getDirectionStatus(user.id).then(status => {
+      setDirectionComplete(isAllDirectionComplete(status))
+    })
+  }, [user?.id, currentJourneyLevel])
 
   // Wahoo count: all completed challenges this week
   useEffect(() => {
@@ -1747,9 +1758,22 @@ function Challenge() {
           />
         )}
 
+        {/* Journey chapter card — always visible in Discover tab */}
+        {activeCategory === 'Discover' && (
+          <StageCard heroStage={currentJourneyLevel} directionComplete={directionComplete} />
+        )}
+
         {/* Journey Tab — hero stage, voice progress, thresholds */}
         {activeCategory === 'Discover' && (
-          <DiscoverTab userId={user?.id} heroStage={currentJourneyLevel} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} onUpdate={() => { loadStageProgress(); loadUserScores(); recheckStage() }} />
+          <DiscoverTab userId={user?.id} heroStage={currentJourneyLevel} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} onUpdate={() => {
+            loadStageProgress()
+            loadUserScores()
+            recheckStage()
+            // Re-check direction completion after card save
+            if (currentJourneyLevel >= 8) {
+              getDirectionStatus(user?.id).then(status => setDirectionComplete(isAllDirectionComplete(status)))
+            }
+          }} />
         )}
 
         {/* Level Tab */}
