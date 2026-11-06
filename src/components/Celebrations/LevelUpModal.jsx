@@ -69,6 +69,13 @@ export default function LevelUpModal({ level, onClose }) {
             {levelInfo.name}
           </div>
 
+          {/* Chapter belief quote */}
+          {levelInfo.isChapterTransition && levelInfo.chapterBelief && (
+            <div className={`graduation-belief ${phase >= 1 ? 'visible' : ''}`}>
+              "{levelInfo.chapterBelief}"
+            </div>
+          )}
+
           {/* Message */}
           {levelInfo.description && (
             <p className={`grad-message ${phase >= 2 ? 'visible' : ''}`}>

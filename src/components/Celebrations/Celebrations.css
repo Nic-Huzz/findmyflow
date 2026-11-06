@@ -346,6 +346,22 @@
   transform: translateY(0);
 }
 
+/* Chapter belief quote */
+.graduation-belief {
+  font-style: italic;
+  font-size: 16px;
+  opacity: 0.85;
+  margin-top: 12px;
+  padding: 0 20px;
+  text-align: center;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.5s ease;
+}
+.graduation-belief.visible {
+  opacity: 0.85;
+}
+
 /* Message */
 .grad-message {
   font-size: 14px;
