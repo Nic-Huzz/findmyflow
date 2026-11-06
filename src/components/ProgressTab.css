@@ -1167,11 +1167,11 @@
 
 /* ═══ CHAPTER LABELS (SVG overlay) ════════════════════ */
 
-.sc-svg-chapter-label {
+.progress-tab .sc-svg-chapter-label {
   pointer-events: none;
   transition: fill 0.3s;
 }
 
-.sc-svg-chapter-active {
+.progress-tab .sc-svg-chapter-active {
   filter: drop-shadow(0 0 4px rgba(233, 162, 59, 0.3));
 }
