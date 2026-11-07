@@ -205,7 +205,8 @@ export default function JourneyContainer() {
   const handleCheckpointContinue = useCallback(async () => {
     const nextStage = stageIndex + 1
     if (nextStage >= JOURNEY_STAGES.length) {
-      // Journey complete
+      // Journey complete — clear checkpoint so the complete screen renders
+      setShowCheckpoint(false)
       if (isWorkshop && participantId) {
         await supabase
           .from('workshop_participants')
