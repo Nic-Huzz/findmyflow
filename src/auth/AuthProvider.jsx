@@ -241,7 +241,7 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error
       
       console.log('👋 User signed out')
-      try { localStorage.removeItem('fmf_selected_project_id') } catch {}
+      try { localStorage.removeItem('fmf_selected_project_id') } catch { /* ignore */ }
       return { success: true }
     } catch (error) {
       console.error('❌ Sign out error:', error)

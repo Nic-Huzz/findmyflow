@@ -206,7 +206,7 @@ export default function FacilitatorDashboard() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {incompleteCount > 0 && (
               <p style={{ color: '#FFB800', textAlign: 'center', fontSize: '0.9rem' }}>
-                {incompleteCount} participant{incompleteCount !== 1 ? 's' : ''} haven't finished. Unlock anyway?
+                {incompleteCount} participant{incompleteCount !== 1 ? 's' : ''} haven&apos;t finished. Unlock anyway?
               </p>
             )}
             <div style={{ display: 'flex', gap: 12 }}>

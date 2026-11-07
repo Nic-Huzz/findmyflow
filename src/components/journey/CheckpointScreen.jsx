@@ -70,7 +70,7 @@ export default function CheckpointScreen({ isWorkshop, completedStage, onContinu
         )}
 
         {isWorkshop && showUnlocked && (
-          <p style={{ color: '#D946EF', fontSize: '1.2rem', fontWeight: 600 }}>Let's go!</p>
+          <p style={{ color: '#D946EF', fontSize: '1.2rem', fontWeight: 600 }}>Let&apos;s go!</p>
         )}
 
         {!isWorkshop && (
