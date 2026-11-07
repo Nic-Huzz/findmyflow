@@ -38,7 +38,7 @@ function getDominantArchetype(selections) {
   return TIEBREAK_ORDER.find(a => tied.includes(a)) || tied[0]
 }
 
-export default function WoundMapFlow() {
+export default function WoundMapFlow({ onComplete } = {}) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -157,7 +157,8 @@ export default function WoundMapFlow() {
     }
 
     setSaving(false)
-    navigate(returnTo)
+    if (onComplete) onComplete({ archetype: getDominantArchetype(selections) })
+    else navigate(returnTo)
   }
 
   const transitionClass = `${isTransitioning ? 'wm-transitioning' : ''} ${isEntering ? 'wm-entering' : ''}`

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
 import { isCoreNode, getExperienceLabel, VIRTUAL_EXPERIENCE_NODES } from '../lib/experienceDomeConfig'
 import { useAuth } from '../auth/AuthProvider'
@@ -10,6 +10,8 @@ import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { createFunnelTracker } from '../lib/funnelTracker'
 import DomeRadar from '../components/DomeRadar'
 import './ExperienceGameFlow.css'
+
+const POSITIVE_STATES = ['vibe_rise', 'fun']
 
 // ─── Constants ───
 
@@ -476,6 +478,74 @@ function BranchScreen({ branches, checked, ratings, onToggle, onRate, onFinish }
   )
 }
 
+// ─── Get Paid Screen (between play and insight) ───
+
+function GetPaidScreen({ branches, ratings, wantPaid, onTogglePaid, onFinish, onBack }) {
+  // Group positive-rated experiences by primal
+  const positiveByBranch = useMemo(() => {
+    const groups = []
+    branches.forEach(b => {
+      const items = b.nodes.filter(n => POSITIVE_STATES.includes(ratings[n.id]))
+      if (items.length > 0) {
+        groups.push({ id: b.id, label: b.label, color: b.color, items })
+      }
+    })
+    return groups
+  }, [branches, ratings])
+
+  const totalPositive = positiveByBranch.reduce((sum, g) => sum + g.items.length, 0)
+  const answeredCount = positiveByBranch.reduce((sum, g) =>
+    sum + g.items.filter(n => wantPaid[n.id] != null).length, 0)
+
+  return (
+    <div className="exp-game-getpaid">
+      <div className="exp-game-getpaid-header">
+        <h2>These make you feel alive.</h2>
+        <p>Could any of them be more than a hobby?</p>
+      </div>
+
+      <div className="exp-game-getpaid-list">
+        {positiveByBranch.map(group => (
+          <div key={group.id} className="exp-game-getpaid-group">
+            <span className="exp-game-getpaid-branch" style={{ color: group.color }}>
+              {group.label}
+            </span>
+            {group.items.map(node => {
+              const val = wantPaid[node.id]
+              return (
+                <div key={node.id} className="exp-game-getpaid-item">
+                  <span className="exp-game-getpaid-name">{node.label}</span>
+                  <div className="exp-game-getpaid-btns">
+                    <button
+                      className={`exp-game-getpaid-btn ${val === true ? 'active yes' : ''}`}
+                      onClick={() => { hapticLight(); onTogglePaid(node.id, true) }}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className={`exp-game-getpaid-btn ${val === false ? 'active no' : ''}`}
+                      onClick={() => { hapticLight(); onTogglePaid(node.id, false) }}
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ))}
+      </div>
+
+      <div className="exp-game-tick-nav">
+        <button className="back-btn" onClick={onBack}>←</button>
+        <button className="next-btn" onClick={onFinish}>
+          {answeredCount < totalPositive ? 'Skip for now →' : 'See my results →'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ─── Challenge Picker CTA ───
 
 function ChallengePickerCTA({ branches, ratings, recommended, totalNodes, totalRated, onExplore, onRerate }) {
@@ -607,11 +677,68 @@ function ChallengePickerCTA({ branches, ratings, recommended, totalNodes, totalR
   )
 }
 
+// ─── AI Path Suggestions ───
+
+function PathSuggestions({ aiResult, wantPaid, branches, ratings }) {
+  if (!aiResult) return null
+
+  // Build a lookup: nodeId → label for want_paid highlighting
+  const wantPaidLabels = useMemo(() => {
+    const labels = new Set()
+    branches.forEach(b => {
+      b.nodes.forEach(n => {
+        if (wantPaid[n.id] === true) labels.add(n.label)
+      })
+    })
+    return labels
+  }, [branches, wantPaid])
+
+  const hasWantPaid = wantPaidLabels.size > 0
+
+  return (
+    <div className="exp-game-paths">
+      {aiResult.pattern && (
+        <div className="exp-game-paths-pattern">
+          <p>{aiResult.pattern}</p>
+        </div>
+      )}
+
+      <div className="exp-game-paths-list">
+        {aiResult.paths?.map((path, i) => {
+          // Check if any experiences in this path are want_paid
+          const paidExps = path.experiences?.filter(e => wantPaidLabels.has(e)) || []
+          const hasPaid = paidExps.length > 0
+
+          return (
+            <div key={i} className={`exp-game-path-card ${hasPaid ? 'has-paid' : ''}`}>
+              <div className="exp-game-path-name">{path.name}</div>
+              <p className="exp-game-path-desc">{path.description}</p>
+              {hasPaid && (
+                <div className="exp-game-path-paid">
+                  You want to get paid for: {paidExps.join(', ')}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {hasWantPaid && (
+        <div className="exp-game-paths-cta">
+          <Link to="/choose-quests" className="exp-game-paths-deeper">
+            Go deeper on these paths →
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Insight Screen ───
 
-function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onRerate }) {
+function InsightScreen({ branches, checked, ratings, wantPaid, totalNodes, aiResult, aiLoading, onExplore, onRerate }) {
   const [revealed, setRevealed] = useState(1)
-  const { insights, recommended, unexploredCount } = useMemo(
+  const { insights } = useMemo(
     () => generateInsights(branches, ratings),
     [branches, ratings]
   )
@@ -632,6 +759,9 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onRe
   }, [ratings, coreNodeIds])
   const totalRated = Object.keys(coreRatings).length
   const vibeCount = Object.values(coreRatings).filter(r => r === 'vibe_rise').length
+
+  // Check if any want_paid=true
+  const hasWantPaid = Object.values(wantPaid).some(v => v === true)
 
   const handleTap = useCallback(() => {
     if (allRevealed) return
@@ -673,15 +803,43 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onRe
       )}
 
       {allRevealed && (
-        <ChallengePickerCTA
-          branches={branches}
-          ratings={ratings}
-          recommended={recommended}
-          totalNodes={totalNodes}
-          totalRated={totalRated}
-          onExplore={onExplore}
-          onRerate={onRerate}
-        />
+        <>
+          {/* AI path suggestions (authenticated + has positive ratings) */}
+          {aiLoading && (
+            <div className="exp-game-paths-loading">
+              <div className="exp-game-paths-spinner" />
+              <span>Finding your paths...</span>
+            </div>
+          )}
+
+          {aiResult && !aiLoading && (
+            <PathSuggestions
+              aiResult={aiResult}
+              wantPaid={wantPaid}
+              branches={branches}
+              ratings={ratings}
+            />
+          )}
+
+          {/* Zero want_paid fallback: discovery courage challenge */}
+          {!hasWantPaid && !aiLoading && (
+            <div className="exp-game-discovery-cta">
+              <p className="exp-game-discovery-text">
+                Not sure what you'd want to get paid for yet? Try something new this week and see how it feels.
+              </p>
+            </div>
+          )}
+
+          <ChallengePickerCTA
+            branches={branches}
+            ratings={ratings}
+            recommended={null}
+            totalNodes={totalNodes}
+            totalRated={totalRated}
+            onExplore={onExplore}
+            onRerate={onRerate}
+          />
+        </>
       )}
     </div>
   )
@@ -691,21 +849,25 @@ function InsightScreen({ branches, checked, ratings, totalNodes, onExplore, onRe
 
 const STORAGE_KEY = 'exp-game-pending'
 const CHECKED_KEY = 'exp-game-checked'
+const WANT_PAID_KEY = 'exp-game-want-paid'
 
-export default function ExperienceGameFlow() {
+export default function ExperienceGameFlow({ onComplete } = {}) {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { domeStates, loading: domeLoading, bulkSetStates } = useDomeData(user?.id)
+  const { domeStates, wantPaidStates, loading: domeLoading, bulkSetStates } = useDomeData(user?.id)
   const branches = useMemo(buildBranches, [])
   const [phase, setPhase] = useState('framing')
   const [checked, setChecked] = useState({})
   const [ratings, setRatings] = useState({})
+  const [wantPaid, setWantPaid] = useState({})
+  const [aiResult, setAiResult] = useState(null)
+  const [aiLoading, setAiLoading] = useState(false)
   const [hydrated, setHydrated] = useState(false)
   const tracker = useRef(createFunnelTracker('experience_game'))
 
   // Track each phase reached
   useEffect(() => {
-    const phases = ['framing', 'intro', 'play', 'insight']
+    const phases = ['framing', 'intro', 'play', 'get-paid', 'insight']
     const idx = phases.indexOf(phase)
     if (idx >= 0) tracker.current.step(phase, idx)
   }, [phase])
@@ -724,9 +886,12 @@ export default function ExperienceGameFlow() {
       Object.keys(supabaseRatings).forEach(id => { checkedFromSupabase[id] = true })
       setChecked(checkedFromSupabase)
       setRatings(supabaseRatings)
+      if (wantPaidStates && Object.keys(wantPaidStates).length > 0) {
+        setWantPaid(wantPaidStates)
+      }
       setPhase('insight') // already completed — show results
       // Clear any stale localStorage
-      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(CHECKED_KEY) } catch {}
+      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(CHECKED_KEY); localStorage.removeItem(WANT_PAID_KEY) } catch {}
     } else {
       // Fall back to localStorage (unauthenticated or first time)
       try {
@@ -740,10 +905,12 @@ export default function ExperienceGameFlow() {
           }
         }
         if (savedRatings) setRatings(JSON.parse(savedRatings))
+        const savedPaid = localStorage.getItem(WANT_PAID_KEY)
+        if (savedPaid) setWantPaid(JSON.parse(savedPaid))
       } catch {}
     }
     setHydrated(true)
-  }, [domeLoading, domeStates, hydrated])
+  }, [domeLoading, domeStates, wantPaidStates, hydrated])
 
   const handleToggle = useCallback((nodeId) => {
     hapticLight()
@@ -765,20 +932,53 @@ export default function ExperienceGameFlow() {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch {}
       return next
     })
+    // Clear want_paid if rating changed away from positive
+    if (!POSITIVE_STATES.includes(nsState)) {
+      setWantPaid(prev => {
+        if (prev[nodeId] == null) return prev
+        const next = { ...prev }
+        delete next[nodeId]
+        try { localStorage.setItem(WANT_PAID_KEY, JSON.stringify(next)) } catch {}
+        return next
+      })
+    }
   }, [])
 
-  const handleFinish = useCallback(() => {
-    // Read latest ratings from localStorage to avoid stale closure
-    let latestRatings = ratings
+  const handleTogglePaid = useCallback((nodeId, value) => {
+    setWantPaid(prev => {
+      let next
+      // Toggle off if same value tapped again
+      if (prev[nodeId] === value) {
+        next = { ...prev }
+        delete next[nodeId]
+      } else {
+        next = { ...prev, [nodeId]: value }
+      }
+      try { localStorage.setItem(WANT_PAID_KEY, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }, [])
+
+  // Called after get-paid screen (or skipped) — save to DB + fire AI + show insight
+  const handleGetPaidFinish = useCallback((overrideRatings) => {
+    // Read latest from localStorage to avoid stale closures
+    let latestRatings = overrideRatings || ratings
+    if (!overrideRatings) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY)
+        if (stored) latestRatings = JSON.parse(stored)
+      } catch {}
+    }
+    let latestWantPaid = wantPaid
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) latestRatings = JSON.parse(stored)
+      const storedPaid = localStorage.getItem(WANT_PAID_KEY)
+      if (storedPaid) latestWantPaid = JSON.parse(storedPaid)
     } catch {}
 
     const ratingCount = Object.keys(latestRatings).length
 
     if (user?.id && ratingCount > 0) {
-      bulkSetStates(latestRatings)
+      bulkSetStates(latestRatings, latestWantPaid)
 
       // Award 3 RP per experience rated
       const totalRP = ratingCount * 3
@@ -793,21 +993,66 @@ export default function ExperienceGameFlow() {
           count: ratingCount,
           rp_per: 3,
         }),
+      }).then(({ error }) => {
+        if (error) console.error('RP award failed:', error)
       })
 
       try {
         localStorage.removeItem(STORAGE_KEY)
         localStorage.removeItem(CHECKED_KEY)
+        localStorage.removeItem(WANT_PAID_KEY)
       } catch {}
-    } else if (ratingCount > 0) {
-      // Not logged in — ratings saved in localStorage only
+
+      // Fire AI mini analysis (non-blocking)
+      const positiveLabels = []
+      branches.forEach(b => {
+        b.nodes.forEach(n => {
+          if (POSITIVE_STATES.includes(latestRatings[n.id])) {
+            positiveLabels.push(n.label)
+          }
+        })
+      })
+
+      if (positiveLabels.length > 0) {
+        setAiLoading(true)
+        supabase.functions.invoke('suggest-life-paths', {
+          body: {
+            mode: 'mini_analysis',
+            domeProfile: { selected: positiveLabels },
+          },
+        }).then(({ data, error }) => {
+          if (!error && data) setAiResult(data)
+          setAiLoading(false)
+        }).catch(() => setAiLoading(false))
+      }
     }
+
     setPhase('insight')
-  }, [user, ratings, bulkSetStates])
+  }, [user, ratings, wantPaid, branches, bulkSetStates])
+
+  // Called when all branches are rated — show get-paid screen
+  const handleBranchesComplete = useCallback(() => {
+    // Read latest ratings from localStorage to avoid stale closure
+    let latestRatings = ratings
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) latestRatings = JSON.parse(stored)
+    } catch {}
+
+    // Check if there are any positive ratings to ask about
+    const hasPositive = Object.values(latestRatings).some(s => POSITIVE_STATES.includes(s))
+    if (hasPositive) {
+      setPhase('get-paid')
+    } else {
+      // No positive ratings, skip get-paid, go straight to save + insight
+      handleGetPaidFinish(latestRatings)
+    }
+  }, [ratings, handleGetPaidFinish])
 
   const handleExplore = useCallback(async (selectedNodeId) => {
     if (!selectedNodeId) {
-      navigate('/7-day-challenge?tab=discover')
+      if (onComplete) onComplete({ selectedNodeId: null })
+      else navigate('/7-day-challenge?tab=discover')
       return
     }
 
@@ -845,8 +1090,9 @@ export default function ExperienceGameFlow() {
     } catch {}
 
     hapticSuccess()
-    navigate('/7-day-challenge?tab=discover')
-  }, [user, branches, navigate])
+    if (onComplete) onComplete({ selectedNodeId, nodeLabel, branchLabel })
+    else navigate('/7-day-challenge?tab=discover')
+  }, [user, branches, navigate, onComplete])
 
 
   if (phase === 'framing') {
@@ -877,7 +1123,22 @@ export default function ExperienceGameFlow() {
           ratings={ratings}
           onToggle={handleToggle}
           onRate={handleRate}
-          onFinish={handleFinish}
+          onFinish={handleBranchesComplete}
+        />
+      </div>
+    )
+  }
+
+  if (phase === 'get-paid') {
+    return (
+      <div className="exp-game">
+        <GetPaidScreen
+          branches={branches}
+          ratings={ratings}
+          wantPaid={wantPaid}
+          onTogglePaid={handleTogglePaid}
+          onFinish={() => handleGetPaidFinish()}
+          onBack={() => setPhase('play')}
         />
       </div>
     )
@@ -889,7 +1150,10 @@ export default function ExperienceGameFlow() {
         branches={branches}
         checked={checked}
         ratings={ratings}
+        wantPaid={wantPaid}
         totalNodes={branches.reduce((sum, b) => sum + b.nodes.length, 0)}
+        aiResult={aiResult}
+        aiLoading={aiLoading}
         onExplore={handleExplore}
         onRerate={() => { setPhase('play'); setHydrated(true) }}
       />

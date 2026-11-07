@@ -89,7 +89,7 @@ const STEPS = {
 
 // ─── Component ──────────────────────────────────────────────────────────────
 
-export default function EssenceMirrorFlow() {
+export default function EssenceMirrorFlow({ onComplete } = {}) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -422,7 +422,8 @@ export default function EssenceMirrorFlow() {
     }
 
     setSaving(false)
-    navigate(returnTo)
+    if (onComplete) onComplete({ essenceName: heroName || getArchetype(pixarPick)?.name })
+    else navigate(returnTo)
   }
 
   // ─── Render ─────────────────────────────────────────────────────────────

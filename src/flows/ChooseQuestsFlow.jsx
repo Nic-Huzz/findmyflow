@@ -27,7 +27,7 @@ const STEPS = {
   DONE: 'done',
 }
 
-export default function ChooseQuestsFlow() {
+export default function ChooseQuestsFlow({ onComplete } = {}) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { domeStates, loading: domeLoading } = useDomeData(user?.id)
@@ -82,7 +82,7 @@ export default function ChooseQuestsFlow() {
   useEffect(() => {
     if (domeLoading) return
     const hasPositive = Object.values(domeStates).some(s => s === 'vibe_rise' || s === 'fun')
-    if (!hasPositive) navigate('/experience-game', { replace: true })
+    if (!hasPositive && !onComplete) navigate('/experience-game', { replace: true })
   }, [domeLoading, domeStates, navigate])
 
   // Build experience lists
@@ -784,8 +784,11 @@ export default function ChooseQuestsFlow() {
               ))}
             </div>
             <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
-                Go to my paths →
+              <button className="cqf-cta cqf-cta-gold" onClick={() => {
+                if (onComplete) onComplete({ paths: chosenPaths })
+                else navigate('/money-map')
+              }}>
+                Continue →
               </button>
             </div>
           </div>
