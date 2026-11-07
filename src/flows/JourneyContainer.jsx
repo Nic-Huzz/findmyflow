@@ -170,16 +170,18 @@ export default function JourneyContainer() {
 
       // Update participant progress in DB
       if (isWorkshop && participantId) {
-        const completed = [false, false, false, false, false]
-        completed[stageIndex] = true
-        // Merge with existing
-        const { data: existing } = await supabase
+        // Read existing completions, fall back to defaults on error
+        const { data: existing, error: readErr } = await supabase
           .from('workshop_participants')
           .select('stage_completed')
           .eq('id', participantId)
           .single()
 
-        const merged = existing?.stage_completed || completed
+        if (readErr) {
+          console.warn('Failed to read stage_completed, using defaults:', readErr)
+        }
+
+        const merged = [...(existing?.stage_completed || [false, false, false, false, false])]
         merged[stageIndex] = true
 
         await supabase

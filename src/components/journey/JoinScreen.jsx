@@ -20,7 +20,24 @@ export default function JoinScreen({ code, onJoined }) {
     setError(null)
 
     try {
-      // 1. Look up workshop session by code
+      // 1. Sign in anonymously first (needed for RLS to allow session lookup)
+      let anonUserId
+      const { data: existingSession } = await supabase.auth.getSession()
+      if (existingSession?.session?.user?.is_anonymous) {
+        // Resume existing anonymous session (page refresh / re-submit)
+        anonUserId = existingSession.session.user.id
+      } else {
+        const { data: authData, error: authErr } = await supabase.auth.signInAnonymously()
+        if (authErr) {
+          setError('Could not join. Please try again.')
+          console.warn('Anonymous auth error:', authErr)
+          setLoading(false)
+          return
+        }
+        anonUserId = authData.user.id
+      }
+
+      // 2. Look up workshop session by code (now authenticated)
       const { data: session, error: sessionErr } = await supabase
         .from('workshop_sessions')
         .select('id, status')
@@ -33,18 +50,25 @@ export default function JoinScreen({ code, onJoined }) {
         return
       }
 
-      // 2. Sign in anonymously
-      const { data: authData, error: authErr } = await supabase.auth.signInAnonymously()
-      if (authErr) {
-        setError('Could not join. Please try again.')
-        console.warn('Anonymous auth error:', authErr)
-        setLoading(false)
+      // 3. Check for existing participant row (page refresh case)
+      const { data: existingParticipant } = await supabase
+        .from('workshop_participants')
+        .select('id')
+        .eq('session_id', session.id)
+        .eq('anon_user_id', anonUserId)
+        .maybeSingle()
+
+      if (existingParticipant) {
+        // Resume existing participation
+        onJoined({
+          participantId: existingParticipant.id,
+          sessionId: session.id,
+          anonUserId,
+        })
         return
       }
 
-      const anonUserId = authData.user.id
-
-      // 3. Create participant row
+      // 4. Create participant row
       const { data: participant, error: partErr } = await supabase
         .from('workshop_participants')
         .insert({

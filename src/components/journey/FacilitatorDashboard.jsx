@@ -121,7 +121,7 @@ export default function FacilitatorDashboard() {
       .from('workshop_sessions')
       .update({
         current_stage: nextStage,
-        status: nextStage === 0 ? 'active' : undefined,
+        status: currentStage === 0 ? 'active' : undefined,
         started_at: currentStage === 0 ? new Date().toISOString() : undefined,
       })
       .eq('id', session.id)

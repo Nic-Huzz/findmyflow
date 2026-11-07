@@ -15,6 +15,12 @@ export function useWorkshopChannel(code, { participantId, onAdvance, onProgress 
   const [isConnected, setIsConnected] = useState(false)
   const channelRef = useRef(null)
 
+  // Keep callback refs current so the channel listeners always call the latest version
+  const onAdvanceRef = useRef(onAdvance)
+  const onProgressRef = useRef(onProgress)
+  useEffect(() => { onAdvanceRef.current = onAdvance }, [onAdvance])
+  useEffect(() => { onProgressRef.current = onProgress }, [onProgress])
+
   useEffect(() => {
     if (!code) return
 
@@ -25,12 +31,12 @@ export function useWorkshopChannel(code, { participantId, onAdvance, onProgress 
 
     // Listen for advance events (participant side)
     channel.on('broadcast', { event: 'advance' }, (payload) => {
-      if (onAdvance) onAdvance(payload.payload)
+      if (onAdvanceRef.current) onAdvanceRef.current(payload.payload)
     })
 
     // Listen for progress events (facilitator side)
     channel.on('broadcast', { event: 'progress' }, (payload) => {
-      if (onProgress) onProgress(payload.payload)
+      if (onProgressRef.current) onProgressRef.current(payload.payload)
     })
 
     // Track presence
@@ -52,7 +58,7 @@ export function useWorkshopChannel(code, { participantId, onAdvance, onProgress 
       supabase.removeChannel(channel)
       setIsConnected(false)
     }
-  }, [code, participantId]) // onAdvance/onProgress intentionally excluded — use refs if they change
+  }, [code, participantId])
 
   const broadcast = useCallback((event, payload) => {
     if (channelRef.current) {
