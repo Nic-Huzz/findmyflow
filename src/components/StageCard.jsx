@@ -59,7 +59,7 @@ export default function StageCard({ heroStage = 0, directionComplete = false }) 
       )}
 
       {/* Next action CTA */}
-      {currentStep?.nextAction && (
+      {currentStep?.nextAction && currentStep?.nextRoute && (
         <button className="sc-next-action" onClick={() => navigate(currentStep.nextRoute)}>
           Next: {currentStep.nextAction} <span>→</span>
         </button>

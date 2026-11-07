@@ -9,6 +9,7 @@ import JourneyCompleted from './journey/JourneyCompleted'
 import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import SkillsDisplay from './journey/SkillsDisplay'
 import { getChapterForStage, getStepsWithStatus } from '../data/journeyChapters'
+import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import './JourneyTab.css'
 
 const VOICE_ICONS = { ghost: '👻', controller: '🧱', auto_pilot: '🤖', perfectionist: '🎯', people_pleaser: '🪞' }
@@ -36,6 +37,13 @@ export default function JourneyTab({ userId, onUnlockTab }) {
   // Lightweight figurine display data (replaces heavy useFigurine hook)
   const [figurineDisplay, setFigurineDisplay] = useState(null)
   const [clarityPct, setClarityPct] = useState(null)
+  const [directionComplete, setDirectionComplete] = useState(false)
+
+  // Fetch direction status for Breakthrough chapter tick box
+  useEffect(() => {
+    if (!userId || heroStage < 8) return
+    getDirectionStatus(userId).then(status => setDirectionComplete(isAllDirectionComplete(status)))
+  }, [userId, heroStage])
 
   useEffect(() => {
     if (!userId) return
@@ -226,8 +234,8 @@ export default function JourneyTab({ userId, onUnlockTab }) {
 
   if (loading) return <div className="jt-loading">Loading journey...</div>
 
-  const { chapter } = getChapterForStage(heroStage)
-  const steps = getStepsWithStatus(heroStage)
+  const { chapter } = getChapterForStage(heroStage, directionComplete)
+  const steps = getStepsWithStatus(heroStage, directionComplete)
   const currentStep = steps.find(s => s.current) || steps[steps.length - 1]
   const sorted = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
   const totalVoiceCount = sorted.reduce((sum, [, ct]) => sum + ct, 0)
