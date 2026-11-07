@@ -67,7 +67,7 @@ const JOURNEY_STAGES = [
 
 export default function JourneyContainer() {
   const { code } = useParams()
-  const { user } = useAuth()
+  const { user: _user } = useAuth() // used in future solo mode auth
   const isWorkshop = !!code
 
   // Journey state
@@ -80,7 +80,7 @@ export default function JourneyContainer() {
   const [joined, setJoined] = useState(false)
   const [participantId, setParticipantId] = useState(null)
   const [sessionId, setSessionId] = useState(null)
-  const [workshopCurrentStage, setWorkshopCurrentStage] = useState(0)
+  const [, setWorkshopCurrentStage] = useState(0)
 
   // Use ref for the advance handler so it has access to latest state
   const stageRef = useRef(stageIndex)
@@ -94,7 +94,7 @@ export default function JourneyContainer() {
     }
   }, [])
 
-  const { broadcast, presenceCount } = useWorkshopChannel(
+  const { broadcast } = useWorkshopChannel(
     isWorkshop && joined ? code : null,
     {
       participantId,
@@ -147,7 +147,7 @@ export default function JourneyContainer() {
   }, [isWorkshop, joined, sessionId, participantId])
 
   // Handle flow completion
-  const handleFlowComplete = useCallback(async (data) => {
+  const handleFlowComplete = useCallback(async (_data) => {
     const stage = JOURNEY_STAGES[stageIndex]
     const isLastSubflow = subflowIndex >= stage.subflows.length - 1
 
