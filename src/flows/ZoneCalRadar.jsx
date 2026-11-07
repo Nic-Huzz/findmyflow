@@ -51,7 +51,7 @@ function clearProgress() {
   try { localStorage.removeItem(STORAGE_KEY) } catch {}
 }
 
-export default function ZoneCalRadar() {
+export default function ZoneCalRadar({ onComplete, skipEmailGate } = {}) {
   const saved = useRef(loadProgress())
   const [stage, setStage] = useState(() => saved.current?.stage || 'hook')
   const [answers, setAnswers] = useState(() => saved.current?.answers || {})
@@ -118,7 +118,14 @@ export default function ZoneCalRadar() {
     if (advanceTimer.current) clearTimeout(advanceTimer.current)
     advanceTimer.current = setTimeout(() => {
       const idx = STAGE_ORDER.indexOf(dimId)
-      if (idx < STAGE_ORDER.length - 1) setStage(STAGE_ORDER[idx + 1])
+      if (idx < STAGE_ORDER.length - 1) {
+        const nextStage = STAGE_ORDER[idx + 1]
+        if (nextStage === 'email_gate' && skipEmailGate) {
+          setStage('results')
+        } else {
+          setStage(nextStage)
+        }
+      }
       advanceTimer.current = null
     }, 300)
   }, [])
@@ -343,7 +350,11 @@ export default function ZoneCalRadar() {
 
             <div className="zcr-results-cta">
               <p>Your shape shows where you are. Vibe Rise helps you move.</p>
-              <a href="/get-started" className="primary-button">Start the journey</a>
+              {onComplete ? (
+                <button className="primary-button" onClick={() => onComplete({ dimensions: answers, diagnosis })}>Continue</button>
+              ) : (
+                <a href="/get-started" className="primary-button">Start the journey</a>
+              )}
             </div>
           </div>
         )}

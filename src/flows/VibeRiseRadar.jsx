@@ -197,7 +197,7 @@ function getVerdict(scores) {
 
 // ── Main Component ──
 
-export default function VibeRiseRadar() {
+export default function VibeRiseRadar({ onComplete, skipEmailGate } = {}) {
   const saved = useRef(loadProgress())
   const [stage, setStage] = useState(() => saved.current?.stage || 'hook')
   const [answers, setAnswers] = useState(() => saved.current?.answers || {})
@@ -260,7 +260,14 @@ export default function VibeRiseRadar() {
 
   const handleNext = () => {
     const idx = STAGE_ORDER.indexOf(stage)
-    if (idx < STAGE_ORDER.length - 1) setStage(STAGE_ORDER[idx + 1])
+    if (idx < STAGE_ORDER.length - 1) {
+      const nextStage = STAGE_ORDER[idx + 1]
+      if (nextStage === 'email_gate' && skipEmailGate) {
+        setStage('results')
+      } else {
+        setStage(nextStage)
+      }
+    }
   }
 
   const handleEmailSubmit = async (submittedEmail, submittedName) => {
@@ -471,7 +478,11 @@ export default function VibeRiseRadar() {
 
             <div className="vrr-results-cta">
               <p>Your comfort zone decides how alive you feel. Vibe Rise expands it.</p>
-              <a href="/get-started" className="primary-button">Start expanding</a>
+              {onComplete ? (
+                <button className="primary-button" onClick={() => onComplete({ answers, verdict })}>Continue</button>
+              ) : (
+                <a href="/get-started" className="primary-button">Start expanding</a>
+              )}
             </div>
           </div>
         )}

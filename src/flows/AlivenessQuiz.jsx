@@ -140,7 +140,7 @@ function getVerdict(scores) {
   }
 }
 
-export default function AlivenessQuiz() {
+export default function AlivenessQuiz({ onComplete, skipEmailGate } = {}) {
   const saved = useRef(loadProgress())
   const [stage, setStage] = useState(() => saved.current?.stage || 'hook')
   const [answers, setAnswers] = useState(() => saved.current?.answers || {})
@@ -196,7 +196,14 @@ export default function AlivenessQuiz() {
 
   const goNext = () => {
     const idx = STAGE_ORDER.indexOf(stage)
-    if (idx < STAGE_ORDER.length - 1) setStage(STAGE_ORDER[idx + 1])
+    if (idx < STAGE_ORDER.length - 1) {
+      const nextStage = STAGE_ORDER[idx + 1]
+      if (nextStage === 'email_gate' && skipEmailGate) {
+        setStage('results')
+      } else {
+        setStage(nextStage)
+      }
+    }
   }
 
   const goBack = () => {
@@ -208,7 +215,14 @@ export default function AlivenessQuiz() {
     setAnswers(prev => ({ ...prev, [channelId]: score }))
     setTimeout(() => {
       const idx = STAGE_ORDER.indexOf(channelId)
-      if (idx < STAGE_ORDER.length - 1) setStage(STAGE_ORDER[idx + 1])
+      if (idx < STAGE_ORDER.length - 1) {
+        const nextStage = STAGE_ORDER[idx + 1]
+        if (nextStage === 'email_gate' && skipEmailGate) {
+          setStage('results')
+        } else {
+          setStage(nextStage)
+        }
+      }
     }, 150)
   }
 
@@ -449,7 +463,11 @@ export default function AlivenessQuiz() {
                   Make it real
                 </button>
               ) : (
-                <a href="/get-started" className="primary-button glow-button">Keep the vessel full</a>
+                {onComplete ? (
+                  <button className="primary-button glow-button" onClick={() => onComplete({ ...answers, verdict })}>Continue</button>
+                ) : (
+                  <a href="/get-started" className="primary-button glow-button">Keep the vessel full</a>
+                )}
               )}
               <button className="go-back-link" onClick={handleRetake}>Retake quiz</button>
             </div>
@@ -506,7 +524,8 @@ export default function AlivenessQuiz() {
               <p className="aq-cta-line">The vessel doesn't fill with motivation.<br />It fills when you reopen what closed.</p>
               <button className="primary-button glow-button" onClick={async () => {
                 await saveLeverage()
-                window.location.href = '/get-started'
+                if (onComplete) onComplete({ ...answers, verdict })
+                else window.location.href = '/get-started'
               }}>Start reopening</button>
               <button className="go-back-link" onClick={() => setStage('results')}>&larr; Back to results</button>
             </div>
