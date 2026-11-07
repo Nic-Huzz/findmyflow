@@ -463,11 +463,11 @@ export default function AlivenessQuiz({ onComplete, skipEmailGate } = {}) {
                   Make it real
                 </button>
               ) : (
-                {onComplete ? (
+                onComplete ? (
                   <button className="primary-button glow-button" onClick={() => onComplete({ ...answers, verdict })}>Continue</button>
                 ) : (
                   <a href="/get-started" className="primary-button glow-button">Keep the vessel full</a>
-                )}
+                )
               )}
               <button className="go-back-link" onClick={handleRetake}>Retake quiz</button>
             </div>
