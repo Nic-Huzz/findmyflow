@@ -318,6 +318,11 @@ const LifePathWidgetTest = lazyRetry(() => import('./pages/LifePathWidgetTest'))
 const ChooseQuestsFlow = lazyRetry(() => import('./flows/ChooseQuestsFlow'))
 const ChildhoodReflectionFlow = lazyRetry(() => import('./flows/ChildhoodReflectionFlow'))
 
+// Essence Journey
+import JourneyContainer from './flows/JourneyContainer'
+import FacilitatorDashboard from './components/journey/FacilitatorDashboard'
+import WorkshopCreatePage from './components/journey/WorkshopCreatePage'
+
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
 const PlaylistFeedAdmin = lazyRetry(() => import('./pages/PlaylistFeedAdmin'))
@@ -429,7 +434,8 @@ function ConditionalZarlo() {
   const isLifePaths = location.pathname === '/life-paths'
   const isRuleBreakTree = location.pathname === '/rule-break-tree'
   const isDomeOnboarding = location.pathname === '/dome-onboarding'
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths || isRuleBreakTree || isDomeOnboarding) return null
+  const isJourneyRoute = location.pathname.startsWith('/journey')
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths || isRuleBreakTree || isDomeOnboarding || isJourneyRoute) return null
   return <ZarloWidget />
 }
 
@@ -488,6 +494,7 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/experience-game' ||
                         location.pathname === '/dome-onboarding' ||
                         location.pathname === '/community' ||
+                        location.pathname.startsWith('/journey') ||
                         (location.pathname.startsWith('/create/') &&
                          location.pathname !== '/create/' &&
                          location.pathname !== '/create/experiences' &&
@@ -773,6 +780,12 @@ function AppRouter() {
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
+
+            {/* Essence Journey — Workshop + Solo Onboarding */}
+            <Route path="/journey" element={<JourneyContainer />} />
+            <Route path="/journey/create" element={<WorkshopCreatePage />} />
+            <Route path="/journey/:code/facilitate" element={<FacilitatorDashboard />} />
+            <Route path="/journey/:code" element={<JourneyContainer />} />
 
             {/* Fantasy League Landing Page - Public */}
             <Route path="/fantasy" element={<FantasyLeagueLanding />} />
