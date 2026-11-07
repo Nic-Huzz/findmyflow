@@ -1,0 +1,214 @@
+/**
+ * ChildhoodReflectionFlow.css
+ * Stage 1 of the Essence Journey: "Remember who you were as a kid."
+ */
+
+.crf {
+  --crf-pink: #D946EF;
+  --crf-gold: #FFB800;
+  --crf-text: #ffffff;
+  --crf-text-muted: rgba(255, 255, 255, 0.6);
+  --crf-glass: rgba(255, 255, 255, 0.06);
+  --crf-glass-border: rgba(255, 255, 255, 0.1);
+  --crf-bg: #09090F;
+
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--crf-bg);
+  color: var(--crf-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 24px 20px 100px;
+  box-sizing: border-box;
+}
+
+.crf-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.crf h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.crf .crf-hint {
+  color: var(--crf-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.crf-input-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.crf-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.crf-input-row input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--crf-glass-border);
+  background: var(--crf-glass);
+  color: var(--crf-text);
+  font-size: 1rem;
+  outline: none;
+}
+
+.crf-input-row input:focus {
+  border-color: var(--crf-pink);
+}
+
+.crf-input-row input::placeholder {
+  color: var(--crf-text-muted);
+}
+
+.crf-remove-btn {
+  background: none;
+  border: none;
+  color: var(--crf-text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.crf-add-more {
+  background: none;
+  border: 1px dashed var(--crf-glass-border);
+  border-radius: 12px;
+  color: var(--crf-text-muted);
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.crf-add-more:hover {
+  border-color: var(--crf-pink);
+  color: var(--crf-text);
+}
+
+/* Experience grid */
+.crf-exp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.crf-exp-card {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--crf-glass-border);
+  background: var(--crf-glass);
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.crf-exp-card.loved {
+  border-color: var(--crf-pink);
+  background: rgba(217, 70, 239, 0.15);
+}
+
+.crf-exp-card.liked {
+  border-color: var(--crf-gold);
+  background: rgba(255, 184, 0, 0.1);
+}
+
+/* Navigation */
+.crf-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  background: linear-gradient(transparent, var(--crf-bg) 30%);
+}
+
+.crf-nav button {
+  padding: 14px 32px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.crf-nav .crf-back {
+  background: var(--crf-glass);
+  color: var(--crf-text);
+  border: 1px solid var(--crf-glass-border);
+}
+
+.crf-nav .crf-next {
+  background: linear-gradient(135deg, var(--crf-pink) 0%, var(--crf-gold) 100%);
+  color: #000;
+}
+
+.crf-nav .crf-next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Progress dots */
+.crf-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.crf-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--crf-glass-border);
+}
+
+.crf-dot.active {
+  background: var(--crf-pink);
+}
+
+.crf-dot.done {
+  background: var(--crf-gold);
+}
+
+/* Summary */
+.crf-summary-card {
+  background: var(--crf-glass);
+  border: 1px solid var(--crf-glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.crf-summary-card h3 {
+  color: var(--crf-pink);
+  margin-bottom: 12px;
+}
+
+.crf-summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.crf-summary-tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(217, 70, 239, 0.12);
+  border: 1px solid rgba(217, 70, 239, 0.25);
+  font-size: 0.85rem;
+}
