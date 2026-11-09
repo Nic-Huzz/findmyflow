@@ -12,7 +12,7 @@ import { getChapterForStage, getStepsWithStatus, JOURNEY_CHAPTERS } from '../dat
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import './StageCard.css'
 
-export default function StageCard({ heroStage = 0, directionComplete = false }) {
+export default function StageCard({ heroStage = 0, directionComplete = false, children }) {
   const navigate = useNavigate()
   const { chapter, stepsComplete, stepsTotal } = getChapterForStage(heroStage, directionComplete)
   const steps = getStepsWithStatus(heroStage, directionComplete)
@@ -64,6 +64,9 @@ export default function StageCard({ heroStage = 0, directionComplete = false }) 
           Next: {currentStep.nextAction} <span>→</span>
         </button>
       )}
+
+      {/* Optional slot for extra content (e.g. journey map toggle) */}
+      {children}
     </div>
   )
 }

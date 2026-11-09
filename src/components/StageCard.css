@@ -166,3 +166,24 @@
   transform: scale(0.97);
   opacity: 0.9;
 }
+
+/* Journey toggle (passed as children from ProgressTab) */
+.sc-journey-toggle {
+  display: block;
+  margin: 12px auto 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sc-journey-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}

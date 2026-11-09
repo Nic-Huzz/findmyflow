@@ -1010,12 +1010,11 @@ export default function ProgressTab({ userId }) {
 
       {/* ═══ HERO CARD ═══ */}
       <div className="pt-hero">
-        <StageCard heroStage={heroStage} directionComplete={directionComplete} />
-        <div style={{ textAlign: 'center', marginTop: 8 }}>
-          <button className="pt-stages-toggle" onClick={() => setShowStages(!showStages)}>
+        <StageCard heroStage={heroStage} directionComplete={directionComplete}>
+          <button className="sc-journey-toggle" onClick={() => setShowStages(!showStages)}>
             {showStages ? 'Hide map' : 'See your journey'} {showStages ? '▴' : '▾'}
           </button>
-        </div>
+        </StageCard>
 
         {/* ═══ Expandable Journey Quadrant Map ═══ */}
         {showStages && (
