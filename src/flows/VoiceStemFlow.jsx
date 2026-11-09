@@ -746,14 +746,21 @@ export default function VoiceStemFlow() {
     if (position.stageIndex === 2) return `Stage 3 of 4  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
   })()
 
-  // ── Restore from localStorage on mount ───────────────────────────
+  // ── Restore from localStorage / skip to stage on mount ───────────
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const skipTo = params.get('skip')
+    const resumeStage = params.get('resume')
+
+    // ?skip=3 jumps directly to that stage's recording, no saved data needed
+    if (skipTo) {
+      const stageIdx = parseInt(skipTo, 10) - 1 // skip=3 means stageIndex=2
+      setTimeout(() => beginStage({ stageIndex: stageIdx }), 100)
+      return
+    }
+
     const saved = loadSession()
     if (!saved) return
-
-    // Resume from saved state
-    const params = new URLSearchParams(window.location.search)
-    const resumeStage = params.get('resume')
 
     if (saved.selectedExpression) setSelectedExpression(saved.selectedExpression)
     if (saved.confirmedPrediction) setConfirmedPrediction(saved.confirmedPrediction)
@@ -761,7 +768,7 @@ export default function VoiceStemFlow() {
     if (saved.stage2Results) setStage2Results(saved.stage2Results)
     if (saved.stage3Results) setStage3Results(saved.stage3Results)
 
-    // ?resume=N skips to that stage. Delayed to let state settle after setState calls above.
+    // ?resume=N requires saved data from prior stages
     if (resumeStage) {
       setTimeout(() => {
         if (resumeStage === '3' && saved.stage2Results) {
