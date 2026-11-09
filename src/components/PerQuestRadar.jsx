@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DOME_DIMENSIONS, getNumericTier } from '../data/domeDimensions'
+import { VIBE_RISE_DIMENSIONS } from '../data/vibeRiseDimensions'
 import { supabase } from '../lib/supabaseClient'
 import './PerQuestRadar.css'
 import './DomeOfSafety.css'
@@ -34,14 +35,7 @@ function buildPolygon(cx, cy, maxRadius, values, maxLevels, angleStep) {
   }).map(p => `${p.x},${p.y}`).join(' ')
 }
 
-const FUEL_CHANNELS = [
-  { id: 'choice', emoji: '🔓', name: 'Choice' },
-  { id: 'connection', emoji: '🤝', name: 'Connection' },
-  { id: 'mastery', emoji: '📈', name: 'Mastery' },
-  { id: 'meaning', emoji: '✨', name: 'Meaning' },
-]
-
-function QuestRadarCard({ quest, actualProgress, fuel }) {
+function QuestRadarCard({ quest, actualProgress, aliveness }) {
   const navigate = useNavigate()
   const size = 310
   const cx = size / 2
@@ -216,33 +210,41 @@ function QuestRadarCard({ quest, actualProgress, fuel }) {
         </div>
       )}
 
-      {/* Life fuel bars */}
-      <div className="pqr-fuel">
-        <div className="pqr-fuel-title">Life Fuel</div>
-        {FUEL_CHANNELS.map(ch => (
-          <div key={ch.id} className="pqr-fuel-row">
-            <span className="pqr-fuel-label">{ch.emoji} {ch.name}</span>
-            <div className="pqr-fuel-track">
-              <div className="pqr-fuel-fill" style={{ width: `${fuel?.[ch.id] || 0}%` }} />
-            </div>
-            <span className="pqr-fuel-pct">{fuel?.[ch.id] || 0}%</span>
-          </div>
-        ))}
-        {fuel && fuel.weeks > 0 ? (
-          <>
-            <div className="pqr-fuel-weeks">{fuel.weeks} week{fuel.weeks !== 1 ? 's' : ''}</div>
-            {(() => {
-              const strong = FUEL_CHANNELS.filter(ch => fuel[ch.id] >= 75)
-              const weak = FUEL_CHANNELS.filter(ch => fuel[ch.id] < 50)
-              if (strong.length === 4) return <div className="pqr-fuel-insight">All four fuels are active on this path.</div>
-              if (weak.length > 0) return <div className="pqr-fuel-insight">This path is missing {weak.map(ch => `${ch.emoji} ${ch.name}`).join(' and ')}.</div>
-              return null
-            })()}
-          </>
-        ) : (
-          <div className="pqr-fuel-insight">Complete a courage challenge to see your fuel.</div>
-        )}
-      </div>
+      {/* Aliveness dimension bars */}
+      {(aliveness?.baseline || aliveness?.latest) && (
+        <div className="pqr-alive-bars">
+          {VIBE_RISE_DIMENSIONS.map(dim => {
+            const baseScore = aliveness?.baseline?.[dim.id] ?? null
+            const latestScore = aliveness?.latest?.[dim.id] ?? null
+
+            // Show latest if available, otherwise baseline
+            const displayScore = latestScore ?? baseScore ?? 0
+
+            // Delta only when BOTH exist — never from a single snapshot
+            const delta = (aliveness?.latest && aliveness?.baseline)
+              ? (latestScore ?? 0) - (baseScore ?? 0)
+              : 0
+
+            return (
+              <div key={dim.id} className="pqr-alive-row">
+                <span className="pqr-alive-label">{dim.name}</span>
+                <div className="pqr-alive-track">
+                  <div
+                    className="pqr-alive-fill"
+                    style={{ width: `${(displayScore / 5) * 100}%` }}
+                  />
+                </div>
+                <span className="pqr-alive-score">{displayScore}/5</span>
+                {delta !== 0 && (
+                  <span className={`pqr-alive-delta ${delta > 0 ? 'up' : 'down'}`}>
+                    {delta > 0 ? '+' : ''}{delta}
+                  </span>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
@@ -250,7 +252,7 @@ function QuestRadarCard({ quest, actualProgress, fuel }) {
 export default function PerQuestRadar({ userId }) {
   const [quests, setQuests] = useState([])
   const [progress, setProgress] = useState({}) // { questId: { dimId: maxLevel } }
-  const [fuelData, setFuelData] = useState({}) // { questId: { choice: %, connection: %, mastery: %, meaning: %, weeks: n } }
+  const [alivenessData, setAlivenessData] = useState({}) // { questId: { baseline: scores|null, latest: scores|null } }
   const [loading, setLoading] = useState(true)
   const [activeIdx, setActiveIdx] = useState(0)
   const stripRef = useRef(null)
@@ -306,28 +308,22 @@ export default function PerQuestRadar({ userId }) {
           })
         }
 
-        // Load fuel review data
-        const { data: fuelRows } = await supabase
-          .from('path_fuel_reviews')
-          .select('quest_id, choice, connection, mastery, meaning')
+        // Load aliveness snapshots (baseline + most recent checkin per quest)
+        const { data: snapRows } = await supabase
+          .from('quest_aliveness_snapshots')
+          .select('quest_id, snapshot_type, scores, created_at')
           .eq('user_id', userId)
           .in('quest_id', questIds)
+          .order('created_at', { ascending: false })
 
-        const fuelMap = {}
-        if (fuelRows?.length) {
-          const byQuest = {}
-          fuelRows.forEach(r => {
-            if (!byQuest[r.quest_id]) byQuest[r.quest_id] = []
-            byQuest[r.quest_id].push(r)
-          })
-          for (const [qId, rows] of Object.entries(byQuest)) {
-            const weeks = rows.length
-            fuelMap[qId] = {
-              choice: Math.round(rows.filter(r => r.choice === true).length / weeks * 100),
-              connection: Math.round(rows.filter(r => r.connection === true).length / weeks * 100),
-              mastery: Math.round(rows.filter(r => r.mastery === true).length / weeks * 100),
-              meaning: Math.round(rows.filter(r => r.meaning === true).length / weeks * 100),
-              weeks,
+        const alivenessMap = {}
+        if (snapRows?.length) {
+          for (const qId of questIds) {
+            const questSnaps = snapRows.filter(r => r.quest_id === qId)
+            const baseline = questSnaps.find(r => r.snapshot_type === 'baseline')?.scores ?? null
+            const latestCheckin = questSnaps.find(r => r.snapshot_type === 'checkin')?.scores ?? null
+            if (baseline || latestCheckin) {
+              alivenessMap[qId] = { baseline, latest: latestCheckin }
             }
           }
         }
@@ -339,7 +335,7 @@ export default function PerQuestRadar({ userId }) {
         )
         setQuests(definedQuests.map(q => ({ ...q, _courageCount: counts[q.id] || 0 })))
         setProgress(progressMap)
-        setFuelData(fuelMap)
+        setAlivenessData(alivenessMap)
         setLoading(false)
       })
   }, [userId])
@@ -380,7 +376,7 @@ export default function PerQuestRadar({ userId }) {
       <div className="pqr-strip" ref={stripRef}>
         {quests.map(quest => (
           <div key={quest.id} className="pqr-card">
-            <QuestRadarCard quest={quest} actualProgress={progress[quest.id]} fuel={fuelData[quest.id]} />
+            <QuestRadarCard quest={quest} actualProgress={progress[quest.id]} aliveness={alivenessData[quest.id]} />
           </div>
         ))}
       </div>
