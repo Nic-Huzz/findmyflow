@@ -180,7 +180,8 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
       setError('Could not start recording. Please check your microphone.')
       console.warn('Recording start error:', err)
     }
-  }, []) // onSilenceStop accessed via onSilenceStopRef — stable ref pattern
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // stop uses refs not state; onSilenceStop via ref
 
   const stop = useCallback(() => {
     stoppedRef.current = true
@@ -191,15 +192,19 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
 
   // Cleanup on unmount
   useEffect(() => {
+    const recorder = mediaRecorderRef
+    const anim = animFrameRef
+    const ctx = audioContextRef
+    const stream = streamRef
+    const maxT = maxTimerRef
+    const silT = silenceTimerRef
     return () => {
-      if (mediaRecorderRef.current?.state === 'recording') {
-        mediaRecorderRef.current.stop()
-      }
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
-      if (audioContextRef.current) audioContextRef.current.close().catch(() => {})
-      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop())
-      if (maxTimerRef.current) clearTimeout(maxTimerRef.current)
-      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current)
+      if (recorder.current?.state === 'recording') recorder.current.stop()
+      if (anim.current) cancelAnimationFrame(anim.current)
+      if (ctx.current) ctx.current.close().catch(() => {})
+      if (stream.current) stream.current.getTracks().forEach(t => t.stop())
+      if (maxT.current) clearTimeout(maxT.current)
+      if (silT.current) clearTimeout(silT.current)
     }
   }, [])
 
