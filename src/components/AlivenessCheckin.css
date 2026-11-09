@@ -1,0 +1,109 @@
+/* AlivenessCheckin.css — scoped with aci- prefix */
+
+/* Container */
+.aci-wrap {
+  background: linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%);
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin: 0 0 16px;
+  border: 1px solid rgba(94, 23, 235, 0.12);
+}
+
+/* Progress dots */
+.aci-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
+.aci-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Question */
+.aci-emoji { text-align: center; font-size: 24px; margin-bottom: 4px; }
+.aci-question { font-size: 15px; font-weight: 600; text-align: center; margin-bottom: 16px; }
+
+/* Answer buttons */
+.aci-answers { display: flex; flex-direction: column; gap: 6px; }
+.aci-answer {
+  padding: 10px 14px; border-radius: 10px; border: none;
+  font-size: 13px; text-align: left; cursor: pointer;
+  font-weight: 400; font-family: inherit;
+}
+.aci-answer.selected { font-weight: 600; }
+
+/* Nav */
+.aci-nav { display: flex; gap: 8px; margin-top: 12px; }
+.aci-back {
+  padding: 8px 14px; border-radius: 8px; background: #f0ede8;
+  border: none; font-size: 13px; cursor: pointer; font-family: inherit;
+}
+.aci-dismiss {
+  padding: 8px 14px; border-radius: 8px; background: none;
+  border: none; font-size: 13px; color: #999; cursor: pointer; font-family: inherit;
+}
+
+/* Results */
+.aci-results { text-align: center; }
+.aci-headline { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+.aci-radar-wrap { display: flex; justify-content: center; margin-bottom: 12px; }
+
+/* Radar legend */
+.aci-legend {
+  display: flex; justify-content: center; gap: 12px;
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+.aci-legend-item {
+  display: flex; align-items: center; gap: 4px; font-size: 11px; color: #666;
+}
+.aci-legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* Shift breakdown */
+.aci-shifts { text-align: left; margin: 12px 0; }
+.aci-shift-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+.aci-shift-name { width: 110px; font-weight: 500; flex-shrink: 0; }
+.aci-shift-delta { font-weight: 600; }
+.aci-shift-delta.up { color: #22c55e; }
+.aci-shift-delta.down { color: #ef4444; }
+.aci-shift-delta.flat { color: #999; }
+
+/* Deficiency suggestion */
+.aci-deficiency {
+  margin-top: 16px; padding: 12px; border-radius: 12px;
+  background: rgba(233, 162, 59, 0.08); border: 1px solid rgba(233, 162, 59, 0.2);
+  text-align: left;
+}
+.aci-def-label { font-size: 12px; font-weight: 600; color: #E9A23B; margin-bottom: 4px; }
+.aci-def-text { font-size: 13px; color: #333; margin-bottom: 8px; }
+.aci-def-actions { display: flex; gap: 8px; }
+.aci-def-accept {
+  padding: 8px 16px; border-radius: 10px;
+  background: #5e17eb; color: #fff; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.aci-def-skip {
+  padding: 8px 16px; border-radius: 10px;
+  background: #f0ede8; color: #666; border: none;
+  font-size: 13px; cursor: pointer; font-family: inherit;
+}
+
+/* Save error */
+.aci-error {
+  margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+  background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);
+  font-size: 13px; color: #b91c1c; text-align: center;
+}
+.aci-error-actions { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+.aci-retry {
+  padding: 8px 16px; border-radius: 10px;
+  background: #5e17eb; color: #fff; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+.aci-cancel {
+  padding: 8px 16px; border-radius: 10px;
+  background: #f0ede8; color: #666; border: none;
+  font-size: 13px; cursor: pointer; font-family: inherit;
+}
+
+/* Done button */
+.aci-done {
+  margin-top: 16px; padding: 10px 24px; border-radius: 10px;
+  background: #5e17eb; color: #fff; border: none;
+  font-weight: 600; font-size: 14px; cursor: pointer; font-family: inherit;
+}
