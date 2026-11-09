@@ -24,6 +24,8 @@ import ZoneCalSection from './ZoneCalSection'
 import { JOURNEY_CHAPTERS, getChapterForStage } from '../data/journeyChapters'
 import StageCard from './StageCard'
 import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
+import AlivenessCheckin from './AlivenessCheckin'
+import { getCheckinDueQuests } from '../lib/alivenessEngine'
 import './ProgressTab.css'
 
 // ── Hero Stages with quadrant coordinates ──
@@ -491,6 +493,12 @@ export default function ProgressTab({ userId }) {
   const [showBaselineFlow, setShowBaselineFlow] = useState(false)
   const [baselineDismissed, setBaselineDismissed] = useState(false)
 
+  // Aliveness check-in card
+  const [checkinDueQuest, setCheckinDueQuest] = useState(null) // { quest, state }
+  const [showCheckinFlow, setShowCheckinFlow] = useState(false)
+  const [checkinDismissed, setCheckinDismissed] = useState(false)
+  const [allSnapshots, setAllSnapshots] = useState({}) // { questId: [snapshots] }
+
   // Load reflection data for a single evidence card (on expand)
   const loadReflections = async (challengeId) => {
     if (reflections[challengeId]?.loaded) return
@@ -646,11 +654,11 @@ export default function ProgressTab({ userId }) {
           supabase.from('quest_cross_pollination')
             .select('source_quest_id, target_quest_id')
             .eq('user_id', userId),
-          // Aliveness baselines (for retroactive baseline card)
+          // Aliveness snapshots (baselines + check-ins, for retroactive card + check-in prompt)
           supabase.from('quest_aliveness_snapshots')
-            .select('quest_id, snapshot_type')
+            .select('quest_id, snapshot_type, scores, created_at')
             .eq('user_id', userId)
-            .eq('snapshot_type', 'baseline'),
+            .order('created_at', { ascending: false }),
           // Dome check (fast count to avoid flash of "Play Experience Game" CTA)
           supabase.from('experience_dome_ratings')
             .select('id', { count: 'exact', head: true })
@@ -700,12 +708,26 @@ export default function ProgressTab({ userId }) {
         setQuestNames(namesMap)
 
         // Find first quest needing aliveness baseline (most recently active first)
-        const baselineQuestIds = new Set((alivenessBaselineRes.data || []).map(s => s.quest_id))
+        const baselineQuestIds = new Set(
+          (alivenessBaselineRes.data || []).filter(s => s.snapshot_type === 'baseline').map(s => s.quest_id)
+        )
         const questsWithoutBaseline = (questsRes.data || [])
           .filter(q => !baselineQuestIds.has(q.id))
         if (questsWithoutBaseline.length > 0) {
           setBaselineNeededQuest(questsWithoutBaseline[0])
         }
+
+        // Group snapshots for check-in detection
+        const snapshotsByQuest = {}
+        ;(alivenessBaselineRes.data || []).forEach(s => {
+          if (!snapshotsByQuest[s.quest_id]) snapshotsByQuest[s.quest_id] = []
+          snapshotsByQuest[s.quest_id].push(s)
+        })
+        setAllSnapshots(snapshotsByQuest)
+
+        const activeQuests = (questsRes.data || []).filter(q => baselineQuestIds.has(q.id))
+        const dueList = getCheckinDueQuests(activeQuests, snapshotsByQuest)
+        if (dueList.length > 0) setCheckinDueQuest(dueList[0])
 
         // Process NS checkins for evidence feed
         const groanIds = (groanRes.data || []).map(g => g.id)
@@ -1246,6 +1268,64 @@ export default function ProgressTab({ userId }) {
           onDismiss={() => {
             setShowBaselineFlow(false)
             setBaselineDismissed(true)
+          }}
+        />
+      )}
+
+      {/* ═══ ALIVENESS CHECK-IN PROMPT ═══ */}
+      {checkinDueQuest && !checkinDismissed && !showCheckinFlow && !baselineNeededQuest && (
+        <div style={{
+          background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
+          borderRadius: 16, padding: '16px', margin: '0 0 16px',
+          border: '1px solid rgba(94, 23, 235, 0.12)',
+        }}>
+          <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{checkinDueQuest.quest.label}</div>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+            How alive are you? 60 seconds.
+          </div>
+          <div style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
+            {checkinDueQuest.state.daysSinceLast >= 30
+              ? "It's been a while since your last snapshot."
+              : `It's been ${checkinDueQuest.state.daysSinceLast} days since your last snapshot.`}
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={() => setShowCheckinFlow(true)} style={{
+              padding: '10px 20px', borderRadius: 10,
+              background: '#5e17eb', color: '#fff', border: 'none',
+              fontWeight: 600, fontSize: 14, cursor: 'pointer',
+            }}>
+              Take snapshot
+            </button>
+            <button onClick={() => setCheckinDismissed(true)} style={{
+              padding: '10px 16px', borderRadius: 10,
+              background: '#f0ede8', color: '#666', border: 'none',
+              fontSize: 14, cursor: 'pointer',
+            }}>
+              Not now
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showCheckinFlow && checkinDueQuest && (
+        <AlivenessCheckin
+          userId={userId}
+          quest={checkinDueQuest.quest}
+          baseline={checkinDueQuest.state.baseline}
+          previous={checkinDueQuest.state.previous}
+          allSnapshots={allSnapshots[checkinDueQuest.quest.id] || []}
+          onComplete={() => {
+            setShowCheckinFlow(false)
+            setCheckinDueQuest(null)
+          }}
+          onDismiss={() => {
+            setShowCheckinFlow(false)
+            setCheckinDismissed(true)
+          }}
+          onNavigateChallenge={({ text, questId }) => {
+            setShowCheckinFlow(false)
+            setCheckinDueQuest(null)
+            navigate('/7-day-challenge')
           }}
         />
       )}
