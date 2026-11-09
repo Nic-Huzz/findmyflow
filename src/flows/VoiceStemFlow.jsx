@@ -260,6 +260,30 @@ function Stage2Results({ results, selectedExpression, confirmedPrediction, onCon
         </div>
       )}
 
+      {/* Wound mapping */}
+      {(results.woundStage || results.woundScene || results.nsArchetype) && (
+        <div className="vs-wound-mapping">
+          {results.woundStage && (
+            <div className="vs-wound-row">
+              <span className="vs-wound-label">Installed at</span>
+              <span className="vs-wound-value">{results.woundStage}</span>
+            </div>
+          )}
+          {results.woundScene && (
+            <div className="vs-wound-row">
+              <span className="vs-wound-label">You became</span>
+              <span className="vs-wound-value">{results.woundScene}</span>
+            </div>
+          )}
+          {results.nsLabel && (
+            <div className="vs-wound-row">
+              <span className="vs-wound-label">Your nervous system learned</span>
+              <span className="vs-wound-value">{results.nsLabel}</span>
+            </div>
+          )}
+        </div>
+      )}
+
       <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
         Continue to Stage 3
       </button>

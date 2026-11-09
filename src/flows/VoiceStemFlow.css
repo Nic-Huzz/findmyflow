@@ -931,3 +931,33 @@
 .vs-cta:hover {
   opacity: 0.9;
 }
+
+/* ── WOUND MAPPING ─────────────────────────────────────── */
+
+.vs-wound-mapping {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vs-wound-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vs-wound-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+}
+
+.vs-wound-value {
+  color: #D946EF;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
