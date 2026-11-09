@@ -182,6 +182,7 @@ const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 // const NervousSystemMap = lazyRetry(() => import('./pages/NervousSystemMap')) // archived
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
+const VoiceStemFlow = lazyRetry(() => import('./flows/VoiceStemFlow'))
 const PublicMoneyModelFlow = lazyRetry(() => import('./flows/PublicMoneyModelFlow'))
 const PublicNervousSystemFlow = lazyRetry(() => import('./flows/PublicNervousSystemFlow'))
 const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlow'))
@@ -771,6 +772,7 @@ function AppRouter() {
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
             <Route path="/try/facilitator-score" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
             <Route path="/try/ai-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><AIDiagnostic /></Suspense>} />
+            <Route path="/try/voice-stems" element={<VoiceStemFlow />} />
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
