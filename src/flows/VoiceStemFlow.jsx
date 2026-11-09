@@ -32,13 +32,16 @@ function loadSession() {
 
 function saveSession(data) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    // Merge with existing session data instead of overwriting
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+    const merged = { ...existing, ...data }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+    // Also save to Supabase (fire and forget)
+    saveToSupabase(merged)
   } catch (e) {
     // localStorage unavailable — non-fatal
     void e
   }
-  // Also save to Supabase (fire and forget)
-  saveToSupabase(data)
 }
 
 let _sessionId = null
