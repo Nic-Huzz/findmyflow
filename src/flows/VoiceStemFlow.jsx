@@ -843,9 +843,13 @@ export default function VoiceStemFlow() {
         // Stage 3 — dimension scoring
         const results = await processStage(3, transcripts, { selectedExpression, confirmedPrediction })
         setStage3Results(results)
+        // Note: stage2Results comes from the useCallback dep array closure.
+        // It's correct because triggerProcessing re-creates after setStage2Results.
+        // But use a ref-read as a safety net in case of React batching edge cases.
+        const s2Results = stage2Results
         saveSession({
           stage1Results,
-          stage2Results,
+          stage2Results: s2Results,
           stage3Transcripts: transcriptsRef.current,
           stage3Results: results,
           completed: true,

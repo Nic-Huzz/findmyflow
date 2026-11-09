@@ -131,7 +131,25 @@ serve(async (req) => {
   }
 
   try {
-    const { stage, transcripts, selectedExpression, confirmedPrediction } = await req.json()
+    const body = await req.json()
+    const { stage, transcripts } = body
+
+    // Input validation
+    if (!Array.isArray(transcripts) || transcripts.length > 50) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid transcripts: must be an array of max 50 items' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    if (![1, 2, 3].includes(stage)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid stage: must be 1, 2, or 3' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    // Sanitize string inputs (prevent prompt injection of objects/arrays)
+    const selectedExpression = typeof body.selectedExpression === 'string' ? body.selectedExpression.slice(0, 200) : ''
+    const confirmedPrediction = typeof body.confirmedPrediction === 'string' ? body.confirmedPrediction.slice(0, 200) : ''
 
     let prompt: string
     switch (stage) {

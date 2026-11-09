@@ -47,6 +47,11 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
   const animFrameRef = useRef(null)
   const maxTimerRef = useRef(null)
   const mimeTypeRef = useRef(null)
+  const stoppedRef = useRef(false)
+
+  // Keep onSilenceStop ref current so the rAF loop always calls the latest version
+  const onSilenceStopRef = useRef(onSilenceStop)
+  useEffect(() => { onSilenceStopRef.current = onSilenceStop }, [onSilenceStop])
 
   useEffect(() => {
     setIsInApp(isInAppBrowser())
@@ -85,6 +90,7 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
     setError(null)
     chunksRef.current = []
     hasSpokenRef.current = false
+    stoppedRef.current = false
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -103,7 +109,7 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
       let silenceStart = null
 
       const checkSilence = () => {
-        if (!analyserRef.current) return
+        if (!analyserRef.current || stoppedRef.current) return
         analyserRef.current.getFloatTimeDomainData(dataArray)
         const rms = Math.sqrt(dataArray.reduce((sum, v) => sum + v * v, 0) / dataArray.length)
 
@@ -114,8 +120,9 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
           if (!silenceStart) silenceStart = Date.now()
           else if (Date.now() - silenceStart > SILENCE_DURATION_MS) {
             setSilenceDetected(true)
+            stoppedRef.current = true
             stop()
-            if (onSilenceStop) onSilenceStop()
+            if (onSilenceStopRef.current) onSilenceStopRef.current()
             return
           }
         }
@@ -173,9 +180,10 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
       setError('Could not start recording. Please check your microphone.')
       console.warn('Recording start error:', err)
     }
-  }, [onSilenceStop])
+  }, []) // onSilenceStop accessed via onSilenceStopRef — stable ref pattern
 
   const stop = useCallback(() => {
+    stoppedRef.current = true
     if (mediaRecorderRef.current?.state === 'recording') {
       mediaRecorderRef.current.stop()
     }

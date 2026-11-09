@@ -34,6 +34,24 @@ serve(async (req) => {
       )
     }
 
+    // File size guard (10MB max)
+    const MAX_SIZE = 10 * 1024 * 1024
+    if (audioFile.size > MAX_SIZE) {
+      return new Response(
+        JSON.stringify({ error: 'Audio file too large (max 10MB)' }),
+        { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Content-type guard
+    const allowedTypes = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'audio/m4a']
+    if (audioFile.type && !allowedTypes.some(t => audioFile.type.startsWith(t))) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid audio type' }),
+        { status: 415, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     const params = new URLSearchParams({
       model: 'nova-2',
       language: 'en',
