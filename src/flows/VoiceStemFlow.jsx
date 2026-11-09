@@ -752,21 +752,25 @@ export default function VoiceStemFlow() {
     const skipTo = params.get('skip')
     const resumeStage = params.get('resume')
 
-    // ?skip=3 jumps directly to that stage's recording, no saved data needed
+    const saved = loadSession()
+
+    // Always restore saved state if it exists
+    if (saved) {
+      if (saved.selectedExpression) setSelectedExpression(saved.selectedExpression)
+      if (saved.confirmedPrediction) setConfirmedPrediction(saved.confirmedPrediction)
+      if (saved.stage1Results) setStage1Results(saved.stage1Results)
+      if (saved.stage2Results) setStage2Results(saved.stage2Results)
+      if (saved.stage3Results) setStage3Results(saved.stage3Results)
+    }
+
+    // ?skip=3 jumps directly to that stage's recording
     if (skipTo) {
-      const stageIdx = parseInt(skipTo, 10) - 1 // skip=3 means stageIndex=2
+      const stageIdx = parseInt(skipTo, 10) - 1
       setTimeout(() => beginStage({ stageIndex: stageIdx }), 100)
       return
     }
 
-    const saved = loadSession()
     if (!saved) return
-
-    if (saved.selectedExpression) setSelectedExpression(saved.selectedExpression)
-    if (saved.confirmedPrediction) setConfirmedPrediction(saved.confirmedPrediction)
-    if (saved.stage1Results) setStage1Results(saved.stage1Results)
-    if (saved.stage2Results) setStage2Results(saved.stage2Results)
-    if (saved.stage3Results) setStage3Results(saved.stage3Results)
 
     // ?resume=N requires saved data from prior stages
     if (resumeStage) {
