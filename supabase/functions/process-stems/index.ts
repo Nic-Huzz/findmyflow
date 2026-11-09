@@ -270,7 +270,7 @@ serve(async (req) => {
     }
 
     const message = await client.messages.create({
-      model: stage === 4 ? 'claude-sonnet-4-20250514' : 'claude-haiku-4-5-20251001',
+      model: 'claude-haiku-4-5-20251001', // Sonnet 4 unavailable, using Haiku for all stages
       max_tokens: stage === 4 ? 1500 : 1024,
       messages: [{ role: 'user', content: prompt }],
     })
