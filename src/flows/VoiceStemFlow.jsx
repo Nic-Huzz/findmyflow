@@ -761,15 +761,19 @@ export default function VoiceStemFlow() {
     if (saved.stage2Results) setStage2Results(saved.stage2Results)
     if (saved.stage3Results) setStage3Results(saved.stage3Results)
 
-    // ?resume=3 skips to Stage 3 stems, ?resume=results_2 shows Stage 2 results, etc.
-    if (resumeStage === '3' && saved.stage2Results) {
-      beginStage({ stageIndex: 2 })
-    } else if (resumeStage === '4' && saved.stage3Results) {
-      beginStage({ stageIndex: 3 })
-    } else if (resumeStage === 'results_2' && saved.stage2Results) {
-      setScreen('results_2')
-    } else if (resumeStage === 'results_3' && saved.stage3Results) {
-      setScreen('results_3')
+    // ?resume=N skips to that stage. Delayed to let state settle after setState calls above.
+    if (resumeStage) {
+      setTimeout(() => {
+        if (resumeStage === '3' && saved.stage2Results) {
+          beginStage({ stageIndex: 2 })
+        } else if (resumeStage === '4' && saved.stage3Results) {
+          beginStage({ stageIndex: 3 })
+        } else if (resumeStage === 'results_2' && saved.stage2Results) {
+          setScreen('results_2')
+        } else if (resumeStage === 'results_3' && saved.stage3Results) {
+          setScreen('results_3')
+        }
+      }, 100)
     } else if (saved.completed) {
       setScreen('final_results')
     }
@@ -809,6 +813,10 @@ export default function VoiceStemFlow() {
 
   // ── Start a countdown then begin recording ─────────────────────
   const startCountdownThenRecord = useCallback((stemId) => {
+    // Clear any existing timers first (prevents stacking on resume/rapid calls)
+    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+
     setCountdownNum(3)
     setScreen('countdown')
 
