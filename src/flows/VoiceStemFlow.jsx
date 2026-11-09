@@ -749,10 +749,31 @@ export default function VoiceStemFlow() {
   // ── Restore from localStorage on mount ───────────────────────────
   useEffect(() => {
     const saved = loadSession()
-    if (saved?.completed) {
-      // Optionally resume — for now just start fresh if full session exists
-      // The spec says resume from last completed stage, not mid-stage
+    if (!saved) return
+
+    // Resume from saved state
+    const params = new URLSearchParams(window.location.search)
+    const resumeStage = params.get('resume')
+
+    if (saved.selectedExpression) setSelectedExpression(saved.selectedExpression)
+    if (saved.confirmedPrediction) setConfirmedPrediction(saved.confirmedPrediction)
+    if (saved.stage1Results) setStage1Results(saved.stage1Results)
+    if (saved.stage2Results) setStage2Results(saved.stage2Results)
+    if (saved.stage3Results) setStage3Results(saved.stage3Results)
+
+    // ?resume=3 skips to Stage 3 stems, ?resume=results_2 shows Stage 2 results, etc.
+    if (resumeStage === '3' && saved.stage2Results) {
+      beginStage({ stageIndex: 2 })
+    } else if (resumeStage === '4' && saved.stage3Results) {
+      beginStage({ stageIndex: 3 })
+    } else if (resumeStage === 'results_2' && saved.stage2Results) {
+      setScreen('results_2')
+    } else if (resumeStage === 'results_3' && saved.stage3Results) {
+      setScreen('results_3')
+    } else if (saved.completed) {
+      setScreen('final_results')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // ── Cleanup timers on unmount ─────────────────────────────────────
