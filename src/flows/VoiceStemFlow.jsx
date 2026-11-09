@@ -875,15 +875,11 @@ export default function VoiceStemFlow() {
         const results = await processStage(1, transcripts, {})
         setStage1Results(results)
         // Save to localStorage
-        saveSession({ stage1Transcripts: transcriptsRef.current, stage1Results: results })
-        // Show themes selection bridge
-        const themes = results?.themes || results?.essenceThemes || []
-        if (themes.length > 0) {
-          setScreen('selection_1')
-        } else {
-          // No themes extracted — show results directly with continue button
-          setScreen('results_1')
-        }
+        // Auto-select the energy as the expression (no manual selection needed)
+        const energy = results?.energy || 'your essence'
+        setSelectedExpression(energy)
+        saveSession({ stage1Transcripts: transcriptsRef.current, stage1Results: results, selectedExpression: energy })
+        setScreen('results_1')
 
       } else if (stageIndex === 1 && layerIndex === 0) {
         // Stage 2 layer 2 — extract prediction
