@@ -994,7 +994,7 @@ export default function VoiceStemFlow() {
             <h1>Find Your Thread</h1>
             <p className="vs-landing-desc">
               You&apos;ll complete sentences out loud. Speak fast. Don&apos;t think.
-              First thing that comes. 29 stems, 3 stages, about 15 minutes.
+              First thing that comes. 35 stems, 4 stages, about 20 minutes.
             </p>
 
             {isInApp && (
