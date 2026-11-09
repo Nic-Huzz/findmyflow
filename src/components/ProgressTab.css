@@ -21,14 +21,8 @@
 /* ═══ HERO CARD ══════════════════════════════════════ */
 
 .progress-tab .pt-hero {
-  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
-  border-radius: 24px;
-  padding: 28px 24px;
   margin-bottom: 0;
-  color: white;
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
 }
 
 .progress-tab .pt-stage-row {
@@ -51,10 +45,10 @@
 .progress-tab .pt-stages-toggle {
   font-size: 11px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
+  color: rgba(94, 23, 235, 0.5);
+  background: rgba(94, 23, 235, 0.08);
   border: none;
-  padding: 4px 10px;
+  padding: 6px 14px;
   border-radius: 8px;
   cursor: pointer;
   font-family: inherit;
@@ -63,7 +57,7 @@
 }
 
 .progress-tab .pt-stages-toggle:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(94, 23, 235, 0.15);
 }
 
 .progress-tab .pt-stage-name {
@@ -190,7 +184,7 @@
 .progress-tab .pt-journey-expand {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(94, 23, 235, 0.1);
   position: relative;
   z-index: 1;
 }
