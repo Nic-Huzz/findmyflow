@@ -165,47 +165,25 @@ function SelectionBridge({ type, options, onSelect }) {
 
 // Stage 1 results card (themes + summary)
 function Stage1Results({ results, onContinue }) {
-  const themes = results?.themes || results?.essenceThemes || []
-  const summary = results?.summary || results?.whoYouWere || ''
-  const skills = results?.skills || results?.keySkills || []
+  if (!results) return null
+  const energy = results.energy || 'alive'
+  const patterns = results.patterns || results.essenceThemes?.map(t => ({ label: t.label || t, evidence: t.evidence || '' })) || []
+  const mirror = results.mirror || results.summary || ''
 
   return (
-    <div className="vs-results">
-      <div className="vs-results-header">
-        <div className="vs-results-label">Stage 1 Complete</div>
-        <h2>Your Essence</h2>
-        {summary && <p className="vs-results-summary">&ldquo;{summary}&rdquo;</p>}
+    <div className="vs-results-card">
+      <h2 className="vs-results-title">The kid in you was <span className="vs-gold-text">{energy}</span></h2>
+      <p className="vs-results-mirror">{mirror}</p>
+      <div className="vs-results-patterns">
+        {patterns.map((p, i) => (
+          <div key={i} className="vs-pattern-card">
+            <div className="vs-pattern-label">{p.label}</div>
+            {p.evidence && <div className="vs-pattern-evidence">"{p.evidence}"</div>}
+          </div>
+        ))}
       </div>
-
-      {themes.length > 0 && (
-        <div className="vs-results-card">
-          <h4>Essence Themes</h4>
-          <div className="vs-theme-tags">
-            {themes.map((t, i) => (
-              <span key={i} className="vs-theme-tag">
-                {typeof t === 'string' ? t : t.label || t.name || String(t)}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {skills.length > 0 && (
-        <div className="vs-results-card">
-          <h4>Skills and Interests</h4>
-          <div className="vs-theme-tags">
-            {skills.slice(0, 8).map((s, i) => (
-              <span key={i} className="vs-theme-tag">
-                {typeof s === 'string' ? s : s.label || String(s)}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
-        Continue to Stage 2
-      </button>
+      <p className="vs-results-prompt">Which of these feels most alive right now? Which one do you miss most?</p>
+      <button className="vs-cta" onClick={onContinue}>Continue</button>
     </div>
   )
 }
@@ -1013,8 +991,16 @@ export default function VoiceStemFlow() {
         {screen === 'selection_1' && stage1Results && (
           <SelectionBridge
             type="theme"
-            options={stage1Results.themes || stage1Results.essenceThemes || []}
-            onSelect={handleSelection1}
+            options={
+              (stage1Results.patterns || []).map(p => p.label) ||
+              (stage1Results.themes || stage1Results.essenceThemes || []).map(t => t.label || t)
+            }
+            prompt="Which of these feels most alive right now?"
+            onSelect={(selected) => {
+              setSelectedExpression(selected)
+              saveSession({ selectedExpression: selected })
+              beginStage({ stageIndex: 1, layerIndex: 0 })
+            }}
           />
         )}
 

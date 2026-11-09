@@ -26,23 +26,27 @@ Each stem was completed vocally 6-8 times in 30 seconds. The responses are raw, 
 
 ${stemLines}
 
-Extract the following and return ONLY valid JSON (no markdown, no explanation):
+Your job is to produce a FELT recognition of who this person was as a kid. Not a clinical assessment. A mirror that makes them think "yes, that was me."
+
+Return ONLY valid JSON (no markdown, no explanation):
 
 {
-  "essenceThemes": [
-    { "label": "short theme label (2-4 words)", "evidence": "key phrases from transcripts that support this" }
+  "energy": "One or two words describing their overall childhood energy (e.g. 'electric', 'quietly intense', 'wildly curious', 'gentle but fierce')",
+  "patterns": [
+    {
+      "label": "Short pattern label, 3-5 words, starts with 'You' + past tense verb (e.g. 'You built entire worlds', 'You performed for everyone', 'You moved constantly')",
+      "evidence": "Key phrases from their actual words that show this pattern"
+    }
   ],
-  "skills": ["skill1", "skill2"],
-  "heroes": ["hero1", "hero2"],
-  "summary": "One sentence: who this person was as a kid, written in second person ('You were...')"
+  "mirror": "2-3 sentence paragraph written in second person. Starts with 'The kid in you was [energy].' Then describes what they did using their own words. Ends with what they couldn't NOT do. Written to land emotionally, not clinically."
 }
 
 Rules:
-- Extract 3-4 essence themes maximum
-- Theme labels should be vivid and specific, not generic (not "creativity" but "building imaginary worlds")
-- Skills are activities they naturally gravitated toward
-- Heroes can be real people, fictional characters, or archetypes
-- The summary should feel like a mirror, not a clinical assessment`
+- Extract exactly 3 patterns. Not 2, not 4. Three.
+- Pattern labels must be vivid and specific, not generic. Not 'creativity' but 'You built entire worlds'.
+- The mirror paragraph should feel like someone who KNOWS them is describing them, using their actual words.
+- The energy should be 1-2 words maximum that capture the kid's vibe.
+- Use their actual spoken words as evidence wherever possible.`
 }
 
 function buildStage2Prompt(transcripts: any[], selectedExpression: string, confirmedPrediction: string): string {
