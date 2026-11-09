@@ -197,15 +197,15 @@ Return ONLY valid JSON:
     "id": "second strongest match id",
     "name": "Second strongest match name"
   },
-  "essenceBlend": "2-3 sentences blending primary + secondary in second person. How these two energies show up together in THIS person, using their actual spoken words as evidence. Not generic.",
-  "mirrorReveal": "3-4 sentence reveal written to land emotionally. Starts with their childhood (Stage 1), moves through what was suppressed (Stage 2), and arrives at who they are now. Ends with a line that makes them feel SEEN. Use their actual words."
+  "essenceBlend": "Exactly 2 short sentences. First: what makes this person's archetype unique to THEM (use their words). Second: how primary + secondary work together. Punchy, not poetic. Max 40 words total.",
+  "mirrorReveal": "Exactly 3 short sentences, each separated by \\n\\n. First: what was lost. Second: what survived. Third: who they actually are, ending with a gut-punch line. Max 50 words total. Use their actual words."
 }
 
 Rules:
-- The mirrorReveal is the emotional climax of the entire journey. Make it count.
+- KEEP IT SHORT. The reveal should hit like a text message, not an essay. Every word must earn its place.
+- The mirrorReveal is the emotional climax. Less is more. The gut-punch line is everything.
 - Reference their specific words from ALL stages, not just Stage 4.
 - The archetype match should be based on energy and patterns, not surface-level keyword matching.
-- The essenceBlend should feel like a description of a real person, not a horoscope.
 - primaryArchetype.id must be one of: radiant_rebel, playful_creator, sacred_jester, mystic_messenger, truth_teller, heart_alchemist, grounded_guardian, heart_holder, rhythm_architect, wise_sage, cosmic_connector, compassionate_leader
 - NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }

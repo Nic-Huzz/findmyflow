@@ -1026,26 +1026,28 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
 }
 .vs-essence-blend {
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.7;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  white-space: pre-line;
 }
 .vs-essence-mirror-card {
   background: rgba(217, 70, 239, 0.06);
   border: 1px solid rgba(217, 70, 239, 0.15);
   border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
+  padding: 20px;
+  margin-bottom: 28px;
 }
 .vs-essence-mirror {
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.8;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-style: italic;
+  white-space: pre-line;
 }
 .vs-cta-gold {
   background: linear-gradient(135deg, #D946EF 0%, #FFB800 100%);
