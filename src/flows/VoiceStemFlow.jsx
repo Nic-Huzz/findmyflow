@@ -178,7 +178,7 @@ function Stage1Results({ results, onContinue }) {
         {patterns.map((p, i) => (
           <div key={i} className="vs-pattern-card">
             <div className="vs-pattern-label">{p.label}</div>
-            {p.evidence && <div className="vs-pattern-evidence">"{p.evidence}"</div>}
+            {p.evidence && <div className="vs-pattern-evidence">&ldquo;{p.evidence}&rdquo;</div>}
           </div>
         ))}
       </div>
@@ -897,13 +897,6 @@ export default function VoiceStemFlow() {
   }
 
   // ── Selection bridge handler ───────────────────────────────────
-  const handleSelection1 = (option) => {
-    const label = typeof option === 'string' ? option : option.label || option.name || String(option)
-    setSelectedExpression(label)
-    // Brief delay, then show results_1
-    setTimeout(() => setScreen('results_1'), 400)
-  }
-
   const handleSelection2 = (option) => {
     const label = typeof option === 'string' ? option : option.label || option.text || String(option)
     setConfirmedPrediction(label)
