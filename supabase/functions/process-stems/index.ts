@@ -38,7 +38,7 @@ Return ONLY valid JSON (no markdown, no explanation):
       "evidence": "Key phrases from their actual words that show this pattern"
     }
   ],
-  "mirror": "2-3 sentence paragraph written in second person. Starts with 'The kid in you was [energy].' Then describes what they did using their own words. Ends with what they couldn't NOT do. Written to land emotionally, not clinically."
+  "mirror": "3-4 sentences written in second person, each separated by \\n\\n so they display as separate paragraphs. First sentence starts with 'The kid in you was [energy].' Middle sentences describe what they did using their own words. Last sentence is what they couldn't NOT do. Written to land emotionally, not clinically."
 }
 
 Rules:
@@ -46,7 +46,8 @@ Rules:
 - Pattern labels must be vivid and specific, not generic. Not 'creativity' but 'You built entire worlds'.
 - The mirror paragraph should feel like someone who KNOWS them is describing them, using their actual words.
 - The energy should be 1-2 words maximum that capture the kid's vibe.
-- Use their actual spoken words as evidence wherever possible.`
+- Use their actual spoken words as evidence wherever possible.
+- NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 
 function buildStage2Prompt(transcripts: any[], selectedExpression: string, confirmedPrediction: string): string {
@@ -111,7 +112,8 @@ Rules:
 - Use their actual words wherever possible
 - The wound stage should match WHERE the event happened (home = first two stages, school = third, friends = fourth)
 - The NS archetype should match HOW they responded (fought back = sympathetic, shut down/conformed = dorsal)
-- predictions array is for the selection bridge before layer 3`
+- predictions array is for the selection bridge before layer 3
+- NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 
 function buildStage3Prompt(transcripts: any[]): string {
@@ -146,7 +148,8 @@ Scoring guide:
 - Meaning: 1 = pointless/performing someone else's life, 5 = aligned/rippling outward
 - Safety: 1 = hiding/masking core self, 5 = free to be fully seen
 
-Use their actual words as evidence. The insight should mirror, not diagnose.`
+Use their actual words as evidence. The insight should mirror, not diagnose.
+NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 
 function buildStage4Prompt(transcripts, context) {
@@ -203,7 +206,8 @@ Rules:
 - Reference their specific words from ALL stages, not just Stage 4.
 - The archetype match should be based on energy and patterns, not surface-level keyword matching.
 - The essenceBlend should feel like a description of a real person, not a horoscope.
-- primaryArchetype.id must be one of: radiant_rebel, playful_creator, sacred_jester, mystic_messenger, truth_teller, heart_alchemist, grounded_guardian, heart_holder, rhythm_architect, wise_sage, cosmic_connector, compassionate_leader`
+- primaryArchetype.id must be one of: radiant_rebel, playful_creator, sacred_jester, mystic_messenger, truth_teller, heart_alchemist, grounded_guardian, heart_holder, rhythm_architect, wise_sage, cosmic_connector, compassionate_leader
+- NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 
 serve(async (req) => {

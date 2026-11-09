@@ -882,9 +882,18 @@
 
 .vs-results-mirror {
   font-size: 0.95rem;
-  line-height: 1.7;
+  line-height: 1.8;
   color: var(--vs-muted);
   margin: 0 0 20px;
+  white-space: pre-line;
+}
+
+.vs-results-mirror p {
+  margin: 0 0 14px;
+}
+
+.vs-results-mirror p:last-child {
+  margin-bottom: 0;
 }
 
 .vs-results-patterns {

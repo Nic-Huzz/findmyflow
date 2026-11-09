@@ -37,6 +37,35 @@ function saveSession(data) {
     // localStorage unavailable — non-fatal
     void e
   }
+  // Also save to Supabase (fire and forget)
+  saveToSupabase(data)
+}
+
+let _sessionId = null
+function getSessionId() {
+  if (_sessionId) return _sessionId
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY))
+    if (stored?._sessionId) { _sessionId = stored._sessionId; return _sessionId }
+  } catch { /* ignore */ }
+  _sessionId = crypto.randomUUID()
+  return _sessionId
+}
+
+async function saveToSupabase(data) {
+  try {
+    const { supabase } = await import('../lib/supabaseClient')
+    const sessionId = getSessionId()
+    const placeholderEmail = `anon-${sessionId.slice(0, 8)}@voice-stems.local`
+    await supabase.from('public_leads').upsert({
+      id: sessionId,
+      email: data.email || placeholderEmail,
+      source_flow: 'voice_stems',
+      flow_results: { ...data, _sessionId: sessionId },
+    }, { onConflict: 'id' })
+  } catch {
+    // Supabase save failure is non-fatal
+  }
 }
 
 function clearSession() {
@@ -444,13 +473,15 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
     if (!email.trim() || emailSubmitting) return
     setEmailSubmitting(true)
     try {
-      // Save to Supabase public_leads if available, else just store locally
+      // Update existing session row with real email + final results
       const { supabase } = await import('../lib/supabaseClient')
-      await supabase.from('public_leads').insert({
+      const sessionId = getSessionId()
+      await supabase.from('public_leads').upsert({
+        id: sessionId,
         email: email.trim(),
         source_flow: 'voice_stems',
-        flow_results: { stage1, stage2, stage3 },
-      })
+        flow_results: { stage1, stage2, stage3, stage4, _sessionId: sessionId },
+      }, { onConflict: 'id' })
     } catch {
       // Supabase insert failure is non-fatal
     }
