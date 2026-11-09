@@ -127,6 +127,49 @@ Respond ONLY as JSON:
       })
     }
 
+    // ── MODE: MINI_ANALYSIS (Experience Game end screen — 2-4 path directions) ──
+    if (mode === 'mini_analysis') {
+      if (!domeProfile?.selected?.length) {
+        throw new Error('Mini analysis requires selected experiences')
+      }
+
+      const experienceList = domeProfile.selected
+        .map((s: any) => typeof s === 'string' ? s : s.label)
+        .join(', ')
+
+      const essenceLine = domeProfile.essence
+        ? `\nTheir essence archetype is "${domeProfile.essence}" (this shapes their energy/style, not what they do).`
+        : ''
+
+      const miniPrompt = `A person just finished mapping their life experiences. These are the ones that make them feel most alive:
+
+${experienceList}${essenceLine}
+
+YOUR TASK: Look at these experiences as a whole and identify 2-4 distinct LIFE PATH DIRECTIONS this person could explore. A life path is a broad direction, not a specific project. Think "Movement & Wellness" or "Creative Technology" or "Teaching & Facilitation", not "Run a yoga studio."
+
+For each path, name it and write one sentence explaining what this direction looks like in practice. Then list which of their experiences feed into it.
+
+End with one sentence about the PATTERN you see across all their experiences. What connects everything? This should feel like "oh wow, someone finally sees me."
+
+RULES:
+1. ONLY reference experiences from the list above. Never invent interests.
+2. Some experiences may appear in multiple paths. That's fine.
+3. Path names should be plain language a 12-year-old would understand.
+4. Write like a friend, not a career counsellor.
+5. The pattern sentence should be specific to THIS person, not generic motivation advice.
+6. NEVER use em dashes. Use commas, full stops, or rephrase.
+7. BANNED phrases: "nervous system journey", "curated experience", "transformational space", "holding space", "intentional community", "holistic approach".
+
+Respond ONLY as JSON:
+{"paths": [{"name": "...", "description": "one sentence", "experiences": ["experience name", ...]}], "pattern": "one sentence about what connects everything"}`
+
+      const parsed = await callAI(miniPrompt)
+
+      return new Response(JSON.stringify(parsed), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
     // ── MODE: SUGGEST (default — generate project ideas) ──
     if (!domeProfile?.selected?.length) {
       throw new Error('Need selected dome experiences to suggest projects')
