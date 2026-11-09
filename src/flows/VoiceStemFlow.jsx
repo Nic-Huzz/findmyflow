@@ -917,6 +917,13 @@ export default function VoiceStemFlow() {
       transcript: transcriptsRef.current[stem.id] || '',
     }))
 
+    // Save transcripts immediately BEFORE AI processing (survives processing failures)
+    const stageKey = stageIndex === 0 ? 'stage1Transcripts'
+      : stageIndex === 1 ? 'stage2Transcripts'
+      : stageIndex === 2 ? 'stage3Transcripts'
+      : 'stage4Transcripts'
+    saveSession({ [stageKey]: transcriptsRef.current })
+
     try {
       if (stageIndex === 0) {
         // Stage 1 — cluster essence themes
@@ -995,10 +1002,6 @@ export default function VoiceStemFlow() {
         })
         setStage4Results(results)
         saveSession({
-          stage1Results,
-          stage2Results,
-          stage3Results,
-          stage4Transcripts: transcriptsRef.current,
           stage4Results: results,
           completed: true,
         })
