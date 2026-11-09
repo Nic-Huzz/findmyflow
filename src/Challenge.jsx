@@ -59,7 +59,6 @@ import { getWeekStartLocal } from './lib/dateUtils'
 import { BoltIcon } from '@heroicons/react/24/solid'
 import { checkHeroGraduation } from './lib/heroStageChecker'
 import { getDirectionStatus, isAllDirectionComplete } from './lib/directionEngine'
-import StageCard from './components/StageCard'
 import { postFeedEvent } from './lib/communityFeed'
 import { checkStreakBox } from './lib/mysteryBoxes'
 import { preloadChallengeFlows } from './lib/preloadRoutes'
@@ -1756,11 +1755,6 @@ function Challenge() {
               userData,
             }}
           />
-        )}
-
-        {/* Journey chapter card — always visible in Discover tab */}
-        {activeCategory === 'Discover' && (
-          <StageCard heroStage={currentJourneyLevel} directionComplete={directionComplete} />
         )}
 
         {/* Journey Tab — hero stage, voice progress, thresholds */}
