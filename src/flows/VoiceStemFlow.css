@@ -961,3 +961,80 @@
   font-weight: 600;
   font-size: 0.95rem;
 }
+
+/* Essence Reveal */
+.vs-essence-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+  text-align: center;
+}
+.vs-essence-reveal-inner {
+  max-width: 480px;
+  width: 100%;
+}
+.vs-essence-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: rgba(217, 70, 239, 0.15);
+  border: 1px solid rgba(217, 70, 239, 0.3);
+  color: #D946EF;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.vs-essence-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #D946EF 0%, #FFB800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.vs-essence-tagline {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+.vs-essence-secondary {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+  margin-bottom: 32px;
+}
+.vs-essence-blend-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.vs-essence-blend {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+.vs-essence-mirror-card {
+  background: rgba(217, 70, 239, 0.06);
+  border: 1px solid rgba(217, 70, 239, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+.vs-essence-mirror {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  font-size: 1.05rem;
+  font-style: italic;
+}
+.vs-cta-gold {
+  background: linear-gradient(135deg, #D946EF 0%, #FFB800 100%);
+  color: #000;
+  font-weight: 700;
+}

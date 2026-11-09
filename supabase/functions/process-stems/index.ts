@@ -149,6 +149,63 @@ Scoring guide:
 Use their actual words as evidence. The insight should mirror, not diagnose.`
 }
 
+function buildStage4Prompt(transcripts, context) {
+  const stemLines = transcripts.map(t =>
+    `"${t.stemText}"\nResponse: ${t.transcript || '(no response)'}`
+  ).join('\n\n')
+  const priorContext = `
+PRIOR STAGES CONTEXT:
+- Stage 1 (childhood essence): ${context.stage1Mirror || 'not available'}
+- Stage 2 (suppression): Selected expression: "${context.selectedExpression || ''}". Prediction: "${context.confirmedPrediction || ''}". Wound scene: ${context.woundScene || 'unknown'}. NS archetype: ${context.nsLabel || 'unknown'}.
+- Stage 3 (consequences): Lowest dimension: ${context.lowestDimension || 'unknown'}.`
+  const archetypeList = `
+AVAILABLE ARCHETYPES (pick the best match):
+1. Radiant Rebel - Disruptive truth-teller with heart
+2. Playful Creator - Joy, innovation, curiosity-led action
+3. Sacred Jester - Disruption through play, heart-led absurdity
+4. Mystic Messenger - Deep intuition, spiritual transmission
+5. Truth-Teller - Raw honesty, cuts through pretence
+6. Heart Alchemist - Transforms pain into gold, emotional depth
+7. Grounded Guardian - Steady presence, protective strength
+8. Heart Holder - Deep empathy, holds space for others
+9. Rhythm Architect - Builds systems, creates flow and order
+10. Wise Sage - Pattern recognition, teaches through experience
+11. Cosmic Connector - Links people, ideas, worlds
+12. Compassionate Leader - Leads through care, quiet authority`
+  return `You are analyzing rapid spoken sentence completions about someone's true identity beneath their protective patterns.
+
+${stemLines}
+
+${priorContext}
+
+${archetypeList}
+
+Based on their spoken responses AND all prior stage context, identify their essence archetype. The archetype should feel like a RECOGNITION, not a label. When they read it, they should think "that IS me."
+
+Return ONLY valid JSON:
+
+{
+  "primaryArchetype": {
+    "id": "the archetype id in snake_case (e.g. radiant_rebel)",
+    "name": "The archetype name (e.g. Radiant Rebel)",
+    "essence": "The archetype one-line essence description"
+  },
+  "secondaryArchetype": {
+    "id": "second strongest match id",
+    "name": "Second strongest match name"
+  },
+  "essenceBlend": "2-3 sentences blending primary + secondary in second person. How these two energies show up together in THIS person, using their actual spoken words as evidence. Not generic.",
+  "mirrorReveal": "3-4 sentence reveal written to land emotionally. Starts with their childhood (Stage 1), moves through what was suppressed (Stage 2), and arrives at who they are now. Ends with a line that makes them feel SEEN. Use their actual words."
+}
+
+Rules:
+- The mirrorReveal is the emotional climax of the entire journey. Make it count.
+- Reference their specific words from ALL stages, not just Stage 4.
+- The archetype match should be based on energy and patterns, not surface-level keyword matching.
+- The essenceBlend should feel like a description of a real person, not a horoscope.
+- primaryArchetype.id must be one of: radiant_rebel, playful_creator, sacred_jester, mystic_messenger, truth_teller, heart_alchemist, grounded_guardian, heart_holder, rhythm_architect, wise_sage, cosmic_connector, compassionate_leader`
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -165,9 +222,9 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
-    if (![1, 2, 3].includes(stage)) {
+    if (![1, 2, 3, 4].includes(stage)) {
       return new Response(
-        JSON.stringify({ error: 'Invalid stage: must be 1, 2, or 3' }),
+        JSON.stringify({ error: 'Invalid stage: must be 1, 2, 3, or 4' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -186,6 +243,21 @@ serve(async (req) => {
       case 3:
         prompt = buildStage3Prompt(transcripts)
         break
+      case 4: {
+        const s1m = typeof body.stage1Mirror === 'string' ? body.stage1Mirror.slice(0, 500) : ''
+        const ws = typeof body.woundScene === 'string' ? body.woundScene.slice(0, 100) : ''
+        const nl = typeof body.nsLabel === 'string' ? body.nsLabel.slice(0, 50) : ''
+        const ld = typeof body.lowestDimension === 'string' ? body.lowestDimension.slice(0, 50) : ''
+        prompt = buildStage4Prompt(transcripts, {
+          selectedExpression: selectedExpression || '',
+          confirmedPrediction: confirmedPrediction || '',
+          stage1Mirror: s1m,
+          woundScene: ws,
+          nsLabel: nl,
+          lowestDimension: ld,
+        })
+        break
+      }
       default:
         return new Response(
           JSON.stringify({ error: `Invalid stage: ${stage}` }),
@@ -194,8 +266,8 @@ serve(async (req) => {
     }
 
     const message = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
+      model: stage === 4 ? 'claude-sonnet-4-6-20250514' : 'claude-haiku-4-5-20251001',
+      max_tokens: stage === 4 ? 1500 : 1024,
       messages: [{ role: 'user', content: prompt }],
     })
 

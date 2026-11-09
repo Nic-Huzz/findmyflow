@@ -100,6 +100,7 @@ function ProcessingScreen({ stage }) {
     '2a': 'Identifying the prediction...',
     '2b': 'Tracing the source...',
     3: 'Scoring your dimensions...',
+    4: 'Finding your essence archetype...',
   }
   return (
     <div className="vs-processing">
@@ -390,7 +391,7 @@ function Stage3Results({ results, onContinue }) {
 }
 
 // Final results page
-function FinalResults({ stage1, stage2, stage3, selectedExpression, confirmedPrediction, onRestart }) {
+function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, confirmedPrediction, onRestart }) {
   const [emailSent, setEmailSent] = useState(false)
   const [email, setEmail] = useState('')
   const [emailSubmitting, setEmailSubmitting] = useState(false)
@@ -467,8 +468,20 @@ function FinalResults({ stage1, stage2, stage3, selectedExpression, confirmedPre
       <div className="vs-final-label">Your Full Picture</div>
       <h1>The Thread</h1>
       <p className="vs-final-intro">
-        Three stages. 29 sentences. Here is what came through.
+        Four stages. 35 sentences. Here is what came through.
       </p>
+
+      {/* Stage 4: Essence Archetype */}
+      {stage4 && (
+        <div className="vs-final-section">
+          <div className="vs-final-label">YOUR ESSENCE</div>
+          <h3 className="vs-gold-text">{stage4.primaryArchetype?.name}</h3>
+          {stage4.primaryArchetype?.essence && (
+            <p className="vs-final-text" style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 12 }}>{stage4.primaryArchetype.essence}</p>
+          )}
+          <p className="vs-final-text">{stage4.essenceBlend}</p>
+        </div>
+      )}
 
       {/* Stage 1: Essence */}
       <div className="vs-final-section">
@@ -573,6 +586,40 @@ function FinalResults({ stage1, stage2, stage3, selectedExpression, confirmedPre
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
+function EssenceReveal({ results, onContinue }) {
+  if (!results) return null
+  const primary = results.primaryArchetype || {}
+  const secondary = results.secondaryArchetype || {}
+  const blend = results.essenceBlend || ''
+  const reveal = results.mirrorReveal || ''
+
+  return (
+    <div className="vs-essence-reveal">
+      <div className="vs-essence-reveal-inner">
+        <div className="vs-essence-badge">Your Essence</div>
+        <h1 className="vs-essence-name">{primary.name || 'Your True Self'}</h1>
+        {primary.essence && <p className="vs-essence-tagline">{primary.essence}</p>}
+        {secondary.name && (
+          <p className="vs-essence-secondary">with shades of <span className="vs-gold-text">{secondary.name}</span></p>
+        )}
+
+        <div className="vs-essence-blend-card">
+          <p className="vs-essence-blend">{blend}</p>
+        </div>
+
+        <div className="vs-essence-mirror-card">
+          <p className="vs-essence-mirror">{reveal}</p>
+        </div>
+
+        <button className="vs-cta vs-cta-gold" onClick={onContinue}>
+          See your full journey
+        </button>
+      </div>
+    </div>
+  )
+}
+
+
 /**
  * Flow screen enum:
  * 'landing'
@@ -611,6 +658,7 @@ export default function VoiceStemFlow() {
   const [stage1Results, setStage1Results] = useState(null)
   const [stage2Results, setStage2Results] = useState(null)
   const [stage3Results, setStage3Results] = useState(null)
+  const [stage4Results, setStage4Results] = useState(null)
 
   // ── Countdown state ────────────────────────────────────────────────
   const [countdownNum, setCountdownNum] = useState(3)
@@ -636,7 +684,7 @@ export default function VoiceStemFlow() {
   const currentStem = currentStems[position.stemIndex] || null
 
   // ── Progress percent for progress bar ────────────────────────────
-  const totalStems = 29 // known total
+  const totalStems = 35 // 6 + 13 + 10 + 6
   const stemsCompleted = (() => {
     if (position.stageIndex === 0) return position.stemIndex
     if (position.stageIndex === 1) {
@@ -644,18 +692,19 @@ export default function VoiceStemFlow() {
       if (position.layerIndex === null || position.layerIndex === 0) return layer1done + position.stemIndex
       return layer1done + 7 + position.stemIndex
     }
-    return 6 + 13 + position.stemIndex
+    if (position.stageIndex === 2) return 6 + 13 + position.stemIndex
+    return 6 + 13 + 10 + position.stemIndex // stageIndex === 3
   })()
   const progressPercent = Math.round((stemsCompleted / totalStems) * 100)
 
   // ── Progress label ────────────────────────────────────────────────
   const stageLabel = (() => {
-    if (position.stageIndex === 0) return `Stage 1 of 3  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 0) return `Stage 1 of 4  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     if (position.stageIndex === 1) {
       const layer = position.layerIndex === 0 ? 'Layer 2' : 'Layer 3'
-      return `Stage 2 of 3 (${layer})  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+      return `Stage 2 of 4 (${layer})  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     }
-    return `Stage 3 of 3  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 2) return `Stage 3 of 4  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
   })()
 
   // ── Restore from localStorage on mount ───────────────────────────
@@ -773,7 +822,8 @@ export default function VoiceStemFlow() {
     if (stageIndex === 0) setProcessingStageKey(1)
     else if (stageIndex === 1 && layerIndex === 0) setProcessingStageKey('2a')
     else if (stageIndex === 1 && layerIndex === 1) setProcessingStageKey('2b')
-    else setProcessingStageKey(3)
+    else if (stageIndex === 2) setProcessingStageKey(3)
+    else setProcessingStageKey(4)
 
     // Wait for all in-flight transcriptions to complete
     const pending = [...pendingTranscriptionsRef.current]
@@ -841,28 +891,49 @@ export default function VoiceStemFlow() {
         })
         setScreen('results_2')
 
-      } else {
+      } else if (stageIndex === 2) {
         // Stage 3 — dimension scoring
         const results = await processStage(3, transcripts, { selectedExpression, confirmedPrediction })
         setStage3Results(results)
-        // Note: stage2Results comes from the useCallback dep array closure.
-        // It's correct because triggerProcessing re-creates after setStage2Results.
-        // But use a ref-read as a safety net in case of React batching edge cases.
         const s2Results = stage2Results
         saveSession({
           stage1Results,
           stage2Results: s2Results,
           stage3Transcripts: transcriptsRef.current,
           stage3Results: results,
-          completed: true,
         })
         setScreen('results_3')
+      } else if (stageIndex === 3) {
+        // Stage 4 — Essence archetype
+        const lowestDim = stage3Results?.dimensions
+          ? Object.entries(stage3Results.dimensions).reduce((low, [k, v]) =>
+              (v?.score || 5) < (low.score || 5) ? { key: k, score: v?.score } : low, { key: '', score: 5 }
+            ).key
+          : ''
+        const results = await processStage(4, transcripts, {
+          selectedExpression,
+          confirmedPrediction,
+          stage1Mirror: stage1Results?.mirror || '',
+          woundScene: stage2Results?.woundScene || '',
+          nsLabel: stage2Results?.nsLabel || '',
+          lowestDimension: lowestDim,
+        })
+        setStage4Results(results)
+        saveSession({
+          stage1Results,
+          stage2Results,
+          stage3Results,
+          stage4Transcripts: transcriptsRef.current,
+          stage4Results: results,
+          completed: true,
+        })
+        setScreen('essence_reveal')
       }
     } catch (err) {
       console.error('processStage error:', err)
       setFlowError('Something went wrong analysing your responses. Tap to retry.')
     }
-  }, [selectedExpression, confirmedPrediction, stage1Results, stage2Results]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedExpression, confirmedPrediction, stage1Results, stage2Results, stage3Results]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Begin a new stage/layer ────────────────────────────────────
   const beginStage = useCallback(({ stageIndex, layerIndex = null }) => {
@@ -889,6 +960,7 @@ export default function VoiceStemFlow() {
     setStage1Results(null)
     setStage2Results(null)
     setStage3Results(null)
+    setStage4Results(null)
     setSelectedExpression(null)
     setConfirmedPrediction(null)
     setPosition({ stageIndex: 0, layerIndex: null, stemIndex: 0 })
@@ -936,6 +1008,7 @@ export default function VoiceStemFlow() {
                 { n: 1, label: 'Living from Essence', desc: '6 stems — who you were as a kid' },
                 { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
                 { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
+                { n: 4, label: 'The Search', desc: '6 stems — who you are underneath it all' },
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
                   <div className="vs-stage-pill-num">{s.n}</div>
@@ -1056,6 +1129,14 @@ export default function VoiceStemFlow() {
         {screen === 'results_3' && stage3Results && (
           <Stage3Results
             results={stage3Results}
+            onContinue={() => beginStage({ stageIndex: 3 })}
+          />
+        )}
+
+        {/* ESSENCE REVEAL */}
+        {screen === 'essence_reveal' && stage4Results && (
+          <EssenceReveal
+            results={stage4Results}
             onContinue={() => setScreen('final_results')}
           />
         )}
@@ -1066,6 +1147,7 @@ export default function VoiceStemFlow() {
             stage1={stage1Results}
             stage2={stage2Results}
             stage3={stage3Results}
+            stage4={stage4Results}
             selectedExpression={selectedExpression}
             confirmedPrediction={confirmedPrediction}
             onRestart={handleRestart}

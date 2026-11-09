@@ -1,6 +1,6 @@
 /**
- * voiceStems.js — All 29 sentence completion stems for the Essence Journey.
- * 3 stages, with Stage 2 split into Layer 2 (7 stems) and Layer 3 (6 stems).
+ * voiceStems.js — All 35 sentence completion stems for the Essence Journey.
+ * 4 stages, with Stage 2 split into Layer 2 (7 stems) and Layer 3 (6 stems).
  */
 
 export const STAGES = [
@@ -66,11 +66,24 @@ export const STAGES = [
       { id: 's3_10', text: 'The parts of myself I hide are...', dimension: 'safety' },
     ],
   },
+  {
+    id: 'archetype',
+    label: 'The Search',
+    description: 'Who are you underneath all of this.',
+    stems: [
+      { id: 's4_1', text: "The version of me I'd be if nobody was judging is..." },
+      { id: 's4_2', text: 'The energy I bring when I stop performing is...' },
+      { id: 's4_3', text: "The thing people don't realise about me is..." },
+      { id: 's4_4', text: "The way I act when I'm at my most free is..." },
+      { id: 's4_5', text: 'The word that describes who I really am is...' },
+      { id: 's4_6', text: "When I'm alone and being honest, I am..." },
+    ],
+  },
 ]
 
 /**
  * Get stems for a stage, resolving dynamic text.
- * @param {number} stageIndex - 0, 1, or 2
+ * @param {number} stageIndex - 0, 1, 2, or 3
  * @param {number|null} layerIndex - for stage 1 (suppressed): 0 = prediction, 1 = source. null for other stages.
  * @param {object} context - { selectedExpression, confirmedPrediction }
  * @returns {Array<{ id, text, dimension? }>}
