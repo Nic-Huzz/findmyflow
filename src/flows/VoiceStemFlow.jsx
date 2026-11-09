@@ -221,7 +221,9 @@ function Stage1Results({ results, onContinue }) {
 // Stage 2 results card (full thread: essence → prediction → source → rule)
 function Stage2Results({ results, selectedExpression, confirmedPrediction, onContinue }) {
   const thread = results?.thread || results?.fullThread || null
-  const source = results?.sourceEvent || results?.source || {}
+  const rawSource = results?.sourceEvent || results?.source || {}
+  const source = typeof rawSource === 'string' ? { description: rawSource }
+    : { description: [rawSource.what, rawSource.who ? `(${rawSource.who})` : '', rawSource.approximateAge ? `around age ${rawSource.approximateAge}` : ''].filter(Boolean).join(' '), ...rawSource }
   const rule = results?.rule || results?.protectiveRule || ''
   const pattern = results?.protectivePattern || results?.pattern || ''
 
@@ -492,7 +494,10 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
 
   const thread = stage2?.thread || stage2?.fullThread
   const rule = stage2?.rule || stage2?.protectiveRule || ''
-  const sourceDesc = stage2?.sourceEvent || stage2?.source?.description || stage2?.source?.event || ''
+  const rawSourceDesc = stage2?.sourceEvent || stage2?.source || ''
+  const sourceDesc = typeof rawSourceDesc === 'string' ? rawSourceDesc
+    : typeof rawSourceDesc === 'object' ? [rawSourceDesc.what, rawSourceDesc.who ? `(${rawSourceDesc.who})` : '', rawSourceDesc.approximateAge ? `around age ${rawSourceDesc.approximateAge}` : ''].filter(Boolean).join(' ')
+    : ''
 
   return (
     <div className="vs-final">

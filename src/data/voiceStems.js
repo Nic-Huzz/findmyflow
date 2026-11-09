@@ -39,7 +39,7 @@ export const STAGES = [
         id: 'source',
         label: 'Layer 3: Source',
         stems: [
-          { id: 's2b_1', text: 'The first time I felt that feeling was...' },
+          { id: 's2b_1', text: 'The first time I felt {confirmedPrediction} was...', dynamic: true },
           { id: 's2b_2', text: 'The person who was there when it happened was...' },
           { id: 's2b_3', text: 'What they said or did was...' },
           { id: 's2b_4', text: 'What I decided about myself after that was...' },
@@ -102,7 +102,9 @@ export function getStemsForStage(stageIndex, layerIndex = null, context = {}) {
   return stems.map(stem => ({
     ...stem,
     text: stem.dynamic
-      ? stem.text.replace('{selectedExpression}', context.selectedExpression || '______')
+      ? stem.text
+          .replace('{selectedExpression}', context.selectedExpression || '______')
+          .replace('{confirmedPrediction}', context.confirmedPrediction || 'that feeling')
       : stem.text,
   }))
 }
