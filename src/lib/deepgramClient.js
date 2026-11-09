@@ -1,7 +1,7 @@
 /**
  * deepgramClient.js — Transcription via the transcribe edge function.
  */
-import { supabase } from './supabaseClient'
+// supabase import removed — uses raw fetch instead
 
 /**
  * Transcribe an audio blob via the Deepgram proxy edge function.

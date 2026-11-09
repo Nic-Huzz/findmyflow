@@ -205,7 +205,7 @@ const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLand
 const BreathworkLanding = lazyRetry(() => import('./pages/BreathworkLanding'))
 const WhyICreatedThis = lazyRetry(() => import('./pages/WhyICreatedThis'))
 
-const MoneyMapFlow = lazyRetry(() => import('./flows/MoneyMapFlow'))
+// const MoneyMapFlow = lazyRetry(() => import('./flows/MoneyMapFlow'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
@@ -778,7 +778,7 @@ function AppRouter() {
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
             <Route path="/choose-quests" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><ChooseQuestsFlow /></Suspense></AuthGate>} />
             <Route path="/path-definition/:questId" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PathDefinitionFlow /></Suspense></AuthGate>} />
-            <Route path="/money-map" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><MoneyMapFlow /></Suspense></AuthGate>} />
+            {/* <Route path="/money-map" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><MoneyMapFlow /></Suspense></AuthGate>} /> */}
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
