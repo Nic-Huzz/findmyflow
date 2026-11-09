@@ -131,11 +131,11 @@ Return ONLY valid JSON:
 
 {
   "dimensions": {
-    "choice": { "score": 1-5, "insight": "One sentence about their choice/freedom state" },
-    "connection": { "score": 1-5, "insight": "One sentence about their connection state" },
-    "growth": { "score": 1-5, "insight": "One sentence about their growth/engagement state" },
-    "meaning": { "score": 1-5, "insight": "One sentence about their meaning/alignment state" },
-    "safety": { "score": 1-5, "insight": "One sentence about their safety/visibility state" }
+    "choice": { "score": 1-5, "insight": "One sentence about your choice/freedom state, written in second person (you/your)" },
+    "connection": { "score": 1-5, "insight": "One sentence about your connection state, written in second person" },
+    "growth": { "score": 1-5, "insight": "One sentence about your growth/engagement state, written in second person" },
+    "meaning": { "score": 1-5, "insight": "One sentence about your meaning/alignment state, written in second person" },
+    "safety": { "score": 1-5, "insight": "One sentence about your safety/visibility state, written in second person" }
   },
   "lowestDimension": "the dimension with the lowest score",
   "overallInsight": "One sentence connecting the lowest dimension to suppression"
@@ -148,7 +148,7 @@ Scoring guide:
 - Meaning: 1 = pointless/performing someone else's life, 5 = aligned/rippling outward
 - Safety: 1 = hiding/masking core self, 5 = free to be fully seen
 
-Use their actual words as evidence. The insight should mirror, not diagnose.
+Use the participant's actual words as evidence. Write ALL insights in second person (you/your), never third person (they/their). The insight should mirror, not diagnose.
 NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 
