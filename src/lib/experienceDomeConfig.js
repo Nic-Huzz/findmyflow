@@ -150,7 +150,6 @@ const EXPERIENCE_LABELS = {
   'exp-style-scary': 'Wearing something that scares you a little',
   'exp-style-becoming': 'Changing your look to match who you\'re becoming',
   'exp-style-comfort': 'Choosing comfort over expectation',
-  'exp-product-design': 'Product design',
   'exp-graphic-design': 'Graphic design',
   'exp-investing': 'Investing / trading',
   'exp-spreadsheets': 'Spreadsheets / data',
@@ -674,7 +673,6 @@ const CORE_NODE_IDS = new Set([
 
   // Tools (5) — extending capability
   'exp-coding',              // Coding / building software
-  'exp-product-design',      // Product design
   'exp-graphic-design',      // Graphic design
   'exp-investing',           // Investing / trading
   'exp-spreadsheets',        // Spreadsheets / data
@@ -794,7 +792,6 @@ export const VIRTUAL_EXPERIENCE_NODES = [
   { id: 'exp-style-scary', label: 'Wearing something that scares you a little', branch: 'status-fashion', primal: 'status' },
   { id: 'exp-style-becoming', label: 'Changing your look to match who you\'re becoming', branch: 'status-fashion', primal: 'status' },
   { id: 'exp-style-comfort', label: 'Choosing comfort over expectation', branch: 'status-fashion', primal: 'status' },
-  { id: 'exp-product-design', label: 'Product design', branch: 'tech', primal: 'tools' },
   { id: 'exp-graphic-design', label: 'Graphic design', branch: 'tech', primal: 'tools' },
   { id: 'exp-investing', label: 'Investing / trading', branch: 'tech', primal: 'tools' },
   { id: 'exp-spreadsheets', label: 'Spreadsheets / data', branch: 'tech', primal: 'tools' },

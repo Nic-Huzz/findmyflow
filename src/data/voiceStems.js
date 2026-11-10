@@ -82,6 +82,44 @@ export const STAGES = [
 ]
 
 /**
+ * EXPERIENCE_ACTIVITIES -- flat list of ~30 core experiences for voice game (Stage 5).
+ * Sourced from VIRTUAL_EXPERIENCE_NODES in experienceDomeConfig.js.
+ * Only core exp- nodes, no sub-nodes (too granular for rapid-fire voice).
+ */
+export const EXPERIENCE_ACTIVITIES = [
+  { id: 'exp-surfing', label: 'Surfing', branch: 'movement' },
+  { id: 'exp-climbing', label: 'Rock climbing / bouldering', branch: 'movement' },
+  { id: 'exp-gardening', label: 'Gardening / growing food', branch: 'nourishment' },
+  { id: 'exp-volunteering', label: 'Volunteering / giving back', branch: 'bonds' },
+  { id: 'exp-pets', label: 'Pet ownership / caring for animals', branch: 'bonds' },
+  { id: 'exp-public-speaking', label: 'Public speaking / presenting', branch: 'story' },
+  { id: 'exp-selling', label: 'Selling / pitching', branch: 'story' },
+  { id: 'exp-coaching', label: 'Coaching / mentoring someone', branch: 'story' },
+  { id: 'exp-choosing-style', label: 'Dressing as the version of you that feels most alive', branch: 'status' },
+  { id: 'exp-tattoo', label: 'Marking your body with something meaningful', branch: 'status' },
+  { id: 'exp-swimming', label: 'Swimming / ocean', branch: 'movement' },
+  { id: 'exp-club-dancing', label: 'Going out dancing / clubbing', branch: 'movement' },
+  { id: 'exp-drinks-friends', label: 'Drinks with friends / hanging out', branch: 'bonds' },
+  { id: 'exp-vulnerable-convo', label: 'Vulnerable conversation', branch: 'bonds' },
+  { id: 'exp-cinema', label: 'Going to the cinema / watching a great film', branch: 'story' },
+  { id: 'exp-research', label: 'Researching / going down rabbit holes', branch: 'story' },
+  { id: 'exp-making', label: 'Making something with your hands', branch: 'shelter' },
+  { id: 'exp-thrill', label: 'Adrenaline / thrill ride', branch: 'play' },
+  { id: 'exp-spiritual', label: 'Spiritual practice', branch: 'healing' },
+  { id: 'exp-nature-stillness', label: 'Being in nature without an activity', branch: 'sleep' },
+  { id: 'exp-hosting-home', label: 'Hosting people in your home', branch: 'shelter' },
+  { id: 'exp-farmers-market', label: 'Visiting a farmers market', branch: 'nourishment' },
+  { id: 'exp-new-cuisine', label: 'Trying a cuisine you\'ve never had', branch: 'nourishment' },
+  { id: 'exp-coding', label: 'Coding / building software', branch: 'tools' },
+  { id: 'exp-singing', label: 'Singing', branch: 'story' },
+  { id: 'exp-rapping', label: 'Rapping / freestyle', branch: 'story' },
+  { id: 'exp-teaching', label: 'Teaching / facilitating a workshop', branch: 'story' },
+  { id: 'exp-djing-live', label: 'DJing / playing a set for a crowd', branch: 'play' },
+  { id: 'exp-dance-expression', label: 'Dancing (creative / performance)', branch: 'story' },
+  { id: 'exp-interior-design', label: 'Interior / spatial design', branch: 'shelter' },
+]
+
+/**
  * Get stems for a stage, resolving dynamic text.
  * @param {number} stageIndex - 0, 1, 2, or 3
  * @param {number|null} layerIndex - for stage 1 (suppressed): 0 = prediction, 1 = source. null for other stages.

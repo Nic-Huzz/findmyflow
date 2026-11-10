@@ -784,11 +784,8 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
               ))}
             </div>
             <div className="cqf-fixed">
-              <button className="cqf-cta cqf-cta-gold" onClick={() => {
-                if (onComplete) onComplete({ paths: chosenPaths })
-                else navigate('/money-map')
-              }}>
-                Continue →
+              <button className="cqf-cta cqf-cta-gold" onClick={() => onComplete ? onComplete() : navigate('/money-map')}>
+                Go to my paths →
               </button>
             </div>
           </div>

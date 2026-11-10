@@ -532,21 +532,14 @@ export const DOME_SUB_NODES = {
     { id: 'fmt-fashion-costume', label: 'Costume / theatrical design' },
   ],
 
-  'exp-product-design': [
-    // Product design — discipline
-    { id: 'fmt-proddesign-ux', label: 'UX / digital product design' },
-    { id: 'fmt-proddesign-industrial', label: 'Industrial / physical product design' },
-    { id: 'fmt-proddesign-web', label: 'Web design' },
-    { id: 'fmt-proddesign-game', label: 'Game design' },
+  'exp-coding': [
+    { id: 'fmt-code-apps', label: 'Apps (mobile, web, SaaS)' },
+    { id: 'fmt-code-tools', label: 'Tools (automations, bots, Shopify, Notion)' },
   ],
 
   'exp-graphic-design': [
-    // Graphic design — discipline
-    { id: 'fmt-graphic-brand', label: 'Brand / identity design' },
-    { id: 'fmt-graphic-print', label: 'Print design (posters, packaging)' },
-    { id: 'fmt-graphic-digital', label: 'Digital / social media design' },
-    { id: 'fmt-graphic-illustration', label: 'Illustration' },
-    { id: 'fmt-graphic-typography', label: 'Typography / lettering' },
+    { id: 'fmt-graphic-web', label: 'Website design' },
+    { id: 'fmt-graphic-content', label: 'Content assets (social posts, thumbnails, brand)' },
   ],
 
   'exp-investing': [
@@ -560,12 +553,7 @@ export const DOME_SUB_NODES = {
   ],
 
   'exp-spreadsheets': [
-    // Spreadsheets — what you build
-    { id: 'fmt-sheet-financial', label: 'Financial modelling' },
-    { id: 'fmt-sheet-data', label: 'Data analysis / dashboards' },
-    { id: 'fmt-sheet-tracking', label: 'Tracking systems / personal spreadsheets' },
-    { id: 'fmt-sheet-automation', label: 'Formulas / automation' },
-    { id: 'fmt-sheet-reporting', label: 'Reporting / presentations' },
+    { id: 'fmt-sheet-modelling', label: 'Financial modelling and dashboards' },
   ],
 
   'exp-caring-kids': [
@@ -772,14 +760,11 @@ export const DOME_SUB_NODES = {
   ],
 
   'exp-selling': [
-    // Selling — different modalities
-    { id: 'fmt-sell-1on1', label: '1:1 sales conversation' },
-    { id: 'fmt-sell-stage', label: 'Stage selling / webinar' },
-    { id: 'fmt-sell-page', label: 'Sales page / online funnel' },
-    { id: 'fmt-sell-dm', label: 'DM / outreach selling' },
-    { id: 'fmt-sell-market', label: 'Market stall / in-person' },
-    { id: 'fmt-sell-negotiate', label: 'Negotiation / deal-making' },
-    { id: 'fmt-sell-fundraise', label: 'Fundraising / pitching investors' },
+    { id: 'fmt-sell-meta', label: 'Meta ads (Facebook + Instagram)' },
+    { id: 'fmt-sell-amazon', label: 'Amazon ads' },
+    { id: 'fmt-sell-google', label: 'Google ads' },
+    { id: 'fmt-sell-cold-call', label: 'Cold calling' },
+    { id: 'fmt-sell-setter', label: 'Sales call setter' },
   ],
 
   'exp-coaching': [

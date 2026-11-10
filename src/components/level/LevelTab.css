@@ -746,6 +746,25 @@
   margin: 0 4px;
 }
 
+.quest-flow-cta {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.08) 100%);
+  border: 1.5px solid rgba(94, 23, 235, 0.15);
+  border-radius: 14px;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 8px;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.quest-flow-cta:active { opacity: 0.7; }
+
 .quest-discover-prompt {
   text-align: center;
   font-size: 13px;

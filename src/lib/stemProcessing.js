@@ -5,9 +5,9 @@ import { supabase } from './supabaseClient'
 
 /**
  * Process stage transcripts through Claude.
- * @param {number} stage - 1, 2, 3, or 4
+ * @param {number} stage - 1, 2, 3, 4, 5, or 6
  * @param {Array<{ stemId: string, stemText: string, transcript: string }>} transcripts
- * @param {object} context - { selectedExpression?, confirmedPrediction? }
+ * @param {object} context - { selectedExpression?, confirmedPrediction?, activities?, funActivities? }
  * @returns {Promise<object>} Stage-specific results
  */
 export async function processStage(stage, transcripts, context = {}) {
@@ -21,6 +21,8 @@ export async function processStage(stage, transcripts, context = {}) {
       woundScene: context.woundScene || null,
       nsLabel: context.nsLabel || null,
       lowestDimension: context.lowestDimension || null,
+      activities: context.activities || null,
+      funActivities: context.funActivities || null,
     },
   })
 

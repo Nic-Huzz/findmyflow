@@ -16,7 +16,6 @@ import DirectionSection from './direction/DirectionSection'
 import {
   BoltIcon,
   SparklesIcon,
-  BriefcaseIcon,
   CheckCircleIcon,
   FireIcon,
   FaceSmileIcon,
@@ -43,7 +42,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
   const [showNsRating, setShowNsRating] = useState(false)
   const [loading, setLoading] = useState(true)
   const [domeExpanded, setDomeExpanded] = useState(false)
-  const [hasCurrentJob, setHasCurrentJob] = useState(false)
+  const [moneyMapCompleted, setMoneyMapCompleted] = useState(false)
   const [hasChosenQuests, setHasChosenQuests] = useState(false)
   // Step banner dismiss state (initialized from localStorage, immutable after dismiss)
   const [step2Dismissed, setStep2Dismissed] = useState(() =>
@@ -61,7 +60,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
 
     Promise.all([
       supabase.from('user_stage_progress')
-        .select('essence_mirror_completed')
+        .select('essence_mirror_completed, money_map_completed')
         .eq('user_id', userId).maybeSingle(),
       supabase.from('experience_dome_ratings')
         .select('node_id, ns_state')
@@ -80,12 +79,13 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         .eq('status', 'active')
         .neq('label', 'Healing Work')
         .limit(1),
-    ]).then(([essenceRes, domeRes, domeChallRes, questsRes]) => {
+    ]).then(([stageRes, domeRes, domeChallRes, questsRes]) => {
       // Active dome challenge
       if (domeChallRes.data?.[0]) {
         setActiveDomeChallenge(domeChallRes.data[0])
       }
-      setEssenceDone(!!essenceRes.data?.essence_mirror_completed)
+      setEssenceDone(!!stageRes.data?.essence_mirror_completed)
+      setMoneyMapCompleted(!!stageRes.data?.money_map_completed)
 
       const ratings = {}
       const checked = {}
@@ -113,14 +113,6 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       console.error('DiscoverTab load error:', err)
       setLoading(false)
     })
-
-    // Check for current job quest
-    supabase.from('quests').select('id').eq('user_id', userId).eq('is_current_job', true).limit(1)
-      .then(({ data }) => {
-        if (data?.length > 0) {
-          setHasCurrentJob(true)
-        }
-      })
   }, [userId])
 
   const pickExperience = (nodeId, nodeLabel) => {
@@ -282,25 +274,23 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
         </button>
       )}
 
-      {/* Step 1c: Current Job — shows after essence done */}
-      {essenceDone && domeCount > 0 && (
-        <button className="dt-card" onClick={() => navigate('/add-current-job')}>
+      {/* Step 1c: Money Map — shows after essence done and quests chosen */}
+      {hasChosenQuests && !moneyMapCompleted && (
+        <button className="dt-card" onClick={() => navigate('/money-map')}>
           <div className="dt-card-header">
-            <span className="dt-card-icon">{hasCurrentJob ? <CheckCircleIcon style={{ width: 18, height: 18, color: '#10b981' }} /> : <BriefcaseIcon style={{ width: 18, height: 18 }} />}</span>
-            <span className="dt-card-title">{hasCurrentJob ? 'Your current work' : 'Map your current work'}</span>
+            <span className="dt-card-icon"><BoltIcon style={{ width: 18, height: 18 }} /></span>
+            <span className="dt-card-title">Set up your financial engine</span>
           </div>
           <p className="dt-card-desc">
-            {hasCurrentJob
-              ? 'Revisit what\'s alive in your job.'
-              : 'Find what\'s already alive in your job.'}
+            Make sure your bills are covered while you build.
           </p>
           <span className="dt-card-arrow">→</span>
         </button>
       )}
 
-      {/* Phase 1→2 Bridge CTA — locked until essence + dome + current job done */}
+      {/* Phase 1→2 Bridge CTA — locked until essence + dome done */}
       {(() => {
-        const bridgeReady = essenceDone && domeCount > 0 && hasCurrentJob
+        const bridgeReady = essenceDone && domeCount > 0
         if (hasChosenQuests) {
           return (
             <button className="dt-bridge-cta dt-bridge-done" onClick={() => navigate('/choose-quests')}>

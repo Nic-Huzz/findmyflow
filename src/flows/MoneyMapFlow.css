@@ -1,0 +1,102 @@
+/* MoneyMapFlow.css — /money-map */
+
+.mm { min-height: 100dvh; background: #f5f5f0; color: #1a1a2e; }
+.mm-container { max-width: 480px; margin: 0 auto; padding: 20px 20px 120px; }
+.mm-loading { display: flex; align-items: center; justify-content: center; min-height: 60dvh; }
+.mm-spinner { width: 48px; height: 48px; border: 3px solid rgba(94,23,235,0.1); border-top-color: #5e17eb; border-radius: 50%; animation: mm-spin 0.8s linear infinite; }
+@keyframes mm-spin { to { transform: rotate(360deg); } }
+
+/* ── Intro ── */
+.mm-intro { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80dvh; text-align: center; gap: 16px; }
+.mm-intro-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B); display: flex; align-items: center; justify-content: center; }
+.mm-intro h1 { font-size: 26px; font-weight: 800; line-height: 1.2; }
+.mm-intro p { font-size: 15px; color: rgba(0,0,0,0.5); line-height: 1.6; max-width: 300px; }
+.mm-steps { display: flex; gap: 0; width: 100%; max-width: 340px; margin: 12px 0; }
+.mm-step { flex: 1; text-align: center; padding: 10px 6px; position: relative; }
+.mm-step::after { content: '→'; position: absolute; right: -4px; top: 50%; transform: translateY(-50%); color: rgba(0,0,0,0.12); font-size: 13px; }
+.mm-step:last-child::after { display: none; }
+.mm-step-num { width: 26px; height: 26px; border-radius: 50%; background: rgba(94,23,235,0.08); color: #5e17eb; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; }
+.mm-step-text { font-size: 11px; color: rgba(0,0,0,0.4); line-height: 1.3; }
+
+/* ── Question ── */
+.mm-question { padding-top: 40px; }
+.mm-question h2 { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 24px; line-height: 1.3; }
+
+/* ── Options (shared) ── */
+.mm-options { display: flex; flex-direction: column; gap: 10px; }
+.mm-option { display: flex; align-items: flex-start; gap: 14px; padding: 16px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; text-align: left; width: 100%; font-family: inherit; }
+.mm-option:active { transform: scale(0.98); }
+.mm-option.selected { border-color: #5e17eb; background: rgba(94,23,235,0.03); }
+.mm-option-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); flex-shrink: 0; margin-top: 2px; transition: all 0.15s; }
+.mm-option.selected .mm-option-radio { background: #5e17eb; border-color: #5e17eb; box-shadow: inset 0 0 0 3px white; }
+.mm-option-text { display: flex; flex-direction: column; gap: 4px; }
+.mm-option-title { font-size: 15px; font-weight: 600; }
+.mm-option-sub { font-size: 12px; color: rgba(0,0,0,0.4); }
+
+/* ── Tag experiences (2b) ── */
+.mm-tag { padding-top: 20px; }
+.mm-tag-header { text-align: center; margin-bottom: 16px; }
+.mm-tag-header h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.mm-tag-header p { font-size: 13px; color: rgba(0,0,0,0.4); }
+
+.mm-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; }
+.mm-divider span { font-size: 11px; font-weight: 600; color: #E9A23B; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+.mm-divider.fun span { color: #10b981; }
+.mm-divider hr { flex: 1; border: none; border-top: 1px solid rgba(0,0,0,0.06); }
+
+.mm-exp { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; margin-bottom: 6px; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; width: 100%; font-family: inherit; text-align: left; }
+.mm-exp:active { transform: scale(0.98); }
+.mm-exp.selected { border-color: #E9A23B; background: rgba(233,162,59,0.04); }
+.mm-exp-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; transition: all 0.15s; color: transparent; }
+.mm-exp.selected .mm-exp-check { background: #E9A23B; border-color: #E9A23B; color: white; }
+.mm-exp-name { font-size: 14px; font-weight: 500; flex: 1; }
+.mm-exp-ns { font-size: 16px; flex-shrink: 0; }
+
+.mm-fun-toggle { text-align: center; margin: 10px 0; }
+.mm-fun-toggle button { background: none; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; padding: 8px 20px; font-size: 12px; color: rgba(0,0,0,0.4); cursor: pointer; font-family: inherit; }
+
+.mm-custom-input { margin-top: 12px; }
+.mm-custom-input input { width: 100%; padding: 14px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.1); font-size: 14px; font-family: inherit; background: white; box-sizing: border-box; }
+.mm-custom-input input:focus { outline: none; border-color: #5e17eb; }
+
+/* ── Money Map (Screen 3) ── */
+.mm-map { padding-top: 40px; }
+.mm-map h2 { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 12px; line-height: 1.3; }
+.mm-map-sub { font-size: 14px; color: rgba(0,0,0,0.45); text-align: center; margin-bottom: 20px; line-height: 1.5; }
+.mm-map-prompt { font-size: 14px; color: rgba(0,0,0,0.5); text-align: center; margin-top: 16px; }
+
+/* ── Tier 1 cards ── */
+.mm-tier1-list { display: flex; flex-direction: column; gap: 8px; }
+.mm-tier1-card { padding: 16px; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.06); background: white; cursor: pointer; transition: all 0.15s; user-select: none; -webkit-tap-highlight-color: transparent; text-align: left; width: 100%; font-family: inherit; }
+.mm-tier1-card:active { transform: scale(0.98); }
+.mm-tier1-card.selected { border-color: #5e17eb; background: rgba(94,23,235,0.03); }
+.mm-tier1-gold { border-color: rgba(233,162,59,0.3); background: rgba(233,162,59,0.04); }
+.mm-tier1-gold.selected { border-color: #E9A23B; background: rgba(233,162,59,0.08); }
+.mm-tier1-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.mm-tier1-name { font-size: 15px; font-weight: 700; }
+.mm-tier1-rate { font-size: 12px; color: rgba(0,0,0,0.4); margin-bottom: 4px; }
+.mm-tier1-hook { font-size: 13px; color: rgba(0,0,0,0.55); line-height: 1.4; }
+
+/* ── Done ── */
+.mm-done { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70dvh; text-align: center; gap: 16px; }
+.mm-done-check { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #5e17eb, #E9A23B); display: flex; align-items: center; justify-content: center; }
+.mm-done-check-green { background: #10b981; }
+.mm-done-check-neutral { background: rgba(0,0,0,0.2); }
+.mm-done h2 { font-size: 24px; font-weight: 700; }
+.mm-done p { font-size: 14px; color: rgba(0,0,0,0.45); max-width: 280px; line-height: 1.5; }
+
+.mm-done-card { padding: 16px; border-radius: 14px; border: 1.5px solid rgba(233,162,59,0.3); background: rgba(233,162,59,0.04); width: 100%; max-width: 340px; }
+.mm-done-card-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.mm-done-card-sub { font-size: 12px; color: rgba(0,0,0,0.4); }
+
+/* ── Fixed bottom ── */
+.mm-fixed { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 16px 20px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, #f5f5f0 30%); pointer-events: none; z-index: 100; }
+.mm-fixed > * { pointer-events: auto; }
+.mm-cta { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.mm-cta:active { transform: scale(0.98); }
+.mm-cta-gold { background: linear-gradient(135deg, #5e17eb, #E9A23B); color: white; }
+.mm-cta-gold:disabled { opacity: 0.3; }
+.mm-cta-secondary { background: white; color: #5e17eb; border: 1.5px solid rgba(94,23,235,0.15); margin-top: 8px; font-size: 14px; padding: 12px; }
+
+/* ── Error ── */
+.mm-error { text-align: center; padding: 8px; color: #ef4444; font-size: 14px; }

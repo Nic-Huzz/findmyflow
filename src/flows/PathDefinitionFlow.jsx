@@ -25,6 +25,7 @@ import GenericRadar from '../components/GenericRadar'
 import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import { generate as generatePassionChallenge } from '../lib/passionChallengeEngine'
 import './PathDefinitionFlow.css'
 
 const VOICES = [
@@ -333,6 +334,8 @@ export default function PathDefinitionFlow() {
       hapticSuccess()
       setSaving(false)
       setScreen(4) // done
+      // Fire-and-forget: generate first passion challenge recommendation
+      generatePassionChallenge(questId, user.id).catch(() => {})
     } catch (err) {
       console.error('Path definition save failed:', err)
       setError('Something went wrong saving. Please try again.')

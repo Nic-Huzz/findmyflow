@@ -26,19 +26,16 @@ export const AuthProvider = ({ children }) => {
 
       // Track last_seen_at for re-engagement notifications (fire and forget)
       if (session?.user) {
-        const isAnon = session.user.is_anonymous
-        if (!isAnon) {
-          supabase
-            .from('notification_preferences')
-            .upsert({
-              user_id: session.user.id,
-              last_seen_at: new Date().toISOString(),
-              notifications_paused: false,
-            }, { onConflict: 'user_id' })
-            .then(({ error }) => {
-              if (error) console.warn('Failed to update last_seen_at:', error)
-            })
-        }
+        supabase
+          .from('notification_preferences')
+          .upsert({
+            user_id: session.user.id,
+            last_seen_at: new Date().toISOString(),
+            notifications_paused: false,
+          }, { onConflict: 'user_id' })
+          .then(({ error }) => {
+            if (error) console.warn('Failed to update last_seen_at:', error)
+          })
       }
     }
 
@@ -51,53 +48,52 @@ export const AuthProvider = ({ children }) => {
         setUser(session?.user ?? null)
         setLoading(false)
 
-        // Track last_seen_at and new signup events — skip for anonymous users
+        // Track last_seen_at for re-engagement notifications (fire and forget)
         if (event === 'SIGNED_IN' && session?.user) {
-          const isAnon = session.user.is_anonymous
-          if (!isAnon) {
-            supabase
-              .from('notification_preferences')
-              .upsert({
-                user_id: session.user.id,
-                last_seen_at: new Date().toISOString(),
-                notifications_paused: false,
-              }, { onConflict: 'user_id' })
-              .then(({ error }) => {
-                if (error) console.warn('Failed to update last_seen_at:', error)
-              })
+          supabase
+            .from('notification_preferences')
+            .upsert({
+              user_id: session.user.id,
+              last_seen_at: new Date().toISOString(),
+              notifications_paused: false,
+            }, { onConflict: 'user_id' })
+            .then(({ error }) => {
+              if (error) console.warn('Failed to update last_seen_at:', error)
+            })
+        }
 
-            // Track new signups (created_at ~= last_sign_in_at means first login)
-            const created = new Date(session.user.created_at).getTime()
-            const signedIn = new Date(session.user.last_sign_in_at).getTime()
-            if (Math.abs(signedIn - created) < 60000) {
-              trackAccountCreated({ userId: session.user.id, source: 'otp', ...getStoredUtmParams() })
+        // Track new signups (created_at ~= last_sign_in_at means first login)
+        if (event === 'SIGNED_IN' && session?.user) {
+          const created = new Date(session.user.created_at).getTime()
+          const signedIn = new Date(session.user.last_sign_in_at).getTime()
+          if (Math.abs(signedIn - created) < 60000) {
+            trackAccountCreated({ userId: session.user.id, source: 'otp', ...getStoredUtmParams() })
 
-              // Enroll in welcome email sequence
-              const userEmail = session.user.email
-              if (userEmail) {
-                const name = session.user.user_metadata?.full_name || userEmail.split('@')[0]
-                supabase.functions.invoke('enroll-email-sequence', {
-                  body: {
-                    email: userEmail,
-                    sequence_type: 'welcome',
-                    personalization_tokens: { name }
-                  }
-                }).catch(err => console.warn('Welcome email enrollment failed:', err))
+            // Enroll in welcome email sequence
+            const userEmail = session.user.email
+            if (userEmail) {
+              const name = session.user.user_metadata?.full_name || userEmail.split('@')[0]
+              supabase.functions.invoke('enroll-email-sequence', {
+                body: {
+                  email: userEmail,
+                  sequence_type: 'welcome',
+                  personalization_tokens: { name }
+                }
+              }).catch(err => console.warn('Welcome email enrollment failed:', err))
 
-                // Claim aliveness quiz results from public_leads (if they took the quiz before signup)
-                supabase.from('public_leads')
-                  .select('flow_results')
-                  .eq('email', userEmail)
-                  .eq('source_flow', 'aliveness_quiz')
-                  .maybeSingle()
-                  .then(({ data }) => {
-                    if (!data?.flow_results) return
-                    supabase.from('user_stage_progress').upsert({
-                      user_id: session.user.id,
-                      life_fuel_quiz: data.flow_results,
-                    }, { onConflict: 'user_id', ignoreDuplicates: false }).catch(() => {})
-                  }).catch(() => {})
-              }
+              // Claim aliveness quiz results from public_leads (if they took the quiz before signup)
+              supabase.from('public_leads')
+                .select('flow_results')
+                .eq('email', userEmail)
+                .eq('source_flow', 'aliveness_quiz')
+                .maybeSingle()
+                .then(({ data }) => {
+                  if (!data?.flow_results) return
+                  supabase.from('user_stage_progress').upsert({
+                    user_id: session.user.id,
+                    life_fuel_quiz: data.flow_results,
+                  }, { onConflict: 'user_id', ignoreDuplicates: false }).catch(() => {})
+                }).catch(() => {})
             }
           }
         }
@@ -110,7 +106,7 @@ export const AuthProvider = ({ children }) => {
   // Initialize notifications when user is authenticated
   useEffect(() => {
     const setupNotifications = async () => {
-      if (user && !user.is_anonymous) {
+      if (user) {
         const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
         if (vapidPublicKey || isNativePushSupported()) {
           await initializeNotifications(user.id, vapidPublicKey)
@@ -241,7 +237,7 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error
       
       console.log('👋 User signed out')
-      try { localStorage.removeItem('fmf_selected_project_id') } catch { /* ignore */ }
+      try { localStorage.removeItem('fmf_selected_project_id') } catch {}
       return { success: true }
     } catch (error) {
       console.error('❌ Sign out error:', error)

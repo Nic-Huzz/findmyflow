@@ -192,15 +192,6 @@ export async function getDirectionStatus(userId) {
   }
 }
 
-/**
- * Check if all 4 direction cards are complete.
- * @param {{ lifeMapReview: boolean, problemMotivation: boolean, multiplication: boolean, moneyModel: boolean }} status
- */
-export function isAllDirectionComplete(status) {
-  return !!(status.lifeMapReview && status.problemMotivation
-    && status.multiplication && status.moneyModel)
-}
-
 // ── Era responses (Life Map raw data) ─────────────────────────────────────────
 
 const ERA_ORDER = [

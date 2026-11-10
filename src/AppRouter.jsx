@@ -205,7 +205,7 @@ const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLand
 const BreathworkLanding = lazyRetry(() => import('./pages/BreathworkLanding'))
 const WhyICreatedThis = lazyRetry(() => import('./pages/WhyICreatedThis'))
 
-// const MoneyMapFlow = lazyRetry(() => import('./flows/MoneyMapFlow'))
+const MoneyMapFlow = lazyRetry(() => import('./flows/MoneyMapFlow'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
@@ -317,12 +317,6 @@ const FacilitateLifePaths = lazyRetry(() => import('./pages/FacilitateLifePaths'
 const TryLifePaths = lazyRetry(() => import('./flows/TryLifePaths'))
 const LifePathWidgetTest = lazyRetry(() => import('./pages/LifePathWidgetTest'))
 const ChooseQuestsFlow = lazyRetry(() => import('./flows/ChooseQuestsFlow'))
-const ChildhoodReflectionFlow = lazyRetry(() => import('./flows/ChildhoodReflectionFlow'))
-
-// Essence Journey
-import JourneyContainer from './flows/JourneyContainer'
-import FacilitatorDashboard from './components/journey/FacilitatorDashboard'
-import WorkshopCreatePage from './components/journey/WorkshopCreatePage'
 
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
@@ -435,8 +429,7 @@ function ConditionalZarlo() {
   const isLifePaths = location.pathname === '/life-paths'
   const isRuleBreakTree = location.pathname === '/rule-break-tree'
   const isDomeOnboarding = location.pathname === '/dome-onboarding'
-  const isJourneyRoute = location.pathname.startsWith('/journey')
-  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths || isRuleBreakTree || isDomeOnboarding || isJourneyRoute) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP || isBreathworkLP || isWhyPage || isShiftScorecard || isEssenceIdentify || isProtectiveIdentify || isMatrixCodeDeepDive || isExperienceCreators || isScopeMap || isPreLaunch || isRemarkableFlow || isCreateFlow || isFacilitate || isLifePaths || isRuleBreakTree || isDomeOnboarding) return null
   return <ZarloWidget />
 }
 
@@ -495,7 +488,6 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/experience-game' ||
                         location.pathname === '/dome-onboarding' ||
                         location.pathname === '/community' ||
-                        location.pathname.startsWith('/journey') ||
                         (location.pathname.startsWith('/create/') &&
                          location.pathname !== '/create/' &&
                          location.pathname !== '/create/experiences' &&
@@ -772,22 +764,17 @@ function AppRouter() {
             <Route path="/try/career-clarity" element={<CareerClarityQuiz />} />
             <Route path="/try/facilitator-score" element={<Suspense fallback={<LoadingSpinner />}><FacilitatorScore /></Suspense>} />
             <Route path="/try/ai-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><AIDiagnostic /></Suspense>} />
-            <Route path="/try/voice-stems" element={<VoiceStemFlow />} />
+            <Route path="/try/voice-stems" element={<Suspense fallback={<LoadingSpinner />}><VoiceStemFlow mode="workshop" /></Suspense>} />
+            <Route path="/try/onboarding" element={<Suspense fallback={<LoadingSpinner />}><VoiceStemFlow mode="onboarding" /></Suspense>} />
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
             <Route path="/choose-quests" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><ChooseQuestsFlow /></Suspense></AuthGate>} />
             <Route path="/path-definition/:questId" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PathDefinitionFlow /></Suspense></AuthGate>} />
-            {/* <Route path="/money-map" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><MoneyMapFlow /></Suspense></AuthGate>} /> */}
+            <Route path="/money-map" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><MoneyMapFlow /></Suspense></AuthGate>} />
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />
             <Route path="/facilitate/life-paths" element={<FacilitateLifePaths />} />
             <Route path="/shift-scorecard" element={<ShiftScorecard />} />
-
-            {/* Essence Journey — Workshop + Solo Onboarding */}
-            <Route path="/journey" element={<JourneyContainer />} />
-            <Route path="/journey/create" element={<WorkshopCreatePage />} />
-            <Route path="/journey/:code/facilitate" element={<FacilitatorDashboard />} />
-            <Route path="/journey/:code" element={<JourneyContainer />} />
 
             {/* Fantasy League Landing Page - Public */}
             <Route path="/fantasy" element={<FantasyLeagueLanding />} />

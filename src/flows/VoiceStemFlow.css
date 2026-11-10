@@ -132,7 +132,6 @@
   width: 100%;
   margin-bottom: 20px;
 }
-
 .vs-input {
   width: 100%;
   padding: 14px 18px;
@@ -145,11 +144,9 @@
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
-
 .vs-input:focus {
   border-color: var(--vs-pink);
 }
-
 .vs-input::placeholder {
   color: var(--vs-muted);
 }
@@ -181,15 +178,6 @@
 .vs-btn-primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.vs-btn-ready {
-  animation: vs-pulse-ready 1.5s ease-in-out infinite;
-}
-
-@keyframes vs-pulse-ready {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.02); }
 }
 
 .vs-btn-ghost {
@@ -1093,6 +1081,161 @@
   font-weight: 700;
 }
 
+/* ── Experience Game (Stage 5/6) ─────────────────────────────── */
+
+.vs-exp-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 16px 40px;
+  gap: 8px;
+}
+.vs-exp-intro h2 {
+  font-size: 1.8rem;
+  margin: 8px 0;
+  background: var(--vs-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.vs-exp-intro-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--vs-muted);
+  max-width: 360px;
+}
+.vs-exp-intro-desc strong {
+  color: var(--vs-text);
+}
+.vs-exp-intro-sub {
+  font-size: 0.85rem;
+  color: var(--vs-muted);
+  margin-top: 4px;
+}
+
+/* Activity batch list (shown during countdown + recording) */
+.vs-exp-batch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto 12px;
+  padding: 0 8px;
+}
+.vs-exp-batch-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--vs-glass);
+  border: 1px solid var(--vs-glass-border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+.vs-exp-batch-num {
+  font-weight: 700;
+  color: var(--vs-pink);
+  min-width: 22px;
+  font-size: 0.85rem;
+}
+
+/* Countdown positioned at bottom when activity list is shown */
+.vs-countdown-overlay-bottom {
+  position: relative;
+  margin-top: auto;
+  padding: 16px 0 8px;
+}
+.vs-countdown-overlay-bottom .vs-countdown-num {
+  font-size: 3rem;
+}
+.vs-countdown-overlay-bottom .vs-countdown-label {
+  font-size: 0.85rem;
+}
+
+/* Experience result tags */
+.vs-exp-result-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.vs-exp-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.vs-exp-tag-fun {
+  background: rgba(217, 70, 239, 0.15);
+  border: 1px solid rgba(217, 70, 239, 0.3);
+  color: var(--vs-pink);
+}
+.vs-exp-tag-uncertain {
+  background: var(--vs-glass);
+  border: 1px solid var(--vs-glass-border);
+  color: var(--vs-muted);
+}
+
+/* ── Signup Gate ──────────────────────────────────────────────── */
+
+.vs-signup-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 16px 40px;
+  gap: 8px;
+  width: 100%;
+}
+.vs-signup-gate h2 {
+  font-size: 1.6rem;
+  margin: 8px 0;
+}
+.vs-signup-desc {
+  font-size: 0.95rem;
+  color: var(--vs-muted);
+  max-width: 340px;
+  line-height: 1.5;
+}
+.vs-signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 16px;
+}
+
+/* ── Download App ──────────────────────────────────────────── */
+
+.vs-download-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 20px;
+}
+.vs-download-buttons a {
+  text-decoration: none;
+  text-align: center;
+}
+.vs-btn-secondary {
+  background: transparent;
+  border: 1.5px solid var(--vs-glass-border);
+  color: var(--vs-text);
+}
+.vs-download-archetype {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--vs-gold);
+  margin: 4px 0 8px;
+}
+
 /* ── AVATAR SCREEN ─────────────────────────────── */
 
 .vs-avatar-screen {
@@ -1104,31 +1247,26 @@
   padding: 24px 20px;
   text-align: center;
 }
-
 .vs-avatar-inner {
   max-width: 480px;
   width: 100%;
 }
-
 .vs-avatar-title {
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 8px;
 }
-
 .vs-avatar-desc {
   color: var(--vs-muted);
   font-size: 0.95rem;
   margin-bottom: 28px;
 }
-
 .vs-avatar-preview-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
 }
-
 .vs-avatar-preview {
   width: 200px;
   height: 200px;
@@ -1137,20 +1275,17 @@
   border: 2px solid var(--vs-glass-border);
   margin-bottom: 8px;
 }
-
 .vs-avatar-actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
 }
-
 .vs-avatar-result {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .vs-avatar-image {
   width: 300px;
   height: 300px;
@@ -1159,7 +1294,6 @@
   border: 2px solid var(--vs-pink);
   box-shadow: 0 0 40px rgba(217, 70, 239, 0.2);
 }
-
 .vs-avatar-upload {
   display: flex;
   flex-direction: column;

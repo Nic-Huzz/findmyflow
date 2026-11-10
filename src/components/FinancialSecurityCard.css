@@ -1,0 +1,54 @@
+/* FinancialSecurityCard.css — fsc- prefix */
+
+.fsc-section { margin-top: 24px; }
+
+.fsc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 0 4px; }
+.fsc-header-title { font-size: 14px; font-weight: 700; color: rgba(0,0,0,0.6); }
+
+/* ── Empty state ── */
+.fsc-empty { padding: 20px; border-radius: 16px; border: 1.5px dashed rgba(0,0,0,0.1); text-align: center; }
+.fsc-empty-text { font-size: 14px; color: rgba(0,0,0,0.45); margin-bottom: 12px; line-height: 1.5; }
+.fsc-empty-btn { background: none; border: none; color: #5e17eb; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; padding: 0; }
+
+/* ── Active card ── */
+.fsc-card { padding: 18px; border-radius: 16px; border: 1.5px solid rgba(233,162,59,0.2); background: rgba(233,162,59,0.03); }
+.fsc-card-name { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+
+/* Stage progress */
+.fsc-stage { margin-bottom: 14px; }
+.fsc-stage-label { font-size: 12px; color: rgba(0,0,0,0.4); font-weight: 600; margin-bottom: 6px; display: block; }
+.fsc-dots { display: flex; gap: 6px; }
+.fsc-dot { width: 100%; height: 4px; border-radius: 2px; background: rgba(0,0,0,0.06); }
+.fsc-dot-filled { background: linear-gradient(135deg, #5e17eb, #E9A23B); }
+
+/* Challenge */
+.fsc-challenge { margin-bottom: 14px; }
+.fsc-challenge-label { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.35); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.fsc-challenge-text { font-size: 14px; color: rgba(0,0,0,0.6); line-height: 1.5; }
+
+/* CTA */
+.fsc-cta { width: 100%; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #5e17eb, #E9A23B); color: white; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.fsc-cta:active { transform: scale(0.98); }
+
+/* Love-it card */
+.fsc-card-love { border-color: rgba(16,185,129,0.2); background: rgba(16,185,129,0.03); }
+.fsc-love-status { font-size: 12px; color: #10b981; font-weight: 600; margin-bottom: 8px; }
+
+/* Weekly pulse */
+.fsc-pulse-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 10px 0; border: none; background: none; font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.5); cursor: pointer; font-family: inherit; }
+.fsc-pulse-actions { display: flex; gap: 8px; margin-top: 4px; }
+.fsc-pulse-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.fsc-pulse-btn:active { transform: scale(0.97); }
+.fsc-pulse-yes { background: rgba(16,185,129,0.1); color: #10b981; }
+.fsc-pulse-no { background: rgba(239,68,68,0.08); color: #ef4444; }
+.fsc-pulse-btn:disabled { opacity: 0.4; }
+
+/* Acquisition method picker */
+.fsc-acquisition { margin-top: 4px; }
+.fsc-acq-title { font-size: 14px; font-weight: 600; color: rgba(0,0,0,0.6); margin-bottom: 10px; }
+.fsc-acq-options { display: flex; flex-direction: column; gap: 6px; }
+.fsc-acq-btn { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid rgba(0,0,0,0.06); background: white; font-size: 13px; font-weight: 500; text-align: left; cursor: pointer; font-family: inherit; transition: all 0.15s; position: relative; }
+.fsc-acq-btn:active { transform: scale(0.98); }
+.fsc-acq-btn:disabled { opacity: 0.4; }
+.fsc-acq-recommended { border-color: rgba(233,162,59,0.3); }
+.fsc-acq-badge { display: block; font-size: 10px; font-weight: 700; color: #E9A23B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }

@@ -20,6 +20,13 @@ const STEPS = {
   EPISODES: 'episodes',
   PROCESSING: 'processing',
   RESULTS: 'results',
+  CONNECT_QUEST: 'connect_quest',
+  FLOW_DRAFT: 'flow_draft',
+  SHARPEN_1: 'sharpen_1',
+  SHARPEN_2: 'sharpen_2',
+  SHARPEN_3: 'sharpen_3',
+  SHARPEN_4: 'sharpen_4',
+  FLOW_SAVED: 'flow_saved',
 }
 
 const CONTENT_TYPES = [
@@ -86,14 +93,29 @@ export default function CuriosityMapFlow() {
   const [existingInputs, setExistingInputs] = useState([])
   const [loading, setLoading] = useState(true)
 
+  // Flow statement screens
+  const [quests, setQuests] = useState([])
+  const [selectedQuest, setSelectedQuest] = useState(null)
+  const [selectedClusterNames, setSelectedClusterNames] = useState([])
+  const [flowStatement, setFlowStatement] = useState('')
+  const [isEditingFlow, setIsEditingFlow] = useState(false)
+  const [editedFlow, setEditedFlow] = useState('')
+  const [flowProcessing, setFlowProcessing] = useState(false)
+  const [flowProcessingText, setFlowProcessingText] = useState('Finding your flow...')
+  const [sharpen1, setSharpen1] = useState('')
+  const [sharpen2, setSharpen2] = useState('')
+  const [sharpen3, setSharpen3] = useState('')
+  const [sharpen4, setSharpen4] = useState('')
+
   // Load existing data
   useEffect(() => {
     if (!user) { setLoading(false); return }
     ;(async () => {
       try {
-        const [{ data: inputs }, { data: clusterData }] = await Promise.all([
+        const [{ data: inputs }, { data: clusterData }, { data: questData }] = await Promise.all([
           supabase.from('curiosity_inputs').select('*').eq('user_id', user.id).order('created_at'),
           supabase.from('curiosity_clusters').select('*').eq('user_id', user.id),
+          supabase.from('quests').select('*').eq('user_id', user.id).eq('status', 'active'),
         ])
         if (inputs?.length) {
           setExistingInputs(inputs)
@@ -104,6 +126,9 @@ export default function CuriosityMapFlow() {
           // If they already have results, show them
           if (inputs?.length >= 3) setStep(STEPS.RESULTS)
         }
+        if (questData?.length) {
+          setQuests(questData)
+        }
       } catch (err) {
         console.warn('Curiosity data load failed:', err.message)
       } finally {
@@ -111,6 +136,72 @@ export default function CuriosityMapFlow() {
       }
     })()
   }, [user])
+
+  // Generate flow statement when entering FLOW_DRAFT step
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (step !== STEPS.FLOW_DRAFT || flowStatement || flowProcessing || !selectedQuest) return
+    let cancelled = false
+
+    // Snapshot state values to avoid stale closures
+    const quest = selectedQuest
+    const clusterNames = selectedClusterNames
+    const allClusters = clusters
+
+    ;(async () => {
+      setFlowProcessing(true)
+      setFlowProcessingText('Finding your flow...')
+
+      const t1 = setTimeout(() => { if (!cancelled) setFlowProcessingText('Connecting the dots...') }, 2500)
+      const t2 = setTimeout(() => { if (!cancelled) setFlowProcessingText('Crafting your statement...') }, 5000)
+
+      try {
+        const [{ data: remarkableData }, { data: essenceData }] = await Promise.all([
+          supabase.from('remarkable_angles').select('wound_problem, assumption, combination_insight, different').eq('user_id', user.id),
+          supabase.from('lead_flow_profiles').select('custom_essence_fields').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        ])
+
+        const themes = clusterNames.map(name => {
+          const c = allClusters.find(cl => (cl.name || cl.cluster_name) === name)
+          return c ? { name: c.name || c.cluster_name, why: c.why, description: c.description } : { name }
+        })
+
+        const remarkableAngles = (remarkableData || []).map(r =>
+          `Problem: ${r.wound_problem || ''}. Assumption: ${r.assumption || ''}. Insight: ${r.combination_insight || ''}. Different: ${r.different || ''}.`
+        )
+
+        const { data, error } = await supabase.functions.invoke('generate-flow-statement', {
+          body: {
+            quest_name: quest.label,
+            quest_branch: Array.isArray(quest.branch) ? quest.branch.join(', ') : (quest.branch || ''),
+            format_picks: quest.format_picks || [],
+            themes,
+            remarkable_angles: remarkableAngles,
+            essence: essenceData?.custom_essence_fields?.superpower || '',
+          },
+        })
+
+        clearTimeout(t1); clearTimeout(t2)
+        if (cancelled) return
+        if (error) throw error
+
+        const statement = data?.statement || data?.flow_statement || ''
+        setFlowStatement(statement)
+        setEditedFlow(statement)
+        hapticSuccess()
+      } catch (err) {
+        clearTimeout(t1); clearTimeout(t2)
+        if (cancelled) return
+        console.error('Flow statement generation failed:', err)
+        setFlowProcessingText('Something went wrong. Try again.')
+        setTimeout(() => { if (!cancelled) setFlowProcessing(false) }, 2000)
+        return
+      }
+      setFlowProcessing(false)
+    })()
+
+    return () => { cancelled = true }
+  }, [step])
 
   const addItem = () => {
     if (!currentTitle.trim()) return
@@ -566,14 +657,335 @@ export default function CuriosityMapFlow() {
           )}
 
           <div className="cmf-results-actions">
-            <button className="cmf-primary-btn" onClick={() => navigate('/life-map')}>
-              Next step: Your Life Map
+            {quests.length > 0 ? (
+              <>
+                <button className="cmf-primary-btn" onClick={() => { hapticMedium(); setStep(STEPS.CONNECT_QUEST) }}>
+                  Connect to a path &rarr;
+                </button>
+                <button className="cmf-secondary-btn" onClick={() => { setStep(STEPS.ADD_CONTENT) }}>
+                  Feel like some curiosities are missing? Add more content
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="cmf-primary-btn" onClick={() => navigate('/life-map')}>
+                  Next step: Your Life Map
+                </button>
+                <button className="cmf-secondary-btn" onClick={() => { setStep(STEPS.ADD_CONTENT) }}>
+                  Feel like some curiosities are missing? Add more content
+                </button>
+                <button className="cmf-secondary-btn" onClick={() => navigate('/7-day-challenge')}>
+                  Return to quests
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ═══════════════════════════════════════════════
+  // SCREEN 6: CONNECT QUEST
+  // ═══════════════════════════════════════════════
+  if (step === STEPS.CONNECT_QUEST) {
+    const toggleCluster = (name) => {
+      setSelectedClusterNames(prev => {
+        if (prev.includes(name)) return prev.filter(n => n !== name)
+        if (prev.length >= 3) return prev
+        return [...prev, name]
+      })
+    }
+
+    return (
+      <div className="cmf">
+        <FlowProgressIndicator step="connect" />
+        <div className="cmf-container">
+          <div className="cmf-heading">Which path do these <span className="cmf-gold">connect</span> to?</div>
+          <div className="cmf-subtext">Pick a path, then select the themes that feel connected to it.</div>
+
+          <div className="cmf-quest-list">
+            {quests.map(q => (
+              <button
+                key={q.id}
+                className={`cmf-quest-card${selectedQuest?.id === q.id ? ' selected' : ''}`}
+                onClick={() => { hapticLight(); setSelectedQuest(q); setSelectedClusterNames([]) }}
+              >
+                <div className="cmf-quest-card-color" style={{ background: q.color || '#6b7280' }} />
+                <div className="cmf-quest-card-label">{q.label}</div>
+                <div className="cmf-quest-card-check">
+                  {selectedQuest?.id === q.id ? '\u2713' : ''}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {selectedQuest && (
+            <>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>
+                Select 1-3 themes connected to {selectedQuest.label}
+              </div>
+              <div className="cmf-theme-chips">
+                {clusters.map((c, i) => {
+                  const name = c.name || c.cluster_name
+                  const isSelected = selectedClusterNames.includes(name)
+                  return (
+                    <button
+                      key={i}
+                      className={`cmf-theme-chip${isSelected ? ' selected' : ''}`}
+                      onClick={() => { hapticLight(); toggleCluster(name) }}
+                    >
+                      <div className="cmf-theme-chip-check">
+                        {isSelected ? '\u2713' : ''}
+                      </div>
+                      {name}
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
+
+          <div className="cmf-nav">
+            <button className="cmf-back-btn" onClick={() => setStep(STEPS.RESULTS)}>Back</button>
+            <button
+              className="cmf-primary-btn"
+              disabled={selectedClusterNames.length < 1}
+              onClick={() => { hapticMedium(); setStep(STEPS.FLOW_DRAFT) }}
+            >
+              Find your flow &rarr;
             </button>
-            <button className="cmf-secondary-btn" onClick={() => { setStep(STEPS.ADD_CONTENT) }}>
-              Feel like some curiosities are missing? Add more content
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (step === STEPS.FLOW_DRAFT) {
+    if (flowProcessing) {
+      return (
+        <div className="cmf">
+          <div className="cmf-container">
+            <div className="cmf-processing">
+              <div className="cmf-spinner" />
+              <div className="cmf-processing-text">{flowProcessingText}</div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className="cmf">
+        <FlowProgressIndicator step="find" />
+        <div className="cmf-container">
+          <div className="cmf-heading">Your <span className="cmf-gold">flow</span></div>
+          <div className="cmf-subtext">This is what {selectedQuest?.label} is really about for you.</div>
+
+          {!isEditingFlow ? (
+            <div className="cmf-flow-quote">
+              <div className="cmf-flow-quote-text">{flowStatement}</div>
+            </div>
+          ) : (
+            <textarea
+              className="cmf-flow-edit"
+              value={editedFlow}
+              onChange={e => setEditedFlow(e.target.value)}
+              autoFocus
+            />
+          )}
+
+          <div style={{ display: 'flex', gap: 10 }}>
+            {!isEditingFlow ? (
+              <button
+                className="cmf-secondary-btn"
+                style={{ flex: 0 }}
+                onClick={() => { hapticLight(); setIsEditingFlow(true) }}
+              >
+                Edit
+              </button>
+            ) : (
+              <button
+                className="cmf-secondary-btn"
+                style={{ flex: 0 }}
+                onClick={() => {
+                  hapticLight()
+                  setFlowStatement(editedFlow)
+                  setIsEditingFlow(false)
+                }}
+              >
+                Save edit
+              </button>
+            )}
+            <button
+              className="cmf-primary-btn"
+              style={{ flex: 1, marginTop: 0 }}
+              disabled={isEditingFlow}
+              onClick={() => { hapticSuccess(); setStep(STEPS.SHARPEN_1) }}
+            >
+              That's my flow
             </button>
-            <button className="cmf-secondary-btn" onClick={() => navigate('/7-day-challenge')}>
-              Return to quests
+          </div>
+
+          <button className="cmf-back-btn" style={{ width: '100%', textAlign: 'center', marginTop: 12 }} onClick={() => {
+            setFlowStatement('')
+            setEditedFlow('')
+            setFlowProcessing(false)
+            setStep(STEPS.CONNECT_QUEST)
+          }}>
+            Back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ═══════════════════════════════════════════════
+  // SCREENS 8-11: SHARPEN 1-4
+  // ═══════════════════════════════════════════════
+  const SHARPEN_CONFIG = [
+    {
+      step: STEPS.SHARPEN_1,
+      question: (name) => `What problem does ${name} solve that nobody else is solving right?`,
+      placeholder: 'e.g. Real transformation is paywalled. People spend thousands and are still stuck.',
+      value: sharpen1,
+      setter: setSharpen1,
+      prev: STEPS.FLOW_DRAFT,
+      next: STEPS.SHARPEN_2,
+      num: 1,
+    },
+    {
+      step: STEPS.SHARPEN_2,
+      question: () => 'What does everyone assume is required to solve it, that you think is wrong?',
+      placeholder: 'e.g. Everyone assumes healing must be serious, clinical, and expensive',
+      value: sharpen2,
+      setter: setSharpen2,
+      prev: STEPS.SHARPEN_1,
+      next: STEPS.SHARPEN_3,
+      num: 2,
+    },
+    {
+      step: STEPS.SHARPEN_3,
+      question: () => 'What experience or background showed you that assumption is wrong?',
+      placeholder: 'e.g. I did a year-long fear challenge that changed my life more in 3 months than 3 years of online courses',
+      value: sharpen3,
+      setter: setSharpen3,
+      prev: STEPS.SHARPEN_2,
+      next: STEPS.SHARPEN_4,
+      num: 3,
+    },
+    {
+      step: STEPS.SHARPEN_4,
+      question: () => 'Remove that assumption. How does your approach solve it differently?',
+      placeholder: 'e.g. Instead of talking about fear, we do the scary thing together, safely, and track what changes',
+      value: sharpen4,
+      setter: setSharpen4,
+      prev: STEPS.SHARPEN_3,
+      next: STEPS.FLOW_SAVED,
+      num: 4,
+    },
+  ]
+
+  const sharpenConfig = SHARPEN_CONFIG.find(s => s.step === step)
+  if (sharpenConfig) {
+    const { question, placeholder, value, setter, prev, next, num } = sharpenConfig
+    const canProceed = value.trim().length >= 10
+
+    const handleSave = async () => {
+      hapticMedium()
+      // If this is the last sharpen screen, save everything
+      if (next === STEPS.FLOW_SAVED) {
+        try {
+          await supabase.from('quests').update({
+            flow_statement: flowStatement,
+            flow_themes: selectedClusterNames,
+            flow_sharpening: { q1: sharpen1, q2: sharpen2, q3: sharpen3, q4: sharpen4 },
+          }).eq('id', selectedQuest.id)
+        } catch (err) {
+          console.error('Failed to save flow data:', err)
+        }
+      }
+      setStep(next)
+    }
+
+    const handleSkip = async () => {
+      hapticLight()
+      setter('')
+      // If this is the last sharpen screen, save everything
+      if (next === STEPS.FLOW_SAVED) {
+        try {
+          await supabase.from('quests').update({
+            flow_statement: flowStatement,
+            flow_themes: selectedClusterNames,
+            flow_sharpening: {
+              q1: num >= 2 ? sharpen1 : '',
+              q2: num >= 3 ? sharpen2 : '',
+              q3: num >= 4 ? sharpen3 : '',
+              q4: '',
+            },
+          }).eq('id', selectedQuest.id)
+        } catch (err) {
+          console.error('Failed to save flow data:', err)
+        }
+      }
+      setStep(next)
+    }
+
+    return (
+      <div className="cmf">
+        <FlowProgressIndicator step="sharpen" />
+        <div className="cmf-container">
+          <div className="cmf-step-label">Sharpen {num} of 4</div>
+
+          <div className="cmf-sharpen-context">
+            <div className="cmf-sharpen-context-label">Your flow</div>
+            <div className="cmf-sharpen-context-text">{flowStatement}</div>
+          </div>
+
+          <div className="cmf-heading" style={{ fontSize: 20 }}>{question(selectedQuest?.label)}</div>
+
+          <textarea
+            className="cmf-sharpen-textarea"
+            value={value}
+            onChange={e => setter(e.target.value)}
+            placeholder={placeholder}
+            autoFocus
+          />
+
+          <div className="cmf-nav">
+            <button className="cmf-back-btn" onClick={() => setStep(prev)}>Back</button>
+            <button
+              className="cmf-primary-btn"
+              disabled={!canProceed}
+              onClick={handleSave}
+            >
+              Next
+            </button>
+          </div>
+
+          <div className="cmf-skip">
+            <button onClick={handleSkip}>Skip this one</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ═══════════════════════════════════════════════
+  // SCREEN 12: FLOW SAVED (Celebration)
+  // ═══════════════════════════════════════════════
+  if (step === STEPS.FLOW_SAVED) {
+    return (
+      <div className="cmf">
+        <div className="cmf-container">
+          <div className="cmf-celebration">
+            <div className="cmf-celebration-emoji">{'\u2728'}</div>
+            <div className="cmf-celebration-title">Flow found</div>
+            <div className="cmf-flow-quote" style={{ marginTop: 0 }}>
+              <div className="cmf-flow-quote-text">{flowStatement}</div>
+            </div>
+            <button className="cmf-primary-btn" onClick={() => { hapticSuccess(); navigate('/7-day-challenge') }}>
+              Back to your paths
             </button>
           </div>
         </div>
@@ -582,6 +994,30 @@ export default function CuriosityMapFlow() {
   }
 
   return null
+}
+
+// ── Flow progress indicator for post-results screens ──
+function FlowProgressIndicator({ step }) {
+  const steps = [
+    { key: 'connect', label: 'Connect' },
+    { key: 'find', label: 'Find' },
+    { key: 'sharpen', label: 'Sharpen' },
+  ]
+  const currentIndex = steps.findIndex(s => s.key === step)
+
+  return (
+    <div className="cmf-flow-progress">
+      {steps.map((s, i) => (
+        <div key={s.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className={`cmf-flow-progress-step${i === currentIndex ? ' active' : i < currentIndex ? ' completed' : ''}`}>
+            <div className="cmf-flow-progress-dot" />
+            <span>{s.label}</span>
+          </div>
+          {i < steps.length - 1 && <span className="cmf-flow-progress-arrow">&rarr;</span>}
+        </div>
+      ))}
+    </div>
+  )
 }
 
 // ── Collapsible cluster card ──

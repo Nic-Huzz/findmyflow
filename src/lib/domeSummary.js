@@ -64,7 +64,7 @@ export function getDomeExperiencesForBridge(domeStates) {
 
 /**
  * Returns ALL rated dome experiences across all NS states.
- * Used by CurrentJobFlow to let users pick which experiences are part of their work.
+ * Used by MoneyMapFlow to let users pick which experiences are part of their work.
  * @param {Object} domeStates - { [nodeId]: nsState }
  * @returns {{ vibeRise: Array, fun: Array, stressed: Array, bored: Array }}
  */

@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { STATE_META } from './LifePathMap/lifePaths'
 import { supabase } from '../lib/supabaseClient'
-import { getDimensionById } from '../data/domeDimensions'
+import { getDimensionById, DOME_DIMENSIONS } from '../data/domeDimensions'
 import { LIFE_FUEL_CHANNELS, CHANNEL_IDS } from '../data/channelMapping'
 import HealingFlowModal from './HealingFlowModal'
 import GroanCompletionModal from './GroanCompletionModal'
@@ -26,6 +26,7 @@ import {
   FaceSmileIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid'
+import { getCached, generate, markAccepted, markDismissed, STRIKE_TYPES, getGapDimensions } from '../lib/passionChallengeEngine'
 import './QuestBoardCard.css'
 
 const STATE_LABELS = {
@@ -76,10 +77,34 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const [reRatingExpId, setReRatingExpId] = useState(null)
   const inputRef = useRef(null)
 
+  // Next Move (passion challenge recommendation)
+  const [nextMoveExpanded, setNextMoveExpanded] = useState(false)
+  const [nextMoveLoading, setNextMoveLoading] = useState(false)
+  const [nextMoveRec, setNextMoveRec] = useState(null)
+  const [manualMode, setManualMode] = useState(false)
+  const [manualStrikeType, setManualStrikeType] = useState(null)
+  const [manualDims, setManualDims] = useState([])
+  const [gapDimIds, setGapDimIds] = useState([])
+
   const stateMeta = STATE_META[quest.predicted_state]
   const courageCount = tasks.filter(t => t.is_courage_challenge).length
   const courageDoneCount = tasks.filter(t => t.is_courage_challenge && t.done).length
   const taskIdKey = tasks.map(t => t.id).join(',')
+
+  // Read passion challenge rec from localStorage cache
+  useEffect(() => {
+    setNextMoveRec(getCached(quest.id))
+    setNextMoveExpanded(false)
+    setManualMode(false)
+  }, [quest.id])
+
+  // Load gap dimensions for manual mode (accounts for actual progress).
+  // Dep is quest.id only — current_dimensions is an object ref that would
+  // re-trigger on every parent re-render. Dims only change when quest changes.
+  useEffect(() => {
+    if (!quest.current_dimensions || !Object.keys(quest.current_dimensions).length) return
+    getGapDimensions(quest.id).then(setGapDimIds).catch(() => setGapDimIds([]))
+  }, [quest.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load healing intentions for all tasks
   useEffect(() => {
@@ -301,6 +326,52 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     })
   }
 
+  // ── Next Move helpers ──
+  const isPassionPath = quest.status === 'active'
+    && !quest.is_current_job && !quest.is_bridge_job
+    && quest.current_dimensions && Object.keys(quest.current_dimensions).length > 0
+
+  const handleAcceptChallenge = async () => {
+    if (!nextMoveRec) return
+    await markAccepted(quest.id, userId)
+    setWahooCreatorText(nextMoveRec.challenge)
+    setShowWahooCreator(true)
+    setNextMoveRec(null)
+    setNextMoveExpanded(false)
+  }
+
+  const handleRefreshChallenge = async () => {
+    setNextMoveLoading(true)
+    try {
+      await markDismissed(quest.id, userId)
+      const rec = await generate(quest.id, userId)
+      setNextMoveRec(rec)
+    } catch (e) {
+      console.warn('Error generating challenge:', e)
+    } finally {
+      setNextMoveLoading(false)
+    }
+  }
+
+  const handleManualGenerate = async () => {
+    if (!manualStrikeType || !manualDims.length) return
+    setNextMoveLoading(true)
+    try {
+      setManualMode(false)
+      const rec = await generate(quest.id, userId, {
+        strikeType: manualStrikeType,
+        dimensions: manualDims,
+      })
+      setNextMoveRec(rec)
+      setManualStrikeType(null)
+      setManualDims([])
+    } catch (e) {
+      console.warn('Error generating challenge:', e)
+    } finally {
+      setNextMoveLoading(false)
+    }
+  }
+
   const activeExperiences = experiences.filter(e => e.status === 'active')
   const hasExperiences = activeExperiences.length > 0
   const incomplete = tasks.filter(t => !t.done)
@@ -313,6 +384,108 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
   const getDimVals = (task) => {
     if (!task.groan_challenge_id) return {}
     return challengeDimValues[task.groan_challenge_id] || {}
+  }
+
+  const renderNextMove = () => {
+    if (!isPassionPath || !nextMoveRec) return null
+
+    return (
+      <div
+        className={`qbc-next-move ${nextMoveExpanded ? 'qbc-next-move--expanded' : ''}`}
+        onClick={() => !nextMoveExpanded && setNextMoveExpanded(true)}
+      >
+        <div className="qbc-next-move-header">
+          <span className="qbc-next-move-icon">✦</span>
+          <span className="qbc-next-move-title">Your next move</span>
+        </div>
+
+        <div className="qbc-next-move-challenge">
+          "{nextMoveRec.challenge}"
+        </div>
+
+        {nextMoveExpanded && (
+          <div className="qbc-next-move-detail">
+            {nextMoveRec.stretches?.length > 0 && (
+              <div className="qbc-next-move-dims">
+                {nextMoveRec.stretches.map(dimId => {
+                  const dim = getDimensionById(dimId)
+                  if (!dim) return null
+                  return <span key={dimId} className="qbc-next-move-dim">{dim.icon} {dim.label}</span>
+                })}
+              </div>
+            )}
+
+            <div className="qbc-next-move-permission">{nextMoveRec.permission}</div>
+            <div className="qbc-next-move-closer">{nextMoveRec.closer}</div>
+
+            <div className="qbc-next-move-actions">
+              <button className="qbc-next-move-accept" onClick={(e) => { e.stopPropagation(); handleAcceptChallenge() }}>
+                Let's do it
+              </button>
+              <button
+                className="qbc-next-move-refresh"
+                onClick={(e) => { e.stopPropagation(); handleRefreshChallenge() }}
+                disabled={nextMoveLoading}
+              >
+                {nextMoveLoading ? 'Thinking...' : 'Show me another'}
+              </button>
+            </div>
+
+            {!manualMode && (
+              <button
+                className="qbc-next-move-manual-link"
+                onClick={(e) => { e.stopPropagation(); setManualMode(true) }}
+              >
+                Choose my own
+              </button>
+            )}
+
+            {manualMode && (
+              <div className="qbc-next-move-manual" onClick={(e) => e.stopPropagation()}>
+                <div className="qbc-manual-label">Pick a challenge type</div>
+                <div className="qbc-manual-types">
+                  {STRIKE_TYPES.map(t => (
+                    <button
+                      key={t.id}
+                      className={`qbc-manual-type ${manualStrikeType === t.id ? 'qbc-manual-type--selected' : ''}`}
+                      onClick={() => setManualStrikeType(t.id)}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="qbc-manual-label">Push which edges?</div>
+                <div className="qbc-manual-dims">
+                  {gapDimIds.map(dimId => {
+                    const dim = getDimensionById(dimId)
+                    if (!dim) return null
+                    const selected = manualDims.includes(dimId)
+                    return (
+                      <button
+                        key={dimId}
+                        className={`qbc-manual-dim ${selected ? 'qbc-manual-dim--selected' : ''}`}
+                        onClick={() => setManualDims(prev =>
+                          selected ? prev.filter(d => d !== dimId) : [...prev, dimId].slice(0, 3)
+                        )}
+                      >
+                        {dim.icon} {dim.label}
+                      </button>
+                    )
+                  })}
+                </div>
+                <button
+                  className="qbc-next-move-accept"
+                  disabled={!manualStrikeType || !manualDims.length || nextMoveLoading}
+                  onClick={handleManualGenerate}
+                >
+                  {nextMoveLoading ? 'Thinking...' : 'Generate'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )
   }
 
   const renderTaskRow = (task) => {
@@ -405,7 +578,10 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               onBlur={saveRename}
               onClick={e => e.stopPropagation()} />
           ) : (
-            <div className="qbc-title">{quest.label}</div>
+            <div className="qbc-title-group">
+              <div className="qbc-title">{quest.label}</div>
+              {quest.flow_statement && <div className="qbc-flow-subtitle">{quest.flow_statement}</div>}
+            </div>
           )}
           {courageCount > 0 && (
             <div className="qbc-badge">{courageDoneCount}/{courageCount}</div>
@@ -469,6 +645,9 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               Define this path →
             </button>
           )}
+
+          {/* Next Move — AI-generated passion challenge recommendation */}
+          {renderNextMove()}
 
           {/* Experience sections (collapsible) */}
           {hasExperiences && activeExperiences.map(exp => {
