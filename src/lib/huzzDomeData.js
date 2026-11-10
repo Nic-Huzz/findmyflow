@@ -157,7 +157,6 @@ export const HUZZ_DOME_STATES = {
   // exp-horse-riding: uninterested
   // exp-interior-design: uninterested
   // exp-fashion-design: uninterested
-  'exp-product-design': 'vibe_rise', // Product design — builds apps, designs UX
   'exp-graphic-design': 'pressure', // Graphic design — growth edge
   'exp-investing': 'pressure',      // Investing / trading — growth edge
   // exp-spreadsheets: uninterested

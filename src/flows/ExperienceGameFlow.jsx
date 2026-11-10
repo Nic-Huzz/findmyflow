@@ -108,7 +108,6 @@ const EXPERIENCE_DESC = {
   'exp-dance-expression': 'Choreography, dance class, freestyle, partner dance, performances',
   'exp-interior-design': 'Room layouts, renovations, styling spaces, hospitality design',
   'exp-fashion-design': 'Clothing, accessories, sustainable fashion, costume design',
-  'exp-product-design': 'UX, web design, industrial design, game design',
   'exp-graphic-design': 'Brand identity, posters, packaging, illustration, typography',
   'exp-investing': 'Stocks, crypto, property, angel investing, day trading',
   'exp-spreadsheets': 'Financial models, dashboards, tracking systems, formulas',
