@@ -9,6 +9,7 @@ import {
   triggerFireConfetti,
   triggerSideCannons
 } from '../components/Celebrations'
+import { isChapterTransition, JOURNEY_CHAPTERS } from '../data/journeyChapters'
 
 /**
  * Hook for managing celebration animations
@@ -181,6 +182,26 @@ export function useCelebrations() {
     const key = `${fromStage}-${toStage}`
     const c = CELEBRATIONS[key]
     if (!c) return
+
+    const chapterTransitionId = isChapterTransition(fromStage, toStage)
+    if (chapterTransitionId) {
+      const chapter = JOURNEY_CHAPTERS.find(ch => ch.id === chapterTransitionId)
+      setShowLevelUp({
+        name: chapter.name,
+        emoji: c?.emoji || '🌟',
+        description: c?.message || chapter.tagline,
+        isGraduation: true,
+        isChapterTransition: chapterTransitionId,
+        chapterBelief: chapter.belief,
+        avatarUrl: context.avatarUrl || null,
+        useFigurineOverlay: context.useFigurineOverlay || false,
+      })
+      setLevelUpKey(k => k + 1)
+      triggerSideCannons()
+      setTimeout(() => triggerSideCannons(), 600)
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200])
+      return
+    }
 
     if (c.confetti === 'side_cannons') triggerSideCannons()
     else if (c.confetti === 'gold') {

@@ -25,6 +25,7 @@ import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 // HomeFirstTime archived — replaced by /essence-mirror redirect
 import SeeYourFlow from '../components/SeeYourFlow'
 import StageCard from '../components/StageCard'
+import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import { hasPendingJourneyData, persistJourneyOnboarding, hasPendingPlaySkillsData, persistPlaySkillsOnboarding } from '../lib/journeyOnboarding'
 import { BoltIcon } from '@heroicons/react/24/solid'
 import './MePage.css'
@@ -99,6 +100,7 @@ export default function MePage() {
   const [showInlineMapper, setShowInlineMapper] = useState(null) // null = not determined yet
   const [dbLevelProgress, setDbLevelProgress] = useState(null)
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
+  const [directionComplete, setDirectionComplete] = useState(false)
   const projectMenuRef = useRef(null)
 
   const primaryProject = selectedProject || projects?.[0] || null
@@ -159,6 +161,12 @@ export default function MePage() {
       .then(({ data }) => {
         if (data) setDbLevelProgress(data)
       })
+  }, [user?.id, currentJourneyLevel])
+
+  // Fetch direction completion status (only relevant at stage 8+)
+  useEffect(() => {
+    if (!user?.id || currentJourneyLevel < 8) return
+    getDirectionStatus(user.id).then(status => setDirectionComplete(isAllDirectionComplete(status)))
   }, [user?.id, currentJourneyLevel])
 
   // Persist journey onboarding data after first login
@@ -547,7 +555,7 @@ export default function MePage() {
          SECTION 2: STAGE LEVEL
          ============================================================ */}
       <section className="quest-section reveal-fade-up" ref={questRevealRef}>
-        <StageCard heroStage={currentJourneyLevel} />
+        <StageCard heroStage={currentJourneyLevel} directionComplete={directionComplete} />
       </section>
 
       {/* Fantasy League promo removed — re-enable when league is ready for spotlight */}
