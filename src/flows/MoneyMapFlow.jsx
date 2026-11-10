@@ -711,7 +711,7 @@ export default function MoneyMapFlow() {
               </div>
               <p>You'll find this on your Paths tab. Now go build your dream.</p>
               <div className="mm-fixed">
-                <button className="mm-cta mm-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
+                <button className="mm-cta mm-cta-gold" onClick={() => navigate('/7-day-challenge?tab=weekly')}>
                   Go to Paths →
                 </button>
               </div>
@@ -738,7 +738,7 @@ export default function MoneyMapFlow() {
               </div>
               <p>Focus on building your passion paths. We'll check in each week.</p>
               <div className="mm-fixed">
-                <button className="mm-cta mm-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
+                <button className="mm-cta mm-cta-gold" onClick={() => navigate('/7-day-challenge?tab=weekly')}>
                   Go to Paths →
                 </button>
               </div>
@@ -759,7 +759,7 @@ export default function MoneyMapFlow() {
             <h2>No worries</h2>
             <p>You can come back to this anytime from your Paths tab.</p>
             <div className="mm-fixed">
-              <button className="mm-cta mm-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
+              <button className="mm-cta mm-cta-gold" onClick={() => navigate('/7-day-challenge?tab=weekly')}>
                 Go to Paths →
               </button>
             </div>

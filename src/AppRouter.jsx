@@ -317,6 +317,8 @@ const FacilitateLifePaths = lazyRetry(() => import('./pages/FacilitateLifePaths'
 const TryLifePaths = lazyRetry(() => import('./flows/TryLifePaths'))
 const LifePathWidgetTest = lazyRetry(() => import('./pages/LifePathWidgetTest'))
 const ChooseQuestsFlow = lazyRetry(() => import('./flows/ChooseQuestsFlow'))
+const DiscoveryPage = lazyRetry(() => import('./pages/DiscoveryPage'))
+const DirectionPage = lazyRetry(() => import('./pages/DirectionPage'))
 
 // Lazy-loaded - Public Play-List Feed
 const PlaylistFeed = lazyRetry(() => import('./pages/PlaylistFeed'))
@@ -770,6 +772,8 @@ function AppRouter() {
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
             <Route path="/choose-quests" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><ChooseQuestsFlow /></Suspense></AuthGate>} />
+            <Route path="/discovery" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><DiscoveryPage /></Suspense></AuthGate>} />
+            <Route path="/direction" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><DirectionPage /></Suspense></AuthGate>} />
             <Route path="/path-definition/:questId" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><PathDefinitionFlow /></Suspense></AuthGate>} />
             <Route path="/money-map" element={<AuthGate><Suspense fallback={<LoadingSpinner />}><MoneyMapFlow /></Suspense></AuthGate>} />
             <Route path="/quest-map" element={<AuthGate><QuestMapPage /></AuthGate>} />

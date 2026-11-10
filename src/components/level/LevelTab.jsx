@@ -77,6 +77,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
   const [matrixData, setMatrixData] = useState(null) // { actionScore, clarityPct, zone, total }
   const [hasCurrentJob, setHasCurrentJob] = useState(false)
+  const [hasDomeData, setHasDomeData] = useState(false)
 
   // Load matrix data (Action Score + Clarity)
   useEffect(() => {
@@ -337,6 +338,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     }
     // Load quests + tasks
     loadQuests()
+    // Check dome data (for empty state: "Find Your Path" vs "Start discovering")
+    supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId)
+      .then(({ count }) => setHasDomeData((count || 0) > 0))
     // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
       .from('nikigai_clusters')
@@ -500,9 +504,17 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         </div>
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
-            <span style={{ fontSize: 20 }}>🔒</span>
-            <p>Complete discovery first to unlock your paths</p>
-            <a href="/try/life-paths" className="quest-locked-link">Start Life Paths →</a>
+            {hasDomeData ? (
+              <>
+                <p>You know what lights you up. Now pick your paths.</p>
+                <a href="/choose-quests" className="quest-locked-link">Find Your Path →</a>
+              </>
+            ) : (
+              <>
+                <p>Find something you want to pursue</p>
+                <a href={`/experience-game?returnTo=${encodeURIComponent('/7-day-challenge?tab=weekly')}`} className="quest-locked-link">Start discovering →</a>
+              </>
+            )}
           </div>
         )}
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && hasLifePaths && (
@@ -527,8 +539,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         )}
 
         {/* Discovery prompt */}
-        <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Discover')}>
-          Keep completing discovery experiences to identify new paths →
+        <div className="quest-discover-prompt" onClick={() => navigate('/experience-game?returnTo=' + encodeURIComponent('/7-day-challenge?tab=weekly'))}>
+          Not feeling any of these? Find something new →
         </div>
         {hasLifePaths && !showAddQuest && (
           <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Path</button>
@@ -619,7 +631,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name experiences you'd love to have that scare you a little. Host a silent disco. Post a vulnerable video. Cold-call a stranger.</p>
             <p className="quest-modal-question">Each one is a rep in the gym, training your system that expressing yourself this way is safe.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Weekly') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -637,7 +649,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
             <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Weekly') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -774,7 +786,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Paths')}
+                  onClick={() => onNavigateTab?.('Weekly')}
                   style={{ cursor: 'pointer' }}
                 >
                   {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
@@ -807,7 +819,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Paths')}
+                  onClick={() => onNavigateTab?.('Weekly')}
                   style={{ cursor: 'pointer' }}
                 >
                   {healingDone > 0 ? `${healingDone}/${healingTarget}` : 'Start'}

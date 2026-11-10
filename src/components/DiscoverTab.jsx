@@ -30,7 +30,7 @@ function getWeekKey() {
   return WEEK_KEY + getWeekStartLocal()
 }
 
-export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpdate }) {
+export default function DiscoverTab({ userId, heroStage = 0, onUpdate, hideDirection = false }) {
   const navigate = useNavigate()
   const [essenceDone, setEssenceDone] = useState(false)
   const [domeCount, setDomeCount] = useState(0)
@@ -165,7 +165,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
   return (
     <div className="discover-tab">
       {/* Phase 2→3 Direction Bridge (hero stage 8+) */}
-      {heroStage >= 8 && (
+      {!hideDirection && heroStage >= 8 && (
         <DirectionSection userId={userId} onUpdate={onUpdate} />
       )}
 
@@ -261,7 +261,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
 
       {/* Step 1b: Essence Mirror — shows after dome has data */}
       {domeCount > 0 && (
-        <button className="dt-card" onClick={() => navigate('/essence-mirror')}>
+        <button className="dt-card" onClick={() => navigate('/essence-mirror?returnTo=/discovery')}>
           <div className="dt-card-header">
             <span className="dt-card-icon">{essenceDone ? <CheckCircleIcon style={{ width: 18, height: 18, color: '#10b981' }} /> : <SparklesIcon style={{ width: 18, height: 18 }} />}</span>
             <span className="dt-card-title">{essenceDone ? 'Your Essence' : 'Discover Your Essence'}</span>

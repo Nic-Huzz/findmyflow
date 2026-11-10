@@ -37,27 +37,36 @@ const INSTALL_SEEN_KEY = 'hasSeenChallengeInstallPrompt'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
-  'play-list': 'Paths',
-  'playlist': 'Paths',
-  'wahoo': 'Paths',         // backward compat — courage merged into quests
-  'courage': 'Paths',       // backward compat — courage merged into quests
-  'priority': 'Paths',
-  'level': 'Paths',         // backward compat
-  'quests': 'Paths',
-  'paths': 'Paths',
-  'business': 'Paths',      // backward compat
-  'create': 'Paths',        // backward compat
-  'groans': 'Paths',        // backward compat — courage merged into quests
-  'healing': 'Paths',       // backward compat — courage merged into quests
-  'tracker': 'Paths',       // backward compat — courage merged into quests
-  'tune': 'Tune',
-  'bonus': 'Tune',           // backward compat
-  'journey': 'Discover',     // renamed
-  'discover': 'Discover',
+  // Daily (was Tune + Discover)
+  'daily': 'Daily',
+  'tune': 'Daily',           // backward compat
+  'bonus': 'Daily',          // backward compat
+  'discover': 'Daily',       // backward compat
+  'journey': 'Daily',        // backward compat
+
+  // Weekly (was Paths)
+  'weekly': 'Weekly',
+  'paths': 'Weekly',         // backward compat
+  'play-list': 'Weekly',     // backward compat
+  'playlist': 'Weekly',      // backward compat
+  'wahoo': 'Weekly',         // backward compat
+  'courage': 'Weekly',       // backward compat
+  'priority': 'Weekly',      // backward compat
+  'level': 'Weekly',         // backward compat
+  'quests': 'Weekly',        // backward compat
+  'business': 'Weekly',      // backward compat
+  'create': 'Weekly',        // backward compat
+  'groans': 'Weekly',        // backward compat
+  'healing': 'Weekly',       // backward compat
+  'tracker': 'Weekly',       // backward compat
+
+  // Progress (unchanged)
   'progress': 'Progress',
+
+  // Special views (unchanged)
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
-  'healing-summary': 'HealingSummary'
+  'healing-summary': 'HealingSummary',
 }
 
 export function useChallengeData() {
@@ -65,16 +74,24 @@ export function useChallengeData() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Get initial category from URL params
+  // Get initial category from URL params.
+  // Returns null when no ?tab= param so the landing logic effect can set the
+  // correct tab (Progress for incomplete users, Daily for complete) without flash.
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search)
     const tabParam = params.get('tab')?.toLowerCase()
-    return TAB_TO_CATEGORY[tabParam] || 'Discover'
+    if (tabParam && TAB_TO_CATEGORY[tabParam]) return TAB_TO_CATEGORY[tabParam]
+    if (tabParam) return 'Daily'
+    return null // no explicit tab — will be set by landing logic
   }
 
   // UI State
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(getInitialCategory)
+
+  // Setup completion check for landing logic
+  const [allSetupDone, setAllSetupDone] = useState(null) // null = loading
+  const initialLandingSet = useRef(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [onboardingScreen, setOnboardingScreen] = useState('install-app') // 'install-app' | 'enable-notifications'
   const [showGroupSelection, setShowGroupSelection] = useState(false)
@@ -141,8 +158,60 @@ export function useChallengeData() {
     }
   }, [location.search])
 
+  // Setup completion check — queries mirror ProgressTab exactly (lines 574-590).
+  // Runs once per user session to determine which tab to land on.
+  useEffect(() => {
+    if (!user?.id) return
+    Promise.all([
+      // Dome check — same as ProgressTab line 663
+      supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+      // Essence check — must match ProgressTab line 575: checks lead_flow_profiles, NOT user_stage_progress
+      supabase.from('lead_flow_profiles').select('id').eq('user_id', user.id).limit(1),
+      // Money map check — same as ProgressTab line 582
+      supabase.from('user_stage_progress').select('money_map_completed').eq('user_id', user.id).maybeSingle(),
+      // Paths check — must match ProgressTab line 586: active, non-current-job quests
+      supabase.from('quests').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'active').neq('is_current_job', true),
+    ]).then(([domeRes, essenceRes, stageRes, questsRes]) => {
+      const done = (domeRes.count || 0) > 0
+        && (essenceRes.data?.length || 0) > 0
+        && !!stageRes.data?.money_map_completed
+        && (questsRes.count || 0) > 0
+      setAllSetupDone(done)
+    })
+  }, [user?.id])
+
+  // Landing logic — sets the initial tab once setup check resolves.
+  // Three states: complete → Daily, has dome but no quests (post-onboarding) → Weekly, nothing → Progress.
+  // Only fires once (guarded by initialLandingSet ref).
+  // Does nothing if the user arrived with an explicit ?tab= param (activeCategory already set).
+  const [hasDome, setHasDome] = useState(null)
+  const [hasQuests, setHasQuests] = useState(null)
+
+  useEffect(() => {
+    if (!user?.id) return
+    // These run alongside the allSetupDone check (same queries, stored separately for landing logic)
+    supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', user.id)
+      .then(({ count }) => setHasDome((count || 0) > 0))
+    supabase.from('quests').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'active').neq('is_current_job', true)
+      .then(({ count }) => setHasQuests((count || 0) > 0))
+  }, [user?.id])
+
+  useEffect(() => {
+    if (activeCategory !== null || allSetupDone === null || hasDome === null || hasQuests === null) return
+    if (initialLandingSet.current) return
+    initialLandingSet.current = true
+
+    if (allSetupDone) {
+      setActiveCategory('Daily')        // Returning complete user
+    } else if (hasDome && !hasQuests) {
+      setActiveCategory('Weekly')        // Post-onboarding: has dome data, needs to choose quests
+    } else {
+      setActiveCategory('Progress')      // Brand new / solo fallback
+    }
+  }, [activeCategory, allSetupDone, hasDome, hasQuests])
+
   // Constants
-  const categories = ['Discover', 'Paths', 'Tune', 'Progress']
+  const categories = ['Daily', 'Weekly', 'Progress']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 
@@ -1840,6 +1909,7 @@ export function useChallengeData() {
     loading,
     activeCategory,
     setActiveCategory,
+    allSetupDone,
     showOnboarding,
     setShowOnboarding,
     onboardingScreen,

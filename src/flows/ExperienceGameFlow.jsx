@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { PRIMALS, INDUSTRIES, industryNodes } from '../lib/ruleBreakTreeData'
 import { isCoreNode, getExperienceLabel, VIRTUAL_EXPERIENCE_NODES } from '../lib/experienceDomeConfig'
 import { useAuth } from '../auth/AuthProvider'
@@ -693,6 +693,8 @@ const CHECKED_KEY = 'exp-game-checked'
 
 export default function ExperienceGameFlow({ onComplete } = {}) {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const returnTo = decodeURIComponent(searchParams.get('returnTo') || '/7-day-challenge?tab=daily')
   const { user } = useAuth()
   const { domeStates, loading: domeLoading, bulkSetStates } = useDomeData(user?.id)
   const branches = useMemo(buildBranches, [])
@@ -808,7 +810,7 @@ export default function ExperienceGameFlow({ onComplete } = {}) {
   const handleExplore = useCallback(async (selectedNodeId) => {
     if (!selectedNodeId) {
       if (onComplete) onComplete({ selectedNodeId: null })
-      else navigate('/7-day-challenge?tab=discover')
+      else navigate(returnTo)
       return
     }
 
@@ -847,7 +849,7 @@ export default function ExperienceGameFlow({ onComplete } = {}) {
 
     hapticSuccess()
     if (onComplete) onComplete({ selectedNodeId, nodeLabel, branchLabel })
-    else navigate('/7-day-challenge?tab=discover')
+    else navigate(returnTo)
   }, [user, branches, navigate, onComplete])
 
 

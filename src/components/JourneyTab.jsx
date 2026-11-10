@@ -14,7 +14,7 @@ import './JourneyTab.css'
 
 const VOICE_ICONS = { ghost: '👻', controller: '🧱', auto_pilot: '🤖', perfectionist: '🎯', people_pleaser: '🪞' }
 
-export default function JourneyTab({ userId, onUnlockTab }) {
+export default function JourneyTab({ userId }) {
   const navigate = useNavigate()
   const [heroStage, setHeroStage] = useState(0)
   const [voiceCounts, setVoiceCounts] = useState({})
@@ -401,7 +401,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
       )}
 
       {/* Onboarding — only if items incomplete */}
-      <JourneyOnboarding userId={userId} onUnlockTab={onUnlockTab} />
+      <JourneyOnboarding userId={userId} />
 
       {/* Clarity number removed — zone matrix on Quests tab is the visualization */}
 

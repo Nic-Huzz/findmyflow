@@ -1197,6 +1197,19 @@ export default function ProgressTab({ userId }) {
         )}
       </div>
 
+      {/* ═══ ONBOARDING BANNER ═══ */}
+      {!allSetupDone && (
+        <div className="pt-onboarding-banner">
+          <div className="pt-onboarding-title">Complete your onboarding</div>
+          <button className="pt-cta pt-cta-purple" onClick={() => window.open('https://cal.com/nichuzz/onboarding', '_blank')}>
+            Book your onboarding call &rarr;
+          </button>
+          <button className="pt-onboarding-secondary" onClick={() => navigate('/discovery')}>
+            Want to do it yourself? &rarr;
+          </button>
+        </div>
+      )}
+
       {/* ═══ ZONE CAL ═══ */}
       <ZoneCalSection userId={userId} userEmail={userEmail} hasEssence={hasEssence} />
 
@@ -1593,23 +1606,7 @@ export default function ProgressTab({ userId }) {
       )}
 
       {/* ═══ SMART CTA ═══ */}
-      {nextCta && allSetupDone === false && (
-        <>
-          <div className="pt-bridge">
-            <span className="pt-bridge-text">
-              {!hasDome ? 'let\'s find out what lights you up.' : !hasEssence ? 'now, who are you really?' : !hasPaths ? 'ready to find your path?' : 'now let\'s see what your current life looks like.'}
-            </span>
-          </div>
-          <div className="pt-cta-card">
-            <div className="pt-cta-card-icon">{nextCta.icon}</div>
-            <div className="pt-cta-card-title">{nextCta.title}</div>
-            <div className="pt-cta-card-sub">{nextCta.sub}</div>
-            <button className="pt-cta" onClick={() => navigate(nextCta.route)}>
-              {nextCta.ctaText} <span>→</span>
-            </button>
-          </div>
-        </>
-      )}
+      {/* REMOVED: replaced by onboarding banner above */}
 
       {/* ═══ JOURNEY SECTION ═══ */}
       {hasPaths && (

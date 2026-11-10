@@ -37,7 +37,7 @@ export const LEVEL_CONFIG = {
         route: null,
         narrative: 'Open your Wahoo space and name what would light you up.',
         icon: '🔥',
-        navigateTo: 'Courage',
+        navigateTo: 'Weekly',
         lockedUntil: 'life_paths',
       },
       {
@@ -46,7 +46,7 @@ export const LEVEL_CONFIG = {
         route: null,
         narrative: 'Complete your first healing quest.',
         icon: '💚',
-        navigateTo: 'Courage',
+        navigateTo: 'Weekly',
         lockedUntil: 'life_paths',
       },
       {
@@ -310,7 +310,7 @@ export function getLevelConfig(level) {
         ? 'Complete your first Wahoo.'
         : `Complete ${config.courageCount} Wahoo${config.courageCount > 1 ? 's' : ''}.`,
       icon: '🔥',
-      navigateTo: 'Courage',
+      navigateTo: 'Weekly',
     })
   }
 
@@ -324,7 +324,7 @@ export function getLevelConfig(level) {
         ? 'Complete 1 weekly healing quest.'
         : `Complete ${config.courageCount} weekly healing quests.`,
       icon: '💜',
-      navigateTo: 'Courage',
+      navigateTo: 'Weekly',
     })
   }
 
