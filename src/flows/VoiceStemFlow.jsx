@@ -1394,7 +1394,7 @@ export default function VoiceStemFlow() {
         {screen === 'avatar' && (
           <AvatarScreen
             stage4Results={stage4Results}
-            onSkip={handleRestart}
+            onSkip={() => setScreen('final_results')}
           />
         )}
 
