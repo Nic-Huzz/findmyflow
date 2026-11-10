@@ -3,6 +3,8 @@ import { supabase } from '../lib/supabaseClient'
 import { hapticLight } from '../lib/haptics'
 import confetti from 'canvas-confetti'
 import { saveChallengeCompletion } from '../lib/challengeCompletionService'
+import { advanceStage, createNextChallenge } from '../lib/financialSecurityEngine'
+import { invalidate as invalidatePassionRec, generate as generatePassionChallenge } from '../lib/passionChallengeEngine'
 import {
   EyeSlashIcon,
   AdjustmentsHorizontalIcon,
@@ -15,12 +17,16 @@ import {
   QuestionMarkCircleIcon,
   CheckCircleIcon,
   StopIcon,
+  ArrowPathIcon,
 } from '@heroicons/react/24/solid'
 import './GroanCompletionModal.css'
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
   const savedRef = useRef(false)
   const advanceTimer = useRef(null)
+  const rpAwardedRef = useRef(null)
+  const onCompleteCalledRef = useRef(false)
+  const isMoneyMap = challenge?.challenge_source === 'money_map'
 
   // Hide bottom toolbar while modal is open
   useEffect(() => {
@@ -31,14 +37,28 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Cleanup advance timer on unmount
   useEffect(() => () => clearTimeout(advanceTimer.current), [])
 
-  // Close handler — save path already calls onComplete, so just close here
+  // Close handler — on screen 4 (continue/pivot), fire onComplete to exit
   const handleClose = useCallback(() => {
+    if (isMoneyMap && savedRef.current && !onCompleteCalledRef.current) {
+      // Invalidate + regenerate passion challenge rec for this quest
+      if (sourceQuestId) {
+        invalidatePassionRec(sourceQuestId)
+        generatePassionChallenge(sourceQuestId, userId).catch(() => {})
+      }
+      onCompleteCalledRef.current = true
+      onComplete?.({
+        dimensionValues: challenge?.dimension_values,
+        rpAwarded: rpAwardedRef.current,
+      })
+    }
     onClose()
-  }, [onClose])
+  }, [onClose, onComplete, isMoneyMap, challenge, sourceQuestId, userId])
 
-  const [screen, setScreen] = useState(1) // 1=wahoo, 2=aftertaste, 3=voice
+  const [screen, setScreen] = useState(isMoneyMap ? 3 : 1) // 1=wahoo, 2=aftertaste, 3=voice, 4=continue/pivot (money map discovery only)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
+  const [financialStage, setFinancialStage] = useState(null)
+  const [pivotChoice, setPivotChoice] = useState(null)
 
   // Core state kept for save
   const [wahooClassification, setWahooClassification] = useState(null)
@@ -46,19 +66,89 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   const [aftertaste, setAftertaste] = useState(null)
   const [gapVoice, setGapVoice] = useState(null)
 
+  // Default wahoo/aftertaste for money map (screens 1+2 are skipped)
+  useEffect(() => {
+    if (isMoneyMap) {
+      setWahooClassification('vibe')
+      setAfterState('vibe_rise')
+      setAftertaste('yes')
+    }
+  }, [isMoneyMap])
+
   // Quest linking (needed by saveChallengeCompletion for behavioral evidence)
+  // Also fetches financial_stage for money map stage branching
   const [sourceQuestId, setSourceQuestId] = useState(null)
   useEffect(() => {
     if (!userId || !challenge?.id) return
-    supabase.from('quest_tasks').select('quest_id')
+    supabase.from('quest_tasks').select('quest_id, quests!inner(financial_stage)')
       .eq('groan_challenge_id', challenge.id).eq('user_id', userId)
       .maybeSingle()
-      .then(({ data }) => { if (data?.quest_id) setSourceQuestId(data.quest_id) })
+      .then(({ data }) => {
+        if (data?.quest_id) setSourceQuestId(data.quest_id)
+        if (data?.quests?.financial_stage) setFinancialStage(data.quests.financial_stage)
+      })
   }, [userId, challenge?.id])
 
   function advanceTo(next) {
     clearTimeout(advanceTimer.current)
     advanceTimer.current = setTimeout(() => setScreen(next), 300)
+  }
+
+  // Shared: fire onComplete exactly once
+  function fireOnComplete() {
+    // Invalidate + regenerate passion challenge rec for this quest
+    if (sourceQuestId) {
+      invalidatePassionRec(sourceQuestId)
+      generatePassionChallenge(sourceQuestId, userId).catch(() => {})
+    }
+    if (!onCompleteCalledRef.current) {
+      onCompleteCalledRef.current = true
+      onComplete?.({
+        dimensionValues: challenge?.dimension_values,
+        wahooClassification,
+        afterState,
+        rpAwarded: rpAwardedRef.current,
+      })
+    }
+  }
+
+  // Discovery only: user chose to continue or pivot
+  async function handleContinueOrPivot(choice) {
+    const questId = sourceQuestId || challenge?.quest_id
+    if (choice === 'continue' && questId) {
+      const newStage = await advanceStage(questId, financialStage || 'discovery')
+      if (newStage) {
+        const { data: quest } = await supabase.from('quests')
+          .select('*').eq('id', questId).single()
+        if (quest) await createNextChallenge(userId, quest)
+      }
+    }
+    // 'try_different' — stage stays at discovery, no next challenge
+    fireOnComplete()
+  }
+
+  // Portfolio+ stages: auto-advance without asking
+  async function handleAutoAdvance() {
+    const questId = sourceQuestId || challenge?.quest_id
+    if (!questId) { fireOnComplete(); return }
+
+    // Resolve stage — use cached value, or fetch if useEffect hasn't resolved yet
+    let stage = financialStage
+    if (!stage) {
+      const { data: q } = await supabase.from('quests')
+        .select('financial_stage').eq('id', questId).single()
+      stage = q?.financial_stage
+    }
+    if (!stage) { fireOnComplete(); return }
+
+    const newStage = await advanceStage(questId, stage)
+    if (newStage && newStage !== 'acquisition') {
+      // Create next challenge (skip for acquisition — that's a picker)
+      const { data: quest } = await supabase.from('quests')
+        .select('*').eq('id', questId).single()
+      if (quest) await createNextChallenge(userId, quest)
+    }
+    fireOnComplete()
   }
 
   const savingRef = useRef(false)
@@ -83,6 +173,22 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
 
       savedRef.current = true
       setSaving(false)
+
+      if (isMoneyMap) {
+        rpAwardedRef.current = rpAwarded
+        // financialStage may be null if useEffect hasn't resolved — default to discovery
+        // (the very first money map challenge IS always discovery)
+        const stage = financialStage || 'discovery'
+        if (stage === 'discovery') {
+          // Discovery: show continue/pivot choice (screen 4)
+          advanceTo(4)
+        } else {
+          // Portfolio+: auto-advance, no question asked
+          await handleAutoAdvance()
+        }
+        return
+      }
+
       onComplete?.({
         dimensionValues: challenge.dimension_values,
         wahooClassification,
@@ -168,7 +274,7 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         {/* Screen 2: Do you want to do that again? */}
         {screen === 2 && (
           <>
-            <button className="gcm-back-btn" onClick={() => { clearTimeout(advanceTimer.current); setScreen(1) }}>←</button>
+            <button className="gcm-back-btn" onClick={() => { clearTimeout(advanceTimer.current); setScreen(1) }}>&larr;</button>
             <h2 className="gcm-title">Do you want to do that again?</h2>
             <div className="gcm-wahoo-options">
               <button
@@ -202,7 +308,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
         {/* Screen 3: Voice check + save trigger */}
         {screen === 3 && (
           <>
-            <button className="gcm-back-btn" onClick={() => { clearTimeout(advanceTimer.current); setScreen(2) }}>←</button>
+            {!isMoneyMap && (
+              <button className="gcm-back-btn" onClick={() => { clearTimeout(advanceTimer.current); setScreen(2) }}>&larr;</button>
+            )}
             <h2 className="gcm-title">Did a protective voice show up before or during?</h2>
             <div className="gcm-wahoo-options gcm-voice-grid">
               {voices.map(v => (
@@ -227,6 +335,32 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
             </div>
             {saving && <p className="gcm-saving">Saving...</p>}
             {error && <p className="gcm-error">{error}</p>}
+          </>
+        )}
+
+        {/* Screen 4: Continue or pivot (money map discovery only) */}
+        {screen === 4 && (
+          <>
+            <h2 className="gcm-title">Want to keep exploring this?</h2>
+            <p className="gcm-subtitle">Or would you rather try a different path to financial security?</p>
+            <div className="gcm-wahoo-options">
+              <button
+                className={`gcm-wahoo-btn ${pivotChoice === 'continue' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setPivotChoice('continue'); handleContinueOrPivot('continue') }}
+                style={pivotChoice === 'continue' ? { borderColor: '#E9A23B', background: 'rgba(233,162,59,0.06)', color: '#E9A23B' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji"><FireIcon style={{ width: 20, height: 20 }} /></span>
+                <span className="gcm-wahoo-label">Yes, keep going</span>
+              </button>
+              <button
+                className={`gcm-wahoo-btn ${pivotChoice === 'try_different' ? 'selected' : ''}`}
+                onClick={() => { hapticLight(); setPivotChoice('try_different'); handleContinueOrPivot('try_different') }}
+                style={pivotChoice === 'try_different' ? { borderColor: '#5e17eb', background: 'rgba(94,23,235,0.06)', color: '#5e17eb' } : undefined}
+              >
+                <span className="gcm-wahoo-emoji"><ArrowPathIcon style={{ width: 20, height: 20 }} /></span>
+                <span className="gcm-wahoo-label">Try something different</span>
+              </button>
+            </div>
           </>
         )}
       </div>

@@ -9,7 +9,9 @@ import {
   triggerFireConfetti,
   triggerSideCannons
 } from '../components/Celebrations'
-import { isChapterTransition, JOURNEY_CHAPTERS } from '../data/journeyChapters'
+// journeyChapters removed — no longer used
+const JOURNEY_CHAPTERS = []
+function isChapterTransition() { return null }
 
 /**
  * Hook for managing celebration animations

@@ -21,7 +21,9 @@ import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import GenericRadar from './GenericRadar'
 import ZoneCalSection from './ZoneCalSection'
-import { JOURNEY_CHAPTERS, getChapterForStage } from '../data/journeyChapters'
+// journeyChapters removed — Task 2 replaces ProgressTab entirely
+const JOURNEY_CHAPTERS = []
+function getChapterForStage() { return { chapter: { id: 'search', name: '', tagline: '' } } }
 import StageCard from './StageCard'
 import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import AlivenessCheckin from './AlivenessCheckin'

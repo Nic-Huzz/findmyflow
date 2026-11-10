@@ -3,16 +3,13 @@ import { supabase } from '../lib/supabaseClient'
 
 /**
  * Hook to read/write Experience Dome ratings for the current user.
- * Returns { domeStates, wantPaidStates, setNodeState, bulkSetStates, loading }
+ * Returns { domeStates, setNodeState, loading }
  *
  * domeStates: { [nodeId]: 'vibe_rise' | 'fun' | 'growth_edge' | 'pressure' | 'bored' }
- * wantPaidStates: { [nodeId]: true | false } — only for fun/vibe_rise nodes
  * setNodeState(nodeId, state): upserts a rating (state=null deletes it)
- * bulkSetStates(ratings, wantPaidMap?): upserts ratings + optional want_paid in one call
  */
 export function useDomeData(userId) {
   const [domeStates, setDomeStates] = useState({})
-  const [wantPaidStates, setWantPaidStates] = useState({})
   const [loading, setLoading] = useState(true)
 
   // Load all ratings for user
@@ -25,7 +22,7 @@ export function useDomeData(userId) {
     async function load() {
       const { data, error } = await supabase
         .from('experience_dome_ratings')
-        .select('node_id, ns_state, want_paid')
+        .select('node_id, ns_state')
         .eq('user_id', userId)
 
       if (error) {
@@ -35,13 +32,10 @@ export function useDomeData(userId) {
       }
 
       const states = {}
-      const paid = {}
       data.forEach(row => {
         states[row.node_id] = row.ns_state
-        if (row.want_paid != null) paid[row.node_id] = row.want_paid
       })
       setDomeStates(states)
-      setWantPaidStates(paid)
       setLoading(false)
     }
 
@@ -87,11 +81,10 @@ export function useDomeData(userId) {
   }, [userId])
 
   // Bulk upsert (for onboarding completion)
-  // wantPaidMap is optional: { [nodeId]: true | false }
-  const bulkSetStates = useCallback(async (ratings, wantPaidMap) => {
+  const bulkSetStates = useCallback(async (ratings) => {
     if (!userId) return
 
-    // Optimistic update — ratings
+    // Optimistic update
     setDomeStates(prev => {
       const next = { ...prev }
       Object.entries(ratings).forEach(([nodeId, state]) => {
@@ -101,32 +94,14 @@ export function useDomeData(userId) {
       return next
     })
 
-    // Optimistic update — want_paid
-    if (wantPaidMap) {
-      setWantPaidStates(prev => {
-        const next = { ...prev }
-        Object.entries(wantPaidMap).forEach(([nodeId, val]) => {
-          if (val == null) delete next[nodeId]
-          else next[nodeId] = val
-        })
-        return next
-      })
-    }
-
     const rows = Object.entries(ratings)
       .filter(([, state]) => state)
-      .map(([nodeId, state]) => {
-        const row = {
-          user_id: userId,
-          node_id: nodeId,
-          ns_state: state,
-          updated_at: new Date().toISOString(),
-          // Explicitly set want_paid: use map value if provided, else null
-          // (clears stale want_paid on re-rated nodes)
-          want_paid: (wantPaidMap && wantPaidMap[nodeId] != null) ? wantPaidMap[nodeId] : null,
-        }
-        return row
-      })
+      .map(([nodeId, state]) => ({
+        user_id: userId,
+        node_id: nodeId,
+        ns_state: state,
+        updated_at: new Date().toISOString(),
+      }))
 
     if (rows.length > 0) {
       const { error } = await supabase
@@ -152,5 +127,5 @@ export function useDomeData(userId) {
     }
   }, [userId])
 
-  return { domeStates, wantPaidStates, setNodeState, bulkSetStates, loading }
+  return { domeStates, setNodeState, bulkSetStates, loading }
 }

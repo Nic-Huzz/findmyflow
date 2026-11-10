@@ -30,7 +30,7 @@ import JourneyGraphPopup from '../JourneyGraphPopup'
 import WeeklyFocus from './WeeklyFocus'
 import './WeeklyFocus.css'
 import './LevelTab.css'
-import PayTheBillsSection from '../PayTheBillsSection'
+import FinancialSecurityCard from '../FinancialSecurityCard'
 
 export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, userId = null, capacityRefresh = 0, onRefreshPoints = null, onLevelChange = null, onNavigateTab = null, onGraduate = null }) {
   const { user } = useAuth()
@@ -519,6 +519,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         }).map(q => (
           <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} experiences={questExperiences[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
         ))}
+        {/* Find Your Flow CTA — show when active quests exist but at least one has no flow statement */}
+        {quests.some(q => q.status === 'active' && !q.is_bridge_job && !q.flow_statement) && (
+          <button className="quest-flow-cta" onClick={() => navigate('/curiosity-map')}>
+            Want more personalised courage challenges? Find your flow →
+          </button>
+        )}
+
         {/* Discovery prompt */}
         <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Discover')}>
           Keep completing discovery experiences to identify new paths →
@@ -596,11 +603,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       </div>
 
       {/* Pay The Bills — bridge job section */}
-      <PayTheBillsSection
-        quests={quests}
-        userId={userId}
-        onUpdate={loadQuests}
-      />
+      <FinancialSecurityCard userId={userId} onUpdate={loadQuests} />
 
       {/* Struggle Pills — hidden for now, revisit later */}
 

@@ -8,7 +8,9 @@ import JourneyOnboarding from './journey/JourneyOnboarding'
 import JourneyCompleted from './journey/JourneyCompleted'
 import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import SkillsDisplay from './journey/SkillsDisplay'
-import { getChapterForStage, getStepsWithStatus } from '../data/journeyChapters'
+// journeyChapters removed — Task 2 replaces JourneyTab entirely
+function getChapterForStage() { return { chapter: { id: 'search', name: 'Your Journey', tagline: '' }, steps: [] } }
+function getStepsWithStatus() { return [] }
 import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import './JourneyTab.css'
 

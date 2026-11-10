@@ -8,7 +8,10 @@
  */
 
 import { useNavigate } from 'react-router-dom'
-import { getChapterForStage, getStepsWithStatus, JOURNEY_CHAPTERS } from '../data/journeyChapters'
+// journeyChapters removed — Task 2 replaces StageCard entirely
+const JOURNEY_CHAPTERS = []
+function getChapterForStage() { return { chapter: { id: 'search', name: '', tagline: '' }, stepsComplete: 0, stepsTotal: 0 } }
+function getStepsWithStatus() { return [] }
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import './StageCard.css'
 
