@@ -1,136 +1,189 @@
-/**
- * StageCard.css — Hero stage level card
- * CSS prefix: sc-
- */
+/* StageCard — journey chapter card with tick boxes */
 
 .sc-card {
-  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+  background: linear-gradient(135deg, #5e17eb 0%, #4c1d95 100%);
   border-radius: 24px;
-  padding: 28px 24px;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+  padding: 24px;
+  color: #fff;
+  margin-bottom: 16px;
 }
 
-.sc-stage-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.sc-stage-label {
-  font-size: 11px;
+.sc-chapter-name {
+  font-size: 28px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+  margin-bottom: 2px;
 }
 
-.sc-stage-name {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
+.sc-step-count {
+  font-size: 14px;
+  opacity: 0.7;
   margin-bottom: 20px;
 }
 
-/* Journey bar */
-.sc-journey-bar {
-  position: relative;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 100px;
-  margin-bottom: 6px;
-}
-
-.sc-journey-fill {
-  height: 100%;
-  border-radius: 100px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), #E9A23B);
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-}
-
-.sc-journey-fill::after {
-  content: '';
-  position: absolute;
-  right: -1px;
-  top: -4px;
-  width: 14px;
-  height: 14px;
-  background: #E9A23B;
-  border-radius: 50%;
-  box-shadow: 0 0 12px rgba(233, 162, 59, 0.4);
-  border: 2px solid white;
-}
-
-.sc-journey-endpoints {
+/* Tick box list */
+.sc-steps {
   display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: 600;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.sc-stage-desc {
-  font-size: 13px;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.5;
-  margin-bottom: 12px;
+.sc-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.sc-step-done {
+  opacity: 0.7;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.4);
+}
+
+.sc-step-done .sc-step-icon {
+  color: #E9A23B;
+}
+
+.sc-step-current {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.sc-step-current .sc-step-icon {
+  color: #E9A23B;
+}
+
+.sc-step-icon {
+  flex-shrink: 0;
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.sc-step-name {
+  line-height: 1.3;
+}
+
+/* Chapter dots */
+.sc-chapter-dots {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 20px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.sc-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.sc-dot-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: background 0.3s;
+}
+
+.sc-dot-active .sc-dot-circle {
+  background: #E9A23B;
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.5);
+}
+
+.sc-dot-done .sc-dot-circle {
+  background: rgba(233, 162, 59, 0.6);
+}
+
+.sc-dot-label {
+  font-size: 11px;
+  opacity: 0.5;
+}
+
+.sc-dot-active .sc-dot-label {
+  opacity: 1;
+  font-weight: 600;
 }
 
 /* Think refs */
 .sc-think {
-  padding: 12px 14px;
-  border-left: 3px solid #E9A23B;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 0 12px 12px 0;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
 }
 
 .sc-think-label {
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.6;
+  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #E9A23B;
-  margin-bottom: 4px;
+  letter-spacing: 0.5px;
 }
 
 .sc-think-ref {
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.6;
+  opacity: 0.85;
+  line-height: 1.4;
+  margin-bottom: 4px;
 }
 
-/* Next action button */
+.sc-think-ref:last-child {
+  margin-bottom: 0;
+}
+
+/* CTA button */
 .sc-next-action {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #E9A23B;
+  color: #1a1a1a;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  width: 100%;
-  padding: 12px 16px;
-  background: rgba(233, 162, 59, 0.15);
-  border: 1px solid rgba(233, 162, 59, 0.3);
-  color: #E9A23B;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.sc-next-action:hover {
-  background: rgba(233, 162, 59, 0.25);
+  transition: transform 0.15s, opacity 0.15s;
 }
 
 .sc-next-action:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* Journey toggle (passed as children from ProgressTab) */
+.sc-journey-toggle {
+  display: block;
+  margin: 12px auto 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sc-journey-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
 }

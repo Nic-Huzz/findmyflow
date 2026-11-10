@@ -192,6 +192,11 @@ export async function getDirectionStatus(userId) {
   }
 }
 
+export function isAllDirectionComplete(status) {
+  return !!(status.lifeMapReview && status.problemMotivation
+    && status.multiplication && status.moneyModel)
+}
+
 // ── Era responses (Life Map raw data) ─────────────────────────────────────────
 
 const ERA_ORDER = [

@@ -21,6 +21,8 @@ import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import GenericRadar from './GenericRadar'
 import ZoneCalSection from './ZoneCalSection'
+import StageCard from './StageCard'
+import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import './ProgressTab.css'
 
 // ── Hero Stages with quadrant coordinates ──
@@ -443,6 +445,7 @@ export default function ProgressTab({ userId }) {
   const [matrixData, setMatrixData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showStages, setShowStages] = useState(false)
+  const [directionComplete, setDirectionComplete] = useState(false)
 
   // Data availability flags
   const [hasEssence, setHasEssence] = useState(false)
@@ -921,6 +924,12 @@ export default function ProgressTab({ userId }) {
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
 
+  // Fetch direction completion for StageCard
+  useEffect(() => {
+    if (!userId || heroStage < 8) return
+    getDirectionStatus(userId).then(status => setDirectionComplete(isAllDirectionComplete(status)))
+  }, [userId, heroStage])
+
   // Zone Cal Worth CTA → open healing voice selector
   useEffect(() => {
     const handler = () => {
@@ -1000,42 +1009,11 @@ export default function ProgressTab({ userId }) {
 
       {/* ═══ HERO CARD ═══ */}
       <div className="pt-hero">
-        <div className="pt-stage-row">
-          <div className="pt-stage-label">Stage {heroStage} of 12</div>
-          <button className="pt-stages-toggle" onClick={() => setShowStages(!showStages)}>
+        <StageCard heroStage={heroStage} directionComplete={directionComplete}>
+          <button className="sc-journey-toggle" onClick={() => setShowStages(!showStages)}>
             {showStages ? 'Hide map' : 'See your journey'} {showStages ? '▴' : '▾'}
           </button>
-        </div>
-        <div className="pt-stage-name">{stageInfo.name}</div>
-
-        <div className="pt-journey-bar">
-          <div className="pt-journey-fill" style={{ width: `${Math.max(Math.min((heroStage / 12) * 100, 100), 4)}%` }} />
-        </div>
-        <div className="pt-journey-endpoints">
-          <span>The Crack</span>
-          <span>Doing What You Love</span>
-        </div>
-
-        {stageInfo.desc && (
-          <div className="pt-stage-desc">{stageInfo.desc}</div>
-        )}
-
-        {/* Think refs */}
-        {stageInfo.refs && (
-          <div className="pt-think">
-            <div className="pt-think-label">Think:</div>
-            {stageInfo.refs.map((ref, i) => (
-              <div key={i} className="pt-think-ref">{ref}</div>
-            ))}
-          </div>
-        )}
-
-        {/* Next action CTA */}
-        {stageInfo.nextAction && (
-          <button className="pt-next-action" onClick={() => navigate(stageInfo.nextRoute)}>
-            Next step: {stageInfo.nextAction} <span>→</span>
-          </button>
-        )}
+        </StageCard>
 
         {/* ═══ Expandable Journey Quadrant Map ═══ */}
         {showStages && (
