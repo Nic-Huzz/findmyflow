@@ -1209,3 +1209,69 @@
   color: var(--vs-gold);
   margin: 4px 0 8px;
 }
+
+/* ── AVATAR SCREEN ─────────────────────────────── */
+
+.vs-avatar-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+  text-align: center;
+}
+.vs-avatar-inner {
+  max-width: 480px;
+  width: 100%;
+}
+.vs-avatar-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.vs-avatar-desc {
+  color: var(--vs-muted);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+.vs-avatar-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.vs-avatar-preview {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 2px solid var(--vs-glass-border);
+  margin-bottom: 8px;
+}
+.vs-avatar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.vs-avatar-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vs-avatar-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 2px solid var(--vs-pink);
+  box-shadow: 0 0 40px rgba(217, 70, 239, 0.2);
+}
+.vs-avatar-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}

@@ -629,8 +629,130 @@ function Stage3Results({ results, onContinue }) {
   )
 }
 
+// Avatar generation screen
+function AvatarScreen({ stage4Results, onSkip }) {
+  const [photo, setPhoto] = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [generating, setGenerating] = useState(false)
+  const [generatedUrl, setGeneratedUrl] = useState(null)
+  const [error, setError] = useState(null)
+  const [loadingText, setLoadingText] = useState('Generating...')
+  const fileInputRef = useRef(null)
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhoto(file)
+    setPreview(URL.createObjectURL(file))
+    setError(null)
+    setGeneratedUrl(null)
+  }
+
+  const handleGenerate = async () => {
+    if (!photo || !stage4Results?.primaryArchetype) return
+    setGenerating(true)
+    setError(null)
+
+    const labels = ['Reading your essence...', 'Designing your character...', 'Adding the magic...', 'Almost there...']
+    let i = 0
+    const interval = setInterval(() => { i = (i + 1) % labels.length; setLoadingText(labels[i]) }, 3000)
+
+    try {
+      const base64 = await new Promise((resolve) => {
+        const img = new Image()
+        img.onload = () => {
+          let w = img.width, h = img.height
+          const MAX = 1024
+          if (w > MAX || h > MAX) {
+            const ratio = MAX / Math.max(w, h)
+            w = Math.round(w * ratio)
+            h = Math.round(h * ratio)
+          }
+          const canvas = document.createElement('canvas')
+          canvas.width = w; canvas.height = h
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+          resolve(canvas.toDataURL('image/jpeg', 0.85).split(',')[1])
+        }
+        img.src = URL.createObjectURL(photo)
+      })
+
+      const primary = stage4Results.primaryArchetype
+      const prompt = `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
+
+Their essence: "${primary.name}" - ${primary.essence}
+
+Create a dynamic pose and scene background that embodies this essence. The character should be in action or in their element, not just standing. Use warm cinematic lighting with purple and gold tones. Big expressive animated eyes. Heroic but approachable. Modern 3D animated feature film quality. Square composition.`
+
+      const { supabase: sb } = await import('../lib/supabaseClient')
+      const { data, error: genErr } = await sb.functions.invoke('generate-avatar-gemini', {
+        body: { photo_base64: base64, photo_mime: 'image/jpeg', prompt },
+      })
+
+      clearInterval(interval)
+      if (genErr || data?.error) {
+        setError(data?.message || 'Generation failed. Try again.')
+        setGenerating(false)
+        return
+      }
+      setGeneratedUrl(data.url)
+      setGenerating(false)
+    } catch (err) {
+      clearInterval(interval)
+      console.warn('Avatar error:', err)
+      setError('Something went wrong. Try again.')
+      setGenerating(false)
+    }
+  }
+
+  return (
+    <div className="vs-avatar-screen">
+      <div className="vs-avatar-inner">
+        <h2 className="vs-avatar-title">Create Your Avatar</h2>
+        <p className="vs-avatar-desc">Upload a selfie and we will transform you into your essence archetype.</p>
+
+        {generatedUrl ? (
+          <div className="vs-avatar-result">
+            <img src={generatedUrl} alt="Your essence avatar" className="vs-avatar-image" />
+            <button className="vs-btn-primary" onClick={onSkip} style={{ marginTop: 20 }}>Done</button>
+          </div>
+        ) : preview ? (
+          <div className="vs-avatar-preview-wrap">
+            <img src={preview} alt="Your selfie" className="vs-avatar-preview" />
+            <div className="vs-avatar-actions">
+              <button className="vs-btn-primary" onClick={handleGenerate} disabled={generating}>
+                {generating ? loadingText : 'Generate my avatar'}
+              </button>
+              <button className="vs-btn-ghost" onClick={() => { setPhoto(null); setPreview(null) }} disabled={generating}>
+                Choose different photo
+              </button>
+            </div>
+            {error && <div className="vs-error-msg">{error}</div>}
+          </div>
+        ) : (
+          <div className="vs-avatar-upload">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="user"
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
+            <button className="vs-btn-primary" onClick={() => fileInputRef.current?.click()}>
+              Take a selfie or upload photo
+            </button>
+            <button className="vs-btn-ghost" onClick={onSkip} style={{ marginTop: 12 }}>
+              Skip for now
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // Final results page
-function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, confirmedPrediction, onRestart }) {
+function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, confirmedPrediction, onRestart, onCreateAvatar }) {
   const [emailSent, setEmailSent] = useState(false)
   const [email, setEmail] = useState('')
   const [emailSubmitting, setEmailSubmitting] = useState(false)
@@ -820,6 +942,12 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
           </form>
         )}
       </div>
+
+      {onCreateAvatar && (
+        <button className="vs-btn-primary" onClick={onCreateAvatar} style={{ marginTop: 20 }}>
+          Create your avatar
+        </button>
+      )}
 
       <button className="vs-restart-btn" onClick={onRestart}>
         Start again
@@ -1692,7 +1820,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'essence_reveal' && stage4Results && (
           <EssenceReveal
             results={stage4Results}
-            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
+            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'avatar')}
           />
         )}
 
@@ -1892,6 +2020,15 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             selectedExpression={selectedExpression}
             confirmedPrediction={confirmedPrediction}
             onRestart={handleRestart}
+            onCreateAvatar={() => setScreen('avatar')}
+          />
+        )}
+
+        {/* AVATAR GENERATION */}
+        {screen === 'avatar' && (
+          <AvatarScreen
+            stage4Results={stage4Results}
+            onSkip={() => setScreen('final_results')}
           />
         )}
 
