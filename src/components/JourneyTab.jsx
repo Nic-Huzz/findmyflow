@@ -8,68 +8,11 @@ import JourneyOnboarding from './journey/JourneyOnboarding'
 import JourneyCompleted from './journey/JourneyCompleted'
 import OrphanWahooLinker from './journey/OrphanWahooLinker'
 import SkillsDisplay from './journey/SkillsDisplay'
+import { getChapterForStage, getStepsWithStatus } from '../data/journeyChapters'
+import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import './JourneyTab.css'
 
 const VOICE_ICONS = { ghost: '👻', controller: '🧱', auto_pilot: '🤖', perfectionist: '🎯', people_pleaser: '🪞' }
-
-// Hero stage names + movie references
-const HERO_STAGES = [
-  { stage: 0, name: 'Waking Up', references: [
-    'Ariel seeing the surface world for the first time.',
-    'Peter Parker getting bitten by the spider.',
-    'Neo seeing the Matrix for the first time.',
-  ]},
-  { stage: 1, name: 'Waking Up', references: [
-    'Ariel seeing the surface world for the first time.',
-    'Peter Parker getting bitten by the spider.',
-    'Neo seeing the Matrix for the first time.',
-  ]},
-  { stage: 2, name: 'Exploring', references: [
-    'Ariel seeing the surface world for the first time.',
-    'Peter Parker getting bitten by the spider.',
-    'Neo taking the red pill.',
-  ]},
-  { stage: 3, name: 'Discovering Yourself', references: [
-    'Simba running away to the jungle.',
-    'Miles Morales saying "I can\'t do this."',
-    'Frodo saying "I wish the ring had never come to me."',
-  ]},
-  { stage: 4, name: 'Choosing a Direction', references: [
-    'Aladdin meeting the Genie.',
-    'Tony Stark building the first suit in the cave.',
-    'Luke meeting Yoda on Dagobah.',
-  ]},
-  { stage: 5, name: 'Finding Your Way', references: [
-    'Jasmine and Aladdin on the magic carpet for the first time.',
-    'Spider-Man\'s first swing through New York.',
-    'Neo dodging bullets for the first time.',
-  ]},
-  { stage: 6, name: 'Facing Resistance', references: [
-    'Mulan training with the army.',
-    'The Avengers learning to fight together.',
-    'Rocky running up the stairs.',
-  ]},
-  { stage: 7, name: 'Going Deeper', references: [
-    'Simba returning to the Pride Lands to face Scar.',
-    'Doctor Strange facing Dormammu.',
-    'Luke entering the cave on Dagobah.',
-  ]},
-  { stage: 8, name: 'The Breakthrough', references: [
-    'Mufasa\'s death breaking Simba open.',
-    'Tony Stark snapping the Infinity Gauntlet.',
-    'Neo dying and coming back as The One.',
-  ]},
-  { stage: 9, name: 'First Reward', references: [
-    'Simba taking his place on Pride Rock.',
-    'Thor finally becoming worthy.',
-    'Frodo holding the ring at Mount Doom.',
-  ]},
-  { stage: 10, name: 'Building Momentum', references: [
-    'Woody choosing to leave Andy.',
-    'Spider-Man returning to Queens.',
-    'Bilbo writing his book.',
-  ]},
-]
 
 export default function JourneyTab({ userId, onUnlockTab }) {
   const navigate = useNavigate()
@@ -94,6 +37,13 @@ export default function JourneyTab({ userId, onUnlockTab }) {
   // Lightweight figurine display data (replaces heavy useFigurine hook)
   const [figurineDisplay, setFigurineDisplay] = useState(null)
   const [clarityPct, setClarityPct] = useState(null)
+  const [directionComplete, setDirectionComplete] = useState(false)
+
+  // Fetch direction status for Breakthrough chapter tick box
+  useEffect(() => {
+    if (!userId || heroStage < 8) return
+    getDirectionStatus(userId).then(status => setDirectionComplete(isAllDirectionComplete(status)))
+  }, [userId, heroStage])
 
   useEffect(() => {
     if (!userId) return
@@ -284,7 +234,9 @@ export default function JourneyTab({ userId, onUnlockTab }) {
 
   if (loading) return <div className="jt-loading">Loading journey...</div>
 
-  const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
+  const { chapter } = getChapterForStage(heroStage, directionComplete)
+  const steps = getStepsWithStatus(heroStage, directionComplete)
+  const currentStep = steps.find(s => s.current) || steps[steps.length - 1]
   const sorted = Object.entries(voiceCounts).sort((a, b) => b[1] - a[1])
   const totalVoiceCount = sorted.reduce((sum, [, ct]) => sum + ct, 0)
 
@@ -292,12 +244,12 @@ export default function JourneyTab({ userId, onUnlockTab }) {
     <div className="jt-container">
       {/* Current Stage — unified card with next step + progress */}
       <div className="jt-stage-card">
-        <div className="jt-stage-number">Stage {Math.max(heroStage, 2)}</div>
-        <h2 className="jt-stage-name">{stageInfo.name}</h2>
-        {stageInfo.references?.length > 0 && (
+        <div className="jt-stage-number">{chapter.name}</div>
+        <h2 className="jt-stage-name">{currentStep?.name || chapter.tagline}</h2>
+        {currentStep?.refs?.length > 0 && (
           <div className="jt-stage-refs">
             <p className="jt-stage-ref-label">Think:</p>
-            {stageInfo.references.map((ref, i) => (
+            {currentStep.refs.map((ref, i) => (
               <p key={i} className="jt-stage-ref">{ref}</p>
             ))}
           </div>
@@ -305,33 +257,27 @@ export default function JourneyTab({ userId, onUnlockTab }) {
 
         {/* Next step — clear action + where to go */}
         <div className="jt-stage-next">
-          {heroStage <= 2 && (
+          {chapter.id === 'search' && heroStage <= 2 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">Complete the Getting Started steps below to begin your journey.</span>
               <span className="jt-next-arrow">↓</span>
             </div>
           )}
-          {heroStage === 3 && (
+          {chapter.id === 'search' && heroStage === 3 && (
             <a href="/essence-mirror" className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">Create your hero avatar. Go to the Essence Mirror.</span>
               <span className="jt-next-arrow">→</span>
             </a>
           )}
-          {heroStage === 4 && (
+          {chapter.id === 'search' && heroStage >= 4 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Complete a courage challenge. Any feeling counts.</span>
+              <span className="jt-next-text">Choose your paths and start your first courage challenge.</span>
             </div>
           )}
-          {heroStage === 5 && (
-            <div className="jt-next-inline">
-              <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Focus your courage challenges on one life path. Go deeper.</span>
-            </div>
-          )}
-          {heroStage === 6 && (
+          {chapter.id === 'challenge' && heroStage === 6 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">
@@ -369,7 +315,7 @@ export default function JourneyTab({ userId, onUnlockTab }) {
               )}
             </div>
           )}
-          {heroStage === 7 && (
+          {chapter.id === 'challenge' && heroStage === 7 && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">The root is close. This part needs a human, not an app.</span>
@@ -378,22 +324,16 @@ export default function JourneyTab({ userId, onUnlockTab }) {
               </a>
             </div>
           )}
-          {heroStage === 8 && (
+          {chapter.id === 'breakthrough' && heroStage === 8 && !currentStep?.nextAction && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
               <span className="jt-next-text">You've been through the fire. Check in when you're ready.</span>
             </div>
           )}
-          {heroStage === 9 && (
+          {chapter.id === 'breakthrough' && (heroStage !== 8 || currentStep?.nextAction) && (
             <div className="jt-next-inline">
               <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Your life paths are connecting. Watch for where they overlap.</span>
-            </div>
-          )}
-          {heroStage >= 10 && (
-            <div className="jt-next-inline">
-              <span className="jt-next-label">Next step</span>
-              <span className="jt-next-text">Your flow statement is forming. Keep going.</span>
+              <span className="jt-next-text">{currentStep?.nextAction || 'Your life paths are connecting. Watch for where they overlap.'}</span>
             </div>
           )}
         </div>
