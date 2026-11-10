@@ -94,6 +94,7 @@ function Challenge() {
     loading,
     activeCategory,
     setActiveCategory,
+    weeklyLocked,
     showOnboarding,
     onboardingScreen,
     setOnboardingScreen,
@@ -204,12 +205,7 @@ function Challenge() {
   )
 
   // Step banner dismiss state (Paths + Progress tabs)
-  const [step2PathsSeen, setStep2PathsSeen] = useState(() =>
-    localStorage.getItem('step2_banner_seen_paths') === 'true'
-  )
-  const [step3Seen, setStep3Seen] = useState(() =>
-    localStorage.getItem('step3_banner_seen') === 'true'
-  )
+  // Step banners removed — onboarding now handled by Progress tab banner + Weekly lock
 
   useEffect(() => {
     if (!user?.id) return
@@ -1608,13 +1604,16 @@ const [directionComplete, setDirectionComplete] = useState(false)
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
           const isComingSoon = lockedCategories?.has(category)
-          const isLocked = isComingSoon
+          const isWeeklyLock = category === 'Weekly' && weeklyLocked
+          const isLocked = isComingSoon || isWeeklyLock
           return (
             <button
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => {
-                if (!isLocked) {
+                if (isWeeklyLock) {
+                  setActiveCategory('Progress')
+                } else if (!isLocked) {
                   setActiveCategory(category)
                 }
               }}
@@ -1622,6 +1621,7 @@ const [directionComplete, setDirectionComplete] = useState(false)
             >
               {category}
               {isComingSoon && <span className="lock-icon" style={{ fontSize: '0.7em', opacity: 0.6 }}>Soon</span>}
+              {isWeeklyLock && <span className="lock-icon">🔒</span>}
             </button>
           )
         })}
@@ -1728,13 +1728,6 @@ const [directionComplete, setDirectionComplete] = useState(false)
         )}
 
         {/* Progress Tab — reporting scorecard */}
-        {activeCategory === 'Progress' && !step3Seen && (
-          <div className="dt-step-banner" style={{ margin: '0 0 12px' }}>
-            <span className="dt-step-banner-label">Step 3.</span>
-            <span className="dt-step-banner-text">Watch your life transform as your comfort zone grows.</span>
-            <button className="dt-step-banner-close" onClick={() => { localStorage.setItem('step3_banner_seen', 'true'); setStep3Seen(true) }}>×</button>
-          </div>
-        )}
         {activeCategory === 'Progress' && (
           <Suspense fallback={<div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Loading...</div>}>
             <ProgressTab userId={user?.id} />
@@ -1764,13 +1757,6 @@ const [directionComplete, setDirectionComplete] = useState(false)
         )}
 
         {/* Level Tab */}
-        {activeCategory === 'Weekly' && !step2PathsSeen && (
-          <div className="dt-step-banner" style={{ margin: '0 0 12px' }}>
-            <span className="dt-step-banner-label">Step 2.</span>
-            <span className="dt-step-banner-text">Turn those experiences into life paths with projects and courage challenges.</span>
-            <button className="dt-step-banner-close" onClick={() => { localStorage.setItem('step2_banner_seen_paths', 'true'); setStep2PathsSeen(true) }}>×</button>
-          </div>
-        )}
         {activeCategory === 'Weekly' && (
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setActiveCategory(tab)

@@ -1910,6 +1910,7 @@ export function useChallengeData() {
     activeCategory,
     setActiveCategory,
     allSetupDone,
+    weeklyLocked: hasDome === false, // Weekly locked until user has dome data (from voice onboarding or Experience Game)
     showOnboarding,
     setShowOnboarding,
     onboardingScreen,
