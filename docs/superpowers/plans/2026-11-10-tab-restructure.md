@@ -149,9 +149,11 @@ git add -A && git commit -m "feat: rename tabs Discover/Paths/Tune → Daily/Wee
 
 - [ ] **Step 5:** `src/components/JourneyTab.jsx` line 17: Remove `onUnlockTab` from destructured props. Line 404: Remove `onUnlockTab={onUnlockTab}` from JourneyOnboarding render.
 
-- [ ] **Step 6:** Build check: `npm run build`
+- [ ] **Step 6:** `src/components/onboarding/JourneyOnboarding.jsx` line 19: Remove `onUnlockTab` from destructured props. Grep for any usage inside and remove.
 
-- [ ] **Step 7:** Commit
+- [ ] **Step 7:** Build check: `npm run build`
+
+- [ ] **Step 8:** Commit
 ```bash
 git add -A && git commit -m "feat: remove Discover tab from Challenge + remove Paths lock gate"
 ```
@@ -169,7 +171,7 @@ git add -A && git commit -m "feat: remove Discover tab from Challenge + remove P
 - Consumes: Tab names from Task 1, Discover removed from Task 2
 - Produces: `allSetupDone` boolean returned from useChallengeData hook
 
-- [ ] **Step 1:** `src/hooks/useChallengeData.js` — Add setup completion check. Mirror ProgressTab's checks (lines 1001-1009). Add after existing data loading:
+- [ ] **Step 1:** `src/hooks/useChallengeData.js` — Add setup completion check. IMPORTANT: Mirror ProgressTab's EXACT queries (lines 563-590), not approximations. Add state + effect:
 ```js
 // Setup completion check for landing logic
 const [allSetupDone, setAllSetupDone] = useState(null) // null = loading
@@ -178,12 +180,17 @@ const initialLandingSet = useRef(false)
 useEffect(() => {
   if (!user?.id) return
   Promise.all([
+    // Dome check — same as ProgressTab line 663
     supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
-    supabase.from('user_stage_progress').select('essence_mirror_completed, money_map_completed').eq('user_id', user.id).maybeSingle(),
-    supabase.from('quests').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('is_current_job', false),
-  ]).then(([domeRes, stageRes, questsRes]) => {
+    // Essence check — must match ProgressTab line 575: checks lead_flow_profiles, NOT user_stage_progress
+    supabase.from('lead_flow_profiles').select('id').eq('user_id', user.id).limit(1),
+    // Money map check — same as ProgressTab line 572
+    supabase.from('user_stage_progress').select('money_map_completed').eq('user_id', user.id).maybeSingle(),
+    // Paths check — must match ProgressTab line 586: active, non-current-job quests
+    supabase.from('quests').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'active').neq('is_current_job', true),
+  ]).then(([domeRes, essenceRes, stageRes, questsRes]) => {
     const done = (domeRes.count || 0) > 0
-      && !!stageRes.data?.essence_mirror_completed
+      && (essenceRes.data?.length || 0) > 0
       && !!stageRes.data?.money_map_completed
       && (questsRes.count || 0) > 0
     setAllSetupDone(done)
@@ -191,20 +198,26 @@ useEffect(() => {
 }, [user?.id])
 ```
 
-- [ ] **Step 2:** `src/hooks/useChallengeData.js` — Add landing redirect effect:
+- [ ] **Step 2:** `src/hooks/useChallengeData.js` — Integrate landing logic into initial category selection to avoid flash. Instead of a separate useEffect that redirects AFTER content renders, modify the `getInitialCategory` function (lines 69-73) to return `null` when no `?tab=` param is present, and add a useEffect that sets the real category once `allSetupDone` resolves:
 ```js
-// First-open landing: incomplete users → Progress, complete users → Daily
-useEffect(() => {
-  if (allSetupDone === null || initialLandingSet.current) return
-  initialLandingSet.current = true
-  // Only redirect if no explicit tab was requested via URL
+// In getInitialCategory: if no ?tab= param, return null (pending)
+function getInitialCategory() {
   const params = new URLSearchParams(window.location.search)
-  if (params.get('tab')) return
-  if (!allSetupDone) {
-    setActiveCategory('Progress')
-  }
-}, [allSetupDone])
+  const tabParam = params.get('tab')?.toLowerCase()
+  if (tabParam && TAB_TO_CATEGORY[tabParam]) return TAB_TO_CATEGORY[tabParam]
+  if (tabParam) return 'Daily'
+  return null // no explicit tab — will be set by landing logic
+}
+
+// Then add effect:
+useEffect(() => {
+  if (activeCategory !== null || allSetupDone === null) return
+  if (initialLandingSet.current) return
+  initialLandingSet.current = true
+  setActiveCategory(allSetupDone ? 'Daily' : 'Progress')
+}, [activeCategory, allSetupDone])
 ```
+NOTE: Challenge.jsx must handle `activeCategory === null` by showing a loading state (the existing skeleton/loading check should cover this since the main data loading runs in parallel).
 
 - [ ] **Step 3:** Return `allSetupDone` from the hook alongside existing values.
 
@@ -345,7 +358,18 @@ const DirectionPage = lazyRetry(() => import('./pages/DirectionPage'))
   - Near line 808: `const [searchParams] = useSearchParams()` and `const returnTo = decodeURIComponent(searchParams.get('returnTo') || '/7-day-challenge?tab=daily')`
   - Lines 811, 850: Replace `navigate('/7-day-challenge?tab=discover')` with `navigate(returnTo)`
 
-- [ ] **Step 8:** `src/components/ProgressTab.jsx` — Add onboarding banner after StageCard. Use the EXISTING `allSetupDone` variable (line 1009) — no new import needed:
+- [ ] **Step 8:** `src/components/ProgressTab.jsx` — Add onboarding banner after StageCard AND hide the existing smart CTA. Use the EXISTING `allSetupDone` variable (line 1009) — no new import needed.
+
+First, at lines 1596-1612, wrap the existing smart CTA block in a comment or delete it — the onboarding banner replaces it as the primary CTA for incomplete users:
+```jsx
+{/* REMOVED: replaced by onboarding banner above
+{nextCta && allSetupDone === false && (
+  ... existing smart CTA ...
+)}
+*/}
+```
+
+Then add the new banner after StageCard:
 ```jsx
 {!allSetupDone && (
   <div className="pt-onboarding-banner">
