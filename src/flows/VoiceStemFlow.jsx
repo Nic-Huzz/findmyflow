@@ -126,6 +126,14 @@ function RecordingZone({ secondsLeft, onDone }) {
   )
 }
 
+function DoubleConfirmButton({ onConfirm, label = 'Continue', confirmLabel = 'Ready? Tap to begin' }) {
+  const [confirmed, setConfirmed] = useState(false)
+  if (!confirmed) {
+    return <button className="vs-btn-primary" onClick={() => setConfirmed(true)}>{label}</button>
+  }
+  return <button className="vs-btn-primary vs-btn-ready" onClick={onConfirm}>{confirmLabel}</button>
+}
+
 function ProcessingScreen({ stage }) {
   const labels = {
     1: 'Finding your essence themes...',
@@ -216,7 +224,7 @@ function Stage1Results({ results, onContinue }) {
         ))}
       </div>
       <p className="vs-results-prompt">Which of these feels most alive right now? Which one do you miss most?</p>
-      <button className="vs-cta" onClick={onContinue}>Continue</button>
+      <DoubleConfirmButton onConfirm={onContinue} />
     </div>
   )
 }
@@ -319,9 +327,9 @@ function Stage2Results({ results, selectedExpression, confirmedPrediction, onCon
         </div>
       )}
 
-      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
-        Continue to Stage 3
-      </button>
+      <div style={{ marginTop: 8 }}>
+        <DoubleConfirmButton onConfirm={onContinue} />
+      </div>
     </div>
   )
 }
@@ -417,9 +425,9 @@ function Stage3Results({ results, onContinue }) {
         </div>
       )}
 
-      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
-        See the full picture
-      </button>
+      <div style={{ marginTop: 8 }}>
+        <DoubleConfirmButton onConfirm={onContinue} />
+      </div>
     </div>
   )
 }
@@ -677,6 +685,8 @@ function EssenceReveal({ results, onContinue }) {
 export default function VoiceStemFlow() {
   // ── Top-level screen state ──────────────────────────────────────────────
   const [screen, setScreen] = useState('landing')
+  const [participantName, setParticipantName] = useState('')
+  const [participantEmail, setParticipantEmail] = useState('')
 
   // ── Current position in the flow ───────────────────────────────────────
   // Which stage/layer/stemIndex we're on
@@ -1027,6 +1037,8 @@ export default function VoiceStemFlow() {
       const ok = await requestPermission()
       if (!ok) return
     }
+    // Save name + email immediately so all subsequent saves include them
+    saveSession({ name: participantName.trim(), email: participantEmail.trim().toLowerCase() })
     beginStage({ stageIndex: 0, layerIndex: null })
   }
 
@@ -1098,14 +1110,31 @@ export default function VoiceStemFlow() {
               ))}
             </div>
 
+            <div className="vs-landing-form">
+              <input
+                type="text"
+                placeholder="Your name"
+                value={participantName}
+                onChange={(e) => setParticipantName(e.target.value)}
+                className="vs-input"
+              />
+              <input
+                type="email"
+                placeholder="Your email"
+                value={participantEmail}
+                onChange={(e) => setParticipantEmail(e.target.value)}
+                className="vs-input"
+              />
+            </div>
+
             {recError && <div className="vs-error-msg">{recError}</div>}
 
             <button
               className="vs-btn-primary"
               onClick={handleStart}
-              disabled={isInApp}
+              disabled={isInApp || !participantName.trim() || !participantEmail.trim()}
             >
-              {permissionGranted ? 'Begin — Speak first, think later' : 'Allow microphone and begin'}
+              {permissionGranted ? 'Begin' : 'Allow microphone and begin'}
             </button>
           </div>
         )}

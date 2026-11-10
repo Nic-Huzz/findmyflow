@@ -125,6 +125,35 @@
   color: var(--vs-muted);
 }
 
+.vs-landing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.vs-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--vs-glass-border);
+  background: var(--vs-glass);
+  color: var(--vs-text);
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vs-input:focus {
+  border-color: var(--vs-pink);
+}
+
+.vs-input::placeholder {
+  color: var(--vs-muted);
+}
+
 .vs-btn-primary {
   width: 100%;
   padding: 16px 32px;
@@ -152,6 +181,15 @@
 .vs-btn-primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.vs-btn-ready {
+  animation: vs-pulse-ready 1.5s ease-in-out infinite;
+}
+
+@keyframes vs-pulse-ready {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
 }
 
 .vs-btn-ghost {
