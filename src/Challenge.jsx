@@ -1479,6 +1479,37 @@ const [directionComplete, setDirectionComplete] = useState(false)
   // Note: Level, Tune, and Play-list tabs work without progress (self-contained).
   // Only Healing tab needs progress for quest tracking. Don't block the whole page.
 
+  // activeCategory is null when no ?tab= param and allSetupDone hasn't resolved yet.
+  // The existing loading skeleton covers this case — don't render tab content until a
+  // real category is selected to avoid a flash of incorrect tab.
+  if (activeCategory === null) {
+    return (
+      <div className="challenge-container">
+        <div className="skeleton-header">
+          <div className="skeleton-title shimmer"></div>
+          <div className="skeleton-points shimmer"></div>
+        </div>
+        <div className="skeleton-tabs">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="skeleton-tab shimmer"></div>
+          ))}
+        </div>
+        <div className="skeleton-cards">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="skeleton-card">
+              <div className="skeleton-card-header">
+                <div className="skeleton-card-title shimmer"></div>
+                <div className="skeleton-card-badge shimmer"></div>
+              </div>
+              <div className="skeleton-card-desc shimmer"></div>
+              <div className="skeleton-card-desc short shimmer"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const categoryPoints = getCategoryPoints(activeCategory)
   const artifactProgress = getArtifactProgress(activeCategory, null)
 
