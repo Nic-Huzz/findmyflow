@@ -536,7 +536,7 @@ export function getRecommendedEmphasis(currentStage, wealthLadder) {
  * Tension Layer Display Metadata
  */
 export const TENSION_LAYER_DISPLAY = {
-  discover: { name: 'Discover', riverElement: 'The Spring', emoji: '💧', color: '#9333EA', description: 'Finding your source.', appFeature: 'Flow Finder' },
+  discover: { name: 'Daily', riverElement: 'The Spring', emoji: '💧', color: '#9333EA', description: 'Finding your source.', appFeature: 'Flow Finder' },
   regulate: { name: 'Regulate', riverElement: 'The Riverbed', emoji: '🪨', color: '#10B981', description: 'Building capacity.', appFeature: 'Healing & Rewiring' },
   reveal:   { name: 'Reveal', riverElement: 'The Current', emoji: '🌊', color: '#E9A23B', description: 'Showing up and doing the work.', appFeature: 'Play-list Live + Money Layers' },
   value:    { name: 'Value', riverElement: 'The Ocean', emoji: '🌏', color: '#5e17eb', description: 'Owning your worth.', appFeature: 'Play-list Vulnerable + Authority Layers' },

@@ -983,7 +983,7 @@ export default function LifePathFlow() {
                 <p style={{ margin: '0 0 10px' }}>Your life paths are now active quests. The things you've been putting off are your courage challenges.</p>
                 <p style={{ margin: 0 }}>Head to your Paths tab to see them.</p>
               </div>
-              <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge?tab=Paths')} style={{ marginTop: 16 }}>
+              <button className="flp-advance-btn" onClick={() => navigate('/7-day-challenge?tab=weekly')} style={{ marginTop: 16 }}>
                 Go to my paths →
               </button>
               <button className="flp-advance-btn" onClick={() => setStep(STEPS.MAP)} style={{ marginTop: 8, opacity: 0.5, background: 'transparent', border: '1px solid rgba(0,0,0,0.1)', color: '#1a1a2e' }}>

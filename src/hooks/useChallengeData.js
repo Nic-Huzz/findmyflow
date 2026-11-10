@@ -37,27 +37,36 @@ const INSTALL_SEEN_KEY = 'hasSeenChallengeInstallPrompt'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
-  'play-list': 'Paths',
-  'playlist': 'Paths',
-  'wahoo': 'Paths',         // backward compat — courage merged into quests
-  'courage': 'Paths',       // backward compat — courage merged into quests
-  'priority': 'Paths',
-  'level': 'Paths',         // backward compat
-  'quests': 'Paths',
-  'paths': 'Paths',
-  'business': 'Paths',      // backward compat
-  'create': 'Paths',        // backward compat
-  'groans': 'Paths',        // backward compat — courage merged into quests
-  'healing': 'Paths',       // backward compat — courage merged into quests
-  'tracker': 'Paths',       // backward compat — courage merged into quests
-  'tune': 'Tune',
-  'bonus': 'Tune',           // backward compat
-  'journey': 'Discover',     // renamed
-  'discover': 'Discover',
+  // Daily (was Tune + Discover)
+  'daily': 'Daily',
+  'tune': 'Daily',           // backward compat
+  'bonus': 'Daily',          // backward compat
+  'discover': 'Daily',       // backward compat
+  'journey': 'Daily',        // backward compat
+
+  // Weekly (was Paths)
+  'weekly': 'Weekly',
+  'paths': 'Weekly',         // backward compat
+  'play-list': 'Weekly',     // backward compat
+  'playlist': 'Weekly',      // backward compat
+  'wahoo': 'Weekly',         // backward compat
+  'courage': 'Weekly',       // backward compat
+  'priority': 'Weekly',      // backward compat
+  'level': 'Weekly',         // backward compat
+  'quests': 'Weekly',        // backward compat
+  'business': 'Weekly',      // backward compat
+  'create': 'Weekly',        // backward compat
+  'groans': 'Weekly',        // backward compat
+  'healing': 'Weekly',       // backward compat
+  'tracker': 'Weekly',       // backward compat
+
+  // Progress (unchanged)
   'progress': 'Progress',
+
+  // Special views (unchanged)
   'leaderboard': 'Leaderboard',
   'summary': 'GroansSummary',
-  'healing-summary': 'HealingSummary'
+  'healing-summary': 'HealingSummary',
 }
 
 export function useChallengeData() {
@@ -69,7 +78,7 @@ export function useChallengeData() {
   const getInitialCategory = () => {
     const params = new URLSearchParams(location.search)
     const tabParam = params.get('tab')?.toLowerCase()
-    return TAB_TO_CATEGORY[tabParam] || 'Discover'
+    return TAB_TO_CATEGORY[tabParam] || 'Daily'
   }
 
   // UI State
@@ -142,7 +151,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Discover', 'Paths', 'Tune', 'Progress']
+  const categories = ['Daily', 'Weekly', 'Progress']
   const lockedCategories = new Set([]) // All tabs unlocked
   const BONUS_PERCENTAGE = 5 // kept for legacy tab completion bonus logic
 

@@ -527,7 +527,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         )}
 
         {/* Discovery prompt */}
-        <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Discover')}>
+        <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Daily')}>
           Keep completing discovery experiences to identify new paths →
         </div>
         {hasLifePaths && !showAddQuest && (
@@ -619,7 +619,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name experiences you'd love to have that scare you a little. Host a silent disco. Post a vulnerable video. Cold-call a stranger.</p>
             <p className="quest-modal-question">Each one is a rep in the gym, training your system that expressing yourself this way is safe.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Weekly') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -637,7 +637,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             <p className="quest-modal-question" style={{ fontWeight: 700, color: '#1a1a2e' }}>What you'll do:</p>
             <p className="quest-modal-question">Name the fear. Identify the pattern. Trace it to its origin. Rewrite what's true now.</p>
             <p className="quest-modal-question">Understanding the pattern is the first step. Releasing it is the second.</p>
-            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Paths') }}>
+            <button className="quest-modal-cta" onClick={() => { setUnlockExplainer(null); onNavigateTab?.('Weekly') }}>
               Open Courage Tab →
             </button>
           </div>
@@ -774,7 +774,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Paths')}
+                  onClick={() => onNavigateTab?.('Weekly')}
                   style={{ cursor: 'pointer' }}
                 >
                   {courageDone > 0 ? `${courageDone}/${courageTarget}` : 'Start'}
@@ -807,7 +807,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
               ) : (
                 <button
                   className="level-dd-status start"
-                  onClick={() => onNavigateTab?.('Paths')}
+                  onClick={() => onNavigateTab?.('Weekly')}
                   style={{ cursor: 'pointer' }}
                 >
                   {healingDone > 0 ? `${healingDone}/${healingTarget}` : 'Start'}

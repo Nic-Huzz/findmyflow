@@ -247,7 +247,7 @@ export default function FinancialSecurityCard({ userId, onUpdate }) {
             className="fsc-cta"
             onClick={() => {
               // Navigate to the paths tab — the QuestBoardCard will show this challenge
-              navigate('/7-day-challenge?tab=Paths')
+              navigate('/7-day-challenge?tab=weekly')
             }}
           >
             Start this challenge →

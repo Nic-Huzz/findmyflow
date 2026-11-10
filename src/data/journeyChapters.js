@@ -38,7 +38,7 @@ export const JOURNEY_CHAPTERS = [
     belief: "Growing up is having the freedom to express without needing anyone's permission.",
     tagline: "Something clicks. You start living from it.",
     steps: [
-      { heroStage: null, name: 'Find your direction', desc: "Everything connects. You know what you're here for.", refs: ['Po discovering the Dragon Scroll is blank.', 'Remy cooking for the food critic.'], nextAction: 'Explore your direction on the Discover tab', nextRoute: '/7-day-challenge', checkFn: 'directionComplete' },
+      { heroStage: null, name: 'Find your direction', desc: "Everything connects. You know what you're here for.", refs: ['Po discovering the Dragon Scroll is blank.', 'Remy cooking for the food critic.'], nextAction: 'Find your direction', nextRoute: '/direction', checkFn: 'directionComplete' },
       { heroStage: 9, name: 'First Reward', desc: "You're earning from what you love.", refs: ['Simba taking his place on Pride Rock.', 'Thor finally becoming worthy.'], nextAction: 'Report your first income', nextRoute: '/7-day-challenge' },
       { heroStage: 10, name: 'Building Momentum', desc: "It's working and you keep going.", refs: ['Woody choosing to leave Andy.', 'Bilbo writing his book.'], nextAction: 'Earn income 3 months in a row', nextRoute: '/7-day-challenge' },
       { heroStage: 11, name: 'Proving It\'s Real', desc: "This isn't luck. It's you.", refs: ['"I am Iron Man."', 'Simba defeating Scar.'], nextAction: 'Cover your monthly expenses', nextRoute: '/7-day-challenge' },

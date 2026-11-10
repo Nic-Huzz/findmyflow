@@ -409,7 +409,7 @@ function Challenge() {
   // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Discover', 'Tune', 'Progress']))
+  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Daily', 'Weekly', 'Progress']))
   const [directionComplete, setDirectionComplete] = useState(false)
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
@@ -1374,7 +1374,7 @@ function Challenge() {
     if (q.archived) return false
     // Play-list and Tune tabs handle their own content via standalone components
     if (activeCategory === 'Courage') return false
-    if (activeCategory === 'Tune') return false
+    if (activeCategory === 'Daily') return false
     return q.category === activeCategory
   }) || []
 
@@ -1598,8 +1598,8 @@ function Challenge() {
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => {
-                if (isLocked && category === 'Paths') {
-                  setActiveCategory('Discover')
+                if (isLocked && category === 'Weekly') {
+                  setActiveCategory('Daily')
                 } else if (!isLocked) {
                   setActiveCategory(category)
                 }
@@ -1644,7 +1644,7 @@ function Challenge() {
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
-            onBack={() => setActiveCategory('Paths')}
+            onBack={() => setActiveCategory('Weekly')}
             progress={progress}
             completions={completions}
           />
@@ -1653,7 +1653,7 @@ function Challenge() {
         {/* Healing Summary */}
         {activeCategory === 'HealingSummary' && (
           <HealingSummary
-            onBack={() => setActiveCategory('Paths')}
+            onBack={() => setActiveCategory('Weekly')}
             progress={progress}
           />
         )}
@@ -1712,7 +1712,7 @@ function Challenge() {
         {/* Flow Finder sub-tabs archived — skills revealed through levels */}
 
         {/* Tune Tab — Daily maintenance deposits */}
-        {activeCategory === 'Tune' && (
+        {activeCategory === 'Daily' && (
           <TuneTab
             userId={user?.id}
             onQuestComplete={handleQuestComplete}
@@ -1771,14 +1771,14 @@ function Challenge() {
         )}
 
         {/* Level Tab */}
-        {activeCategory === 'Paths' && !step2PathsSeen && (
+        {activeCategory === 'Weekly' && !step2PathsSeen && (
           <div className="dt-step-banner" style={{ margin: '0 0 12px' }}>
             <span className="dt-step-banner-label">Step 2.</span>
             <span className="dt-step-banner-text">Turn those experiences into life paths with projects and courage challenges.</span>
             <button className="dt-step-banner-close" onClick={() => { localStorage.setItem('step2_banner_seen_paths', 'true'); setStep2PathsSeen(true) }}>×</button>
           </div>
         )}
-        {activeCategory === 'Paths' && (
+        {activeCategory === 'Weekly' && (
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
             setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)

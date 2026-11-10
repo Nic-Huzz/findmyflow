@@ -364,7 +364,7 @@ export default function PathDefinitionFlow() {
       <div className="pdf"><div className="pdf-container">
         <div className="pdf-error">
           {error || 'Path not found.'}
-          <button onClick={() => navigate('/7-day-challenge?tab=Paths')}>Go to Paths</button>
+          <button onClick={() => navigate('/7-day-challenge?tab=weekly')}>Go to Paths</button>
         </div>
       </div></div>
     )
@@ -652,7 +652,7 @@ export default function PathDefinitionFlow() {
               onClick={() => goScreen(2)}>
               {!precursor ? 'Pick where you are' : !hasAspiration ? 'Set aspirations for 4+ dimensions' : 'Next →'}
             </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => baselineExists ? navigate('/7-day-challenge?tab=Paths') : goScreen(0)}>
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => baselineExists ? navigate('/7-day-challenge?tab=weekly') : goScreen(0)}>
               {baselineExists ? '← Back to paths' : '← Back'}
             </button>
           </div>
@@ -1095,7 +1095,7 @@ export default function PathDefinitionFlow() {
             <h2>Path defined</h2>
             <p>Your first courage challenge is ready. Head to your paths to start.</p>
             <div className="pdf-fixed">
-              <button className="pdf-cta pdf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=Paths')}>
+              <button className="pdf-cta pdf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=weekly')}>
                 Go to my paths →
               </button>
             </div>
