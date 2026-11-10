@@ -1013,6 +1013,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Top-level screen state ──────────────────────────────────────────────
   const [screen, setScreen] = useState('landing')
+  const [participantName, setParticipantName] = useState('')
+  const [participantEmail, setParticipantEmail] = useState('')
 
   // ── Current position in the flow ───────────────────────────────────────
   // Which stage/layer/stemIndex we're on
@@ -1384,6 +1386,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       const ok = await requestPermission()
       if (!ok) return
     }
+    saveSession({ name: participantName.trim(), email: participantEmail.trim().toLowerCase() })
     beginStage({ stageIndex: 0, layerIndex: null })
   }
 
@@ -1695,14 +1698,31 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               ))}
             </div>
 
+            <div className="vs-landing-form">
+              <input
+                type="text"
+                placeholder="Your name"
+                value={participantName}
+                onChange={(e) => setParticipantName(e.target.value)}
+                className="vs-input"
+              />
+              <input
+                type="email"
+                placeholder="Your email"
+                value={participantEmail}
+                onChange={(e) => setParticipantEmail(e.target.value)}
+                className="vs-input"
+              />
+            </div>
+
             {recError && <div className="vs-error-msg">{recError}</div>}
 
             <button
               className="vs-btn-primary"
               onClick={handleStart}
-              disabled={isInApp}
+              disabled={isInApp || !participantName.trim() || !participantEmail.trim()}
             >
-              {permissionGranted ? 'Begin — Speak first, think later' : 'Allow microphone and begin'}
+              {permissionGranted ? 'Begin' : 'Allow microphone and begin'}
             </button>
           </div>
         )}
