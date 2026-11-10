@@ -30,7 +30,7 @@ function getWeekKey() {
   return WEEK_KEY + getWeekStartLocal()
 }
 
-export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpdate }) {
+export default function DiscoverTab({ userId, heroStage = 0, onUpdate }) {
   const navigate = useNavigate()
   const [essenceDone, setEssenceDone] = useState(false)
   const [domeCount, setDomeCount] = useState(0)

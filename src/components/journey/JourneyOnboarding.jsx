@@ -16,7 +16,7 @@ import DeepDiveCard from '../level/DeepDiveCard'
 import '../level/LevelTab.css'
 import './JourneyOnboarding.css'
 
-export default function JourneyOnboarding({ userId, onUnlockTab }) {
+export default function JourneyOnboarding({ userId }) {
   const { user } = useAuth()
   const [hasCuriosityMap, setHasCuriosityMap] = useState(false)
   const [hasLifeMap, setHasLifeMap] = useState(false)

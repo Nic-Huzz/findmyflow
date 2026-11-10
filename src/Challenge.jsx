@@ -49,8 +49,6 @@ import DailyCheckin from './components/DailyCheckin'
 import WeeklyReview from './components/WeeklyReview'
 import LevelTab from './components/level/LevelTab'
 import JourneyTab from './components/JourneyTab'
-import DiscoverTab from './components/DiscoverTab'
-import './components/DiscoverTab.css'
 const ProgressTab = lazy(() => import('./components/ProgressTab'))
 import './components/ProgressTab.css'
 import { getLevelConfig } from './components/level/LevelConfig'
@@ -409,8 +407,7 @@ function Challenge() {
   // Dynamic level detection + hero stage graduation
   const [currentJourneyLevel, setCurrentJourneyLevel] = useState(0)
   const [viewingLevel, setViewingLevel] = useState(null)
-  const [unlockedTabs, setUnlockedTabs] = useState(new Set(['Daily', 'Weekly', 'Progress']))
-  const [directionComplete, setDirectionComplete] = useState(false)
+const [directionComplete, setDirectionComplete] = useState(false)
 
   // Post-action trigger: bumped by completion handlers to re-check graduation immediately
   const [stageCheckTrigger, setStageCheckTrigger] = useState(0)
@@ -454,18 +451,6 @@ function Challenge() {
         }
       }
 
-      // 4. Tab unlock logic — Paths unlocks after choose-quests OR current job completion
-      const email = (await supabase.auth.getUser()).data?.user?.email
-      Promise.all([
-        email
-          ? supabase.from('life_path_sessions').select('id').eq('client_email', email).eq('step', 'complete').limit(1)
-          : Promise.resolve({ data: [] }),
-        supabase.from('quests').select('id').eq('user_id', user.id).eq('is_current_job', true).limit(1),
-      ]).then(([lpRes, cjRes]) => {
-        if (lpRes.data?.length > 0 || cjRes.data?.length > 0) {
-          setUnlockedTabs(prev => new Set([...prev, 'Paths']))
-        }
-      })
     }
 
     loadStageAndCheckGraduation()
@@ -1592,15 +1577,13 @@ function Challenge() {
       <div className="challenge-tabs stagger-children">
         {categories.map(category => {
           const isComingSoon = lockedCategories?.has(category)
-          const isLocked = isComingSoon || !unlockedTabs.has(category)
+          const isLocked = isComingSoon
           return (
             <button
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => {
-                if (isLocked && category === 'Weekly') {
-                  setActiveCategory('Daily')
-                } else if (!isLocked) {
+                if (!isLocked) {
                   setActiveCategory(category)
                 }
               }}
@@ -1608,18 +1591,10 @@ function Challenge() {
             >
               {category}
               {isComingSoon && <span className="lock-icon" style={{ fontSize: '0.7em', opacity: 0.6 }}>Soon</span>}
-              {isLocked && !isComingSoon && <span className="lock-icon">🔒</span>}
             </button>
           )
         })}
       </div>
-
-      {/* Lock explanation — visible when Paths is locked */}
-      {!unlockedTabs.has('Paths') && activeCategory === 'Discover' && (
-        <div className="paths-lock-hint">
-          Complete discovery to unlock Paths
-        </div>
-      )}
 
       {/* Healing tab — new per-task intentions only, no legacy cards */}
 
@@ -1757,19 +1732,6 @@ function Challenge() {
           />
         )}
 
-        {/* Journey Tab — hero stage, voice progress, thresholds */}
-        {activeCategory === 'Discover' && (
-          <DiscoverTab userId={user?.id} heroStage={currentJourneyLevel} onUnlockTab={(tab) => { setUnlockedTabs(prev => new Set([...prev, tab])); setActiveCategory(tab) }} onUpdate={() => {
-            loadStageProgress()
-            loadUserScores()
-            recheckStage()
-            // Re-check direction completion after card save
-            if (currentJourneyLevel >= 8) {
-              getDirectionStatus(user?.id).then(status => setDirectionComplete(isAllDirectionComplete(status)))
-            }
-          }} />
-        )}
-
         {/* Level Tab */}
         {activeCategory === 'Weekly' && !step2PathsSeen && (
           <div className="dt-step-banner" style={{ margin: '0 0 12px' }}>
@@ -1780,7 +1742,6 @@ function Challenge() {
         )}
         {activeCategory === 'Weekly' && (
           <LevelTab currentLevel={viewingLevel ?? currentJourneyLevel ?? 0} maxUnlockedLevel={currentJourneyLevel ?? 0} userId={user?.id} capacityRefresh={capacityRefresh} onRefreshPoints={() => { loadStageProgress(); loadUserScores(); reloadCompletions() }} onLevelChange={setViewingLevel} onNavigateTab={(tab) => {
-            setUnlockedTabs(prev => new Set([...prev, tab]))
             setActiveCategory(tab)
           }} onGraduate={(newLevel) => {
             setCurrentJourneyLevel(newLevel)
