@@ -18,6 +18,32 @@
   font-size: 14px;
 }
 
+/* ═══ ONBOARDING BANNER ══════════════════════════════ */
+.progress-tab .pt-onboarding-banner {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.progress-tab .pt-onboarding-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.progress-tab .pt-onboarding-secondary {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 8px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ═══ HERO CARD ══════════════════════════════════════ */
 
 .progress-tab .pt-hero {

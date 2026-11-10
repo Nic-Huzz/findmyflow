@@ -500,9 +500,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         </div>
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
-            <span style={{ fontSize: 20 }}>🔒</span>
-            <p>Complete discovery first to unlock your paths</p>
-            <a href="/try/life-paths" className="quest-locked-link">Start Life Paths →</a>
+            <p>Find something you want to pursue</p>
+            <a href={`/experience-game?returnTo=${encodeURIComponent('/7-day-challenge?tab=weekly')}`} className="quest-locked-link">Start discovering →</a>
           </div>
         )}
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && hasLifePaths && (
@@ -527,8 +526,8 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         )}
 
         {/* Discovery prompt */}
-        <div className="quest-discover-prompt" onClick={() => onNavigateTab?.('Daily')}>
-          Keep completing discovery experiences to identify new paths →
+        <div className="quest-discover-prompt" onClick={() => navigate('/experience-game?returnTo=' + encodeURIComponent('/7-day-challenge?tab=weekly'))}>
+          Not feeling any of these? Find something new →
         </div>
         {hasLifePaths && !showAddQuest && (
           <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Path</button>
