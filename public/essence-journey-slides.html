@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essence Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #09090F;
+    --surface: #111118;
+    --pink: #D946EF;
+    --gold: #FFB800;
+    --text: #F0ECF5;
+    --muted: rgba(240, 236, 245, 0.45);
+    --glass: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --gradient: linear-gradient(135deg, #D946EF 0%, #D946EF 65%, #E8A040 90%, #FFB800 100%);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    cursor: none;
+  }
+
+  /* Noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  /* Gradient glow behind active slide */
+  .slide.active::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(217, 70, 239, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Typography */
+  .slide-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 28px;
+  }
+
+  .slide-label.gold { color: var(--gold); }
+
+  h1 {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 4.5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 700px;
+  }
+
+  .quote {
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 750px;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .quote strong {
+    font-weight: 700;
+    font-style: normal;
+    color: var(--text);
+  }
+
+  /* Rule list */
+  .rules {
+    list-style: none;
+    text-align: left;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .rules li {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--text);
+    padding-left: 36px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .rules li::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 0;
+    font-weight: 800;
+    font-size: 0.85rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gradient);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 2px;
+  }
+
+  /* Stage cards */
+  .stage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    border-radius: 24px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .stage-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pink);
+  }
+
+  .stage-badge.gold .dot { background: var(--gold); }
+
+  /* Share prompt */
+  .share-prompt {
+    margin-top: 32px;
+    padding: 20px 28px;
+    border-radius: 16px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 550px;
+    line-height: 1.6;
+  }
+
+  .share-prompt strong {
+    color: var(--pink);
+    font-weight: 600;
+  }
+
+  /* Big number */
+  .big-number {
+    font-size: clamp(5rem, 12vw, 10rem);
+    font-weight: 900;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  /* Link display */
+  .link-display {
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding: 16px 40px;
+    border-radius: 16px;
+    background: var(--glass);
+    border: 2px solid var(--pink);
+    color: var(--pink);
+    letter-spacing: 0.02em;
+    margin-top: 20px;
+    margin-bottom: 12px;
+  }
+
+  .link-hint {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Divider line */
+  .divider {
+    width: 60px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--gradient);
+    margin: 24px auto;
+  }
+
+  /* Progress bar */
+  .progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gradient);
+    transition: width 0.5s ease;
+    z-index: 100;
+  }
+
+  /* Slide counter */
+  .counter {
+    position: fixed;
+    bottom: 16px;
+    right: 24px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    z-index: 100;
+  }
+
+  /* Keyboard hint */
+  .keys-hint {
+    position: fixed;
+    bottom: 16px;
+    left: 24px;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.15);
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ═══════════════════════ INTRO ═══════════════════════ -->
+
+  <!-- Slide 1: Title -->
+  <div class="slide active" data-section="intro">
+    <h1 class="gradient-text">Essence Journey</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Welcome. My name is Huzz.</p>
+  </div>
+
+  <!-- Slide 2: Knowledge Stack -->
+  <div class="slide" data-section="intro">
+    <div class="big-number">6</div>
+    <h2>years of knowledge<br>poured into this session</h2>
+    <p class="subtitle">Books. Podcasts. Courses. Frameworks. Neuroscience. 200+ guided rave experiences across 12 countries. All compressed into the next 50 minutes. Most people would sell this as a 6-week coaching container.</p>
+  </div>
+
+  <!-- Slide 3: Chicken + Egg -->
+  <div class="slide" data-section="intro">
+    <div class="slide-label">The problem</div>
+    <h2>How do we know our answers<br>are <span class="gradient-text">essence</span> vs <span style="color:var(--muted)">suppression</span>?</h2>
+    <div class="divider"></div>
+    <p class="subtitle">We have 14,000 hours of school in our system creating the suppression. So this exercise is designed to bypass it. The speed is the point. You speak before you can filter.</p>
+  </div>
+
+  <!-- Slide 4: The Rules -->
+  <div class="slide" data-section="intro">
+    <div class="slide-label">How it works</div>
+    <h2>The Rules</h2>
+    <ol class="rules">
+      <li data-n="1">A sentence appears on your screen</li>
+      <li data-n="2">Complete it out loud, as fast as you can</li>
+      <li data-n="3">You have 30 seconds. Aim for 6-8 completions</li>
+      <li data-n="4">Don't think. Don't edit. First thing that comes out.</li>
+      <li data-n="5">If it sounds messy, you're doing it right</li>
+    </ol>
+  </div>
+
+  <!-- Slide 5: Open the link -->
+  <div class="slide" data-section="intro">
+    <div class="slide-label">Let's begin</div>
+    <h2>Open this on your phone</h2>
+    <div class="link-display">/try/voice-stems</div>
+    <p class="link-hint">Enter your name and email. Allow microphone access.</p>
+  </div>
+
+  <!-- ═══════════════════════ STAGE 1 ═══════════════════════ -->
+
+  <!-- Slide 6: M&M before Stage 1 -->
+  <div class="slide" data-section="stage1">
+    <div class="stage-badge"><span class="dot"></span> Stage 1 of 4</div>
+    <h2>Who you were<br><span class="gradient-text">as a kid</span></h2>
+    <p class="subtitle">Before school. Before culture. Before "grow up." Just answer as fast as you can.</p>
+  </div>
+
+  <!-- Slide 7: After Stage 1 — Share -->
+  <div class="slide" data-section="stage1">
+    <div class="slide-label gold">Stage 1 complete</div>
+    <h2>That's who you were</h2>
+    <p class="quote">Before anyone told you to stop.</p>
+    <div class="share-prompt">
+      <strong>Share:</strong> What surprised you? What did you see that you forgot about yourself?
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ STAGE 2 ═══════════════════════ -->
+
+  <!-- Slide 8: M&M before Stage 2 -->
+  <div class="slide" data-section="stage2">
+    <div class="stage-badge"><span class="dot"></span> Stage 2 of 4</div>
+    <h2>The impact of<br><span class="gradient-text">growing up</span></h2>
+    <p class="subtitle">Something happened between then and now. For me, I was a walking rainbow. Then Jesse called me weird. I stopped wearing colour for 12 years. Everyone here has a version of that story. We're about to find yours.</p>
+  </div>
+
+  <!-- Slide 9: Mid Stage 2 — Layer 3 intro -->
+  <div class="slide" data-section="stage2">
+    <div class="slide-label">Going deeper</div>
+    <h2>You've named the fear</h2>
+    <p class="subtitle">Now we're going to trace it back to where it started.</p>
+  </div>
+
+  <!-- Slide 10: After Stage 2 — Share -->
+  <div class="slide" data-section="stage2">
+    <div class="slide-label gold">Stage 2 complete</div>
+    <h2>The whole story</h2>
+    <p class="quote">You just traced a line from what you loved, through what scared you, back to where it started. You've probably never seen it written down before.</p>
+    <div class="share-prompt">
+      <strong>Share:</strong> What came up that you didn't expect? Who was the person? What was the rule you made?
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ STAGE 3 ═══════════════════════ -->
+
+  <!-- Slide 11: M&M before Stage 3 -->
+  <div class="slide" data-section="stage3">
+    <div class="stage-badge"><span class="dot"></span> Stage 3 of 4</div>
+    <h2>The consequences of<br><span class="gradient-text">growing up</span></h2>
+    <p class="subtitle">That prediction has been running your life. These next 10 stems are about right now. What your life actually feels like today.</p>
+  </div>
+
+  <!-- Slide 12: After Stage 3 — Share -->
+  <div class="slide" data-section="stage3">
+    <div class="slide-label gold">Stage 3 complete</div>
+    <h2>The cost</h2>
+    <p class="quote">That shape is the cost. Where it's flat, that's where the kid got shut down. Where it's high, that's where you've fought back.</p>
+    <div class="share-prompt">
+      <strong>Share:</strong> Look at your lowest dimension. Does it surprise you, or did you already know?
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ STAGE 4 ═══════════════════════ -->
+
+  <!-- Slide 13: M&M before Stage 4 -->
+  <div class="slide" data-section="stage4">
+    <div class="stage-badge gold"><span class="dot"></span> Stage 4 of 4</div>
+    <h2>The essence that is<br><span class="gradient-text">still in there</span></h2>
+    <p class="subtitle">The person who has lived through it all. You've seen who you were. You've seen what happened. You've seen the cost. These last 6 stems are about who you actually are. Not who you perform. Not the mask. You.</p>
+  </div>
+
+  <!-- Slide 14: After Stage 4 — The reveal -->
+  <div class="slide" data-section="stage4">
+    <div class="slide-label gold">Stage 4 complete</div>
+    <h2>That's <span class="gradient-text">you</span></h2>
+    <p class="quote">Take a moment. Read it.</p>
+  </div>
+
+  <!-- Slide 15: Avatar -->
+  <div class="slide" data-section="stage4">
+    <h2>Now let's see<br>what you <span class="gradient-text">look like</span></h2>
+    <p class="subtitle">Upload a selfie and we'll turn you into your archetype.</p>
+  </div>
+
+  <!-- ═══════════════════════ CLOSE ═══════════════════════ -->
+
+  <!-- Slide 16: Closing question -->
+  <div class="slide" data-section="close">
+    <h2>Who feels like they just<br><span class="gradient-text">met themselves</span><br>for the first time?</h2>
+  </div>
+
+  <!-- Slide 17: Thank you -->
+  <div class="slide" data-section="close">
+    <h1 class="gradient-text">Much Love</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Huzz</p>
+  </div>
+
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+<div class="keys-hint">← →</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide')
+  const progress = document.getElementById('progress')
+  const counter = document.getElementById('counter')
+  let current = 0
+  const total = slides.length
+
+  function updateSlide(prev, next) {
+    if (next < 0 || next >= total) return
+    slides[prev].classList.remove('active')
+    slides[prev].classList.add('exit')
+    setTimeout(() => slides[prev].classList.remove('exit'), 600)
+    slides[next].classList.add('active')
+    current = next
+    progress.style.width = ((current + 1) / total * 100) + '%'
+    counter.textContent = (current + 1) + ' / ' + total
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); updateSlide(current, current + 1) }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); updateSlide(current, current - 1) }
+    if (e.key === 'Home') { e.preventDefault(); updateSlide(current, 0) }
+    if (e.key === 'End') { e.preventDefault(); updateSlide(current, total - 1) }
+  })
+
+  // Click / tap (left half = back, right half = forward)
+  document.addEventListener('click', (e) => {
+    if (e.clientX < window.innerWidth / 3) updateSlide(current, current - 1)
+    else updateSlide(current, current + 1)
+  })
+
+  // Touch swipe
+  let touchStartX = 0
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX })
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) updateSlide(current, current + 1)
+      else updateSlide(current, current - 1)
+    }
+  })
+
+  // Init
+  progress.style.width = (1 / total * 100) + '%'
+  counter.textContent = '1 / ' + total
+</script>
+
+</body>
+</html>
