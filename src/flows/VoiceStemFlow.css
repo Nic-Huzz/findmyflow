@@ -125,35 +125,6 @@
   color: var(--vs-muted);
 }
 
-.vs-landing-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.vs-input {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: 1px solid var(--vs-glass-border);
-  background: var(--vs-glass);
-  color: var(--vs-text);
-  font-size: 1rem;
-  outline: none;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.vs-input:focus {
-  border-color: var(--vs-pink);
-}
-
-.vs-input::placeholder {
-  color: var(--vs-muted);
-}
-
 .vs-btn-primary {
   width: 100%;
   padding: 16px 32px;
@@ -181,15 +152,6 @@
 .vs-btn-primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.vs-btn-ready {
-  animation: vs-pulse-ready 1.5s ease-in-out infinite;
-}
-
-@keyframes vs-pulse-ready {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.02); }
 }
 
 .vs-btn-ghost {
@@ -1091,81 +1053,6 @@
   background: linear-gradient(135deg, #D946EF 0%, #FFB800 100%);
   color: #000;
   font-weight: 700;
-}
-
-/* ── AVATAR SCREEN ─────────────────────────────── */
-
-.vs-avatar-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 24px 20px;
-  text-align: center;
-}
-
-.vs-avatar-inner {
-  max-width: 480px;
-  width: 100%;
-}
-
-.vs-avatar-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.vs-avatar-desc {
-  color: var(--vs-muted);
-  font-size: 0.95rem;
-  margin-bottom: 28px;
-}
-
-.vs-avatar-preview-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.vs-avatar-preview {
-  width: 200px;
-  height: 200px;
-  border-radius: 20px;
-  object-fit: cover;
-  border: 2px solid var(--vs-glass-border);
-  margin-bottom: 8px;
-}
-
-.vs-avatar-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.vs-avatar-result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.vs-avatar-image {
-  width: 300px;
-  height: 300px;
-  border-radius: 24px;
-  object-fit: cover;
-  border: 2px solid var(--vs-pink);
-  box-shadow: 0 0 40px rgba(217, 70, 239, 0.2);
-}
-
-.vs-avatar-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
 }
 
 /* ── Experience Game (Stage 5/6) ─────────────────────────────── */

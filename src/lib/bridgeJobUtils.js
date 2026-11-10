@@ -1,7 +1,7 @@
 /**
  * bridgeJobUtils.js — Earning estimate parsing and bridge job filtering
  *
- * Used by FindBridgeFlow and PayTheBillsSection to surface
+ * Used by MoneyMapFlow and FinancialSecurityCard to surface
  * financially viable bridge job options from dome experiences.
  */
 import { EXPERIENCE_PRICING } from '../data/experiencePricing'

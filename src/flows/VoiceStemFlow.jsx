@@ -7,9 +7,7 @@
  * → stem (stage 2 layer 2) → processing → selection_2 (confirm prediction)
  * → stem (stage 2 layer 3) → processing → results_2
  * → stem (stage 3) → processing → results_3
- * → essence_reveal → avatar → final_results (workshop mode)
- * → essence_reveal → experience_intro → exp game → experience_results
- *   → paid_filter → signup_gate → download_app (onboarding mode)
+ * → final_results
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -290,7 +288,7 @@ function DownloadApp({ userEmail, essenceArchetype, pathActivities }) {
 
   return (
     <div className="vs-signup-gate">
-      <div className="vs-results-label">You&apos;re in</div>
+      <div className="vs-results-label">You're in</div>
       <h2>Get the app</h2>
 
       {essenceArchetype && (
@@ -299,7 +297,7 @@ function DownloadApp({ userEmail, essenceArchetype, pathActivities }) {
 
       {hasPaths ? (
         <p className="vs-signup-desc">
-          You said you&apos;d love to get paid for <strong>{pathLabels.join(', ')}</strong>.
+          You said you'd love to get paid for <strong>{pathLabels.join(', ')}</strong>.
           Open the app to discover the paths that combine them.
         </p>
       ) : (
@@ -423,7 +421,7 @@ function Stage1Results({ results, onContinue }) {
         ))}
       </div>
       <p className="vs-results-prompt">Which of these feels most alive right now? Which one do you miss most?</p>
-      <DoubleConfirmButton onConfirm={onContinue} />
+      <button className="vs-cta" onClick={onContinue}>Continue</button>
     </div>
   )
 }
@@ -526,9 +524,9 @@ function Stage2Results({ results, selectedExpression, confirmedPrediction, onCon
         </div>
       )}
 
-      <div style={{ marginTop: 8 }}>
-        <DoubleConfirmButton onConfirm={onContinue} />
-      </div>
+      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
+        Continue to Stage 3
+      </button>
     </div>
   )
 }
@@ -624,137 +622,14 @@ function Stage3Results({ results, onContinue }) {
         </div>
       )}
 
-      <div style={{ marginTop: 8 }}>
-        <DoubleConfirmButton onConfirm={onContinue} />
-      </div>
+      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
+        See the full picture
+      </button>
     </div>
   )
 }
 
-// Final results page
-function AvatarScreen({ stage4Results, onSkip }) {
-  const [photo, setPhoto] = useState(null)
-  const [preview, setPreview] = useState(null)
-  const [generating, setGenerating] = useState(false)
-  const [generatedUrl, setGeneratedUrl] = useState(null)
-  const [error, setError] = useState(null)
-  const [loadingText, setLoadingText] = useState('Generating...')
-  const fileInputRef = useRef(null)
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setPhoto(file)
-    setPreview(URL.createObjectURL(file))
-    setError(null)
-    setGeneratedUrl(null)
-  }
-
-  const handleGenerate = async () => {
-    if (!photo || !stage4Results?.primaryArchetype) return
-    setGenerating(true)
-    setError(null)
-
-    const labels = ['Reading your essence...', 'Designing your character...', 'Adding the magic...', 'Almost there...']
-    let i = 0
-    const interval = setInterval(() => { i = (i + 1) % labels.length; setLoadingText(labels[i]) }, 3000)
-
-    try {
-      // Compress photo
-      const base64 = await new Promise((resolve) => {
-        const img = new Image()
-        img.onload = () => {
-          let w = img.width, h = img.height
-          const MAX = 1024
-          if (w > MAX || h > MAX) {
-            const ratio = MAX / Math.max(w, h)
-            w = Math.round(w * ratio)
-            h = Math.round(h * ratio)
-          }
-          const canvas = document.createElement('canvas')
-          canvas.width = w; canvas.height = h
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-          resolve(canvas.toDataURL('image/jpeg', 0.85).split(',')[1])
-        }
-        img.src = URL.createObjectURL(photo)
-      })
-
-      const primary = stage4Results.primaryArchetype
-      const prompt = `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
-
-Their essence: "${primary.name}" - ${primary.essence}
-
-Create a dynamic pose and scene background that embodies this essence. The character should be in action or in their element, not just standing. Use warm cinematic lighting with purple and gold tones. Big expressive animated eyes. Heroic but approachable. Modern 3D animated feature film quality. Square composition.`
-
-      const { supabase } = await import('../lib/supabaseClient')
-      const { data, error: genErr } = await supabase.functions.invoke('generate-avatar-gemini', {
-        body: { photo_base64: base64, photo_mime: 'image/jpeg', prompt },
-      })
-
-      clearInterval(interval)
-      if (genErr || data?.error) {
-        setError(data?.message || 'Generation failed. Try again.')
-        setGenerating(false)
-        return
-      }
-      setGeneratedUrl(data.url)
-      setGenerating(false)
-    } catch (err) {
-      clearInterval(interval)
-      console.warn('Avatar error:', err)
-      setError('Something went wrong. Try again.')
-      setGenerating(false)
-    }
-  }
-
-  return (
-    <div className="vs-avatar-screen">
-      <div className="vs-avatar-inner">
-        <h2 className="vs-avatar-title">Create Your Avatar</h2>
-        <p className="vs-avatar-desc">Upload a selfie and we will transform you into your essence archetype.</p>
-
-        {generatedUrl ? (
-          <div className="vs-avatar-result">
-            <img src={generatedUrl} alt="Your essence avatar" className="vs-avatar-image" />
-            <button className="vs-btn-primary" onClick={onSkip} style={{ marginTop: 20 }}>Done</button>
-          </div>
-        ) : preview ? (
-          <div className="vs-avatar-preview-wrap">
-            <img src={preview} alt="Your selfie" className="vs-avatar-preview" />
-            <div className="vs-avatar-actions">
-              <button className="vs-btn-primary" onClick={handleGenerate} disabled={generating}>
-                {generating ? loadingText : 'Generate my avatar'}
-              </button>
-              <button className="vs-btn-ghost" onClick={() => { setPhoto(null); setPreview(null) }} disabled={generating}>
-                Choose different photo
-              </button>
-            </div>
-            {error && <div className="vs-error-msg">{error}</div>}
-          </div>
-        ) : (
-          <div className="vs-avatar-upload">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="user"
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
-            />
-            <button className="vs-btn-primary" onClick={() => fileInputRef.current?.click()}>
-              Take a selfie or upload photo
-            </button>
-            <button className="vs-btn-ghost" onClick={onSkip} style={{ marginTop: 12 }}>
-              Skip for now
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, confirmedPrediction, onRestart, onCreateAvatar }) {
+function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, confirmedPrediction, onRestart }) {
   const [emailSent, setEmailSent] = useState(false)
   const [email, setEmail] = useState('')
   const [emailSubmitting, setEmailSubmitting] = useState(false)
@@ -945,12 +820,6 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
         )}
       </div>
 
-      {onCreateAvatar && (
-        <button className="vs-btn-primary" onClick={onCreateAvatar} style={{ marginTop: 20 }}>
-          Create your avatar
-        </button>
-      )}
-
       <button className="vs-restart-btn" onClick={onRestart}>
         Start again
       </button>
@@ -1015,8 +884,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Top-level screen state ──────────────────────────────────────────────
   const [screen, setScreen] = useState('landing')
-  const [participantName, setParticipantName] = useState('')
-  const [participantEmail, setParticipantEmail] = useState('')
 
   // ── Current position in the flow ───────────────────────────────────────
   // Which stage/layer/stemIndex we're on
@@ -1388,8 +1255,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       const ok = await requestPermission()
       if (!ok) return
     }
-    // Save name + email immediately so all subsequent saves include them
-    saveSession({ name: participantName.trim(), email: participantEmail.trim().toLowerCase() })
     beginStage({ stageIndex: 0, layerIndex: null })
   }
 
@@ -1701,31 +1566,14 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               ))}
             </div>
 
-            <div className="vs-landing-form">
-              <input
-                type="text"
-                placeholder="Your name"
-                value={participantName}
-                onChange={(e) => setParticipantName(e.target.value)}
-                className="vs-input"
-              />
-              <input
-                type="email"
-                placeholder="Your email"
-                value={participantEmail}
-                onChange={(e) => setParticipantEmail(e.target.value)}
-                className="vs-input"
-              />
-            </div>
-
             {recError && <div className="vs-error-msg">{recError}</div>}
 
             <button
               className="vs-btn-primary"
               onClick={handleStart}
-              disabled={isInApp || !participantName.trim() || !participantEmail.trim()}
+              disabled={isInApp}
             >
-              {permissionGranted ? 'Begin' : 'Allow microphone and begin'}
+              {permissionGranted ? 'Begin — Speak first, think later' : 'Allow microphone and begin'}
             </button>
           </div>
         )}
@@ -1843,7 +1691,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'essence_reveal' && stage4Results && (
           <EssenceReveal
             results={stage4Results}
-            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'avatar')}
+            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
           />
         )}
 
@@ -2043,15 +1891,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             selectedExpression={selectedExpression}
             confirmedPrediction={confirmedPrediction}
             onRestart={handleRestart}
-            onCreateAvatar={() => setScreen('avatar')}
-          />
-        )}
-
-        {/* AVATAR GENERATION */}
-        {screen === 'avatar' && (
-          <AvatarScreen
-            stage4Results={stage4Results}
-            onSkip={() => setScreen('final_results')}
           />
         )}
 
