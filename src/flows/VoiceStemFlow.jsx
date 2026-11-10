@@ -7,19 +7,31 @@
  * → stem (stage 2 layer 2) → processing → selection_2 (confirm prediction)
  * → stem (stage 2 layer 3) → processing → results_2
  * → stem (stage 3) → processing → results_3
- * → final_results
+ * → essence_reveal → avatar → final_results (workshop mode)
+ * → essence_reveal → experience_intro → exp game → experience_results
+ *   → paid_filter → signup_gate → download_app (onboarding mode)
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import GenericRadar from '../components/GenericRadar'
+import { useAuth } from '../auth/AuthProvider'
+import { supabase } from '../lib/supabaseClient'
 import { useAudioRecorder } from '../hooks/useAudioRecorder'
 import { transcribeAudio } from '../lib/deepgramClient'
 import { processStage } from '../lib/stemProcessing'
-import { getStemsForStage } from '../data/voiceStems'
+import { getStemsForStage, EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
 import './VoiceStemFlow.css'
 
 const STORAGE_KEY = 'voice_stems_session'
 const MAX_STEM_SECONDS = 30
+const EXP_BATCH_SIZE = 10
+const EXP_RECORD_SECONDS = 30
+
+// Split activities into batches of 10 for recording
+const EXP_BATCHES = []
+for (let i = 0; i < EXPERIENCE_ACTIVITIES.length; i += EXP_BATCH_SIZE) {
+  EXP_BATCHES.push(EXPERIENCE_ACTIVITIES.slice(i, i + EXP_BATCH_SIZE))
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -134,6 +146,191 @@ function DoubleConfirmButton({ onConfirm, label = 'Continue', confirmLabel = 'Re
   return <button className="vs-btn-primary vs-btn-ready" onClick={onConfirm}>{confirmLabel}</button>
 }
 
+function SignupGate({ prefillEmail, onComplete }) {
+  const { signInWithCode, verifyCode, user } = useAuth()
+  const [email, setEmail] = useState(prefillEmail || '')
+  const [code, setCode] = useState('')
+  const [step, setStep] = useState('email') // email → code → saving
+  const [error, setError] = useState(null)
+  const [sending, setSending] = useState(false)
+  const completedRef = useRef(false)
+
+  const safeComplete = useCallback((u) => {
+    if (completedRef.current) return
+    completedRef.current = true
+    onComplete(u)
+  }, [onComplete])
+
+  // If already logged in (or auth resolves after mount), skip straight to saving
+  useEffect(() => {
+    if (user) {
+      safeComplete(user)
+    }
+  }, [user, safeComplete])
+
+  const handleSendCode = async (e) => {
+    e.preventDefault()
+    if (!email.trim() || sending) return
+    setSending(true)
+    setError(null)
+    const result = await signInWithCode(email.trim(), { shouldCreateUser: true })
+    setSending(false)
+    if (result.success) {
+      setStep('code')
+    } else {
+      setError(result.message || 'Failed to send code. Try again.')
+    }
+  }
+
+  const handleVerify = async (e) => {
+    e.preventDefault()
+    if (!code.trim() || sending) return
+    setSending(true)
+    setError(null)
+    const result = await verifyCode(email.trim(), code.trim())
+    setSending(false)
+    if (result.success) {
+      setStep('saving')
+      safeComplete(result.user)
+    } else {
+      setError(result.message || 'Invalid code. Try again.')
+    }
+  }
+
+  if (step === 'saving') {
+    return (
+      <div className="vs-signup-gate">
+        <div className="vs-spinner" />
+        <p>Setting up your account...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="vs-signup-gate">
+      <div className="vs-results-label">Almost there</div>
+      <h2>Create your account</h2>
+      <p className="vs-signup-desc">
+        Save your results and discover your life paths.
+      </p>
+
+      {step === 'email' && (
+        <form className="vs-signup-form" onSubmit={handleSendCode}>
+          <input
+            className="vs-input"
+            type="email"
+            placeholder="Your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          {error && <div className="vs-error-msg">{error}</div>}
+          <button className="vs-btn-primary" type="submit" disabled={sending}>
+            {sending ? 'Sending...' : 'Send verification code'}
+          </button>
+        </form>
+      )}
+
+      {step === 'code' && (
+        <form className="vs-signup-form" onSubmit={handleVerify}>
+          <p style={{ fontSize: '0.9rem', color: 'var(--vs-muted)' }}>
+            Check {email} for a 6-digit code.
+          </p>
+          <input
+            className="vs-input"
+            type="text"
+            inputMode="numeric"
+            placeholder="Enter code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            autoFocus
+            required
+          />
+          {error && <div className="vs-error-msg">{error}</div>}
+          <button className="vs-btn-primary" type="submit" disabled={sending}>
+            {sending ? 'Verifying...' : 'Verify and continue'}
+          </button>
+          <button
+            type="button"
+            className="vs-btn-ghost"
+            onClick={() => { setStep('email'); setCode(''); setError(null) }}
+          >
+            Use a different email
+          </button>
+        </form>
+      )}
+    </div>
+  )
+}
+
+function DownloadApp({ userEmail, essenceArchetype, pathActivities }) {
+  const [linkSent, setLinkSent] = useState(false)
+  const [sending, setSending] = useState(false)
+
+  const APP_STORE_URL = 'https://apps.apple.com/app/vibe-rise/id6740644498'
+  const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.nichuzz.viberise'
+
+  const handleSendLink = async () => {
+    if (!userEmail || sending) return
+    setSending(true)
+    try {
+      const { error } = await supabase.functions.invoke('send-app-link', {
+        body: { email: userEmail, appStoreUrl: APP_STORE_URL, playStoreUrl: PLAY_STORE_URL },
+      })
+      if (!error) setLinkSent(true)
+    } catch {
+      // Silent fail — buttons are still there
+    }
+    setSending(false)
+  }
+
+  // Build tease from path activities (things they'd get paid for)
+  const pathLabels = (pathActivities || []).slice(0, 3).map(a => a.label)
+  const hasPaths = pathLabels.length > 0
+
+  return (
+    <div className="vs-signup-gate">
+      <div className="vs-results-label">You&apos;re in</div>
+      <h2>Get the app</h2>
+
+      {essenceArchetype && (
+        <p className="vs-download-archetype">{essenceArchetype}</p>
+      )}
+
+      {hasPaths ? (
+        <p className="vs-signup-desc">
+          You said you&apos;d love to get paid for <strong>{pathLabels.join(', ')}</strong>.
+          Open the app to discover the paths that combine them.
+        </p>
+      ) : (
+        <p className="vs-signup-desc">
+          Your results are saved. Open the app to find your path.
+        </p>
+      )}
+
+      <div className="vs-download-buttons">
+        <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer" className="vs-btn-primary">
+          Download for iPhone
+        </a>
+        <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" className="vs-btn-primary vs-btn-secondary">
+          Download for Android
+        </a>
+      </div>
+
+      {userEmail && (
+        <button
+          className="vs-btn-ghost"
+          onClick={handleSendLink}
+          disabled={linkSent || sending}
+          style={{ marginTop: 8 }}
+        >
+          {linkSent ? 'Link sent!' : sending ? 'Sending...' : 'Send download link to my email'}
+        </button>
+      )}
+    </div>
+  )
+}
+
 function ProcessingScreen({ stage }) {
   const labels = {
     1: 'Finding your essence themes...',
@@ -141,6 +338,8 @@ function ProcessingScreen({ stage }) {
     '2b': 'Tracing the source...',
     3: 'Scoring your dimensions...',
     4: 'Finding your essence archetype...',
+    5: 'Mapping your experiences...',
+    6: 'Finding your paths...',
   }
   return (
     <div className="vs-processing">
@@ -810,7 +1009,10 @@ function EssenceReveal({ results, onContinue }) {
  * 'final_results'
  */
 
-export default function VoiceStemFlow() {
+export default function VoiceStemFlow({ mode = 'workshop' }) {
+  const isOnboarding = mode === 'onboarding'
+  const { user } = useAuth()
+
   // ── Top-level screen state ──────────────────────────────────────────────
   const [screen, setScreen] = useState('landing')
   const [participantName, setParticipantName] = useState('')
@@ -836,6 +1038,14 @@ export default function VoiceStemFlow() {
   const [stage2Results, setStage2Results] = useState(null)
   const [stage3Results, setStage3Results] = useState(null)
   const [stage4Results, setStage4Results] = useState(null)
+  const [stage5Results, setStage5Results] = useState(null)
+  const [stage6Results, setStage6Results] = useState(null)
+
+  // ── Experience game batch tracking ─────────────────────────────────
+  const expBatchRef = useRef(0)
+  const paidBatchRef = useRef(0)
+  const paidBatchesRef = useRef([]) // computed from stage5Results.fun
+  const stage5ResultsRef = useRef(null) // avoids stale closure in processPaidFilter
 
   // ── Countdown state ────────────────────────────────────────────────
   const [countdownNum, setCountdownNum] = useState(3)
@@ -899,11 +1109,24 @@ export default function VoiceStemFlow() {
       if (saved.stage1Results) setStage1Results(saved.stage1Results)
       if (saved.stage2Results) setStage2Results(saved.stage2Results)
       if (saved.stage3Results) setStage3Results(saved.stage3Results)
+      if (saved.stage4Results) setStage4Results(saved.stage4Results)
+      if (saved.stage5Results) { setStage5Results(saved.stage5Results); stage5ResultsRef.current = saved.stage5Results }
+      if (saved.stage6Results) setStage6Results(saved.stage6Results)
     }
 
-    // ?skip=3 jumps directly to that stage's recording
+    // ?skip=N jumps directly to that stage's recording
     if (skipTo) {
-      const stageIdx = parseInt(skipTo, 10) - 1
+      const n = parseInt(skipTo, 10)
+      if (n === 5) {
+        setTimeout(() => setScreen('experience_intro'), 100)
+        return
+      }
+      if (n === 6) {
+        // Need stage 5 results to run paid filter; show intro as fallback
+        setTimeout(() => setScreen('experience_intro'), 100)
+        return
+      }
+      const stageIdx = n - 1
       setTimeout(() => beginStage({ stageIndex: stageIdx }), 100)
       return
     }
@@ -1179,10 +1402,16 @@ export default function VoiceStemFlow() {
     setStage2Results(null)
     setStage3Results(null)
     setStage4Results(null)
+    setStage5Results(null)
+    setStage6Results(null)
     setSelectedExpression(null)
     setConfirmedPrediction(null)
     setPosition({ stageIndex: 0, layerIndex: null, stemIndex: 0 })
     setFlowError(null)
+    expBatchRef.current = 0
+    paidBatchRef.current = 0
+    paidBatchesRef.current = []
+    stage5ResultsRef.current = null
     setScreen('landing')
   }
 
@@ -1199,6 +1428,240 @@ export default function VoiceStemFlow() {
     setFlowError(null)
     triggerProcessing(position.stageIndex, position.layerIndex)
   }
+
+  // ── Experience Game (Stage 5) ─────────────────────────────────
+
+  const startExpBatch = useCallback((batchIdx) => {
+    expBatchRef.current = batchIdx
+    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+
+    setCountdownNum(3)
+    setScreen('exp_countdown')
+
+    let count = 3
+    countdownRef.current = setInterval(() => {
+      count -= 1
+      if (count <= 0) {
+        clearInterval(countdownRef.current)
+        countdownRef.current = null
+        currentStemIdRef.current = `exp_batch_${batchIdx}`
+        setStemSeconds(EXP_RECORD_SECONDS)
+        setScreen('exp_recording')
+        start()
+
+        let secs = EXP_RECORD_SECONDS
+        stemTimerRef.current = setInterval(() => {
+          secs -= 1
+          setStemSeconds(secs)
+          if (secs <= 0) {
+            clearInterval(stemTimerRef.current)
+            stemTimerRef.current = null
+            handleExpBatchDone()
+          }
+        }, 1000)
+      } else {
+        setCountdownNum(count)
+      }
+    }, 1000)
+  }, [start]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleExpBatchDone = useCallback(() => {
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+    stop()
+    setScreen('exp_transition')
+
+    setTimeout(() => {
+      const nextBatch = expBatchRef.current + 1
+      if (nextBatch < EXP_BATCHES.length) {
+        startExpBatch(nextBatch)
+      } else {
+        processExperienceGame()
+      }
+    }, 1000)
+  }, [stop]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const processExperienceGame = useCallback(async () => {
+    setScreen('processing')
+    setProcessingStageKey(5)
+    setFlowError(null)
+
+    const pending = [...pendingTranscriptionsRef.current]
+    pendingTranscriptionsRef.current = []
+    await Promise.allSettled(pending)
+
+    const transcripts = EXP_BATCHES.map((batch, i) => ({
+      stemId: `exp_batch_${i}`,
+      stemText: `Round ${i + 1}: ${batch.map(a => a.label).join(', ')}`,
+      transcript: transcriptsRef.current[`exp_batch_${i}`] || '',
+    }))
+
+    saveSession({ stage5Transcripts: transcripts })
+
+    try {
+      const results = await processStage(5, transcripts, { activities: EXPERIENCE_ACTIVITIES })
+      setStage5Results(results)
+      stage5ResultsRef.current = results
+      saveSession({ stage5Results: results })
+      setScreen('experience_results')
+    } catch (err) {
+      console.error('Stage 5 error:', err)
+      setFlowError('Something went wrong mapping your experiences. Tap to retry.')
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const retryExpProcessing = () => {
+    setFlowError(null)
+    processExperienceGame()
+  }
+
+  // ── Paid Filter (Stage 6) ─────────────────────────────────────
+
+  const startPaidFilter = useCallback(() => {
+    const funList = stage5Results?.fun || []
+    const batches = []
+    for (let i = 0; i < funList.length; i += EXP_BATCH_SIZE) {
+      batches.push(funList.slice(i, i + EXP_BATCH_SIZE))
+    }
+    paidBatchesRef.current = batches
+    if (batches.length === 0) {
+      // No fun activities, skip to signup gate
+      setScreen('signup_gate')
+      return
+    }
+    startPaidBatch(0)
+  }, [stage5Results]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const startPaidBatch = useCallback((batchIdx) => {
+    paidBatchRef.current = batchIdx
+    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+
+    setCountdownNum(3)
+    setScreen('paid_countdown')
+
+    let count = 3
+    countdownRef.current = setInterval(() => {
+      count -= 1
+      if (count <= 0) {
+        clearInterval(countdownRef.current)
+        countdownRef.current = null
+        currentStemIdRef.current = `paid_batch_${batchIdx}`
+        setStemSeconds(EXP_RECORD_SECONDS)
+        setScreen('paid_recording')
+        start()
+
+        let secs = EXP_RECORD_SECONDS
+        stemTimerRef.current = setInterval(() => {
+          secs -= 1
+          setStemSeconds(secs)
+          if (secs <= 0) {
+            clearInterval(stemTimerRef.current)
+            stemTimerRef.current = null
+            handlePaidBatchDone()
+          }
+        }, 1000)
+      } else {
+        setCountdownNum(count)
+      }
+    }, 1000)
+  }, [start]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handlePaidBatchDone = useCallback(() => {
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+    stop()
+    setScreen('paid_transition')
+
+    setTimeout(() => {
+      const nextBatch = paidBatchRef.current + 1
+      if (nextBatch < paidBatchesRef.current.length) {
+        startPaidBatch(nextBatch)
+      } else {
+        processPaidFilter()
+      }
+    }, 1000)
+  }, [stop]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const processPaidFilter = useCallback(async () => {
+    setScreen('processing')
+    setProcessingStageKey(6)
+    setFlowError(null)
+
+    const pending = [...pendingTranscriptionsRef.current]
+    pendingTranscriptionsRef.current = []
+    await Promise.allSettled(pending)
+
+    const funList = stage5ResultsRef.current?.fun || []
+    const transcripts = paidBatchesRef.current.map((batch, i) => ({
+      stemId: `paid_batch_${i}`,
+      stemText: batch.map(a => a.label).join(', '),
+      transcript: transcriptsRef.current[`paid_batch_${i}`] || '',
+    }))
+
+    saveSession({ stage6Transcripts: transcripts })
+
+    try {
+      const results = await processStage(6, transcripts, { funActivities: funList })
+      setStage6Results(results)
+      saveSession({ stage6Results: results })
+      setScreen('signup_gate')
+    } catch (err) {
+      console.error('Stage 6 error:', err)
+      setFlowError('Something went wrong. Tap to retry.')
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const retryPaidProcessing = () => {
+    setFlowError(null)
+    processPaidFilter()
+  }
+
+  // ── Signup + Dome Ratings Bridge ──────────────────────────────
+
+  const handleSignupComplete = useCallback(async (authedUser) => {
+    if (!authedUser?.id) return
+
+    // Build dome ratings from stage 5+6 results
+    const s5 = stage5ResultsRef.current
+    const s6 = stage6Results
+    if (!s5) {
+      setScreen('download_app')
+      return
+    }
+
+    const rows = []
+    const now = new Date().toISOString()
+    // Stage 6 path activities = fun + wants to get paid
+    ;(s6?.path || []).forEach(a => {
+      rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: true, updated_at: now })
+    })
+    // Stage 6 passion activities = fun + doesn't want to get paid
+    ;(s6?.passion || []).forEach(a => {
+      rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: false, updated_at: now })
+    })
+    // Fun activities not in stage 6 results (skipped paid filter or zero batches)
+    const s6Ids = new Set([...(s6?.path || []).map(a => a.id), ...(s6?.passion || []).map(a => a.id)])
+    ;(s5.fun || []).forEach(a => {
+      if (!s6Ids.has(a.id)) {
+        rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: false, updated_at: now })
+      }
+    })
+    // Not fun = bored
+    ;(s5.notFun || []).forEach(a => {
+      rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'bored', want_paid: false, updated_at: now })
+    })
+
+    if (rows.length > 0) {
+      const { error } = await supabase
+        .from('experience_dome_ratings')
+        .upsert(rows, { onConflict: 'user_id,node_id' })
+      if (error) {
+        console.error('Failed to save dome ratings:', error)
+      }
+    }
+
+    setScreen('download_app')
+  }, [stage6Results]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Render ─────────────────────────────────────────────────────
   return (
@@ -1302,13 +1765,21 @@ export default function VoiceStemFlow() {
           <ProcessingScreen stage={processingStageKey} />
         )}
 
-        {/* PROCESSING ERROR */}
-        {screen === 'processing' && flowError && (
+        {/* PROCESSING ERROR (stages 1-4 only) */}
+        {screen === 'processing' && flowError && processingStageKey !== 5 && processingStageKey !== 6 && (
           <div className="vs-processing">
             <div className="vs-error-msg" style={{ maxWidth: 360 }}>{flowError}</div>
             <button className="vs-btn-primary" onClick={handleRetryProcessing} style={{ marginTop: 16 }}>
               Retry
             </button>
+          </div>
+        )}
+
+        {/* PROCESSING ERROR (stage 5) */}
+        {screen === 'processing' && flowError && processingStageKey === 5 && (
+          <div className="vs-processing">
+            <div className="vs-error-msg" style={{ maxWidth: 360 }}>{flowError}</div>
+            <button className="vs-btn-primary" onClick={retryExpProcessing} style={{ marginTop: 16 }}>Retry</button>
           </div>
         )}
 
@@ -1372,7 +1843,193 @@ export default function VoiceStemFlow() {
         {screen === 'essence_reveal' && stage4Results && (
           <EssenceReveal
             results={stage4Results}
-            onContinue={() => setScreen('final_results')}
+            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'avatar')}
+          />
+        )}
+
+        {/* ── EXPERIENCE GAME (Stage 5) ─────────────────────────── */}
+
+        {/* EXPERIENCE INTRO */}
+        {screen === 'experience_intro' && (
+          <div className="vs-exp-intro">
+            <div className="vs-results-label">Stage 5</div>
+            <h2>The Experience Game</h2>
+            <p className="vs-exp-intro-desc">
+              You will see activities, 10 at a time. For each one, say <strong>&quot;fun&quot;</strong> or <strong>&quot;not fun&quot;</strong>. Go fast. Trust your gut.
+            </p>
+            <p className="vs-exp-intro-sub">
+              {EXPERIENCE_ACTIVITIES.length} activities. {EXP_BATCHES.length} rounds. About 2 minutes.
+            </p>
+            <DoubleConfirmButton
+              onConfirm={() => startExpBatch(0)}
+              label="Start the game"
+              confirmLabel="Ready? Tap to begin"
+            />
+          </div>
+        )}
+
+        {/* EXP COUNTDOWN */}
+        {screen === 'exp_countdown' && (
+          <div className="vs-stem-screen">
+            <ProgressBar
+              label={`Experience Game  ·  Round ${expBatchRef.current + 1} of ${EXP_BATCHES.length}`}
+              percent={Math.round((expBatchRef.current / EXP_BATCHES.length) * 100)}
+            />
+            <div className="vs-exp-batch-list">
+              {(EXP_BATCHES[expBatchRef.current] || []).map((a, i) => (
+                <div key={a.id} className="vs-exp-batch-item">
+                  <span className="vs-exp-batch-num">{i + 1}.</span>
+                  <span>{a.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="vs-countdown-overlay vs-countdown-overlay-bottom">
+              <div className="vs-countdown-num" key={countdownNum}>{countdownNum}</div>
+              <div className="vs-countdown-label">Say &quot;fun&quot; or &quot;not fun&quot; for each...</div>
+            </div>
+          </div>
+        )}
+
+        {/* EXP RECORDING */}
+        {screen === 'exp_recording' && (
+          <div className="vs-stem-screen">
+            <ProgressBar
+              label={`Experience Game  ·  Round ${expBatchRef.current + 1} of ${EXP_BATCHES.length}`}
+              percent={Math.round(((expBatchRef.current + 0.5) / EXP_BATCHES.length) * 100)}
+            />
+            <div className="vs-exp-batch-list">
+              {(EXP_BATCHES[expBatchRef.current] || []).map((a, i) => (
+                <div key={a.id} className="vs-exp-batch-item">
+                  <span className="vs-exp-batch-num">{i + 1}.</span>
+                  <span>{a.label}</span>
+                </div>
+              ))}
+            </div>
+            <RecordingZone secondsLeft={stemSeconds} onDone={handleExpBatchDone} />
+          </div>
+        )}
+
+        {/* EXP TRANSITION */}
+        {screen === 'exp_transition' && (
+          <div className="vs-stem-screen">
+            <div className="vs-transition">
+              <div className="vs-got-it">Got it.</div>
+              <div className="vs-transcribing-label">Transcribing...</div>
+            </div>
+          </div>
+        )}
+
+        {/* EXPERIENCE RESULTS */}
+        {screen === 'experience_results' && stage5Results && (
+          <div className="vs-results">
+            <div className="vs-results-header">
+              <div className="vs-results-label">Stage 5 Complete</div>
+              <h2>Your Experiences</h2>
+            </div>
+            <div className="vs-results-card">
+              <h4>Fun ({(stage5Results.fun || []).length})</h4>
+              <div className="vs-exp-result-list">
+                {(stage5Results.fun || []).map(a => (
+                  <span key={a.id} className="vs-exp-tag vs-exp-tag-fun">{a.label}</span>
+                ))}
+              </div>
+            </div>
+            {(stage5Results.uncertain || []).length > 0 && (
+              <div className="vs-results-card">
+                <h4>Uncertain ({stage5Results.uncertain.length})</h4>
+                <div className="vs-exp-result-list">
+                  {stage5Results.uncertain.map(a => (
+                    <span key={a.id} className="vs-exp-tag vs-exp-tag-uncertain">{a.label}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            <p style={{ fontSize: '0.9rem', color: 'var(--vs-muted)', marginTop: 12 }}>
+              Now, for each &quot;fun&quot; activity, we will ask: could you get paid for it?
+            </p>
+            <DoubleConfirmButton
+              onConfirm={startPaidFilter}
+              label="Continue to paid filter"
+              confirmLabel="Ready? Tap to begin"
+            />
+          </div>
+        )}
+
+        {/* ── PAID FILTER (Stage 6) ──────────────────────────────── */}
+
+        {/* PAID COUNTDOWN */}
+        {screen === 'paid_countdown' && (
+          <div className="vs-stem-screen">
+            <ProgressBar
+              label={`Paid Filter  ·  Round ${paidBatchRef.current + 1} of ${paidBatchesRef.current.length}`}
+              percent={Math.round((paidBatchRef.current / Math.max(paidBatchesRef.current.length, 1)) * 100)}
+            />
+            <div className="vs-exp-batch-list">
+              {(paidBatchesRef.current[paidBatchRef.current] || []).map((a, i) => (
+                <div key={a.id} className="vs-exp-batch-item">
+                  <span className="vs-exp-batch-num">{i + 1}.</span>
+                  <span>{a.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="vs-countdown-overlay vs-countdown-overlay-bottom">
+              <div className="vs-countdown-num" key={countdownNum}>{countdownNum}</div>
+              <div className="vs-countdown-label">Say &quot;yes&quot; (could get paid) or &quot;no&quot; (just passion)...</div>
+            </div>
+          </div>
+        )}
+
+        {/* PAID RECORDING */}
+        {screen === 'paid_recording' && (
+          <div className="vs-stem-screen">
+            <ProgressBar
+              label={`Paid Filter  ·  Round ${paidBatchRef.current + 1} of ${paidBatchesRef.current.length}`}
+              percent={Math.round(((paidBatchRef.current + 0.5) / Math.max(paidBatchesRef.current.length, 1)) * 100)}
+            />
+            <div className="vs-exp-batch-list">
+              {(paidBatchesRef.current[paidBatchRef.current] || []).map((a, i) => (
+                <div key={a.id} className="vs-exp-batch-item">
+                  <span className="vs-exp-batch-num">{i + 1}.</span>
+                  <span>{a.label}</span>
+                </div>
+              ))}
+            </div>
+            <RecordingZone secondsLeft={stemSeconds} onDone={handlePaidBatchDone} />
+          </div>
+        )}
+
+        {/* PAID TRANSITION */}
+        {screen === 'paid_transition' && (
+          <div className="vs-stem-screen">
+            <div className="vs-transition">
+              <div className="vs-got-it">Got it.</div>
+              <div className="vs-transcribing-label">Transcribing...</div>
+            </div>
+          </div>
+        )}
+
+        {/* PROCESSING ERROR (stage 6) */}
+        {screen === 'processing' && flowError && processingStageKey === 6 && (
+          <div className="vs-processing">
+            <div className="vs-error-msg" style={{ maxWidth: 360 }}>{flowError}</div>
+            <button className="vs-btn-primary" onClick={retryPaidProcessing} style={{ marginTop: 16 }}>Retry</button>
+          </div>
+        )}
+
+        {/* SIGNUP GATE (after Stage 6, before download) */}
+        {screen === 'signup_gate' && (
+          <SignupGate
+            prefillEmail={(() => { try { const s = JSON.parse(localStorage.getItem(STORAGE_KEY)); return s?.email || '' } catch { return '' } })()}
+            onComplete={handleSignupComplete}
+          />
+        )}
+
+        {/* DOWNLOAD APP (after signup, user picks up in-app) */}
+        {screen === 'download_app' && (
+          <DownloadApp
+            userEmail={user?.email}
+            essenceArchetype={stage4Results?.primaryArchetype?.name}
+            pathActivities={stage6Results?.path}
           />
         )}
 

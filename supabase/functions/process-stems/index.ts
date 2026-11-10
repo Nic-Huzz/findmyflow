@@ -210,6 +210,72 @@ Rules:
 - NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 
+function buildStage5Prompt(transcripts: any[], activities: any[]): string {
+  const activityList = activities.map((a: any, i: number) =>
+    `${i + 1}. [${a.id}] ${a.label}`
+  ).join('\n')
+
+  const responseText = transcripts.map((t, i) => {
+    const batchStart = i * 10 + 1
+    const batchEnd = Math.min((i + 1) * 10, activities.length)
+    return `--- Round ${i + 1} (activities ${batchStart}-${batchEnd}) ---\n${t.transcript || '(no response)'}`
+  }).join('\n\n')
+
+  return `You are mapping rapid spoken "fun" or "not fun" responses to a list of activities.
+
+The participant was shown these activities in batches of 10 and said "fun" or "not fun" for each. The transcript is split by round, matching the batch boundaries.
+
+ACTIVITIES (in order shown, with IDs in brackets):
+${activityList}
+
+TRANSCRIPT OF THEIR RESPONSES (split by recording round):
+${responseText}
+
+Map each response to the corresponding activity. The participant may say variations: "fun", "yes", "love it", "definitely" = FUN. "not fun", "no", "nah", "skip", "meh" = NOT FUN. If unclear or skipped, mark as UNCERTAIN.
+
+Return ONLY valid JSON. Use the EXACT id from the brackets above for each activity:
+{
+  "fun": [{ "id": "exp-surfing", "label": "Surfing" }, ...],
+  "notFun": [{ "id": "exp-gardening", "label": "Gardening / growing food" }, ...],
+  "uncertain": [{ "id": "exp-coding", "label": "Coding / building software" }, ...]
+}
+
+Rules:
+- Map by ORDER, not by keyword matching. Activity 1's response is the first thing they said, etc.
+- Use the EXACT id string from the brackets (e.g. "exp-surfing"), do not invent IDs.
+- If the transcript has fewer responses than activities, mark remaining as uncertain.
+- NEVER use em dashes.
+- Write all text in second person (you/your).`
+}
+
+function buildStage6Prompt(transcripts: any[], funActivities: any[]): string {
+  const activityList = funActivities.map((a: any, i: number) =>
+    `${i + 1}. [${a.id}] ${a.label}`
+  ).join('\n')
+
+  const responseText = transcripts.map((t, i) => {
+    const batchStart = i * 10 + 1
+    const batchEnd = Math.min((i + 1) * 10, funActivities.length)
+    return `--- Round ${i + 1} (activities ${batchStart}-${batchEnd}) ---\n${t.transcript || '(no response)'}`
+  }).join('\n\n')
+
+  return `The participant was shown their "fun" activities and said "yes" (could get paid) or "no" (just passion) for each. The transcript is split by recording round.
+
+FUN ACTIVITIES (in order shown, with IDs in brackets):
+${activityList}
+
+TRANSCRIPT:
+${responseText}
+
+Map each response. "Yes", "yeah", "definitely", "maybe" = PATH (could get paid). "No", "nah", "just for fun" = PASSION (not paid).
+
+Return ONLY valid JSON. Use the EXACT id from the brackets above:
+{
+  "path": [{ "id": "exp-teaching", "label": "Teaching / facilitating a workshop" }, ...],
+  "passion": [{ "id": "exp-surfing", "label": "Surfing" }, ...]
+}`
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -226,9 +292,9 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
-    if (![1, 2, 3, 4].includes(stage)) {
+    if (![1, 2, 3, 4, 5, 6].includes(stage)) {
       return new Response(
-        JSON.stringify({ error: 'Invalid stage: must be 1, 2, 3, or 4' }),
+        JSON.stringify({ error: 'Invalid stage: must be 1, 2, 3, 4, 5, or 6' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -260,6 +326,16 @@ serve(async (req) => {
           nsLabel: nl,
           lowestDimension: ld,
         })
+        break
+      }
+      case 5: {
+        const activities = Array.isArray(body.activities) ? body.activities : []
+        prompt = buildStage5Prompt(transcripts, activities)
+        break
+      }
+      case 6: {
+        const funActivities = Array.isArray(body.funActivities) ? body.funActivities : []
+        prompt = buildStage6Prompt(transcripts, funActivities)
         break
       }
       default:
