@@ -113,6 +113,7 @@ export default function DiscoverTab({ userId, heroStage = 0, onUnlockTab, onUpda
       console.error('DiscoverTab load error:', err)
       setLoading(false)
     })
+
   }, [userId])
 
   const pickExperience = (nodeId, nodeLabel) => {
