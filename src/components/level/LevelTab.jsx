@@ -77,6 +77,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [activeStruggle, setActiveStruggle] = useState(null) // which struggle pill is open
   const [matrixData, setMatrixData] = useState(null) // { actionScore, clarityPct, zone, total }
   const [hasCurrentJob, setHasCurrentJob] = useState(false)
+  const [hasDomeData, setHasDomeData] = useState(false)
 
   // Load matrix data (Action Score + Clarity)
   useEffect(() => {
@@ -337,6 +338,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
     }
     // Load quests + tasks
     loadQuests()
+    // Check dome data (for empty state: "Find Your Path" vs "Start discovering")
+    supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId)
+      .then(({ count }) => setHasDomeData((count || 0) > 0))
     // Check if playskills exist (from /get-started, curiosity compass, or PlaySkillPicker)
     supabase
       .from('nikigai_clusters')
@@ -500,8 +504,17 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
         </div>
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
-            <p>Find something you want to pursue</p>
-            <a href={`/experience-game?returnTo=${encodeURIComponent('/7-day-challenge?tab=weekly')}`} className="quest-locked-link">Start discovering →</a>
+            {hasDomeData ? (
+              <>
+                <p>You know what lights you up. Now pick your paths.</p>
+                <a href="/choose-quests" className="quest-locked-link">Find Your Path →</a>
+              </>
+            ) : (
+              <>
+                <p>Find something you want to pursue</p>
+                <a href={`/experience-game?returnTo=${encodeURIComponent('/7-day-challenge?tab=weekly')}`} className="quest-locked-link">Start discovering →</a>
+              </>
+            )}
           </div>
         )}
         {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && hasLifePaths && (

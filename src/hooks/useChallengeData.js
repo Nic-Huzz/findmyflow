@@ -180,15 +180,35 @@ export function useChallengeData() {
     })
   }, [user?.id])
 
-  // Landing logic — sets the initial tab once allSetupDone resolves.
+  // Landing logic — sets the initial tab once setup check resolves.
+  // Three states: complete → Daily, has dome but no quests (post-onboarding) → Weekly, nothing → Progress.
   // Only fires once (guarded by initialLandingSet ref).
   // Does nothing if the user arrived with an explicit ?tab= param (activeCategory already set).
+  const [hasDome, setHasDome] = useState(null)
+  const [hasQuests, setHasQuests] = useState(null)
+
   useEffect(() => {
-    if (activeCategory !== null || allSetupDone === null) return
+    if (!user?.id) return
+    // These run alongside the allSetupDone check (same queries, stored separately for landing logic)
+    supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', user.id)
+      .then(({ count }) => setHasDome((count || 0) > 0))
+    supabase.from('quests').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'active').neq('is_current_job', true)
+      .then(({ count }) => setHasQuests((count || 0) > 0))
+  }, [user?.id])
+
+  useEffect(() => {
+    if (activeCategory !== null || allSetupDone === null || hasDome === null || hasQuests === null) return
     if (initialLandingSet.current) return
     initialLandingSet.current = true
-    setActiveCategory(allSetupDone ? 'Daily' : 'Progress')
-  }, [activeCategory, allSetupDone])
+
+    if (allSetupDone) {
+      setActiveCategory('Daily')        // Returning complete user
+    } else if (hasDome && !hasQuests) {
+      setActiveCategory('Weekly')        // Post-onboarding: has dome data, needs to choose quests
+    } else {
+      setActiveCategory('Progress')      // Brand new / solo fallback
+    }
+  }, [activeCategory, allSetupDone, hasDome, hasQuests])
 
   // Constants
   const categories = ['Daily', 'Weekly', 'Progress']
