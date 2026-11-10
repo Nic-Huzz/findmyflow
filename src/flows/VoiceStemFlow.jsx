@@ -629,6 +629,7 @@ function Stage3Results({ results, onContinue }) {
   )
 }
 
+// Final results page
 function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, confirmedPrediction, onRestart }) {
   const [emailSent, setEmailSent] = useState(false)
   const [email, setEmail] = useState('')
