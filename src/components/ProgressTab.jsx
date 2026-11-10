@@ -21,13 +21,6 @@ import { ESSENCE_ARCHETYPES } from '../data/essenceArchetypes'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import GenericRadar from './GenericRadar'
 import ZoneCalSection from './ZoneCalSection'
-// journeyChapters removed — Task 2 replaces ProgressTab entirely
-const JOURNEY_CHAPTERS = []
-function getChapterForStage() { return { chapter: { id: 'search', name: '', tagline: '' } } }
-import StageCard from './StageCard'
-import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
-import AlivenessCheckin from './AlivenessCheckin'
-import { getCheckinDueQuests } from '../lib/alivenessEngine'
 import './ProgressTab.css'
 
 // ── Hero Stages with quadrant coordinates ──
@@ -450,7 +443,6 @@ export default function ProgressTab({ userId }) {
   const [matrixData, setMatrixData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showStages, setShowStages] = useState(false)
-  const [directionComplete, setDirectionComplete] = useState(false)
 
   // Data availability flags
   const [hasEssence, setHasEssence] = useState(false)
@@ -494,12 +486,6 @@ export default function ProgressTab({ userId }) {
   const [baselineNeededQuest, setBaselineNeededQuest] = useState(null) // { id, label } of first quest needing baseline
   const [showBaselineFlow, setShowBaselineFlow] = useState(false)
   const [baselineDismissed, setBaselineDismissed] = useState(false)
-
-  // Aliveness check-in card
-  const [checkinDueQuest, setCheckinDueQuest] = useState(null) // { quest, state }
-  const [showCheckinFlow, setShowCheckinFlow] = useState(false)
-  const [checkinDismissed, setCheckinDismissed] = useState(false)
-  const [allSnapshots, setAllSnapshots] = useState({}) // { questId: [snapshots] }
 
   // Load reflection data for a single evidence card (on expand)
   const loadReflections = async (challengeId) => {
@@ -579,7 +565,7 @@ export default function ProgressTab({ userId }) {
             .eq('user_id', userId)
             .order('created_at', { ascending: false })
             .limit(1),
-          // Money Map check
+          // Money map check
           supabase.from('user_stage_progress')
             .select('money_map_completed')
             .eq('user_id', userId)
@@ -656,11 +642,11 @@ export default function ProgressTab({ userId }) {
           supabase.from('quest_cross_pollination')
             .select('source_quest_id, target_quest_id')
             .eq('user_id', userId),
-          // Aliveness snapshots (baselines + check-ins, for retroactive card + check-in prompt)
+          // Aliveness baselines (for retroactive baseline card)
           supabase.from('quest_aliveness_snapshots')
-            .select('quest_id, snapshot_type, scores, created_at')
+            .select('quest_id, snapshot_type')
             .eq('user_id', userId)
-            .order('created_at', { ascending: false }),
+            .eq('snapshot_type', 'baseline'),
           // Dome check (fast count to avoid flash of "Play Experience Game" CTA)
           supabase.from('experience_dome_ratings')
             .select('id', { count: 'exact', head: true })
@@ -710,26 +696,12 @@ export default function ProgressTab({ userId }) {
         setQuestNames(namesMap)
 
         // Find first quest needing aliveness baseline (most recently active first)
-        const baselineQuestIds = new Set(
-          (alivenessBaselineRes.data || []).filter(s => s.snapshot_type === 'baseline').map(s => s.quest_id)
-        )
+        const baselineQuestIds = new Set((alivenessBaselineRes.data || []).map(s => s.quest_id))
         const questsWithoutBaseline = (questsRes.data || [])
           .filter(q => !baselineQuestIds.has(q.id))
         if (questsWithoutBaseline.length > 0) {
           setBaselineNeededQuest(questsWithoutBaseline[0])
         }
-
-        // Group snapshots for check-in detection
-        const snapshotsByQuest = {}
-        ;(alivenessBaselineRes.data || []).forEach(s => {
-          if (!snapshotsByQuest[s.quest_id]) snapshotsByQuest[s.quest_id] = []
-          snapshotsByQuest[s.quest_id].push(s)
-        })
-        setAllSnapshots(snapshotsByQuest)
-
-        const activeQuests = (questsRes.data || []).filter(q => baselineQuestIds.has(q.id))
-        const dueList = getCheckinDueQuests(activeQuests, snapshotsByQuest)
-        if (dueList.length > 0) setCheckinDueQuest(dueList[0])
 
         // Process NS checkins for evidence feed
         const groanIds = (groanRes.data || []).map(g => g.id)
@@ -949,12 +921,6 @@ export default function ProgressTab({ userId }) {
 
   const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
 
-  // Fetch direction completion for StageCard
-  useEffect(() => {
-    if (!userId || heroStage < 8) return
-    getDirectionStatus(userId).then(status => setDirectionComplete(isAllDirectionComplete(status)))
-  }, [userId, heroStage])
-
   // Zone Cal Worth CTA → open healing voice selector
   useEffect(() => {
     const handler = () => {
@@ -1034,11 +1000,42 @@ export default function ProgressTab({ userId }) {
 
       {/* ═══ HERO CARD ═══ */}
       <div className="pt-hero">
-        <StageCard heroStage={heroStage} directionComplete={directionComplete}>
-          <button className="sc-journey-toggle" onClick={() => setShowStages(!showStages)}>
+        <div className="pt-stage-row">
+          <div className="pt-stage-label">Stage {heroStage} of 12</div>
+          <button className="pt-stages-toggle" onClick={() => setShowStages(!showStages)}>
             {showStages ? 'Hide map' : 'See your journey'} {showStages ? '▴' : '▾'}
           </button>
-        </StageCard>
+        </div>
+        <div className="pt-stage-name">{stageInfo.name}</div>
+
+        <div className="pt-journey-bar">
+          <div className="pt-journey-fill" style={{ width: `${Math.max(Math.min((heroStage / 12) * 100, 100), 4)}%` }} />
+        </div>
+        <div className="pt-journey-endpoints">
+          <span>The Crack</span>
+          <span>Doing What You Love</span>
+        </div>
+
+        {stageInfo.desc && (
+          <div className="pt-stage-desc">{stageInfo.desc}</div>
+        )}
+
+        {/* Think refs */}
+        {stageInfo.refs && (
+          <div className="pt-think">
+            <div className="pt-think-label">Think:</div>
+            {stageInfo.refs.map((ref, i) => (
+              <div key={i} className="pt-think-ref">{ref}</div>
+            ))}
+          </div>
+        )}
+
+        {/* Next action CTA */}
+        {stageInfo.nextAction && (
+          <button className="pt-next-action" onClick={() => navigate(stageInfo.nextRoute)}>
+            Next step: {stageInfo.nextAction} <span>→</span>
+          </button>
+        )}
 
         {/* ═══ Expandable Journey Quadrant Map ═══ */}
         {showStages && (
@@ -1138,32 +1135,6 @@ export default function ProgressTab({ userId }) {
                         </text>
                       )}
                     </g>
-                  )
-                })}
-
-                {/* Chapter labels — positioned at midpoint of each chapter's stages */}
-                {JOURNEY_CHAPTERS.map(ch => {
-                  const chapterStages = ch.steps
-                    .filter(s => s.heroStage !== null)
-                    .map(s => HERO_STAGES.find(h => h.stage === s.heroStage))
-                    .filter(Boolean)
-                  if (chapterStages.length === 0) return null
-                  const midX = chapterStages.reduce((s, h) => s + h.x, 0) / chapterStages.length
-                  const midY = Math.min(...chapterStages.map(h => h.y)) - 18
-                  const isActive = ch.id === getChapterForStage(heroStage).chapter.id
-                  return (
-                    <text
-                      key={ch.id}
-                      x={midX}
-                      y={midY}
-                      textAnchor="middle"
-                      className={`sc-svg-chapter-label ${isActive ? 'sc-svg-chapter-active' : ''}`}
-                      fontSize="10"
-                      fontWeight={isActive ? '700' : '400'}
-                      fill={isActive ? '#E9A23B' : 'rgba(94, 23, 235, 0.5)'}
-                    >
-                      {ch.name}
-                    </text>
                   )
                 })}
               </svg>
@@ -1270,64 +1241,6 @@ export default function ProgressTab({ userId }) {
           onDismiss={() => {
             setShowBaselineFlow(false)
             setBaselineDismissed(true)
-          }}
-        />
-      )}
-
-      {/* ═══ ALIVENESS CHECK-IN PROMPT ═══ */}
-      {checkinDueQuest && !checkinDismissed && !showCheckinFlow && !baselineNeededQuest && (
-        <div style={{
-          background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
-          borderRadius: 16, padding: '16px', margin: '0 0 16px',
-          border: '1px solid rgba(94, 23, 235, 0.12)',
-        }}>
-          <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{checkinDueQuest.quest.label}</div>
-          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
-            How alive are you? 60 seconds.
-          </div>
-          <div style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
-            {checkinDueQuest.state.daysSinceLast >= 30
-              ? "It's been a while since your last snapshot."
-              : `It's been ${checkinDueQuest.state.daysSinceLast} days since your last snapshot.`}
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button onClick={() => setShowCheckinFlow(true)} style={{
-              padding: '10px 20px', borderRadius: 10,
-              background: '#5e17eb', color: '#fff', border: 'none',
-              fontWeight: 600, fontSize: 14, cursor: 'pointer',
-            }}>
-              Take snapshot
-            </button>
-            <button onClick={() => setCheckinDismissed(true)} style={{
-              padding: '10px 16px', borderRadius: 10,
-              background: '#f0ede8', color: '#666', border: 'none',
-              fontSize: 14, cursor: 'pointer',
-            }}>
-              Not now
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showCheckinFlow && checkinDueQuest && (
-        <AlivenessCheckin
-          userId={userId}
-          quest={checkinDueQuest.quest}
-          baseline={checkinDueQuest.state.baseline}
-          previous={checkinDueQuest.state.previous}
-          allSnapshots={allSnapshots[checkinDueQuest.quest.id] || []}
-          onComplete={() => {
-            setShowCheckinFlow(false)
-            setCheckinDueQuest(null)
-          }}
-          onDismiss={() => {
-            setShowCheckinFlow(false)
-            setCheckinDismissed(true)
-          }}
-          onNavigateChallenge={({ text, questId }) => {
-            setShowCheckinFlow(false)
-            setCheckinDueQuest(null)
-            navigate('/7-day-challenge')
           }}
         />
       )}
@@ -1599,7 +1512,7 @@ export default function ProgressTab({ userId }) {
         <>
           <div className="pt-bridge">
             <span className="pt-bridge-text">
-              {!hasDome ? 'let\'s find out what lights you up.' : !hasEssence ? 'now, who are you really?' : !hasPaths ? 'ready to find your path?' : 'now let\'s see what your current life looks like.'}
+              {!hasDome ? 'let\'s find out what lights you up.' : !hasEssence ? 'now, who are you really?' : !hasPaths ? 'ready to find your path?' : 'now let\'s make sure your bills are covered.'}
             </span>
           </div>
           <div className="pt-cta-card">

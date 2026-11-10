@@ -1,75 +1,53 @@
 /**
- * StageCard.jsx — Journey chapter card with tick boxes
+ * StageCard.jsx — Hero stage level card
  *
- * Shows current chapter (Search/Challenge/Breakthrough), step progress
- * as tick boxes, chapter dots, movie refs, and next action CTA.
+ * Shows current stage (0-12), journey bar, description, movie refs,
+ * and next action CTA. Used on /me and ProgressTab.
  *
  * CSS prefix: sc-
  */
 
 import { useNavigate } from 'react-router-dom'
-// journeyChapters removed — Task 2 replaces StageCard entirely
-const JOURNEY_CHAPTERS = []
-function getChapterForStage() { return { chapter: { id: 'search', name: '', tagline: '' }, stepsComplete: 0, stepsTotal: 0 } }
-function getStepsWithStatus() { return [] }
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { HERO_STAGES } from './ProgressTab'
 import './StageCard.css'
 
-export default function StageCard({ heroStage = 0, directionComplete = false, children }) {
+export default function StageCard({ heroStage = 0 }) {
   const navigate = useNavigate()
-  const { chapter, stepsComplete, stepsTotal } = getChapterForStage(heroStage, directionComplete)
-  const steps = getStepsWithStatus(heroStage, directionComplete)
-  const currentStep = steps.find(s => s.current) || steps[steps.length - 1]
+  const stageInfo = HERO_STAGES[heroStage] || HERO_STAGES[0]
 
   return (
     <div className="sc-card">
-      {/* Chapter name + step count */}
-      <div className="sc-chapter-name">{chapter.name}</div>
-      <div className="sc-step-count">
-        {stepsComplete} of {stepsTotal} complete
+      <div className="sc-stage-row">
+        <div className="sc-stage-label">Stage {heroStage} of 12</div>
+      </div>
+      <div className="sc-stage-name">{stageInfo.name}</div>
+
+      <div className="sc-journey-bar">
+        <div className="sc-journey-fill" style={{ width: `${Math.max(Math.min((heroStage / 12) * 100, 100), 4)}%` }} />
+      </div>
+      <div className="sc-journey-endpoints">
+        <span>The Crack</span>
+        <span>Doing What You Love</span>
       </div>
 
-      {/* Tick box list */}
-      <div className="sc-steps">
-        {steps.map((step, i) => (
-          <div key={i} className={`sc-step ${step.complete ? 'sc-step-done' : ''} ${step.current ? 'sc-step-current' : ''}`}>
-            <span className="sc-step-icon">
-              {step.complete ? <CheckCircleIcon width={18} height={18} /> : step.current ? '▸' : '○'}
-            </span>
-            <span className="sc-step-name">{step.name}</span>
-          </div>
-        ))}
-      </div>
+      {stageInfo.desc && (
+        <div className="sc-stage-desc">{stageInfo.desc}</div>
+      )}
 
-      {/* Chapter dots */}
-      <div className="sc-chapter-dots">
-        {JOURNEY_CHAPTERS.map(c => (
-          <div key={c.id} className={`sc-dot ${c.id === chapter.id ? 'sc-dot-active' : ''} ${JOURNEY_CHAPTERS.indexOf(c) < JOURNEY_CHAPTERS.indexOf(chapter) ? 'sc-dot-done' : ''}`}>
-            <span className="sc-dot-circle" />
-            <span className="sc-dot-label">{c.name}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Movie refs for current step */}
-      {currentStep?.refs && (
+      {stageInfo.refs && (
         <div className="sc-think">
           <div className="sc-think-label">Think:</div>
-          {currentStep.refs.map((ref, i) => (
+          {stageInfo.refs.map((ref, i) => (
             <div key={i} className="sc-think-ref">{ref}</div>
           ))}
         </div>
       )}
 
-      {/* Next action CTA */}
-      {currentStep?.nextAction && currentStep?.nextRoute && (
-        <button className="sc-next-action" onClick={() => navigate(currentStep.nextRoute)}>
-          Next: {currentStep.nextAction} <span>→</span>
+      {stageInfo.nextAction && (
+        <button className="sc-next-action" onClick={() => navigate(stageInfo.nextRoute)}>
+          Next step: {stageInfo.nextAction} <span>→</span>
         </button>
       )}
-
-      {/* Optional slot for extra content (e.g. journey map toggle) */}
-      {children}
     </div>
   )
 }
