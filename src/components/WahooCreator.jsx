@@ -73,6 +73,7 @@ export default function WahooCreator({
   initialText = '',
   initialQuestId = null,
   initialSourceLabel = null,
+  initialExpId = null,
   onWahooAccepted,
   onClose,
 }) {
@@ -87,7 +88,7 @@ export default function WahooCreator({
   const [healingTaskId, setHealingTaskId] = useState(null)
   const [expansionDims, setExpansionDims] = useState([])
   const [dimensionValues, setDimensionValues] = useState({})
-  const [selectedExpId, setSelectedExpId] = useState(null)
+  const [selectedExpId, setSelectedExpId] = useState(initialExpId)
   const [questExperiences, setQuestExperiences] = useState([])
   const [predictedDifficulty, setPredictedDifficulty] = useState(null)
   // Drill-in: which dimension is currently being leveled (null = show grid)

@@ -271,6 +271,7 @@ export async function generate(questId, userId, opts) {
     const recommendation = {
       challenge: data.challenge, permission: data.permission,
       closer: data.closer, stretches: data.stretches || [],
+      experience_label: data.experience_label || null,
     }
 
     const mode = isManual ? 'manual' : 'auto'

@@ -95,10 +95,11 @@ RULES:
 - Permission: under 20 words. Why this matters for their path. Acknowledge what they want, not what they lack.
 - Closer: under 20 words. Reassurance that this is reversible and safe to try.
 - Stretches: list 2-3 dimension IDs this challenge pushes.
+- Experience: which project/experience from the EXPERIENCES list this challenge relates to. Return the exact label. If none fit, return null.
 ${moneyRules}
 
 Respond with ONLY valid JSON, no other text:
-{"challenge":"What if you...","permission":"...","closer":"...","stretches":["dim1","dim2"]}`
+{"challenge":"What if you...","permission":"...","closer":"...","stretches":["dim1","dim2"],"experience_label":"exact label or null"}`
 
     const userPrompt = `QUEST: "${quest_label}"
 EXPERIENCES: ${experienceStr}

@@ -331,10 +331,17 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     && !quest.is_current_job && !quest.is_bridge_job
     && quest.current_dimensions && Object.keys(quest.current_dimensions).length > 0
 
+  const [preselectedExpId, setPreselectedExpId] = useState(null)
+
   const handleAcceptChallenge = async () => {
     if (!nextMoveRec) return
     await markAccepted(quest.id, userId)
     setWahooCreatorText(nextMoveRec.challenge)
+    // Pre-select the project if AI identified one
+    if (nextMoveRec.experience_label) {
+      const match = activeExperiences.find(e => e.label === nextMoveRec.experience_label)
+      if (match) setPreselectedExpId(match.id)
+    }
     setShowWahooCreator(true)
     setNextMoveRec(null)
     setNextMoveExpanded(false)
@@ -831,12 +838,14 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               initialText={wahooCreatorText}
               initialQuestId={quest.id}
               initialSourceLabel={quest.label}
+              initialExpId={preselectedExpId}
               onWahooAccepted={() => {
                 setShowWahooCreator(false)
+                setPreselectedExpId(null)
                 setTaskInput('')
                 onUpdate?.()
               }}
-              onClose={() => { setShowWahooCreator(false); setTaskInput('') }}
+              onClose={() => { setShowWahooCreator(false); setPreselectedExpId(null); setTaskInput('') }}
             />
           </div>
         </div>

@@ -70,6 +70,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [questTasks, setQuestTasks] = useState({}) // { questId: [tasks] }
   const [questExperiences, setQuestExperiences] = useState({}) // { questId: [experiences] }
   const [showAddQuest, setShowAddQuest] = useState(false)
+  const [showExploreMenu, setShowExploreMenu] = useState(false)
   const [addQuestLabel, setAddQuestLabel] = useState('')
   const [addQuestState, setAddQuestState] = useState(null)
   const [addQuestSaving, setAddQuestSaving] = useState(false)
@@ -611,12 +612,25 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             </div>
           </div>
         )}
-        {/* Discovery prompt */}
-        <div className="quest-discover-prompt" onClick={() => navigate('/experience-game?returnTo=' + encodeURIComponent('/7-day-challenge?tab=weekly'))}>
-          Explore new paths →
+        {/* Discovery prompt — opens popup with two options */}
+        <div className="quest-explore-wrapper">
+          <div className="quest-discover-prompt" onClick={() => setShowExploreMenu(!showExploreMenu)}>
+            Explore new paths →
+          </div>
+          {showExploreMenu && (
+            <div className="quest-explore-menu">
+              <button className="quest-explore-option" onClick={() => { setShowExploreMenu(false); navigate('/experience-game?returnTo=' + encodeURIComponent('/7-day-challenge?tab=weekly')) }}>
+                Discover new experiences
+                <span className="quest-explore-hint">Find what lights you up</span>
+              </button>
+              <button className="quest-explore-option" onClick={() => { setShowExploreMenu(false); setShowAddQuest(true) }}>
+                Add a custom path
+                <span className="quest-explore-hint">Already know what you want to pursue</span>
+              </button>
+            </div>
+          )}
         </div>
-        {/* "+ Add Path" removed — "Explore new paths" handles discovery */}
-        {hasLifePaths && showAddQuest && (
+        {showAddQuest && (
           <div className="quest-add-modal">
             <div className="quest-add-title">What life path are you pursuing?</div>
             {lifePathCareers.length > 0 && !addQuestCustom ? (

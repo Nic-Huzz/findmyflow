@@ -778,6 +778,52 @@
 }
 .quest-discover-prompt:active { opacity: 1; }
 
+.quest-explore-wrapper {
+  position: relative;
+}
+
+.quest-explore-menu {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 6px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: fadeUp 0.15s ease;
+}
+
+.quest-explore-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a0b3d;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+
+.quest-explore-option:active {
+  background: rgba(94, 23, 235, 0.06);
+}
+
+.quest-explore-hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
 .quest-current-job-cta {
   display: flex;
   align-items: center;
