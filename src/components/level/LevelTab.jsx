@@ -618,7 +618,9 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             Explore new paths →
           </div>
           {showExploreMenu && (
-            <div className="quest-explore-menu">
+            <>
+            <div style={{ position: 'fixed', inset: 0, zIndex: 9 }} onClick={() => setShowExploreMenu(false)} />
+            <div className="quest-explore-menu" style={{ position: 'relative', zIndex: 10 }}>
               <button className="quest-explore-option" onClick={() => { setShowExploreMenu(false); navigate('/experience-game?returnTo=' + encodeURIComponent('/7-day-challenge?tab=weekly')) }}>
                 Discover new experiences
                 <span className="quest-explore-hint">Find what lights you up</span>
@@ -628,6 +630,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
                 <span className="quest-explore-hint">Already know what you want to pursue</span>
               </button>
             </div>
+            </>
           )}
         </div>
         {showAddQuest && (

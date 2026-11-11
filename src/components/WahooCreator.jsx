@@ -164,9 +164,14 @@ export default function WahooCreator({
       .order('sort_order')
       .then(({ data }) => {
         setQuestExperiences(data || [])
-        setSelectedExpId(null)
+        // Only reset selection if initialExpId wasn't provided or doesn't belong to this quest
+        if (initialExpId && data?.some(e => e.id === initialExpId)) {
+          setSelectedExpId(initialExpId)
+        } else {
+          setSelectedExpId(null)
+        }
       })
-  }, [linkedQuestId])
+  }, [linkedQuestId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     return () => {

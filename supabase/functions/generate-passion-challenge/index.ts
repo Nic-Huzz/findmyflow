@@ -39,7 +39,7 @@ serve(async (req) => {
     }
 
     const experienceStr = experience_labels?.length
-      ? experience_labels.slice(0, 3).join(', ')
+      ? experience_labels.join(', ')
       : quest_label || 'this path'
 
     const targetDimLines = (target_dimensions || Object.keys(dimension_gaps))
