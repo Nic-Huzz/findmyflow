@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import AppRouter from './AppRouter.jsx'
 import checkAppVersion from './lib/versionCheck.js'
 import { captureUtmParams, trackAppOpened } from './lib/analytics.js'
+import './styles/theme-tokens.css'
 import './index.css'
 
 // Clear stale localStorage when app version changes

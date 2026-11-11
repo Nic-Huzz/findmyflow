@@ -1,0 +1,54 @@
+:root {
+  /* Backgrounds */
+  --bg-page: #f8f9fa;
+  --bg-surface: #ffffff;
+  --bg-surface-hover: #faf8ff;
+  --bg-muted: #f5f5f5;
+  --bg-input: #f8f9fa;
+
+  /* Text */
+  --text-primary: #1a1a2e;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --text-faint: #9ca3af;
+  --text-on-accent: #ffffff;
+  --text-on-gradient: #0a0a0a;
+
+  /* Accent */
+  --accent-primary: #5e17eb;
+  --accent-primary-light: #8b5cf6;
+  --accent-primary-dark: #7c3aed;
+  --accent-primary-bg: rgba(94, 23, 235, 0.06);
+  --accent-primary-border: rgba(94, 23, 235, 0.15);
+
+  /* Gold */
+  --accent-gold: #E9A23B;
+  --accent-gold-light: #f0b94e;
+  --accent-gold-bg: rgba(233, 162, 59, 0.1);
+
+  /* Semantic */
+  --color-success: #10b981;
+  --color-success-dark: #059669;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
+  --color-danger-bg: rgba(239, 68, 68, 0.1);
+  --color-warning: #f97316;
+  --color-neutral: #6b7280;
+
+  /* Borders */
+  --border-default: #e9ecef;
+  --border-light: #dee2e6;
+  --border-input: #e9ecef;
+  --border-input-focus: #5e17eb;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-accent: 0 4px 12px rgba(94, 23, 235, 0.3);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  --gradient-bar: linear-gradient(90deg, #5e17eb, #a78bfa, #E9A23B);
+  --gradient-gold: linear-gradient(135deg, #E9A23B 0%, #f0b94e 100%);
+}
