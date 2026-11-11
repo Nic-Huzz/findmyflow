@@ -3141,7 +3141,7 @@
   background: linear-gradient(
     90deg,
     #f0f0f0 25%,
-    var(--border-light) 50%,
+    #e0e0e0 50%,
     #f0f0f0 75%
   );
   background-size: 200% 100%;
@@ -3456,7 +3456,7 @@
 .plt-category-bubble:hover,
 .plt-category-bubble.expanded {
   border-color: var(--accent-gold);
-  background: var(--bg-surface)bf2;
+  background: #fffbf2;
 }
 
 .plt-bubble-icon {
