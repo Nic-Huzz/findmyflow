@@ -111,6 +111,8 @@ function shouldSkipLine(line) {
   if (trimmed.includes('var(--')) return true;
   // Skip url() values
   if (trimmed.includes('url(')) return true;
+  // Skip CSS custom property definitions (--foo: value)
+  if (trimmed.startsWith('--')) return true;
   return false;
 }
 
