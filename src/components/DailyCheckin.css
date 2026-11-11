@@ -18,7 +18,7 @@
 }
 
 .daily-checkin-card {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 24px;
   padding: 32px 24px 24px;
   max-width: 380px;
@@ -44,7 +44,7 @@
   border: none;
   font-size: 13px;
   font-weight: 600;
-  color: #adb5bd;
+  color: var(--text-faint);
   cursor: pointer;
 }
 
@@ -58,13 +58,13 @@
 .daily-checkin-title {
   font-size: 18px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 4px;
 }
 
 .daily-checkin-sub {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--text-muted);
   margin: 0 0 20px;
 }
 
@@ -79,27 +79,27 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border: 2px solid #eef0f3;
+  border: 2px solid var(--border-input);
   border-radius: 16px;
-  background: #f8f8fa;
+  background: var(--bg-input);
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
 }
 
 .daily-checkin-btn:hover {
-  border-color: #d1d5db;
+  border-color: var(--border-input);
 }
 
 .daily-checkin-btn.selected {
   background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   transform: scale(0.97);
 }
 
 .daily-checkin-btn.daily-checkin-vibe-rise.selected {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-color: #E9A23B;
+  border-color: var(--accent-gold);
   box-shadow: 0 0 16px rgba(233, 162, 59, 0.25);
 }
 
@@ -123,13 +123,13 @@
 .daily-checkin-btn-name {
   font-size: 15px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .daily-checkin-btn-label {
   font-size: 12px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 /* Back button (drain + regulation reuse) */
@@ -141,7 +141,7 @@
   border: none;
   font-size: 13px;
   font-weight: 600;
-  color: #adb5bd;
+  color: var(--text-faint);
   cursor: pointer;
 }
 
@@ -163,30 +163,30 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  border: 2px solid #eef0f3;
+  border: 2px solid var(--border-input);
   border-radius: 12px;
-  background: #f8f8fa;
+  background: var(--bg-input);
   font-size: 14px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .daily-checkin-drain-cat:hover {
-  border-color: #d1d5db;
+  border-color: var(--border-input);
 }
 
 .daily-checkin-drain-cat.selected {
   background: linear-gradient(135deg, #fee2e2 0%, #fef3c7 100%);
-  border-color: #ef4444;
+  border-color: var(--color-danger);
 }
 
 .daily-checkin-drain-note {
   width: 100%;
   margin-top: 12px;
   padding: 10px 14px;
-  border: 2px solid #eef0f3;
+  border: 2px solid var(--border-input);
   border-radius: 12px;
   font-size: 14px;
   font-family: inherit;
@@ -196,7 +196,7 @@
 }
 
 .daily-checkin-drain-note:focus {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
 }
 
 .daily-checkin-drain-actions {
@@ -208,12 +208,12 @@
 .daily-checkin-drain-skip {
   flex: 1;
   padding: 12px;
-  border: 2px solid #eef0f3;
+  border: 2px solid var(--border-input);
   border-radius: 14px;
-  background: white;
+  background: var(--bg-surface);
   font-size: 14px;
   font-weight: 700;
-  color: #6b7280;
+  color: var(--text-muted);
   cursor: pointer;
 }
 
@@ -225,7 +225,7 @@
   background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
   font-size: 14px;
   font-weight: 700;
-  color: white;
+  color: var(--text-on-accent);
   cursor: pointer;
   transition: opacity 0.15s;
 }
@@ -238,11 +238,11 @@
 /* Boost capture (vibe_rise) — gold theme */
 .daily-checkin-boost .daily-checkin-drain-cat.boost-selected {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-color: #E9A23B;
+  border-color: var(--accent-gold);
 }
 
 .daily-checkin-boost-note:focus {
-  border-color: #E9A23B;
+  border-color: var(--accent-gold);
 }
 
 .daily-checkin-boost-save {
@@ -254,18 +254,18 @@
   width: 100%;
   margin-top: 4px;
   padding: 12px 14px;
-  border: 2px solid #eef0f3;
+  border: 2px solid var(--border-input);
   border-radius: 12px;
   font-size: 16px;
   font-family: inherit;
-  color: #1a1a2e;
+  color: var(--text-primary);
   outline: none;
   transition: border-color 0.15s;
   box-sizing: border-box;
 }
 
 .daily-checkin-predict-input:focus {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
 }
 
 .daily-checkin-predict-outcomes {
@@ -279,12 +279,12 @@
   flex: 1;
   min-width: calc(50% - 4px);
   padding: 10px 8px;
-  border: 2px solid #eef0f3;
+  border: 2px solid var(--border-input);
   border-radius: 12px;
-  background: #f8f8fa;
+  background: var(--bg-input);
   font-size: 13px;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s;
@@ -295,9 +295,9 @@
 }
 
 .daily-checkin-predict-btn.selected {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
