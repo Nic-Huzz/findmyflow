@@ -13,6 +13,7 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
+import { getVoicePickerOptions } from '../data/protectiveVoices'
 import './PreActionModal.css'
 
 // Milestones that trigger PRE-ACTION
@@ -39,13 +40,7 @@ const VISIBILITY_LAYERS = [
 ]
 
 // Protective voices (HOW resistance sounds)
-const PROTECTIVE_VOICES = [
-  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
-  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
-  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
-  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
-]
+const PROTECTIVE_VOICES = getVoicePickerOptions()
 
 // Essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {

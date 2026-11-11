@@ -130,7 +130,7 @@ export default function DailyCheckin({ userId, onComplete }) {
             }}>
               Skip
             </button>
-            <span className="daily-checkin-emoji"><BoltIcon style={{ width: 32, height: 32, color: '#5e17eb' }} /></span>
+            <span className="daily-checkin-emoji"><BoltIcon style={{ width: 32, height: 32, color: '#FF3CAC' }} /></span>
             <h3 className="daily-checkin-title">How are you right now?</h3>
             <p className="daily-checkin-sub">Quick daily check-in to track your nervous system</p>
             <div className="daily-checkin-states">
@@ -213,8 +213,8 @@ export default function DailyCheckin({ userId, onComplete }) {
         {step === 'regulation' && (
           <RegulationCard
             state={selectedState}
-            onDone={finishCheckin}
-            onSkip={finishCheckin}
+            onDone={() => finishCheckin()}
+            onSkip={() => finishCheckin()}
             onBack={() => setStep('drain')}
           />
         )}

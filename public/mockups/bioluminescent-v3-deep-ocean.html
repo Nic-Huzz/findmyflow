@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Vibe Rise — Bioluminescent v3 (Deep Ocean)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #060610;
+      --surface: rgba(16, 16, 32, 0.65);
+      --surface-2: rgba(22, 22, 42, 0.7);
+      --text: #E8E4F0;
+      --text-muted: #6e6888;
+      --text-secondary: #a89ebe;
+      --border: rgba(140, 100, 255, 0.06);
+      --pink: #C77DFF;
+      --gold: #FFB347;
+      --green: #34d399;
+      --red: #f87171;
+      --accent: #7B68EE;
+      --gradient: linear-gradient(135deg, #C77DFF 0%, #7B68EE 50%, #FFB347 100%);
+      --gradient-bar: linear-gradient(90deg, #7B68EE, #C77DFF, #FFB347);
+      --font: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ===== APP FRAME ===== */
+    .challenge-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      padding-bottom: calc(60px + env(safe-area-inset-bottom, 0) + 2rem);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ===== JELLYFISH — large slow pulsing orbs ===== */
+    .jellyfish-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .jellyfish {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: jf-drift linear infinite;
+    }
+    .jellyfish::after {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      border-radius: 50%;
+      background: inherit;
+      filter: blur(20px);
+      opacity: 0.3;
+      animation: jf-pulse 4s ease-in-out infinite;
+    }
+    @keyframes jf-drift {
+      0% { opacity: 0; transform: translateY(20px) translateX(0) scale(0.9); }
+      8% { opacity: 0.7; }
+      85% { opacity: 0.7; }
+      100% { opacity: 0; transform: translateY(-110vh) translateX(40px) scale(1.05); }
+    }
+    @keyframes jf-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.2; }
+      50% { transform: scale(1.3); opacity: 0.45; }
+    }
+
+    /* ===== DEEP OCEAN AMBIENT ===== */
+    .ocean-glow {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 20% 30%, rgba(123,104,238,0.08), transparent),
+        radial-gradient(ellipse 500px 500px at 80% 70%, rgba(199,125,255,0.05), transparent),
+        radial-gradient(ellipse 400px 300px at 50% 90%, rgba(255,179,71,0.03), transparent);
+      animation: ocean-shift 20s ease-in-out infinite;
+    }
+    @keyframes ocean-shift {
+      0%, 100% { opacity: 1; filter: hue-rotate(0deg); }
+      50% { opacity: 0.8; filter: hue-rotate(8deg); }
+    }
+
+    /* ===== CAUSTIC LIGHT OVERLAY ===== */
+    .caustics {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.03;
+      background:
+        repeating-conic-gradient(rgba(123,104,238,0.15) 0% 25%, transparent 0% 50%) 50% 50% / 200px 200px,
+        repeating-conic-gradient(rgba(199,125,255,0.1) 0% 25%, transparent 0% 50%) 25px 25px / 180px 180px;
+      animation: caustic-move 30s linear infinite;
+      filter: blur(30px);
+    }
+    @keyframes caustic-move {
+      0% { transform: translateX(0) translateY(0) rotate(0deg); }
+      100% { transform: translateX(50px) translateY(-30px) rotate(15deg); }
+    }
+
+    /* ===== HEADER ===== */
+    .challenge-header {
+      background: linear-gradient(180deg, #1a1040 0%, rgba(123,104,238,0.15) 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 8px 40px rgba(123,104,238,0.12), 0 0 80px rgba(123,104,238,0.05);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(123,104,238,0.1);
+    }
+
+    .challenge-app-title {
+      margin: 0 0 1rem 0;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #E8E4F0, #C77DFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .challenge-score-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .challenge-total {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .challenge-total-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(199,125,255,0.3);
+    }
+
+    .challenge-total-label {
+      font-size: 0.65rem;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .challenge-hero-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(199,125,255,0.3);
+      flex-shrink: 0;
+      box-shadow: 0 0 30px rgba(123,104,238,0.2), 0 0 60px rgba(199,125,255,0.1);
+      animation: avatar-breathe 6s ease-in-out infinite;
+    }
+
+    @keyframes avatar-breathe {
+      0%, 100% { box-shadow: 0 0 30px rgba(123,104,238,0.2), 0 0 60px rgba(199,125,255,0.1); }
+      50% { box-shadow: 0 0 40px rgba(123,104,238,0.3), 0 0 80px rgba(199,125,255,0.15); }
+    }
+
+    .challenge-hero-avatar div {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1a1040, #0d0820);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .challenge-level-bar { margin-top: 0.75rem; margin-bottom: 1.25rem; }
+
+    .challenge-level-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+
+    .challenge-level-name { font-size: 0.85rem; font-weight: 700; }
+    .challenge-level-xp { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+
+    .challenge-level-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(123,104,238,0.08);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .challenge-level-fill {
+      height: 100%;
+      border-radius: 5px;
+      background: var(--gradient-bar);
+      position: relative;
+      transition: width 0.8s ease;
+    }
+
+    .challenge-level-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: levelShimmer 4s ease-in-out infinite;
+    }
+
+    @keyframes levelShimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .challenge-header-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(123,104,238,0.12);
+      border: 1px solid rgba(123,104,238,0.15);
+      border-radius: 20px;
+      padding: 0.35rem 0.75rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .streak-badge-num { color: var(--gold); font-size: 1rem; font-weight: 800; }
+
+    .hero-streak-flame {
+      font-size: 1rem;
+      line-height: 1;
+      animation: flamePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes flamePulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.08); filter: brightness(1.2); }
+    }
+
+    .challenge-matchup-banner {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(123,104,238,0.08);
+      border: 1px solid rgba(123,104,238,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .challenge-matchup-team-name { color: var(--gold); font-weight: 700; }
+    .challenge-matchup-pill { background: rgba(123,104,238,0.15); border-radius: 8px; padding: 2px 8px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; }
+    .challenge-matchup-vs { opacity: 0.4; font-size: 0.7rem; }
+
+    .settings-badge {
+      background: rgba(123,104,238,0.1);
+      border: 1px solid rgba(123,104,238,0.12);
+      color: var(--text-secondary);
+      padding: 0.625rem 1rem;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 45px;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+
+    .settings-badge:hover {
+      background: rgba(123,104,238,0.2);
+      transform: rotate(90deg);
+      box-shadow: 0 0 20px rgba(123,104,238,0.1);
+    }
+
+    /* ===== TABS ===== */
+    .challenge-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.5rem 1.5rem 0.75rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .challenge-tab {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid rgba(123,104,238,0.08);
+      background: rgba(16, 16, 32, 0.5);
+      color: var(--text-muted);
+      border-radius: 12px;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      backdrop-filter: blur(12px);
+    }
+
+    .challenge-tab:hover {
+      background: rgba(123,104,238,0.08);
+      color: var(--text-secondary);
+      border-color: rgba(123,104,238,0.15);
+    }
+
+    .challenge-tab.active {
+      background: var(--gradient);
+      color: #0a0a0a;
+      border: none;
+      box-shadow: 0 4px 20px rgba(123,104,238,0.25), 0 0 40px rgba(199,125,255,0.1);
+    }
+
+    .challenge-tab.locked { opacity: 0.3; cursor: not-allowed; }
+    .challenge-tab .lock-icon { font-size: 0.7rem; margin-left: 0.35rem; }
+
+    .paths-lock-hint {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      margin: -4px 1.5rem 8px;
+      background: rgba(123,104,238,0.04);
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    /* ===== CONTENT ===== */
+    .challenge-content {
+      padding: 0.5rem 1.5rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== GLASS CARD BASE ===== */
+    .glass {
+      background: rgba(16, 16, 36, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(123,104,238,0.08);
+      border-radius: 16px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: radial-gradient(ellipse 200px 100px at 50% 0%, rgba(123,104,238,0.04), transparent 70%);
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .glass:hover::before { opacity: 1; }
+
+    .glass:hover {
+      border-color: rgba(123,104,238,0.15);
+      box-shadow: 0 8px 30px rgba(123,104,238,0.06), 0 0 60px rgba(199,125,255,0.03);
+    }
+
+    /* ===== STEP BANNER ===== */
+    .dt-step-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 16px;
+      background: rgba(123,104,238,0.04);
+      border: 1px solid rgba(123,104,238,0.08);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .dt-step-banner-label { font-weight: 800; font-size: 14px; color: var(--pink); }
+    .dt-step-banner-text { font-size: 14px; color: var(--text-secondary); line-height: 1.4; }
+
+    /* ===== ARTIFACT PROGRESS ===== */
+    .artifact-progress {
+      background: rgba(16, 16, 36, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(123,104,238,0.08);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .artifact-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .artifact-header h3 { font-size: 14px; font-weight: 700; color: var(--text); margin: 0; }
+    .artifact-header p { font-size: 12px; color: var(--text-muted); margin: 0; }
+
+    .progress-bar-container { width: 100%; }
+    .progress-bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(123,104,238,0.06);
+      border-radius: 4px;
+      overflow: visible;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient-bar);
+      border-radius: 4px;
+      position: relative;
+      transition: width 0.6s ease;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: -2px; top: -6px; bottom: -6px; width: 18px;
+      background: radial-gradient(ellipse at center, rgba(199,125,255,0.6), transparent);
+      filter: blur(4px);
+      animation: barPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes barPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ===== WEEKLY REVIEW CTA ===== */
+    .wr-cta-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: rgba(255,179,71,0.04);
+      border: 1px solid rgba(255,179,71,0.1);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .wr-cta-card:hover {
+      background: rgba(255,179,71,0.08);
+      box-shadow: 0 0 30px rgba(255,179,71,0.05);
+      border-color: rgba(255,179,71,0.18);
+    }
+
+    .wr-cta-left { display: flex; align-items: center; gap: 10px; }
+    .wr-cta-icon { color: var(--gold); }
+    .wr-cta-title { font-size: 14px; font-weight: 700; }
+    .wr-cta-sub { font-size: 12px; color: var(--text-muted); }
+    .wr-cta-arrow { color: var(--gold); font-size: 16px; }
+
+    /* ===== DISCOVERY CARDS ===== */
+    .dt-card {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .dt-card:active {
+      background: var(--surface-2);
+      transform: scale(0.995);
+    }
+
+    .dt-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .dt-card-icon { font-size: 18px; }
+    .dt-card-title { font-size: 15px; font-weight: 700; color: var(--text); }
+
+    .dt-card-badge {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--pink);
+      background: rgba(199,125,255,0.1);
+      padding: 3px 8px;
+      border-radius: 8px;
+    }
+
+    .dt-card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin: 0; }
+
+    .dt-card-arrow {
+      position: absolute;
+      right: 16px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .dt-card:hover .dt-card-arrow { color: var(--pink); }
+
+    /* ===== DOME VIZ ===== */
+    .dt-dome-viz {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .dt-dome-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .dt-dome-sub { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+    /* ===== NS RATING BUTTONS ===== */
+    .ns-rating-row { display: flex; gap: 6px; margin-top: 10px; }
+
+    .ns-btn {
+      flex: 1;
+      padding: 8px 4px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      font-family: var(--font);
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-muted);
+      backdrop-filter: blur(8px);
+    }
+
+    .ns-btn.vr { border-color: rgba(255,179,71,0.2); color: var(--gold); }
+    .ns-btn.vr:hover { background: rgba(255,179,71,0.06); box-shadow: 0 0 20px rgba(255,179,71,0.08); }
+    .ns-btn.fun { border-color: rgba(52,211,153,0.2); color: var(--green); }
+    .ns-btn.fun:hover { background: rgba(52,211,153,0.06); box-shadow: 0 0 20px rgba(52,211,153,0.08); }
+    .ns-btn.str { border-color: rgba(248,113,113,0.2); color: var(--red); }
+    .ns-btn.str:hover { background: rgba(248,113,113,0.06); box-shadow: 0 0 20px rgba(248,113,113,0.08); }
+    .ns-btn.bor { border-color: rgba(107,114,128,0.15); color: #6b7280; }
+    .ns-btn.bor:hover { background: rgba(107,114,128,0.04); }
+
+    /* ===== BRIDGE CTA ===== */
+    .dt-bridge-cta {
+      background: rgba(123,104,238,0.05);
+      border: 1px solid rgba(123,104,238,0.1);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      margin-top: 4px;
+      backdrop-filter: blur(10px);
+    }
+
+    .dt-bridge-cta h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .dt-bridge-cta p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--gradient);
+      color: #0a0a0a;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(123,104,238,0.2), 0 0 40px rgba(199,125,255,0.08);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(123,104,238,0.3), 0 0 60px rgba(199,125,255,0.12);
+    }
+
+    /* ===== QUEST CARDS ===== */
+    .quest-section-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      padding-left: 2px;
+    }
+
+    .quest-group {
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .quest-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .quest-group-icon { font-size: 1.2rem; }
+    .quest-group-title { font-size: 15px; font-weight: 700; }
+    .quest-group-meta { font-size: 12px; color: var(--text-muted); }
+
+    .quest-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(123,104,238,0.02);
+      border: 1px solid rgba(123,104,238,0.05);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .quest-row:last-child { margin-bottom: 0; }
+    .quest-row:hover { border-color: rgba(123,104,238,0.12); box-shadow: 0 0 20px rgba(123,104,238,0.04); }
+
+    .quest-check {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      border: 2px solid rgba(123,104,238,0.15);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .quest-row:hover .quest-check { border-color: var(--pink); box-shadow: 0 0 10px rgba(199,125,255,0.1); }
+
+    .quest-check.done {
+      background: var(--gradient);
+      border-color: transparent;
+      box-shadow: 0 0 15px rgba(123,104,238,0.2);
+    }
+
+    .quest-check.done::after { content: '\2713'; color: #0a0a0a; font-size: 11px; font-weight: 800; }
+
+    .quest-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+    .quest-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .quest-rp { font-size: 12px; font-weight: 700; color: var(--pink); flex-shrink: 0; margin-left: auto; }
+
+    /* ===== TUNE TAB ===== */
+    .freq-pills { display: flex; gap: 6px; margin-bottom: 14px; }
+
+    .freq-pill {
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(123,104,238,0.08);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .freq-pill.active {
+      background: rgba(199,125,255,0.08);
+      border-color: rgba(199,125,255,0.2);
+      color: var(--pink);
+      box-shadow: 0 0 15px rgba(199,125,255,0.06);
+    }
+
+    .tune-summary { text-align: center; padding: 12px 0; }
+    .tune-summary-count { font-size: 13px; color: var(--text-muted); }
+    .tune-summary-rp { font-size: 14px; font-weight: 700; color: var(--pink); margin-top: 4px; }
+
+    /* ===== PROGRESS TAB ===== */
+    .score-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+
+    .score-card {
+      background: rgba(16, 16, 36, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(123,104,238,0.06);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+
+    .score-card:hover {
+      border-color: rgba(123,104,238,0.12);
+      box-shadow: 0 4px 20px rgba(123,104,238,0.06);
+    }
+
+    .score-card-value { font-size: 1.5rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .score-card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+    .sc-tune { color: #c4b5fd; text-shadow: 0 0 20px rgba(196,181,253,0.3); }
+    .sc-courage { color: var(--gold); text-shadow: 0 0 20px rgba(255,179,71,0.3); }
+    .sc-reach { color: #67e8f9; text-shadow: 0 0 20px rgba(103,232,249,0.3); }
+
+    .radar-container {
+      background: rgba(16, 16, 36, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(123,104,238,0.06);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .radar-container::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 40%, rgba(123,104,238,0.04), transparent 70%);
+      pointer-events: none;
+    }
+
+    .radar-label { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+
+    .radar-legend { display: flex; gap: 16px; margin-top: 12px; font-size: 12px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-line { width: 8px; height: 2px; border-radius: 1px; display: inline-block; }
+    .legend-dash { width: 8px; height: 2px; border: 1px dashed rgba(255,255,255,0.15); border-radius: 1px; display: inline-block; }
+
+    .weekly-stats {
+      background: rgba(16, 16, 36, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(123,104,238,0.06);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .weekly-stat { text-align: center; }
+    .weekly-stat-value { font-size: 1.3rem; font-weight: 800; }
+    .weekly-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ===== DIVIDER ===== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(123,104,238,0.1), transparent);
+      margin: 16px 0;
+    }
+
+    /* ===== TAB CONTENT ===== */
+    .tab-panel { display: none; animation: tabIn 0.4s ease; }
+    .tab-panel.active { display: block; }
+    @keyframes tabIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ocean-glow"></div>
+  <div class="caustics"></div>
+  <div class="jellyfish-layer" id="jellyfish"></div>
+
+  <div class="challenge-container">
+
+    <header class="challenge-header">
+      <h1 class="challenge-app-title">Find My Flow</h1>
+      <div class="challenge-score-block">
+        <div class="challenge-total">
+          <span class="challenge-total-value">42</span>
+          <span class="challenge-total-label">weekly pts</span>
+        </div>
+        <div class="challenge-hero-avatar"><div>&#10022;</div></div>
+      </div>
+      <div class="challenge-level-bar">
+        <div class="challenge-level-row">
+          <span class="challenge-level-name">&#127754; Ripple Maker</span>
+          <span class="challenge-level-xp">1,240 / 2,000 RP</span>
+        </div>
+        <div class="challenge-level-track"><div class="challenge-level-fill" style="width: 62%;"></div></div>
+      </div>
+      <div class="challenge-header-top-row">
+        <div class="streak-badge">
+          <span class="hero-streak-flame">&#128293;</span>
+          <span class="streak-badge-num">5</span>
+        </div>
+        <div class="challenge-matchup-banner">
+          <span class="challenge-matchup-team-name">You</span>
+          <span class="challenge-matchup-pill"><span style="color:#34d399">2</span>-<span style="color:#f87171">1</span></span>
+          <span class="challenge-matchup-vs">vs</span>
+          <span>Last Week You</span>
+        </div>
+        <button class="settings-badge">&#9881;</button>
+      </div>
+    </header>
+
+    <div class="challenge-tabs">
+      <button class="challenge-tab active" onclick="switchTab('discover',this)">Discover</button>
+      <button class="challenge-tab locked" onclick="switchTab('paths',this)">Paths <span class="lock-icon">&#128274;</span></button>
+      <button class="challenge-tab" onclick="switchTab('tune',this)">Tune</button>
+      <button class="challenge-tab" onclick="switchTab('progress',this)">Progress</button>
+    </div>
+
+    <div class="paths-lock-hint" id="lockHint">Complete discovery to unlock Paths</div>
+
+    <div class="challenge-content">
+
+      <!-- DISCOVER -->
+      <div class="tab-panel active" id="tab-discover">
+        <div class="dt-step-banner">
+          <span class="dt-step-banner-label">Step 1.</span>
+          <span class="dt-step-banner-text">Discover what lights you up. Rate experiences and find your essence.</span>
+        </div>
+
+        <div class="wr-cta-card">
+          <div class="wr-cta-left">
+            <span class="wr-cta-icon">&#9889;</span>
+            <div>
+              <div class="wr-cta-title">Weekly Review</div>
+              <div class="wr-cta-sub">60s audit &middot; +15 RP</div>
+            </div>
+          </div>
+          <span class="wr-cta-arrow">&rarr;</span>
+        </div>
+
+        <div class="artifact-progress">
+          <div class="artifact-header">
+            <h3>Discovery Compass</h3>
+            <p>Unlocks at 80 RP</p>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-label"><span>Progress</span><span>35/80</span></div>
+            <div class="progress-bar"><div class="progress-bar-fill" style="width:44%;"></div></div>
+          </div>
+        </div>
+
+        <div class="dt-card glass">
+          <div class="dt-card-header">
+            <span class="dt-card-icon">&#127919;</span>
+            <span class="dt-card-title">Experience This Week</span>
+          </div>
+          <p class="dt-card-desc">Cook a new recipe from scratch</p>
+          <div class="ns-rating-row">
+            <button class="ns-btn vr">Vibe Rise</button>
+            <button class="ns-btn fun">Fun</button>
+            <button class="ns-btn str">Stressful</button>
+            <button class="ns-btn bor">Bored</button>
+          </div>
+        </div>
+
+        <div class="dt-card glass">
+          <div class="dt-card-header">
+            <span class="dt-card-icon">&#127918;</span>
+            <span class="dt-card-title">Play the Experience Game</span>
+            <span class="dt-card-badge">12 new</span>
+          </div>
+          <p class="dt-card-desc">Rate 54 life experiences. Discover what you're drawn to.</p>
+          <span class="dt-card-arrow">&rsaquo;</span>
+        </div>
+
+        <div class="dt-dome-viz glass">
+          <div class="dt-dome-label">Your Experience Dome</div>
+          <svg viewBox="0 0 200 200" style="width:180px;height:180px;">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(123,104,238,0.06)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(123,104,238,0.06)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(123,104,238,0.06)" stroke-width="1"/>
+            <polygon points="100,35 155,55 170,100 145,155 100,170 60,145 35,100 50,55" fill="url(#rg3)" stroke="url(#rs3)" stroke-width="2" opacity="0.6"/>
+            <polygon points="100,35 155,55 170,100 145,155 100,170 60,145 35,100 50,55" fill="url(#rg3)" filter="url(#gl3)" opacity="0.2"/>
+            <defs>
+              <linearGradient id="rg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(123,104,238,0.2)"/><stop offset="100%" stop-color="rgba(255,179,71,0.12)"/></linearGradient>
+              <linearGradient id="rs3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7B68EE"/><stop offset="50%" stop-color="#C77DFF"/><stop offset="100%" stop-color="#FFB347"/></linearGradient>
+              <filter id="gl3"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <text x="100" y="22" fill="#6e6888" font-size="7" text-anchor="middle" font-family="Outfit">Movement</text>
+            <text x="182" y="103" fill="#6e6888" font-size="7" text-anchor="start" font-family="Outfit">Bonds</text>
+            <text x="100" y="195" fill="#6e6888" font-size="7" text-anchor="middle" font-family="Outfit">Story</text>
+            <text x="18" y="103" fill="#6e6888" font-size="7" text-anchor="end" font-family="Outfit">Play</text>
+            <circle cx="100" cy="35" r="3" fill="#7B68EE" opacity="0.8"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite"/></circle><circle cx="100" cy="35" r="8" fill="#7B68EE" opacity="0.1"/>
+            <circle cx="155" cy="55" r="3" fill="#C77DFF" opacity="0.8"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite" begin="1s"/></circle><circle cx="155" cy="55" r="8" fill="#C77DFF" opacity="0.1"/>
+            <circle cx="170" cy="100" r="3" fill="#C77DFF" opacity="0.8"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite" begin="2s"/></circle><circle cx="170" cy="100" r="8" fill="#C77DFF" opacity="0.1"/>
+            <circle cx="145" cy="155" r="3" fill="#FFB347" opacity="0.8"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite" begin="3s"/></circle><circle cx="145" cy="155" r="8" fill="#FFB347" opacity="0.1"/>
+          </svg>
+          <div class="dt-dome-sub">Tap to expand &middot; 38 of 54 rated</div>
+        </div>
+
+        <div class="dt-card glass">
+          <div class="dt-card-header">
+            <span class="dt-card-icon">&#10024;</span>
+            <span class="dt-card-title">Discover Your Essence</span>
+          </div>
+          <p class="dt-card-desc">A 9-step mirror that reveals who you are underneath.</p>
+          <span class="dt-card-arrow">&rsaquo;</span>
+        </div>
+
+        <div class="dt-bridge-cta">
+          <h3>Ready to go deeper?</h3>
+          <p>Choose your life paths and start building toward the life you want.</p>
+          <button class="btn-primary">Choose Your Paths</button>
+        </div>
+      </div>
+
+      <!-- PATHS -->
+      <div class="tab-panel" id="tab-paths">
+        <div class="dt-step-banner">
+          <span class="dt-step-banner-label">Step 2.</span>
+          <span class="dt-step-banner-text">Build your comfort zone along your chosen life paths.</span>
+        </div>
+        <div class="artifact-progress">
+          <div class="artifact-header"><h3>Path Builder</h3><p>Unlocks at 200 RP</p></div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-label"><span>Progress</span><span>120/200</span></div>
+            <div class="progress-bar"><div class="progress-bar-fill" style="width:60%;"></div></div>
+          </div>
+        </div>
+        <div class="quest-section-label">Active Quests</div>
+        <div class="quest-group glass">
+          <div class="quest-group-header">
+            <span class="quest-group-icon">&#127928;</span>
+            <div><div class="quest-group-title">Music Production</div><div class="quest-group-meta">3 tasks this week &middot; 2 courage challenges</div></div>
+          </div>
+          <div class="quest-row"><div class="quest-check done"></div><div><div class="quest-name">Finish one beat</div><div class="quest-meta">Daily &middot; Courage</div></div><span class="quest-rp">+5 RP</span></div>
+          <div class="quest-row"><div class="quest-check"></div><div><div class="quest-name">Share a WIP with someone</div><div class="quest-meta">Weekly &middot; Courage</div></div><span class="quest-rp">+10 RP</span></div>
+          <div class="quest-row"><div class="quest-check"></div><div><div class="quest-name">Study one technique</div><div class="quest-meta">Daily &middot; Tune</div></div><span class="quest-rp">+3 RP</span></div>
+        </div>
+        <div class="quest-group glass">
+          <div class="quest-group-header">
+            <span class="quest-group-icon">&#129496;</span>
+            <div><div class="quest-group-title">Yoga Teaching</div><div class="quest-group-meta">2 tasks this week</div></div>
+          </div>
+          <div class="quest-row"><div class="quest-check done"></div><div><div class="quest-name">Practice 30min flow</div><div class="quest-meta">Daily &middot; Tune</div></div><span class="quest-rp">+3 RP</span></div>
+          <div class="quest-row"><div class="quest-check"></div><div><div class="quest-name">Lead a session for a friend</div><div class="quest-meta">Weekly &middot; Courage</div></div><span class="quest-rp">+10 RP</span></div>
+        </div>
+      </div>
+
+      <!-- TUNE -->
+      <div class="tab-panel" id="tab-tune">
+        <div class="dt-step-banner">
+          <span class="dt-step-banner-label">Daily.</span>
+          <span class="dt-step-banner-text">Small actions that keep you moving forward.</span>
+        </div>
+        <div class="freq-pills">
+          <button class="freq-pill active">Morning</button>
+          <button class="freq-pill">1pm</button>
+          <button class="freq-pill">6pm</button>
+        </div>
+        <div class="quest-row"><div class="quest-check done"></div><div><div class="quest-name">Morning meditation</div><div class="quest-meta">Healing &middot; 10 min</div></div><span class="quest-rp">+3 RP</span></div>
+        <div class="quest-row"><div class="quest-check done"></div><div><div class="quest-name">Journal 3 things I'm grateful for</div><div class="quest-meta">Tune &middot; 5 min</div></div><span class="quest-rp">+2 RP</span></div>
+        <div class="quest-row"><div class="quest-check"></div><div><div class="quest-name">Cold shower challenge</div><div class="quest-meta">Courage &middot; 3 min</div></div><span class="quest-rp">+5 RP</span></div>
+        <div class="quest-row"><div class="quest-check"></div><div><div class="quest-name">Read 10 pages</div><div class="quest-meta">Tune &middot; 15 min</div></div><span class="quest-rp">+2 RP</span></div>
+        <div class="quest-row"><div class="quest-check"></div><div><div class="quest-name">Practice one new skill</div><div class="quest-meta">Tune &middot; 20 min</div></div><span class="quest-rp">+3 RP</span></div>
+        <div class="section-divider"></div>
+        <div class="tune-summary">
+          <div class="tune-summary-count">2 of 5 complete</div>
+          <div class="tune-summary-rp">+5 RP earned today</div>
+        </div>
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="tab-panel" id="tab-progress">
+        <div class="dt-step-banner">
+          <span class="dt-step-banner-label">Step 3.</span>
+          <span class="dt-step-banner-text">Watch your comfort zone expand as you grow.</span>
+        </div>
+        <div class="score-cards">
+          <div class="score-card"><div class="score-card-value sc-tune">18</div><div class="score-card-label">Tune</div></div>
+          <div class="score-card"><div class="score-card-value sc-courage">14</div><div class="score-card-label">Courage</div></div>
+          <div class="score-card"><div class="score-card-value sc-reach">10</div><div class="score-card-label">Reach</div></div>
+        </div>
+        <div class="radar-container">
+          <div class="radar-label">This Week vs Ghost</div>
+          <svg viewBox="0 0 200 200" style="width:170px;height:170px;">
+            <circle cx="100" cy="100" r="75" fill="none" stroke="rgba(123,104,238,0.05)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(123,104,238,0.05)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="25" fill="none" stroke="rgba(123,104,238,0.05)" stroke-width="1"/>
+            <line x1="100" y1="25" x2="100" y2="175" stroke="rgba(123,104,238,0.04)"/><line x1="35" y1="137" x2="165" y2="63" stroke="rgba(123,104,238,0.04)"/><line x1="35" y1="63" x2="165" y2="137" stroke="rgba(123,104,238,0.04)"/>
+            <polygon points="100,50 140,80 130,140 70,140 60,80" fill="rgba(123,104,238,0.03)" stroke="rgba(123,104,238,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+            <polygon points="100,35 155,70 140,150 60,150 45,70" fill="url(#pg3)" stroke="url(#ps3)" stroke-width="2" opacity="0.6"/>
+            <polygon points="100,35 155,70 140,150 60,150 45,70" fill="url(#pg3)" filter="url(#pg3f)" opacity="0.15"/>
+            <defs>
+              <linearGradient id="pg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(123,104,238,0.2)"/><stop offset="100%" stop-color="rgba(255,179,71,0.1)"/></linearGradient>
+              <linearGradient id="ps3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7B68EE"/><stop offset="50%" stop-color="#C77DFF"/><stop offset="100%" stop-color="#FFB347"/></linearGradient>
+              <filter id="pg3f"><feGaussianBlur stdDeviation="10"/></filter>
+            </defs>
+            <text x="100" y="18" fill="#c4b5fd" font-size="8" text-anchor="middle" font-family="Outfit" font-weight="600">Tune</text>
+            <text x="175" y="145" fill="#67e8f9" font-size="8" text-anchor="start" font-family="Outfit" font-weight="600">Reach</text>
+            <text x="25" y="145" fill="#FFB347" font-size="8" text-anchor="end" font-family="Outfit" font-weight="600">Courage</text>
+            <circle cx="100" cy="35" r="3" fill="#c4b5fd"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="5s" repeatCount="indefinite"/></circle><circle cx="100" cy="35" r="10" fill="#c4b5fd" opacity="0.08"/>
+            <circle cx="155" cy="70" r="3" fill="#67e8f9"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="5s" repeatCount="indefinite" begin="1.5s"/></circle><circle cx="155" cy="70" r="10" fill="#67e8f9" opacity="0.08"/>
+            <circle cx="45" cy="70" r="3" fill="#FFB347"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="5s" repeatCount="indefinite" begin="3s"/></circle><circle cx="45" cy="70" r="10" fill="#FFB347" opacity="0.08"/>
+          </svg>
+          <div class="radar-legend">
+            <div class="legend-item"><span class="legend-line" style="background:var(--gradient);"></span> You</div>
+            <div class="legend-item" style="color:var(--text-muted);"><span class="legend-dash"></span> Ghost</div>
+          </div>
+        </div>
+        <div class="weekly-stats">
+          <div class="weekly-stat"><div class="weekly-stat-value">7</div><div class="weekly-stat-label">Quests done</div></div>
+          <div class="weekly-stat"><div class="weekly-stat-value" style="color:var(--gold);">2</div><div class="weekly-stat-label">Courage</div></div>
+          <div class="weekly-stat"><div class="weekly-stat-value" style="color:var(--pink);">42</div><div class="weekly-stat-label">RP earned</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.challenge-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+      document.getElementById('lockHint').style.display = id === 'discover' ? 'block' : 'none';
+    }
+
+    // Jellyfish
+    (function() {
+      const c = document.getElementById('jellyfish');
+      const palette = [
+        { bg: 'rgba(123,104,238,0.35)', glow: 'rgba(123,104,238,0.15)' },
+        { bg: 'rgba(199,125,255,0.3)', glow: 'rgba(199,125,255,0.12)' },
+        { bg: 'rgba(255,179,71,0.2)', glow: 'rgba(255,179,71,0.08)' },
+        { bg: 'rgba(167,139,250,0.25)', glow: 'rgba(167,139,250,0.1)' },
+      ];
+      for (let i = 0; i < 10; i++) {
+        const d = document.createElement('div');
+        d.className = 'jellyfish';
+        const s = 8 + Math.random() * 18;
+        const col = palette[Math.floor(Math.random() * palette.length)];
+        const dur = 25 + Math.random() * 35;
+        const delay = Math.random() * 20;
+        d.style.cssText = `width:${s}px;height:${s}px;background:${col.bg};box-shadow:0 0 ${s*2.5}px ${col.glow};left:${Math.random()*100}%;top:${70+Math.random()*40}%;animation-duration:${dur}s;animation-delay:${delay}s;`;
+        c.appendChild(d);
+      }
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Vibe Rise — Bioluminescent Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Core palette — nichuzz.com DNA */
+      --bg: #09090F;
+      --surface: #111118;
+      --surface-2: #16161F;
+      --text: #F0ECF5;
+      --text-muted: #7a7488;
+      --text-secondary: #b0aab8;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(217, 70, 239, 0.3);
+
+      /* Bioluminescent glow colors */
+      --pink: #D946EF;
+      --pink-glow: rgba(217, 70, 239, 0.15);
+      --pink-glow-strong: rgba(217, 70, 239, 0.3);
+      --gold: #FFB800;
+      --gold-glow: rgba(255, 184, 0, 0.12);
+      --gradient: linear-gradient(135deg, #D946EF 0%, #D946EF 65%, #E8A040 90%, #FFB800 100%);
+      --gradient-subtle: linear-gradient(135deg, rgba(217,70,239,0.08) 0%, rgba(255,184,0,0.04) 100%);
+
+      /* Status glows */
+      --vibe-rise: #FFB800;
+      --fun: #10b981;
+      --stressed: #ef4444;
+      --bored: #6b7280;
+
+      /* System */
+      --font: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-frame {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ========== FIREFLY PARTICLES ========== */
+    .fireflies {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .firefly {
+      position: absolute;
+      border-radius: 50%;
+      animation: firefly-float linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes firefly-float {
+      0% { opacity: 0; transform: translateY(0) translateX(0); }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(40px); }
+    }
+
+    /* ========== AMBIENT GLOW BLOBS ========== */
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+      opacity: 0.4;
+    }
+    .ambient-glow div { position: absolute; border-radius: 50%; }
+    .glow-1 { width: 300px; height: 300px; top: -80px; left: -60px; background: rgba(217,70,239,0.2); animation: glow-drift 12s ease-in-out infinite; }
+    .glow-2 { width: 200px; height: 200px; top: 30%; right: -40px; background: rgba(255,184,0,0.1); animation: glow-drift 16s ease-in-out infinite reverse; }
+    .glow-3 { width: 250px; height: 250px; bottom: 10%; left: -30px; background: rgba(217,70,239,0.12); animation: glow-drift 14s ease-in-out infinite 3s; }
+
+    @keyframes glow-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -15px) scale(1.05); }
+      66% { transform: translate(-10px, 10px) scale(0.95); }
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      position: relative;
+      z-index: 2;
+      padding: 52px 20px 16px;
+    }
+
+    .header-title {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .score-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .score-value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .score-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .hero-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid rgba(217,70,239,0.3);
+      box-shadow: 0 0 20px rgba(217,70,239,0.15), 0 0 60px rgba(217,70,239,0.05);
+      overflow: hidden;
+      transition: box-shadow 0.4s var(--ease);
+    }
+
+    .hero-avatar:hover {
+      box-shadow: 0 0 30px rgba(217,70,239,0.25), 0 0 80px rgba(217,70,239,0.1);
+    }
+
+    .hero-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Level bar */
+    .level-bar {
+      margin-bottom: 12px;
+    }
+
+    .level-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .level-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .level-xp {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .level-track {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .level-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 3px;
+      transition: width 0.6s var(--ease-out);
+      position: relative;
+    }
+
+    .level-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -4px;
+      bottom: -4px;
+      width: 20px;
+      background: radial-gradient(ellipse at right, rgba(217,70,239,0.4), transparent);
+      filter: blur(2px);
+    }
+
+    /* Meta row: streak + matchup */
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: rgba(255,184,0,0.08);
+      border: 1px solid rgba(255,184,0,0.15);
+    }
+
+    .streak-flame {
+      color: var(--gold);
+      font-size: 0.9rem;
+      animation: flame-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes flame-pulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 4px rgba(255,184,0,0.5)); }
+    }
+
+    .streak-num {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--gold);
+    }
+
+    .matchup-banner {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .matchup-score {
+      font-weight: 700;
+      color: var(--pink);
+    }
+
+    .settings-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .settings-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+    /* ========== TABS ========== */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 12px;
+      border: none;
+      font-family: var(--font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      position: relative;
+      text-align: center;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid transparent;
+    }
+
+    .tab:hover {
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .tab.active {
+      color: #000;
+      background: var(--gradient);
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(217,70,239,0.2), 0 4px 12px rgba(217,70,239,0.15);
+    }
+
+    .tab.locked {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .tab-lock {
+      font-size: 0.6em;
+      margin-left: 4px;
+    }
+
+    /* ========== CONTENT AREA ========== */
+    .content {
+      padding: 0 20px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ========== CARDS — The core bioluminescent element ========== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 12px;
+      position: relative;
+      transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: var(--radius);
+      background: radial-gradient(ellipse at 50% 0%, rgba(217,70,239,0.06), transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+
+    .card:hover {
+      border-color: rgba(217,70,239,0.15);
+      box-shadow: 0 0 30px rgba(217,70,239,0.08), 0 0 60px rgba(217,70,239,0.03);
+      transform: translateY(-1px);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:active {
+      transform: scale(0.99);
+      box-shadow: 0 0 40px rgba(217,70,239,0.12), 0 0 80px rgba(217,70,239,0.05);
+    }
+
+    .card-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .card-arrow {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .card:hover .card-arrow {
+      color: var(--pink);
+      transform: translateY(-50%) translateX(3px);
+    }
+
+    /* Highlighted card — for active/priority items */
+    .card.glow {
+      border-color: rgba(217,70,239,0.2);
+      box-shadow: 0 0 20px rgba(217,70,239,0.06);
+    }
+
+    .card.glow::before {
+      opacity: 1;
+      background: radial-gradient(ellipse at 50% 0%, rgba(217,70,239,0.1), transparent 70%);
+    }
+
+    /* ========== STEP BANNER ========== */
+    .step-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--gradient-subtle);
+      border: 1px solid rgba(217,70,239,0.1);
+      margin-bottom: 16px;
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* ========== DOME RADAR (simplified mockup) ========== */
+    .dome-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dome-container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(217,70,239,0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .dome-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .dome-svg {
+      width: 200px;
+      height: 200px;
+    }
+
+    .dome-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    /* ========== NS RATING BUTTONS ========== */
+    .ns-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .ns-btn {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+
+    .ns-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .ns-btn.vibe-rise {
+      border-color: rgba(255,184,0,0.3);
+      color: var(--gold);
+    }
+    .ns-btn.vibe-rise:hover {
+      background: rgba(255,184,0,0.08);
+      box-shadow: 0 0 16px rgba(255,184,0,0.1);
+    }
+
+    .ns-btn.fun {
+      border-color: rgba(16,185,129,0.3);
+      color: var(--fun);
+    }
+    .ns-btn.fun:hover {
+      background: rgba(16,185,129,0.08);
+      box-shadow: 0 0 16px rgba(16,185,129,0.1);
+    }
+
+    .ns-btn.stressed {
+      border-color: rgba(239,68,68,0.3);
+      color: var(--stressed);
+    }
+    .ns-btn.stressed:hover {
+      background: rgba(239,68,68,0.08);
+      box-shadow: 0 0 16px rgba(239,68,68,0.1);
+    }
+
+    .ns-btn.bored {
+      border-color: rgba(107,114,128,0.25);
+      color: var(--bored);
+    }
+    .ns-btn.bored:hover {
+      background: rgba(107,114,128,0.06);
+    }
+
+    /* ========== PROGRESS BAR (artifact) ========== */
+    .artifact {
+      background: var(--gradient-subtle);
+      border: 1px solid rgba(217,70,239,0.1);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+
+    .artifact-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .artifact-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .artifact-pts {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .artifact-track {
+      height: 5px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .artifact-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .artifact-fill::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: -6px;
+      bottom: -6px;
+      width: 16px;
+      background: radial-gradient(ellipse at right, rgba(217,70,239,0.5), transparent);
+      filter: blur(3px);
+      animation: artifact-glow-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes artifact-glow-pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* ========== WEEKLY REVIEW CTA ========== */
+    .wr-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,184,0,0.06);
+      border: 1px solid rgba(255,184,0,0.15);
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+    }
+
+    .wr-cta:hover {
+      background: rgba(255,184,0,0.1);
+      box-shadow: 0 0 20px rgba(255,184,0,0.08);
+    }
+
+    .wr-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wr-icon {
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    .wr-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .wr-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .wr-arrow {
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    /* ========== QUEST CARDS (Tune/Paths tab) ========== */
+    .quest-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      cursor: pointer;
+    }
+
+    .quest-card:hover {
+      border-color: rgba(217,70,239,0.15);
+      box-shadow: 0 0 20px rgba(217,70,239,0.06);
+    }
+
+    .quest-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid rgba(255,255,255,0.15);
+      flex-shrink: 0;
+      transition: all 0.2s var(--ease);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quest-card:hover .quest-check {
+      border-color: var(--pink);
+      box-shadow: 0 0 8px rgba(217,70,239,0.2);
+    }
+
+    .quest-check.done {
+      background: var(--gradient);
+      border-color: transparent;
+      box-shadow: 0 0 12px rgba(217,70,239,0.3);
+    }
+
+    .quest-check.done::after {
+      content: '✓';
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
+    .quest-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .quest-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .quest-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .quest-rp {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--pink);
+      flex-shrink: 0;
+    }
+
+    /* ========== PROGRESS TAB SCORES ========== */
+    .score-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+      transition: all 0.3s var(--ease);
+    }
+
+    .score-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 0 20px rgba(217,70,239,0.06);
+    }
+
+    .score-card-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .score-card-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .sc-tune { color: #f9a8d4; }
+    .sc-courage { color: var(--gold); }
+    .sc-reach { color: #67e8f9; }
+
+    /* ========== BRIDGE CTA ========== */
+    .bridge-cta {
+      background: linear-gradient(135deg, rgba(217,70,239,0.08), rgba(255,184,0,0.04));
+      border: 1px solid rgba(217,70,239,0.15);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .bridge-cta h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .bridge-cta p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .btn-glow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--gradient);
+      color: #0a0a0a;
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 13px 28px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      box-shadow: 0 0 20px rgba(217,70,239,0.15);
+    }
+
+    .btn-glow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(217,70,239,0.25), 0 8px 20px rgba(217,70,239,0.15);
+    }
+
+    .btn-glow:active {
+      transform: scale(0.98);
+    }
+
+    /* ========== TAB SWITCHER ========== */
+    .tab-content {
+      display: none;
+      animation: tab-fade-in 0.35s var(--ease);
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes tab-fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== FREQUENCY PILLS (Tune tab) ========== */
+    .freq-pills {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .freq-pill {
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+
+    .freq-pill.active {
+      background: rgba(217,70,239,0.1);
+      border-color: rgba(217,70,239,0.3);
+      color: var(--pink);
+    }
+
+    /* ========== MINI RADAR (Progress tab) ========== */
+    .radar-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .radar-section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, rgba(217,70,239,0.04), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ========== BOTTOM TAB BAR ========== */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: rgba(9,9,15,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 8px 20px calc(8px + env(safe-area-inset-bottom, 0));
+      display: flex;
+      justify-content: space-around;
+      z-index: 10;
+    }
+
+    .bottom-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      padding: 4px 12px;
+      transition: color 0.2s;
+    }
+
+    .bottom-tab.active {
+      color: var(--pink);
+    }
+
+    .bottom-tab svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* ========== SECTION DIVIDER ========== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(217,70,239,0.12), transparent);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient glow blobs -->
+  <div class="ambient-glow">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+    <div class="glow-3"></div>
+  </div>
+
+  <!-- Firefly particles (CSS-only) -->
+  <div class="fireflies" id="fireflies"></div>
+
+  <div class="app-frame">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+      <div class="header-title">Find My Flow</div>
+
+      <div class="score-row">
+        <div class="score-block">
+          <div class="score-value">42</div>
+          <div class="score-label">weekly pts</div>
+        </div>
+        <div class="hero-avatar">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg, #2a1a3e, #1a0a2e);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">✦</div>
+        </div>
+      </div>
+
+      <div class="level-bar">
+        <div class="level-row">
+          <span class="level-name">🌊 Ripple Maker</span>
+          <span class="level-xp">1,240 / 2,000 RP</span>
+        </div>
+        <div class="level-track">
+          <div class="level-fill" style="width: 62%;"></div>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <div class="streak-badge">
+          <span class="streak-flame">🔥</span>
+          <span class="streak-num">5</span>
+        </div>
+        <div class="matchup-banner">
+          <span>You</span>
+          <span class="matchup-score">2-1</span>
+          <span>vs Last Week You</span>
+        </div>
+        <button class="settings-btn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.3 21l-.8-2.7A8.1 8.1 0 017 17l-2.6.9L3 15.6l1.8-2A8.3 8.3 0 014.5 12c0-.6.1-1.1.2-1.6L3 8.4l1.4-2.3L7 7a8.1 8.1 0 012.5-1.4L10.3 3h2.8l.8 2.6A8.1 8.1 0 0116.4 7l2.6-.9 1.4 2.3-1.8 2c.1.5.2 1 .2 1.6s-.1 1.1-.2 1.6l1.8 2L19 17.9l-2.6-.9a8.1 8.1 0 01-2.5 1.4l-.8 2.6h-2.8z" /><circle cx="12" cy="12" r="3" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== TABS ===== -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('discover', this)">Discover</button>
+      <button class="tab" onclick="switchTab('paths', this)">Paths</button>
+      <button class="tab" onclick="switchTab('tune', this)">Tune</button>
+      <button class="tab" onclick="switchTab('progress', this)">Progress</button>
+    </div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+      <!-- ===== DISCOVER TAB ===== -->
+      <div class="tab-content active" id="tab-discover">
+        <div class="step-banner">
+          <div class="step-num">1</div>
+          <div class="step-text">Discover what lights you up. Rate experiences and find your essence.</div>
+        </div>
+
+        <!-- Weekly Review CTA -->
+        <div class="wr-cta">
+          <div class="wr-left">
+            <span class="wr-icon">⚡</span>
+            <div>
+              <div class="wr-title">Weekly Review</div>
+              <div class="wr-sub">60s audit · +15 RP</div>
+            </div>
+          </div>
+          <span class="wr-arrow">→</span>
+        </div>
+
+        <!-- Artifact progress -->
+        <div class="artifact">
+          <div class="artifact-header">
+            <span class="artifact-name">Discovery Compass</span>
+            <span class="artifact-pts">35 / 80</span>
+          </div>
+          <div class="artifact-track">
+            <div class="artifact-fill" style="width: 44%;"></div>
+          </div>
+        </div>
+
+        <!-- Experience to try -->
+        <div class="card glow">
+          <span class="card-label">Experience This Week</span>
+          <div class="card-title">Cook a new recipe from scratch</div>
+          <div class="card-desc">How did it feel?</div>
+          <div class="ns-buttons">
+            <button class="ns-btn vibe-rise">Vibe Rise</button>
+            <button class="ns-btn fun">Fun</button>
+            <button class="ns-btn stressed">Stressful</button>
+            <button class="ns-btn bored">Bored</button>
+          </div>
+        </div>
+
+        <!-- Play the Experience Game -->
+        <div class="card">
+          <span class="card-label">Play</span>
+          <div class="card-title">Play the Experience Game</div>
+          <div class="card-desc">Rate 54 life experiences. Discover what you're drawn to.</div>
+          <span class="card-arrow">→</span>
+        </div>
+
+        <!-- Dome Radar -->
+        <div class="dome-container">
+          <div class="dome-label">Your Experience Dome</div>
+          <svg class="dome-svg" viewBox="0 0 200 200">
+            <!-- Grid circles -->
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <!-- Radar shape (example values) -->
+            <polygon
+              points="100,35 155,55 170,100 145,155 100,170 60,145 35,100 50,55"
+              fill="url(#radarGrad)"
+              stroke="url(#radarStroke)"
+              stroke-width="2"
+              opacity="0.7"
+            />
+            <!-- Glow behind radar -->
+            <polygon
+              points="100,35 155,55 170,100 145,155 100,170 60,145 35,100 50,55"
+              fill="url(#radarGrad)"
+              filter="url(#glow)"
+              opacity="0.3"
+            />
+            <defs>
+              <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(217,70,239,0.25)"/>
+                <stop offset="100%" stop-color="rgba(255,184,0,0.15)"/>
+              </linearGradient>
+              <linearGradient id="radarStroke" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#D946EF"/>
+                <stop offset="100%" stop-color="#FFB800"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="8" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <!-- Axis labels -->
+            <text x="100" y="22" fill="#7a7488" font-size="7" text-anchor="middle" font-family="Outfit">Movement</text>
+            <text x="182" y="103" fill="#7a7488" font-size="7" text-anchor="start" font-family="Outfit">Bonds</text>
+            <text x="100" y="195" fill="#7a7488" font-size="7" text-anchor="middle" font-family="Outfit">Story</text>
+            <text x="18" y="103" fill="#7a7488" font-size="7" text-anchor="end" font-family="Outfit">Play</text>
+            <!-- Dots on vertices with glow -->
+            <circle cx="100" cy="35" r="3" fill="#D946EF" opacity="0.8"/>
+            <circle cx="100" cy="35" r="6" fill="#D946EF" opacity="0.15"/>
+            <circle cx="155" cy="55" r="3" fill="#D946EF" opacity="0.8"/>
+            <circle cx="155" cy="55" r="6" fill="#D946EF" opacity="0.15"/>
+            <circle cx="170" cy="100" r="3" fill="#E8A040" opacity="0.8"/>
+            <circle cx="170" cy="100" r="6" fill="#E8A040" opacity="0.15"/>
+            <circle cx="145" cy="155" r="3" fill="#FFB800" opacity="0.8"/>
+            <circle cx="145" cy="155" r="6" fill="#FFB800" opacity="0.15"/>
+          </svg>
+          <div class="dome-hint">Tap to expand · 38 of 54 rated</div>
+        </div>
+
+        <!-- Essence Mirror CTA -->
+        <div class="card">
+          <span class="card-label">Self-Knowledge</span>
+          <div class="card-title">Discover Your Essence</div>
+          <div class="card-desc">A 9-step mirror that reveals who you are underneath.</div>
+          <span class="card-arrow">→</span>
+        </div>
+
+        <!-- Bridge CTA -->
+        <div class="bridge-cta">
+          <h3>Ready to go deeper?</h3>
+          <p>Choose your life paths and start building toward the life you want.</p>
+          <button class="btn-glow">Choose Your Paths</button>
+        </div>
+      </div>
+
+      <!-- ===== PATHS TAB ===== -->
+      <div class="tab-content" id="tab-paths">
+        <div class="step-banner">
+          <div class="step-num">2</div>
+          <div class="step-text">Build your comfort zone along your chosen life paths.</div>
+        </div>
+
+        <div class="artifact">
+          <div class="artifact-header">
+            <span class="artifact-name">Path Builder</span>
+            <span class="artifact-pts">120 / 200</span>
+          </div>
+          <div class="artifact-track">
+            <div class="artifact-fill" style="width: 60%;"></div>
+          </div>
+        </div>
+
+        <!-- Quest cards -->
+        <div style="margin-bottom: 4px;">
+          <span class="card-label" style="padding-left: 2px;">Active Quests</span>
+        </div>
+
+        <div class="card glow" style="padding: 16px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span style="font-size:1.2rem;">🎸</span>
+            <div>
+              <div style="font-weight:700;font-size:0.95rem;">Music Production</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">3 tasks this week · 2 courage challenges</div>
+            </div>
+          </div>
+          <div class="quest-card" style="margin-bottom:6px;">
+            <div class="quest-check done"></div>
+            <div class="quest-info">
+              <div class="quest-name">Finish one beat</div>
+              <div class="quest-meta">Daily · Courage</div>
+            </div>
+            <span class="quest-rp">+5 RP</span>
+          </div>
+          <div class="quest-card" style="margin-bottom:6px;">
+            <div class="quest-check"></div>
+            <div class="quest-info">
+              <div class="quest-name">Share a WIP with someone</div>
+              <div class="quest-meta">Weekly · Courage</div>
+            </div>
+            <span class="quest-rp">+10 RP</span>
+          </div>
+          <div class="quest-card">
+            <div class="quest-check"></div>
+            <div class="quest-info">
+              <div class="quest-name">Study one technique</div>
+              <div class="quest-meta">Daily · Tune</div>
+            </div>
+            <span class="quest-rp">+3 RP</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 16px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span style="font-size:1.2rem;">🧘</span>
+            <div>
+              <div style="font-weight:700;font-size:0.95rem;">Yoga Teaching</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">2 tasks this week</div>
+            </div>
+          </div>
+          <div class="quest-card" style="margin-bottom:6px;">
+            <div class="quest-check done"></div>
+            <div class="quest-info">
+              <div class="quest-name">Practice 30min flow</div>
+              <div class="quest-meta">Daily · Tune</div>
+            </div>
+            <span class="quest-rp">+3 RP</span>
+          </div>
+          <div class="quest-card">
+            <div class="quest-check"></div>
+            <div class="quest-info">
+              <div class="quest-name">Lead a session for a friend</div>
+              <div class="quest-meta">Weekly · Courage</div>
+            </div>
+            <span class="quest-rp">+10 RP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TUNE TAB ===== -->
+      <div class="tab-content" id="tab-tune">
+        <div class="step-banner">
+          <div class="step-num">✦</div>
+          <div class="step-text">Daily deposits. Small actions that keep you moving.</div>
+        </div>
+
+        <div class="freq-pills">
+          <button class="freq-pill active">Morning</button>
+          <button class="freq-pill">Afternoon</button>
+          <button class="freq-pill">Evening</button>
+        </div>
+
+        <div class="quest-card">
+          <div class="quest-check done"></div>
+          <div class="quest-info">
+            <div class="quest-name">Morning meditation</div>
+            <div class="quest-meta">Healing · 10 min</div>
+          </div>
+          <span class="quest-rp">+3 RP</span>
+        </div>
+
+        <div class="quest-card">
+          <div class="quest-check done"></div>
+          <div class="quest-info">
+            <div class="quest-name">Journal 3 things I'm grateful for</div>
+            <div class="quest-meta">Tune · 5 min</div>
+          </div>
+          <span class="quest-rp">+2 RP</span>
+        </div>
+
+        <div class="quest-card">
+          <div class="quest-check"></div>
+          <div class="quest-info">
+            <div class="quest-name">Cold shower challenge</div>
+            <div class="quest-meta">Courage · 3 min</div>
+          </div>
+          <span class="quest-rp">+5 RP</span>
+        </div>
+
+        <div class="quest-card">
+          <div class="quest-check"></div>
+          <div class="quest-info">
+            <div class="quest-name">Read 10 pages</div>
+            <div class="quest-meta">Tune · 15 min</div>
+          </div>
+          <span class="quest-rp">+2 RP</span>
+        </div>
+
+        <div class="quest-card">
+          <div class="quest-check"></div>
+          <div class="quest-info">
+            <div class="quest-name">Practice one new skill</div>
+            <div class="quest-meta">Tune · 20 min</div>
+          </div>
+          <span class="quest-rp">+3 RP</span>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div style="text-align:center;padding:8px 0;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">2 of 5 complete</div>
+          <div style="font-size:0.85rem;font-weight:700;color:var(--pink);margin-top:4px;">+5 RP earned today</div>
+        </div>
+      </div>
+
+      <!-- ===== PROGRESS TAB ===== -->
+      <div class="tab-content" id="tab-progress">
+        <div class="step-banner">
+          <div class="step-num">3</div>
+          <div class="step-text">Watch your comfort zone expand as you grow.</div>
+        </div>
+
+        <div class="score-cards">
+          <div class="score-card">
+            <div class="score-card-value sc-tune">18</div>
+            <div class="score-card-label">Tune</div>
+          </div>
+          <div class="score-card">
+            <div class="score-card-value sc-courage">14</div>
+            <div class="score-card-label">Courage</div>
+          </div>
+          <div class="score-card">
+            <div class="score-card-value sc-reach">10</div>
+            <div class="score-card-label">Reach</div>
+          </div>
+        </div>
+
+        <div class="radar-section">
+          <div class="dome-label">This Week vs Ghost</div>
+          <svg viewBox="0 0 200 200" style="width:180px;height:180px;">
+            <!-- Grid -->
+            <circle cx="100" cy="100" r="75" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="25" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <!-- Axes -->
+            <line x1="100" y1="25" x2="100" y2="175" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="35" y1="137" x2="165" y2="63" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="35" y1="63" x2="165" y2="137" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <!-- Ghost (last week) -->
+            <polygon points="100,50 140,80 130,140 70,140 60,80" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- You (this week) -->
+            <polygon points="100,35 155,70 140,150 60,150 45,70" fill="url(#progressGrad)" stroke="url(#radarStroke2)" stroke-width="2" opacity="0.7"/>
+            <polygon points="100,35 155,70 140,150 60,150 45,70" fill="url(#progressGrad)" filter="url(#glow2)" opacity="0.2"/>
+            <defs>
+              <linearGradient id="progressGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(217,70,239,0.2)"/>
+                <stop offset="100%" stop-color="rgba(255,184,0,0.1)"/>
+              </linearGradient>
+              <linearGradient id="radarStroke2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#D946EF"/>
+                <stop offset="100%" stop-color="#FFB800"/>
+              </linearGradient>
+              <filter id="glow2">
+                <feGaussianBlur stdDeviation="10"/>
+              </filter>
+            </defs>
+            <!-- Labels -->
+            <text x="100" y="18" fill="#f9a8d4" font-size="8" text-anchor="middle" font-family="Outfit" font-weight="600">Tune</text>
+            <text x="175" y="145" fill="#67e8f9" font-size="8" text-anchor="start" font-family="Outfit" font-weight="600">Reach</text>
+            <text x="25" y="145" fill="#FFB800" font-size="8" text-anchor="end" font-family="Outfit" font-weight="600">Courage</text>
+            <!-- Vertex dots with glow -->
+            <circle cx="100" cy="35" r="3" fill="#f9a8d4"><animate attributeName="r" values="3;4;3" dur="3s" repeatCount="indefinite"/></circle>
+            <circle cx="100" cy="35" r="8" fill="#f9a8d4" opacity="0.15"/>
+            <circle cx="155" cy="70" r="3" fill="#67e8f9"><animate attributeName="r" values="3;4;3" dur="3s" repeatCount="indefinite" begin="1s"/></circle>
+            <circle cx="155" cy="70" r="8" fill="#67e8f9" opacity="0.15"/>
+            <circle cx="45" cy="70" r="3" fill="#FFB800"><animate attributeName="r" values="3;4;3" dur="3s" repeatCount="indefinite" begin="2s"/></circle>
+            <circle cx="45" cy="70" r="8" fill="#FFB800" opacity="0.15"/>
+          </svg>
+          <div style="display:flex;gap:16px;margin-top:14px;font-size:0.75rem;">
+            <span style="display:flex;align-items:center;gap:5px;"><span style="width:8px;height:2px;background:var(--gradient);border-radius:1px;display:inline-block;"></span> You</span>
+            <span style="display:flex;align-items:center;gap:5px;color:var(--text-muted);"><span style="width:8px;height:2px;border:1px dashed rgba(255,255,255,0.2);border-radius:1px;display:inline-block;"></span> Ghost</span>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="card">
+          <span class="card-label">This Week</span>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;">
+            <div style="text-align:center;">
+              <div style="font-size:1.3rem;font-weight:800;">7</div>
+              <div style="font-size:0.7rem;color:var(--text-muted);">Quests done</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.3rem;font-weight:800;color:var(--gold);">2</div>
+              <div style="font-size:0.7rem;color:var(--text-muted);">Courage</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.3rem;font-weight:800;color:var(--pink);">42</div>
+              <div style="font-size:0.7rem;color:var(--text-muted);">RP earned</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+
+  </div><!-- /app-frame -->
+
+  <script>
+    // Tab switching
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Generate fireflies
+    (function() {
+      const container = document.getElementById('fireflies');
+      const count = 25;
+      const colors = [
+        'rgba(217,70,239,0.6)',
+        'rgba(217,70,239,0.4)',
+        'rgba(255,184,0,0.5)',
+        'rgba(255,184,0,0.3)',
+        'rgba(232,160,64,0.4)',
+      ];
+
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'firefly';
+        const size = 2 + Math.random() * 3;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.background = color;
+        dot.style.boxShadow = `0 0 ${size * 3}px ${color}`;
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.top = (60 + Math.random() * 60) + '%';
+        dot.style.animationDuration = (12 + Math.random() * 20) + 's';
+        dot.style.animationDelay = (Math.random() * 15) + 's';
+        container.appendChild(dot);
+      }
+    })();
+  </script>
+
+</body>
+</html>

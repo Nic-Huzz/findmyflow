@@ -67,6 +67,8 @@ import FigurineOverlay from './components/Figurine/FigurineOverlay'
 import ZarloProactiveBubble from './components/Zarlo/ZarloProactiveBubble'
 import { generateZarloReaction } from './lib/zarlo/zarloEngine'
 import './Challenge.css'
+import './styles/bioluminescent-theme.css'
+import BioluminescentBackground from './components/BioluminescentBackground'
 
 // Confetti celebration for quest completion
 const triggerConfetti = (event) => {
@@ -1515,6 +1517,7 @@ const [directionComplete, setDirectionComplete] = useState(false)
 
   return (
     <div className="challenge-container content-enter">
+      <BioluminescentBackground />
       {/* Portal explainer moved inline to DiscoverTab */}
       {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => {
         setShowDailyCheckin(false)

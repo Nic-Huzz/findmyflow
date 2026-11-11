@@ -5,9 +5,9 @@
 
 export const NERVOUS_SYSTEM_STATES = [
   { id: 'vibe_rise', name: 'Vibe Rise', label: 'Alive, activated, safe, fully here', emoji: '⚡', iconName: 'BoltIcon', iconColor: '#E9A23B' },
-  { id: 'ventral', name: 'Safe', label: 'Calm, connected, present', emoji: '😊', iconName: 'FaceSmileIcon', iconColor: '#10b981' },
-  { id: 'sympathetic', name: 'Activated', label: 'Activated, buzzing, on edge', emoji: '😬', iconName: 'ExclamationTriangleIcon', iconColor: '#ef4444' },
-  { id: 'dorsal', name: 'Shutdown', label: 'Heavy, numb, shut down', emoji: '😶', iconName: 'MinusCircleIcon', iconColor: '#6b7280' },
+  { id: 'ventral', name: 'Good', label: 'Calm, connected, present', emoji: '😊', iconName: 'FaceSmileIcon', iconColor: '#00E5A0' },
+  { id: 'sympathetic', name: 'Stressed', label: 'Activated, buzzing, on edge', emoji: '😬', iconName: 'ExclamationTriangleIcon', iconColor: '#FF5A6E' },
+  { id: 'dorsal', name: 'Heavy', label: 'Heavy, numb, shut down', emoji: '😶', iconName: 'MinusCircleIcon', iconColor: '#8478A0' },
 ]
 
 // Sympathetic (fight/flight)

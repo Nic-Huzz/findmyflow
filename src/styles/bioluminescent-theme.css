@@ -1,0 +1,2157 @@
+/* ============================================================
+   BIOLUMINESCENT THEME v4a — Living Reef Dark Override
+   ============================================================
+   Import AFTER all existing CSS to override the light theme.
+   Uses !important on every declaration for theme-layer override.
+
+   Color mapping (light -> dark):
+   - #5e17eb (purple)        -> #FF3CAC (pink)
+   - #8b5cf6 (purple light)  -> #E040FB (magenta)
+   - #7c3aed (purple dark)   -> #cc2d8a (dark pink)
+   - #E9A23B (gold)          -> #FFB800 (gold)
+   - #f8f9fa/#e9ecef/#f5f5f5 -> #0A0812 (dark bg)
+   - #ffffff (white cards)    -> #12101C (surface) / rgba(18,16,28,0.75) (glass)
+   - #dee2e6/#e9ecef (border) -> rgba(255,255,255,0.05)
+   - #212529/#1a1a2e (text)   -> #F2EEF8
+   - #6c757d/#495057 (muted)  -> #8478A0 / #BAB0D0
+   - #10b981 (success)        -> #00E5A0
+   - #ef4444 (danger)         -> #FF5A6E
+   - #f97316 (warning)        -> #FF8C42
+   ============================================================ */
+
+
+/* ============================================================
+   1. ROOT / BODY / CONTAINER
+   ============================================================ */
+
+body {
+  background: #0A0812 !important;
+  color: #F2EEF8 !important;
+}
+
+.challenge-container {
+  background: transparent !important;
+}
+
+
+/* ============================================================
+   2. HEADER
+   ============================================================ */
+
+.challenge-header {
+  background: linear-gradient(135deg, #1A0820 0%, #2D0A3E 50%, #1A0820 100%) !important;
+  box-shadow: 0 4px 30px rgba(255,60,172,0.15), inset 0 -1px 0 rgba(255,60,172,0.1) !important;
+}
+
+.challenge-level-fill {
+  background: linear-gradient(90deg, #FF3CAC, #E040FB, #FFB800) !important;
+}
+
+.challenge-level-track {
+  background: rgba(255,60,172,0.06) !important;
+}
+
+.streak-badge {
+  background: rgba(255,60,172,0.1) !important;
+  border: 1px solid rgba(255,60,172,0.15) !important;
+}
+
+.challenge-matchup-banner {
+  background: rgba(255,60,172,0.06) !important;
+  border: 1px solid rgba(255,60,172,0.1) !important;
+}
+
+.challenge-matchup-pill {
+  background: rgba(255,60,172,0.12) !important;
+}
+
+.challenge-day {
+  background: rgba(255,60,172,0.08) !important;
+  border: 1px solid rgba(255,60,172,0.1) !important;
+}
+
+.challenge-journey-btn,
+.leaderboard-btn {
+  background: rgba(255,60,172,0.08) !important;
+  border: 1px solid rgba(255,60,172,0.1) !important;
+}
+
+.challenge-score-dropdown {
+  background: rgba(255,60,172,0.08) !important;
+}
+
+.challenge-hero-avatar {
+  border-color: rgba(255,60,172,0.4) !important;
+  box-shadow: 0 0 20px rgba(255,60,172,0.25) !important;
+}
+
+
+/* ============================================================
+   3. TABS
+   ============================================================ */
+
+.challenge-tab {
+  background: #12101C !important;
+  color: #8478A0 !important;
+  border: 1px solid rgba(255,60,172,0.06) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+}
+
+.challenge-tab:hover {
+  background: #1A1628 !important;
+  color: #BAB0D0 !important;
+  border-color: rgba(255,60,172,0.12) !important;
+}
+
+.challenge-tab.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
+  color: #0a0a0a !important;
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(255,60,172,0.3) !important;
+}
+
+.challenge-tab.locked {
+  opacity: 0.3 !important;
+}
+
+
+/* ============================================================
+   4. CHALLENGE.CSS — CARDS, BUTTONS, MODALS
+   ============================================================ */
+
+/* All white card backgrounds -> dark glass surface */
+.quest-card,
+.dt-card,
+.artifact-progress,
+.wr-cta-card,
+.quest-group,
+.dt-dome-viz,
+.dt-bridge-cta,
+.score-card,
+.radar-container,
+.weekly-stats,
+.challenge-score-dropdown,
+.settings-dropdown {
+  background: rgba(18,16,28,0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  color: #F2EEF8 !important;
+}
+
+/* Card hover states */
+.quest-card:hover,
+.dt-card:hover,
+.quest-group:hover {
+  border-color: rgba(255,60,172,0.12) !important;
+  box-shadow: 0 4px 20px rgba(255,60,172,0.08) !important;
+}
+
+
+/* ============================================================
+   5. LEVELTAB.CSS
+   ============================================================ */
+
+/* Level selector pills */
+.level-selector-pill {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.level-selector-pill:hover:not(.locked) {
+  border-color: rgba(255,60,172,0.2) !important;
+  background: #1A1628 !important;
+}
+
+.level-selector-pill.current {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+.level-selector-pill.locked {
+  background: #0D0B14 !important;
+  color: #4a4060 !important;
+}
+
+/* Level header card */
+.level-header-card {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%) !important;
+}
+
+/* Zone diagnosis */
+.level-zone-diagnosis,
+.level-deep-dive,
+.level-boss-fight,
+.level-milestone,
+.level-progress {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.level-zone-card {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.level-zone-card:hover {
+  border-color: rgba(255,60,172,0.15) !important;
+  background: #1A1628 !important;
+}
+
+.level-zone-card.selected {
+  border-color: #FF3CAC !important;
+  background: rgba(255,60,172,0.06) !important;
+}
+
+.level-zone-check {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+}
+
+.level-zone-name,
+.level-dd-name,
+.level-boss-fight-title,
+.level-milestone-text,
+.level-section-title {
+  color: #F2EEF8 !important;
+}
+
+.level-zone-desc {
+  color: #8478A0 !important;
+}
+
+/* Boss reveal */
+.level-boss-reveal {
+  background: linear-gradient(135deg, rgba(255,60,172,0.08), rgba(255,60,172,0.04)) !important;
+  border-left-color: #FF3CAC !important;
+}
+
+/* Progress bars */
+.level-bar-track {
+  background: rgba(255,60,172,0.06) !important;
+}
+
+.level-bar-fill.purple {
+  background: linear-gradient(90deg, #FF3CAC, #E040FB) !important;
+}
+
+.level-bar-dot {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.level-bar-dot.filled {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+}
+
+/* Quest section */
+.quest-section {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.quest-flow-cta {
+  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(255,184,0,0.03)) !important;
+  border-color: rgba(255,60,172,0.15) !important;
+  color: #FF3CAC !important;
+}
+
+.quest-explore-menu {
+  background: #12101C !important;
+}
+
+.quest-explore-option {
+  color: #F2EEF8 !important;
+}
+
+.quest-explore-option:hover {
+  background: rgba(255,60,172,0.06) !important;
+}
+
+.quest-add-btn {
+  border-color: rgba(255,60,172,0.15) !important;
+  background: #0D0B14 !important;
+  color: #FF3CAC !important;
+}
+
+.quest-swipe-dot.active {
+  background: #FF3CAC !important;
+}
+
+.quest-section-title {
+  color: #FF3CAC !important;
+}
+
+/* Graduation */
+.level-graduation-overlay {
+  background: rgba(10,8,18,0.85) !important;
+}
+
+.level-graduation-card {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.level-graduation-btn {
+  background: linear-gradient(135deg, #FFB800, #FFD060) !important;
+  color: #0a0a0a !important;
+}
+
+/* DD status badges */
+.level-dd-status.done {
+  background: rgba(0,229,160,0.12) !important;
+  color: #00E5A0 !important;
+}
+
+.level-dd-status.start {
+  background: linear-gradient(135deg, #FFB800, #FFD060) !important;
+  color: #0a0a0a !important;
+}
+
+.level-milestone-label {
+  color: #FFB800 !important;
+}
+
+
+/* ============================================================
+   6. WEEKLYFOCUS.CSS
+   ============================================================ */
+
+.wf-card {
+  background: rgba(18,16,28,0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+}
+
+.wf-focus {
+  background: rgba(255,60,172,0.04) !important;
+}
+
+.wf-focus.wf-completed {
+  background: rgba(255,184,0,0.06) !important;
+}
+
+.wf-action {
+  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 160%) !important;
+  color: #0a0a0a !important;
+}
+
+.wf-action-secondary {
+  color: #FF3CAC !important;
+  border-color: rgba(255,60,172,0.2) !important;
+}
+
+
+/* ============================================================
+   7. TUNETAB.CSS
+   ============================================================ */
+
+.tt-section {
+  background: rgba(18,16,28,0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.tt-section-title {
+  color: #FF3CAC !important;
+}
+
+.tt-section-sub {
+  color: #8478A0 !important;
+}
+
+.tt-drain-log-btn {
+  background: #12101C !important;
+  border-color: rgba(255,60,172,0.15) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-drain-cat-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-drain-cat-btn.selected {
+  border-color: #FF8C42 !important;
+  background: rgba(255,140,66,0.06) !important;
+}
+
+.tt-drain-note {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #F2EEF8 !important;
+}
+
+.tt-state-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-drain-save {
+  background: linear-gradient(135deg, #E040FB, #FF3CAC) !important;
+  color: #0a0a0a !important;
+}
+
+.tt-recovery-sheet {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.tt-recovery-dur.selected {
+  background: #FF3CAC !important;
+  border-color: #FF3CAC !important;
+}
+
+.tt-recovery-activity.selected {
+  border-color: #00E5A0 !important;
+  background: rgba(0,229,160,0.08) !important;
+}
+
+.tt-recovery-save {
+  background: linear-gradient(135deg, #00E5A0, #00C48C) !important;
+  color: #0a0a0a !important;
+}
+
+.tt-info-modal {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.tt-info-modal-close {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+}
+
+
+/* ============================================================
+   8. PROGRESSTAB.CSS
+   ============================================================ */
+
+/* Evidence cards, fuel cards, voice cards, essence card */
+.pt-essence-card,
+.pt-fuel-pain,
+.pt-voice-card,
+.pt-evidence-card {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #F2EEF8 !important;
+}
+
+.pt-essence-avatar {
+  border-color: #FF3CAC !important;
+}
+
+.pt-essence-name {
+  color: #FF3CAC !important;
+}
+
+.pt-fuel-has {
+  color: #00E5A0 !important;
+}
+
+.pt-fuel-missing {
+  color: #FF5A6E !important;
+}
+
+.pt-voice-dot.filled {
+  background: #FF3CAC !important;
+}
+
+/* Evidence state colors */
+.pt-evidence-card[data-state="vibe_rise"]::before {
+  background: #FFB800 !important;
+}
+
+.pt-evidence-card[data-state="fun"]::before {
+  background: #00E5A0 !important;
+}
+
+.pt-evidence-card[data-state="pressure"]::before {
+  background: #FF5A6E !important;
+}
+
+/* Think box */
+.pt-think {
+  background: rgba(255,255,255,0.03) !important;
+  border-left-color: #FFB800 !important;
+  color: #BAB0D0 !important;
+}
+
+/* CTAs */
+.pt-cta {
+  background: linear-gradient(135deg, #FFB800, #FFD060) !important;
+  color: #0a0a0a !important;
+}
+
+.pt-cta-purple {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+/* Checklists */
+.pt-check-dot.done {
+  background: #00E5A0 !important;
+}
+
+.pt-check-dot.next {
+  background: #FFB800 !important;
+}
+
+/* Journey labels */
+.pt-journey-fill {
+  background: linear-gradient(90deg, rgba(255,255,255,0.4), #FFB800) !important;
+}
+
+.pt-next-action {
+  background: rgba(255,184,0,0.15) !important;
+  border-color: rgba(255,184,0,0.3) !important;
+  color: #FFB800 !important;
+}
+
+
+/* ============================================================
+   9. SMALLER COMPONENT OVERRIDES
+   ============================================================ */
+
+/* --- CapacityCard --- */
+
+.cc-card {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.cc-title {
+  color: #F2EEF8 !important;
+}
+
+.cc-trend-up {
+  color: #00E5A0 !important;
+}
+
+.cc-trend-down {
+  color: #FF5A6E !important;
+}
+
+.cc-pillar-active {
+  background: rgba(255,60,172,0.10) !important;
+  color: #FF3CAC !important;
+}
+
+.cc-pillar-inactive {
+  background: rgba(255,255,255,0.04) !important;
+}
+
+.cc-marker {
+  background: #F2EEF8 !important;
+}
+
+.cc-zl-stuck {
+  color: #FF5A6E !important;
+}
+
+.cc-zl-wired {
+  color: #FF8C42 !important;
+}
+
+.cc-zl-grounded {
+  color: #FF3CAC !important;
+}
+
+.cc-zl-vibe-rise {
+  color: #FFB800 !important;
+}
+
+.cc-maint-dot {
+  background: rgba(255,255,255,0.05) !important;
+}
+
+.cc-maint-filled {
+  background: #00E5A0 !important;
+}
+
+.cc-maint-partial {
+  background: #FFB800 !important;
+}
+
+.cc-maint-low {
+  background: #FF5A6E !important;
+}
+
+.cc-cta {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+/* --- QuadrantCard --- */
+
+.qc-card {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.qc-compass {
+  background: #0D0B14 !important;
+}
+
+.qc-zone-grounded .qc-zone-label-text {
+  color: #FF3CAC !important;
+}
+
+.qc-zone-viberise .qc-zone-label-text {
+  color: #FFB800 !important;
+}
+
+.qc-zone-stuck .qc-zone-label-text {
+  color: #8478A0 !important;
+}
+
+.qc-zone-wired .qc-zone-label-text {
+  color: #FF5A6E !important;
+}
+
+.qc-bar-fill-safety {
+  background: linear-gradient(90deg, #E040FB, #FF3CAC) !important;
+}
+
+.qc-bar-fill-expression {
+  background: linear-gradient(90deg, #FFD060, #FFB800) !important;
+}
+
+.qc-bar-fill-maintenance {
+  background: linear-gradient(90deg, rgba(0,229,160,0.4), #00E5A0) !important;
+}
+
+.qc-bar-todo {
+  color: #FF3CAC !important;
+}
+
+.qc-bar-done {
+  color: #00E5A0 !important;
+}
+
+.qc-nudge {
+  background: linear-gradient(135deg, rgba(255,60,172,0.03), rgba(255,184,0,0.04)) !important;
+  border-color: rgba(255,60,172,0.05) !important;
+}
+
+/* --- ChallengeFilters --- */
+
+.frequency-tab {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #8478A0 !important;
+}
+
+.frequency-tab:hover {
+  background: #1A1628 !important;
+  border-color: rgba(255,60,172,0.15) !important;
+}
+
+.frequency-tab.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  border-color: #FF3CAC !important;
+  color: #0a0a0a !important;
+}
+
+.filter-chip {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.filter-chip:hover {
+  border-color: #FF3CAC !important;
+  color: #FF3CAC !important;
+}
+
+.filter-chip.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  border-color: #FF3CAC !important;
+  color: #0a0a0a !important;
+}
+
+/* --- ChallengeStageTabs --- */
+
+.stage-tab {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #8478A0 !important;
+}
+
+.stage-tab.available {
+  background: #12101C !important;
+  color: #BAB0D0 !important;
+}
+
+.stage-tab.current {
+  background: rgba(255,60,172,0.1) !important;
+  border-color: #FF3CAC !important;
+  color: #FF3CAC !important;
+}
+
+.stage-tab.completed {
+  background: rgba(255,184,0,0.1) !important;
+  border-color: rgba(255,184,0,0.3) !important;
+  color: #FFB800 !important;
+}
+
+.stage-tab.active {
+  background: #FF3CAC !important;
+  border-color: #FF3CAC !important;
+  color: #0a0a0a !important;
+}
+
+.completed-check {
+  background: #FFB800 !important;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800) !important;
+}
+
+/* --- QuestTaskSheet --- */
+
+.qts-sheet {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.qts-accent {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800) !important;
+}
+
+.qts-title {
+  color: #F2EEF8 !important;
+}
+
+.qts-row-label {
+  color: rgba(255,255,255,0.35) !important;
+}
+
+.qts-row-value {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.qts-pill-healed {
+  background: rgba(0,229,160,0.06) !important;
+  color: #00E5A0 !important;
+}
+
+.qts-identity {
+  background: rgba(255,60,172,0.03) !important;
+  border-left-color: rgba(255,60,172,0.15) !important;
+}
+
+.qts-cross-tag {
+  background: rgba(255,60,172,0.06) !important;
+  color: #FF3CAC !important;
+}
+
+.qts-cta {
+  background: linear-gradient(135deg, rgba(255,60,172,0.9), rgba(255,184,0,0.9)) !important;
+}
+
+
+/* ============================================================
+   10. GENERIC TEXT COLOR OVERRIDES
+   ============================================================ */
+
+/* Catch-all for common headings in the challenge area */
+.challenge-content h1,
+.challenge-content h2,
+.challenge-content h3,
+.challenge-content h4 {
+  color: #F2EEF8 !important;
+}
+
+/* Muted text patterns */
+.challenge-content p,
+.challenge-content .desc,
+.challenge-content .description {
+  color: #BAB0D0 !important;
+}
+
+/* Links in the challenge area */
+.challenge-content a {
+  color: #FF3CAC !important;
+}
+
+/* Generic button font reset */
+.challenge-content button {
+  font-family: 'Outfit', -apple-system, sans-serif !important;
+}
+
+
+/* ============================================================
+   11. SPORE PARTICLES + REEF GLOW + LIVING TEXTURE
+   ============================================================ */
+
+/* --- Bioluminescent spore particles --- */
+
+.bio-spore-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+}
+
+.bio-spore {
+  position: absolute !important;
+  border-radius: 50% !important;
+  animation: bio-spore-rise linear infinite !important;
+}
+
+.bio-spore::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: -3px !important;
+  border-radius: 50% !important;
+  background: inherit !important;
+  filter: blur(6px) !important;
+  opacity: 0.6 !important;
+}
+
+@keyframes bio-spore-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-40vh) translateX(15px) scale(1.2);
+  }
+  85% {
+    opacity: 0.6;
+    transform: translateY(-80vh) translateX(-10px) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-105vh) scale(0.3);
+  }
+}
+
+/* --- Reef glow blobs --- */
+
+.bio-reef-glow {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.bio-reef-glow div {
+  position: absolute !important;
+  border-radius: 50% !important;
+  filter: blur(60px) !important;
+}
+
+.bio-rg1 {
+  width: 200px !important;
+  height: 200px !important;
+  top: 5% !important;
+  left: -20% !important;
+  background: rgba(255,60,172,0.12) !important;
+  animation: bio-reef-pulse 8s ease-in-out infinite !important;
+}
+
+.bio-rg2 {
+  width: 160px !important;
+  height: 160px !important;
+  top: 40% !important;
+  right: -15% !important;
+  background: rgba(224,64,251,0.08) !important;
+  animation: bio-reef-pulse 10s ease-in-out infinite 2s !important;
+}
+
+.bio-rg3 {
+  width: 180px !important;
+  height: 180px !important;
+  bottom: 10% !important;
+  left: 10% !important;
+  background: rgba(255,184,0,0.06) !important;
+  animation: bio-reef-pulse 12s ease-in-out infinite 4s !important;
+}
+
+.bio-rg4 {
+  width: 120px !important;
+  height: 120px !important;
+  top: 60% !important;
+  left: 40% !important;
+  background: rgba(0,229,204,0.04) !important;
+  animation: bio-reef-pulse 9s ease-in-out infinite 1s !important;
+}
+
+@keyframes bio-reef-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+}
+
+/* ========================================
+   12. FORMS, INPUTS, TEXTAREAS, MODALS
+   ======================================== */
+
+/* All text inputs and textareas within challenge */
+.challenge-container input[type="text"],
+.challenge-container input[type="number"],
+.challenge-container input[type="email"],
+.challenge-container input[type="search"],
+.challenge-container textarea,
+.challenge-container select,
+.tt-drain-note,
+.tt-stall-note,
+.quest-input,
+.quest-textarea,
+.quest-dropdown {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #F2EEF8 !important;
+}
+
+.challenge-container input:focus,
+.challenge-container textarea:focus,
+.challenge-container select:focus,
+.tt-drain-note:focus {
+  border-color: #FF3CAC !important;
+  background: #1A1628 !important;
+  box-shadow: 0 0 0 4px rgba(255,60,172,0.1) !important;
+  outline: none !important;
+}
+
+.challenge-container input::placeholder,
+.challenge-container textarea::placeholder,
+.tt-drain-note::placeholder {
+  color: #5a4e70 !important;
+}
+
+/* Drain/stall form — the modal shown in screenshot */
+.tt-drain-form {
+  color: #F2EEF8 !important;
+}
+
+.tt-drain-cat-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-drain-cat-btn:hover {
+  border-color: rgba(255,140,66,0.3) !important;
+  color: #FF8C42 !important;
+}
+
+.tt-drain-cat-btn.selected {
+  border-color: #FF8C42 !important;
+  background: rgba(255,140,66,0.08) !important;
+  color: #FF8C42 !important;
+}
+
+/* Stall category buttons use same pattern but purple → pink */
+.tt-stall-count {
+  color: #E040FB !important;
+}
+
+/* State buttons in drain/stall */
+.tt-state-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-state-btn:hover {
+  border-color: rgba(255,60,172,0.2) !important;
+}
+
+.tt-state-btn.selected,
+.tt-state-btn:active {
+  border-color: #FF3CAC !important;
+  background: rgba(255,60,172,0.08) !important;
+  color: #FF3CAC !important;
+}
+
+.tt-state-label {
+  color: #8478A0 !important;
+}
+
+/* Save/cancel buttons */
+.tt-drain-save {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+.tt-drain-cancel {
+  background: transparent !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #BAB0D0 !important;
+}
+
+/* Drain/stall list items */
+.tt-drain-item {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.tt-drain-item-cat {
+  color: #8478A0 !important;
+}
+
+.tt-drain-item-note {
+  color: #BAB0D0 !important;
+}
+
+/* Stall log button */
+.tt-stall-log-btn {
+  background: #12101C !important;
+  border-color: rgba(224,64,251,0.15) !important;
+  color: #E040FB !important;
+}
+
+/* Generic modals and sheets within challenge */
+.challenge-container .modal-overlay,
+.challenge-container [class*="overlay"] {
+  background: rgba(10,8,18,0.85) !important;
+}
+
+.challenge-container .modal-content,
+.challenge-container .modal-card,
+.challenge-container [class*="modal"]:not([class*="overlay"]) {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+/* Recovery sheet */
+.tt-recovery-sheet {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.tt-recovery-dur {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-recovery-dur.selected {
+  background: #FF3CAC !important;
+  border-color: #FF3CAC !important;
+  color: #0a0a0a !important;
+}
+
+.tt-recovery-activity {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.tt-recovery-activity.selected {
+  border-color: #00E5A0 !important;
+  background: rgba(0,229,160,0.08) !important;
+  color: #00E5A0 !important;
+}
+
+.tt-recovery-save {
+  background: linear-gradient(135deg, #00E5A0, #00C48C) !important;
+  color: #0a0a0a !important;
+}
+
+/* Info modal */
+.tt-info-modal {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.tt-info-modal-close {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+/* Quest select options, add quest modal */
+.quest-select-option {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.quest-select-option:hover {
+  border-color: rgba(255,60,172,0.2) !important;
+  background: #1A1628 !important;
+}
+
+.quest-select-option.selected {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+/* Rating buttons */
+.quest-rating-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.quest-rating-btn.selected {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+  border-color: transparent !important;
+}
+
+/* Generic white backgrounds catch-all */
+.challenge-container [class*="card"],
+.challenge-container [class*="section"]:not(.challenge-tabs):not(.section-divider) {
+  background-color: rgba(18,16,28,0.75);
+  border-color: rgba(255,255,255,0.05);
+}
+
+/* Healing modal */
+.healing-completion-modal,
+.healing-intention-modal,
+.healing-flow-modal {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+/* Settings dropdown */
+.settings-dropdown,
+.settings-menu-item {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.settings-menu-item:hover {
+  background: #1A1628 !important;
+}
+
+.settings-menu-item {
+  border-bottom-color: rgba(255,255,255,0.05) !important;
+}
+
+/* Ghost intro banner */
+.ghost-intro-banner {
+  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(255,184,0,0.04)) !important;
+  border-color: rgba(255,60,172,0.1) !important;
+  color: #F2EEF8 !important;
+}
+
+/* Weekly review CTA (the gold-bordered card) */
+.wr-dismiss-btn {
+  color: #8478A0 !important;
+}
+
+/* Learn more content */
+.learn-more-content {
+  background: rgba(255,60,172,0.03) !important;
+  border-left-color: #FFB800 !important;
+  color: #BAB0D0 !important;
+}
+
+.learn-more-toggle {
+  color: #FF3CAC !important;
+}
+
+/* Sub tabs (healing daily/weekly) */
+.sub-tab {
+  background: transparent !important;
+  color: #8478A0 !important;
+}
+
+.sub-tab:hover {
+  background: rgba(255,60,172,0.08) !important;
+  color: #FF3CAC !important;
+}
+
+.sub-tab.active {
+  background: #FF3CAC !important;
+  color: #0a0a0a !important;
+}
+
+.healing-sub-tabs-wrapper,
+.business-sub-tabs,
+.healing-sub-tabs {
+  background: rgba(255,60,172,0.03) !important;
+  border-bottom-color: rgba(255,60,172,0.08) !important;
+}
+
+/* Generic primary buttons — all purple → pink gradient */
+.challenge-container .btn-primary,
+.challenge-container [class*="complete-btn"],
+.challenge-container [class*="action-btn"],
+.challenge-container [class*="flow-btn"]:not(.locked):not(.coming-soon),
+.quest-complete-btn,
+.quest-flow-btn:not(.locked),
+.quest-action-btn,
+.quest-checklist-link {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
+  color: #0a0a0a !important;
+}
+
+/* Secondary/outline buttons */
+.challenge-container .btn-secondary,
+.quest-complete-btn.secondary,
+.view-results-btn {
+  background: transparent !important;
+  border-color: rgba(255,60,172,0.2) !important;
+  color: #FF3CAC !important;
+}
+
+/* Locked/disabled buttons */
+.quest-flow-btn.locked,
+.quest-flow-btn.coming-soon {
+  background: #1A1628 !important;
+  color: #4a4060 !important;
+}
+
+/* Completed badge */
+.quest-completed-badge {
+  background: rgba(0,229,160,0.12) !important;
+  color: #00E5A0 !important;
+  border-color: rgba(0,229,160,0.2) !important;
+}
+
+/* Locked message */
+.quest-locked-message {
+  background: #12101C !important;
+  color: #8478A0 !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+/* Frequency badges */
+.frequency-badge {
+  color: #BAB0D0 !important;
+}
+
+.frequency-badge.daily {
+  background: rgba(255,184,0,0.1) !important;
+  color: #FFB800 !important;
+}
+
+.frequency-badge.weekly {
+  background: rgba(224,64,251,0.1) !important;
+  color: #E040FB !important;
+}
+
+/* Quest points RP pill */
+.quest-points {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+/* Quest card text */
+.quest-name {
+  color: #F2EEF8 !important;
+}
+
+.quest-description {
+  color: #8478A0 !important;
+}
+
+/* Daily streak bubbles */
+.streak-bubble {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #4a4060 !important;
+}
+
+.streak-bubble.completed {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+  border-color: transparent !important;
+}
+
+/* Confetti colors remapped */
+.confetti-0 { background: #FF3CAC !important; }
+.confetti-1 { background: #FFB800 !important; }
+.confetti-2 { background: #00E5A0 !important; }
+.confetti-3 { background: #00E5CC !important; }
+.confetti-4 { background: #FF5A6E !important; }
+
+/* Back links */
+.challenge-container a[class*="back"],
+.challenge-container [class*="back-btn"] {
+  color: #FF3CAC !important;
+}
+
+/* ========================================
+   13. DAILY CHECKIN MODAL (the NS state picker)
+   ======================================== */
+
+.daily-checkin-overlay {
+  background: rgba(10,8,18,0.85) !important;
+}
+
+.daily-checkin-card {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important;
+}
+
+.daily-checkin-title {
+  color: #F2EEF8 !important;
+}
+
+.daily-checkin-sub {
+  color: #8478A0 !important;
+}
+
+.daily-checkin-skip {
+  color: #8478A0 !important;
+}
+
+.daily-checkin-back {
+  color: #8478A0 !important;
+}
+
+.daily-checkin-btn {
+  background: rgba(255,255,255,0.04) !important;
+  border: 2px solid rgba(255,255,255,0.08) !important;
+}
+
+.daily-checkin-btn-name {
+  color: #FF3CAC !important;
+}
+
+.daily-checkin-btn-emoji {
+  color: #F2EEF8 !important;
+}
+
+.daily-checkin-btn-label {
+  color: #8478A0 !important;
+}
+
+.daily-checkin-btn:hover {
+  border-color: rgba(255,255,255,0.2) !important;
+}
+
+.daily-checkin-btn.selected {
+  background: linear-gradient(135deg, rgba(255,60,172,0.12), rgba(224,64,251,0.08)) !important;
+  border-color: #FF3CAC !important;
+}
+
+.daily-checkin-btn.selected .daily-checkin-btn-name {
+  color: #FF3CAC !important;
+}
+
+.daily-checkin-btn.daily-checkin-vibe-rise.selected {
+  background: linear-gradient(135deg, rgba(255,184,0,0.12), rgba(255,184,0,0.06)) !important;
+  border-color: #FFB800 !important;
+  box-shadow: 0 0 16px rgba(255,184,0,0.15) !important;
+}
+
+.daily-checkin-btn.daily-checkin-vibe-rise.selected .daily-checkin-btn-name {
+  color: #FFB800 !important;
+}
+
+.daily-checkin-drain-cat {
+  background: rgba(255,255,255,0.04) !important;
+  border: 2px solid rgba(255,255,255,0.08) !important;
+  color: #F2EEF8 !important;
+}
+
+.daily-checkin-drain-cat:hover {
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+.daily-checkin-drain-cat.selected {
+  background: rgba(255,90,110,0.08) !important;
+  border-color: #FF5A6E !important;
+  color: #FF5A6E !important;
+}
+
+.daily-checkin-drain-note {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #F2EEF8 !important;
+}
+
+.daily-checkin-drain-note:focus {
+  border-color: #FF3CAC !important;
+}
+
+.daily-checkin-drain-skip {
+  background: rgba(255,255,255,0.04) !important;
+  border: 2px solid rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.daily-checkin-drain-save {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+.daily-checkin-boost-save {
+  background: linear-gradient(135deg, #FFB800, #f59e0b) !important;
+  color: #0a0a0a !important;
+}
+
+.daily-checkin-predict-input {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #F2EEF8 !important;
+}
+
+.daily-checkin-predict-input:focus {
+  border-color: #FF3CAC !important;
+}
+
+.daily-checkin-predict-btn {
+  background: rgba(255,255,255,0.04) !important;
+  border: 2px solid rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.daily-checkin-predict-btn.selected {
+  background: rgba(255,60,172,0.1) !important;
+  border-color: #FF3CAC !important;
+  color: #FF3CAC !important;
+}
+
+/* ========================================
+   13a. REGULATION CARD (post-checkin exercises)
+   ======================================== */
+
+.regulation-back {
+  color: #8478A0 !important;
+}
+
+.regulation-state-badge.state-ventral {
+  background: rgba(0,229,160,0.12) !important;
+  color: #00E5A0 !important;
+}
+
+.regulation-state-badge.state-vibe_rise {
+  background: rgba(255,184,0,0.12) !important;
+  color: #FFB800 !important;
+}
+
+.regulation-state-badge.state-sympathetic {
+  background: rgba(255,90,110,0.1) !important;
+  color: #FF5A6E !important;
+}
+
+.regulation-state-badge.state-dorsal {
+  background: rgba(132,120,160,0.12) !important;
+  color: #8478A0 !important;
+}
+
+.regulation-title {
+  color: #F2EEF8 !important;
+}
+
+.regulation-subtitle {
+  color: #8478A0 !important;
+}
+
+.regulation-single {
+  background: rgba(255,60,172,0.04) !important;
+  border-color: rgba(255,60,172,0.1) !important;
+}
+
+.regulation-single .regulation-instruction {
+  color: #BAB0D0 !important;
+}
+
+.regulation-exercise {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+.regulation-exercise:hover {
+  border-color: rgba(255,255,255,0.15) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+
+.regulation-exercise.expanded {
+  background: rgba(255,60,172,0.06) !important;
+  border-color: #FF3CAC !important;
+  box-shadow: 0 2px 12px rgba(255,60,172,0.1) !important;
+}
+
+.regulation-exercise-name {
+  color: #F2EEF8 !important;
+}
+
+.regulation-duration {
+  color: #8478A0 !important;
+  background: rgba(255,255,255,0.04) !important;
+}
+
+.regulation-exercise.expanded .regulation-duration {
+  background: rgba(255,60,172,0.08) !important;
+  color: #FF3CAC !important;
+}
+
+.regulation-instruction {
+  color: #8478A0 !important;
+}
+
+.regulation-done {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
+  color: #0a0a0a !important;
+  box-shadow: 0 4px 16px rgba(255,60,172,0.25) !important;
+}
+
+.regulation-skip {
+  border-color: rgba(255,255,255,0.08) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #8478A0 !important;
+}
+
+.regulation-skip:hover {
+  border-color: rgba(255,255,255,0.15) !important;
+  color: #BAB0D0 !important;
+}
+
+/* ========================================
+   13b. BOTTOM TOOLBAR
+   ======================================== */
+
+.bottom-toolbar,
+.bottom-toolbar.main-toolbar {
+  background: #0A0812 !important;
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.3) !important;
+}
+
+.main-toolbar .toolbar-item {
+  color: #8478A0 !important;
+}
+
+.main-toolbar .toolbar-item:hover {
+  color: #FF3CAC !important;
+  background: rgba(255,60,172,0.05) !important;
+}
+
+.main-toolbar .toolbar-item.active {
+  color: #FF3CAC !important;
+  background: rgba(255,60,172,0.08) !important;
+}
+
+/* Let's Play button — gradient instead of purple */
+.main-toolbar .toolbar-challenge,
+.main-toolbar .toolbar-challenge:hover,
+.main-toolbar .toolbar-challenge.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
+  color: #0a0a0a !important;
+}
+
+/* Download popup in toolbar */
+.dl-popup {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.dl-popup-btn--purple {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+.dl-popup-btn--dark {
+  background: #1A1628 !important;
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   14. LEVELTAB — QUEST MODALS & FORMS
+   ======================================== */
+
+.quest-empty {
+  background: #12101C !important;
+  color: #8478A0 !important;
+}
+
+.quest-add-modal {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #F2EEF8 !important;
+}
+
+.quest-add-select,
+.quest-add-input {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+.quest-state-pill {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.quest-state-pill.selected,
+.quest-state-pill:hover {
+  border-color: #FF3CAC !important;
+  background: rgba(255,60,172,0.08) !important;
+  color: #FF3CAC !important;
+}
+
+.quest-add-cancel {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.quest-closed-item {
+  background: #12101C !important;
+}
+
+.struggle-pill {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.quest-scroll-card {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.quest-modal {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important;
+}
+
+.lt-matrix-card {
+  background: #12101C !important;
+}
+
+.skill-level-picker {
+  background: #12101C !important;
+  border-color: rgba(255,60,172,0.15) !important;
+  color: #F2EEF8 !important;
+}
+
+.skill-level-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.skill-level-btn.selected,
+.skill-level-btn.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+  border-color: transparent !important;
+}
+
+.level-boss-textarea {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.level-graduation-title {
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   15. PROGRESSTAB — REMAINING CARDS
+   ======================================== */
+
+.pt-onboarding-banner {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-voice-nav-btn {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #12101C !important;
+  color: #BAB0D0 !important;
+}
+
+.pt-evidence-card[data-state="vibe_rise"] {
+  background: rgba(18,16,28,0.75) !important;
+}
+
+.pt-evidence-card[data-state="fun"] {
+  background: rgba(18,16,28,0.75) !important;
+}
+
+.pt-evidence-summary {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-cta-card {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-income-card {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-fuel-compare {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-checklist {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-empty {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+.pt-reflect-input {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.pt-reflect-pill {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #12101C !important;
+  color: #BAB0D0 !important;
+}
+
+.pt-chip-state[data-state="vibe_rise"] {
+  background: rgba(255,184,0,0.08) !important;
+  color: #FFB800 !important;
+}
+
+.pt-chip-state[data-state="fun"] {
+  background: rgba(0,229,160,0.08) !important;
+  color: #00E5A0 !important;
+}
+
+.pt-chip-state[data-state="pressure"] {
+  background: rgba(255,90,110,0.08) !important;
+  color: #FF5A6E !important;
+}
+
+/* ========================================
+   16. CHALLENGE.CSS — REMAINING ELEMENTS
+   ======================================== */
+
+.onboarding-content {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.onboarding-category {
+  background: #1A1628 !important;
+  color: #F2EEF8 !important;
+}
+
+.onboarding-category h3,
+.onboarding-artifacts h3 {
+  color: #F2EEF8 !important;
+}
+
+.group-mode-btn {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #BAB0D0 !important;
+}
+
+.group-code-input {
+  border-color: rgba(255,255,255,0.1) !important;
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   17. TUNETAB — REMAINING ELEMENTS
+   ======================================== */
+
+.tt-recovery-handle {
+  background: rgba(255,255,255,0.1) !important;
+}
+
+.tt-recovery-other {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   18. QUEST PATH MAP
+   ======================================== */
+
+.qpm-overlay {
+  background: #0A0812 !important;
+}
+
+.qpm-add-input {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #F2EEF8 !important;
+}
+
+.qpm-add-btn {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800) !important;
+  color: #0a0a0a !important;
+}
+
+/* ========================================
+   19. QUADRANT CARD BAR + PROGRESS LINE
+   ======================================== */
+
+.qc-bar {
+  background: #12101C !important;
+}
+
+.progress-line {
+  background: rgba(255,255,255,0.1) !important;
+}
+
+/* ========================================
+   20. WEEKLY REVIEW MODAL
+   ======================================== */
+
+.weekly-review-modal,
+.weekly-review-card,
+.wr-card {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+.wr-question {
+  color: #F2EEF8 !important;
+}
+
+.wr-option {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #BAB0D0 !important;
+}
+
+.wr-option:hover {
+  border-color: rgba(255,60,172,0.2) !important;
+}
+
+.wr-option.selected {
+  background: rgba(255,60,172,0.08) !important;
+  border-color: #FF3CAC !important;
+  color: #FF3CAC !important;
+}
+
+.wr-textarea {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #F2EEF8 !important;
+}
+
+.wr-submit,
+.wr-next-btn {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
+  color: #0a0a0a !important;
+}
+
+.wr-skip {
+  color: #8478A0 !important;
+}
+
+/* ========================================
+   21. GHOST RECAP + WEEKLY RECAP CARDS
+   ======================================== */
+
+.ghost-recap-card,
+.weekly-recap-card {
+  background: rgba(18,16,28,0.75) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   22. CHALLENGE INTRO / ONBOARDING
+   ======================================== */
+
+.challenge-intro {
+  background: #0A0812 !important;
+  color: #F2EEF8 !important;
+}
+
+.challenge-intro-card {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   23. NOTIFICATION PROMPT
+   ======================================== */
+
+.notification-prompt {
+  background: #12101C !important;
+  color: #F2EEF8 !important;
+}
+
+/* ========================================
+   24. QUESTBOARDCARD (the swipeable quest cards)
+   ======================================== */
+
+.qbc {
+  background: rgba(18,16,28,0.85) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.qbc-title { color: #F2EEF8 !important; }
+.qbc-flow-subtitle { color: #8478A0 !important; }
+.qbc-badge { color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; }
+.qbc-chevron { color: rgba(255,255,255,0.15) !important; }
+.qbc-task-text { color: #F2EEF8 !important; }
+.qbc-task-row--done .qbc-task-text { color: #5a4e70 !important; }
+.qbc-exp-name { color: #F2EEF8 !important; }
+.qbc-exp-icon { color: rgba(255,255,255,0.2) !important; }
+.qbc-exp-chevron { color: rgba(255,255,255,0.15) !important; }
+.qbc-exp-empty { color: #00E5A0 !important; }
+.qbc-dim-hint { color: rgba(255,255,255,0.2) !important; }
+.qbc-dim-value { color: #FF3CAC !important; }
+.qbc-ungrouped-label { color: rgba(255,255,255,0.25) !important; }
+.qbc-completed-toggle { color: rgba(255,255,255,0.3) !important; }
+.qbc-completed-toggle:active { color: #FF3CAC !important; }
+.qbc-outcome-text { color: #F2EEF8 !important; }
+.qbc-stuck-hint { color: rgba(255,255,255,0.2) !important; }
+.qbc-stuck-hint:active { color: #FF3CAC !important; }
+.qbc-menu-trigger { color: rgba(255,255,255,0.15) !important; }
+.qbc-menu-trigger:active { color: #BAB0D0 !important; }
+
+.qbc-fuel-row.has .qbc-fuel-status { color: #00E5A0 !important; }
+.qbc-fuel-row.missing .qbc-fuel-status { color: #FF5A6E !important; }
+.qbc-exp-state--vibe_rise { color: #FFB800 !important; }
+.qbc-exp-state--fun { color: #00E5A0 !important; }
+.qbc-exp-state--pressure { color: #FF5A6E !important; }
+.qbc-exp-state--bored { color: #8478A0 !important; }
+
+.qbc-check:hover { border-color: #FF3CAC !important; }
+.qbc-check--done { background: #00E5A0 !important; border-color: #00E5A0 !important; }
+
+.qbc-focus-radio { border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.15) !important; }
+.qbc-focus-radio--active { border-color: #FF3CAC !important; color: #FF3CAC !important; }
+
+.qbc-define-cta { background: rgba(255,60,172,0.05) !important; color: #FF3CAC !important; }
+.qbc-rerate-btn { background: rgba(18,16,28,0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+.qbc-signal-btn { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,255,255,0.06) !important; }
+.qbc-outcome-btn { border-color: rgba(255,255,255,0.08) !important; background: rgba(18,16,28,0.75) !important; }
+
+.qbc-add-project-save { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
+.qbc-add-project-cancel { background: rgba(255,255,255,0.05) !important; color: rgba(255,255,255,0.5) !important; }
+.qbc-add-courage-btn { background: rgba(255,60,172,0.05) !important; color: #FF3CAC !important; }
+.qbc-add-task-btn { background: rgba(255,255,255,0.03) !important; color: rgba(255,255,255,0.35) !important; }
+
+.qbc-input { background: #12101C !important; color: #F2EEF8 !important; border-color: rgba(255,255,255,0.08) !important; }
+.qbc-input:focus { border-color: #FF3CAC !important; }
+.qbc-input::placeholder { color: #5a4e70 !important; }
+.qbc-add-btn { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
+
+.qbc-menu-dropdown { background: #12101C !important; border-color: rgba(255,255,255,0.05) !important; }
+.qbc-menu-item { background: #12101C !important; color: #BAB0D0 !important; }
+.qbc-menu-item:hover { background: #1A1628 !important; }
+.qbc-rename-input { color: #F2EEF8 !important; border-bottom-color: #FF3CAC !important; }
+.qbc-close-btn { background: rgba(18,16,28,0.75) !important; color: #BAB0D0 !important; }
+
+.wc-modal { background: #12101C !important; color: #F2EEF8 !important; }
+
+.qbc-next-move { background: rgba(255,60,172,0.03) !important; border-color: rgba(255,60,172,0.1) !important; }
+.qbc-next-move-dim { color: #FF3CAC !important; }
+.qbc-next-move-accept { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
+.qbc-next-move-accept:hover { background: linear-gradient(135deg, #E040FB, #FF3CAC) !important; }
+.qbc-next-move-refresh { color: rgba(255,255,255,0.35) !important; }
+.qbc-next-move-manual-link:hover { color: #FF3CAC !important; }
+.qbc-manual-type { border-color: rgba(255,255,255,0.08) !important; background: rgba(18,16,28,0.75) !important; color: #BAB0D0 !important; }
+.qbc-manual-type--selected { border-color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; color: #FF3CAC !important; }
+.qbc-manual-dim { border-color: rgba(255,255,255,0.08) !important; background: rgba(18,16,28,0.75) !important; color: #BAB0D0 !important; }
+.qbc-manual-dim--selected { border-color: #FFB800 !important; background: rgba(255,184,0,0.06) !important; color: #FFB800 !important; }
+
+/* ========================================
+   25. WEEKLYFOCUS — ALL REMAINING
+   ======================================== */
+
+.wf-prompt-text { color: #8478A0 !important; }
+.wf-label { color: #F2EEF8 !important; }
+.wf-change { color: #FF3CAC !important; }
+.wf-focus-text { color: #F2EEF8 !important; }
+.wf-focus-quest { color: #8478A0 !important; }
+.wf-healing-link { color: #8478A0 !important; }
+.wf-healing-link:active { color: #FF3CAC !important; }
+.wf-done-msg { color: #FFB800 !important; }
+.wf-counter-inline { color: #8478A0 !important; }
+.wf-counter-num { color: #FFB800 !important; }
+
+/* ========================================
+   26. TUNETAB — ALL REMAINING
+   ======================================== */
+
+.tt-section-count { color: #00E5A0 !important; }
+.tt-subsection-header { border-bottom-color: rgba(255,255,255,0.05) !important; }
+.tt-subsection-count { color: #8478A0 !important; }
+.tt-label-name { color: #F2EEF8 !important; }
+.tt-label-sub { color: #8478A0 !important; }
+.tt-label-purple { color: #FF3CAC !important; }
+.tt-label-gold { color: #FFB800 !important; }
+.tt-meal-label { color: #F2EEF8 !important; }
+.tt-meal-btn { border-color: rgba(255,255,255,0.05) !important; background: #12101C !important; color: #BAB0D0 !important; }
+.tt-meal-btn.selected { border-color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; color: #FF3CAC !important; }
+.tt-meal-done { color: #00E5A0 !important; }
+.tt-info-icon { color: #5a4e70 !important; }
+.tt-info-modal-name { color: #F2EEF8 !important; }
+.tt-info-modal-desc { color: #8478A0 !important; }
+.tt-inline-tracker-label { color: #F2EEF8 !important; }
+.tt-drain-item-cat { color: #F2EEF8 !important; }
+.tt-drain-item-note { color: #8478A0 !important; }
+
+.tt-voice-btn { border-color: rgba(255,255,255,0.05) !important; background: #12101C !important; color: #BAB0D0 !important; }
+.tt-voice-btn:hover { border-color: rgba(255,255,255,0.15) !important; }
+.tt-voice-btn.selected { border-color: #E040FB !important; background: rgba(224,64,251,0.06) !important; color: #E040FB !important; }
+
+.tt-recovery-title { color: #F2EEF8 !important; }
+.tt-recovery-sub { color: #8478A0 !important; }
+.tt-recovery-footer { border-top-color: rgba(255,255,255,0.05) !important; }
+
+.tt-exp-add-btn { border-color: rgba(255,60,172,0.2) !important; color: #FF3CAC !important; }
+.tt-exp-pred-btn { border-color: rgba(255,255,255,0.05) !important; background: #12101C !important; color: #BAB0D0 !important; }
+.tt-exp-pred-btn.selected { border-color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; color: #FF3CAC !important; }
+.tt-exp-save { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
+.tt-exp-outcome-modal .tt-recovery-save { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; }
+.tt-hit { color: #00E5A0 !important; }
+.tt-miss { color: #8478A0 !important; }
+
+/* ========================================
+   27. GHOST BANNER INLINE LINK
+   ======================================== */
+
+.ghost-intro-banner a,
+.challenge-container a[href*="guide"],
+.challenge-container a[href*="how"] {
+  color: #FF3CAC !important;
+}
+
+/* ========================================
+   28. PROGRESSTAB — REMAINING
+   ======================================== */
+
+.pt-onboarding-secondary { color: #8478A0 !important; }
+
+/* ========================================
+   99. UNIVERSAL NUCLEAR CATCH-ALL
+   Broad rules that catch anything still leaking through.
+   These use low-ish specificity so component overrides above win.
+   ======================================== */
+
+/* --- All backgrounds that are white/light gray --- */
+.challenge-container [class*="card"]:not(.challenge-header):not(.score-card),
+.challenge-container [class*="section"]:not(.challenge-tabs):not(.section-divider):not(.challenge-content),
+.challenge-container [class*="modal"]:not([class*="overlay"]),
+.challenge-container [class*="sheet"],
+.challenge-container [class*="picker"],
+.challenge-container [class*="dropdown"],
+.challenge-container [class*="menu"]:not([class*="item"]) {
+  background-color: rgba(18,16,28,0.85);
+  border-color: rgba(255,255,255,0.05);
+}
+
+/* --- All dark text → light --- */
+.challenge-container [class*="title"]:not(.challenge-app-title),
+.challenge-container [class*="name"]:not(.challenge-level-name):not(.challenge-matchup-team-name),
+.challenge-container [class*="heading"] {
+  color: #F2EEF8;
+}
+
+.challenge-container [class*="desc"],
+.challenge-container [class*="sub"]:not(.sub-tab),
+.challenge-container [class*="meta"],
+.challenge-container [class*="label"]:not(.score-card-label):not(.toolbar-label):not(.challenge-total-label),
+.challenge-container [class*="hint"],
+.challenge-container [class*="note"]:not(textarea),
+.challenge-container [class*="count"],
+.challenge-container [class*="muted"],
+.challenge-container [class*="secondary"] {
+  color: #8478A0;
+}
+
+/* --- All inputs/textareas → dark --- */
+.challenge-container input:not([type="checkbox"]):not([type="radio"]),
+.challenge-container textarea,
+.challenge-container select {
+  background: #12101C !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #F2EEF8 !important;
+}
+
+.challenge-container input::placeholder,
+.challenge-container textarea::placeholder {
+  color: #5a4e70 !important;
+}
+
+/* --- All purple (#5e17eb) text → pink --- */
+.challenge-container [class*="cta"]:not(button),
+.challenge-container [class*="link"]:not(a),
+.challenge-container [class*="action"]:not(button):not(.pt-next-action) {
+  color: #FF3CAC;
+}
+
+/* --- All purple gradient buttons → pink gradient --- */
+.challenge-container button[class*="save"]:not(.tt-recovery-save),
+.challenge-container button[class*="submit"],
+.challenge-container button[class*="action"]:not(.regulation-done):not(.wf-action):not(.pt-next-action) {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
+  color: #0a0a0a !important;
+}
+
+/* --- All light borders → subtle --- */
+.challenge-container [class*="pill"]:not(.challenge-matchup-pill):not(.challenge-pill):not(.freq-pill),
+.challenge-container [class*="chip"],
+.challenge-container [class*="tag"]:not([class*="stage"]),
+.challenge-container [class*="option"],
+.challenge-container [class*="btn"]:not(.challenge-tab):not(.toolbar-item):not([class*="save"]):not([class*="submit"]):not([class*="action"]):not(.regulation-done):not(.wf-action):not(.btn-primary) {
+  border-color: rgba(255,255,255,0.08);
+}
+
+/* --- Success green → bioluminescent green --- */
+.challenge-container [class*="done"],
+.challenge-container [class*="completed"]:not(.qbc-completed-toggle),
+.challenge-container [class*="success"],
+.challenge-container [class*="has"] {
+  color: #00E5A0;
+}
+
+/* --- Danger red → bioluminescent red --- */
+.challenge-container [class*="missing"],
+.challenge-container [class*="error"],
+.challenge-container [class*="danger"] {
+  color: #FF5A6E;
+}
+
+/* --- Links → pink --- */
+.challenge-container a:not(.challenge-tab):not(.toolbar-item) {
+  color: #FF3CAC;
+}
+
+/* --- Scrollbar --- */
+.challenge-container ::-webkit-scrollbar { width: 4px; }
+.challenge-container ::-webkit-scrollbar-track { background: transparent; }
+.challenge-container ::-webkit-scrollbar-thumb { background: rgba(255,60,172,0.15); border-radius: 2px; }
+
+/* --- Living texture grain --- */
+
+.bio-living-texture {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  opacity: 0.015 !important;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E") !important;
+  background-size: 128px 128px !important;
+}

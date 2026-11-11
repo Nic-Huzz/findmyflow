@@ -170,7 +170,25 @@ When Life Map re-runs, only archive UNRATED clusters. User-rated clusters must s
 Always use `src/lib/scoreUtilities.js` for Clarity and Action Score. Never inline the formula.
 
 ### Design Consistency (IMPORTANT)
-**Light theme** throughout. Never dark backgrounds. Match `#f5f5f0` or white. Brand purple/gold for accents. Use `src/styles/flow-base.css` before inventing.
+**Bioluminescent dark theme** on `/7-day-challenge` route. Brand pink `#FF3CAC` / magenta `#E040FB` / gold `#FFB800` for accents. Other routes (flows, onboarding) still use light theme with `#f5f5f0` or white. Use `src/styles/flow-base.css` before inventing.
+
+### CSS Colors (IMPORTANT)
+**Never hardcode colors.** Always use CSS custom properties from `src/styles/theme-tokens.css`:
+```css
+/* DO THIS */
+.my-card { background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-default); }
+.my-btn { background: var(--gradient-primary); color: var(--text-on-gradient); }
+.my-link { color: var(--accent-primary); }
+.my-success { color: var(--color-success); }
+
+/* NEVER DO THIS */
+.my-card { background: #ffffff; color: #1a1a2e; border: 1px solid #e9ecef; }
+.my-btn { background: #5e17eb; }
+```
+
+Key tokens: `--bg-page`, `--bg-surface`, `--bg-muted`, `--bg-input` (backgrounds), `--text-primary`, `--text-secondary`, `--text-muted`, `--text-faint` (text), `--accent-primary`, `--accent-primary-light`, `--accent-gold` (accents), `--color-success`, `--color-danger`, `--color-warning` (semantic), `--border-default`, `--border-light`, `--border-input` (borders), `--gradient-primary`, `--gradient-bar`, `--gradient-gold` (gradients), `--shadow-card`, `--shadow-accent` (shadows). Full list in `src/styles/theme-tokens.css`.
+
+Same rule for inline JSX styles — use `var()` or add a CSS class instead of hardcoding hex values.
 
 ### CSS Scoping
 Always scope to parent: `.see-your-flow .entry-card { }` not `.entry-card { }`
