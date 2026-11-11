@@ -16,8 +16,8 @@
 
 /* === SECTION === */
 .tt-section {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
@@ -46,18 +46,18 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .tt-section-count {
   font-size: 13px;
   font-weight: 700;
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .tt-section-sub {
   font-size: 13px;
-  color: #6c757d;
+  color: var(--text-muted);
   margin: 0 0 12px;
   line-height: 1.4;
 }
@@ -98,22 +98,22 @@
 }
 
 .tt-label-maintenance {
-  color: #6c757d;
+  color: var(--text-muted);
 }
 
 .tt-label-safety {
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .tt-label-activation {
-  color: #E9A23B;
+  color: var(--accent-gold);
 }
 
 .tt-subsection-count {
   margin-left: auto;
   font-size: 11px;
   font-weight: 700;
-  color: #adb5bd;
+  color: var(--text-faint);
 }
 
 /* === SCORE BADGES (inline with section/subsection titles) === */
@@ -127,12 +127,12 @@
 
 .tt-score-maintenance {
   background: rgba(16, 185, 129, 0.08);
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .tt-score-safety {
   background: rgba(94, 23, 235, 0.08);
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .tt-score-expression {
@@ -163,7 +163,7 @@
 .tt-meal-label {
   font-size: 13px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
   min-width: 70px;
 }
 
@@ -175,8 +175,8 @@
 .tt-meal-btn {
   padding: 5px 10px;
   border-radius: 8px;
-  border: 1.5px solid #e9ecef;
-  background: #ffffff;
+  border: 1.5px solid var(--border-default);
+  background: var(--bg-surface);
   font-size: 11px;
   font-weight: 700;
   cursor: pointer;
@@ -196,7 +196,7 @@
 
 .tt-meal-done {
   font-size: 14px;
-  color: #10b981;
+  color: var(--color-success);
   font-weight: 700;
 }
 
@@ -209,7 +209,7 @@
 
 .tt-info-icon {
   font-size: 11px;
-  color: #adb5bd;
+  color: var(--text-faint);
   flex-shrink: 0;
 }
 
@@ -231,7 +231,7 @@
 }
 
 .tt-info-modal {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 24px;
   max-width: 340px;
@@ -249,13 +249,13 @@
 .tt-info-modal-name {
   font-size: 16px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .tt-info-modal-desc {
   font-size: 14px;
-  color: #6c757d;
+  color: var(--text-muted);
   line-height: 1.5;
   margin-bottom: 16px;
 }
@@ -263,7 +263,7 @@
 .tt-info-modal-close {
   padding: 10px 28px;
   background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  color: #ffffff;
+  color: var(--text-on-accent);
   border: none;
   border-radius: 10px;
   font-size: 14px;
@@ -285,18 +285,18 @@
 
 /* === DRAIN SECTION === */
 .tt-drain-count {
-  color: #f97316;
+  color: var(--color-warning);
 }
 
 .tt-drain-log-btn {
   width: 100%;
   padding: 12px;
-  background: #f8f9fa;
-  border: 2px dashed #dee2e6;
+  background: var(--bg-muted);
+  border: 2px dashed var(--border-light);
   border-radius: 12px;
   font-size: 14px;
   font-weight: 700;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
@@ -304,8 +304,8 @@
 }
 
 .tt-drain-log-btn:hover {
-  border-color: #f97316;
-  color: #f97316;
+  border-color: var(--color-warning);
+  color: var(--color-warning);
   background: rgba(249, 115, 22, 0.04);
 }
 
@@ -330,7 +330,7 @@
 .tt-inline-tracker-label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -366,48 +366,48 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: #ffffff;
-  border: 2px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 100px;
   font-size: 13px;
   font-weight: 700;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
 }
 
 .tt-drain-cat-btn:hover {
-  border-color: #f97316;
+  border-color: var(--color-warning);
 }
 
 .tt-drain-cat-btn.selected {
-  border-color: #f97316;
+  border-color: var(--color-warning);
   background: rgba(249, 115, 22, 0.06);
-  color: #f97316;
+  color: var(--color-warning);
 }
 
 .tt-drain-note {
   width: 100%;
   padding: 12px 14px;
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
+  background: var(--bg-muted);
+  border: 2px solid var(--border-default);
   border-radius: 12px;
   font-size: 15px;
   font-family: inherit;
-  color: #1a1a2e;
+  color: var(--text-primary);
   transition: all 0.2s;
 }
 
 .tt-drain-note:focus {
   outline: none;
-  border-color: #f97316;
-  background: #ffffff;
+  border-color: var(--color-warning);
+  background: var(--bg-surface);
   box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
 }
 
 .tt-drain-note::placeholder {
-  color: #adb5bd;
+  color: var(--text-faint);
 }
 
 .tt-drain-state {
@@ -417,7 +417,7 @@
 .tt-state-label {
   font-size: 12px;
   font-weight: 700;
-  color: #6c757d;
+  color: var(--text-muted);
   display: block;
   margin-bottom: 6px;
 }
@@ -431,8 +431,8 @@
   flex: 1;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
-  background: #ffffff;
+  border: 2px solid var(--border-default);
+  background: var(--bg-surface);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -454,22 +454,22 @@
 }
 
 .tt-state-activated {
-  color: #f97316;
+  color: var(--color-warning);
 }
 
 .tt-state-activated:hover:not(:disabled),
 .tt-state-activated.selected {
-  border-color: #f97316;
+  border-color: var(--color-warning);
   background: rgba(249, 115, 22, 0.04);
 }
 
 .tt-state-shutdown {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .tt-state-shutdown:hover:not(:disabled),
 .tt-state-shutdown.selected {
-  border-color: #ef4444;
+  border-color: var(--color-danger);
   background: rgba(239, 68, 68, 0.04);
 }
 
@@ -482,7 +482,7 @@
   flex: 1;
   padding: 12px;
   background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-  color: #ffffff;
+  color: var(--text-on-accent);
   border: none;
   border-radius: 12px;
   font-size: 15px;
@@ -505,12 +505,12 @@
 
 .tt-drain-cancel {
   padding: 12px 16px;
-  background: #ffffff;
-  border: 2px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   font-family: inherit;
 }
@@ -544,13 +544,13 @@
 .tt-drain-item-cat {
   font-size: 13px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   display: block;
 }
 
 .tt-drain-item-note {
   font-size: 12px;
-  color: #6c757d;
+  color: var(--text-muted);
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -562,11 +562,11 @@
   flex-shrink: 0;
 }
 
-.tt-activated { color: #f97316; }
-.tt-shutdown { color: #ef4444; }
+.tt-activated { color: var(--color-warning); }
+.tt-shutdown { color: var(--color-danger); }
 
 /* Stall overrides (reuses tt-drain-* layout, different accent) */
-.tt-stall-count { color: #8b5cf6; }
+.tt-stall-count { color: var(--accent-primary-light); }
 
 .tt-stall-voice {
   margin-top: 8px;
@@ -581,11 +581,11 @@
 .tt-voice-btn {
   padding: 8px 14px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
-  background: #ffffff;
+  border: 2px solid var(--border-default);
+  background: var(--bg-surface);
   font-size: 13px;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
@@ -595,18 +595,18 @@
 }
 
 .tt-voice-btn.selected {
-  border-color: #8b5cf6;
+  border-color: var(--accent-primary-light);
   background: rgba(139, 92, 246, 0.06);
-  color: #8b5cf6;
+  color: var(--accent-primary-light);
 }
 
 .tt-stall-log-btn {
   border-color: rgba(139, 92, 246, 0.2);
-  color: #8b5cf6;
+  color: var(--accent-primary-light);
 }
 
 .tt-stall-log-btn:hover {
-  border-color: #8b5cf6;
+  border-color: var(--accent-primary-light);
   background: rgba(139, 92, 246, 0.04);
 }
 
@@ -654,17 +654,17 @@
 }
 
 .tt-recovery-avg {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .tt-recover-btn {
   padding: 6px 12px;
   background: transparent;
-  border: 1.5px solid #e9ecef;
+  border: 1.5px solid var(--border-default);
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
@@ -677,15 +677,15 @@
 }
 
 .tt-recover-btn:hover {
-  border-color: #10b981;
-  color: #10b981;
+  border-color: var(--color-success);
+  color: var(--color-success);
   background: rgba(16, 185, 129, 0.04);
 }
 
 .tt-recovered-badge {
   font-size: 11px;
   font-weight: 700;
-  color: #10b981;
+  color: var(--color-success);
   flex-shrink: 0;
 }
 
@@ -702,7 +702,7 @@
 }
 
 .tt-recovery-sheet {
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: 20px 20px 0 0;
   width: 100%;
   max-width: 480px;
@@ -720,7 +720,7 @@
 .tt-recovery-handle {
   width: 36px;
   height: 4px;
-  background: #dee2e6;
+  background: var(--border-light);
   border-radius: 2px;
   margin: 10px auto 0;
   flex-shrink: 0;
@@ -741,14 +741,14 @@
 .tt-recovery-title {
   font-size: 18px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .tt-recovery-sub {
   font-size: 13px;
   font-weight: 600;
-  color: #6c757d;
+  color: var(--text-muted);
   margin: 4px 0 0;
 }
 
@@ -767,7 +767,7 @@
   display: block;
   font-size: 12px;
   font-weight: 700;
-  color: #adb5bd;
+  color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 8px;
@@ -782,22 +782,22 @@
 .tt-recovery-dur {
   flex: 1;
   padding: 10px 2px;
-  background: #f8f9fa;
-  border: 1.5px solid #e9ecef;
+  background: var(--bg-muted);
+  border: 1.5px solid var(--border-default);
   border-radius: 10px;
   font-size: 12px;
   font-family: inherit;
   font-weight: 600;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.15s ease;
   text-align: center;
 }
 
 .tt-recovery-dur.selected {
-  background: #5e17eb;
-  border-color: #5e17eb;
-  color: #fff;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--text-on-accent);
 }
 
 /* Activity pills */
@@ -811,38 +811,38 @@
 .tt-recovery-activity {
   padding: 8px 14px;
   border-radius: 100px;
-  border: 1.5px solid #e9ecef;
+  border: 1.5px solid var(--border-default);
   background: #fafafa;
   font-size: 13px;
   font-weight: 600;
-  color: #6c757d;
+  color: var(--text-muted);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s ease;
 }
 
 .tt-recovery-activity.selected {
-  border-color: #10b981;
+  border-color: var(--color-success);
   background: rgba(16, 185, 129, 0.08);
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .tt-recovery-other {
   width: 100%;
   padding: 10px 12px;
-  border: 1.5px solid #e9ecef;
+  border: 1.5px solid var(--border-default);
   border-radius: 10px;
   font-size: 13px;
   font-family: inherit;
-  color: #1a1a2e;
+  color: var(--text-primary);
   background: #fafafa;
   box-sizing: border-box;
 }
 
 .tt-recovery-other:focus {
   outline: none;
-  border-color: #10b981;
-  background: #fff;
+  border-color: var(--color-success);
+  background: var(--bg-surface);
 }
 
 /* Sticky footer */
@@ -856,7 +856,7 @@
   width: 100%;
   padding: 14px;
   background: linear-gradient(135deg, #10b981, #059669);
-  color: #ffffff;
+  color: var(--text-on-accent);
   border: none;
   border-radius: 12px;
   font-size: 15px;
@@ -898,11 +898,11 @@
 /* === EXPERIENCE CHECK-IN === */
 .tt-exp-add-btn {
   border-color: rgba(94, 23, 235, 0.2);
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .tt-exp-add-btn:hover:not(:disabled) {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   background: rgba(94, 23, 235, 0.04);
 }
 
@@ -931,11 +931,11 @@
   min-width: calc(50% - 4px);
   padding: 10px 8px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
-  background: #ffffff;
+  border: 2px solid var(--border-default);
+  background: var(--bg-surface);
   font-size: 13px;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
@@ -946,9 +946,9 @@
 }
 
 .tt-exp-pred-btn.selected {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   background: rgba(94, 23, 235, 0.06);
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .tt-exp-save {
@@ -977,9 +977,9 @@
 }
 
 .tt-hit {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .tt-miss {
-  color: #6c757d;
+  color: var(--text-muted);
 }
