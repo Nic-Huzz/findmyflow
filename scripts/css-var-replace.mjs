@@ -184,8 +184,8 @@ for (let i = 0; i < lines.length; i++) {
   // 3. Universal replacements (accents, semantic, borders) — for any property
   //    But skip accent colors inside gradient() to avoid breaking gradient syntax
   for (const entry of UNIVERSAL_MAP) {
-    if (isGradient && (entry.token === '--accent-primary' || entry.token === '--accent-primary-light')) {
-      // Don't replace inside gradients — these are part of gradient color stops
+    if (isGradient) {
+      // Don't replace color stops inside gradients — keep them as raw hex for consistency
       continue;
     }
     newLine = replaceInLine(newLine, entry.patterns, entry.token);
