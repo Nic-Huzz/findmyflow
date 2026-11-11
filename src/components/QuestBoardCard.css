@@ -245,7 +245,7 @@
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  color: var(--border-input);
+  color: #d1d5db;
   font-family: inherit;
   transition: all 0.15s;
   padding: 0;
