@@ -8,6 +8,18 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
+.wf-card-prompt {
+  text-align: center;
+  padding: 16px 18px;
+}
+
+.wf-prompt-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: -0.01em;
+}
+
 .wf-header {
   display: flex;
   align-items: center;
@@ -142,6 +154,65 @@
   padding: 10px 0 0;
 }
 
+/* ── Quest pills (horizontal scroll) ── */
+.wf-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 0 12px;
+  margin-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.wf-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.wf-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f5f0;
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.wf-pill:active {
+  transform: scale(0.97);
+}
+
+.wf-pill-active {
+  background: rgba(94, 23, 235, 0.06);
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.wf-pill-count {
+  background: rgba(94, 23, 235, 0.1);
+  color: #5e17eb;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 10px;
+  line-height: 1.4;
+}
+
+.wf-pill-active .wf-pill-count {
+  background: #5e17eb;
+  color: #fff;
+}
+
 /* ── Picker mode ── */
 .wf-empty {
   font-size: 13px;
@@ -154,22 +225,7 @@
 .wf-picker {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.wf-quest-group {
-  display: flex;
-  flex-direction: column;
   gap: 6px;
-}
-
-.wf-quest-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #9ca3af;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0 4px 2px;
 }
 
 .wf-pick {

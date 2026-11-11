@@ -10,9 +10,11 @@
  * Created: 2026-03-27
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
+import { getWeekStartLocal } from '../../lib/dateUtils'
+import { hapticLight } from '../../lib/haptics'
 import { useAuth } from '../../auth/AuthProvider'
 import confetti from 'canvas-confetti'
 import { getLevelConfig, LEVEL_CONFIG } from './LevelConfig'
@@ -78,6 +80,85 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [matrixData, setMatrixData] = useState(null) // { actionScore, clarityPct, zone, total }
   const [hasCurrentJob, setHasCurrentJob] = useState(false)
   const [hasDomeData, setHasDomeData] = useState(false)
+
+  // Quest swipe carousel
+  const questStripRef = useRef(null)
+  const [activeQuestIdx, setActiveQuestIdx] = useState(0)
+
+  const activePathQuests = useMemo(() =>
+    quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job),
+  [quests])
+
+  const activeQuestIds = useMemo(() => activePathQuests.map(q => q.id).join(','), [activePathQuests])
+
+  // Intersection observer for quest swipe dots
+  useEffect(() => {
+    const strip = questStripRef.current
+    if (!strip || activePathQuests.length <= 1) return
+    const cards = strip.querySelectorAll('.quest-swipe-card')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = Array.from(cards).indexOf(entry.target)
+            if (idx >= 0) setActiveQuestIdx(idx)
+          }
+        })
+      },
+      { root: strip, threshold: 0.6 }
+    )
+    cards.forEach(card => observer.observe(card))
+    return () => observer.disconnect()
+  }, [activeQuestIds])
+
+  const scrollToQuest = useCallback((idx) => {
+    const strip = questStripRef.current
+    if (!strip) return
+    strip.scrollTo({ left: idx * strip.clientWidth, behavior: 'smooth' })
+  }, [])
+
+  // Weekly focus state (lifted from WeeklyFocus — shared with QuestBoardCard)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const WEEK_KEY = useMemo(() => 'weekly_focus_challenge_' + getWeekStartLocal(), [])
+  const [weeklyFocusId, setWeeklyFocusId] = useState(null)
+  const [weeklyFocusCompleted, setWeeklyFocusCompleted] = useState(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(WEEK_KEY)
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored)
+        setWeeklyFocusId(parsed.taskId)
+        setWeeklyFocusCompleted(!!parsed.completed)
+      } catch { /* ignore */ }
+    }
+  }, [WEEK_KEY])
+
+  // Sync: if focused task was completed via QuestBoardCard, mark completed
+  useEffect(() => {
+    if (!weeklyFocusId || weeklyFocusCompleted) return
+    for (const q of quests) {
+      const task = (questTasks[q.id] || []).find(t => t.id === weeklyFocusId)
+      if (task?.done) {
+        localStorage.setItem(WEEK_KEY, JSON.stringify({ taskId: weeklyFocusId, completed: true }))
+        setWeeklyFocusCompleted(true)
+        break
+      }
+    }
+  }, [weeklyFocusId, weeklyFocusCompleted, quests, questTasks, WEEK_KEY])
+
+  const saveWeeklyFocus = useCallback((taskId) => {
+    localStorage.setItem(WEEK_KEY, JSON.stringify({ taskId, completed: false }))
+    setWeeklyFocusId(taskId)
+    setWeeklyFocusCompleted(false)
+    hapticLight()
+  }, [WEEK_KEY])
+
+  const clearWeeklyFocus = useCallback(() => {
+    localStorage.removeItem(WEEK_KEY)
+    setWeeklyFocusId(null)
+    setWeeklyFocusCompleted(false)
+  }, [WEEK_KEY])
 
   // Load matrix data (Action Score + Clarity)
   useEffect(() => {
@@ -153,6 +234,13 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       }
     }
   }, [userId])
+
+  const handleWeeklyFocusComplete = useCallback(() => {
+    localStorage.setItem(WEEK_KEY, JSON.stringify({ taskId: weeklyFocusId, completed: true }))
+    setWeeklyFocusCompleted(true)
+    loadQuests()
+    onRefreshPoints?.()
+  }, [WEEK_KEY, weeklyFocusId, loadQuests, onRefreshPoints])
 
   // Add quest
   const handleAddQuest = async () => {
@@ -473,69 +561,61 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
 
       {/* ══════ QUEST BOARD ══════ */}
 
-      {/* Active Quests */}
-      {/* Life Path Progress button — above quests */}
-      {hasLifePaths && quests.filter(q => q.status === 'active').length > 0 && (
-        <button className="quest-path-btn" onClick={() => navigate('/quest-map')}>
-          <span className="quest-path-btn-icon">✦</span>
-          <span>Your Life Paths</span>
-          <span className="quest-path-btn-arrow">→</span>
-        </button>
-      )}
-
-      {/* Weekly Focus — one courage challenge a week */}
+      {/* Weekly Focus — display only, picking happens in quest cards */}
       <WeeklyFocus
+        focusId={weeklyFocusId}
+        completed={weeklyFocusCompleted}
         quests={quests}
         questTasks={questTasks}
         userId={userId}
         courageCount={courageCount}
-        onCompleteCourage={() => {
-          loadQuests()
-          onRefreshPoints?.()
-        }}
-        onAddChallenge={() => {
-          loadQuests()
-        }}
+        onCompleteCourage={handleWeeklyFocusComplete}
+        onClearFocus={clearWeeklyFocus}
       />
 
       <div className="quest-section">
+        {/* Header with dots */}
         <div className="quest-section-header">
           <span className="quest-section-title">Your Paths</span>
+          {activePathQuests.length > 1 && (
+            <div className="quest-swipe-dots">
+              {activePathQuests.map((_, i) => (
+                <button
+                  key={i}
+                  className={`quest-swipe-dot ${i === activeQuestIdx ? 'active' : ''}`}
+                  onClick={() => scrollToQuest(i)}
+                />
+              ))}
+            </div>
+          )}
         </div>
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && !hasLifePaths && (
+        {activePathQuests.length === 0 && !hasLifePaths && (
           <div className="quest-empty quest-locked-card">
             <p>You know what lights you up. Now pick your paths.</p>
             <a href="/choose-quests" className="quest-locked-link">Find Your Path →</a>
           </div>
         )}
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).length === 0 && hasLifePaths && (
+        {activePathQuests.length === 0 && hasLifePaths && (
           <div className="quest-empty">No active paths yet. Add one from your life paths below.</div>
         )}
-        {!hasLifePaths && quests.length > 0 && (
-          <div className="quest-soft-prompt">
-            <a href="/try/life-paths">Complete Life Paths</a> to see your progress map
+
+        {/* Quest swipe carousel */}
+        {activePathQuests.length > 0 && (
+          <div className="quest-swipe-wrapper">
+            <div className="quest-swipe-strip" ref={questStripRef}>
+              {activePathQuests.map(q => (
+                <div key={q.id} className="quest-swipe-card">
+                  <QuestBoardCard quest={q} tasks={questTasks[q.id] || []} experiences={questExperiences[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} alwaysExpanded weeklyFocusId={weeklyFocusId} onPickWeeklyFocus={saveWeeklyFocus} />
+                </div>
+              ))}
+            </div>
           </div>
         )}
-        {quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job).sort((a, b) => {
-          const order = { vibe: 0, peace: 1, anxious: 2, shutdown: 3 }
-          return (order[a.predicted_state] ?? 4) - (order[b.predicted_state] ?? 4)
-        }).map(q => (
-          <QuestBoardCard key={q.id} quest={q} tasks={questTasks[q.id] || []} experiences={questExperiences[q.id] || []} userId={userId} onUpdate={() => { loadQuests(); onRefreshPoints?.() }} />
-        ))}
-        {/* Find Your Flow CTA — show when active quests exist but at least one has no flow statement */}
-        {quests.some(q => q.status === 'active' && !q.is_bridge_job && !q.flow_statement) && (
-          <button className="quest-flow-cta" onClick={() => navigate('/curiosity-map')}>
-            Want more personalised courage challenges? Find your flow →
-          </button>
-        )}
-
         {/* Discovery prompt */}
         <div className="quest-discover-prompt" onClick={() => navigate('/experience-game?returnTo=' + encodeURIComponent('/7-day-challenge?tab=weekly'))}>
-          Not feeling any of these? Find something new →
+          Explore new paths →
         </div>
-        {hasLifePaths && !showAddQuest && (
-          <button className="quest-add-btn" onClick={() => setShowAddQuest(true)}>+ Add Path</button>
-        )}
+        {/* "+ Add Path" removed — "Explore new paths" handles discovery */}
         {hasLifePaths && showAddQuest && (
           <div className="quest-add-modal">
             <div className="quest-add-title">What life path are you pursuing?</div>
@@ -600,7 +680,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
             onDone={() => setSkillLevelPicker(null)}
           />
         )}
-        <div className="quest-recommend">We recommend focusing on 1-3 quests at a time</div>
+        {/* quest-recommend removed — patronising */}
 
         {/* Zone Matrix moved to Progress tab */}
       </div>
@@ -876,25 +956,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
       />
 
 
-      {/* Life Map enrichment CTA — optional, shown when user has quests but no Life Map */}
-      {quests.length > 0 && !hasLifeMap && (
-        <button
-          onClick={() => navigate('/life-map')}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 12, width: '100%',
-            padding: '14px 16px', borderRadius: 14, border: '1px solid rgba(94,23,235,0.1)',
-            background: 'rgba(94,23,235,0.03)', cursor: 'pointer', fontFamily: 'inherit',
-            textAlign: 'left', marginTop: 16,
-          }}
-        >
-          <span style={{ fontSize: 24, flexShrink: 0 }}>🗺️</span>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#5e17eb' }}>Understand WHY these light you up</div>
-            <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.4)', marginTop: 2 }}>Map your life story to uncover the deeper patterns.</div>
-          </div>
-          <span style={{ fontSize: 16, color: 'rgba(0,0,0,0.2)', flexShrink: 0 }}>›</span>
-        </button>
-      )}
+      {/* Life Map enrichment CTA moved to Progress tab */}
 
       {showJourney && (
         <JourneyGraphPopup

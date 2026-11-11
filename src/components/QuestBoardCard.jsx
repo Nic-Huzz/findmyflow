@@ -43,9 +43,9 @@ const STATE_ICONS = {
   uninterested: <MinusCircleIcon style={{ width: 16, height: 16, color: '#6b7280' }} />,
 }
 
-export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate }) {
+export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate, alwaysExpanded = false, weeklyFocusId = null, onPickWeeklyFocus = null }) {
   const navigate = useNavigate()
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(alwaysExpanded)
   const [showAllTasks, setShowAllTasks] = useState(false)
   const [taskInput, setTaskInput] = useState('')
   const [showTaskInput, setShowTaskInput] = useState(false)
@@ -492,13 +492,21 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     const dims = getDims(task)
     const hasDims = dims.length > 0
     const isTaskExpanded = expandedTaskId === task.id
+    const isFocused = weeklyFocusId === task.id
+    const canPickFocus = task.is_courage_challenge && !task.done && onPickWeeklyFocus
     return (
     <div key={task.id}>
       <div
-        className={`qbc-task-row ${isTaskExpanded ? 'qbc-task-row--expanded' : ''}`}
+        className={`qbc-task-row ${isTaskExpanded ? 'qbc-task-row--expanded' : ''} ${isFocused ? 'qbc-task-row--focused' : ''}`}
         onClick={hasDims ? () => setExpandedTaskId(isTaskExpanded ? null : task.id) : undefined}
       >
-        <button className="qbc-check" onClick={(e) => { e.stopPropagation(); toggleTask(task) }} />
+        {canPickFocus ? (
+          <button className={`qbc-focus-radio ${isFocused ? 'qbc-focus-radio--active' : ''}`} onClick={(e) => { e.stopPropagation(); onPickWeeklyFocus(task.id) }}>
+            {isFocused ? '●' : '○'}
+          </button>
+        ) : (
+          <button className="qbc-check" onClick={(e) => { e.stopPropagation(); toggleTask(task) }} />
+        )}
         <div className="qbc-task-content">
           <div className="qbc-task-text">{task.text}</div>
         </div>
@@ -569,8 +577,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
     <div className="qbc">
       {/* Header */}
       <div className="qbc-header">
-        <div className="qbc-header-main" onClick={() => { setExpanded(!expanded); setShowMenu(false) }}>
-          <div className="qbc-dot" style={{ background: quest.color || stateMeta?.color || '#6b7280' }} />
+        <div className="qbc-header-main" onClick={() => { if (!alwaysExpanded) { setExpanded(!expanded); setShowMenu(false) } }}>
           {renaming === 'quest' ? (
             <input ref={renameRef} className="qbc-rename-input" value={renameText}
               onChange={e => setRenameText(e.target.value)}
@@ -586,7 +593,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
           {courageCount > 0 && (
             <div className="qbc-badge">{courageDoneCount}/{courageCount}</div>
           )}
-          <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>
+          {!alwaysExpanded && <div className="qbc-chevron">{expanded ? '▴' : '▾'}</div>}
         </div>
         <button className="qbc-menu-trigger" onClick={(e) => { e.stopPropagation(); setShowMenu(!showMenu); setShowClose(false); setShowRenameProject(false) }}>···</button>
         {showMenu && (
@@ -639,17 +646,17 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             </div>
           )}
 
-          {/* Define path CTA — shows when quest has no current_dimensions (not for current job reference) */}
-          {(!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && !(quest.is_current_job && quest.status === 'reference') && (
+          {/* Define path CTA — hidden in swipe mode */}
+          {!alwaysExpanded && (!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && !(quest.is_current_job && quest.status === 'reference') && (
             <button className="qbc-define-cta" onClick={() => navigate(`/path-definition/${quest.id}`)}>
               Define this path →
             </button>
           )}
 
-          {/* Next Move — AI-generated passion challenge recommendation */}
-          {renderNextMove()}
+          {/* Next Move — hidden in swipe mode (weekly focus handles picking) */}
+          {!alwaysExpanded && renderNextMove()}
 
-          {/* Experience sections (collapsible) */}
+          {/* Experience sections (collapsible) — no state badges in swipe mode */}
           {hasExperiences && activeExperiences.map(exp => {
             const expTasks = incomplete.filter(t => t.experience_id === exp.id)
             const isCollapsed = collapsedExps.has(exp.id)
@@ -667,7 +674,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
                   ) : (
                     <span className="qbc-exp-name" onDoubleClick={(e) => { e.stopPropagation(); startRename(exp.id, exp.label) }}>{exp.label}</span>
                   )}
-                  {isReRating ? (
+                  {!alwaysExpanded && (isReRating ? (
                     <div className="qbc-exp-rerate" onClick={e => e.stopPropagation()}>
                       {['vibe_rise', 'fun', 'pressure', 'uninterested'].map(s => (
                         <button key={s}
@@ -684,7 +691,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
                       title="Tap to update">
                       {STATE_LABELS[exp.capacity_state] || 'Rate'}
                     </button>
-                  )}
+                  ))}
                   <span className="qbc-exp-chevron">{isCollapsed ? '▸' : '▾'}</span>
                 </div>
                 {!isCollapsed && (
@@ -754,30 +761,19 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             </div>
           )}
 
-          {/* Add buttons */}
-          <div className="qbc-add-actions">
+          {/* Add buttons — compact in swipe mode */}
+          <div className={`qbc-add-actions ${alwaysExpanded ? 'qbc-add-actions--compact' : ''}`}>
             <button className="qbc-add-courage-btn" onClick={() => {
               setWahooCreatorText('')
               setShowWahooCreator(true)
             }}>
-              <BoltIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> Add courage challenge
+              <BoltIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> {alwaysExpanded ? 'Add challenge' : 'Add courage challenge'}
             </button>
             <button className="qbc-add-task-btn" onClick={() => { setShowTaskInput(true); setTimeout(() => inputRef.current?.focus(), 50) }}>
               + Add task
             </button>
           </div>
-          {incomplete.some(t => t.is_courage_challenge) && (
-            <button className="qbc-stuck-hint" onClick={() => {
-              const firstCourage = incomplete.find(t => t.is_courage_challenge)
-              if (firstCourage) {
-                setHealingTaskId(firstCourage.id)
-                setHealingTaskText(firstCourage.text || '')
-                setHealingExistingData(healingIntentions[firstCourage.id] || null)
-              }
-            }}>
-              Feeling stuck with a challenge?
-            </button>
-          )}
+          {/* "Feeling stuck" removed — accessible via ⚡ icon on each task */}
 
           {/* Inline task input */}
           {showTaskInput && (

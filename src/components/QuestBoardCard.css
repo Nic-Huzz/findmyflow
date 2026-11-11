@@ -232,6 +232,39 @@
   color: #fff;
 }
 
+/* Focus radio for courage challenge picking */
+.qbc-focus-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #d1d5db;
+  font-family: inherit;
+  transition: all 0.15s;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1;
+}
+
+.qbc-focus-radio--active {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.qbc-task-row--focused {
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 10px;
+  margin: -2px -4px;
+  padding: 2px 4px;
+}
+
 .qbc-task-content { flex: 1; min-width: 0; }
 .qbc-task-text { font-size: 13px; font-weight: 500; color: #1a1a2e; line-height: 1.4; }
 .qbc-task-row--done .qbc-task-text { text-decoration: line-through; color: #b8bbc6; }
@@ -408,6 +441,29 @@
   transition: all 0.15s;
 }
 .qbc-add-task-btn:active { background: rgba(0, 0, 0, 0.06); }
+
+/* Compact mode for swipe cards */
+.qbc-add-actions--compact {
+  gap: 8px;
+  padding-top: 10px;
+  margin-top: 8px;
+}
+.qbc-add-actions--compact .qbc-add-courage-btn {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.qbc-add-actions--compact .qbc-add-task-btn {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+/* Flat task list for swipe mode */
+.qbc-flat-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0 4px;
+}
 
 .qbc-stuck-hint {
   display: block;

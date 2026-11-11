@@ -800,6 +800,56 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 4px;
+  justify-content: space-between;
+}
+
+/* ── Quest swipe carousel ── */
+.quest-swipe-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.quest-swipe-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d1d5db;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.quest-swipe-dot.active {
+  width: 8px;
+  height: 8px;
+  background: #5e17eb;
+}
+
+.quest-swipe-wrapper {
+  margin: 0 -20px;
+}
+
+.quest-swipe-strip {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 0;
+}
+
+.quest-swipe-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.quest-swipe-card {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .quest-section-icon {
