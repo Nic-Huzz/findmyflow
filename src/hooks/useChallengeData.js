@@ -158,23 +158,19 @@ export function useChallengeData() {
     }
   }, [location.search])
 
-  // Setup completion check — queries mirror ProgressTab exactly (lines 574-590).
-  // Runs once per user session to determine which tab to land on.
+  // Setup completion check — determines landing tab.
+  // dome + essence = Weekly (post-onboarding, needs to choose quests)
+  // dome + essence + quests = Daily (fully set up)
+  // neither = Progress (brand new)
   useEffect(() => {
     if (!user?.id) return
     Promise.all([
-      // Dome check — same as ProgressTab line 663
       supabase.from('experience_dome_ratings').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
-      // Essence check — must match ProgressTab line 575: checks lead_flow_profiles, NOT user_stage_progress
       supabase.from('lead_flow_profiles').select('id').eq('user_id', user.id).limit(1),
-      // Money map check — same as ProgressTab line 582
-      supabase.from('user_stage_progress').select('money_map_completed').eq('user_id', user.id).maybeSingle(),
-      // Paths check — must match ProgressTab line 586: active, non-current-job quests
       supabase.from('quests').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'active').neq('is_current_job', true),
-    ]).then(([domeRes, essenceRes, stageRes, questsRes]) => {
+    ]).then(([domeRes, essenceRes, questsRes]) => {
       const done = (domeRes.count || 0) > 0
         && (essenceRes.data?.length || 0) > 0
-        && !!stageRes.data?.money_map_completed
         && (questsRes.count || 0) > 0
       setAllSetupDone(done)
     })
@@ -202,11 +198,11 @@ export function useChallengeData() {
     initialLandingSet.current = true
 
     if (allSetupDone) {
-      setActiveCategory('Daily')        // Returning complete user
-    } else if (hasDome && !hasQuests) {
-      setActiveCategory('Weekly')        // Post-onboarding: has dome data, needs to choose quests
+      setActiveCategory('Daily')        // dome + essence + quests = fully set up
+    } else if (hasDome) {
+      setActiveCategory('Weekly')        // dome + essence, needs to choose quests
     } else {
-      setActiveCategory('Progress')      // Brand new / solo fallback
+      setActiveCategory('Progress')      // brand new / no onboarding yet
     }
   }, [activeCategory, allSetupDone, hasDome, hasQuests])
 
