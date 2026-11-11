@@ -20,7 +20,7 @@
   border: none;
   font-size: 13px;
   font-weight: 600;
-  color: #9ca3af;
+  color: var(--text-faint);
   cursor: pointer;
   padding: 0;
 }
@@ -39,7 +39,7 @@
 
 .regulation-state-badge.state-ventral {
   background: rgba(52, 211, 153, 0.12);
-  color: #059669;
+  color: var(--color-success-dark);
 }
 
 .regulation-state-badge.state-vibe_rise {
@@ -49,7 +49,7 @@
 
 .regulation-state-badge.state-sympathetic {
   background: rgba(239, 68, 68, 0.1);
-  color: #dc2626;
+  color: var(--color-danger-dark);
 }
 
 .regulation-state-badge.state-dorsal {
@@ -60,13 +60,13 @@
 .regulation-title {
   font-size: 20px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 4px;
 }
 
 .regulation-subtitle {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--text-muted);
   margin: 0 0 18px;
   line-height: 1.5;
 }
@@ -82,7 +82,7 @@
 
 .regulation-single .regulation-instruction {
   font-size: 15px;
-  color: #374151;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0 0 8px;
   font-weight: 500;
@@ -108,9 +108,9 @@
   display: flex;
   flex-direction: column;
   padding: 14px 16px;
-  border: 1.5px solid #eef0f3;
+  border: 1.5px solid var(--border-input);
   border-radius: 14px;
-  background: #f8f8fa;
+  background: var(--bg-input);
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
@@ -118,13 +118,13 @@
 }
 
 .regulation-exercise:hover {
-  border-color: #d1d5db;
+  border-color: var(--border-input);
   background: #f3f4f6;
 }
 
 .regulation-exercise.expanded {
   background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%);
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   box-shadow: 0 2px 12px rgba(94, 23, 235, 0.1);
 }
 
@@ -138,13 +138,13 @@
 .regulation-exercise-name {
   font-size: 14px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .regulation-duration {
   font-size: 11px;
   font-weight: 700;
-  color: #9ca3af;
+  color: var(--text-faint);
   background: rgba(0, 0, 0, 0.04);
   padding: 3px 10px;
   border-radius: 20px;
@@ -153,7 +153,7 @@
 
 .regulation-exercise.expanded .regulation-duration {
   background: rgba(94, 23, 235, 0.08);
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .regulation-instruction {
@@ -175,7 +175,7 @@
   border: none;
   border-radius: 14px;
   background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
-  color: white;
+  color: var(--text-on-accent);
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
@@ -193,10 +193,10 @@
 
 .regulation-skip {
   padding: 14px 20px;
-  border: 1.5px solid #e5e7eb;
+  border: 1.5px solid var(--border-light);
   border-radius: 14px;
-  background: white;
-  color: #9ca3af;
+  background: var(--bg-surface);
+  color: var(--text-faint);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -204,6 +204,6 @@
 }
 
 .regulation-skip:hover {
-  border-color: #d1d5db;
-  color: #6b7280;
+  border-color: var(--border-input);
+  color: var(--text-muted);
 }
