@@ -20,7 +20,7 @@ if (!filePath) {
 // Background replacements (used when the property is background/background-color)
 const BG_MAP = [
   // bg-surface: white
-  { patterns: ['#ffffff', '#FFFFFF', 'white'], token: '--bg-surface' },
+  { patterns: ['#ffffff', '#FFFFFF', '#fff', '#FFF', 'white'], token: '--bg-surface' },
   // bg-muted
   { patterns: ['#f8f9fa', '#F8F9FA', '#f5f5f5', '#F5F5F5', '#f1f3f5', '#F1F3F5', '#f0f0f0', '#F0F0F0'], token: '--bg-muted' },
   // bg-surface-hover
@@ -76,20 +76,31 @@ const UNIVERSAL_MAP = [
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function isInsideKeyframes(lines, lineIndex) {
-  // Walk backwards from the line to see if we're inside @keyframes
-  let braceDepth = 0;
-  for (let i = lineIndex; i >= 0; i--) {
+  // Pre-scan: find all @keyframes blocks and their closing braces
+  // Then check if lineIndex falls inside any of them
+  let depth = 0;
+  let inKeyframes = false;
+  let kfStartLine = -1;
+
+  for (let i = 0; i <= lineIndex; i++) {
     const line = lines[i];
-    // Count braces
-    for (const ch of line) {
-      if (ch === '}') braceDepth++;
-      if (ch === '{') braceDepth--;
-    }
     if (line.match(/@keyframes\s/)) {
-      return braceDepth <= 0; // If we haven't exited the keyframes block
+      inKeyframes = true;
+      kfStartLine = i;
+      depth = 0;
+    }
+    if (inKeyframes) {
+      for (const ch of line) {
+        if (ch === '{') depth++;
+        if (ch === '}') depth--;
+      }
+      // Once depth returns to 0, the keyframes block is closed
+      if (depth <= 0 && kfStartLine !== i) {
+        inKeyframes = false;
+      }
     }
   }
-  return false;
+  return inKeyframes;
 }
 
 function shouldSkipLine(line) {
@@ -104,21 +115,18 @@ function shouldSkipLine(line) {
 }
 
 function isBgProperty(line) {
-  const trimmed = line.trim();
-  return /^background\s*:/.test(trimmed) ||
-         /^background-color\s*:/.test(trimmed);
+  return /(?:^|\s|;)background\s*:/.test(line) ||
+         /(?:^|\s|;)background-color\s*:/.test(line);
 }
 
 function isColorProperty(line) {
-  const trimmed = line.trim();
-  return /^color\s*:/.test(trimmed);
+  return /(?:^|\s|;)color\s*:/.test(line);
 }
 
 function isBorderProperty(line) {
-  const trimmed = line.trim();
-  return /^border\s*:/.test(trimmed) ||
-         /^border-\w+\s*:/.test(trimmed) ||
-         /^outline\s*:/.test(trimmed);
+  return /(?:^|\s|;)border\s*:/.test(line) ||
+         /(?:^|\s|;)border-\w+\s*:/.test(line) ||
+         /(?:^|\s|;)outline\s*:/.test(line);
 }
 
 function isGradientLine(line) {
@@ -137,7 +145,7 @@ function replaceInLine(line, patterns, token) {
     let regex;
     if (pattern === 'white') {
       // Match 'white' as a standalone value, not inside other words (e.g. 'whitespace')
-      regex = new RegExp(`(?<=[:\\s,])${escapeRegex(pattern)}(?=[\\s;,!)])`, 'gi');
+      regex = new RegExp(`(?<=[:\\s,])${escapeRegex(pattern)}(?=[\\s;,!)]|$)`, 'gi');
     } else {
       regex = new RegExp(escapeRegex(pattern), 'gi');
     }
@@ -153,57 +161,63 @@ const lines = content.split('\n');
 const changes = [];
 let totalReplacements = 0;
 
+/**
+ * Process a single CSS declaration (e.g. "color: #fff" or "background: white").
+ * Returns the declaration with replacements applied.
+ */
+function processDeclaration(decl) {
+  let result = decl;
+  const isGradient = isGradientLine(decl);
+  const declIsBg = /background(?:-color)?\s*:/.test(decl);
+  const declIsColor = /(?:^|\s)color\s*:/.test(decl);
+
+  // 1. Background declarations — use BG_MAP
+  if (declIsBg && !isGradient) {
+    for (const entry of BG_MAP) {
+      result = replaceInLine(result, entry.patterns, entry.token);
+    }
+  }
+
+  // 2. Color declarations — use TEXT_COLOR_MAP (includes white → text-on-accent)
+  if (declIsColor) {
+    for (const entry of TEXT_COLOR_MAP) {
+      result = replaceInLine(result, entry.patterns, entry.token);
+    }
+  }
+
+  // 3. Universal replacements — skip inside gradients
+  if (!isGradient) {
+    for (const entry of UNIVERSAL_MAP) {
+      result = replaceInLine(result, entry.patterns, entry.token);
+    }
+  }
+
+  // 4. Non-bg, non-color, non-gradient properties (fill, stroke, etc.)
+  //    Apply text colors (not white) for text-primary/secondary/muted
+  if (!declIsBg && !declIsColor && !isGradient) {
+    const textNonWhiteMap = TEXT_COLOR_MAP.filter(e => e.token !== '--text-on-accent');
+    for (const entry of textNonWhiteMap) {
+      result = replaceInLine(result, entry.patterns, entry.token);
+    }
+  }
+
+  return result;
+}
+
 for (let i = 0; i < lines.length; i++) {
   const originalLine = lines[i];
 
   if (shouldSkipLine(originalLine)) continue;
   if (isInsideKeyframes(lines, i)) continue;
 
-  let newLine = originalLine;
-
-  // Decide which maps to apply based on context
-  const isBg = isBgProperty(originalLine);
-  const isColor = isColorProperty(originalLine);
-  const isBorder = isBorderProperty(originalLine);
-  const isGradient = isGradientLine(originalLine);
-
-  // 1. Context-specific: background properties
-  if (isBg && !isGradient) {
-    for (const entry of BG_MAP) {
-      newLine = replaceInLine(newLine, entry.patterns, entry.token);
-    }
-  }
-
-  // 2. Context-specific: color properties
-  if (isColor) {
-    for (const entry of TEXT_COLOR_MAP) {
-      newLine = replaceInLine(newLine, entry.patterns, entry.token);
-    }
-  }
-
-  // 3. Universal replacements (accents, semantic, borders) — for any property
-  //    But skip accent colors inside gradient() to avoid breaking gradient syntax
-  for (const entry of UNIVERSAL_MAP) {
-    if (isGradient) {
-      // Don't replace color stops inside gradients — keep them as raw hex for consistency
-      continue;
-    }
-    newLine = replaceInLine(newLine, entry.patterns, entry.token);
-  }
-
-  // 4. If line is not bg/color but has text-like colors, try text map too
-  //    (for properties like fill, stroke, etc.)
-  if (!isBg && !isColor && !isGradient) {
-    // For non-bg, non-color properties that have white — likely fill/stroke on buttons
-    // Skip this to be safe — only do text-primary/secondary/muted for non-color props
-    const textNonWhiteMap = TEXT_COLOR_MAP.filter(e => e.token !== '--text-on-accent');
-    for (const entry of textNonWhiteMap) {
-      newLine = replaceInLine(newLine, entry.patterns, entry.token);
-    }
-  }
-
-  // 5. For bg properties with colors that are also in universal map (like border colors used as bg),
-  //    run universal on bg lines too (already done above)
+  // Split multi-declaration lines on ; and process each declaration independently
+  // This handles lines like: "font-size: 16px; font-weight: 700; color: #1a1a2e;"
+  const parts = originalLine.split(';');
+  const processedParts = parts.map(part => {
+    if (part.trim() === '' || shouldSkipLine(part)) return part;
+    return processDeclaration(part);
+  });
+  const newLine = processedParts.join(';');
 
   if (newLine !== originalLine) {
     // Check for double var(var(-- which would be a bug
