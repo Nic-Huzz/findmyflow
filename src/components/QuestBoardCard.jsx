@@ -37,10 +37,10 @@ const STATE_LABELS = {
 }
 
 const STATE_ICONS = {
-  vibe_rise: <FireIcon style={{ width: 16, height: 16, color: '#E9A23B' }} />,
-  fun: <FaceSmileIcon style={{ width: 16, height: 16, color: '#10b981' }} />,
-  pressure: <ExclamationTriangleIcon style={{ width: 16, height: 16, color: '#ef4444' }} />,
-  uninterested: <MinusCircleIcon style={{ width: 16, height: 16, color: '#6b7280' }} />,
+  vibe_rise: <FireIcon style={{ width: 16, height: 16, color: 'var(--accent-gold)' }} />,
+  fun: <FaceSmileIcon style={{ width: 16, height: 16, color: 'var(--color-success)' }} />,
+  pressure: <ExclamationTriangleIcon style={{ width: 16, height: 16, color: 'var(--color-danger)' }} />,
+  uninterested: <MinusCircleIcon style={{ width: 16, height: 16, color: 'var(--text-muted)' }} />,
 }
 
 export default function QuestBoardCard({ quest, tasks, experiences = [], userId, onUpdate, alwaysExpanded = false, weeklyFocusId = null, onPickWeeklyFocus = null }) {
@@ -529,7 +529,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               <span className="qbc-icon-courage"><BoltIcon style={{ width: 14, height: 14 }} /></span>
             </button>
           )}
-          {healingIntentions[task.id] && <span className="qbc-icon-heal"><HeartIcon style={{ width: 14, height: 14, color: '#10b981' }} /></span>}
+          {healingIntentions[task.id] && <span className="qbc-icon-heal"><HeartIcon style={{ width: 14, height: 14, color: 'var(--color-success)' }} /></span>}
           {hasDims && <span className="qbc-dim-hint">{isTaskExpanded ? '▴' : '▾'}</span>}
         </div>
       </div>
@@ -575,7 +575,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
       </div>
       <div className="qbc-task-icons">
         {task.is_courage_challenge && <span className="qbc-icon-courage"><BoltIcon style={{ width: 14, height: 14 }} /></span>}
-        {healingIntentions[task.id] && <span className="qbc-icon-heal"><HeartIcon style={{ width: 14, height: 14, color: '#10b981' }} /></span>}
+        {healingIntentions[task.id] && <span className="qbc-icon-heal"><HeartIcon style={{ width: 14, height: 14, color: 'var(--color-success)' }} /></span>}
       </div>
     </div>
   )

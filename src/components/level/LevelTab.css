@@ -26,11 +26,11 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 2px solid #e9ecef;
-  background: white;
+  border: 2px solid var(--border-default);
+  background: var(--bg-surface);
   font-size: 0.8rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -40,21 +40,21 @@
 }
 
 .level-tab .level-selector-pill:hover:not(.locked) {
-  border-color: #5e17eb;
-  background: #faf8ff;
+  border-color: var(--accent-primary);
+  background: var(--bg-surface-hover);
 }
 
 .level-tab .level-selector-pill.current {
   background: linear-gradient(135deg, #5e17eb, #8b5cf6);
-  color: white;
-  border-color: #5e17eb;
+  color: var(--text-on-accent);
+  border-color: var(--accent-primary);
   box-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
 }
 
 .level-tab .level-selector-pill.locked {
-  background: #f1f3f5;
-  border-color: #e9ecef;
-  color: #adb5bd;
+  background: var(--bg-muted);
+  border-color: var(--border-default);
+  color: var(--text-faint);
   cursor: not-allowed;
   font-size: 0.65rem;
 }
@@ -64,7 +64,7 @@
   background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
   border-radius: 16px;
   padding: 1.25rem 1.5rem;
-  color: white;
+  color: var(--text-on-accent);
   text-align: center;
   box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
 }
@@ -87,7 +87,7 @@
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  color: #ffffff;
+  color: var(--text-on-accent);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -110,7 +110,7 @@
 .level-tab .level-section-title {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #212529;
+  color: var(--text-primary);
   margin: 0 0 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -120,10 +120,10 @@
    ZONE DIAGNOSIS
    ============================================================ */
 .level-tab .level-zone-diagnosis {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 1.25rem;
-  border: 2px solid #e9ecef;
+  border: 2px solid var(--border-default);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -137,8 +137,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
+  background: var(--bg-muted);
+  border: 2px solid var(--border-default);
   border-radius: 14px;
   padding: 0.875rem 1rem;
   cursor: pointer;
@@ -152,14 +152,14 @@
 }
 
 .level-tab .level-zone-card:hover {
-  border-color: #5e17eb;
-  background: #faf8ff;
+  border-color: var(--accent-primary);
+  background: var(--bg-surface-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.1);
 }
 
 .level-tab .level-zone-card.selected {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   background: rgba(94, 23, 235, 0.06);
   box-shadow: 0 4px 16px rgba(94, 23, 235, 0.15);
 }
@@ -180,13 +180,13 @@
 .level-tab .level-zone-name {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin-bottom: 0.15rem;
 }
 
 .level-tab .level-zone-desc {
   font-size: 0.78rem;
-  color: #6c757d;
+  color: var(--text-muted);
   line-height: 1.35;
 }
 
@@ -195,7 +195,7 @@
   height: 28px;
   border-radius: 50%;
   background: linear-gradient(135deg, #5e17eb, #8b5cf6);
-  color: white;
+  color: var(--text-on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -214,8 +214,8 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-  color: #1a1a2e;
-  border-left: 3px solid #5e17eb;
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-primary);
 }
 
 .level-tab .level-boss-icon {
@@ -231,13 +231,13 @@
 .level-tab .level-zone-result-name {
   font-size: 1rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
 
 .level-tab .level-zone-result-desc {
   font-size: 0.82rem;
-  color: #6c757d;
+  color: var(--text-muted);
   line-height: 1.4;
 }
 
@@ -249,7 +249,7 @@
   border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, #E9A23B, #f0b754);
-  color: white;
+  color: var(--text-on-accent);
   font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
@@ -270,18 +270,18 @@
   background: rgba(16, 185, 129, 0.08);
   border-radius: 12px;
   font-size: 0.85rem;
-  color: #059669;
+  color: var(--color-success-dark);
   font-weight: 600;
   text-align: center;
-  border-left: 3px solid #10b981;
+  border-left: 3px solid var(--color-success);
 }
 
 /* ============================================================
    DEEP DIVE CARD
    ============================================================ */
 .level-tab .level-deep-dive {
-  background: white;
-  border: 2px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 16px;
   padding: 1rem 1.25rem;
   display: flex;
@@ -291,7 +291,7 @@
 }
 
 .level-tab .level-deep-dive.completed {
-  border-color: #10b981;
+  border-color: var(--color-success);
   background: rgba(16, 185, 129, 0.04);
 }
 
@@ -308,12 +308,12 @@
 .level-tab .level-dd-name {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .level-tab .level-dd-narrative {
   font-size: 0.78rem;
-  color: #6c757d;
+  color: var(--text-muted);
   margin-top: 0.15rem;
 }
 
@@ -331,12 +331,12 @@
 
 .level-tab .level-dd-status.done {
   background: rgba(16, 185, 129, 0.12);
-  color: #059669;
+  color: var(--color-success-dark);
 }
 
 .level-tab .level-dd-status.start {
   background: linear-gradient(135deg, #E9A23B, #f0b754);
-  color: white;
+  color: var(--text-on-accent);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -347,23 +347,23 @@
 }
 
 .level-tab .level-dd-status.locked {
-  background: #f1f3f5;
-  color: #adb5bd;
+  background: var(--bg-muted);
+  color: var(--text-faint);
 }
 
 /* ============================================================
    BOSS FIGHT CARD
    ============================================================ */
 .level-tab .level-boss-fight {
-  background: white;
-  border: 2px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 16px;
   padding: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .level-tab .level-boss-fight.completed {
-  border-color: #10b981;
+  border-color: var(--color-success);
   background: rgba(16, 185, 129, 0.04);
 }
 
@@ -381,12 +381,12 @@
 .level-tab .level-boss-fight-title {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .level-tab .level-boss-fight-sub {
   font-size: 0.78rem;
-  color: #6c757d;
+  color: var(--text-muted);
   margin-top: 0.1rem;
 }
 
@@ -408,7 +408,7 @@
 
 .level-tab .level-boss-btn.pre {
   background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
-  color: white;
+  color: var(--text-on-accent);
 }
 
 .level-tab .level-boss-btn.pre:hover {
@@ -420,7 +420,7 @@
 .level-tab .level-boss-form {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-default);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -429,14 +429,14 @@
 .level-tab .level-boss-label {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .level-tab .level-boss-textarea {
   width: 100%;
   min-height: 80px;
   padding: 0.75rem;
-  border: 2px solid #e9ecef;
+  border: 2px solid var(--border-default);
   border-radius: 12px;
   font-family: inherit;
   font-size: 0.85rem;
@@ -447,12 +447,12 @@
 
 .level-tab .level-boss-textarea:focus {
   outline: none;
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
 }
 
 .level-tab .level-boss-slider {
   width: 100%;
-  accent-color: #5e17eb;
+  accent-color: var(--accent-primary);
 }
 
 .level-tab .level-boss-submit {
@@ -461,7 +461,7 @@
   border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, #E9A23B, #f0b754);
-  color: white;
+  color: var(--text-on-accent);
   font-weight: 700;
   font-size: 0.9rem;
   cursor: pointer;
@@ -478,8 +478,8 @@
    MILESTONE CARD
    ============================================================ */
 .level-tab .level-milestone {
-  background: white;
-  border: 2px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 16px;
   padding: 1rem 1.25rem;
   display: flex;
@@ -489,7 +489,7 @@
 }
 
 .level-tab .level-milestone.completed {
-  border-color: #10b981;
+  border-color: var(--color-success);
   background: rgba(16, 185, 129, 0.04);
 }
 
@@ -508,20 +508,20 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #E9A23B;
+  color: var(--accent-gold);
   margin-bottom: 0.15rem;
 }
 
 .level-tab .level-milestone-text {
   font-size: 0.88rem;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
   line-height: 1.35;
 }
 
 .level-tab .level-milestone-commitment {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--text-muted);
   line-height: 1.35;
   margin-top: 0.3rem;
   font-style: italic;
@@ -533,7 +533,7 @@
   border: none;
   border-radius: 10px;
   background: linear-gradient(135deg, #E9A23B, #f0b754);
-  color: white;
+  color: var(--text-on-accent);
   font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
@@ -550,8 +550,8 @@
    PROGRESS BARS
    ============================================================ */
 .level-tab .level-progress {
-  background: white;
-  border: 2px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 16px;
   padding: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -571,14 +571,14 @@
   align-items: center;
   font-size: 0.8rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 /* Filled progress bar */
 .level-tab .level-bar-track {
   height: 8px;
-  background: #f1f3f5;
+  background: var(--bg-muted);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -604,14 +604,14 @@
 .level-tab .level-bar-item {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #adb5bd;
-  background: #f8f9fa;
+  color: var(--text-faint);
+  background: var(--bg-muted);
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
 }
 
 .level-tab .level-bar-item.done {
-  color: #059669;
+  color: var(--color-success-dark);
   background: rgba(16, 185, 129, 0.1);
 }
 
@@ -626,14 +626,14 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #f1f3f5;
-  border: 2px solid #e9ecef;
+  background: var(--bg-muted);
+  border: 2px solid var(--border-default);
   transition: all 0.2s ease;
 }
 
 .level-tab .level-bar-dot.filled {
   background: linear-gradient(135deg, #5e17eb, #8b5cf6);
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   box-shadow: 0 2px 8px rgba(94, 23, 235, 0.2);
 }
 
@@ -678,7 +678,7 @@
 }
 
 .level-graduation-card {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 22px;
   max-width: 340px;
   width: 100%;
@@ -701,13 +701,13 @@
 .level-graduation-title {
   font-size: 22px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 8px;
 }
 
 .level-graduation-subtitle {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-muted);
   line-height: 1.5;
   margin: 0 0 24px;
 }
@@ -716,7 +716,7 @@
   display: block;
   width: 100%;
   background: linear-gradient(135deg, #E9A23B 0%, #f0b94e 60%, #e6c45a 100%);
-  color: #1a1a2e;
+  color: var(--text-primary);
   border: none;
   padding: 16px;
   border-radius: 14px;
@@ -738,8 +738,8 @@
    ============================================================ */
 
 .quest-section {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
@@ -753,7 +753,7 @@
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(233, 162, 59, 0.08) 100%);
   border: 1.5px solid rgba(94, 23, 235, 0.15);
   border-radius: 14px;
-  color: #5e17eb;
+  color: var(--accent-primary);
   font-size: 14px;
   font-weight: 600;
   font-family: inherit;
@@ -768,7 +768,7 @@
 .quest-discover-prompt {
   text-align: center;
   font-size: 13px;
-  color: #5e17eb;
+  color: var(--accent-primary);
   font-weight: 500;
   padding: 12px;
   cursor: pointer;
@@ -783,7 +783,7 @@
 }
 
 .quest-explore-menu {
-  background: #ffffff;
+  background: var(--bg-surface);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -807,7 +807,7 @@
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
-  color: #1a0b3d;
+  color: var(--text-primary);
   text-align: left;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -821,7 +821,7 @@
 .quest-explore-hint {
   font-size: 12px;
   font-weight: 400;
-  color: #9ca3af;
+  color: var(--text-faint);
 }
 
 .quest-current-job-cta {
@@ -860,7 +860,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #d1d5db;
+  background: var(--border-input);
   border: none;
   padding: 0;
   cursor: pointer;
@@ -871,7 +871,7 @@
 .quest-swipe-dot.active {
   width: 8px;
   height: 8px;
-  background: #5e17eb;
+  background: var(--accent-primary);
 }
 
 .quest-swipe-wrapper {
@@ -907,23 +907,23 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #5e17eb;
+  color: var(--accent-primary);
   margin: 0;
 }
 
 .quest-section-sub {
   font-size: 13px;
-  color: #6c757d;
+  color: var(--text-muted);
   margin: 0 0 12px;
   line-height: 1.4;
 }
 
 .quest-empty {
   font-size: 13px;
-  color: #6c757d;
+  color: var(--text-muted);
   padding: 14px;
   text-align: center;
-  background: #f8f9fa;
+  background: var(--bg-muted);
   border-radius: 12px;
   margin-bottom: 10px;
   line-height: 1.4;
@@ -940,7 +940,7 @@
   border: none;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.9), rgba(233, 162, 59, 0.9));
-  color: #fff;
+  color: var(--text-on-accent);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -967,10 +967,10 @@
   display: block;
   width: 100%;
   padding: 12px;
-  border: 2px dashed #dee2e6;
+  border: 2px dashed var(--border-light);
   border-radius: 12px;
-  background: #f8f9fa;
-  color: #5e17eb;
+  background: var(--bg-muted);
+  color: var(--accent-primary);
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -979,14 +979,14 @@
 }
 
 .quest-add-btn:hover {
-  border-color: #5e17eb;
-  color: #5e17eb;
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
   background: rgba(94, 23, 235, 0.04);
 }
 
 .quest-recommend {
   font-size: 11px;
-  color: #adb5bd;
+  color: var(--text-faint);
   text-align: center;
   margin-top: 8px;
 }
@@ -994,22 +994,22 @@
 /* Add Quest Form (inline) */
 .quest-add-modal {
   padding: 14px;
-  background: #f8f9fa;
+  background: var(--bg-muted);
   border-radius: 12px;
-  border: 1.5px solid #e9ecef;
+  border: 1.5px solid var(--border-default);
 }
 
 .quest-add-title {
   font-size: 14px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .quest-add-subtitle {
   font-size: 12px;
   font-weight: 700;
-  color: #adb5bd;
+  color: var(--text-faint);
   margin: 10px 0 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1019,12 +1019,12 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
+  border: 2px solid var(--border-default);
   font-size: 15px;
   font-family: inherit;
   outline: none;
-  background: #ffffff;
-  color: #1a1a2e;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   transition: all 0.2s;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23adb5bd' stroke-width='2' fill='none'/%3E%3C/svg%3E");
@@ -1034,7 +1034,7 @@
 }
 
 .quest-add-select:focus {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
 }
 
@@ -1042,7 +1042,7 @@
   display: block;
   background: none;
   border: none;
-  color: #5e17eb;
+  color: var(--accent-primary);
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
@@ -1055,22 +1055,22 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
+  border: 2px solid var(--border-default);
   font-size: 15px;
   font-family: inherit;
   outline: none;
-  background: #ffffff;
-  color: #1a1a2e;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   transition: all 0.2s;
 }
 
 .quest-add-input:focus {
-  border-color: #5e17eb;
-  background: #ffffff;
+  border-color: var(--accent-primary);
+  background: var(--bg-surface);
   box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.08);
 }
 
-.quest-add-input::placeholder { color: #adb5bd; }
+.quest-add-input::placeholder { color: var(--text-faint); }
 
 .quest-add-states {
   display: flex;
@@ -1081,12 +1081,12 @@
 .quest-state-pill {
   padding: 8px 14px;
   border-radius: 100px;
-  border: 2px solid #e9ecef;
+  border: 2px solid var(--border-default);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  background: #ffffff;
-  color: #6c757d;
+  background: var(--bg-surface);
+  color: var(--text-muted);
   font-family: inherit;
   transition: all 0.2s;
 }
@@ -1107,7 +1107,7 @@
   border-radius: 12px;
   border: none;
   background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  color: #fff;
+  color: var(--text-on-accent);
   font-size: 15px;
   font-weight: 700;
   font-family: inherit;
@@ -1125,9 +1125,9 @@
 .quest-add-cancel {
   padding: 12px 16px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
-  background: #ffffff;
-  color: #6c757d;
+  border: 2px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 600;
   font-family: inherit;
@@ -1145,14 +1145,14 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: 10px;
-  background: #f8f9fa;
+  background: var(--bg-muted);
   margin-bottom: 6px;
   font-size: 14px;
 }
 
 .quest-closed-icon { font-size: 16px; }
-.quest-closed-label { flex: 1; font-weight: 600; color: #1a1a2e; }
-.quest-closed-status { font-size: 12px; color: #adb5bd; font-weight: 600; }
+.quest-closed-label { flex: 1; font-weight: 600; color: var(--text-primary); }
+.quest-closed-status { font-size: 12px; color: var(--text-faint); font-weight: 600; }
 
 /* Struggle Pills — matches tt-drain-cat-btn style */
 .struggle-pills {
@@ -1169,14 +1169,14 @@
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
-  border: 2px solid #e9ecef;
-  background: #ffffff;
+  border: 2px solid var(--border-default);
+  background: var(--bg-surface);
   font-size: 14px;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
   text-align: left;
-  color: #495057;
+  color: var(--text-secondary);
   transition: all 0.2s;
 }
 
@@ -1185,9 +1185,9 @@
 }
 
 .struggle-pill.active {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   background: rgba(94, 23, 235, 0.06);
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .struggle-flows {
@@ -1204,7 +1204,7 @@
 /* Divider */
 .quest-divider {
   height: 1px;
-  background: #e9ecef;
+  background: var(--border-default);
   margin: 24px 0;
 }
 
@@ -1229,8 +1229,8 @@
   width: 96px;
   padding: 14px 8px;
   border-radius: 12px;
-  border: 1.5px solid #e9ecef;
-  background: #f8f9fa;
+  border: 1.5px solid var(--border-default);
+  background: var(--bg-muted);
   text-align: center;
   cursor: pointer;
   font-family: inherit;
@@ -1244,19 +1244,19 @@
 }
 
 .quest-scroll-card.completed {
-  border-color: #10b981;
+  border-color: var(--color-success);
   background: rgba(16, 185, 129, 0.06);
 }
 
 .quest-scroll-label {
   font-size: 13px;
   font-weight: 700;
-  color: #495057;
+  color: var(--text-secondary);
   line-height: 1.3;
 }
 
 .quest-scroll-card.completed .quest-scroll-label {
-  color: #059669;
+  color: var(--color-success-dark);
 }
 
 .quest-scroll-check {
@@ -1288,7 +1288,7 @@
 }
 
 .quest-modal {
-  background: #ffffff;
+  background: var(--bg-surface);
   border-radius: 16px;
   max-width: 340px;
   width: 100%;
@@ -1312,7 +1312,7 @@
   background: none;
   border: none;
   font-size: 18px;
-  color: #adb5bd;
+  color: var(--text-faint);
   cursor: pointer;
   font-family: inherit;
   padding: 4px 8px;
@@ -1321,13 +1321,13 @@
 .quest-modal-title {
   font-size: 16px;
   font-weight: 800;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 6px;
 }
 
 .quest-modal-question {
   font-size: 14px;
-  color: #6c757d;
+  color: var(--text-muted);
   margin: 0 0 16px;
   line-height: 1.5;
 }
@@ -1343,7 +1343,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #adb5bd;
+  color: var(--text-faint);
   margin-bottom: 4px;
   font-weight: 700;
 }
@@ -1351,13 +1351,13 @@
 .quest-modal-result-name {
   font-size: 16px;
   font-weight: 700;
-  color: #5e17eb;
+  color: var(--accent-primary);
   margin-bottom: 4px;
 }
 
 .quest-modal-result-desc {
   font-size: 13px;
-  color: #6c757d;
+  color: var(--text-muted);
   line-height: 1.5;
 }
 
@@ -1368,7 +1368,7 @@
   border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, #E9A23B, #f0b754);
-  color: #ffffff;
+  color: var(--text-on-accent);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -1389,14 +1389,14 @@
   border-radius: 10px;
   padding: 10px 14px;
   margin-top: 4px;
-  border-left: 3px solid #5e17eb;
+  border-left: 3px solid var(--accent-primary);
 }
 
 .quest-modal-boss-label {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #adb5bd;
+  color: var(--text-faint);
   font-weight: 700;
   margin-bottom: 2px;
 }
@@ -1404,12 +1404,12 @@
 .quest-modal-boss-name {
   font-size: 14px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .quest-modal-essence {
   font-size: 13px;
-  color: #6c757d;
+  color: var(--text-muted);
   font-style: italic;
   margin: 12px 0 0;
   line-height: 1.5;
@@ -1422,7 +1422,7 @@
 .quest-modal-milestone-text {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
   font-style: italic;
   line-height: 1.5;
   margin: 0 0 16px;
@@ -1431,13 +1431,13 @@
 .quest-modal-milestone-done {
   font-size: 15px;
   font-weight: 700;
-  color: #10b981;
+  color: var(--color-success);
   padding: 12px;
 }
 
 .quest-modal-milestone-committed {
   font-size: 13px;
-  color: #6c757d;
+  color: var(--text-muted);
   line-height: 1.5;
 }
 
@@ -1488,11 +1488,11 @@
 
 /* ── Zone Matrix ── */
 .lt-matrix-card {
-  background: #fff; border-radius: 16px; padding: 16px;
+  background: var(--bg-surface); border-radius: 16px; padding: 16px;
   margin-bottom: 16px; box-shadow: 0 2px 8px rgba(94,23,235,0.06);
 }
 .lt-matrix-title {
-  font-size: 11px; font-weight: 700; color: #adb5bd;
+  font-size: 11px; font-weight: 700; color: var(--text-faint);
   text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
 }
 .lt-matrix-grid {
@@ -1503,7 +1503,7 @@
 .lt-matrix-quadrant {
   position: absolute; width: 50%; height: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: #adb5bd; text-align: center; padding: 8px;
+  font-size: 10px; color: var(--text-faint); text-align: center; padding: 8px;
 }
 .lt-q-tl { top: 0; left: 0; }
 .lt-q-tr { top: 0; right: 0; border-left: 1px solid #f2f3f5; }
@@ -1516,7 +1516,7 @@
   transform: translate(-50%, 50%); z-index: 2;
 }
 .lt-matrix-label {
-  position: absolute; font-size: 9px; color: #9ca3af;
+  position: absolute; font-size: 9px; color: var(--text-faint);
   font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
 }
 .lt-matrix-y-high { top: 4px; left: 4px; }
@@ -1524,44 +1524,44 @@
 .lt-matrix-x-high { bottom: -18px; right: 4px; }
 .lt-matrix-zone {
   text-align: center; margin-top: 10px; font-size: 13px;
-  font-weight: 700; color: #5e17eb;
+  font-weight: 700; color: var(--accent-primary);
 }
 
 /* ── Skill Level Picker ── */
 .skill-level-picker {
-  padding: 14px; background: #fff; border-radius: 12px;
+  padding: 14px; background: var(--bg-surface); border-radius: 12px;
   border: 1px solid rgba(94,23,235,0.15); margin-top: 8px;
   animation: qbc-signal-in 0.2s ease;
 }
 .skill-level-title {
-  font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 10px;
+  font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px;
 }
 .skill-level-row {
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px 0; gap: 8px;
 }
-.skill-level-name { font-size: 13px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; }
+.skill-level-name { font-size: 13px; font-weight: 600; color: var(--text-primary); flex-shrink: 0; }
 .skill-level-btns { display: flex; gap: 4px; }
 .skill-level-btn {
-  padding: 4px 8px; border: 1px solid #e9ecef; border-radius: 6px;
-  background: #fff; font-size: 11px; font-weight: 600; cursor: pointer;
-  font-family: inherit; color: #6b7280; transition: all 0.15s ease;
+  padding: 4px 8px; border: 1px solid var(--border-default); border-radius: 6px;
+  background: var(--bg-surface); font-size: 11px; font-weight: 600; cursor: pointer;
+  font-family: inherit; color: var(--text-muted); transition: all 0.15s ease;
 }
 .skill-level-btn.active {
-  background: #5e17eb; border-color: #5e17eb; color: #fff;
+  background: var(--accent-primary); border-color: var(--accent-primary); color: var(--text-on-accent);
 }
 .skill-level-actions {
   display: flex; gap: 8px; margin-top: 12px;
 }
 .skill-level-save {
-  flex: 1; padding: 10px; background: #5e17eb; color: #fff; border: none;
+  flex: 1; padding: 10px; background: var(--accent-primary); color: var(--text-on-accent); border: none;
   border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer;
   font-family: inherit;
 }
 .skill-level-save:disabled { opacity: 0.5; cursor: not-allowed; }
 .skill-level-skip {
-  padding: 10px 16px; background: none; border: 1px solid #e9ecef;
-  border-radius: 10px; font-size: 13px; color: #6b7280; cursor: pointer;
+  padding: 10px 16px; background: none; border: 1px solid var(--border-default);
+  border-radius: 10px; font-size: 13px; color: var(--text-muted); cursor: pointer;
   font-family: inherit;
 }
 

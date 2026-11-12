@@ -7,8 +7,8 @@
 /* ── Card shell ── */
 .qc-card {
   border-radius: 16px;
-  background: #fff;
-  border: 1px solid #e9ecef;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   cursor: pointer;
@@ -218,9 +218,9 @@
   margin-top: 1px;
 }
 
-.qc-zone-grounded .qc-zone-label-text { color: #5e17eb; }
+.qc-zone-grounded .qc-zone-label-text { color: var(--accent-primary); }
 .qc-zone-viberise .qc-zone-label-text { color: #b8860b; }
-.qc-zone-stuck .qc-zone-label-text { color: #9ca3af; }
+.qc-zone-stuck .qc-zone-label-text { color: var(--text-faint); }
 .qc-zone-wired .qc-zone-label-text { color: #e05252; }
 
 /* ── Axis lines ── */
@@ -352,17 +352,17 @@
 .qc-bar-nudge {
   font-size: 11px;
   font-weight: 500;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin-top: 4px;
   line-height: 1.3;
 }
 
 .qc-bar-done {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .qc-bar-todo {
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 /* ── Nudge text ── */

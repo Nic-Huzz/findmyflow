@@ -1591,12 +1591,12 @@ const [directionComplete, setDirectionComplete] = useState(false)
             Beat it in 2 of 3 categories to win.{' '}
             <span
               onClick={() => navigate('/league/guide')}
-              style={{ color: '#5e17eb', fontWeight: 700, cursor: 'pointer' }}
+              style={{ color: 'var(--accent-primary)', fontWeight: 700, cursor: 'pointer' }}
             >How it works</span>
           </span>
           <button
             onClick={() => { localStorage.setItem('ghost_intro_dismissed', 'true'); setGhostIntroDismissed(true) }}
-            style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '16px', cursor: 'pointer', padding: '0 0 0 12px' }}
+            style={{ background: 'none', border: 'none', color: 'var(--text-faint)', fontSize: '16px', cursor: 'pointer', padding: '0 0 0 12px' }}
           >×</button>
         </div>
       )}
