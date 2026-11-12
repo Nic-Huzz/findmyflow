@@ -85,6 +85,11 @@ const WAHOO_CATEGORIES = [
   { id: 'appearance', name: 'Appearance', icon: '👤' },
 ]
 
+// Display name overrides (cleaner labels for 12-year-old readability)
+const DISPLAY_NAMES = {
+  'practice_sleep': 'Sleep 8+ hrs',
+}
+
 // All daily Tune quest IDs (used for filtering from JSON)
 const DAILY_PRACTICE_IDS = [
   // Maintenance
@@ -856,12 +861,10 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
         </span>
         <div className="ht-item-body">
           <div className="ht-item-name" onClick={() => quest.description && setInfoQuest(quest)} style={quest.description ? { cursor: 'pointer' } : undefined}>
-            {quest.name}
+            {DISPLAY_NAMES[quest.id] || quest.name}
             {quest.description && <span className="tt-info-icon">ⓘ</span>}
           </div>
           <div className="ht-item-meta">
-            <span className="ht-item-type">{quest.type}</span>
-            <span className="ht-item-sep">·</span>
             <span className="ht-pts">{quest.points}pts</span>
           </div>
           {streak && dayLabels && (
@@ -965,8 +968,6 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
                         {q.description && !mealExpanded && <span className="tt-info-icon">ⓘ</span>}
                       </div>
                       <div className="ht-item-meta">
-                        <span className="ht-item-type">{q.type}</span>
-                        <span className="ht-item-sep">·</span>
                         <span className="ht-pts">{MEALS.filter(m => isMealLogged(m.id)).length}/3 meals</span>
                       </div>
                       {mealExpanded && (
@@ -1125,74 +1126,7 @@ export default function TuneTab({ userId, onQuestComplete, onRefreshPoints, onLe
           <div className="tt-quest-list">
             {/* First two expression practices: Own Style, Two Hours of Creation */}
             {expressionPractices.slice(0, 2).map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
-            {/* Weekly Focus — positioned 3rd in expression */}
-            {(() => {
-              const focusQuest = allQuests.find(q => q.id === 'rewire_weekly_focus')
-              if (!focusQuest) return null
-
-              // Before intention set: show "Set your intention" prompt
-              if (!weeklyFocus) {
-                return (
-                  <div className="ht-item-row">
-                    <span className="ht-item-check" />
-                    <div className="ht-item-body">
-                      <div className="ht-item-name">Weekly Focus</div>
-                      <div className="ht-item-meta">
-                        <span className="ht-item-type">Set your intention for this week</span>
-                      </div>
-                    </div>
-                    <button type="button" className="ht-item-action" onClick={() => setHealingModalQuest(focusQuest)}>
-                      Set
-                    </button>
-                  </div>
-                )
-              }
-
-              // After intention set: show the intention + Honour button + day dots
-              const focusDoneToday = isCompletedToday('rewire_weekly_focus')
-              const cat = FOCUS_CATEGORY_LABELS[weeklyFocus.focus_category]
-              const focusStreak = getStreak('rewire_weekly_focus')
-              const focusDayLabels = getDayLabels()
-              return (
-                <div className={`ht-item-row ${focusDoneToday ? 'done' : ''}`}>
-                  <span className={`ht-item-check ${focusDoneToday ? 'done' : ''}`}>
-                    {focusDoneToday ? '✓' : ''}
-                  </span>
-                  <div className="ht-item-body">
-                    <div className="ht-item-name">
-                      {cat?.icon} {weeklyFocus.intention}
-                    </div>
-                    <div className="ht-item-meta">
-                      <span className="ht-item-type">Weekly Focus</span>
-                      <span className="ht-item-sep">·</span>
-                      <span className="ht-pts">{focusQuest.points}pts</span>
-                    </div>
-                    {focusStreak && focusDayLabels && (
-                      <div className="ht-streak-dots">
-                        {focusDayLabels.map((day, i) => (
-                          <div key={i} className="ht-streak-day">
-                            <span className={`ht-streak-dot ${focusStreak[i] ? 'filled' : ''}`} />
-                            <span className="ht-streak-label">{day}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {focusDoneToday ? (
-                    <span className="ht-item-action done-action">Done</span>
-                  ) : (
-                    <button
-                      type="button"
-                      className="ht-item-action"
-                      disabled={completingQuestId === 'rewire_weekly_focus'}
-                      onClick={() => handleInlineComplete(focusQuest)}
-                    >
-                      {completingQuestId === 'rewire_weekly_focus' ? '...' : 'Honour'}
-                    </button>
-                  )}
-                </div>
-              )
-            })()}
+            {/* Weekly Focus — hidden for now */}
             {/* Remaining expression practices: Social Media, Peak State */}
             {expressionPractices.slice(2).map(q => renderQuestRow(q, q.inputType === 'checkbox'))}
           </div>

@@ -112,7 +112,7 @@ export default function GenericRadar({
             key={`ring-${i}`}
             points={pts}
             fill="none"
-            stroke="#e0ddd8"
+            stroke="var(--radar-grid, #e0ddd8)"
             strokeWidth={1}
             opacity={0.5}
           />
@@ -123,7 +123,7 @@ export default function GenericRadar({
           <line
             key={`spoke-${i}`}
             {...s}
-            stroke="#e0ddd8"
+            stroke="var(--radar-grid, #e0ddd8)"
             strokeWidth={1}
             opacity={0.4}
           />
@@ -190,8 +190,8 @@ export default function GenericRadar({
         {/* Primary polygon (scores) */}
         <polygon
           points={polygon}
-          fill="rgba(94, 23, 235, 0.15)"
-          stroke="#5e17eb"
+          fill="var(--radar-fill, rgba(94, 23, 235, 0.15))"
+          stroke="var(--radar-stroke, #5e17eb)"
           strokeWidth={2.5}
           className={animate ? 'gr-polygon-animate' : ''}
         />

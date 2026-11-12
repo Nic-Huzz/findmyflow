@@ -51,4 +51,73 @@
   --gradient-primary: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
   --gradient-bar: linear-gradient(90deg, #5e17eb, #a78bfa, #E9A23B);
   --gradient-gold: linear-gradient(135deg, #E9A23B 0%, #f0b94e 100%);
+
+  /* Radar charts */
+  --radar-grid: #e0ddd8;
+  --radar-fill: rgba(94, 23, 235, 0.15);
+  --radar-stroke: #5e17eb;
+}
+
+/* Bioluminescent Dark Theme */
+.theme-bioluminescent,
+[data-theme="bioluminescent"] {
+  --bg-page: #0A0812;
+  --bg-surface: #12101C;
+  --bg-surface-hover: #1A1628;
+  --bg-muted: #12101C;
+  --bg-input: #12101C;
+
+  --text-primary: #F2EEF8;
+  --text-secondary: #BAB0D0;
+  --text-muted: #8478A0;
+  --text-faint: #5a4e70;
+  --text-on-accent: #0a0a0a;
+  --text-on-gradient: #0a0a0a;
+
+  --accent-primary: #FF3CAC;
+  --accent-primary-light: #E040FB;
+  --accent-primary-dark: #cc2d8a;
+  --accent-primary-bg: rgba(255, 60, 172, 0.06);
+  --accent-primary-border: rgba(255, 60, 172, 0.15);
+
+  --accent-gold: #FFB800;
+  --accent-gold-light: #FFD060;
+  --accent-gold-bg: rgba(255, 184, 0, 0.1);
+
+  --color-success: #FFB800;
+  --color-success-dark: #E5A600;
+  --color-success-bg: rgba(255, 184, 0, 0.12);
+  --color-danger: #FF5A6E;
+  --color-danger-dark: #e04458;
+  --color-danger-bg: rgba(255, 90, 110, 0.1);
+  --color-warning: #FF8C42;
+  --color-neutral: #8478A0;
+
+  --border-default: rgba(255, 255, 255, 0.05);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-input: rgba(255, 255, 255, 0.1);
+  --border-input-focus: #FF3CAC;
+
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 4px 20px rgba(255, 60, 172, 0.08);
+  --shadow-accent: 0 4px 16px rgba(255, 60, 172, 0.25);
+
+  --gradient-primary: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  --gradient-bar: linear-gradient(90deg, #FF3CAC, #E040FB, #FFB800);
+  --gradient-gold: linear-gradient(135deg, #FFB800 0%, #FFD060 100%);
+
+  /* Radar charts */
+  --radar-grid: rgba(255, 255, 255, 0.06);
+  --radar-fill: rgba(255, 60, 172, 0.15);
+  --radar-stroke: #FF3CAC;
+}
+
+/* Body-level overrides when bioluminescent is active */
+.theme-bioluminescent {
+  background: transparent;
+}
+
+body:has(.theme-bioluminescent) {
+  background: #0A0812;
+  color: #F2EEF8;
 }

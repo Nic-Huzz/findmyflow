@@ -87,7 +87,7 @@ export default function LevelTab({ currentLevel = 1, maxUnlockedLevel = null, us
   const [activeQuestIdx, setActiveQuestIdx] = useState(0)
 
   const activePathQuests = useMemo(() =>
-    quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job),
+    quests.filter(q => q.status === 'active' && q.label !== 'Healing Work' && !q.is_bridge_job && q.path_type !== 'financial_security'),
   [quests])
 
   const activeQuestIds = useMemo(() => activePathQuests.map(q => q.id).join(','), [activePathQuests])

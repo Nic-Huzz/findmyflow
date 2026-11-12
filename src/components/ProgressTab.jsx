@@ -1236,15 +1236,13 @@ export default function ProgressTab({ userId }) {
 
       {/* ═══ ALIVENESS BASELINE CARD (retroactive) ═══ */}
       {baselineNeededQuest && !baselineDismissed && !showBaselineFlow && (
-        <div className="pt-baseline-card" style={{
-          background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
-          borderRadius: 16, padding: '20px 16px', margin: '0 0 16px',
-          border: '1px solid rgba(94, 23, 235, 0.12)',
+        <div className="pt-baseline-card aci-wrap" style={{
+          borderRadius: 16, padding: '20px 16px', margin: '16px 0',
         }}>
-          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4, color: 'var(--text-primary)' }}>
             How alive are you on {baselineNeededQuest.label}?
           </div>
-          <div style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+          <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>
             Take a 60-second snapshot. 5 questions.
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -1252,7 +1250,7 @@ export default function ProgressTab({ userId }) {
               onClick={() => setShowBaselineFlow(true)}
               style={{
                 flex: 1, padding: '10px 16px', borderRadius: 10,
-                background: '#5e17eb', color: '#fff', border: 'none',
+                background: 'var(--gradient-primary)', color: 'var(--text-on-accent)', border: 'none',
                 fontWeight: 600, fontSize: 14, cursor: 'pointer',
               }}>
               Take snapshot
@@ -1261,7 +1259,7 @@ export default function ProgressTab({ userId }) {
               onClick={() => setBaselineDismissed(true)}
               style={{
                 padding: '10px 16px', borderRadius: 10,
-                background: '#f0ede8', color: '#666', border: 'none',
+                background: 'var(--bg-muted)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)',
                 fontSize: 14, cursor: 'pointer',
               }}>
               Not now
@@ -1287,16 +1285,12 @@ export default function ProgressTab({ userId }) {
 
       {/* ═══ ALIVENESS CHECK-IN PROMPT ═══ */}
       {checkinDueQuest && !checkinDismissed && !showCheckinFlow && !baselineNeededQuest && (
-        <div style={{
-          background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
-          borderRadius: 16, padding: '16px', margin: '0 0 16px',
-          border: '1px solid rgba(94, 23, 235, 0.12)',
-        }}>
-          <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{checkinDueQuest.quest.label}</div>
-          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+        <div className="aci-wrap" style={{ borderRadius: 16, padding: 16, margin: '0 0 16px' }}>
+          <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 4 }}>{checkinDueQuest.quest.label}</div>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4, color: 'var(--text-primary)' }}>
             How alive are you? 60 seconds.
           </div>
-          <div style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
+          <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 12 }}>
             {checkinDueQuest.state.daysSinceLast >= 30
               ? "It's been a while since your last snapshot."
               : `It's been ${checkinDueQuest.state.daysSinceLast} days since your last snapshot.`}
@@ -1304,14 +1298,14 @@ export default function ProgressTab({ userId }) {
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={() => setShowCheckinFlow(true)} style={{
               padding: '10px 20px', borderRadius: 10,
-              background: '#5e17eb', color: '#fff', border: 'none',
+              background: 'var(--gradient-primary)', color: 'var(--text-on-accent)', border: 'none',
               fontWeight: 600, fontSize: 14, cursor: 'pointer',
             }}>
               Take snapshot
             </button>
             <button onClick={() => setCheckinDismissed(true)} style={{
               padding: '10px 16px', borderRadius: 10,
-              background: '#f0ede8', color: '#666', border: 'none',
+              background: 'var(--bg-muted)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)',
               fontSize: 14, cursor: 'pointer',
             }}>
               Not now
@@ -1657,15 +1651,7 @@ export default function ProgressTab({ userId }) {
         </>
       )}
 
-      {/* ═══ ALL-DONE CTA ═══ */}
-      {allSetupDone && !nextCta && (
-        <>
-          <div className="pt-bridge"><span className="pt-bridge-text">next step</span></div>
-          <button className="pt-cta" onClick={() => navigate('/7-day-challenge')}>
-            Add a courage challenge <span>→</span>
-          </button>
-        </>
-      )}
+      {/* ALL-DONE CTA removed — redundant with Weekly tab */}
 
     </div>
   )

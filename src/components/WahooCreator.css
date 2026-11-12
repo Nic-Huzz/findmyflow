@@ -814,3 +814,21 @@
     animation: none;
   }
 }
+
+/* ── Bioluminescent dark theme ── */
+.theme-bioluminescent .wc-card { background: #12101C; }
+.theme-bioluminescent .wc-card-title { color: #F2EEF8; }
+.theme-bioluminescent .wc-card-sub { color: #8478A0; }
+.theme-bioluminescent .wc-dim-card { background: #1A1628; border-color: rgba(255,255,255,0.08); }
+.theme-bioluminescent .wc-dim-card:hover { border-color: rgba(255,60,172,0.3); background: rgba(255,60,172,0.06); }
+.theme-bioluminescent .wc-dim-card.active { border-color: #FF3CAC; background: rgba(255,60,172,0.1); }
+.theme-bioluminescent .wc-dim-card.wc-dim-gap { border-color: rgba(255,184,0,0.4); background: rgba(255,184,0,0.06); }
+.theme-bioluminescent .wc-dim-card.wc-dim-gap .wc-dim-label { color: #FFB800; }
+.theme-bioluminescent .wc-dim-label { color: #BAB0D0; }
+.theme-bioluminescent .wc-dim-card.active .wc-dim-label { color: #FF3CAC; }
+.theme-bioluminescent .wc-dim-selected-tag { background: rgba(255,60,172,0.1); border-color: rgba(255,60,172,0.2); color: #F2EEF8; }
+.theme-bioluminescent .wc-input,
+.theme-bioluminescent .wc-textarea { background: #1A1628; border-color: rgba(255,255,255,0.1); color: #F2EEF8; }
+.theme-bioluminescent .wc-input:focus,
+.theme-bioluminescent .wc-textarea:focus { border-color: #FF3CAC; box-shadow: 0 0 0 3px rgba(255,60,172,0.1); }
+.theme-bioluminescent .wc-label { color: #BAB0D0; }

@@ -14,7 +14,7 @@ import './QuadrantCard.css'
 
 const QUADRANTS = {
   'vibe-rise': { label: 'Vibe Rise', desc: 'Safe and expressing yourself fully', color: '#b8860b', orb: '#E9A23B' },
-  'grounded': { label: 'Grounded', desc: 'Safe but not putting yourself out there', color: '#5e17eb', orb: '#5e17eb' },
+  'grounded': { label: 'Dreaming', desc: 'Safe, not expressing', color: '#5e17eb', orb: '#5e17eb' },
   'wired': { label: 'Wired', desc: 'Expressing but your body needs safety', color: '#e05252', orb: '#e05252' },
   'stuck': { label: 'Stuck', desc: 'Low on both', color: '#9ca3af', orb: '#9ca3af' },
 }

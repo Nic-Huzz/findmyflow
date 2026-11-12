@@ -67,7 +67,6 @@ import FigurineOverlay from './components/Figurine/FigurineOverlay'
 import ZarloProactiveBubble from './components/Zarlo/ZarloProactiveBubble'
 import { generateZarloReaction } from './lib/zarlo/zarloEngine'
 import './Challenge.css'
-import './styles/bioluminescent-theme.css'
 import BioluminescentBackground from './components/BioluminescentBackground'
 
 // Confetti celebration for quest completion
@@ -1516,7 +1515,7 @@ const [directionComplete, setDirectionComplete] = useState(false)
   // ============================================
 
   return (
-    <div className="challenge-container content-enter">
+    <div className="challenge-container content-enter theme-bioluminescent">
       <BioluminescentBackground />
       {/* Portal explainer moved inline to DiscoverTab */}
       {showDailyCheckin && <DailyCheckin userId={user?.id} onComplete={() => {
@@ -1583,10 +1582,10 @@ const [directionComplete, setDirectionComplete] = useState(false)
         <div
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
-            border: '1px solid rgba(94,23,235,0.12)',
+            background: 'var(--accent-primary-bg)',
+            border: '1px solid var(--accent-primary-border)',
             borderRadius: '14px', padding: '12px 16px',
-            margin: '12px 1.5rem', fontSize: '13px', color: '#1a1a2e', lineHeight: 1.4,
+            margin: '12px 1.5rem', fontSize: '13px', color: 'var(--text-primary)', lineHeight: 1.4,
           }}
         >
           <span>

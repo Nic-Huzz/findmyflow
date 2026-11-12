@@ -6,6 +6,8 @@ import checkAppVersion from './lib/versionCheck.js'
 import { captureUtmParams, trackAppOpened } from './lib/analytics.js'
 import './styles/theme-tokens.css'
 import './index.css'
+// Theme overrides must load last so they win by cascade order (no !important needed)
+import './styles/bioluminescent-theme.css'
 
 // Clear stale localStorage when app version changes
 // This ensures returning users see new UI, not cached old state

@@ -152,7 +152,7 @@ export default function FinancialSecurityCard({ userId, onUpdate }) {
     return (
       <div className="fsc-section">
         <div className="fsc-header">
-          <BoltIcon style={{ width: 18, height: 18, color: '#10b981' }} />
+          <BoltIcon style={{ width: 18, height: 18, color: 'var(--accent-gold)' }} />
           <span className="fsc-header-title">Financial Security</span>
         </div>
         <div className="fsc-card fsc-card-love">

@@ -1,2157 +1,2983 @@
-/* ============================================================
-   BIOLUMINESCENT THEME v4a — Living Reef Dark Override
-   ============================================================
-   Import AFTER all existing CSS to override the light theme.
-   Uses !important on every declaration for theme-layer override.
+/* Bioluminescent gradient overrides — scoped to .theme-bioluminescent */
+/* Simple colors handled by CSS variables in theme-tokens.css */
 
-   Color mapping (light -> dark):
-   - #5e17eb (purple)        -> #FF3CAC (pink)
-   - #8b5cf6 (purple light)  -> #E040FB (magenta)
-   - #7c3aed (purple dark)   -> #cc2d8a (dark pink)
-   - #E9A23B (gold)          -> #FFB800 (gold)
-   - #f8f9fa/#e9ecef/#f5f5f5 -> #0A0812 (dark bg)
-   - #ffffff (white cards)    -> #12101C (surface) / rgba(18,16,28,0.75) (glass)
-   - #dee2e6/#e9ecef (border) -> rgba(255,255,255,0.05)
-   - #212529/#1a1a2e (text)   -> #F2EEF8
-   - #6c757d/#495057 (muted)  -> #8478A0 / #BAB0D0
-   - #10b981 (success)        -> #00E5A0
-   - #ef4444 (danger)         -> #FF5A6E
-   - #f97316 (warning)        -> #FF8C42
-   ============================================================ */
-
-
-/* ============================================================
-   1. ROOT / BODY / CONTAINER
-   ============================================================ */
-
-body {
-  background: #0A0812 !important;
-  color: #F2EEF8 !important;
-}
-
-.challenge-container {
-  background: transparent !important;
-}
-
-
-/* ============================================================
-   2. HEADER
-   ============================================================ */
-
-.challenge-header {
-  background: linear-gradient(135deg, #1A0820 0%, #2D0A3E 50%, #1A0820 100%) !important;
-  box-shadow: 0 4px 30px rgba(255,60,172,0.15), inset 0 -1px 0 rgba(255,60,172,0.1) !important;
-}
-
-.challenge-level-fill {
-  background: linear-gradient(90deg, #FF3CAC, #E040FB, #FFB800) !important;
-}
-
-.challenge-level-track {
-  background: rgba(255,60,172,0.06) !important;
-}
-
-.streak-badge {
-  background: rgba(255,60,172,0.1) !important;
-  border: 1px solid rgba(255,60,172,0.15) !important;
-}
-
-.challenge-matchup-banner {
-  background: rgba(255,60,172,0.06) !important;
-  border: 1px solid rgba(255,60,172,0.1) !important;
-}
-
-.challenge-matchup-pill {
-  background: rgba(255,60,172,0.12) !important;
-}
-
-.challenge-day {
-  background: rgba(255,60,172,0.08) !important;
-  border: 1px solid rgba(255,60,172,0.1) !important;
-}
-
-.challenge-journey-btn,
-.leaderboard-btn {
-  background: rgba(255,60,172,0.08) !important;
-  border: 1px solid rgba(255,60,172,0.1) !important;
-}
-
-.challenge-score-dropdown {
-  background: rgba(255,60,172,0.08) !important;
-}
-
-.challenge-hero-avatar {
-  border-color: rgba(255,60,172,0.4) !important;
-  box-shadow: 0 0 20px rgba(255,60,172,0.25) !important;
-}
-
-
-/* ============================================================
-   3. TABS
-   ============================================================ */
-
-.challenge-tab {
-  background: #12101C !important;
-  color: #8478A0 !important;
-  border: 1px solid rgba(255,60,172,0.06) !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
-}
-
-.challenge-tab:hover {
-  background: #1A1628 !important;
-  color: #BAB0D0 !important;
-  border-color: rgba(255,60,172,0.12) !important;
-}
-
-.challenge-tab.active {
-  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
-  color: #0a0a0a !important;
-  border: none !important;
-  box-shadow: 0 4px 20px rgba(255,60,172,0.3) !important;
-}
-
-.challenge-tab.locked {
-  opacity: 0.3 !important;
-}
-
-
-/* ============================================================
-   4. CHALLENGE.CSS — CARDS, BUTTONS, MODALS
-   ============================================================ */
-
-/* All white card backgrounds -> dark glass surface */
-.quest-card,
-.dt-card,
-.artifact-progress,
-.wr-cta-card,
-.quest-group,
-.dt-dome-viz,
-.dt-bridge-cta,
-.score-card,
-.radar-container,
-.weekly-stats,
-.challenge-score-dropdown,
-.settings-dropdown {
-  background: rgba(18,16,28,0.75) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-  color: #F2EEF8 !important;
-}
-
-/* Card hover states */
-.quest-card:hover,
-.dt-card:hover,
-.quest-group:hover {
-  border-color: rgba(255,60,172,0.12) !important;
-  box-shadow: 0 4px 20px rgba(255,60,172,0.08) !important;
-}
-
-
-/* ============================================================
-   5. LEVELTAB.CSS
-   ============================================================ */
-
-/* Level selector pills */
-.level-selector-pill {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.level-selector-pill:hover:not(.locked) {
-  border-color: rgba(255,60,172,0.2) !important;
-  background: #1A1628 !important;
-}
-
-.level-selector-pill.current {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-.level-selector-pill.locked {
-  background: #0D0B14 !important;
-  color: #4a4060 !important;
-}
-
-/* Level header card */
-.level-header-card {
-  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%) !important;
-}
-
-/* Zone diagnosis */
-.level-zone-diagnosis,
-.level-deep-dive,
-.level-boss-fight,
-.level-milestone,
-.level-progress {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.level-zone-card {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.level-zone-card:hover {
-  border-color: rgba(255,60,172,0.15) !important;
-  background: #1A1628 !important;
-}
-
-.level-zone-card.selected {
-  border-color: #FF3CAC !important;
-  background: rgba(255,60,172,0.06) !important;
-}
-
-.level-zone-check {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-}
-
-.level-zone-name,
-.level-dd-name,
-.level-boss-fight-title,
-.level-milestone-text,
-.level-section-title {
-  color: #F2EEF8 !important;
-}
-
-.level-zone-desc {
-  color: #8478A0 !important;
-}
-
-/* Boss reveal */
-.level-boss-reveal {
-  background: linear-gradient(135deg, rgba(255,60,172,0.08), rgba(255,60,172,0.04)) !important;
-  border-left-color: #FF3CAC !important;
-}
-
-/* Progress bars */
-.level-bar-track {
-  background: rgba(255,60,172,0.06) !important;
-}
-
-.level-bar-fill.purple {
-  background: linear-gradient(90deg, #FF3CAC, #E040FB) !important;
-}
-
-.level-bar-dot {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.level-bar-dot.filled {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-}
-
-/* Quest section */
-.quest-section {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.quest-flow-cta {
-  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(255,184,0,0.03)) !important;
-  border-color: rgba(255,60,172,0.15) !important;
-  color: #FF3CAC !important;
-}
-
-.quest-explore-menu {
-  background: #12101C !important;
-}
-
-.quest-explore-option {
-  color: #F2EEF8 !important;
-}
-
-.quest-explore-option:hover {
-  background: rgba(255,60,172,0.06) !important;
-}
-
-.quest-add-btn {
-  border-color: rgba(255,60,172,0.15) !important;
-  background: #0D0B14 !important;
-  color: #FF3CAC !important;
-}
-
-.quest-swipe-dot.active {
-  background: #FF3CAC !important;
-}
-
-.quest-section-title {
-  color: #FF3CAC !important;
-}
-
-/* Graduation */
-.level-graduation-overlay {
-  background: rgba(10,8,18,0.85) !important;
-}
-
-.level-graduation-card {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.level-graduation-btn {
-  background: linear-gradient(135deg, #FFB800, #FFD060) !important;
-  color: #0a0a0a !important;
-}
-
-/* DD status badges */
-.level-dd-status.done {
-  background: rgba(0,229,160,0.12) !important;
-  color: #00E5A0 !important;
-}
-
-.level-dd-status.start {
-  background: linear-gradient(135deg, #FFB800, #FFD060) !important;
-  color: #0a0a0a !important;
-}
-
-.level-milestone-label {
-  color: #FFB800 !important;
-}
-
-
-/* ============================================================
-   6. WEEKLYFOCUS.CSS
-   ============================================================ */
-
-.wf-card {
-  background: rgba(18,16,28,0.75) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-}
-
-.wf-focus {
-  background: rgba(255,60,172,0.04) !important;
-}
-
-.wf-focus.wf-completed {
-  background: rgba(255,184,0,0.06) !important;
-}
-
-.wf-action {
-  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 160%) !important;
-  color: #0a0a0a !important;
-}
-
-.wf-action-secondary {
-  color: #FF3CAC !important;
-  border-color: rgba(255,60,172,0.2) !important;
-}
-
-
-/* ============================================================
-   7. TUNETAB.CSS
-   ============================================================ */
-
-.tt-section {
-  background: rgba(18,16,28,0.75) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.tt-section-title {
-  color: #FF3CAC !important;
-}
-
-.tt-section-sub {
-  color: #8478A0 !important;
-}
-
-.tt-drain-log-btn {
-  background: #12101C !important;
-  border-color: rgba(255,60,172,0.15) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-drain-cat-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-drain-cat-btn.selected {
-  border-color: #FF8C42 !important;
-  background: rgba(255,140,66,0.06) !important;
-}
-
-.tt-drain-note {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #F2EEF8 !important;
-}
-
-.tt-state-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-drain-save {
-  background: linear-gradient(135deg, #E040FB, #FF3CAC) !important;
-  color: #0a0a0a !important;
-}
-
-.tt-recovery-sheet {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.tt-recovery-dur.selected {
-  background: #FF3CAC !important;
-  border-color: #FF3CAC !important;
-}
-
-.tt-recovery-activity.selected {
-  border-color: #00E5A0 !important;
-  background: rgba(0,229,160,0.08) !important;
-}
-
-.tt-recovery-save {
-  background: linear-gradient(135deg, #00E5A0, #00C48C) !important;
-  color: #0a0a0a !important;
-}
-
-.tt-info-modal {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.tt-info-modal-close {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-}
-
-
-/* ============================================================
-   8. PROGRESSTAB.CSS
-   ============================================================ */
-
-/* Evidence cards, fuel cards, voice cards, essence card */
-.pt-essence-card,
-.pt-fuel-pain,
-.pt-voice-card,
-.pt-evidence-card {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #F2EEF8 !important;
-}
-
-.pt-essence-avatar {
-  border-color: #FF3CAC !important;
-}
-
-.pt-essence-name {
-  color: #FF3CAC !important;
-}
-
-.pt-fuel-has {
-  color: #00E5A0 !important;
-}
-
-.pt-fuel-missing {
-  color: #FF5A6E !important;
-}
-
-.pt-voice-dot.filled {
-  background: #FF3CAC !important;
-}
-
-/* Evidence state colors */
-.pt-evidence-card[data-state="vibe_rise"]::before {
-  background: #FFB800 !important;
-}
-
-.pt-evidence-card[data-state="fun"]::before {
-  background: #00E5A0 !important;
-}
-
-.pt-evidence-card[data-state="pressure"]::before {
-  background: #FF5A6E !important;
-}
-
-/* Think box */
-.pt-think {
-  background: rgba(255,255,255,0.03) !important;
-  border-left-color: #FFB800 !important;
-  color: #BAB0D0 !important;
-}
-
-/* CTAs */
-.pt-cta {
-  background: linear-gradient(135deg, #FFB800, #FFD060) !important;
-  color: #0a0a0a !important;
-}
-
-.pt-cta-purple {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-/* Checklists */
-.pt-check-dot.done {
-  background: #00E5A0 !important;
-}
-
-.pt-check-dot.next {
-  background: #FFB800 !important;
-}
-
-/* Journey labels */
-.pt-journey-fill {
-  background: linear-gradient(90deg, rgba(255,255,255,0.4), #FFB800) !important;
-}
-
-.pt-next-action {
-  background: rgba(255,184,0,0.15) !important;
-  border-color: rgba(255,184,0,0.3) !important;
-  color: #FFB800 !important;
-}
-
-
-/* ============================================================
-   9. SMALLER COMPONENT OVERRIDES
-   ============================================================ */
-
-/* --- CapacityCard --- */
-
-.cc-card {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.cc-title {
-  color: #F2EEF8 !important;
-}
-
-.cc-trend-up {
-  color: #00E5A0 !important;
-}
-
-.cc-trend-down {
-  color: #FF5A6E !important;
-}
-
-.cc-pillar-active {
-  background: rgba(255,60,172,0.10) !important;
-  color: #FF3CAC !important;
-}
-
-.cc-pillar-inactive {
-  background: rgba(255,255,255,0.04) !important;
-}
-
-.cc-marker {
-  background: #F2EEF8 !important;
-}
-
-.cc-zl-stuck {
-  color: #FF5A6E !important;
-}
-
-.cc-zl-wired {
-  color: #FF8C42 !important;
-}
-
-.cc-zl-grounded {
-  color: #FF3CAC !important;
-}
-
-.cc-zl-vibe-rise {
-  color: #FFB800 !important;
-}
-
-.cc-maint-dot {
-  background: rgba(255,255,255,0.05) !important;
-}
-
-.cc-maint-filled {
-  background: #00E5A0 !important;
-}
-
-.cc-maint-partial {
-  background: #FFB800 !important;
-}
-
-.cc-maint-low {
-  background: #FF5A6E !important;
-}
-
-.cc-cta {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-/* --- QuadrantCard --- */
-
-.qc-card {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.qc-compass {
-  background: #0D0B14 !important;
-}
-
-.qc-zone-grounded .qc-zone-label-text {
-  color: #FF3CAC !important;
-}
-
-.qc-zone-viberise .qc-zone-label-text {
-  color: #FFB800 !important;
-}
-
-.qc-zone-stuck .qc-zone-label-text {
-  color: #8478A0 !important;
-}
-
-.qc-zone-wired .qc-zone-label-text {
-  color: #FF5A6E !important;
-}
-
-.qc-bar-fill-safety {
-  background: linear-gradient(90deg, #E040FB, #FF3CAC) !important;
-}
-
-.qc-bar-fill-expression {
-  background: linear-gradient(90deg, #FFD060, #FFB800) !important;
-}
-
-.qc-bar-fill-maintenance {
-  background: linear-gradient(90deg, rgba(0,229,160,0.4), #00E5A0) !important;
-}
-
-.qc-bar-todo {
-  color: #FF3CAC !important;
-}
-
-.qc-bar-done {
-  color: #00E5A0 !important;
-}
-
-.qc-nudge {
-  background: linear-gradient(135deg, rgba(255,60,172,0.03), rgba(255,184,0,0.04)) !important;
-  border-color: rgba(255,60,172,0.05) !important;
-}
-
-/* --- ChallengeFilters --- */
-
-.frequency-tab {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #8478A0 !important;
-}
-
-.frequency-tab:hover {
-  background: #1A1628 !important;
-  border-color: rgba(255,60,172,0.15) !important;
-}
-
-.frequency-tab.active {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  border-color: #FF3CAC !important;
-  color: #0a0a0a !important;
-}
-
-.filter-chip {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.filter-chip:hover {
-  border-color: #FF3CAC !important;
-  color: #FF3CAC !important;
-}
-
-.filter-chip.active {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  border-color: #FF3CAC !important;
-  color: #0a0a0a !important;
-}
-
-/* --- ChallengeStageTabs --- */
-
-.stage-tab {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #8478A0 !important;
-}
-
-.stage-tab.available {
-  background: #12101C !important;
-  color: #BAB0D0 !important;
-}
-
-.stage-tab.current {
-  background: rgba(255,60,172,0.1) !important;
-  border-color: #FF3CAC !important;
-  color: #FF3CAC !important;
-}
-
-.stage-tab.completed {
-  background: rgba(255,184,0,0.1) !important;
-  border-color: rgba(255,184,0,0.3) !important;
-  color: #FFB800 !important;
-}
-
-.stage-tab.active {
-  background: #FF3CAC !important;
-  border-color: #FF3CAC !important;
-  color: #0a0a0a !important;
-}
-
-.completed-check {
-  background: #FFB800 !important;
-}
-
-.progress-fill {
-  background: linear-gradient(90deg, #FF3CAC, #FFB800) !important;
-}
-
-/* --- QuestTaskSheet --- */
-
-.qts-sheet {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.qts-accent {
-  background: linear-gradient(90deg, #FF3CAC, #FFB800) !important;
-}
-
-.qts-title {
-  color: #F2EEF8 !important;
-}
-
-.qts-row-label {
-  color: rgba(255,255,255,0.35) !important;
-}
-
-.qts-row-value {
-  color: rgba(255,255,255,0.7) !important;
-}
-
-.qts-pill-healed {
-  background: rgba(0,229,160,0.06) !important;
-  color: #00E5A0 !important;
-}
-
-.qts-identity {
-  background: rgba(255,60,172,0.03) !important;
-  border-left-color: rgba(255,60,172,0.15) !important;
-}
-
-.qts-cross-tag {
-  background: rgba(255,60,172,0.06) !important;
-  color: #FF3CAC !important;
-}
-
-.qts-cta {
-  background: linear-gradient(135deg, rgba(255,60,172,0.9), rgba(255,184,0,0.9)) !important;
-}
-
-
-/* ============================================================
-   10. GENERIC TEXT COLOR OVERRIDES
-   ============================================================ */
-
-/* Catch-all for common headings in the challenge area */
-.challenge-content h1,
-.challenge-content h2,
-.challenge-content h3,
-.challenge-content h4 {
-  color: #F2EEF8 !important;
-}
-
-/* Muted text patterns */
-.challenge-content p,
-.challenge-content .desc,
-.challenge-content .description {
-  color: #BAB0D0 !important;
-}
-
-/* Links in the challenge area */
-.challenge-content a {
-  color: #FF3CAC !important;
-}
-
-/* Generic button font reset */
-.challenge-content button {
-  font-family: 'Outfit', -apple-system, sans-serif !important;
-}
-
-
-/* ============================================================
-   11. SPORE PARTICLES + REEF GLOW + LIVING TEXTURE
-   ============================================================ */
-
-/* --- Bioluminescent spore particles --- */
-
+/* ── Background layers ── */
 .bio-spore-layer {
-  position: fixed !important;
-  inset: 0 !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-  overflow: hidden !important;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
 }
 
 .bio-spore {
-  position: absolute !important;
-  border-radius: 50% !important;
-  animation: bio-spore-rise linear infinite !important;
+  position: absolute;
+  border-radius: 50%;
+  animation: bio-spore-rise linear infinite;
 }
 
 .bio-spore::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: -3px !important;
-  border-radius: 50% !important;
-  background: inherit !important;
-  filter: blur(6px) !important;
-  opacity: 0.6 !important;
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: inherit;
+  filter: blur(6px);
+  opacity: 0.6;
 }
 
 @keyframes bio-spore-rise {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(0.5);
-  }
-  15% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: translateY(-40vh) translateX(15px) scale(1.2);
-  }
-  85% {
-    opacity: 0.6;
-    transform: translateY(-80vh) translateX(-10px) scale(0.8);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-105vh) scale(0.3);
-  }
+  0% { opacity: 0; transform: translateY(0) scale(0.5); }
+  15% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: translateY(-40vh) translateX(15px) scale(1.2); }
+  85% { opacity: 0.6; transform: translateY(-80vh) translateX(-10px) scale(0.8); }
+  100% { opacity: 0; transform: translateY(-105vh) scale(0.3); }
 }
 
-/* --- Reef glow blobs --- */
-
 .bio-reef-glow {
-  position: fixed !important;
-  inset: 0 !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .bio-reef-glow div {
-  position: absolute !important;
-  border-radius: 50% !important;
-  filter: blur(60px) !important;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
 }
 
 .bio-rg1 {
-  width: 200px !important;
-  height: 200px !important;
-  top: 5% !important;
-  left: -20% !important;
-  background: rgba(255,60,172,0.12) !important;
-  animation: bio-reef-pulse 8s ease-in-out infinite !important;
+  width: 200px; height: 200px;
+  top: 5%; left: -20%;
+  background: rgba(255,60,172,0.12);
+  animation: bio-reef-pulse 8s ease-in-out infinite;
 }
 
 .bio-rg2 {
-  width: 160px !important;
-  height: 160px !important;
-  top: 40% !important;
-  right: -15% !important;
-  background: rgba(224,64,251,0.08) !important;
-  animation: bio-reef-pulse 10s ease-in-out infinite 2s !important;
+  width: 160px; height: 160px;
+  top: 40%; right: -15%;
+  background: rgba(224,64,251,0.08);
+  animation: bio-reef-pulse 10s ease-in-out infinite 2s;
 }
 
 .bio-rg3 {
-  width: 180px !important;
-  height: 180px !important;
-  bottom: 10% !important;
-  left: 10% !important;
-  background: rgba(255,184,0,0.06) !important;
-  animation: bio-reef-pulse 12s ease-in-out infinite 4s !important;
+  width: 180px; height: 180px;
+  bottom: 10%; left: 10%;
+  background: rgba(255,184,0,0.06);
+  animation: bio-reef-pulse 12s ease-in-out infinite 4s;
 }
 
 .bio-rg4 {
-  width: 120px !important;
-  height: 120px !important;
-  top: 60% !important;
-  left: 40% !important;
-  background: rgba(0,229,204,0.04) !important;
-  animation: bio-reef-pulse 9s ease-in-out infinite 1s !important;
+  width: 120px; height: 120px;
+  top: 60%; left: 40%;
+  background: rgba(0,229,204,0.04);
+  animation: bio-reef-pulse 9s ease-in-out infinite 1s;
 }
 
 @keyframes bio-reef-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 0.7;
-  }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.7; }
 }
 
-/* ========================================
-   12. FORMS, INPUTS, TEXTAREAS, MODALS
-   ======================================== */
-
-/* All text inputs and textareas within challenge */
-.challenge-container input[type="text"],
-.challenge-container input[type="number"],
-.challenge-container input[type="email"],
-.challenge-container input[type="search"],
-.challenge-container textarea,
-.challenge-container select,
-.tt-drain-note,
-.tt-stall-note,
-.quest-input,
-.quest-textarea,
-.quest-dropdown {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.1) !important;
-  color: #F2EEF8 !important;
-}
-
-.challenge-container input:focus,
-.challenge-container textarea:focus,
-.challenge-container select:focus,
-.tt-drain-note:focus {
-  border-color: #FF3CAC !important;
-  background: #1A1628 !important;
-  box-shadow: 0 0 0 4px rgba(255,60,172,0.1) !important;
-  outline: none !important;
-}
-
-.challenge-container input::placeholder,
-.challenge-container textarea::placeholder,
-.tt-drain-note::placeholder {
-  color: #5a4e70 !important;
-}
-
-/* Drain/stall form — the modal shown in screenshot */
-.tt-drain-form {
-  color: #F2EEF8 !important;
-}
-
-.tt-drain-cat-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-drain-cat-btn:hover {
-  border-color: rgba(255,140,66,0.3) !important;
-  color: #FF8C42 !important;
-}
-
-.tt-drain-cat-btn.selected {
-  border-color: #FF8C42 !important;
-  background: rgba(255,140,66,0.08) !important;
-  color: #FF8C42 !important;
-}
-
-/* Stall category buttons use same pattern but purple → pink */
-.tt-stall-count {
-  color: #E040FB !important;
-}
-
-/* State buttons in drain/stall */
-.tt-state-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-state-btn:hover {
-  border-color: rgba(255,60,172,0.2) !important;
-}
-
-.tt-state-btn.selected,
-.tt-state-btn:active {
-  border-color: #FF3CAC !important;
-  background: rgba(255,60,172,0.08) !important;
-  color: #FF3CAC !important;
-}
-
-.tt-state-label {
-  color: #8478A0 !important;
-}
-
-/* Save/cancel buttons */
-.tt-drain-save {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-.tt-drain-cancel {
-  background: transparent !important;
-  border-color: rgba(255,255,255,0.1) !important;
-  color: #BAB0D0 !important;
-}
-
-/* Drain/stall list items */
-.tt-drain-item {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.tt-drain-item-cat {
-  color: #8478A0 !important;
-}
-
-.tt-drain-item-note {
-  color: #BAB0D0 !important;
-}
-
-/* Stall log button */
-.tt-stall-log-btn {
-  background: #12101C !important;
-  border-color: rgba(224,64,251,0.15) !important;
-  color: #E040FB !important;
-}
-
-/* Generic modals and sheets within challenge */
-.challenge-container .modal-overlay,
-.challenge-container [class*="overlay"] {
-  background: rgba(10,8,18,0.85) !important;
-}
-
-.challenge-container .modal-content,
-.challenge-container .modal-card,
-.challenge-container [class*="modal"]:not([class*="overlay"]) {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-}
-
-/* Recovery sheet */
-.tt-recovery-sheet {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.tt-recovery-dur {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-recovery-dur.selected {
-  background: #FF3CAC !important;
-  border-color: #FF3CAC !important;
-  color: #0a0a0a !important;
-}
-
-.tt-recovery-activity {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.tt-recovery-activity.selected {
-  border-color: #00E5A0 !important;
-  background: rgba(0,229,160,0.08) !important;
-  color: #00E5A0 !important;
-}
-
-.tt-recovery-save {
-  background: linear-gradient(135deg, #00E5A0, #00C48C) !important;
-  color: #0a0a0a !important;
-}
-
-/* Info modal */
-.tt-info-modal {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.tt-info-modal-close {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-/* Quest select options, add quest modal */
-.quest-select-option {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.quest-select-option:hover {
-  border-color: rgba(255,60,172,0.2) !important;
-  background: #1A1628 !important;
-}
-
-.quest-select-option.selected {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-/* Rating buttons */
-.quest-rating-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.quest-rating-btn.selected {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-  border-color: transparent !important;
-}
-
-/* Generic white backgrounds catch-all */
-.challenge-container [class*="card"],
-.challenge-container [class*="section"]:not(.challenge-tabs):not(.section-divider) {
-  background-color: rgba(18,16,28,0.75);
-  border-color: rgba(255,255,255,0.05);
-}
-
-/* Healing modal */
-.healing-completion-modal,
-.healing-intention-modal,
-.healing-flow-modal {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-/* Settings dropdown */
-.settings-dropdown,
-.settings-menu-item {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.settings-menu-item:hover {
-  background: #1A1628 !important;
-}
-
-.settings-menu-item {
-  border-bottom-color: rgba(255,255,255,0.05) !important;
-}
-
-/* Ghost intro banner */
-.ghost-intro-banner {
-  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(255,184,0,0.04)) !important;
-  border-color: rgba(255,60,172,0.1) !important;
-  color: #F2EEF8 !important;
-}
-
-/* Weekly review CTA (the gold-bordered card) */
-.wr-dismiss-btn {
-  color: #8478A0 !important;
-}
-
-/* Learn more content */
-.learn-more-content {
-  background: rgba(255,60,172,0.03) !important;
-  border-left-color: #FFB800 !important;
-  color: #BAB0D0 !important;
-}
-
-.learn-more-toggle {
-  color: #FF3CAC !important;
-}
-
-/* Sub tabs (healing daily/weekly) */
-.sub-tab {
-  background: transparent !important;
-  color: #8478A0 !important;
-}
-
-.sub-tab:hover {
-  background: rgba(255,60,172,0.08) !important;
-  color: #FF3CAC !important;
-}
-
-.sub-tab.active {
-  background: #FF3CAC !important;
-  color: #0a0a0a !important;
-}
-
-.healing-sub-tabs-wrapper,
-.business-sub-tabs,
-.healing-sub-tabs {
-  background: rgba(255,60,172,0.03) !important;
-  border-bottom-color: rgba(255,60,172,0.08) !important;
-}
-
-/* Generic primary buttons — all purple → pink gradient */
-.challenge-container .btn-primary,
-.challenge-container [class*="complete-btn"],
-.challenge-container [class*="action-btn"],
-.challenge-container [class*="flow-btn"]:not(.locked):not(.coming-soon),
-.quest-complete-btn,
-.quest-flow-btn:not(.locked),
-.quest-action-btn,
-.quest-checklist-link {
-  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
-  color: #0a0a0a !important;
-}
-
-/* Secondary/outline buttons */
-.challenge-container .btn-secondary,
-.quest-complete-btn.secondary,
-.view-results-btn {
-  background: transparent !important;
-  border-color: rgba(255,60,172,0.2) !important;
-  color: #FF3CAC !important;
-}
-
-/* Locked/disabled buttons */
-.quest-flow-btn.locked,
-.quest-flow-btn.coming-soon {
-  background: #1A1628 !important;
-  color: #4a4060 !important;
-}
-
-/* Completed badge */
-.quest-completed-badge {
-  background: rgba(0,229,160,0.12) !important;
-  color: #00E5A0 !important;
-  border-color: rgba(0,229,160,0.2) !important;
-}
-
-/* Locked message */
-.quest-locked-message {
-  background: #12101C !important;
-  color: #8478A0 !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-/* Frequency badges */
-.frequency-badge {
-  color: #BAB0D0 !important;
-}
-
-.frequency-badge.daily {
-  background: rgba(255,184,0,0.1) !important;
-  color: #FFB800 !important;
-}
-
-.frequency-badge.weekly {
-  background: rgba(224,64,251,0.1) !important;
-  color: #E040FB !important;
-}
-
-/* Quest points RP pill */
-.quest-points {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-/* Quest card text */
-.quest-name {
-  color: #F2EEF8 !important;
-}
-
-.quest-description {
-  color: #8478A0 !important;
-}
-
-/* Daily streak bubbles */
-.streak-bubble {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #4a4060 !important;
-}
-
-.streak-bubble.completed {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-  border-color: transparent !important;
-}
-
-/* Confetti colors remapped */
-.confetti-0 { background: #FF3CAC !important; }
-.confetti-1 { background: #FFB800 !important; }
-.confetti-2 { background: #00E5A0 !important; }
-.confetti-3 { background: #00E5CC !important; }
-.confetti-4 { background: #FF5A6E !important; }
-
-/* Back links */
-.challenge-container a[class*="back"],
-.challenge-container [class*="back-btn"] {
-  color: #FF3CAC !important;
-}
-
-/* ========================================
-   13. DAILY CHECKIN MODAL (the NS state picker)
-   ======================================== */
-
-.daily-checkin-overlay {
-  background: rgba(10,8,18,0.85) !important;
-}
-
-.daily-checkin-card {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important;
-}
-
-.daily-checkin-title {
-  color: #F2EEF8 !important;
-}
-
-.daily-checkin-sub {
-  color: #8478A0 !important;
-}
-
-.daily-checkin-skip {
-  color: #8478A0 !important;
-}
-
-.daily-checkin-back {
-  color: #8478A0 !important;
-}
-
-.daily-checkin-btn {
-  background: rgba(255,255,255,0.04) !important;
-  border: 2px solid rgba(255,255,255,0.08) !important;
-}
-
-.daily-checkin-btn-name {
-  color: #FF3CAC !important;
-}
-
-.daily-checkin-btn-emoji {
-  color: #F2EEF8 !important;
-}
-
-.daily-checkin-btn-label {
-  color: #8478A0 !important;
-}
-
-.daily-checkin-btn:hover {
-  border-color: rgba(255,255,255,0.2) !important;
-}
-
-.daily-checkin-btn.selected {
-  background: linear-gradient(135deg, rgba(255,60,172,0.12), rgba(224,64,251,0.08)) !important;
-  border-color: #FF3CAC !important;
-}
-
-.daily-checkin-btn.selected .daily-checkin-btn-name {
-  color: #FF3CAC !important;
-}
-
-.daily-checkin-btn.daily-checkin-vibe-rise.selected {
-  background: linear-gradient(135deg, rgba(255,184,0,0.12), rgba(255,184,0,0.06)) !important;
-  border-color: #FFB800 !important;
-  box-shadow: 0 0 16px rgba(255,184,0,0.15) !important;
-}
-
-.daily-checkin-btn.daily-checkin-vibe-rise.selected .daily-checkin-btn-name {
-  color: #FFB800 !important;
-}
-
-.daily-checkin-drain-cat {
-  background: rgba(255,255,255,0.04) !important;
-  border: 2px solid rgba(255,255,255,0.08) !important;
-  color: #F2EEF8 !important;
-}
-
-.daily-checkin-drain-cat:hover {
-  border-color: rgba(255,255,255,0.15) !important;
-}
-
-.daily-checkin-drain-cat.selected {
-  background: rgba(255,90,110,0.08) !important;
-  border-color: #FF5A6E !important;
-  color: #FF5A6E !important;
-}
-
-.daily-checkin-drain-note {
-  border-color: rgba(255,255,255,0.1) !important;
-  background: rgba(255,255,255,0.04) !important;
-  color: #F2EEF8 !important;
-}
-
-.daily-checkin-drain-note:focus {
-  border-color: #FF3CAC !important;
-}
-
-.daily-checkin-drain-skip {
-  background: rgba(255,255,255,0.04) !important;
-  border: 2px solid rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.daily-checkin-drain-save {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-.daily-checkin-boost-save {
-  background: linear-gradient(135deg, #FFB800, #f59e0b) !important;
-  color: #0a0a0a !important;
-}
-
-.daily-checkin-predict-input {
-  background: rgba(255,255,255,0.04) !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #F2EEF8 !important;
-}
-
-.daily-checkin-predict-input:focus {
-  border-color: #FF3CAC !important;
-}
-
-.daily-checkin-predict-btn {
-  background: rgba(255,255,255,0.04) !important;
-  border: 2px solid rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.daily-checkin-predict-btn.selected {
-  background: rgba(255,60,172,0.1) !important;
-  border-color: #FF3CAC !important;
-  color: #FF3CAC !important;
-}
-
-/* ========================================
-   13a. REGULATION CARD (post-checkin exercises)
-   ======================================== */
-
-.regulation-back {
-  color: #8478A0 !important;
-}
-
-.regulation-state-badge.state-ventral {
-  background: rgba(0,229,160,0.12) !important;
-  color: #00E5A0 !important;
-}
-
-.regulation-state-badge.state-vibe_rise {
-  background: rgba(255,184,0,0.12) !important;
-  color: #FFB800 !important;
-}
-
-.regulation-state-badge.state-sympathetic {
-  background: rgba(255,90,110,0.1) !important;
-  color: #FF5A6E !important;
-}
-
-.regulation-state-badge.state-dorsal {
-  background: rgba(132,120,160,0.12) !important;
-  color: #8478A0 !important;
+.bio-living-texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
 }
 
-.regulation-title {
-  color: #F2EEF8 !important;
+/* Active tab gradient */
+.theme-bioluminescent .challenge-tab.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
 }
 
-.regulation-subtitle {
-  color: #8478A0 !important;
+/* ── Bottom toolbar (rendered outside .theme-bioluminescent, use body:has) ── */
+body:has(.theme-bioluminescent) .bottom-toolbar {
+  background: #0A0812;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
 }
-
-.regulation-single {
-  background: rgba(255,60,172,0.04) !important;
-  border-color: rgba(255,60,172,0.1) !important;
-}
-
-.regulation-single .regulation-instruction {
-  color: #BAB0D0 !important;
-}
-
-.regulation-exercise {
-  background: rgba(255,255,255,0.04) !important;
-  border-color: rgba(255,255,255,0.08) !important;
-}
-
-.regulation-exercise:hover {
-  border-color: rgba(255,255,255,0.15) !important;
-  background: rgba(255,255,255,0.06) !important;
-}
-
-.regulation-exercise.expanded {
-  background: rgba(255,60,172,0.06) !important;
-  border-color: #FF3CAC !important;
-  box-shadow: 0 2px 12px rgba(255,60,172,0.1) !important;
-}
-
-.regulation-exercise-name {
-  color: #F2EEF8 !important;
-}
-
-.regulation-duration {
-  color: #8478A0 !important;
-  background: rgba(255,255,255,0.04) !important;
-}
-
-.regulation-exercise.expanded .regulation-duration {
-  background: rgba(255,60,172,0.08) !important;
-  color: #FF3CAC !important;
-}
-
-.regulation-instruction {
-  color: #8478A0 !important;
-}
-
-.regulation-done {
-  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
-  color: #0a0a0a !important;
-  box-shadow: 0 4px 16px rgba(255,60,172,0.25) !important;
-}
-
-.regulation-skip {
-  border-color: rgba(255,255,255,0.08) !important;
-  background: rgba(255,255,255,0.04) !important;
-  color: #8478A0 !important;
-}
-
-.regulation-skip:hover {
-  border-color: rgba(255,255,255,0.15) !important;
-  color: #BAB0D0 !important;
-}
-
-/* ========================================
-   13b. BOTTOM TOOLBAR
-   ======================================== */
-
-.bottom-toolbar,
-.bottom-toolbar.main-toolbar {
-  background: #0A0812 !important;
-  border-top: 1px solid rgba(255,255,255,0.05) !important;
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.3) !important;
-}
-
-.main-toolbar .toolbar-item {
-  color: #8478A0 !important;
-}
-
-.main-toolbar .toolbar-item:hover {
-  color: #FF3CAC !important;
-  background: rgba(255,60,172,0.05) !important;
-}
-
-.main-toolbar .toolbar-item.active {
-  color: #FF3CAC !important;
-  background: rgba(255,60,172,0.08) !important;
-}
-
-/* Let's Play button — gradient instead of purple */
-.main-toolbar .toolbar-challenge,
-.main-toolbar .toolbar-challenge:hover,
-.main-toolbar .toolbar-challenge.active {
-  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
-  color: #0a0a0a !important;
-}
-
-/* Download popup in toolbar */
-.dl-popup {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.dl-popup-btn--purple {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-.dl-popup-btn--dark {
-  background: #1A1628 !important;
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   14. LEVELTAB — QUEST MODALS & FORMS
-   ======================================== */
-
-.quest-empty {
-  background: #12101C !important;
-  color: #8478A0 !important;
-}
-
-.quest-add-modal {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #F2EEF8 !important;
-}
-
-.quest-add-select,
-.quest-add-input {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-  border-color: rgba(255,255,255,0.1) !important;
-}
-
-.quest-state-pill {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.quest-state-pill.selected,
-.quest-state-pill:hover {
-  border-color: #FF3CAC !important;
-  background: rgba(255,60,172,0.08) !important;
-  color: #FF3CAC !important;
-}
-
-.quest-add-cancel {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.quest-closed-item {
-  background: #12101C !important;
-}
-
-.struggle-pill {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.quest-scroll-card {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.quest-modal {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important;
-}
-
-.lt-matrix-card {
-  background: #12101C !important;
-}
-
-.skill-level-picker {
-  background: #12101C !important;
-  border-color: rgba(255,60,172,0.15) !important;
-  color: #F2EEF8 !important;
-}
-
-.skill-level-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.skill-level-btn.selected,
-.skill-level-btn.active {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-  border-color: transparent !important;
-}
-
-.level-boss-textarea {
-  border-color: rgba(255,255,255,0.1) !important;
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.level-graduation-title {
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   15. PROGRESSTAB — REMAINING CARDS
-   ======================================== */
-
-.pt-onboarding-banner {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-voice-nav-btn {
-  border-color: rgba(255,255,255,0.1) !important;
-  background: #12101C !important;
-  color: #BAB0D0 !important;
-}
-
-.pt-evidence-card[data-state="vibe_rise"] {
-  background: rgba(18,16,28,0.75) !important;
-}
-
-.pt-evidence-card[data-state="fun"] {
-  background: rgba(18,16,28,0.75) !important;
-}
-
-.pt-evidence-summary {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-cta-card {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-income-card {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-fuel-compare {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-checklist {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-empty {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-}
-
-.pt-reflect-input {
-  border-color: rgba(255,255,255,0.1) !important;
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.pt-reflect-pill {
-  border-color: rgba(255,255,255,0.1) !important;
-  background: #12101C !important;
-  color: #BAB0D0 !important;
-}
-
-.pt-chip-state[data-state="vibe_rise"] {
-  background: rgba(255,184,0,0.08) !important;
-  color: #FFB800 !important;
-}
-
-.pt-chip-state[data-state="fun"] {
-  background: rgba(0,229,160,0.08) !important;
-  color: #00E5A0 !important;
-}
-
-.pt-chip-state[data-state="pressure"] {
-  background: rgba(255,90,110,0.08) !important;
-  color: #FF5A6E !important;
-}
-
-/* ========================================
-   16. CHALLENGE.CSS — REMAINING ELEMENTS
-   ======================================== */
-
-.onboarding-content {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.onboarding-category {
-  background: #1A1628 !important;
-  color: #F2EEF8 !important;
-}
-
-.onboarding-category h3,
-.onboarding-artifacts h3 {
-  color: #F2EEF8 !important;
-}
-
-.group-mode-btn {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #BAB0D0 !important;
-}
-
-.group-code-input {
-  border-color: rgba(255,255,255,0.1) !important;
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   17. TUNETAB — REMAINING ELEMENTS
-   ======================================== */
-
-.tt-recovery-handle {
-  background: rgba(255,255,255,0.1) !important;
-}
-
-.tt-recovery-other {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   18. QUEST PATH MAP
-   ======================================== */
-
-.qpm-overlay {
-  background: #0A0812 !important;
-}
-
-.qpm-add-input {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.1) !important;
-  color: #F2EEF8 !important;
-}
-
-.qpm-add-btn {
-  background: linear-gradient(135deg, #FF3CAC, #FFB800) !important;
-  color: #0a0a0a !important;
-}
-
-/* ========================================
-   19. QUADRANT CARD BAR + PROGRESS LINE
-   ======================================== */
-
-.qc-bar {
-  background: #12101C !important;
-}
-
-.progress-line {
-  background: rgba(255,255,255,0.1) !important;
-}
-
-/* ========================================
-   20. WEEKLY REVIEW MODAL
-   ======================================== */
-
-.weekly-review-modal,
-.weekly-review-card,
-.wr-card {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-.wr-question {
-  color: #F2EEF8 !important;
-}
-
-.wr-option {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.08) !important;
-  color: #BAB0D0 !important;
-}
-
-.wr-option:hover {
-  border-color: rgba(255,60,172,0.2) !important;
-}
-
-.wr-option.selected {
-  background: rgba(255,60,172,0.08) !important;
-  border-color: #FF3CAC !important;
-  color: #FF3CAC !important;
-}
-
-.wr-textarea {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.1) !important;
-  color: #F2EEF8 !important;
-}
-
-.wr-submit,
-.wr-next-btn {
-  background: linear-gradient(135deg, #FF3CAC, #E040FB) !important;
-  color: #0a0a0a !important;
-}
-
-.wr-skip {
-  color: #8478A0 !important;
-}
-
-/* ========================================
-   21. GHOST RECAP + WEEKLY RECAP CARDS
-   ======================================== */
-
-.ghost-recap-card,
-.weekly-recap-card {
-  background: rgba(18,16,28,0.75) !important;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   22. CHALLENGE INTRO / ONBOARDING
-   ======================================== */
-
-.challenge-intro {
-  background: #0A0812 !important;
-  color: #F2EEF8 !important;
-}
-
-.challenge-intro-card {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   23. NOTIFICATION PROMPT
-   ======================================== */
-
-.notification-prompt {
-  background: #12101C !important;
-  color: #F2EEF8 !important;
-}
-
-/* ========================================
-   24. QUESTBOARDCARD (the swipeable quest cards)
-   ======================================== */
-
-.qbc {
-  background: rgba(18,16,28,0.85) !important;
-  border-color: rgba(255,255,255,0.06) !important;
-  backdrop-filter: blur(8px) !important;
-}
-
-.qbc-title { color: #F2EEF8 !important; }
-.qbc-flow-subtitle { color: #8478A0 !important; }
-.qbc-badge { color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; }
-.qbc-chevron { color: rgba(255,255,255,0.15) !important; }
-.qbc-task-text { color: #F2EEF8 !important; }
-.qbc-task-row--done .qbc-task-text { color: #5a4e70 !important; }
-.qbc-exp-name { color: #F2EEF8 !important; }
-.qbc-exp-icon { color: rgba(255,255,255,0.2) !important; }
-.qbc-exp-chevron { color: rgba(255,255,255,0.15) !important; }
-.qbc-exp-empty { color: #00E5A0 !important; }
-.qbc-dim-hint { color: rgba(255,255,255,0.2) !important; }
-.qbc-dim-value { color: #FF3CAC !important; }
-.qbc-ungrouped-label { color: rgba(255,255,255,0.25) !important; }
-.qbc-completed-toggle { color: rgba(255,255,255,0.3) !important; }
-.qbc-completed-toggle:active { color: #FF3CAC !important; }
-.qbc-outcome-text { color: #F2EEF8 !important; }
-.qbc-stuck-hint { color: rgba(255,255,255,0.2) !important; }
-.qbc-stuck-hint:active { color: #FF3CAC !important; }
-.qbc-menu-trigger { color: rgba(255,255,255,0.15) !important; }
-.qbc-menu-trigger:active { color: #BAB0D0 !important; }
-
-.qbc-fuel-row.has .qbc-fuel-status { color: #00E5A0 !important; }
-.qbc-fuel-row.missing .qbc-fuel-status { color: #FF5A6E !important; }
-.qbc-exp-state--vibe_rise { color: #FFB800 !important; }
-.qbc-exp-state--fun { color: #00E5A0 !important; }
-.qbc-exp-state--pressure { color: #FF5A6E !important; }
-.qbc-exp-state--bored { color: #8478A0 !important; }
-
-.qbc-check:hover { border-color: #FF3CAC !important; }
-.qbc-check--done { background: #00E5A0 !important; border-color: #00E5A0 !important; }
-
-.qbc-focus-radio { border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.15) !important; }
-.qbc-focus-radio--active { border-color: #FF3CAC !important; color: #FF3CAC !important; }
-
-.qbc-define-cta { background: rgba(255,60,172,0.05) !important; color: #FF3CAC !important; }
-.qbc-rerate-btn { background: rgba(18,16,28,0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
-.qbc-signal-btn { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,255,255,0.06) !important; }
-.qbc-outcome-btn { border-color: rgba(255,255,255,0.08) !important; background: rgba(18,16,28,0.75) !important; }
-
-.qbc-add-project-save { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
-.qbc-add-project-cancel { background: rgba(255,255,255,0.05) !important; color: rgba(255,255,255,0.5) !important; }
-.qbc-add-courage-btn { background: rgba(255,60,172,0.05) !important; color: #FF3CAC !important; }
-.qbc-add-task-btn { background: rgba(255,255,255,0.03) !important; color: rgba(255,255,255,0.35) !important; }
-
-.qbc-input { background: #12101C !important; color: #F2EEF8 !important; border-color: rgba(255,255,255,0.08) !important; }
-.qbc-input:focus { border-color: #FF3CAC !important; }
-.qbc-input::placeholder { color: #5a4e70 !important; }
-.qbc-add-btn { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
-
-.qbc-menu-dropdown { background: #12101C !important; border-color: rgba(255,255,255,0.05) !important; }
-.qbc-menu-item { background: #12101C !important; color: #BAB0D0 !important; }
-.qbc-menu-item:hover { background: #1A1628 !important; }
-.qbc-rename-input { color: #F2EEF8 !important; border-bottom-color: #FF3CAC !important; }
-.qbc-close-btn { background: rgba(18,16,28,0.75) !important; color: #BAB0D0 !important; }
-
-.wc-modal { background: #12101C !important; color: #F2EEF8 !important; }
-
-.qbc-next-move { background: rgba(255,60,172,0.03) !important; border-color: rgba(255,60,172,0.1) !important; }
-.qbc-next-move-dim { color: #FF3CAC !important; }
-.qbc-next-move-accept { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
-.qbc-next-move-accept:hover { background: linear-gradient(135deg, #E040FB, #FF3CAC) !important; }
-.qbc-next-move-refresh { color: rgba(255,255,255,0.35) !important; }
-.qbc-next-move-manual-link:hover { color: #FF3CAC !important; }
-.qbc-manual-type { border-color: rgba(255,255,255,0.08) !important; background: rgba(18,16,28,0.75) !important; color: #BAB0D0 !important; }
-.qbc-manual-type--selected { border-color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; color: #FF3CAC !important; }
-.qbc-manual-dim { border-color: rgba(255,255,255,0.08) !important; background: rgba(18,16,28,0.75) !important; color: #BAB0D0 !important; }
-.qbc-manual-dim--selected { border-color: #FFB800 !important; background: rgba(255,184,0,0.06) !important; color: #FFB800 !important; }
-
-/* ========================================
-   25. WEEKLYFOCUS — ALL REMAINING
-   ======================================== */
-
-.wf-prompt-text { color: #8478A0 !important; }
-.wf-label { color: #F2EEF8 !important; }
-.wf-change { color: #FF3CAC !important; }
-.wf-focus-text { color: #F2EEF8 !important; }
-.wf-focus-quest { color: #8478A0 !important; }
-.wf-healing-link { color: #8478A0 !important; }
-.wf-healing-link:active { color: #FF3CAC !important; }
-.wf-done-msg { color: #FFB800 !important; }
-.wf-counter-inline { color: #8478A0 !important; }
-.wf-counter-num { color: #FFB800 !important; }
-
-/* ========================================
-   26. TUNETAB — ALL REMAINING
-   ======================================== */
-
-.tt-section-count { color: #00E5A0 !important; }
-.tt-subsection-header { border-bottom-color: rgba(255,255,255,0.05) !important; }
-.tt-subsection-count { color: #8478A0 !important; }
-.tt-label-name { color: #F2EEF8 !important; }
-.tt-label-sub { color: #8478A0 !important; }
-.tt-label-purple { color: #FF3CAC !important; }
-.tt-label-gold { color: #FFB800 !important; }
-.tt-meal-label { color: #F2EEF8 !important; }
-.tt-meal-btn { border-color: rgba(255,255,255,0.05) !important; background: #12101C !important; color: #BAB0D0 !important; }
-.tt-meal-btn.selected { border-color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; color: #FF3CAC !important; }
-.tt-meal-done { color: #00E5A0 !important; }
-.tt-info-icon { color: #5a4e70 !important; }
-.tt-info-modal-name { color: #F2EEF8 !important; }
-.tt-info-modal-desc { color: #8478A0 !important; }
-.tt-inline-tracker-label { color: #F2EEF8 !important; }
-.tt-drain-item-cat { color: #F2EEF8 !important; }
-.tt-drain-item-note { color: #8478A0 !important; }
-
-.tt-voice-btn { border-color: rgba(255,255,255,0.05) !important; background: #12101C !important; color: #BAB0D0 !important; }
-.tt-voice-btn:hover { border-color: rgba(255,255,255,0.15) !important; }
-.tt-voice-btn.selected { border-color: #E040FB !important; background: rgba(224,64,251,0.06) !important; color: #E040FB !important; }
-
-.tt-recovery-title { color: #F2EEF8 !important; }
-.tt-recovery-sub { color: #8478A0 !important; }
-.tt-recovery-footer { border-top-color: rgba(255,255,255,0.05) !important; }
-
-.tt-exp-add-btn { border-color: rgba(255,60,172,0.2) !important; color: #FF3CAC !important; }
-.tt-exp-pred-btn { border-color: rgba(255,255,255,0.05) !important; background: #12101C !important; color: #BAB0D0 !important; }
-.tt-exp-pred-btn.selected { border-color: #FF3CAC !important; background: rgba(255,60,172,0.06) !important; color: #FF3CAC !important; }
-.tt-exp-save { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; color: #0a0a0a !important; }
-.tt-exp-outcome-modal .tt-recovery-save { background: linear-gradient(135deg, #FF3CAC, #E040FB) !important; }
-.tt-hit { color: #00E5A0 !important; }
-.tt-miss { color: #8478A0 !important; }
-
-/* ========================================
-   27. GHOST BANNER INLINE LINK
-   ======================================== */
-
-.ghost-intro-banner a,
-.challenge-container a[href*="guide"],
-.challenge-container a[href*="how"] {
-  color: #FF3CAC !important;
-}
-
-/* ========================================
-   28. PROGRESSTAB — REMAINING
-   ======================================== */
-
-.pt-onboarding-secondary { color: #8478A0 !important; }
-
-/* ========================================
-   99. UNIVERSAL NUCLEAR CATCH-ALL
-   Broad rules that catch anything still leaking through.
-   These use low-ish specificity so component overrides above win.
-   ======================================== */
 
-/* --- All backgrounds that are white/light gray --- */
-.challenge-container [class*="card"]:not(.challenge-header):not(.score-card),
-.challenge-container [class*="section"]:not(.challenge-tabs):not(.section-divider):not(.challenge-content),
-.challenge-container [class*="modal"]:not([class*="overlay"]),
-.challenge-container [class*="sheet"],
-.challenge-container [class*="picker"],
-.challenge-container [class*="dropdown"],
-.challenge-container [class*="menu"]:not([class*="item"]) {
-  background-color: rgba(18,16,28,0.85);
-  border-color: rgba(255,255,255,0.05);
+body:has(.theme-bioluminescent) .main-toolbar .toolbar-challenge {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0a0a0a;
 }
 
-/* --- All dark text → light --- */
-.challenge-container [class*="title"]:not(.challenge-app-title),
-.challenge-container [class*="name"]:not(.challenge-level-name):not(.challenge-matchup-team-name),
-.challenge-container [class*="heading"] {
-  color: #F2EEF8;
+body:has(.theme-bioluminescent) .main-toolbar .toolbar-challenge:hover,
+body:has(.theme-bioluminescent) .main-toolbar .toolbar-challenge.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0a0a0a;
 }
 
-.challenge-container [class*="desc"],
-.challenge-container [class*="sub"]:not(.sub-tab),
-.challenge-container [class*="meta"],
-.challenge-container [class*="label"]:not(.score-card-label):not(.toolbar-label):not(.challenge-total-label),
-.challenge-container [class*="hint"],
-.challenge-container [class*="note"]:not(textarea),
-.challenge-container [class*="count"],
-.challenge-container [class*="muted"],
-.challenge-container [class*="secondary"] {
+body:has(.theme-bioluminescent) .toolbar-item {
   color: #8478A0;
 }
 
-/* --- All inputs/textareas → dark --- */
-.challenge-container input:not([type="checkbox"]):not([type="radio"]),
-.challenge-container textarea,
-.challenge-container select {
-  background: #12101C !important;
-  border-color: rgba(255,255,255,0.1) !important;
-  color: #F2EEF8 !important;
+body:has(.theme-bioluminescent) .toolbar-item:hover {
+  color: #BAB0D0;
 }
 
-.challenge-container input::placeholder,
-.challenge-container textarea::placeholder {
-  color: #5a4e70 !important;
-}
-
-/* --- All purple (#5e17eb) text → pink --- */
-.challenge-container [class*="cta"]:not(button),
-.challenge-container [class*="link"]:not(a),
-.challenge-container [class*="action"]:not(button):not(.pt-next-action) {
+body:has(.theme-bioluminescent) .toolbar-item.active {
   color: #FF3CAC;
 }
 
-/* --- All purple gradient buttons → pink gradient --- */
-.challenge-container button[class*="save"]:not(.tt-recovery-save),
-.challenge-container button[class*="submit"],
-.challenge-container button[class*="action"]:not(.regulation-done):not(.wf-action):not(.pt-next-action) {
-  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%) !important;
-  color: #0a0a0a !important;
+/* ── Daily tab (TuneTab) dividers + buttons ── */
+.theme-bioluminescent .tt-subsection-header {
+  border-bottom-color: rgba(255, 60, 172, 0.15);
 }
 
-/* --- All light borders → subtle --- */
-.challenge-container [class*="pill"]:not(.challenge-matchup-pill):not(.challenge-pill):not(.freq-pill),
-.challenge-container [class*="chip"],
-.challenge-container [class*="tag"]:not([class*="stage"]),
-.challenge-container [class*="option"],
-.challenge-container [class*="btn"]:not(.challenge-tab):not(.toolbar-item):not([class*="save"]):not([class*="submit"]):not([class*="action"]):not(.regulation-done):not(.wf-action):not(.btn-primary) {
-  border-color: rgba(255,255,255,0.08);
+.theme-bioluminescent .tt-recovery-footer {
+  border-top-color: rgba(255, 60, 172, 0.15);
 }
 
-/* --- Success green → bioluminescent green --- */
-.challenge-container [class*="done"],
-.challenge-container [class*="completed"]:not(.qbc-completed-toggle),
-.challenge-container [class*="success"],
-.challenge-container [class*="has"] {
-  color: #00E5A0;
+.theme-bioluminescent .ht-item-row {
+  border-bottom: 1px solid rgba(255, 60, 172, 0.1);
 }
 
-/* --- Danger red → bioluminescent red --- */
-.challenge-container [class*="missing"],
-.challenge-container [class*="error"],
-.challenge-container [class*="danger"] {
-  color: #FF5A6E;
+.theme-bioluminescent .ht-item-action {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+  color: #0a0a0a;
+  box-shadow: 0 2px 10px rgba(255, 60, 172, 0.3);
 }
 
-/* --- Links → pink --- */
-.challenge-container a:not(.challenge-tab):not(.toolbar-item) {
+.theme-bioluminescent .ht-item-action.done-action {
+  background: #1A1628;
+  color: #5a4e70;
+}
+
+.theme-bioluminescent .ht-item-sep {
+  color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Splash / loading page ── */
+body:has(.theme-bioluminescent) .splash-screen,
+body:has(.theme-bioluminescent) .app-loading {
+  background: #0A0812;
+}
+
+body:has(.theme-bioluminescent) .splash-title,
+body:has(.theme-bioluminescent) .app-loading-title {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Notification prompt ── */
+.theme-bioluminescent .notification-prompt {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.08) 0%, rgba(255, 184, 0, 0.06) 100%);
+  border-color: rgba(255, 60, 172, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .notification-prompt-text strong {
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .notification-prompt-text p {
+  color: var(--text-muted);
+}
+
+.theme-bioluminescent .notification-prompt-btn.primary {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+  color: #0a0a0a;
+}
+
+.theme-bioluminescent .notification-prompt-btn.secondary {
+  background: #1A1628;
+  color: var(--text-secondary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-bioluminescent .notification-prompt-close {
+  color: var(--text-muted);
+}
+
+/* ── ZoneCalSection (Your Flow card) ── */
+.theme-bioluminescent .zcs-section {
+  background: transparent;
+}
+
+.theme-bioluminescent .zcs-card {
+  background: #12101C;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .zcs-diagnosis-name {
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .zcs-diagnosis-headline {
   color: #FF3CAC;
 }
 
-/* --- Scrollbar --- */
-.challenge-container ::-webkit-scrollbar { width: 4px; }
-.challenge-container ::-webkit-scrollbar-track { background: transparent; }
-.challenge-container ::-webkit-scrollbar-thumb { background: rgba(255,60,172,0.15); border-radius: 2px; }
+.theme-bioluminescent .zcs-diagnosis-desc {
+  color: var(--text-secondary);
+}
 
-/* --- Living texture grain --- */
+.theme-bioluminescent .zcs-transition-old,
+.theme-bioluminescent .zcs-transition-narrative {
+  color: var(--text-secondary);
+}
 
-.bio-living-texture {
-  position: fixed !important;
-  inset: 0 !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-  opacity: 0.015 !important;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E") !important;
-  background-size: 128px 128px !important;
+.theme-bioluminescent .zcs-countdown {
+  color: var(--text-muted);
+}
+
+.theme-bioluminescent .zcs-spoke-label {
+  color: var(--text-secondary);
+}
+
+.theme-bioluminescent .zcs-dim-row {
+  background: #1A1628;
+}
+
+.theme-bioluminescent .zcs-dim-row.low {
+  background: rgba(255, 90, 110, 0.08);
+}
+
+.theme-bioluminescent .zcs-dim-row.high {
+  background: rgba(255, 184, 0, 0.08);
+}
+
+.theme-bioluminescent .zcs-spoke-card {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .zcs-spoke-card:hover {
+  background: rgba(255, 60, 172, 0.12);
+}
+
+/* ── Dome of Safety SVG ── */
+.theme-bioluminescent .dos-ring {
+  stroke: rgba(255, 255, 255, 0.04);
+}
+
+.theme-bioluminescent .dos-ring-outer {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.theme-bioluminescent .dos-spoke {
+  stroke: rgba(255, 255, 255, 0.04);
+}
+
+.theme-bioluminescent .dos-dome-fill {
+  fill: rgba(255, 60, 172, 0.15);
+  stroke: #FF3CAC;
+}
+
+.theme-bioluminescent .dos-edge-fill {
+  stroke: #FFB800;
+  fill: rgba(255, 184, 0, 0.05);
+}
+
+/* ── PerQuestRadar cards (white bg) ── */
+.theme-bioluminescent .pqr-card-inner {
+  background: #12101C;
+}
+
+.theme-bioluminescent .pqr-tab.active {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .pqr-legend-start {
+  background: #FF3CAC;
+}
+
+.theme-bioluminescent .pqr-legend-actual {
+  background: #FF3CAC;
+}
+
+.theme-bioluminescent .pqr-alive-track {
+  background: #1A1628;
+}
+
+.theme-bioluminescent .pqr-alive-fill {
+  background: #FF3CAC;
+}
+
+.theme-bioluminescent .pqr-alive-bg {
+  background: rgba(255, 60, 172, 0.03);
+}
+
+/* ── Your Flow / SeeYourFlow / GenericRadar card bg ── */
+.theme-bioluminescent .see-your-flow,
+.theme-bioluminescent .pt-essence-card,
+.theme-bioluminescent .pt-flow-card,
+.theme-bioluminescent .pt-cta-card {
+  background: var(--bg-surface);
+}
+
+/* ── Aliveness checkin full flow ── */
+.theme-bioluminescent .aci-answer {
+  background: #1A1628;
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .aci-answer.selected {
+  background: rgba(255, 60, 172, 0.12);
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .aci-back {
+  background: #1A1628;
+  color: var(--text-secondary);
+}
+
+.theme-bioluminescent .aci-dismiss {
+  color: var(--text-muted);
+}
+
+.theme-bioluminescent .aci-legend-item {
+  color: var(--text-muted);
+}
+
+.theme-bioluminescent .aci-shift-delta.up {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .aci-shift-name {
+  color: var(--text-secondary);
+}
+
+/* Aliveness checkin card */
+.theme-bioluminescent .aci-wrap {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.06) 0%, rgba(255, 184, 0, 0.04) 100%);
+  border-color: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .aci-answer {
+  background: #1A1628;
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .aci-question {
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .aci-answer {
+  color: var(--text-secondary);
+}
+
+.theme-bioluminescent .aci-headline {
+  color: var(--text-primary);
+}
+
+/* ── SVG radar charts — purple → pink ── */
+.theme-bioluminescent .pqr-container svg line,
+.theme-bioluminescent .pqr-container svg polygon[stroke] {
+  stroke: #FF3CAC;
+}
+
+.theme-bioluminescent .pqr-container svg polygon[fill] {
+  fill: rgba(255, 60, 172, 0.15);
+}
+
+/* ── ProgressTab dark overrides ── */
+.theme-bioluminescent .progress-tab .pt-voice-dot.empty,
+.theme-bioluminescent .progress-tab .pt-check-dot.locked {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .progress-tab .pt-voice-nav-label,
+.theme-bioluminescent .progress-tab .pt-fuel-row + .pt-fuel-row,
+.theme-bioluminescent .progress-tab .pt-check-item + .pt-check-item,
+.theme-bioluminescent .progress-tab .pt-onboarding-divider {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .progress-tab .pt-fuel-bg {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.theme-bioluminescent .progress-tab .pt-section-toggle {
+  color: var(--text-muted);
+}
+
+.theme-bioluminescent .progress-tab .pt-milestone-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .progress-tab .pt-share-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+/* ── WahooCreator (courage challenge popup) ── */
+.theme-bioluminescent .wc-card {
+  background: #12101C;
+}
+
+.theme-bioluminescent .wc-card-title {
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .wc-card-sub {
+  color: var(--text-muted);
+}
+
+.theme-bioluminescent .wc-dim-card {
+  background: #1A1628;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .wc-dim-card:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wc-dim-card.active {
+  border-color: #FF3CAC;
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .wc-dim-card.wc-dim-gap {
+  border-color: rgba(255, 184, 0, 0.4);
+  background: rgba(255, 184, 0, 0.06);
+}
+
+.theme-bioluminescent .wc-dim-card.wc-dim-gap .wc-dim-label {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .wc-dim-label {
+  color: var(--text-secondary);
+}
+
+.theme-bioluminescent .wc-dim-card.active .wc-dim-label {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .wc-dim-selected-tag {
+  background: rgba(255, 60, 172, 0.1);
+  border-color: rgba(255, 60, 172, 0.2);
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .wc-input,
+.theme-bioluminescent .wc-textarea {
+  background: #1A1628;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .wc-input:focus,
+.theme-bioluminescent .wc-textarea:focus {
+  border-color: #FF3CAC;
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .wc-label {
+  color: var(--text-secondary);
+}
+
+/* ── Financial Security Card ── */
+.theme-bioluminescent .fsc-card-love {
+  border-color: rgba(255, 184, 0, 0.25);
+  background: rgba(255, 184, 0, 0.04);
+}
+
+.theme-bioluminescent .fsc-card {
+  border-color: rgba(255, 60, 172, 0.2);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .fsc-header-title {
+  color: var(--text-secondary);
+}
+
+.theme-bioluminescent .fsc-stage-label,
+.theme-bioluminescent .fsc-challenge-label {
+  color: var(--text-faint);
+}
+
+.theme-bioluminescent .fsc-challenge-text,
+.theme-bioluminescent .fsc-card-name {
+  color: var(--text-primary);
+}
+
+.theme-bioluminescent .fsc-love-status {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .fsc-empty {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-bioluminescent .fsc-empty-text {
+  color: var(--text-muted);
+}
+
+/* ── Add challenge / Add task area ── */
+.theme-bioluminescent .qbc-add-actions {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .qbc-add-courage-btn {
+  background: rgba(255, 60, 172, 0.1);
+  border: 1px solid rgba(255, 60, 172, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-bioluminescent .qbc-add-task-btn {
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Explore new paths link ── */
+.theme-bioluminescent .lt-explore-link {
+  color: #FF3CAC;
+}
+
+/* ── WeeklyFocus prompt ── */
+.theme-bioluminescent .wf-prompt-text {
+  color: var(--text-primary);
+}
+
+/* ── QuadrantCard (zone compass) ── */
+.theme-bioluminescent .qc-field {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.06) 0%, rgba(255, 184, 0, 0.04) 100%);
+}
+
+.theme-bioluminescent .qc-axis-h,
+.theme-bioluminescent .qc-axis-v {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .qc-ax-label {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Toast ── */
+body:has(.theme-bioluminescent) .micro-toast {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0a0a0a;
+  box-shadow: 0 4px 20px rgba(255, 60, 172, 0.4);
+}
+
+/* ── Circle + points accent ── */
+.theme-bioluminescent .ht-item-check {
+  border-color: #FF3CAC;
+}
+
+.theme-bioluminescent .ht-pts {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .ht-item-check.done {
+  background: #FF3CAC;
+  border-color: #FF3CAC;
+}
+
+/* ── All greens → gold ── */
+.theme-bioluminescent .qbc-exp-empty {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .qbc-check--done {
+  background: #FFB800;
+  border-color: #FFB800;
+}
+
+.theme-bioluminescent .challenge-matchup-pill .winning {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .plt-dropdown-item.done .plt-dropdown-check {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .ht-item-check.done + .ht-item-body .ht-item-name {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .ht-streak-dot.filled {
+  background: #FFB800;
+}
+
+/* ── Green → Gold overrides ── */
+.theme-bioluminescent .qbc-check--done {
+  background: #FFB800;
+  border-color: #FFB800;
+}
+
+.theme-bioluminescent .challenge-matchup-pill .winning {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .grc-headline.grc-win {
+  background: linear-gradient(135deg, #FFB800, #FFD060);
+}
+
+/* Hardcoded rgba/hover overrides */
+.theme-bioluminescent .challenge-tab {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-bioluminescent .challenge-tab:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-bioluminescent .challenge-header {
+  background: linear-gradient(135deg, #1A0820 0%, #2D0A3E 50%, #1A0820 100%);
+  color: #F2EEF8;
+}
+
+.theme-bioluminescent .challenge-app-title {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.theme-bioluminescent .challenge-header .challenge-level-label,
+.theme-bioluminescent .challenge-header .challenge-level-rp {
+  color: #BAB0D0;
+}
+
+.theme-bioluminescent .challenge-level-fill {
+  background: linear-gradient(90deg, #FF3CAC, #E040FB, #FFB800);
+}
+
+.theme-bioluminescent .challenge-tab.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+.theme-bioluminescent .settings-dropdown {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-bioluminescent .level-selector-pill.current {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .level-header-card {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .level-zone-check {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .level-boss-reveal {
+  background: linear-gradient(135deg, rgba(255,60,172,0.08), rgba(255,60,172,0.04));
+}
+
+.theme-bioluminescent .level-bar-fill.purple {
+  background: linear-gradient(90deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .level-bar-dot.filled {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .quest-flow-cta {
+  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(255,184,0,0.03));
+}
+
+.theme-bioluminescent .level-graduation-btn {
+  background: linear-gradient(135deg, #FFB800, #FFD060);
+}
+
+.theme-bioluminescent .level-dd-status.start {
+  background: linear-gradient(135deg, #FFB800, #FFD060);
+}
+
+.theme-bioluminescent .wf-card {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-bioluminescent .wf-action {
+  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 160%);
+}
+
+.theme-bioluminescent .tt-section {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-bioluminescent .tt-drain-save {
+  background: linear-gradient(135deg, #E040FB, #FF3CAC);
+}
+
+.theme-bioluminescent .tt-recovery-save {
+  background: linear-gradient(135deg, #00E5A0, #00C48C);
+}
+
+.theme-bioluminescent .tt-info-modal-close {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .pt-cta {
+  background: linear-gradient(135deg, #FFB800, #FFD060);
+}
+
+.theme-bioluminescent .pt-cta-purple {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .pt-journey-fill {
+  background: linear-gradient(90deg, rgba(255,255,255,0.4), #FFB800);
+}
+
+.theme-bioluminescent .cc-cta {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .qc-bar-fill-safety {
+  background: linear-gradient(90deg, #E040FB, #FF3CAC);
+}
+
+.theme-bioluminescent .qc-bar-fill-expression {
+  background: linear-gradient(90deg, #FFD060, #FFB800);
+}
+
+.theme-bioluminescent .qc-bar-fill-maintenance {
+  background: linear-gradient(90deg, rgba(0,229,160,0.4), #00E5A0);
+}
+
+.theme-bioluminescent .qc-nudge {
+  background: linear-gradient(135deg, rgba(255,60,172,0.03), rgba(255,184,0,0.04));
+}
+
+.theme-bioluminescent .frequency-tab.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .filter-chip.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .qts-accent {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .qts-cta {
+  background: linear-gradient(135deg, rgba(255,60,172,0.9), rgba(255,184,0,0.9));
+}
+
+.theme-bioluminescent .bio-spore::after {
+  filter: blur(6px);
+}
+
+.theme-bioluminescent .bio-reef-glow div {
+  filter: blur(60px);
+}
+
+.theme-bioluminescent .tt-drain-save {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .tt-recovery-save {
+  background: linear-gradient(135deg, #00E5A0, #00C48C);
+}
+
+.theme-bioluminescent .tt-info-modal-close {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .quest-select-option.selected {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .quest-rating-btn.selected {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .ghost-intro-banner {
+  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(255,184,0,0.04));
+}
+
+.theme-bioluminescent .quest-checklist-link {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+.theme-bioluminescent .quest-points {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .streak-bubble.completed {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .daily-checkin-btn.selected {
+  background: linear-gradient(135deg, rgba(255,60,172,0.12), rgba(224,64,251,0.08));
+}
+
+.theme-bioluminescent .daily-checkin-btn.daily-checkin-vibe-rise.selected {
+  background: linear-gradient(135deg, rgba(255,184,0,0.12), rgba(255,184,0,0.06));
+}
+
+.theme-bioluminescent .daily-checkin-drain-save {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .daily-checkin-boost-save {
+  background: linear-gradient(135deg, #FFB800, #f59e0b);
+}
+
+.theme-bioluminescent .regulation-done {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+.theme-bioluminescent .main-toolbar .toolbar-challenge.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+.theme-bioluminescent .dl-popup-btn--purple {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .skill-level-btn.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .qpm-add-btn {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .wr-next-btn {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .qbc {
+  backdrop-filter: blur(8px);
+}
+
+.theme-bioluminescent .challenge-container button[class*="action"]:not(.regulation-done):not(.wf-action):not(.pt-next-action) {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+/* Total: 55 gradient overrides (down from 753 rules) */
+
+/* Auto-generated dark theme gradient+rgba overrides (439 selectors) */
+
+.theme-bioluminescent .change-project-btn {
+  border: 1px solid rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .change-project-btn:hover {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .business-sub-tabs,
+.healing-sub-tabs {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .healing-sub-tabs-wrapper {
+  background: rgba(255, 60, 172, 0.03);
+  border-bottom: 1px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .sub-tab:hover {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .sub-tab.active {
+  box-shadow: 0 2px 8px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .challenge-container .progress-bar-fill.daily {
+  background: linear-gradient(90deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .challenge-container .progress-bar-fill.explainer {
+  background: linear-gradient(90deg, #E040FB 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .category-point-item.total {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .quest-search-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .summary-btn {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .grand-slam-dropdown-input .locked-message,
+.grand-slam-dropdown-input .no-data-message {
+  background: rgba(255, 60, 172, 0.05);
+  border: 1px dashed rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .grand-slam-dropdown-input .selection-preview {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .quest-complete-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .quest-flow-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .quest-action-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .quest-checklist-link:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .quest-complete-btn.secondary {
+  border: 1px solid rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .quest-complete-btn.secondary:hover {
+  background: rgba(255, 60, 172, 0.08);
+  border-color: rgba(255, 60, 172, 0.5);
+}
+
+.theme-bioluminescent .view-results-btn:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .challenge-onboarding {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .onboarding-content h1 {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .start-challenge-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .start-challenge-btn:hover {
+  box-shadow: 0 8px 20px rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .group-code-display {
+  background: rgba(255, 60, 172, 0.1);
+  border: 2px dashed rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .challenge-container .toggle-btn:hover {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .you-badge {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .group-mode-btn:hover {
+  box-shadow: 0 8px 24px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .daily-release-challenge .video-link:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .points-fly-up {
+  text-shadow: 0 2px 8px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .weekly-recap-card {
+  border: 1px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .recap-cta {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .grc-card {
+  box-shadow: 0 2px 10px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .grc-headline {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .ht-item-action.reread-action {
+  background: rgba(255,60,172,0.08);
+}
+
+.theme-bioluminescent .plt-category-card:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .plt-other-toggle:hover {
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .playlist-tab .plt-healing-done {
+  background: rgba(255, 60, 172, 0.03);
+  border-color: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .playlist-tab .plt-healing-done .plt-healing-voice {
+  color: rgba(255, 60, 172, 0.5);
+}
+
+.theme-bioluminescent .playlist-tab .plt-orphan-assign {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .playlist-tab .plt-community-cta {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 50%, #FFB800 100%);
+}
+
+.theme-bioluminescent .playlist-tab .plt-community-cta:hover {
+  box-shadow: 0 6px 20px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .h-flow-river .fp-hover-ring {
+  stroke: rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .h-flow-river .fp-popup-feeling {
+  background: linear-gradient(135deg, var(--vibe-soft, rgba(255, 217, 61, 0.08)), rgba(255, 60, 172, 0.04));
+}
+
+.theme-bioluminescent .h-flow-river .fp-popup-points {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.08), rgba(255, 184, 0, 0.08));
+}
+
+.theme-bioluminescent .sc-card {
+  background: linear-gradient(135deg, #FF3CAC 0%, #4c1d95 100%);
+}
+
+.theme-bioluminescent .complete-button {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .complete-button:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .fsc-dot-filled {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .fsc-cta {
+  width: 100%; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, #FF3CAC, #FFB800); color: white; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+
+.theme-bioluminescent .confetti:nth-child(2n) {
+  background: linear-gradient(135deg, #6366f1, #E040FB);
+}
+
+.theme-bioluminescent .close-button {
+  background: linear-gradient(135deg, #6366f1 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .mpp-subsection-label {
+  color: rgba(255, 60, 172, 0.6);
+}
+
+.theme-bioluminescent .mpp-explainer-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .wr-header-icon {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .wr-progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .wr-option-btn.selected {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .wr-voice-btn.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wr-textarea:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .wr-text-input:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .wr-number-input:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .wr-submit {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .wr-submit:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .wr-cta-card:hover {
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .wr-share-btn {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .wr-share-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .wr-income-add:hover {
+  background: rgba(255, 60, 172, 0.02);
+}
+
+.theme-bioluminescent .wr-growth-dim {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .flow-compass-input .start-compass-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .flow-compass-input .start-compass-btn:hover {
+  box-shadow: 0 8px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .flow-compass-input .continue-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .flow-compass-input .continue-btn:hover:not(:disabled) {
+  box-shadow: 0 8px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .flow-compass-input .headline-input:focus,
+.flow-compass-input .comment-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .flow-compass-input .complete-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .flow-compass-input .complete-btn:hover:not(:disabled) {
+  box-shadow: 0 8px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .stage-tab.current {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .stage-tab.always-accessible.available {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .dome-mini-close {
+  background: linear-gradient(135deg, #FF3CAC, #7b3ff2);
+}
+
+.theme-bioluminescent .hil-card-clickable:hover {
+  background: rgba(255, 60, 172, 0.02);
+}
+
+.theme-bioluminescent .hil-stage-badge {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .hil-add-input:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .hil-add-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .hil-add-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .qs-container .quest-add-select:focus,
+.wc-container .quest-add-select:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .qs-container .quest-add-submit {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .archetype-carousel-card:hover {
+  box-shadow: 0 8px 24px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .archetype-carousel-card.selected {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.04) 0%, rgba(255, 221, 39, 0.06) 100%);
+  box-shadow: 0 8px 24px rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .carousel-card-check {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .pqr-badge {
+  background: rgba(255,60,172,0.06);
+}
+
+.theme-bioluminescent .pqr-define-btn {
+  border: 1.5px dashed rgba(255,60,172,0.3);
+  background: rgba(255,60,172,0.03);
+}
+
+.theme-bioluminescent .pqr-start-fill {
+  fill: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .zcc-tier.selected {
+  border-color: #5e17eb; background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .groan-reflection-input {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .dt-step-banner {
+  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(233,162,59,0.06));
+  border: 1px solid rgba(255,60,172,0.12);
+}
+
+.theme-bioluminescent .dt-how-accent {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .dt-card-badge {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .dt-dome-viz:active {
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .dt-weekly-card {
+  border: 1px solid rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .dt-weekly-focus {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .dt-weekly-cta {
+  background: rgba(255, 60, 172, 0.06);
+  border: 1px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .dt-bridge-cta {
+  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 100%);
+}
+
+.theme-bioluminescent .regulation-single {
+  border: 1.5px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .regulation-exercise.expanded {
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .regulation-exercise.expanded .regulation-duration {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .vri-summary {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 50%, #4c1d95 100%);
+  box-shadow: 0 8px 32px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .vri-preview-quote {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .vri-empty {
+  background: rgba(255, 60, 172, 0.03);
+  border: 1px dashed rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .vri-create-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .vri-create-btn:hover {
+  box-shadow: 0 6px 24px rgba(255, 60, 172, 0.45);
+}
+
+.theme-bioluminescent .vri-flow-header:hover {
+  background: rgba(255, 60, 172, 0.03);
+}
+
+.theme-bioluminescent .vri-response-badge {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .vri-analyze-section {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.06) 0%, rgba(255, 184, 0, 0.06) 100%);
+  border: 1px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .vri-analyze-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .vri-analyze-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(255, 60, 172, 0.45);
+}
+
+.theme-bioluminescent .vri-reanalyze-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .vri-reanalyze-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(255, 60, 172, 0.45);
+}
+
+.theme-bioluminescent .vri-report-header {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 50%, #4c1d95 100%);
+}
+
+.theme-bioluminescent .vri-history-item:hover {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .vri-history-item.active {
+  background: rgba(255, 60, 172, 0.08);
+  border: 1px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .vri-badge-pattern {
+  background: rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .vri-copy-btn:hover {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .vri-report-section h5 {
+  border-bottom: 1px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .vri-summary-section {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .vri-language-tag {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .vri-language-tag:hover {
+  background: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .vri-language-tag.badge-pattern {
+  background: rgba(255, 60, 172, 0.08);
+  border: 1px solid rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .vri-qa-quotes {
+  border-left: 2px solid rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent VALIDATION SCORE GAUGE
+============================================= */
+.vri-validation-score {
+  background: rgba(255, 60, 172, 0.04);
+  border: 1px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .vri-score-recommendation {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .vri-tab:hover {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .vri-tab.active {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .vri-comp-tag {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .cpc-topo-hero {
+  background: linear-gradient(145deg, #2a0a6e 0%, #FF3CAC 45%, #cc2d8a 70%, #FFB800 100%);
+}
+
+.theme-bioluminescent .cpc-branch-tappable:hover {
+  background: rgba(255,60,172,0.03);
+  border-color: rgba(255,60,172,0.08);
+}
+
+.theme-bioluminescent .cpc-branch-fill {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .cpc-branch-landscape {
+  background: linear-gradient(135deg, rgba(255,60,172,0.02), rgba(233,162,59,0.03));
+  border-left: 3px solid rgba(255,60,172,0.15);
+}
+
+.theme-bioluminescent .cpc-input:focus {
+  border-color: rgba(255,60,172,0.3);
+}
+
+.theme-bioluminescent .cpc-generate {
+  background: linear-gradient(135deg, var(--purple, #FF3CAC), var(--gold, #FFB800));
+}
+
+.theme-bioluminescent .cpc-pos-option:hover {
+  background: rgba(255, 60, 172, 0.03);
+}
+
+.theme-bioluminescent .cpc-pos-option-num {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .priority-tab .pt-progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .pt-prompt-box {
+  background: rgba(255, 60, 172, 0.15);
+  border: 1px solid rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .pt-prompt-copy-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .pt-align-no {
+  background: rgba(255,60,172,0.08);
+}
+
+.theme-bioluminescent RECOMMENDED CARD
+============================ */
+.pt-recommended-card {
+  box-shadow: 0 2px 16px rgba(255,60,172,0.08);
+}
+
+.theme-bioluminescent .pt-recommended-eyebrow {
+  background: rgba(255,60,172,0.06);
+}
+
+.theme-bioluminescent .coming-soon-badge {
+  background: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .explainer-btn.primary:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .rewire-input .nav-btn.next {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .rewire-input .nav-btn.complete {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .rewire-submit-btn {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .install-pwa-banner {
+  background: linear-gradient(135deg, #6366f1 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .splinter-checkin-rating .rating-btn.active {
+  background: linear-gradient(135deg, #E040FB, #FFB800);
+}
+
+.theme-bioluminescent .enable-notifications-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .enable-notifications-btn:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .timezone-select:focus {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent :root {
+  --toolbar-active-bg: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .crm-toolbar .toolbar-item:hover {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .create-toolbar .toolbar-item:hover {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .create-toolbar .toolbar-item.active {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .main-toolbar .toolbar-item:hover {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .jt-stage-card {
+  box-shadow: 0 2px 8px rgba(255, 60, 172, 0.08);
+  border-image: linear-gradient(90deg, #FF3CAC, #FFB800) 1;
+}
+
+.theme-bioluminescent .jt-stage-number {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .jt-stage-refs {
+  background: rgba(255, 60, 172, 0.03);
+}
+
+.theme-bioluminescent .jt-stage-history-btn {
+  color: rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .jt-voice-progress {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .jt-voice-row {
+  border: 1px solid rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .jt-voice-bar {
+  background: rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .jt-voice-bar-fill {
+  background: linear-gradient(90deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .jt-flowmap-btn {
+  border: 1px solid rgba(255, 60, 172, 0.15);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .jt-flowmap-btn:active {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .jt-next-cta-btn {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .jt-next-cta-btn:hover {
+  box-shadow: 0 4px 14px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .jt-next-sub {
+  font-size: 0.75rem; color: rgba(255, 60, 172, 0.5);
+}
+
+.theme-bioluminescent .jt-clarity-card {
+  background: linear-gradient(135deg, rgba(255,60,172,0.06), rgba(233,162,59,0.06));
+  border-radius: 16px; border: 1px solid rgba(255,60,172,0.1);
+}
+
+.theme-bioluminescent .jt-nudge {
+  background: rgba(255,60,172,0.04); border: 1px solid rgba(255,60,172,0.1);
+}
+
+.theme-bioluminescent .dos-dome-fill {
+  fill: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .dos-legend-safe {
+  background: rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .business-setup .bs-spinner {
+  border: 3px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .business-setup .bs-hero {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 50%, #9333ea 100%);
+}
+
+.theme-bioluminescent .business-setup .bs-field input:focus,
+.business-setup .bs-field textarea:focus {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .business-setup .bs-tier-btn:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .business-setup .bs-tier-btn.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .business-setup .bs-add-product:hover {
+  background: rgba(255, 60, 172, 0.03);
+}
+
+.theme-bioluminescent .business-setup .bs-stage-option:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .business-setup .bs-stage-option.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .vibe-picker-toggle {
+  border: 2.5px solid rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .vibe-picker-toggle:hover {
+  border-color: rgba(255, 60, 172, 0.5);
+}
+
+.theme-bioluminescent .vibe-picker-menu {
+  box-shadow: 0 8px 32px rgba(255, 60, 172, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .vibe-picker-label {
+  color: rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .vibe-picker-option.active {
+  box-shadow: 0 0 8px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .groans-summary .back-btn {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .groans-summary .back-btn:hover {
+  background: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .groans-summary .days-bar {
+  background: linear-gradient(90deg, #cc2d8a 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .groans-summary .archetype-bar.protective {
+  background: linear-gradient(90deg, #cc2d8a 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .groans-summary .insight-hero {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .groans-summary .summary-section {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .wahoo-inspiration .wi-chip-cta {
+  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 100%);
+}
+
+.theme-bioluminescent .wi-dial.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .hfm-progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .hfm-pattern-card:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .hfm-pattern-card.selected {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .hfm-textarea:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .hfm-deeper-primary {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .hfm-deeper-primary:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .hfm-next {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .hfm-next:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .see-your-flow {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .twf-hand-hint {
+  border: 1.5px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .twf-start {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .twf-declaration {
+  border: 1.5px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .pre-action-modal {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .flow-map-river {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .river-project-chip.selected {
+  background: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .his-textarea:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .his-body-btn:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .his-body-btn.active {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .his-shape-btn:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .his-shape-btn.active {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .his-swatch.active {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .his-rating-btn:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .his-rating-btn.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .hic-day-pip.filled {
+  background: linear-gradient(135deg, #E040FB, #cc2d8a);
+}
+
+.theme-bioluminescent .hic-primary-btn {
+  background: linear-gradient(135deg, #E040FB, #cc2d8a);
+}
+
+.theme-bioluminescent .response-counter-input .response-progress-bar {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .response-counter-input .response-progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .response-counter-input .response-action-link {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .response-counter-input .response-action-link:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .response-counter-input .quest-complete-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .response-counter-input .quest-complete-btn:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .post-action-modal.rc-post-action {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .launch-review-input {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .wc-progress-fill {
+  background: linear-gradient(90deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .wc-textarea:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .wc-next-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .wc-next-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(255, 60, 172, 0.35);
+}
+
+.theme-bioluminescent .wc-dim-card:hover {
+  border-color: rgba(255, 60, 172, 0.2);
+  background: rgba(255, 60, 172, 0.02);
+}
+
+.theme-bioluminescent .wc-dim-card.active {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wc-dim-level-badge {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .wc-dim-selected-tag {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .wc-level-option:hover {
+  border-color: rgba(255, 60, 172, 0.25);
+  background: rgba(255, 60, 172, 0.02);
+}
+
+.theme-bioluminescent .wc-level-option.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wc-body-card:hover {
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .wc-body-card.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wc-voice-btn:hover {
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .wc-voice-btn.active {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wc-suggestion-card:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .wc-healing-prompt {
+  background: rgba(255, 60, 172, 0.04);
+  border: 1px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .wc-healing-btn.yes {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .recognise-input .nav-btn.next {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .recognise-input .nav-btn.complete {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .recognise-input .recognise-submit-btn {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .recognise-input.voice-quest .stage-context-card {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .reconnect-input .nav-btn.next {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .reconnect-input .nav-btn.complete {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .reconnect-input .reconnect-submit-btn {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .edit-field-toast {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .edit-field-tab.active {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .edit-field-preview {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.04) 0%, rgba(255, 221, 39, 0.06) 100%);
+}
+
+.theme-bioluminescent .hybrid-chip.selected {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .hybrid-generate-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .hybrid-generate-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .custom-textarea:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .milestone-input {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .wahoo-discovery-flow .wdf-primary-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 100%);
+}
+
+.theme-bioluminescent .content-card {
+  border: 1px solid rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .content-card:hover {
+  border-color: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .content-card.expanded {
+  border-color: rgba(255, 60, 172, 0.25);
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .content-card-header:not(:disabled):active {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .content-card-points {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .content-template-btn {
+  background: rgba(255, 60, 172, 0.06);
+  border: 1.5px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .content-template-btn:hover {
+  background: rgba(255, 60, 172, 0.1);
+  border-color: rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .content-url-input {
+  border: 1px solid rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .content-url-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .content-player-chip {
+  border: 1.5px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .content-player-chip.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .player-chip-check {
+  border: 1.5px solid rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .cg-page {
+  background: linear-gradient(180deg, #FF3CAC 0%, #3b0a9e 50%, #1a0440 100%);
+}
+
+.theme-bioluminescent .tt-score-safety {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .tt-state-btn:hover:not(:disabled) {
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .tt-exp-add-btn {
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .tt-exp-add-btn:hover:not(:disabled) {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .tt-exp-pred-btn.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .tt-exp-save {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .tt-exp-outcome-modal .tt-recovery-save {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .tt-exp-outcome-modal .tt-recovery-save:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .groan-matrix {
+  --shadow-card-hover: 0 16px 40px rgba(255, 60, 172, 0.12);
+  --shadow-button: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .groan-source-tabs {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+}
+
+.theme-bioluminescent .groan-matrix-cell.has-challenge {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.03) 0%, rgba(124, 58, 237, 0.05) 100%);
+}
+
+.theme-bioluminescent .groan-generate-btn {
+  box-shadow: 0 2px 8px rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .groan-matrix-empty {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.03) 0%, rgba(124, 58, 237, 0.05) 100%);
+}
+
+.theme-bioluminescent .groan-matrix-empty-cta:hover {
+  box-shadow: 0 8px 24px rgba(255, 60, 172, 0.35);
+}
+
+.theme-bioluminescent .groan-filter-select:focus {
+  box-shadow: 0 0 0 3px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .groan-mobile-generate {
+  box-shadow: 0 2px 8px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .groan-see-more-btn {
+  background: rgba(255, 60, 172, 0.04);
+  border: 1px dashed rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .groan-see-more-btn:hover {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .groan-persona-filter {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.05) 0%, rgba(124, 58, 237, 0.08) 100%);
+}
+
+.theme-bioluminescent .groan-sp-row .groan-row-label {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.06) 0%, rgba(124, 58, 237, 0.1) 100%);
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .groan-sp-cell:hover {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
+
+.theme-bioluminescent .groan-sp-mobile .groan-sp-skill-header {
+  background: linear-gradient(135deg, var(--purple) 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .home-first-time {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .progress-tab .pt-stages-toggle {
+  color: rgba(255, 60, 172, 0.5);
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .progress-tab .pt-stages-toggle:hover {
+  background: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .progress-tab .pt-journey-expand {
+  border-top: 1px solid rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .progress-tab .pt-essence-avatar {
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .progress-tab .pt-voice-explore {
+  background: rgba(255, 60, 172, 0.06);
+  border: 1px solid rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .progress-tab .pt-voice-explore:hover {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .progress-tab .pt-section-icon {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .progress-tab .pt-cta-purple {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .progress-tab .pt-cta-purple:hover {
+  box-shadow: 0 6px 24px rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .progress-tab .pt-evidence-card--expanded {
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .progress-tab .pt-chip-reflect {
+  background: rgba(255, 60, 172, 0.07);
+}
+
+.theme-bioluminescent .progress-tab .pt-reflect-pill.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .healing-summary .back-btn {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .healing-summary .back-btn:hover {
+  background: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .healing-summary .insight-hero {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .healing-summary .summary-section {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .ps-input:focus {
+  border-color: rgba(255,60,172,0.5);
+}
+
+.theme-bioluminescent .ps-statement-card {
+  background: rgba(255,60,172,0.05);
+  border: 1px solid rgba(255,60,172,0.15);
+}
+
+.theme-bioluminescent .ps-statement-edit:focus {
+  border-color: rgba(255,60,172,0.5);
+}
+
+.theme-bioluminescent .tpl-leaderboard {
+  background: linear-gradient(160deg, #FF3CAC 0%, #cc2d8a 40%, #4c1d95 100%);
+}
+
+.theme-bioluminescent .tpl-hero {
+  background: linear-gradient(160deg, #FF3CAC 0%, #4a11c0 40%, #2d0b73 100%);
+}
+
+.theme-bioluminescent .tpl-scorecard {
+  background: linear-gradient(150deg, #FF3CAC 0%, #cc2d8a 45%, #4c1d95 100%);
+}
+
+.theme-bioluminescent .tpl-intentions {
+  background: linear-gradient(170deg, #FF3CAC 0%, #6d26d7 35%, #4c1d95 100%);
+}
+
+.theme-bioluminescent .tpl-courage {
+  background: linear-gradient(140deg, #4c1d95 0%, #FF3CAC 40%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .sic-this-badge {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .branch-gap {
+  background: rgba(255,60,172,0.04);
+  border: 1px solid rgba(255,60,172,0.08);
+}
+
+.theme-bioluminescent .branch-frontier-phase3 {
+  color: rgba(255,60,172,0.6);
+}
+
+.theme-bioluminescent .branch-polymath {
+  color: rgba(255,60,172,0.6);
+  background: rgba(255,60,172,0.03);
+}
+
+.theme-bioluminescent .pif-pill.selected {
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .pif-done {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent AIConsentModal — AI data disclosure overlay
+============================================================ */
+.ai-consent-overlay {
+  background: linear-gradient(145deg, #6b21eb 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .ehc-strike-active {
+  background: rgba(255,60,172,0.1); color: #5e17eb;
+}
+
+.theme-bioluminescent .coach-nudge {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.95) 0%, rgba(60, 15, 150, 0.95) 100%);
+}
+
+.theme-bioluminescent .dgo-chip {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .notification-prompt-btn.primary {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .notification-prompt-btn.primary:hover {
+  box-shadow: 0 4px 8px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .dna-card {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.06), rgba(255, 184, 0, 0.06));
+  border: 1px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .dna-action {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .qbc-badge {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .qbc-define-cta {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .qbc-define-cta:active {
+  transform: scale(0.98); background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .qbc-task-row--focused {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .qbc-task-row--expanded {
+  background: rgba(255, 60, 172, 0.02); border-radius: 8px;
+}
+
+.theme-bioluminescent .qbc-add-courage-btn {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .qbc-add-courage-btn:active {
+  background: rgba(255, 60, 172, 0.1); transform: scale(0.98);
+}
+
+.theme-bioluminescent .qbc-input {
+  border: 1.5px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .qbc-next-move {
+  margin: 8px 0 12px; padding: 14px 16px; background: rgba(255, 60, 172, 0.03); border: 1px solid rgba(255, 60, 172, 0.1); border-radius: 14px; cursor: pointer; transition: background 0.15s;
+}
+
+.theme-bioluminescent .qbc-next-move:hover {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .qbc-next-move--expanded:hover {
+  background: rgba(255, 60, 172, 0.03);
+}
+
+.theme-bioluminescent .qbc-manual-type--selected {
+  border-color: var(--accent-primary); background: rgba(255,60,172,0.06); color: var(--accent-primary);
+}
+
+.theme-bioluminescent .gcf-next {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .fl-my-rank {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .fl-row-me {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .fl-avatar-placeholder {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .adac-pill.selected {
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .adac-next {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .gcm-cross-quest-btn.selected {
+  border-color: #5e17eb; background: rgba(255,60,172,0.06); color: #5e17eb;
+}
+
+.theme-bioluminescent .gcm-wahoo-btn:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .gcm-wahoo-btn.selected {
+  background: rgba(255, 60, 172, 0.04);
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .gcm-gap-pill:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .gcm-gap-pill.selected {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .step-number {
+  background: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .step-bar {
+  background: linear-gradient(90deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .region-bar {
+  background: linear-gradient(90deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .cluster-btn {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .cluster-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .cluster-card:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .cluster-card.expanded {
+  background: rgba(255, 60, 172, 0.08);
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .go-deeper {
+  background: rgba(255, 60, 172, 0.15);
+  border: 1px solid rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .psp-card:hover:not(.psp-card-disabled) {
+  border-color: rgba(255, 60, 172, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .psp-card-selected {
+  background: rgba(255, 60, 172, 0.04);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .psp-card-check {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .psp-custom-chip {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .psp-custom-input:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .psp-custom-add {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .psp-custom-add:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent ChallengeIntro — First-visit story overlay
+============================================================ */
+.challenge-intro-overlay {
+  background: linear-gradient(145deg, #6b21eb 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .ci-tier-vr {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .release-input .nav-btn.next {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .release-input .nav-btn.complete {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .release-input .release-submit-btn {
+  background: linear-gradient(135deg, #cc2d8a 0%, #6d28d9 100%);
+}
+
+.theme-bioluminescent .post-action-header {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .post-action-actions .continue-btn,
+.post-action-actions .save-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .post-action-actions .continue-btn:hover,
+.post-action-actions .save-btn:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .challenge-container:has(.install-screen),
+.challenge-container:has(.notifications-screen),
+.challenge-container:has(.project-selector) {
+  background: linear-gradient(135deg, #cc2d8a 0%, #FF3CAC 50%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .step-number {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+}
+
+.theme-bioluminescent .enable-btn {
+  background: linear-gradient(135deg, #FF3CAC 0%, #cc2d8a 100%);
+}
+
+.theme-bioluminescent .enable-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d26d7 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .zcs-empty-card {
+  border: 1px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .zcs-spoke-card {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .zcs-spoke-card:hover {
+  background: rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .aci-wrap {
+  border: 1px solid rgba(255, 60, 172, 0.12);
+}
+
+.theme-bioluminescent .qpm-healing-prompt {
+  background: rgba(255,60,172,0.04); border: 1px solid rgba(255,60,172,0.1);
+}
+
+.theme-bioluminescent .qpm-healing-yes {
+  background: rgba(255,60,172,0.08); color: #5e17eb;
+}
+
+.theme-bioluminescent .level-tab .level-selector-pill.current {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+  box-shadow: 0 2px 8px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .level-tab .level-header-card {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .level-tab .level-zone-card:hover {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.1);
+}
+
+.theme-bioluminescent .level-tab .level-zone-card.selected {
+  background: rgba(255, 60, 172, 0.06);
+  box-shadow: 0 4px 16px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .level-tab .level-zone-check {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .level-tab .level-boss-reveal {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.08), rgba(255, 60, 172, 0.04));
+}
+
+.theme-bioluminescent .level-tab .level-boss-btn.pre {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 100%);
+}
+
+.theme-bioluminescent .level-tab .level-boss-btn.pre:hover {
+  box-shadow: 0 6px 20px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .level-tab .level-bar-fill.purple {
+  background: linear-gradient(90deg, #FF3CAC, #E040FB);
+}
+
+.theme-bioluminescent .level-tab .level-bar-dot.filled {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+  box-shadow: 0 2px 8px rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .level-graduation-card {
+  box-shadow: 0 12px 48px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .quest-explore-option:active {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .quest-current-job-cta {
+  border: 1.5px dashed rgba(255, 60, 172, 0.15);
+  background: rgba(255, 60, 172, 0.02);
+}
+
+.theme-bioluminescent .quest-path-btn {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.9), rgba(255, 184, 0, 0.9));
+  box-shadow: 0 2px 12px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .quest-path-btn:hover {
+  box-shadow: 0 4px 18px rgba(255, 60, 172, 0.25);
+}
+
+.theme-bioluminescent .quest-add-btn:hover {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .quest-add-select:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .quest-add-input:focus {
+  box-shadow: 0 0 0 4px rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .quest-add-submit {
+  background: linear-gradient(135deg, #FF3CAC, #cc2d8a);
+}
+
+.theme-bioluminescent .quest-add-submit:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .struggle-pill:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .struggle-pill.active {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .quest-scroll-card:hover {
+  border-color: rgba(255, 60, 172, 0.3);
+  background: rgba(255, 60, 172, 0.03);
+}
+
+.theme-bioluminescent .quest-modal-result {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .quest-modal-boss {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+.theme-bioluminescent .lt-matrix-card {
+  margin-bottom: 16px; box-shadow: 0 2px 8px rgba(255,60,172,0.06);
+}
+
+.theme-bioluminescent .lt-matrix-grid {
+  background: linear-gradient(135deg, rgba(255,60,172,0.03), rgba(233,162,59,0.03));
+}
+
+.theme-bioluminescent .lt-matrix-dot {
+  background: linear-gradient(135deg, #FF3CAC, #FFB800);
+  box-shadow: 0 2px 8px rgba(255,60,172,0.3);
+}
+
+.theme-bioluminescent .skill-level-picker {
+  border: 1px solid rgba(255,60,172,0.15); margin-top: 8px;
+}
+
+.theme-bioluminescent .qts-identity {
+  background: rgba(255,60,172,0.03);
+  border-left: 3px solid rgba(255,60,172,0.15);
+}
+
+.theme-bioluminescent .qts-cross-tag {
+  background: rgba(255,60,172,0.06);
+}
+
+.theme-bioluminescent .cc-pillar-active {
+  background: rgba(255, 60, 172, 0.10);
+}
+
+.theme-bioluminescent .cc-bz-grounded {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .cc-bz-grounded.active {
+  background: rgba(255, 60, 172, 0.18);
+}
+
+.theme-bioluminescent .cc-cta:hover {
+  box-shadow: 0 6px 24px rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .qc-compass .qc-mz-tl {
+  background: radial-gradient(circle at 0% 0%, rgba(255, 60, 172, 0.12) 0%, rgba(255, 60, 172, 0.02) 80%);
+}
+
+.theme-bioluminescent .qc-field {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.02) 0%, rgba(255, 184, 0, 0.03) 100%);
+}
+
+.theme-bioluminescent .qc-zone-grounded {
+  background: radial-gradient(circle at 0% 0%, rgba(255, 60, 172, 0.12) 0%, rgba(255, 60, 172, 0.02) 80%);
+}
+
+.theme-bioluminescent .wf-change:active {
+  background: rgba(255, 60, 172, 0.06);
+}
+
+.theme-bioluminescent .wf-focus {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .wf-action:hover {
+  box-shadow: 0 4px 14px rgba(255, 60, 172, 0.22);
+}
+
+.theme-bioluminescent .wf-action.wf-action-secondary {
+  border: 2px dashed rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .wf-action.wf-action-secondary:hover {
+  background: rgba(255, 60, 172, 0.04);
+}
+
+.theme-bioluminescent .wf-action:active {
+  box-shadow: 0 1px 4px rgba(255, 60, 172, 0.14);
+}
+
+/* Dark theme text color overrides (89 selectors) */
+.theme-bioluminescent .settings-menu-item {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .no-project-prompt p {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .sub-tab {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .quest-tag-label {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .quest-select-label {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .group-code-display {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .group-mode-btn p {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .group-code-label {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .daily-release-challenge h4 {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .daily-release-challenge .challenge-description {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .daily-release-challenge .challenge-instructions p {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .daily-release-challenge .challenge-instructions strong {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .quest-complete-btn.locked {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .quest-complete-btn.prelaunch-locked {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .playlist-tab .plt-reach-subtitle {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .wr-income-currency {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .wr-income-hint {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .flow-compass-input .question-heading {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .flow-compass-input .input-group label {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .flow-compass-input .comment-textarea {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .flow-compass-input .comment-textarea::placeholder {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .stage-tab {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .stage-tab.available {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .stage-tab.locked {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .dome-mini-label {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .dome-mini-legend-item {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .pqr-alive-label {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .pqr-alive-score {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .zcc-close {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .zcc-phase {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .zcc-back {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .zcc-prev-label {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .zcc-tier-level {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .dt-revisit-label {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .dt-dome-tap-hint {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .dt-dome-overlay-close {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .dt-weekly-focus-branch {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .explainer-close {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .explainer-close:hover {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .explainer-title {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .explainer-body {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .explainer-category h3 {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .explainer-category p {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .quest-type-card h3 {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .quest-type-card li {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .points-item strong {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .points-item p {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .privacy-footer {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .explainer-btn.secondary {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .progress-tab .obs-dismiss {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .progress-tab .obs-dismiss:hover {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .progress-tab .obs-body {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .dl-popup-close {
+  color: var(--text-faint); cursor: pointer; line-height: 1;
+}
+.theme-bioluminescent .dl-popup-label {
+  color: var(--text-faint); margin-bottom: 0.5rem;
+}
+.theme-bioluminescent .voice-input-textarea {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .popup-date {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .popup-description {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .popup-close {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .popup-close:hover {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .frequency-tab {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .response-counter-input .response-separator {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .response-counter-input .response-target {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .response-counter-input .response-label {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .response-counter-input .response-hint {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .content-card-header:not(:disabled)::after {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .content-card-desc {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .content-picker-hint {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .content-picker-empty {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .player-chip-team {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .content-empty-state {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .tt-inline-tracker-meta {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .tt-inline-tracker-sub {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .groan-header-cell.locked .groan-layer-label {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .groan-header-cell.locked .groan-layer-fear {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .groan-mobile-locked-message {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .progress-tab .pt-onboarding-secondary {
+  color: var(--text-muted);
+}
+.theme-bioluminescent .id-dismiss {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .id-dismiss:hover {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .id-body {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .post-action-question label {
+  color: var(--text-primary);
+}
+.theme-bioluminescent .zcs-diagnosis-desc {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .zcs-countdown {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .zcs-transition-old {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .zcs-transition-narrative {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .zcs-spoke-label {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .zcs-spoke-card p {
+  color: var(--text-secondary);
+}
+.theme-bioluminescent .aci-shift-delta.flat {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .cc-maint-day-label {
+  color: var(--text-faint);
+}
+.theme-bioluminescent .qc-nudge {
+  color: var(--text-secondary);
 }

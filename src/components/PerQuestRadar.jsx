@@ -264,11 +264,13 @@ export default function PerQuestRadar({ userId }) {
 
     supabase
       .from('quests')
-      .select('id, label, color, status, current_dimensions, dream_dimensions, predicted_state')
+      .select('id, label, color, status, current_dimensions, dream_dimensions, predicted_state, path_type')
       .eq('user_id', userId)
       .eq('status', 'active')
       .order('created_at', { ascending: false })
       .then(async ({ data: questData }) => {
+        // Filter out financial-security-only quests (they show under Financial Security card, not paths)
+        questData = (questData || []).filter(q => q.path_type !== 'financial_security')
         if (!questData?.length) { setLoading(false); return }
 
         // Get courage challenge counts per quest

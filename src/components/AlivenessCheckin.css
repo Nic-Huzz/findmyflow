@@ -107,3 +107,20 @@
   background: #5e17eb; color: #fff; border: none;
   font-weight: 600; font-size: 14px; cursor: pointer; font-family: inherit;
 }
+
+/* ── Bioluminescent dark theme ── */
+.theme-bioluminescent .aci-wrap { background: linear-gradient(135deg, rgba(255,60,172,0.06) 0%, rgba(255,184,0,0.04) 100%); border-color: rgba(255,60,172,0.15); }
+.theme-bioluminescent .aci-question { color: #F2EEF8; }
+.theme-bioluminescent .aci-answer { background: #1A1628; color: #F2EEF8; border: 1px solid rgba(255,255,255,0.06); }
+.theme-bioluminescent .aci-answer.selected { background: rgba(255,60,172,0.12); border-color: rgba(255,60,172,0.3); }
+.theme-bioluminescent .aci-back { background: #1A1628; color: #BAB0D0; }
+.theme-bioluminescent .aci-dismiss { color: #8478A0; }
+.theme-bioluminescent .aci-headline { color: #F2EEF8; }
+.theme-bioluminescent .aci-legend-item { color: #8478A0; }
+.theme-bioluminescent .aci-shift-name { color: #BAB0D0; }
+.theme-bioluminescent .aci-shift-delta.up { color: #FFB800; }
+.theme-bioluminescent .aci-shift-delta.flat { color: #5a4e70; }
+.theme-bioluminescent .aci-def-text { color: #BAB0D0; }
+.theme-bioluminescent .aci-def-accept { background: linear-gradient(135deg, #FF3CAC, #E040FB); color: #0a0a0a; }
+.theme-bioluminescent .aci-def-skip { background: #1A1628; color: #8478A0; }
+.theme-bioluminescent .aci-done { background: linear-gradient(135deg, #FF3CAC, #E040FB); color: #0a0a0a; }

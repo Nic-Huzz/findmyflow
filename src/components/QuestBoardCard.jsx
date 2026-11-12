@@ -774,7 +774,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
               setWahooCreatorText('')
               setShowWahooCreator(true)
             }}>
-              <BoltIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'text-bottom' }} /> {alwaysExpanded ? 'Add challenge' : 'Add courage challenge'}
+              <BoltIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'middle' }} /> {alwaysExpanded ? 'Add challenge' : 'Add courage challenge'}
             </button>
             <button className="qbc-add-task-btn" onClick={() => { setShowTaskInput(true); setTimeout(() => inputRef.current?.focus(), 50) }}>
               + Add task
