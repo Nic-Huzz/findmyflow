@@ -816,9 +816,32 @@
 }
 
 /* ── Bioluminescent dark theme ── */
+/* Container + card backgrounds */
+.theme-bioluminescent .wc-container { background: #12101C; }
+.theme-bioluminescent .wc-modal { background: #12101C; }
+.theme-bioluminescent .wc-modal-overlay { background: rgba(0,0,0,0.7); }
+.theme-bioluminescent .wc-modal-close { color: #8478A0; }
 .theme-bioluminescent .wc-card { background: #12101C; }
+.theme-bioluminescent .wc-progress-bar { background: rgba(255,255,255,0.06); }
+.theme-bioluminescent .wc-progress-fill { background: linear-gradient(90deg, #FF3CAC, #E040FB); }
+
+/* Text */
+.theme-bioluminescent .wc-headline { color: #F2EEF8; }
+.theme-bioluminescent .wc-sub { color: #8478A0; }
 .theme-bioluminescent .wc-card-title { color: #F2EEF8; }
 .theme-bioluminescent .wc-card-sub { color: #8478A0; }
+.theme-bioluminescent .wc-label { color: #BAB0D0; }
+.theme-bioluminescent .wc-exp-label { color: #8478A0; }
+
+/* Input + textarea */
+.theme-bioluminescent .wc-input,
+.theme-bioluminescent .wc-textarea { background: #1A1628; border-color: rgba(255,255,255,0.1); color: #F2EEF8; }
+.theme-bioluminescent .wc-input:focus,
+.theme-bioluminescent .wc-textarea:focus { border-color: #FF3CAC; box-shadow: 0 0 0 3px rgba(255,60,172,0.1); }
+.theme-bioluminescent .wc-input::placeholder,
+.theme-bioluminescent .wc-textarea::placeholder { color: #5a4e70; }
+
+/* Dimension cards */
 .theme-bioluminescent .wc-dim-card { background: #1A1628; border-color: rgba(255,255,255,0.08); }
 .theme-bioluminescent .wc-dim-card:hover { border-color: rgba(255,60,172,0.3); background: rgba(255,60,172,0.06); }
 .theme-bioluminescent .wc-dim-card.active { border-color: #FF3CAC; background: rgba(255,60,172,0.1); }
@@ -827,8 +850,33 @@
 .theme-bioluminescent .wc-dim-label { color: #BAB0D0; }
 .theme-bioluminescent .wc-dim-card.active .wc-dim-label { color: #FF3CAC; }
 .theme-bioluminescent .wc-dim-selected-tag { background: rgba(255,60,172,0.1); border-color: rgba(255,60,172,0.2); color: #F2EEF8; }
-.theme-bioluminescent .wc-input,
-.theme-bioluminescent .wc-textarea { background: #1A1628; border-color: rgba(255,255,255,0.1); color: #F2EEF8; }
-.theme-bioluminescent .wc-input:focus,
-.theme-bioluminescent .wc-textarea:focus { border-color: #FF3CAC; box-shadow: 0 0 0 3px rgba(255,60,172,0.1); }
-.theme-bioluminescent .wc-label { color: #BAB0D0; }
+
+/* Gap inspiration cards */
+.theme-bioluminescent .wc-gap-card { background: #1A1628; border-color: rgba(255,184,0,0.15); }
+.theme-bioluminescent .wc-gap-card-label { color: #F2EEF8; }
+.theme-bioluminescent .wc-gap-card-current { color: #8478A0; }
+.theme-bioluminescent .wc-gap-card-arrow { color: #5a4e70; }
+.theme-bioluminescent .wc-gap-card-next { color: #FFB800; }
+.theme-bioluminescent .wc-gap-card-dream { color: #FF3CAC; }
+.theme-bioluminescent .wc-gap-card-prompt { color: #8478A0; }
+.theme-bioluminescent .wc-gap-nudge { background: rgba(255,184,0,0.06); }
+.theme-bioluminescent .wc-gap-nudge-label { color: #8478A0; }
+.theme-bioluminescent .wc-gap-nudge-dim { color: #FFB800; }
+
+/* Experience pills (project selector) */
+.theme-bioluminescent .wc-exp-pill { background: #1A1628; border-color: rgba(255,255,255,0.08); color: #F2EEF8; }
+.theme-bioluminescent .wc-exp-pill.selected { background: rgba(255,60,172,0.1); border-color: #FF3CAC; color: #F2EEF8; }
+
+/* Quest selector pills */
+.theme-bioluminescent .wc-quest-pill { background: #1A1628; border-color: rgba(255,255,255,0.08); color: #F2EEF8; }
+.theme-bioluminescent .wc-quest-pill.selected { background: rgba(255,60,172,0.1); border-color: #FF3CAC; }
+
+/* Buttons */
+.theme-bioluminescent .wc-back { color: #8478A0; }
+.theme-bioluminescent .wc-submit { background: linear-gradient(135deg, #FF3CAC, #E040FB); color: #0a0a0a; }
+.theme-bioluminescent .wc-close { color: #8478A0; }
+.theme-bioluminescent .wc-close:hover { color: #F2EEF8; }
+
+/* Accent colors */
+.theme-bioluminescent .wc-dim-level-badge { color: #FF3CAC; }
+.theme-bioluminescent .wc-error { color: #FF5A6E; }

@@ -776,9 +776,7 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
             }}>
               <BoltIcon style={{ width: 14, height: 14, marginRight: 4, verticalAlign: 'middle' }} /> {alwaysExpanded ? 'Add challenge' : 'Add courage challenge'}
             </button>
-            <button className="qbc-add-task-btn" onClick={() => { setShowTaskInput(true); setTimeout(() => inputRef.current?.focus(), 50) }}>
-              + Add task
-            </button>
+            {/* Add task hidden — courage challenges are the primary action */}
           </div>
           {/* "Feeling stuck" removed — accessible via ⚡ icon on each task */}
 

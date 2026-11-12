@@ -8,6 +8,7 @@ import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/pe
 import { hasActiveChallenge } from './lib/questCompletion'
 import { cacheBustUrl } from './lib/fetchJson'
 import ProtectiveArchetypeIcon from './components/ProtectiveArchetypeIcon'
+import BioluminescentBackground from './components/BioluminescentBackground'
 import { getStageShortName } from './lib/stageConfig'
 import { checkAndGraduateProject } from './lib/graduationChecker'
 import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
@@ -675,7 +676,8 @@ const Profile = () => {
   const isLastSlide = currentSlide === onboardingSlides.length - 1
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container theme-bioluminescent">
+      <BioluminescentBackground />
       {/* Onboarding Modal Overlay */}
       {showOnboarding && (
         <div className="onboarding-overlay">

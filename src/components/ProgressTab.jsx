@@ -1690,12 +1690,8 @@ function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
   }
 
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, #f8f5ff 0%, #fff8f0 100%)',
-      borderRadius: 16, padding: '20px 16px', margin: '0 0 16px',
-      border: '1px solid rgba(94, 23, 235, 0.12)',
-    }}>
-      <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{quest.label}</div>
+    <div className="aci-wrap" style={{ borderRadius: 16, padding: '20px 16px', margin: '0 0 16px' }}>
+      <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 4 }}>{quest.label}</div>
 
       {!isReveal && dim && (
         <>
@@ -1703,25 +1699,19 @@ function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
             {VIBE_RISE_DIMENSIONS.map((_, i) => (
               <div key={i} style={{
                 width: 8, height: 8, borderRadius: '50%',
-                background: i < step ? '#5e17eb' : i === step ? '#E9A23B' : '#e0ddd8',
+                background: i < step ? 'var(--accent-primary)' : i === step ? 'var(--accent-gold)' : 'var(--border-light)',
               }} />
             ))}
           </div>
           <div style={{ textAlign: 'center', fontSize: 24, marginBottom: 4 }}>{dim.emoji}</div>
-          <div style={{ fontSize: 15, fontWeight: 600, textAlign: 'center', marginBottom: 16 }}>{dim.question}</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontSize: 15, fontWeight: 600, textAlign: 'center', marginBottom: 16, color: 'var(--text-primary)' }}>{dim.question}</div>
+          <div className="aci-answers">
             {dim.anchors.map((anchor, i) => {
               const score = i + 1
               const selected = scores[dim.id] === score
               return (
                 <button key={score}
-                  style={{
-                    padding: '10px 14px', borderRadius: 10, border: 'none',
-                    background: selected ? '#5e17eb' : '#f0ede8',
-                    color: selected ? '#fff' : '#333',
-                    fontSize: 13, textAlign: 'left', cursor: 'pointer',
-                    fontWeight: selected ? 600 : 400,
-                  }}
+                  className={`aci-answer ${selected ? 'selected' : ''}`}
                   disabled={advancing}
                   onClick={() => {
                     if (advancing) return
@@ -1736,22 +1726,18 @@ function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
             {step > 0 && (
-              <button onClick={() => setStep(prev => prev - 1)}
-                style={{ padding: '8px 14px', borderRadius: 8, background: '#f0ede8', border: 'none', fontSize: 13, cursor: 'pointer' }}>
+              <button className="aci-back" onClick={() => setStep(prev => prev - 1)}>
                 ← Back
               </button>
             )}
-            <button onClick={onDismiss}
-              style={{ padding: '8px 14px', borderRadius: 8, background: 'none', border: 'none', fontSize: 13, color: '#999', cursor: 'pointer' }}>
-              Cancel
-            </button>
+            <button className="aci-dismiss" onClick={onDismiss}>Cancel</button>
           </div>
         </>
       )}
 
       {isReveal && allDone && (
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>Your aliveness snapshot</div>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 12, color: 'var(--text-primary)' }}>Your aliveness snapshot</div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <GenericRadar
               dimensions={VIBE_RISE_DIMENSIONS}
@@ -1761,13 +1747,7 @@ function RetroactiveBaselineFlow({ userId, quest, onComplete, onDismiss }) {
               animate
             />
           </div>
-          <button onClick={saveBaseline}
-            disabled={saving}
-            style={{
-              marginTop: 12, padding: '10px 24px', borderRadius: 10,
-              background: '#5e17eb', color: '#fff', border: 'none',
-              fontWeight: 600, fontSize: 14, cursor: 'pointer',
-            }}>
+          <button className="aci-done" onClick={saveBaseline} disabled={saving}>
             {saving ? 'Saving...' : 'Save snapshot'}
           </button>
         </div>

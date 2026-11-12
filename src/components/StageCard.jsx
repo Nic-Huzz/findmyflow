@@ -20,8 +20,8 @@ export default function StageCard({ heroStage = 0, directionComplete = false, ch
 
   return (
     <div className="sc-card">
-      {/* Chapter name + step count */}
-      <div className="sc-chapter-name">{chapter.name}</div>
+      {/* Chapter name with stage number */}
+      <div className="sc-chapter-name"><span className="sc-stage-label">Stage {chapter.circleStage}:</span> {chapter.name}</div>
       <div className="sc-step-count">
         {stepsComplete} of {stepsTotal} complete
       </div>
@@ -34,16 +34,6 @@ export default function StageCard({ heroStage = 0, directionComplete = false, ch
               {step.complete ? <CheckCircleIcon width={18} height={18} /> : step.current ? '▸' : '○'}
             </span>
             <span className="sc-step-name">{step.name}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Chapter dots */}
-      <div className="sc-chapter-dots">
-        {JOURNEY_CHAPTERS.map(c => (
-          <div key={c.id} className={`sc-dot ${c.id === chapter.id ? 'sc-dot-active' : ''} ${JOURNEY_CHAPTERS.indexOf(c) < JOURNEY_CHAPTERS.indexOf(chapter) ? 'sc-dot-done' : ''}`}>
-            <span className="sc-dot-circle" />
-            <span className="sc-dot-label">{c.name}</span>
           </div>
         ))}
       </div>

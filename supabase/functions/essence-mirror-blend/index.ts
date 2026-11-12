@@ -77,7 +77,7 @@ Generate a blended profile. The blend should feel like ONE person, not two arche
 Rules:
 - Write in second person ("You are...")
 - Keep each field to 2-3 short sentences max. Each sentence should stand alone as its own thought.
-- The blended_name should be a unique 2-3 word name that captures both essences (e.g., "Fierce Alchemist", "Rebel Healer"). Do NOT start with "The".
+- The blended_name should be a unique 2-word name that captures both essences (e.g., "Fierce Alchemist", "Rebel Healer"). Do NOT start with "The". Use simple, everyday words a 12-year-old would understand. No fancy vocabulary. It should feel like something you'd proudly put in your Instagram bio. Test: if you'd hesitate to say it out loud to a friend, pick simpler words.
 - The wound should combine both wounds into one painful truth
 - NEVER use em dashes (—), semicolons (;), or double hyphens (--)
 - Use commas, full stops, or rephrase instead

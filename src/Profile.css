@@ -1895,3 +1895,611 @@
     font-size: 0.7rem;
   }
 }
+
+/* ============================================================
+   Bioluminescent dark theme overrides
+   ============================================================ */
+
+/* ── Page background ── */
+.theme-bioluminescent.dashboard-container {
+  background: var(--bg-page, #0A0812);
+}
+
+body:has(.theme-bioluminescent.dashboard-container) {
+  background: #0A0812;
+}
+
+/* ── Mobile Top Bar ── */
+.theme-bioluminescent .mobile-topbar {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Sidebar ── */
+.theme-bioluminescent .sidebar {
+  background: linear-gradient(180deg, #12101C 0%, #0A0812 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.theme-bioluminescent .user-profile {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-bioluminescent .user-avatar {
+  background: linear-gradient(135deg, #FF3CAC 0%, #FFB800 100%);
+  color: #0A0812;
+}
+
+.theme-bioluminescent .nav-item.active {
+  background: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .signout-link {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .signout-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Sidebar overlay ── */
+.theme-bioluminescent .sidebar-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ── Page header / titles ── */
+.theme-bioluminescent .page-title {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .page-subtitle {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .section-heading {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .section-title {
+  color: var(--text-primary, #F2EEF8);
+}
+
+/* ── Stats Grid / Archetype Cards ── */
+.theme-bioluminescent .stat-card {
+  background: #12101C;
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-bioluminescent .stat-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.theme-bioluminescent .stat-card.purple .stat-icon {
+  background: rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .stat-card.yellow .stat-icon {
+  background: rgba(255, 184, 0, 0.15);
+}
+
+.theme-bioluminescent .stat-card.gradient .stat-icon {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.15), rgba(255, 184, 0, 0.15));
+}
+
+.theme-bioluminescent .stat-card.purple.clickable:hover {
+  box-shadow: 0 12px 28px rgba(255, 60, 172, 0.2);
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .stat-card.yellow.clickable:hover {
+  box-shadow: 0 12px 28px rgba(255, 184, 0, 0.2);
+  border-color: rgba(255, 184, 0, 0.3);
+}
+
+.theme-bioluminescent .stat-label {
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .stat-value {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .expand-arrow {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .expand-arrow.expanded {
+  background: #FF3CAC;
+  color: white;
+}
+
+/* ── Archetype Expanded ── */
+.theme-bioluminescent .archetype-expanded {
+  background: #12101C;
+  border-color: #FFB800;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.theme-bioluminescent .archetype-expanded .archetype-name {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .archetype-expanded .archetype-subtitle {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .archetype-expanded .archetype-description {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .explore-button {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0A0812;
+  box-shadow: 0 4px 15px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .explore-button:hover {
+  box-shadow: 0 6px 20px rgba(255, 60, 172, 0.4);
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+/* ── Expand content ── */
+.theme-bioluminescent .expand-content {
+  background: rgba(255, 255, 255, 0.03);
+  border-left-color: #FF3CAC;
+}
+
+.theme-bioluminescent .expand-content h4 {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .expand-content p {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+/* ── Archetype expanded content ── */
+.theme-bioluminescent .archetype-expanded-content {
+  background: #12101C;
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .expanded-label {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .expanded-title {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .expanded-text {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .character-item {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+/* ── Archetype card (dashboard) ── */
+.theme-bioluminescent.dashboard-container .archetype-card {
+  background: #12101C;
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-bioluminescent.dashboard-container .archetype-card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.theme-bioluminescent.dashboard-container .archetype-body {
+  background: #12101C;
+}
+
+.theme-bioluminescent.dashboard-container .archetype-name {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .archetype-description {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .archetype-header {
+  background: #1a1730;
+}
+
+.theme-bioluminescent .archetype-tag {
+  background: rgba(10, 8, 18, 0.85);
+  color: #FF3CAC;
+  backdrop-filter: blur(10px);
+}
+
+/* ── Streak Display ── */
+.theme-bioluminescent .streak-item {
+  background: #12101C;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-bioluminescent .streak-item .streak-value {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .streak-item.daily .streak-value {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .streak-item.groan .streak-value {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .streak-item .streak-label {
+  color: var(--text-muted, #8478A0);
+}
+
+/* ── Progress Strip ── */
+.theme-bioluminescent .progress-strip {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+/* ── Action Buttons ── */
+.theme-bioluminescent .action-btn.primary {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0A0812;
+}
+
+.theme-bioluminescent .action-btn.primary:hover {
+  box-shadow: 0 4px 20px rgba(255, 60, 172, 0.5);
+}
+
+@keyframes ctaPulseBio {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(255, 60, 172, 0.5), 0 0 40px rgba(255, 60, 172, 0.2);
+  }
+}
+
+.theme-bioluminescent .action-btn.primary {
+  animation: ctaPulseBio 2s ease-in-out infinite;
+}
+
+.theme-bioluminescent .action-btn.primary:hover {
+  animation: none;
+}
+
+.theme-bioluminescent .action-btn.secondary {
+  background: #12101C;
+  color: var(--text-primary, #F2EEF8);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-bioluminescent .action-btn.secondary:hover {
+  border-color: #FF3CAC;
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .action-btn.support {
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .action-btn.support:hover {
+  color: #25D366;
+  background: rgba(37, 211, 102, 0.1);
+}
+
+/* ── CTA Banner ── */
+.theme-bioluminescent .cta-banner {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+}
+
+.theme-bioluminescent .btn-white {
+  background: #0A0812;
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .btn-outline {
+  border-color: rgba(10, 8, 18, 0.5);
+  color: #0A0812;
+}
+
+.theme-bioluminescent .btn-outline:hover {
+  background: #0A0812;
+  color: #FF3CAC;
+}
+
+/* ── No Project Prompt ── */
+.theme-bioluminescent .no-project-prompt {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.1) 0%, rgba(224, 64, 251, 0.1) 100%);
+  border-color: rgba(255, 60, 172, 0.2);
+}
+
+.theme-bioluminescent .no-project-prompt h3 {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .no-project-prompt p {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+/* ── Flow Map Loading ── */
+.theme-bioluminescent .flow-map-loading {
+  background: rgba(255, 60, 172, 0.05);
+}
+
+/* ── Project Cards ── */
+.theme-bioluminescent .project-card-mini {
+  background: #12101C;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .project-card-mini:hover {
+  border-color: #FF3CAC;
+}
+
+.theme-bioluminescent .project-card-mini.primary {
+  border-color: #FFB800;
+  background: rgba(255, 184, 0, 0.05);
+}
+
+.theme-bioluminescent .project-card-mini .project-name {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .project-card-mini .project-stage {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .project-card-mini .primary-badge {
+  background: #FFB800;
+  color: #0A0812;
+}
+
+.theme-bioluminescent .project-card-mini.add-new {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .project-card-mini.add-new:hover {
+  border-color: #FF3CAC;
+  color: #FF3CAC;
+}
+
+/* ── Project Stage Badge ── */
+.theme-bioluminescent .project-stage-badge {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.1) 0%, rgba(224, 64, 251, 0.1) 100%);
+}
+
+.theme-bioluminescent .project-stage-badge .persona-badge {
+  background: #FF3CAC;
+}
+
+.theme-bioluminescent .project-stage-badge .stage-info {
+  color: var(--text-primary, #F2EEF8);
+}
+
+/* ── Persona Flow Section ── */
+.theme-bioluminescent .persona-flow-card {
+  background: #12101C;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.theme-bioluminescent .persona-flow-name {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .persona-flow-description {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .persona-tagline {
+  color: var(--text-muted, #8478A0);
+}
+
+/* ── Onboarding Modal ── */
+.theme-bioluminescent .onboarding-overlay {
+  background: rgba(10, 8, 18, 0.92);
+}
+
+.theme-bioluminescent .onboarding-modal {
+  background: #12101C;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.theme-bioluminescent .onboarding-title {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .onboarding-content {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .onboarding-dot {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-bioluminescent .onboarding-dot.active {
+  background: linear-gradient(135deg, #FF3CAC, #E040FB);
+  box-shadow: 0 0 10px rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .onboarding-dot.completed {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.theme-bioluminescent .onboarding-btn.primary {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0A0812;
+  box-shadow: 0 4px 12px rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .onboarding-btn.primary:hover {
+  box-shadow: 0 6px 20px rgba(255, 60, 172, 0.4);
+}
+
+.theme-bioluminescent .onboarding-btn.secondary {
+  background: transparent;
+  color: #FF3CAC;
+  border-color: #FF3CAC;
+}
+
+.theme-bioluminescent .onboarding-btn.secondary:hover {
+  background: rgba(255, 60, 172, 0.08);
+}
+
+.theme-bioluminescent .snapshot-placeholder {
+  color: var(--text-muted, #8478A0);
+}
+
+/* ── Agent Access Section ── */
+.theme-bioluminescent .agent-access-section {
+  background: #12101C;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .agent-access-toggle {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .agent-access-toggle:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.theme-bioluminescent .agent-access-toggle-icon {
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .agent-access-toggle-badge {
+  background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
+  color: #0A0812;
+}
+
+.theme-bioluminescent .agent-access-description {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .agent-key-reveal {
+  background: linear-gradient(135deg, rgba(255, 60, 172, 0.1) 0%, rgba(255, 184, 0, 0.1) 100%);
+  border-color: rgba(255, 60, 172, 0.3);
+}
+
+.theme-bioluminescent .agent-key-reveal-header {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .agent-key-reveal-value {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .agent-key-reveal-value code {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .agent-key-copy-btn {
+  background: #FF3CAC;
+}
+
+.theme-bioluminescent .agent-key-copy-btn:hover {
+  background: #E040FB;
+}
+
+.theme-bioluminescent .agent-key-reveal-warning {
+  color: #FFB800;
+}
+
+.theme-bioluminescent .agent-key-dismiss-btn {
+  background: #FFB800;
+  color: #0A0812;
+}
+
+.theme-bioluminescent .agent-key-dismiss-btn:hover {
+  background: #e6a600;
+}
+
+.theme-bioluminescent .agent-key-label-input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .agent-key-label-input:focus {
+  border-color: #FF3CAC;
+  box-shadow: 0 0 0 2px rgba(255, 60, 172, 0.15);
+}
+
+.theme-bioluminescent .agent-key-generate-btn {
+  background: #FFB800;
+  color: #0A0812;
+}
+
+.theme-bioluminescent .agent-key-generate-btn:hover {
+  background: #e6a600;
+}
+
+.theme-bioluminescent .agent-key-error {
+  color: #ff6b6b;
+}
+
+.theme-bioluminescent .agent-keys-loading {
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .agent-keys-list-header {
+  color: var(--text-muted, #8478A0);
+}
+
+.theme-bioluminescent .agent-key-row {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.theme-bioluminescent .agent-key-label {
+  color: var(--text-primary, #F2EEF8);
+}
+
+.theme-bioluminescent .agent-key-prefix {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .agent-key-meta {
+  color: var(--text-faint, #5a4e70);
+}
+
+.theme-bioluminescent .agent-key-revoke-btn {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.theme-bioluminescent .agent-key-revoke-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.theme-bioluminescent .agent-key-revoked-badge {
+  color: var(--text-faint, #5a4e70);
+}
+
+.theme-bioluminescent .agent-usage-details {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-bioluminescent .agent-usage-details summary {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .agent-usage-content p {
+  color: var(--text-secondary, #BAB0D0);
+}
+
+.theme-bioluminescent .agent-usage-content a {
+  color: #FF3CAC;
+}
+
+.theme-bioluminescent .agent-usage-code {
+  background: #0A0812;
+  color: #FFB800;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}

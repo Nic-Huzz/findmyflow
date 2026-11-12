@@ -195,7 +195,8 @@ Return ONLY valid JSON:
   },
   "secondaryArchetype": {
     "id": "second strongest match id",
-    "name": "Second strongest match name"
+    "name": "Second strongest match name",
+    "essence": "One-line description of how this secondary energy shows up in THIS person"
   },
   "essenceBlend": "Exactly 2 short sentences. First: what makes this person's archetype unique to THEM (use their words). Second: how primary + secondary work together. Punchy, not poetic. Max 40 words total.",
   "mirrorReveal": "Exactly 3 short sentences, each separated by \\n\\n. First: what was lost. Second: what survived. Third: who they actually are, ending with a gut-punch line. Max 50 words total. Use their actual words."
@@ -207,6 +208,7 @@ Rules:
 - Reference their specific words from ALL stages, not just Stage 4.
 - The archetype match should be based on energy and patterns, not surface-level keyword matching.
 - primaryArchetype.id must be one of: radiant_rebel, playful_creator, sacred_jester, mystic_messenger, truth_teller, heart_alchemist, grounded_guardian, heart_holder, rhythm_architect, wise_sage, cosmic_connector, compassionate_leader
+- secondaryArchetype.id must ALSO be from that list, but MUST be different from the primary. Never pick two archetypes from the same group (e.g. not both "heart" archetypes).
 - NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
 

@@ -515,6 +515,13 @@ body:has(.theme-bioluminescent) .app-loading-title {
   color: var(--text-muted);
 }
 
+/* ── Task checkboxes ── */
+.theme-bioluminescent .qbc-check {
+  border-color: #FF3CAC;
+  border-width: 2px;
+  background: transparent;
+}
+
 /* ── Add challenge / Add task area ── */
 .theme-bioluminescent .qbc-add-actions {
   border-top-color: rgba(255, 255, 255, 0.06);

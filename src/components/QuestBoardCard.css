@@ -212,7 +212,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1.5px solid rgba(0,0,0,0.15);
+  border: 2px solid var(--border-light);
   background: transparent;
   flex-shrink: 0;
   cursor: pointer;
@@ -686,3 +686,14 @@
 .qbc-manual-dims { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .qbc-manual-dim { padding: 6px 10px; border-radius: 8px; border: 1.5px solid rgba(0,0,0,0.08); background: var(--bg-surface); font-size: 12px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
 .qbc-manual-dim--selected { border-color: var(--accent-gold); background: rgba(233,162,59,0.06); color: #B8891E; }
+
+/* ── Bioluminescent dark theme ── */
+.theme-bioluminescent .qbc-check {
+  border-color: #FF3CAC;
+  border-width: 2px;
+  background: transparent;
+}
+.theme-bioluminescent .qbc-check--done {
+  background: #FF3CAC;
+  border-color: #FF3CAC;
+}

@@ -18,6 +18,8 @@ import { useAudioRecorder } from '../hooks/useAudioRecorder'
 import { transcribeAudio } from '../lib/deepgramClient'
 import { processStage } from '../lib/stemProcessing'
 import { getStemsForStage, EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
+import { getArchetype } from '../data/essenceArchetypes'
+import ExperienceGameLive from '../components/ExperienceGameLive'
 import './VoiceStemFlow.css'
 
 const STORAGE_KEY = 'voice_stems_session'
@@ -69,7 +71,7 @@ async function saveToSupabase(data) {
   try {
     const { supabase } = await import('../lib/supabaseClient')
     const sessionId = getSessionId()
-    const placeholderEmail = `anon-${sessionId.slice(0, 8)}@voice-stems.local`
+    const placeholderEmail = `anon-${sessionId}@voice-stems.local`
     await supabase.from('public_leads').upsert({
       id: sessionId,
       email: data.email || placeholderEmail,
@@ -676,10 +678,13 @@ function AvatarScreen({ stage4Results, onSkip }) {
         img.src = URL.createObjectURL(photo)
       })
 
-      const primary = stage4Results.primaryArchetype
+      const primaryResult = stage4Results.primaryArchetype
+      const primaryFull = getArchetype(primaryResult?.id) || primaryResult
       const prompt = `Transform this person into a high-quality 3D animated movie character. Use ONLY their face and facial features as reference for likeness. Create a completely new heroic scene around them based on their archetype essence.
 
-Their essence: "${primary.name}" - ${primary.essence}
+Their essence: "${primaryFull.name}" - ${primaryFull.poetic_line || primaryFull.essence}
+Their superpower: ${primaryFull.superpower || ''}
+Their vision: ${primaryFull.poetic_vision || ''}
 
 Create a dynamic pose and scene background that embodies this essence. The character should be in action or in their element, not just standing. Use warm cinematic lighting with purple and gold tones. Big expressive animated eyes. Heroic but approachable. Modern 3D animated feature film quality. Square composition.`
 
@@ -958,33 +963,62 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
-function EssenceReveal({ results, onContinue }) {
+function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange, onContinue }) {
   if (!results) return null
   const primary = results.primaryArchetype || {}
   const secondary = results.secondaryArchetype || {}
-  const blend = results.essenceBlend || ''
+  const primaryFull = getArchetype(primary.id) || primary
+  const secondaryFull = getArchetype(secondary.id) || secondary
+  const blend = blendResult?.blended_essence || results.essenceBlend || ''
   const reveal = results.mirrorReveal || ''
 
   return (
     <div className="vs-essence-reveal">
       <div className="vs-essence-reveal-inner">
         <div className="vs-essence-badge">Your Essence</div>
-        <h1 className="vs-essence-name">{primary.name || 'Your True Self'}</h1>
-        {primary.essence && <p className="vs-essence-tagline">{primary.essence}</p>}
-        {secondary.name && (
-          <p className="vs-essence-secondary">with shades of <span className="vs-gold-text">{secondary.name}</span></p>
+        <h1 className="vs-essence-name">{essenceName || primary.name || 'Your True Self'}</h1>
+        {blend && <p className="vs-essence-tagline">{blend}</p>}
+
+        {reveal && (
+          <div className="vs-essence-mirror-card">
+            <p className="vs-essence-mirror">{reveal}</p>
+          </div>
         )}
 
-        <div className="vs-essence-blend-card">
-          <p className="vs-essence-blend">{blend}</p>
+        {(primary.name || secondary.name) && (
+          <div className="vs-essence-blend-card">
+            {primary.name && (
+              <div className="vs-archetype-row">
+                <span className="vs-archetype-label">Primary</span>
+                <span className="vs-archetype-name">{primary.name}</span>
+                <p className="vs-archetype-desc">{primary.essence || primaryFull.poetic_line}</p>
+              </div>
+            )}
+            {secondary.name && (
+              <div className="vs-archetype-row">
+                <span className="vs-archetype-label">Secondary</span>
+                <span className="vs-archetype-name vs-gold-text">{secondary.name}</span>
+                <p className="vs-archetype-desc">{secondary.essence || secondaryFull.poetic_line}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="vs-essence-naming">
+          <label className="vs-essence-naming-label">Name your essence</label>
+          <input
+            className="vs-essence-name-input"
+            type="text"
+            value={essenceName}
+            onChange={(e) => onEssenceNameChange(e.target.value)}
+            placeholder="Your essence name"
+            maxLength={40}
+          />
+          <p className="vs-essence-naming-hint">This becomes your identity. Edit it to make it yours.</p>
         </div>
 
-        <div className="vs-essence-mirror-card">
-          <p className="vs-essence-mirror">{reveal}</p>
-        </div>
-
-        <button className="vs-cta vs-cta-gold" onClick={onContinue}>
-          See your full journey
+        <button className="vs-cta vs-cta-gold" onClick={onContinue} disabled={!essenceName.trim()}>
+          This is me
         </button>
       </div>
     </div>
@@ -1038,6 +1072,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const [stage4Results, setStage4Results] = useState(null)
   const [stage5Results, setStage5Results] = useState(null)
   const [stage6Results, setStage6Results] = useState(null)
+  const [blendResult, setBlendResult] = useState(null)
+  const [essenceName, setEssenceName] = useState('')
 
   // ── Experience game batch tracking ─────────────────────────────────
   const expBatchRef = useRef(0)
@@ -1110,6 +1146,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       if (saved.stage4Results) setStage4Results(saved.stage4Results)
       if (saved.stage5Results) { setStage5Results(saved.stage5Results); stage5ResultsRef.current = saved.stage5Results }
       if (saved.stage6Results) setStage6Results(saved.stage6Results)
+      if (saved.blendResult) setBlendResult(saved.blendResult)
+      if (saved.essenceName) setEssenceName(saved.essenceName)
     }
 
     // ?skip=N jumps directly to that stage's recording
@@ -1364,6 +1402,49 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           stage4Results: results,
           completed: true,
         })
+        // Call essence-mirror-blend to get custom name before showing reveal
+        const primaryData = getArchetype(results.primaryArchetype?.id)
+        const secondaryData = getArchetype(results.secondaryArchetype?.id)
+        if (primaryData && secondaryData) {
+          try {
+            const { data: blendData } = await supabase.functions.invoke('essence-mirror-blend', {
+              body: {
+                primary: {
+                  name: primaryData.name,
+                  poetic_line: primaryData.poetic_line,
+                  superpower: primaryData.superpower,
+                  essence_wound: primaryData.essence_wound,
+                  poetic_vision: primaryData.poetic_vision,
+                  energetic_transmission: primaryData.energetic_transmission,
+                  north_star: primaryData.north_star,
+                  vision_in_action: primaryData.vision_in_action,
+                },
+                secondary: {
+                  name: secondaryData.name,
+                  poetic_line: secondaryData.poetic_line,
+                  superpower: secondaryData.superpower,
+                  essence_wound: secondaryData.essence_wound,
+                  poetic_vision: secondaryData.poetic_vision,
+                  energetic_transmission: secondaryData.energetic_transmission,
+                  north_star: secondaryData.north_star,
+                  vision_in_action: secondaryData.vision_in_action,
+                },
+              },
+            })
+            if (blendData?.blended_name) {
+              setBlendResult(blendData)
+              setEssenceName(blendData.blended_name.replace(/^The\s+/i, ''))
+              saveSession({ blendResult: blendData, essenceName: blendData.blended_name.replace(/^The\s+/i, '') })
+            } else {
+              setEssenceName(primaryData.name)
+            }
+          } catch (blendErr) {
+            console.warn('Blend API error:', blendErr)
+            setEssenceName(primaryData.name)
+          }
+        } else {
+          setEssenceName(results.primaryArchetype?.name || 'Your True Self')
+        }
         setScreen('essence_reveal')
       }
     } catch (err) {
@@ -1840,6 +1921,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'essence_reveal' && stage4Results && (
           <EssenceReveal
             results={stage4Results}
+            blendResult={blendResult}
+            essenceName={essenceName}
+            onEssenceNameChange={(name) => {
+              setEssenceName(name)
+              saveSession({ essenceName: name })
+            }}
             onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'avatar')}
           />
         )}
@@ -1849,71 +1936,37 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {/* EXPERIENCE INTRO */}
         {screen === 'experience_intro' && (
           <div className="vs-exp-intro">
-            <div className="vs-results-label">Stage 5</div>
-            <h2>The Experience Game</h2>
-            <p className="vs-exp-intro-desc">
-              You will see activities, 10 at a time. For each one, say <strong>&quot;fun&quot;</strong> or <strong>&quot;not fun&quot;</strong>. Go fast. Trust your gut.
-            </p>
-            <p className="vs-exp-intro-sub">
-              {EXPERIENCE_ACTIVITIES.length} activities. {EXP_BATCHES.length} rounds. About 2 minutes.
-            </p>
-            <DoubleConfirmButton
-              onConfirm={() => startExpBatch(0)}
-              label="Start the game"
-              confirmLabel="Ready? Tap to begin"
-            />
-          </div>
-        )}
-
-        {/* EXP COUNTDOWN */}
-        {screen === 'exp_countdown' && (
-          <div className="vs-stem-screen">
-            <ProgressBar
-              label={`Experience Game  ·  Round ${expBatchRef.current + 1} of ${EXP_BATCHES.length}`}
-              percent={Math.round((expBatchRef.current / EXP_BATCHES.length) * 100)}
-            />
-            <div className="vs-exp-batch-list">
-              {(EXP_BATCHES[expBatchRef.current] || []).map((a, i) => (
-                <div key={a.id} className="vs-exp-batch-item">
-                  <span className="vs-exp-batch-num">{i + 1}.</span>
-                  <span>{a.label}</span>
-                </div>
-              ))}
+            <div className="vs-results-card">
+              <div className="vs-results-label">Stage 5</div>
+              <h2 className="vs-results-title">The Experience Game</h2>
+              <p className="vs-exp-intro-desc">
+                Activities will appear one at a time. For each one, say <strong>&quot;fun&quot;</strong> or <strong>&quot;not fun&quot;</strong>. Go fast. Trust your gut.
+              </p>
+              <p className="vs-exp-intro-sub">
+                {EXPERIENCE_ACTIVITIES.length} activities. About 2 minutes.
+              </p>
             </div>
-            <div className="vs-countdown-overlay vs-countdown-overlay-bottom">
-              <div className="vs-countdown-num" key={countdownNum}>{countdownNum}</div>
-              <div className="vs-countdown-label">Say &quot;fun&quot; or &quot;not fun&quot; for each...</div>
+            <div className="vs-bottom-action">
+              <DoubleConfirmButton
+                onConfirm={() => setScreen('exp_live')}
+                label="Start the game"
+                confirmLabel="Ready? Tap to begin"
+              />
             </div>
           </div>
         )}
 
-        {/* EXP RECORDING */}
-        {screen === 'exp_recording' && (
-          <div className="vs-stem-screen">
-            <ProgressBar
-              label={`Experience Game  ·  Round ${expBatchRef.current + 1} of ${EXP_BATCHES.length}`}
-              percent={Math.round(((expBatchRef.current + 0.5) / EXP_BATCHES.length) * 100)}
-            />
-            <div className="vs-exp-batch-list">
-              {(EXP_BATCHES[expBatchRef.current] || []).map((a, i) => (
-                <div key={a.id} className="vs-exp-batch-item">
-                  <span className="vs-exp-batch-num">{i + 1}.</span>
-                  <span>{a.label}</span>
-                </div>
-              ))}
-            </div>
-            <RecordingZone secondsLeft={stemSeconds} onDone={handleExpBatchDone} />
-          </div>
-        )}
-
-        {/* EXP TRANSITION */}
-        {screen === 'exp_transition' && (
-          <div className="vs-stem-screen">
-            <div className="vs-transition">
-              <div className="vs-got-it">Got it.</div>
-              <div className="vs-transcribing-label">Transcribing...</div>
-            </div>
-          </div>
+        {/* EXPERIENCE GAME LIVE — one at a time */}
+        {screen === 'exp_live' && (
+          <ExperienceGameLive
+            activities={EXPERIENCE_ACTIVITIES}
+            onComplete={(results) => {
+              setStage5Results(results)
+              stage5ResultsRef.current = results
+              saveSession({ stage5Results: results })
+              setScreen('experience_results')
+            }}
+          />
         )}
 
         {/* EXPERIENCE RESULTS */}
