@@ -74,7 +74,12 @@ const getEssenceMessage = (voice, layer) => {
     'ghost_money': 'Your Ghost avoids asking for money. But fair exchange is claiming your worth.',
     'ghost_authority': 'Your Ghost shrinks from claiming expertise. But quiet authority is still authority.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection requires visibility.',
-    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters.'
+    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters.',
+    'chameleon_screen': 'Your Chameleon wants to match what people expect. But the real you is what creates value.',
+    'chameleon_live': 'Your Chameleon is scanning to figure out who to be. But being real is the action.',
+    'chameleon_vulnerable': 'Your Chameleon wants to present what fits in. But your unique take is the point.',
+    'chameleon_money': 'Your Chameleon worries the real you won\'t sell. But the real you is exactly what sells.',
+    'chameleon_authority': 'Your Chameleon thinks authority means matching the experts. But your own shape is your authority.'
   }
   const key = `${voice}_${layer}`
   return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from helping people.'

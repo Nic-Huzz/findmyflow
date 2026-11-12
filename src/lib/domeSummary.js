@@ -37,29 +37,42 @@ function getNodeLookup() {
 
 /**
  * Returns core dome experiences grouped by primal for the bridge UI.
+ * Split by want_paid: pathActivities (want_paid=true or vibe_rise) vs passions (want_paid=false/absent or fun).
+ * Falls back to vibe_rise/fun split for users who completed the old (non-vocal) experience game.
  * @param {Object} domeStates - { [nodeId]: nsState }
- * @returns {{ vibeRise: Array, fun: Array }} each item: { id, label, primal }
+ * @param {Object} [wantPaidStates] - { [nodeId]: boolean }
+ * @returns {{ pathActivities: Array, passions: Array }} each item: { id, label, primal }
  */
-export function getDomeExperiencesForBridge(domeStates) {
+export function getDomeExperiencesForBridge(domeStates, wantPaidStates = {}) {
   const lookup = getNodeLookup()
-  const vibeRise = []
-  const fun = []
+  const pathActivities = []
+  const passions = []
+  const hasAnyPaidData = Object.keys(wantPaidStates).length > 0
 
   Object.entries(domeStates).forEach(([nodeId, nsState]) => {
     if (!isCoreNode(nodeId)) return
+    if (nsState !== 'vibe_rise' && nsState !== 'fun') return
     const info = lookup.get(nodeId)
     if (!info) return
     const item = { id: nodeId, label: info.label, primal: info.primal }
-    if (nsState === 'vibe_rise') vibeRise.push(item)
-    else if (nsState === 'fun') fun.push(item)
+
+    if (hasAnyPaidData) {
+      // New vocal flow: split by want_paid. vibe_rise always counts as path activity
+      // (handles mixed-flow users who re-rated via ExperienceGameFlow after VoiceStemFlow)
+      if (nsState === 'vibe_rise' || wantPaidStates[nodeId]) pathActivities.push(item)
+      else passions.push(item)
+    } else {
+      // Legacy flow: vibe_rise -> path, fun -> passion
+      if (nsState === 'vibe_rise') pathActivities.push(item)
+      else passions.push(item)
+    }
   })
 
-  // Sort by primal then label within each group
   const sort = (a, b) => a.primal.localeCompare(b.primal) || a.label.localeCompare(b.label)
-  vibeRise.sort(sort)
-  fun.sort(sort)
+  pathActivities.sort(sort)
+  passions.sort(sort)
 
-  return { vibeRise, fun }
+  return { pathActivities, passions }
 }
 
 /**

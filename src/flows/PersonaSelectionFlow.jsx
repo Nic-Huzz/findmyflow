@@ -13,6 +13,7 @@ import {
   PROBLEMS_PROFICIENCY_RINGS
 } from '../lib/wheelTaxonomy'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
+import { getVoicePickerOptions } from '../data/protectiveVoices'
 import './PersonaSelectionFlow.css'
 
 // Flow stages
@@ -35,13 +36,7 @@ const VISIBILITY_LAYERS = [
 ]
 
 // Protective voices for 2D pattern recognition
-const PROTECTIVE_VOICES = [
-  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'My idea isn\'t ready for feedback yet' },
-  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother anyone' },
-  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
-  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
-]
+const PROTECTIVE_VOICES = getVoicePickerOptions()
 
 // Contextual essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {
@@ -60,7 +55,10 @@ const getEssenceMessage = (voice, layer) => {
     'auto_pilot_live': 'Your Auto-Pilot can\'t find the energy. But one conversation can reignite something.',
     'ghost_screen': 'Your Ghost wants to stay invisible. But your idea deserves to be seen, and so do you.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
-    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.'
+    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.',
+    'chameleon_screen': 'Your Chameleon wants to match what they expect. But the real you is what connects.',
+    'chameleon_vulnerable': 'Your Chameleon wants to present what fits in. But your honest take is what matters.',
+    'chameleon_live': 'Your Chameleon is figuring out who to be in the conversation. But genuine connection starts with being yourself.'
   }
 
   const key = `${voice}_${layer}`

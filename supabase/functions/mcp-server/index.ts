@@ -215,7 +215,7 @@ const TOOL_DEFINITIONS = [
               },
               state: { type: 'string', enum: ['vibe_rise', 'fun', 'stress', 'boring'], description: 'How the user felt while doing this task.' },
               identity_statement: { type: 'string', description: 'For vibe_rise/fun: "I am someone who..." (the verb/action part only)' },
-              protective_voice: { type: 'string', enum: ['controller', 'ghost', 'perfectionist', 'auto_pilot', 'people_pleaser'], description: 'For stress state: which voice showed up.' },
+              protective_voice: { type: 'string', enum: ['controller', 'ghost', 'perfectionist', 'auto_pilot', 'people_pleaser', 'chameleon'], description: 'For stress state: which voice showed up.' },
               cross_quest_ids: { type: 'array', items: { type: 'string' }, description: 'For vibe_rise: other quest UUIDs this work also fed.' },
             },
             required: ['task_text', 'skill_tags', 'state'],

@@ -15,6 +15,7 @@ import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
 import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment, findProblemSegment } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
+import { getVoicePickerOptions } from '../data/protectiveVoices'
 import '../styles/flow-base.css'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LetsPlayFlow.css'
@@ -66,13 +67,7 @@ const VISIBILITY_LAYERS = [
 ]
 
 // Pre-action: Protective voices (HOW resistance sounds)
-const PROTECTIVE_VOICES = [
-  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect first' },
-  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: "I don't want to bother anyone" },
-  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
-  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
-]
+const PROTECTIVE_VOICES = getVoicePickerOptions()
 
 // Pre-action: Essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {
@@ -101,7 +96,12 @@ const getEssenceMessage = (voice, layer) => {
     'ghost_vulnerable': 'Your Ghost says hiding is safer. But connection requires visibility.',
     'ghost_live': 'Your Ghost prefers silence. But your voice matters.',
     'ghost_money': 'Your Ghost avoids asking. But claiming your worth is powerful.',
-    'ghost_authority': 'Your Ghost shrinks from claiming expertise. But quiet authority is still authority.'
+    'ghost_authority': 'Your Ghost shrinks from claiming expertise. But quiet authority is still authority.',
+    'chameleon_screen': 'Your Chameleon wants to match what the person expects. But you help best as yourself.',
+    'chameleon_live': 'Your Chameleon is figuring out who to be in the conversation. But being real is how you actually connect.',
+    'chameleon_vulnerable': 'Your Chameleon wants to present what fits. But your honest perspective is what helps.',
+    'chameleon_money': 'Your Chameleon worries being paid will change the dynamic. But fair exchange deepens trust.',
+    'chameleon_authority': 'Your Chameleon thinks helping means becoming what they need. But you help best as yourself.'
   }
   return messages[`${voice}_${layer}`] || 'Your protective voice is trying to keep you safe. But you don\'t need protection from helping people.'
 }

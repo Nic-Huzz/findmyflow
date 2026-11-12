@@ -14,15 +14,12 @@ import { DOME_DIMENSIONS, DIFFICULTY_SCALE, calculateCourageScore } from '../dat
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import QuestSelector from './QuestSelector'
 import HealingFlowModal from './HealingFlowModal'
+import { getVoiceOptions } from '../data/protectiveVoices'
 import './WahooCreator.css'
 
-const VOICE_LIES = [
-  { voice: 'ghost', icon: '👻', lie: "I want to disappear. Hide. Go quiet." },
-  { voice: 'perfectionist', icon: '🎭', lie: "It's not good enough yet. I need more time." },
-  { voice: 'people_pleaser', icon: '🪞', lie: "I'd rather say yes than deal with their reaction." },
-  { voice: 'controller', icon: '🎮', lie: "I want to know how this ends before I do it." },
-  { voice: 'auto_pilot', icon: '🛋️', lie: "I'm going through the motions. I've checked out." },
-]
+const VOICE_LIES = getVoiceOptions().map(v => ({
+  voice: v.id, icon: v.icon, lie: v.lie
+}))
 
 const DIM_SUBS = {
   people: 'More people watching or involved',

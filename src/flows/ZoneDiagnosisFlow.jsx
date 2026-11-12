@@ -25,17 +25,19 @@ import SweetSpotGraph from '../components/level/SweetSpotGraph'
 import '../styles/flow-base.css'
 import './ZoneDiagnosisFlow.css'
 
-// Protective voices per side
+// Protective voices per side (zone placement is domain logic — can't derive from source)
 const PROTECTIVE_VOICES = {
   topLeft: [
     { id: 'controller', name: 'The Controller', description: 'Manages everything. Controls outcomes and image. Leaving it to chance isn\'t an option.' },
     { id: 'ghost', name: 'The Ghost', description: 'Withdraws. Disappears. Doesn\'t feel comfortable sharing.' },
     { id: 'people_pleaser', name: 'The People Pleaser', description: 'Says yes to everything. Earns love by being useful.' },
+    { id: 'chameleon', name: 'The Chameleon', description: 'Becomes someone else to belong. Popular but lost.' },
   ],
   bottomRight: [
     { id: 'perfectionist', name: 'The Perfectionist', description: 'Nothing is ever ready. Gas and brake at the same time.' },
     { id: 'auto_pilot', name: 'The Auto-Pilot', description: 'Goes through the motions. Checked out. "I\'m fine, just tired."' },
     { id: 'people_pleaser', name: 'The People Pleaser', description: 'Says yes to everything. Earns love by being useful.' },
+    { id: 'chameleon', name: 'The Chameleon', description: 'Becomes someone else to belong. Popular but lost.' },
   ],
 }
 

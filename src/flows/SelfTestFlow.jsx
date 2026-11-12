@@ -16,6 +16,7 @@ import { useProjectId } from '../hooks/useProjectId'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
 import { SKILLS_SEGMENTS, PROBLEM_SEGMENTS, findSkillSegment, findProblemSegment } from '../lib/wheelTaxonomy'
 import { supabase } from '../lib/supabaseClient'
+import { getVoicePickerOptions } from '../data/protectiveVoices'
 import '../styles/flow-base.css'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LetsPlayFlow.css'
@@ -46,13 +47,7 @@ const VISIBILITY_LAYERS = [
 ]
 
 // Pre-action: Protective voices (HOW resistance sounds)
-const PROTECTIVE_VOICES = [
-  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect first' },
-  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: "I don't want to bother anyone" },
-  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
-  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
-]
+const PROTECTIVE_VOICES = getVoicePickerOptions()
 
 // Pre-action: Essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {
@@ -81,7 +76,12 @@ const getEssenceMessage = (voice, layer) => {
     'ghost_vulnerable': 'Your Ghost says hiding is safer. But connection requires visibility.',
     'ghost_live': 'Your Ghost prefers silence. But your voice matters.',
     'ghost_money': 'Your Ghost avoids asking. But claiming your worth is powerful.',
-    'ghost_authority': 'Your Ghost shrinks from claiming expertise. But quiet authority is still authority.'
+    'ghost_authority': 'Your Ghost shrinks from claiming expertise. But quiet authority is still authority.',
+    'chameleon_screen': 'Your Chameleon wants to test what others are testing. But this is about what works for you.',
+    'chameleon_live': 'Your Chameleon is figuring out the "right" approach. But your approach is the one to test.',
+    'chameleon_vulnerable': 'Your Chameleon wants to match best practices. But your unique angle is the skill.',
+    'chameleon_money': 'Your Chameleon worries the real skill won\'t work. But the real skill is exactly what to test.',
+    'chameleon_authority': 'Your Chameleon thinks skill means matching the experts. But your experience is the experiment.'
   }
   return messages[`${voice}_${layer}`] || 'Your protective voice is trying to keep you safe. But you don\'t need protection from testing your own skills.'
 }

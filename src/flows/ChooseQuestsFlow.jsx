@@ -30,7 +30,7 @@ const STEPS = {
 export default function ChooseQuestsFlow({ onComplete } = {}) {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const { domeStates, loading: domeLoading } = useDomeData(user?.id)
+  const { domeStates, wantPaidStates, loading: domeLoading } = useDomeData(user?.id)
   // Hide bottom toolbar
   useEffect(() => {
     document.body.classList.add('hide-toolbar')
@@ -85,10 +85,10 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
     if (!hasPositive && !onComplete) navigate('/experience-game', { replace: true })
   }, [domeLoading, domeStates, navigate])
 
-  // Build experience lists
-  const { vibeRise, fun } = getDomeExperiencesForBridge(domeStates)
-  const vibeGroups = groupByPrimal(vibeRise)
-  const funGroups = groupByPrimal(fun)
+  // Build experience lists — split by want_paid (path activities vs passions)
+  const { pathActivities, passions } = getDomeExperiencesForBridge(domeStates, wantPaidStates)
+  const pathGroups = groupByPrimal(pathActivities)
+  const passionGroups = groupByPrimal(passions)
 
   // Get selected path objects
   const chosenPaths = paths.filter((_, i) => selectedPaths.has(i))
@@ -115,7 +115,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
     goTo(STEPS.PROCESSING)
     setAiError(null)
 
-    const allExps = [...vibeRise, ...fun]
+    const allExps = [...pathActivities, ...passions]
     const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
     const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDiveRef.current, allExps)
 
@@ -137,7 +137,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
       setAiError(err.message)
       goTo(STEPS.PROJECTS)
     }
-  }, [selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+  }, [selectedIds, pathActivities, passions, domeStates, essenceArchetype, goTo])
 
   // ── Remove/restore a project ──
   const toggleRemoveProject = useCallback((idx) => {
@@ -171,7 +171,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
     setClusterError(null)
     goTo(STEPS.CLUSTERING)
 
-    const allExps = [...vibeRise, ...fun]
+    const allExps = [...pathActivities, ...passions]
     const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
     const domeProfile = formatDomeForPrompt(selectedLabels, domeStates, essenceArchetype, deepDiveRef.current, allExps)
 
@@ -196,7 +196,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
     } finally {
       setClusterLoading(false)
     }
-  }, [activeProjects, selectedIds, vibeRise, fun, domeStates, essenceArchetype, goTo])
+  }, [activeProjects, selectedIds, pathActivities, passions, domeStates, essenceArchetype, goTo])
 
   // ── Confirm clustered paths → filter to selected non-empty, then save ──
   const confirmPaths = useCallback(() => {
@@ -210,7 +210,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
   }, [paths, selectedPaths])
 
   // Auto-advance past deep dive if ddIndex exceeds selected count
-  const allExpsForDD = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+  const allExpsForDD = [...pathActivities, ...passions].filter(e => selectedIds.has(e.id))
   const ddAutoAdvance = step === STEPS.DEEP_DIVE && allExpsForDD.length > 0 && ddIndex >= allExpsForDD.length
   useEffect(() => {
     if (ddAutoAdvance) callAI()
@@ -231,7 +231,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
 
     try {
       const dd = deepDiveRef.current || {}
-      const allExps = [...vibeRise, ...fun].filter(e => selectedIds.has(e.id))
+      const allExps = [...pathActivities, ...passions].filter(e => selectedIds.has(e.id))
       const chosenArr = paths.filter((_, i) => selectedPaths.has(i))
 
       for (let idx = 0; idx < chosenArr.length; idx++) {
@@ -319,7 +319,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
       console.error('Quest creation failed:', err)
       goTo(STEPS.PROJECTS)
     }
-  }, [user, paths, selectedPaths, goTo, vibeRise, fun, selectedIds])
+  }, [user, paths, selectedPaths, goTo, pathActivities, passions, selectedIds])
 
   // ── Loading ──
   if (domeLoading) {
@@ -361,38 +361,40 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
           </div>
           <div className="cqf-count">{n === 0 ? '0 selected' : `${n} selected`}</div>
 
-          <div className="cqf-divider"><span>✦ Vibe Rise</span><hr/></div>
-          {vibeGroups.map(group => (
-            <div key={group.primal}>
-              <div className="cqf-primal">{group.label}</div>
-              {group.items.map(exp => (
-                <div key={exp.id} className={`cqf-exp ${selectedIds.has(exp.id) ? 'selected' : ''}`} onClick={() => toggleExp(exp.id)}>
-                  <div className="cqf-exp-check">✓</div>
-                  <span className="cqf-exp-name">{exp.label}</span>
-                  <span className="cqf-exp-ns">✦</span>
+          {pathGroups.length > 0 && (
+            <>
+              <div className="cqf-divider"><span>Things you'd get paid for</span><hr/></div>
+              {pathGroups.map(group => (
+                <div key={group.primal}>
+                  <div className="cqf-primal">{group.label}</div>
+                  {group.items.map(exp => (
+                    <div key={exp.id} className={`cqf-exp ${selectedIds.has(exp.id) ? 'selected' : ''}`} onClick={() => toggleExp(exp.id)}>
+                      <div className="cqf-exp-check">✓</div>
+                      <span className="cqf-exp-name">{exp.label}</span>
+                    </div>
+                  ))}
                 </div>
               ))}
-            </div>
-          ))}
+            </>
+          )}
 
-          {funGroups.length > 0 && (
+          {passionGroups.length > 0 && (
             <>
               <div className="cqf-fun-toggle">
                 <button onClick={() => setShowFun(!showFun)}>
-                  {showFun ? 'Hide Fun experiences ▴' : 'Also show Fun experiences ▾'}
+                  {showFun ? 'Hide passions ▴' : 'Also show passions ▾'}
                 </button>
               </div>
               {showFun && (
                 <>
-                  <div className="cqf-divider fun"><span>○ Fun</span><hr/></div>
-                  {funGroups.map(group => (
+                  <div className="cqf-divider fun"><span>Just for fun</span><hr/></div>
+                  {passionGroups.map(group => (
                     <div key={group.primal}>
                       <div className="cqf-primal">{group.label}</div>
                       {group.items.map(exp => (
                         <div key={exp.id} className={`cqf-exp ${selectedIds.has(exp.id) ? 'selected' : ''}`} onClick={() => toggleExp(exp.id)}>
                           <div className="cqf-exp-check">✓</div>
                           <span className="cqf-exp-name">{exp.label}</span>
-                          <span className="cqf-exp-ns">○</span>
                         </div>
                       ))}
                     </div>
@@ -523,7 +525,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
 
   // ── PROCESSING ──
   if (step === STEPS.PROCESSING) {
-    const allExps = [...vibeRise, ...fun]
+    const allExps = [...pathActivities, ...passions]
     const selectedLabels = allExps.filter(e => selectedIds.has(e.id)).map(e => e.label)
     return (
       <div className="cqf">

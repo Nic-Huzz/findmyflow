@@ -46,17 +46,19 @@ const DRAIN_CATEGORIES = [
 
 // Voices by state — mapped from zone-calibration-framework.md
 // Sympathetic: Controller (fight), Ghost (flight). Dorsal: Auto-Pilot (collapse), Perfectionist (freeze).
-// People Pleaser (fawn) layers on any state.
+// People Pleaser + Chameleon (fawn) layer on any state.
 const VOICES_BY_STATE = {
   sympathetic: [
     { id: 'controller', name: 'Controller', icon: '🧱' },
     { id: 'ghost', name: 'Ghost', icon: '👻' },
     { id: 'people_pleaser', name: 'People Pleaser', icon: '🪞' },
+    { id: 'chameleon', name: 'Chameleon', icon: '🦎' },
   ],
   dorsal: [
     { id: 'auto_pilot', name: 'Auto-Pilot', icon: '🤖' },
     { id: 'perfectionist', name: 'Perfectionist', icon: '🎯' },
     { id: 'people_pleaser', name: 'People Pleaser', icon: '🪞' },
+    { id: 'chameleon', name: 'Chameleon', icon: '🦎' },
   ],
 }
 

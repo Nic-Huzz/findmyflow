@@ -45,7 +45,7 @@ export default function MoneyMapFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const skipLoveIt = searchParams.get('skip') === 'love_it'
-  const { domeStates, loading: domeLoading } = useDomeData(user?.id)
+  const { domeStates, wantPaidStates, loading: domeLoading } = useDomeData(user?.id)
 
   // Hide bottom toolbar
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function MoneyMapFlow() {
   const [result, setResult] = useState(null) // { quest, challenge } or { type: 'sorted', jobName } or 'skipped'
 
   // Dome experiences for tag step
-  const { vibeRise, fun } = getDomeExperiencesForBridge(domeStates)
+  const { pathActivities, passions } = getDomeExperiencesForBridge(domeStates, wantPaidStates)
 
   // Screen 3 path detection
   const available = TIER1_IDS
@@ -109,7 +109,7 @@ export default function MoneyMapFlow() {
 
   // Path C: best Tier 2 from dome
   const tier2Option = () => {
-    const funExps = [...vibeRise, ...fun]
+    const funExps = [...pathActivities, ...passions]
       .filter(e => !TIER1_IDS.includes(e.id))
       .map(e => ({ nodeId: e.id, label: e.label }))
     const viable = getViableBridgeExperiences(funExps)
@@ -260,7 +260,7 @@ export default function MoneyMapFlow() {
 
       if (taggedIds.size > 0) {
         const rows = [...taggedIds].map(nodeId => {
-          const exp = [...vibeRise, ...fun].find(e => e.id === nodeId)
+          const exp = [...pathActivities, ...passions].find(e => e.id === nodeId)
           return {
             quest_id: newQuest.id,
             user_id: user.id,
@@ -475,10 +475,10 @@ export default function MoneyMapFlow() {
                 <p>Tap at least one that is part of how you earn.</p>
               </div>
 
-              {vibeRise.length > 0 && (
+              {pathActivities.length > 0 && (
                 <>
-                  <div className="mm-divider"><span>Vibe Rise</span><hr /></div>
-                  {vibeRise.map(exp => (
+                  <div className="mm-divider"><span>Things you'd get paid for</span><hr /></div>
+                  {pathActivities.map(exp => (
                     <button
                       key={exp.id}
                       className={`mm-exp ${taggedIds.has(exp.id) ? 'selected' : ''}`}
@@ -486,16 +486,15 @@ export default function MoneyMapFlow() {
                     >
                       <span className="mm-exp-check">✓</span>
                       <span className="mm-exp-name">{exp.label}</span>
-                      <span className="mm-exp-ns">{NS_EMOJI.vibe_rise}</span>
                     </button>
                   ))}
                 </>
               )}
 
-              {(showFun || vibeRise.length === 0) && fun.length > 0 && (
+              {(showFun || pathActivities.length === 0) && passions.length > 0 && (
                 <>
-                  <div className="mm-divider fun"><span>Fun</span><hr /></div>
-                  {fun.map(exp => (
+                  <div className="mm-divider fun"><span>Just for fun</span><hr /></div>
+                  {passions.map(exp => (
                     <button
                       key={exp.id}
                       className={`mm-exp ${taggedIds.has(exp.id) ? 'selected' : ''}`}
@@ -503,15 +502,14 @@ export default function MoneyMapFlow() {
                     >
                       <span className="mm-exp-check">✓</span>
                       <span className="mm-exp-name">{exp.label}</span>
-                      <span className="mm-exp-ns">{NS_EMOJI.fun}</span>
                     </button>
                   ))}
                 </>
               )}
 
-              {!showFun && vibeRise.length > 0 && fun.length > 0 && (
+              {!showFun && pathActivities.length > 0 && passions.length > 0 && (
                 <div className="mm-fun-toggle">
-                  <button onClick={() => setShowFun(true)}>Also show Fun experiences</button>
+                  <button onClick={() => setShowFun(true)}>Also show passions</button>
                 </div>
               )}
 

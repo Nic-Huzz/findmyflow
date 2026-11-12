@@ -16,17 +16,24 @@ import {
   CpuChipIcon,
   AdjustmentsHorizontalIcon,
   UsersIcon,
+  SparklesIcon,
   HeartIcon,
 } from '@heroicons/react/24/solid'
+import { getAllVoices } from '../data/protectiveVoices'
 import './HealingFlowModal.css'
 
-const PATTERNS = [
-  { id: 'ghost', name: 'The Ghost', icon: <EyeSlashIcon style={{ width: 20, height: 20 }} />, desc: 'I want to disappear. Hide. Go quiet.' },
-  { id: 'controller', name: 'The Controller', icon: <ShieldCheckIcon style={{ width: 20, height: 20 }} />, desc: 'I want to know how this ends before I do it.' },
-  { id: 'auto_pilot', name: 'The Auto-Pilot', icon: <CpuChipIcon style={{ width: 20, height: 20 }} />, desc: 'I\'m going through the motions. I\'ve checked out.' },
-  { id: 'perfectionist', name: 'The Perfectionist', icon: <AdjustmentsHorizontalIcon style={{ width: 20, height: 20 }} />, desc: 'It\'s not good enough yet. I need more time.' },
-  { id: 'people_pleaser', name: 'The People Pleaser', icon: <UsersIcon style={{ width: 20, height: 20 }} />, desc: 'I\'d rather say yes than deal with their reaction.' },
-]
+const PATTERN_ICONS = {
+  ghost: <EyeSlashIcon style={{ width: 20, height: 20 }} />,
+  controller: <ShieldCheckIcon style={{ width: 20, height: 20 }} />,
+  auto_pilot: <CpuChipIcon style={{ width: 20, height: 20 }} />,
+  perfectionist: <AdjustmentsHorizontalIcon style={{ width: 20, height: 20 }} />,
+  people_pleaser: <UsersIcon style={{ width: 20, height: 20 }} />,
+  chameleon: <SparklesIcon style={{ width: 20, height: 20 }} />,
+}
+
+const PATTERNS = getAllVoices().map(v => ({
+  id: v.id, name: v.name, icon: PATTERN_ICONS[v.id] || <SparklesIcon style={{ width: 20, height: 20 }} />, desc: v.lie
+}))
 
 export default function HealingFlowModal({ taskText, userId, questTaskId, existingData, onComplete, onClose }) {
   // Resume from existing data if provided

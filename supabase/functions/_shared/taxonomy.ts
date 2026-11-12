@@ -28,7 +28,7 @@ export const VALID_BRANCH_IDS = [
 ] as const
 
 export const VALID_PROTECTIVE_VOICES = [
-  'controller', 'ghost', 'perfectionist', 'auto_pilot', 'people_pleaser',
+  'controller', 'ghost', 'perfectionist', 'auto_pilot', 'people_pleaser', 'chameleon',
 ] as const
 
 // Skill level thresholds (mirrors src/lib/skillProgress.js)

@@ -11,6 +11,7 @@ import {
   UsersIcon,
   ShieldCheckIcon,
   CpuChipIcon,
+  SparklesIcon,
   FireIcon,
   FaceSmileIcon,
   ExclamationTriangleIcon,
@@ -19,7 +20,17 @@ import {
   StopIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/solid'
+import { getAllVoices } from '../data/protectiveVoices'
 import './GroanCompletionModal.css'
+
+const VOICE_ICONS = {
+  ghost: <EyeSlashIcon style={{ width: 18, height: 18 }} />,
+  perfectionist: <AdjustmentsHorizontalIcon style={{ width: 18, height: 18 }} />,
+  people_pleaser: <UsersIcon style={{ width: 18, height: 18 }} />,
+  controller: <ShieldCheckIcon style={{ width: 18, height: 18 }} />,
+  auto_pilot: <CpuChipIcon style={{ width: 18, height: 18 }} />,
+  chameleon: <SparklesIcon style={{ width: 18, height: 18 }} />,
+}
 
 export default function GroanCompletionModal({ challenge, userId, onComplete, onClose }) {
   const savedRef = useRef(false)
@@ -37,6 +48,31 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
   // Cleanup advance timer on unmount
   useEffect(() => () => clearTimeout(advanceTimer.current), [])
 
+  const [screen, setScreen] = useState(isMoneyMap ? 3 : 1) // 1=wahoo, 2=aftertaste, 3=voice, 4=continue/pivot (money map discovery only)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
+  const [financialStage, setFinancialStage] = useState(null)
+  const [pivotChoice, setPivotChoice] = useState(null)
+
+  // Core state kept for save
+  const [wahooClassification, setWahooClassification] = useState(null)
+  const [afterState, setAfterState] = useState(null)
+  const [aftertaste, setAftertaste] = useState(null)
+  const [gapVoice, setGapVoice] = useState(null)
+
+  // Quest linking (needed by saveChallengeCompletion for behavioral evidence)
+  // Also fetches financial_stage for money map stage branching
+  const [sourceQuestId, setSourceQuestId] = useState(null)
+
+  // Default wahoo/aftertaste for money map (screens 1+2 are skipped)
+  useEffect(() => {
+    if (isMoneyMap) {
+      setWahooClassification('vibe')
+      setAfterState('vibe_rise')
+      setAftertaste('yes')
+    }
+  }, [isMoneyMap])
+
   // Close handler — on screen 4 (continue/pivot), fire onComplete to exit
   const handleClose = useCallback(() => {
     if (isMoneyMap && savedRef.current && !onCompleteCalledRef.current) {
@@ -53,31 +89,6 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     }
     onClose()
   }, [onClose, onComplete, isMoneyMap, challenge, sourceQuestId, userId])
-
-  const [screen, setScreen] = useState(isMoneyMap ? 3 : 1) // 1=wahoo, 2=aftertaste, 3=voice, 4=continue/pivot (money map discovery only)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState(null)
-  const [financialStage, setFinancialStage] = useState(null)
-  const [pivotChoice, setPivotChoice] = useState(null)
-
-  // Core state kept for save
-  const [wahooClassification, setWahooClassification] = useState(null)
-  const [afterState, setAfterState] = useState(null)
-  const [aftertaste, setAftertaste] = useState(null)
-  const [gapVoice, setGapVoice] = useState(null)
-
-  // Default wahoo/aftertaste for money map (screens 1+2 are skipped)
-  useEffect(() => {
-    if (isMoneyMap) {
-      setWahooClassification('vibe')
-      setAfterState('vibe_rise')
-      setAftertaste('yes')
-    }
-  }, [isMoneyMap])
-
-  // Quest linking (needed by saveChallengeCompletion for behavioral evidence)
-  // Also fetches financial_stage for money map stage branching
-  const [sourceQuestId, setSourceQuestId] = useState(null)
   useEffect(() => {
     if (!userId || !challenge?.id) return
     supabase.from('quest_tasks').select('quest_id, quests!inner(financial_stage)')
@@ -217,13 +228,9 @@ export default function GroanCompletionModal({ challenge, userId, onComplete, on
     )
   }
 
-  const voices = [
-    { id: 'ghost', icon: <EyeSlashIcon style={{ width: 18, height: 18 }} />, label: 'Ghost' },
-    { id: 'perfectionist', icon: <AdjustmentsHorizontalIcon style={{ width: 18, height: 18 }} />, label: 'Perfectionist' },
-    { id: 'people_pleaser', icon: <UsersIcon style={{ width: 18, height: 18 }} />, label: 'People Pleaser' },
-    { id: 'controller', icon: <ShieldCheckIcon style={{ width: 18, height: 18 }} />, label: 'Controller' },
-    { id: 'auto_pilot', icon: <CpuChipIcon style={{ width: 18, height: 18 }} />, label: 'Auto-Pilot' },
-  ]
+  const voices = getAllVoices().map(v => ({
+    id: v.id, icon: VOICE_ICONS[v.id] || <SparklesIcon style={{ width: 18, height: 18 }} />, label: v.name.replace('The ', '')
+  }))
 
   return (
     <div className="gcm-overlay" onClick={handleClose}>

@@ -116,6 +116,42 @@ const icons = {
     </svg>
   ),
 
+  'Chameleon': ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 100 100" className="protective-icon">
+      <g opacity="0.15">
+        <circle cx="30" cy="50" r="20" fill="none" stroke="#5e17eb" strokeWidth="1"/>
+        <circle cx="50" cy="50" r="20" fill="none" stroke="#5e17eb" strokeWidth="1"/>
+        <circle cx="70" cy="50" r="20" fill="none" stroke="#5e17eb" strokeWidth="1"/>
+      </g>
+      <g className="prot-chameleon-figure">
+        <circle cx="50" cy="42" r="12" fill="url(#prot-chameleon-grad)" stroke="#5e17eb" strokeWidth="1.5"/>
+        <path d="M38 58 Q38 52 50 52 Q62 52 62 58 L62 75 Q62 80 50 80 Q38 80 38 75Z"
+              fill="url(#prot-chameleon-grad)" stroke="#5e17eb" strokeWidth="1.5"/>
+      </g>
+      <g opacity="0.5">
+        <circle cx="45" cy="40" r="2" fill="white" opacity="0.5"/>
+        <circle cx="55" cy="40" r="2" fill="white" opacity="0.5"/>
+        <path d="M45 47 Q50 50 55 47" fill="none" stroke="white" strokeWidth="1.5" opacity="0.4" strokeLinecap="round"/>
+      </g>
+      <g opacity="0.3">
+        <circle cx="30" cy="40" r="6" fill="#8b5cf6" opacity="0.2"/>
+        <circle cx="70" cy="40" r="6" fill="#E9A23B" opacity="0.2"/>
+        <circle cx="50" cy="28" r="6" fill="#10b981" opacity="0.2"/>
+      </g>
+      <g className="prot-chameleon-arrows" opacity="0.25">
+        <path d="M30 46 L38 44" stroke="#5e17eb" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M70 46 L62 44" stroke="#5e17eb" strokeWidth="1.5" strokeLinecap="round"/>
+      </g>
+      <defs>
+        <linearGradient id="prot-chameleon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.5"/>
+          <stop offset="50%" stopColor="#E9A23B" stopOpacity="0.3"/>
+          <stop offset="100%" stopColor="#10b981" stopOpacity="0.5"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  ),
+
   'Ghost': ({ size }) => (
     <svg width={size} height={size} viewBox="0 0 100 100" className="protective-icon">
       <circle className="prot-ghost-wisp-1" cx="42" cy="35" r="3" fill="#8b5cf6" opacity="0"/>

@@ -2,7 +2,7 @@
  * Protective Voices Data
  *
  * Four internal characters mapped to a 2x2 behavioural response grid
- * (Toward/Away x Sympathetic/Dorsal), plus People Pleaser.
+ * (Toward/Away x Sympathetic/Dorsal), plus two fawn overlays.
  *
  * These are NOT villains to destroy - they're parts of us that developed
  * to keep us safe in environments that weren't safe for our authentic self.
@@ -12,7 +12,8 @@
  * | Toward       | Controller (fight)      | Perfectionist (freeze)  |
  * | Away         | Ghost (flight)          | Auto-Pilot (collapse)   |
  *
- * + People Pleaser (fawn) — present alongside any of the four.
+ * + People Pleaser (fawn — behavioral) — says yes to avoid conflict.
+ * + Chameleon (fawn — identity) — becomes someone else to belong.
  */
 
 export const PROTECTIVE_VOICES = {
@@ -105,6 +106,25 @@ export const PROTECTIVE_VOICES = {
     ],
     playBlocker: 'Stops you from playing YOUR way, always adapting to others',
     affirmation: 'Thank you for protecting me from rejection. I can be myself now.'
+  },
+
+  chameleon: {
+    id: 'chameleon',
+    name: 'The Chameleon',
+    icon: '🦎',
+    lie: "I need to be what they need me to be.",
+    origin: 'Developed when being your authentic self led to exclusion from the group',
+    howItProtects: 'By absorbing the group identity, it guarantees belonging and prevents the pain of being cast out',
+    kryptonite: 'Showing up as yourself even when it doesn\'t match the room. Staying when the group sees the real you.',
+    signs: [
+      'Different personality in every group',
+      'Not knowing what you actually like vs what the group likes',
+      'Popular but feeling empty inside',
+      'Losing yourself in relationships',
+      'Mirroring others without realising'
+    ],
+    playBlocker: 'Play requires knowing what YOU enjoy. Chameleon only knows what the group enjoys',
+    affirmation: 'Thank you for protecting me from being cast out. I can belong as myself now.'
   }
 }
 
@@ -137,6 +157,18 @@ export const getVoiceOptions = () =>
     name: voice.name,
     icon: voice.icon,
     lie: voice.lie
+  }))
+
+/**
+ * Get voice picker options for flow UIs (icon + label + short description).
+ * Used by PersonaSelectionFlow, OfferStackBuilderFlow, MoneyModelFlowBase, etc.
+ */
+export const getVoicePickerOptions = () =>
+  Object.values(PROTECTIVE_VOICES).map(voice => ({
+    id: voice.id,
+    icon: voice.icon,
+    label: voice.name.replace('The ', ''),
+    description: voice.lie
   }))
 
 /**

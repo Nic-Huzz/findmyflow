@@ -182,6 +182,20 @@ const PROTECTIVE_PROFILES: Record<string, any> = {
       breakingFree: "Your worth isn't determined by others' approval. Set boundaries with love."
     }
   },
+  "Chameleon": {
+    summary: "This archetype developed to protect you from being cast out of the group by absorbing its identity.",
+    coreNarrative: "I need to be what they need me to be.",
+    emotionalWound: { fear: "Exclusion, being the outsider, not fitting in.", learned: "If I show who I really am, I'll lose the group." },
+    behavioralStrategy: "Different personality in every group, mirroring interests and opinions, losing track of personal preferences.",
+    avoidancePattern: "Avoid solo identity, avoid expressing unpopular opinions, avoid being the odd one out.",
+    nervousSystemPattern: "Fawn (identity) — sympathetic with social mirroring. Safety through identity absorption.",
+    somaticExpression: "Shapeless posture that mirrors others, voice pitch matching, constant social scanning, tension behind the eyes.",
+    rewiringOpportunity: { affirmations: ["I can belong as myself.", "The right people want the real me.", "My shape is my own."] },
+    detailed: {
+      howItShowsUp: "It says: 'Just match them. Be easy. Be whatever the room needs.' You become popular, well-liked, adaptable. But inside, you feel empty because nobody actually knows you.",
+      breakingFree: "Show up as yourself in one room where it feels safe. Notice that the world doesn't end. That's the beginning."
+    }
+  },
   // Legacy alias — existing links/data may reference "Performer"
   "Performer": {
     summary: "This archetype developed to protect you from chaos, unpredictability, and being seen as not enough.",

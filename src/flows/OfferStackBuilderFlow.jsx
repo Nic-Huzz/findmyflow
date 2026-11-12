@@ -24,6 +24,7 @@ import { useProjectId } from '../hooks/useProjectId'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
+import { getVoicePickerOptions } from '../data/protectiveVoices'
 import './OfferStackBuilderFlow.css'
 
 const STAGES = {
@@ -52,13 +53,7 @@ const VISIBILITY_LAYERS = [
 ]
 
 // Protective voices for 2D pattern recognition (HOW the resistance sounds)
-const PROTECTIVE_VOICES = [
-  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
-  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
-  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
-  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
-]
+const PROTECTIVE_VOICES = getVoicePickerOptions()
 
 // Contextual essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {
@@ -87,7 +82,12 @@ const getEssenceMessage = (voice, layer) => {
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
     'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',
-    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.'
+    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.',
+    'chameleon_screen': 'Your Chameleon wants to match what the audience expects. But the offer only works when it sounds like you.',
+    'chameleon_live': 'Your Chameleon is scanning the room to figure out who to be. But people buy from someone real.',
+    'chameleon_vulnerable': 'Your Chameleon wants to present what fits in. But your unique angle is what makes people pay attention.',
+    'chameleon_money': 'Your Chameleon worries charging will break the belonging. But real value earns real exchange.',
+    'chameleon_authority': 'Your Chameleon thinks authority means becoming what others expect. But your own shape is your authority.'
   }
   const key = `${voice}_${layer}`
   return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from creating value.'

@@ -111,19 +111,15 @@ export async function getPatternHealing(userId, voice) {
   }
 }
 
-const VOICE_DISPLAY = {
-  ghost: { name: 'Ghost', icon: '👻' },
-  perfectionist: { name: 'Perfectionist', icon: '🎯' },
-  'people_pleaser': { name: 'People Pleaser', icon: '🪞' },
-  controller: { name: 'Controller', icon: '🎮' },
-  'auto_pilot': { name: 'Auto-Pilot', icon: '🛋️' },
-}
+import { getVoice } from '../data/protectiveVoices'
 
 /**
  * Get display metadata for a voice.
  */
 export function getVoiceDisplay(voiceId) {
-  return VOICE_DISPLAY[voiceId] || { name: voiceId, icon: '❓' }
+  const v = getVoice(voiceId)
+  if (!v) return { name: voiceId, icon: '❓' }
+  return { name: v.name.replace('The ', ''), icon: v.icon }
 }
 
 const DIM_LABELS = {

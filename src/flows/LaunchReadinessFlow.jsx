@@ -22,6 +22,7 @@ import { useProjectId } from '../hooks/useProjectId'
 import useStaggerReveal from '../hooks/useStaggerReveal'
 import { ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
+import { getVoicePickerOptions } from '../data/protectiveVoices'
 import './LaunchReadinessFlow.css'
 
 const STAGES = {
@@ -47,13 +48,7 @@ const VISIBILITY_LAYERS = [
 ]
 
 // Protective voices for 2D pattern recognition (HOW the resistance sounds)
-const PROTECTIVE_VOICES = [
-  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
-  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
-  { id: 'controller', icon: '🎮', label: 'Controller', description: "Leaving it to chance isn't an option" },
-  { id: 'ghost', icon: '👻', label: 'Ghost', description: "I don't feel comfortable sharing" },
-  { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot', description: "I'm fine, just tired" }
-]
+const PROTECTIVE_VOICES = getVoicePickerOptions()
 
 // Contextual essence messages based on voice + layer
 const getEssenceMessage = (voice, layer) => {
@@ -82,7 +77,12 @@ const getEssenceMessage = (voice, layer) => {
     'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters.',
     'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
     'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',
-    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.'
+    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.',
+    'chameleon_screen': 'Your Chameleon wants to launch something that matches what everyone else is doing. But yours works because it\'s different.',
+    'chameleon_live': 'Your Chameleon is scanning to figure out the "right" way to launch. But your way is the right way.',
+    'chameleon_vulnerable': 'Your Chameleon wants to present what fits in. But launching means standing out.',
+    'chameleon_money': 'Your Chameleon worries the real you won\'t sell. But the real you is exactly what sells.',
+    'chameleon_authority': 'Your Chameleon thinks authority means matching the experts. But your own experience is your authority.'
   }
   const key = `${voice}_${layer}`
   return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from helping people.'

@@ -26,15 +26,12 @@ import { supabase } from '../lib/supabaseClient'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { generate as generatePassionChallenge } from '../lib/passionChallengeEngine'
+import { getVoiceOptions } from '../data/protectiveVoices'
 import './PathDefinitionFlow.css'
 
-const VOICES = [
-  { id: 'ghost', emoji: '👻', label: 'Ghost', sub: 'I want to disappear. Hide. Go quiet.' },
-  { id: 'perfectionist', emoji: '🎯', label: 'Perfectionist', sub: "It's not good enough yet. I need more time." },
-  { id: 'people_pleaser', emoji: '🪞', label: 'People Pleaser', sub: "I'd rather say yes than deal with their reaction." },
-  { id: 'controller', emoji: '🧱', label: 'Controller', sub: 'I want to know how this ends before I do it.' },
-  { id: 'auto_pilot', emoji: '🤖', label: 'Auto-Pilot', sub: "I'm going through the motions. I've checked out." },
-]
+const VOICES = getVoiceOptions().map(v => ({
+  id: v.id, emoji: v.icon, label: v.name.replace('The ', ''), sub: v.lie
+}))
 
 const SHIFT_FUELS = [
   { id: 'choice', icon: '🔓', label: 'Choice', full: 'I get to choose how I spend my time' },

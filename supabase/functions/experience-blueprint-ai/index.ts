@@ -41,6 +41,11 @@ const PROTECTIVE_PATTERNS: Record<string, { name: string; prediction: string; de
     prediction: 'If I say no, I will be abandoned',
     description: 'Says yes when they mean no. Abandons self to keep others happy.',
   },
+  chameleon: {
+    name: 'The Chameleon',
+    prediction: 'If I show who I really am, I will be cast out',
+    description: 'Becomes whoever the group needs. Popular but hollow. Identity absorbed by belonging.',
+  },
 }
 
 // ─── Shift Architecture Phases ──────────────────────────────────────────────
@@ -140,7 +145,7 @@ Think about who would sign up for this experience and what's stopping them from 
 
 Return ONLY valid JSON:
 {
-  "pattern": "ghost|performer|controller|perfectionist|people_pleaser",
+  "pattern": "ghost|performer|controller|perfectionist|people_pleaser|chameleon",
   "prediction": "If I [specific action], [specific feared outcome]",
   "reasoning": "1-2 sentences explaining why this pattern fits"
 }`

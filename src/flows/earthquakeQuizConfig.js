@@ -30,6 +30,7 @@ export const QUESTIONS = [
       { id: 'controller', label: "I need to figure out every detail before I start." },
       { id: 'ghost', label: "I don't feel comfortable putting myself out there." },
       { id: 'auto_pilot', label: "Honestly, I can't seem to care enough to start." },
+      { id: 'chameleon', label: "I keep changing my idea to match what everyone else is doing." },
     ],
   },
   {
@@ -42,6 +43,7 @@ export const QUESTIONS = [
       { id: 'controller', label: "I need to control every detail and can't stop working" },
       { id: 'ghost', label: 'I have great work but I pull back from sharing it' },
       { id: 'auto_pilot', label: "I go through the motions but nothing excites me anymore" },
+      { id: 'chameleon', label: "I become a different person in every group and don't know what I actually want" },
     ],
   },
 
@@ -67,6 +69,7 @@ export const QUESTIONS = [
       { id: 'controller', label: "Let go. Stop managing everything." },
       { id: 'ghost', label: 'Share something personal right now.' },
       { id: 'auto_pilot', label: "What do you actually want?" },
+      { id: 'chameleon', label: "Stop adapting. Just be yourself." },
     ],
   },
   {

@@ -13,6 +13,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getWeekStartLocal } from '../lib/dateUtils'
+import { getVoiceOptions } from '../data/protectiveVoices'
 import { hapticLight, hapticSuccess } from '../lib/haptics'
 import { postFeedEvent } from '../lib/communityFeed'
 import { getDimensionById, getNumericTier } from '../data/domeDimensions'
@@ -624,13 +625,7 @@ export default function WeeklyReview({ userId, weekStart, heroStage = 0, onCompl
               <>
                 <p className="wr-question-sub">Which voice showed up?</p>
                 <div className="wr-voice-row">
-                  {[
-                    { id: 'ghost', icon: '👻', label: 'Ghost' },
-                    { id: 'perfectionist', icon: '🎭', label: 'Perfectionist' },
-                    { id: 'people_pleaser', icon: '🪞', label: 'People Pleaser' },
-                    { id: 'controller', icon: '🎮', label: 'Controller' },
-                    { id: 'auto_pilot', icon: '🛋️', label: 'Auto-Pilot' },
-                  ].map(v => (
+                  {getVoiceOptions().map(v => ({ id: v.id, icon: v.icon, label: v.name })).map(v => (
                     <button
                       key={v.id}
                       type="button"
