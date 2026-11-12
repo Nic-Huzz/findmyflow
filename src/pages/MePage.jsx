@@ -28,6 +28,7 @@ import StageCard from '../components/StageCard'
 import { getDirectionStatus, isAllDirectionComplete } from '../lib/directionEngine'
 import { hasPendingJourneyData, persistJourneyOnboarding, hasPendingPlaySkillsData, persistPlaySkillsOnboarding } from '../lib/journeyOnboarding'
 import { BoltIcon } from '@heroicons/react/24/solid'
+import BioluminescentBackground from '../components/BioluminescentBackground'
 import './MePage.css'
 
 // Stat ring circumference for r=22
@@ -480,7 +481,8 @@ export default function MePage() {
 
 
   return (
-    <div className="me-page content-enter">
+    <div className="me-page content-enter theme-bioluminescent">
+      <BioluminescentBackground />
       {/* ============================================================
          SECTION 1: HERO IDENTITY
          ============================================================ */}
@@ -488,7 +490,6 @@ export default function MePage() {
         <div className="hero-top-bar">
           <div className="brand">Find My Flow</div>
           <div className="hero-top-right">
-            <VibeColorPicker />
             <div className="xp-pill">
               <span>⚡</span>
               <span>{totalXP} RP</span>

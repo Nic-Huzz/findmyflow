@@ -1551,3 +1551,20 @@
     flex-wrap: wrap;
   }
 }
+
+/* ── Bioluminescent dark theme ── */
+.me-page.theme-bioluminescent {
+  --brand-purple: #FF3CAC;
+  --brand-gold: #FFB800;
+  --text-primary: #F2EEF8;
+  --text-secondary: #BAB0D0;
+  --text-muted: #8478A0;
+  --surface: #12101C;
+  --bg: #0A0812;
+  --north: #FFB800;
+  --east: #E040FB;
+  --south: #FF5A6E;
+  --west: #FFB800;
+
+  background: #0A0812;
+}

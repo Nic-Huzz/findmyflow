@@ -2,7 +2,7 @@
 
 .dashboard-container {
   min-height: 100vh;
-  background: #fafbfc;
+  background: var(--bg-page);
   position: relative;
   /* Space for bottom toolbar */
   padding-bottom: calc(60px + env(safe-area-inset-bottom, 0));
@@ -84,7 +84,7 @@
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 15px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .user-name {
@@ -168,21 +168,21 @@
 
 .page-title {
   font-size: 2.5rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin-bottom: 10px;
   font-weight: 800;
 }
 
 .page-subtitle {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 /* Section Headings */
 .section-heading {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin-bottom: 25px;
   margin-top: 24px;
 }
@@ -211,7 +211,7 @@
 .project-stage-badge .stage-info {
   font-size: 1rem;
   font-weight: 500;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 /* Home Action Buttons */
@@ -228,9 +228,9 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: white;
+  background: var(--bg-surface);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card);
 }
 
 .streak-item .streak-flame {
@@ -279,13 +279,13 @@
 .streak-item .streak-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .streak-item .streak-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -295,7 +295,7 @@
 }
 
 .streak-item.groan .streak-value {
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .home-action-buttons {
@@ -338,19 +338,19 @@
 }
 
 .action-btn.secondary {
-  background: white;
-  color: #1a1a2e;
-  border: 2px solid #e8ecef;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 2px solid var(--border-default);
 }
 
 .action-btn.secondary:hover {
-  border-color: #5e17eb;
-  color: #5e17eb;
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
 }
 
 .action-btn.support {
   background: transparent;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.875rem;
   font-weight: 500;
   padding: 12px 16px;
@@ -380,8 +380,8 @@
 .project-card-mini {
   position: relative;
   padding: 16px;
-  background: white;
-  border: 2px solid #e8ecef;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
@@ -391,7 +391,7 @@
 }
 
 .project-card-mini:hover {
-  border-color: #5e17eb;
+  border-color: var(--accent-primary);
   transform: translateY(-2px);
 }
 
@@ -403,12 +403,12 @@
 .project-card-mini .project-name {
   font-weight: 600;
   font-size: 0.9rem;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .project-card-mini .project-stage {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .project-card-mini .primary-badge {
@@ -418,22 +418,22 @@
   font-size: 0.65rem;
   padding: 2px 6px;
   background: var(--gold, #fbbf24);
-  color: #1a1a2e;
+  color: var(--text-primary);
   border-radius: 8px;
   font-weight: 700;
 }
 
 .project-card-mini.add-new {
   border-style: dashed;
-  border-color: #ccc;
+  border-color: var(--border-light);
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .project-card-mini.add-new:hover {
-  border-color: #5e17eb;
-  color: #5e17eb;
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
 }
 
 /* Stats Grid */
@@ -446,11 +446,11 @@
 }
 
 .stat-card {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid #e8ecef;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-default);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -510,19 +510,19 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #f0f0f0;
+  background: var(--bg-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  color: #666;
+  color: var(--text-secondary);
   transition: all 0.3s ease;
   pointer-events: none;
 }
 
 .expand-arrow.expanded {
   transform: rotate(180deg);
-  background: #5e17eb;
+  background: var(--accent-primary);
   color: white;
 }
 
@@ -559,7 +559,7 @@
 
 .stat-label {
   font-size: 0.85rem;
-  color: #999;
+  color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
@@ -568,18 +568,18 @@
 
 .stat-value {
   font-size: 1.8rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
   font-weight: 800;
 }
 
 /* Expanded Archetype Styles - Card Style like Archetypes Page */
 .archetype-expanded {
-  background: #faf8f5;
+  background: var(--bg-muted);
   border-radius: 0 0 20px 20px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   animation: slideDown 0.3s ease-out;
-  border: 2px solid #E9A23B;
+  border: 2px solid var(--accent-gold);
   border-top: none;
 }
 
@@ -615,7 +615,7 @@
   position: absolute;
   top: 36px;
   left: 36px;
-  background: #E9A23B;
+  background: var(--accent-gold);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -633,14 +633,14 @@
 
 .archetype-expanded .archetype-name {
   font-size: 1.75rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin-bottom: 8px;
   font-weight: 800;
 }
 
 .archetype-expanded .archetype-subtitle {
   font-size: 1rem;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
   margin-bottom: 16px;
 }
@@ -648,13 +648,13 @@
 .archetype-expanded .archetype-description {
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 24px;
 }
 
 .explore-button {
   width: 100%;
-  background: #E9A23B;
+  background: var(--accent-gold);
   color: white;
   border: none;
   padding: 16px;
@@ -687,7 +687,7 @@
 
 .section-title {
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -698,11 +698,11 @@
 }
 
 .dashboard-container .archetype-card {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid #e8ecef;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-default);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -719,7 +719,7 @@
   height: 300px;
   position: relative;
   overflow: hidden;
-  background: #f5f7fa;
+  background: var(--bg-muted);
 }
 
 .archetype-header img {
@@ -733,7 +733,7 @@
   top: 20px;
   left: 20px;
   background: rgba(255,255,255,0.95);
-  color: #5e17eb;
+  color: var(--accent-primary);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -754,7 +754,7 @@
 
 .dashboard-container .archetype-name {
   font-size: 1.8rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin-bottom: 15px;
   font-weight: 800;
 }
@@ -762,13 +762,13 @@
 .archetype-description {
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 25px;
 }
 
 .explore-button {
   width: 100%;
-  background: #5e17eb;
+  background: var(--accent-primary);
   color: white;
   border: none;
   padding: 14px;
@@ -785,11 +785,11 @@
 }
 
 .expand-content {
-  background: #f8f9fa;
+  background: var(--bg-page);
   border-radius: 12px;
   padding: 25px;
   margin-top: 20px;
-  border-left: 4px solid #5e17eb;
+  border-left: 4px solid var(--accent-primary);
 }
 
 .expand-content.show {
@@ -797,14 +797,14 @@
 }
 
 .expand-content h4 {
-  color: #5e17eb;
+  color: var(--accent-primary);
   margin-bottom: 10px;
   font-size: 1.1rem;
   font-weight: 600;
 }
 
 .expand-content p {
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 15px;
 }
@@ -812,8 +812,8 @@
 /* Archetype Expanded Content */
 .archetype-expanded-content {
   padding: 24px;
-  background: #fafafa;
-  border-top: 1px solid #e8ecef;
+  background: var(--bg-muted);
+  border-top: 1px solid var(--border-default);
   animation: slideDown 0.3s ease-out;
 }
 
@@ -839,7 +839,7 @@
 .expanded-label {
   font-size: 12px;
   font-weight: 600;
-  color: #5e17eb;
+  color: var(--accent-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
@@ -848,14 +848,14 @@
 .expanded-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text-primary);
   margin-bottom: 12px;
 }
 
 .expanded-text {
   font-size: 15px;
   line-height: 1.7;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .expanded-text.italic {
@@ -872,7 +872,7 @@
 
 .character-item {
   font-size: 15px;
-  color: #666;
+  color: var(--text-secondary);
   padding: 8px 0;
 }
 
@@ -886,11 +886,11 @@
 }
 
 .persona-flow-card {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 20px;
   padding: 30px;
   border-left: 4px solid;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 .persona-flow-header {
@@ -912,20 +912,20 @@
 
 .persona-tagline {
   font-size: 14px;
-  color: #888;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
 .persona-flow-name {
   font-size: 24px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 8px;
 }
 
 .persona-flow-description {
   font-size: 16px;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 24px;
   line-height: 1.5;
 }
@@ -1003,7 +1003,7 @@
 
 .btn-white {
   background: white;
-  color: #5e17eb;
+  color: var(--accent-primary);
   border: none;
   padding: 16px 35px;
   border-radius: 25px;
@@ -1032,7 +1032,7 @@
 
 .btn-outline:hover {
   background: white;
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .btn-locked {
@@ -1340,7 +1340,7 @@
 }
 
 .onboarding-modal {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 20px;
   max-width: 700px;
   width: 100%;
@@ -1371,14 +1371,14 @@
 .onboarding-title {
   font-size: 32px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0 0 16px;
   line-height: 1.2;
 }
 
 .onboarding-content {
   font-size: 16px;
-  color: #6b7280;
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 0 0 16px;
   white-space: pre-line;
@@ -1414,7 +1414,7 @@
 .snapshot-placeholder {
   padding: 40px;
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-faint);
   font-size: 14px;
 }
 
@@ -1429,7 +1429,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #e5e7eb;
+  background: var(--border-default);
   transition: all 0.3s ease;
 }
 
@@ -1440,7 +1440,7 @@
 }
 
 .onboarding-dot.completed {
-  background: #d1d5db;
+  background: var(--border-light);
 }
 
 .onboarding-buttons {
@@ -1471,9 +1471,9 @@
 }
 
 .onboarding-btn.secondary {
-  background: white;
-  color: #5e17eb;
-  border: 2px solid #5e17eb;
+  background: var(--bg-surface);
+  color: var(--accent-primary);
+  border: 2px solid var(--accent-primary);
 }
 
 .onboarding-btn.secondary:hover {
@@ -1548,13 +1548,13 @@
 .no-project-prompt h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
 }
 
 .no-project-prompt p {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-muted);
   margin: 0 0 20px 0;
 }
 
@@ -1580,8 +1580,8 @@
   margin: 32px 0 16px;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
-  background: #fff;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
 }
 
 .agent-access-toggle {
@@ -1595,17 +1595,17 @@
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   text-align: left;
 }
 
 .agent-access-toggle:hover {
-  background: #f8f8fa;
+  background: var(--bg-muted);
 }
 
 .agent-access-toggle-icon {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--text-muted);
 }
 
 .agent-access-toggle-badge {
@@ -1626,7 +1626,7 @@
 
 .agent-access-description {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 16px;
   line-height: 1.5;
 }
@@ -1646,7 +1646,7 @@
   gap: 8px;
   font-weight: 600;
   font-size: 0.9rem;
-  color: #5e17eb;
+  color: var(--accent-primary);
   margin-bottom: 10px;
 }
 
@@ -1654,7 +1654,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
+  background: var(--bg-surface);
   border-radius: 8px;
   padding: 10px 12px;
   margin-bottom: 10px;
@@ -1664,7 +1664,7 @@
   flex: 1;
   font-family: 'SF Mono', 'Fira Code', monospace;
   font-size: 0.8rem;
-  color: #333;
+  color: var(--text-primary);
   word-break: break-all;
 }
 
@@ -1672,7 +1672,7 @@
   padding: 6px 14px;
   border-radius: 6px;
   border: none;
-  background: #5e17eb;
+  background: var(--accent-primary);
   color: #fff;
   font-size: 0.8rem;
   font-weight: 600;
@@ -1695,7 +1695,7 @@
   padding: 8px 16px;
   border-radius: 8px;
   border: none;
-  background: #E9A23B;
+  background: var(--accent-gold);
   color: #fff;
   font-size: 0.85rem;
   font-weight: 600;
@@ -1717,23 +1717,23 @@
   flex: 1;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-input);
   font-size: 0.85rem;
-  color: #333;
-  background: #fafbfc;
+  color: var(--text-primary);
+  background: var(--bg-input);
 }
 
 .agent-key-label-input:focus {
   outline: none;
-  border-color: #5e17eb;
-  box-shadow: 0 0 0 2px rgba(94, 23, 235, 0.1);
+  border-color: var(--border-input-focus);
+  box-shadow: 0 0 0 2px var(--accent-primary-bg);
 }
 
 .agent-key-generate-btn {
   padding: 10px 18px;
   border-radius: 8px;
   border: none;
-  background: #E9A23B;
+  background: var(--accent-gold);
   color: #fff;
   font-size: 0.85rem;
   font-weight: 600;
@@ -1752,7 +1752,7 @@
 
 .agent-key-error {
   font-size: 0.8rem;
-  color: #e5484d;
+  color: var(--color-danger);
   font-weight: 500;
   margin: -8px 0 12px;
 }
@@ -1760,7 +1760,7 @@
 /* Keys list */
 .agent-keys-loading {
   font-size: 0.85rem;
-  color: #888;
+  color: var(--text-muted);
   padding: 12px 0;
 }
 
@@ -1771,7 +1771,7 @@
 .agent-keys-list-header {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #888;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
@@ -1784,7 +1784,7 @@
   gap: 12px;
   padding: 10px 12px;
   border-radius: 8px;
-  background: #fafbfc;
+  background: var(--bg-input);
   margin-bottom: 6px;
 }
 
@@ -1802,26 +1802,26 @@
 .agent-key-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .agent-key-prefix {
   font-family: 'SF Mono', 'Fira Code', monospace;
   font-size: 0.75rem;
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .agent-key-meta {
   font-size: 0.7rem;
-  color: #999;
+  color: var(--text-faint);
 }
 
 .agent-key-revoke-btn {
   padding: 5px 12px;
   border-radius: 6px;
-  border: 1px solid #e5484d;
+  border: 1px solid var(--color-danger);
   background: none;
-  color: #e5484d;
+  color: var(--color-danger);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -1834,20 +1834,20 @@
 
 .agent-key-revoked-badge {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--text-faint);
   font-style: italic;
 }
 
 /* Usage instructions */
 .agent-usage-details {
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-default);
   padding-top: 12px;
 }
 
 .agent-usage-details summary {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #5e17eb;
+  color: var(--accent-primary);
   cursor: pointer;
   padding: 4px 0;
 }
@@ -1858,13 +1858,13 @@
 
 .agent-usage-content p {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 8px;
   line-height: 1.5;
 }
 
 .agent-usage-content a {
-  color: #5e17eb;
+  color: var(--accent-primary);
 }
 
 .agent-usage-code {
@@ -1898,12 +1898,9 @@
 
 /* ============================================================
    Bioluminescent dark theme overrides
+   Only gradient, rgba, and non-tokenisable overrides remain.
+   Simple color swaps are handled by CSS custom properties above.
    ============================================================ */
-
-/* ── Page background ── */
-.theme-bioluminescent.dashboard-container {
-  background: var(--bg-page, #0A0812);
-}
 
 body:has(.theme-bioluminescent.dashboard-container) {
   background: #0A0812;
@@ -1946,39 +1943,11 @@ body:has(.theme-bioluminescent.dashboard-container) {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* ── Sidebar overlay ── */
 .theme-bioluminescent .sidebar-overlay {
   background: rgba(0, 0, 0, 0.7);
 }
 
-/* ── Page header / titles ── */
-.theme-bioluminescent .page-title {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .page-subtitle {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-.theme-bioluminescent .section-heading {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .section-title {
-  color: var(--text-primary, #F2EEF8);
-}
-
-/* ── Stats Grid / Archetype Cards ── */
-.theme-bioluminescent .stat-card {
-  background: #12101C;
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.theme-bioluminescent .stat-card:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
+/* ── Stat icon backgrounds (rgba, can't tokenise) ── */
 .theme-bioluminescent .stat-card.purple .stat-icon {
   background: rgba(255, 60, 172, 0.15);
 }
@@ -2001,43 +1970,14 @@ body:has(.theme-bioluminescent.dashboard-container) {
   border-color: rgba(255, 184, 0, 0.3);
 }
 
-.theme-bioluminescent .stat-label {
-  color: var(--text-muted, #8478A0);
-}
-
-.theme-bioluminescent .stat-value {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .expand-arrow {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-muted, #8478A0);
-}
-
-.theme-bioluminescent .expand-arrow.expanded {
-  background: #FF3CAC;
-  color: white;
-}
-
-/* ── Archetype Expanded ── */
+/* ── Archetype Expanded (specific dark bg + gold border) ── */
 .theme-bioluminescent .archetype-expanded {
-  background: #12101C;
-  border-color: #FFB800;
+  background: var(--bg-surface);
+  border-color: var(--accent-gold);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
-.theme-bioluminescent .archetype-expanded .archetype-name {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .archetype-expanded .archetype-subtitle {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-.theme-bioluminescent .archetype-expanded .archetype-description {
-  color: var(--text-secondary, #BAB0D0);
-}
-
+/* ── Explore button gradient ── */
 .theme-bioluminescent .explore-button {
   background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
   color: #0A0812;
@@ -2049,63 +1989,14 @@ body:has(.theme-bioluminescent.dashboard-container) {
   background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
 }
 
-/* ── Expand content ── */
+/* ── Expand content (rgba background) ── */
 .theme-bioluminescent .expand-content {
   background: rgba(255, 255, 255, 0.03);
-  border-left-color: #FF3CAC;
-}
-
-.theme-bioluminescent .expand-content h4 {
-  color: #FF3CAC;
-}
-
-.theme-bioluminescent .expand-content p {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-/* ── Archetype expanded content ── */
-.theme-bioluminescent .archetype-expanded-content {
-  background: #12101C;
-  border-top-color: rgba(255, 255, 255, 0.06);
-}
-
-.theme-bioluminescent .expanded-label {
-  color: #FF3CAC;
-}
-
-.theme-bioluminescent .expanded-title {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .expanded-text {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-.theme-bioluminescent .character-item {
-  color: var(--text-secondary, #BAB0D0);
 }
 
 /* ── Archetype card (dashboard) ── */
-.theme-bioluminescent.dashboard-container .archetype-card {
-  background: #12101C;
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.theme-bioluminescent.dashboard-container .archetype-card:hover {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-}
-
 .theme-bioluminescent.dashboard-container .archetype-body {
-  background: #12101C;
-}
-
-.theme-bioluminescent.dashboard-container .archetype-name {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .archetype-description {
-  color: var(--text-secondary, #BAB0D0);
+  background: var(--bg-surface);
 }
 
 .theme-bioluminescent .archetype-header {
@@ -2114,45 +2005,28 @@ body:has(.theme-bioluminescent.dashboard-container) {
 
 .theme-bioluminescent .archetype-tag {
   background: rgba(10, 8, 18, 0.85);
-  color: #FF3CAC;
-  backdrop-filter: blur(10px);
 }
 
-/* ── Streak Display ── */
-.theme-bioluminescent .streak-item {
-  background: #12101C;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.theme-bioluminescent .streak-item .streak-value {
-  color: var(--text-primary, #F2EEF8);
-}
-
+/* ── Streak daily/groan accent overrides ── */
 .theme-bioluminescent .streak-item.daily .streak-value {
   color: #FFB800;
 }
 
-.theme-bioluminescent .streak-item.groan .streak-value {
-  color: #FF3CAC;
-}
-
-.theme-bioluminescent .streak-item .streak-label {
-  color: var(--text-muted, #8478A0);
-}
-
-/* ── Progress Strip ── */
+/* ── Progress Strip gradient ── */
 .theme-bioluminescent .progress-strip {
   background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
 }
 
-/* ── Action Buttons ── */
+/* ── Action Buttons (gradients + animation) ── */
 .theme-bioluminescent .action-btn.primary {
   background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
   color: #0A0812;
+  animation: ctaPulseBio 2s ease-in-out infinite;
 }
 
 .theme-bioluminescent .action-btn.primary:hover {
   box-shadow: 0 4px 20px rgba(255, 60, 172, 0.5);
+  animation: none;
 }
 
 @keyframes ctaPulseBio {
@@ -2164,35 +2038,7 @@ body:has(.theme-bioluminescent.dashboard-container) {
   }
 }
 
-.theme-bioluminescent .action-btn.primary {
-  animation: ctaPulseBio 2s ease-in-out infinite;
-}
-
-.theme-bioluminescent .action-btn.primary:hover {
-  animation: none;
-}
-
-.theme-bioluminescent .action-btn.secondary {
-  background: #12101C;
-  color: var(--text-primary, #F2EEF8);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.theme-bioluminescent .action-btn.secondary:hover {
-  border-color: #FF3CAC;
-  color: #FF3CAC;
-}
-
-.theme-bioluminescent .action-btn.support {
-  color: var(--text-muted, #8478A0);
-}
-
-.theme-bioluminescent .action-btn.support:hover {
-  color: #25D366;
-  background: rgba(37, 211, 102, 0.1);
-}
-
-/* ── CTA Banner ── */
+/* ── CTA Banner gradient ── */
 .theme-bioluminescent .cta-banner {
   background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
 }
@@ -2212,46 +2058,21 @@ body:has(.theme-bioluminescent.dashboard-container) {
   color: #FF3CAC;
 }
 
-/* ── No Project Prompt ── */
+/* ── No Project Prompt (gradient bg) ── */
 .theme-bioluminescent .no-project-prompt {
   background: linear-gradient(135deg, rgba(255, 60, 172, 0.1) 0%, rgba(224, 64, 251, 0.1) 100%);
   border-color: rgba(255, 60, 172, 0.2);
 }
 
-.theme-bioluminescent .no-project-prompt h3 {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .no-project-prompt p {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-/* ── Flow Map Loading ── */
+/* ── Flow Map Loading (rgba bg) ── */
 .theme-bioluminescent .flow-map-loading {
   background: rgba(255, 60, 172, 0.05);
 }
 
-/* ── Project Cards ── */
-.theme-bioluminescent .project-card-mini {
-  background: #12101C;
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-.theme-bioluminescent .project-card-mini:hover {
-  border-color: #FF3CAC;
-}
-
+/* ── Project Cards (specific dark overrides) ── */
 .theme-bioluminescent .project-card-mini.primary {
   border-color: #FFB800;
   background: rgba(255, 184, 0, 0.05);
-}
-
-.theme-bioluminescent .project-card-mini .project-name {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .project-card-mini .project-stage {
-  color: var(--text-secondary, #BAB0D0);
 }
 
 .theme-bioluminescent .project-card-mini .primary-badge {
@@ -2259,17 +2080,7 @@ body:has(.theme-bioluminescent.dashboard-container) {
   color: #0A0812;
 }
 
-.theme-bioluminescent .project-card-mini.add-new {
-  border-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-muted, #8478A0);
-}
-
-.theme-bioluminescent .project-card-mini.add-new:hover {
-  border-color: #FF3CAC;
-  color: #FF3CAC;
-}
-
-/* ── Project Stage Badge ── */
+/* ── Project Stage Badge (gradient bg) ── */
 .theme-bioluminescent .project-stage-badge {
   background: linear-gradient(135deg, rgba(255, 60, 172, 0.1) 0%, rgba(224, 64, 251, 0.1) 100%);
 }
@@ -2278,57 +2089,14 @@ body:has(.theme-bioluminescent.dashboard-container) {
   background: #FF3CAC;
 }
 
-.theme-bioluminescent .project-stage-badge .stage-info {
-  color: var(--text-primary, #F2EEF8);
-}
-
-/* ── Persona Flow Section ── */
-.theme-bioluminescent .persona-flow-card {
-  background: #12101C;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.theme-bioluminescent .persona-flow-name {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .persona-flow-description {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-.theme-bioluminescent .persona-tagline {
-  color: var(--text-muted, #8478A0);
-}
-
-/* ── Onboarding Modal ── */
+/* ── Onboarding Modal (rgba/gradient overrides) ── */
 .theme-bioluminescent .onboarding-overlay {
   background: rgba(10, 8, 18, 0.92);
-}
-
-.theme-bioluminescent .onboarding-modal {
-  background: #12101C;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-}
-
-.theme-bioluminescent .onboarding-title {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .onboarding-content {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-.theme-bioluminescent .onboarding-dot {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 .theme-bioluminescent .onboarding-dot.active {
   background: linear-gradient(135deg, #FF3CAC, #E040FB);
   box-shadow: 0 0 10px rgba(255, 60, 172, 0.4);
-}
-
-.theme-bioluminescent .onboarding-dot.completed {
-  background: rgba(255, 255, 255, 0.2);
 }
 
 .theme-bioluminescent .onboarding-btn.primary {
@@ -2341,45 +2109,14 @@ body:has(.theme-bioluminescent.dashboard-container) {
   box-shadow: 0 6px 20px rgba(255, 60, 172, 0.4);
 }
 
-.theme-bioluminescent .onboarding-btn.secondary {
-  background: transparent;
-  color: #FF3CAC;
-  border-color: #FF3CAC;
-}
-
 .theme-bioluminescent .onboarding-btn.secondary:hover {
   background: rgba(255, 60, 172, 0.08);
 }
 
-.theme-bioluminescent .snapshot-placeholder {
-  color: var(--text-muted, #8478A0);
-}
-
-/* ── Agent Access Section ── */
-.theme-bioluminescent .agent-access-section {
-  background: #12101C;
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-.theme-bioluminescent .agent-access-toggle {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .agent-access-toggle:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.theme-bioluminescent .agent-access-toggle-icon {
-  color: var(--text-muted, #8478A0);
-}
-
+/* ── Agent Access Section (gradient/rgba overrides) ── */
 .theme-bioluminescent .agent-access-toggle-badge {
   background: linear-gradient(135deg, #FF3CAC 0%, #E040FB 40%, #FFB800 100%);
   color: #0A0812;
-}
-
-.theme-bioluminescent .agent-access-description {
-  color: var(--text-secondary, #BAB0D0);
 }
 
 .theme-bioluminescent .agent-key-reveal {
@@ -2387,21 +2124,9 @@ body:has(.theme-bioluminescent.dashboard-container) {
   border-color: rgba(255, 60, 172, 0.3);
 }
 
-.theme-bioluminescent .agent-key-reveal-header {
-  color: #FF3CAC;
-}
-
 .theme-bioluminescent .agent-key-reveal-value {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.theme-bioluminescent .agent-key-reveal-value code {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .agent-key-copy-btn {
-  background: #FF3CAC;
 }
 
 .theme-bioluminescent .agent-key-copy-btn:hover {
@@ -2413,7 +2138,6 @@ body:has(.theme-bioluminescent.dashboard-container) {
 }
 
 .theme-bioluminescent .agent-key-dismiss-btn {
-  background: #FFB800;
   color: #0A0812;
 }
 
@@ -2421,19 +2145,7 @@ body:has(.theme-bioluminescent.dashboard-container) {
   background: #e6a600;
 }
 
-.theme-bioluminescent .agent-key-label-input {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .agent-key-label-input:focus {
-  border-color: #FF3CAC;
-  box-shadow: 0 0 0 2px rgba(255, 60, 172, 0.15);
-}
-
 .theme-bioluminescent .agent-key-generate-btn {
-  background: #FFB800;
   color: #0A0812;
 }
 
@@ -2445,28 +2157,8 @@ body:has(.theme-bioluminescent.dashboard-container) {
   color: #ff6b6b;
 }
 
-.theme-bioluminescent .agent-keys-loading {
-  color: var(--text-muted, #8478A0);
-}
-
-.theme-bioluminescent .agent-keys-list-header {
-  color: var(--text-muted, #8478A0);
-}
-
 .theme-bioluminescent .agent-key-row {
   background: rgba(255, 255, 255, 0.03);
-}
-
-.theme-bioluminescent .agent-key-label {
-  color: var(--text-primary, #F2EEF8);
-}
-
-.theme-bioluminescent .agent-key-prefix {
-  color: #FF3CAC;
-}
-
-.theme-bioluminescent .agent-key-meta {
-  color: var(--text-faint, #5a4e70);
 }
 
 .theme-bioluminescent .agent-key-revoke-btn {
@@ -2476,26 +2168,6 @@ body:has(.theme-bioluminescent.dashboard-container) {
 
 .theme-bioluminescent .agent-key-revoke-btn:hover {
   background: rgba(255, 107, 107, 0.1);
-}
-
-.theme-bioluminescent .agent-key-revoked-badge {
-  color: var(--text-faint, #5a4e70);
-}
-
-.theme-bioluminescent .agent-usage-details {
-  border-top-color: rgba(255, 255, 255, 0.06);
-}
-
-.theme-bioluminescent .agent-usage-details summary {
-  color: #FF3CAC;
-}
-
-.theme-bioluminescent .agent-usage-content p {
-  color: var(--text-secondary, #BAB0D0);
-}
-
-.theme-bioluminescent .agent-usage-content a {
-  color: #FF3CAC;
 }
 
 .theme-bioluminescent .agent-usage-code {

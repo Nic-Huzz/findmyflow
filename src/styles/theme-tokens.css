@@ -118,6 +118,8 @@
 }
 
 body:has(.theme-bioluminescent) {
+  --vibe-body-bg: #0A0812;
+  --warm-gray: #0A0812;
   background: #0A0812;
   color: #F2EEF8;
 }
