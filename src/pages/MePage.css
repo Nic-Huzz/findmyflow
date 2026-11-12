@@ -1561,10 +1561,15 @@
   --text-muted: #8478A0;
   --surface: #12101C;
   --bg: #0A0812;
+  --archetype-color-soft: rgba(255, 60, 172, 0.06);
   --north: #FFB800;
   --east: #E040FB;
   --south: #FF5A6E;
   --west: #FFB800;
 
+  background: #0A0812 !important;
+}
+
+body:has(.me-page.theme-bioluminescent) {
   background: #0A0812;
 }
