@@ -24,14 +24,6 @@ import './VoiceStemFlow.css'
 
 const STORAGE_KEY = 'voice_stems_session'
 const MAX_STEM_SECONDS = 30
-const EXP_BATCH_SIZE = 10
-const EXP_RECORD_SECONDS = 30
-
-// Split activities into batches of 10 for recording
-const EXP_BATCHES = []
-for (let i = 0; i < EXPERIENCE_ACTIVITIES.length; i += EXP_BATCH_SIZE) {
-  EXP_BATCHES.push(EXPERIENCE_ACTIVITIES.slice(i, i + EXP_BATCH_SIZE))
-}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -69,15 +61,28 @@ function getSessionId() {
 
 async function saveToSupabase(data) {
   try {
-    const { supabase } = await import('../lib/supabaseClient')
     const sessionId = getSessionId()
     const placeholderEmail = `anon-${sessionId}@voice-stems.local`
-    await supabase.from('public_leads').upsert({
-      id: sessionId,
-      email: data.email || placeholderEmail,
-      source_flow: 'voice_stems',
-      flow_results: { ...data, _sessionId: sessionId },
-    }, { onConflict: 'id' })
+    const url = import.meta.env.VITE_SUPABASE_URL
+    const key = import.meta.env.VITE_SUPABASE_ANON_KEY
+    // Public lead capture — always use anon key, never a user session
+    // Upsert on email (unique constraint), not id
+    const email = data.email || placeholderEmail
+    await fetch(`${url}/rest/v1/public_leads?on_conflict=email`, {
+      method: 'POST',
+      headers: {
+        'apikey': key,
+        'Authorization': `Bearer ${key}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates',
+      },
+      body: JSON.stringify({
+        id: sessionId,
+        email,
+        source_flow: 'voice_stems',
+        flow_results: { ...data, _sessionId: sessionId },
+      }),
+    })
   } catch {
     // Supabase save failure is non-fatal
   }
@@ -1075,11 +1080,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const [blendResult, setBlendResult] = useState(null)
   const [essenceName, setEssenceName] = useState('')
 
-  // ── Experience game batch tracking ─────────────────────────────────
-  const expBatchRef = useRef(0)
-  const paidBatchRef = useRef(0)
-  const paidBatchesRef = useRef([]) // computed from stage5Results.fun
-  const stage5ResultsRef = useRef(null) // avoids stale closure in processPaidFilter
+  // ── Stage 5 results ref (used by handleSignupComplete) ─────────────
+  const stage5ResultsRef = useRef(null)
 
   // ── Countdown state ────────────────────────────────────────────────
   const [countdownNum, setCountdownNum] = useState(3)
@@ -1158,8 +1160,15 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         return
       }
       if (n === 6) {
-        // Need stage 5 results to run paid filter; show intro as fallback
-        setTimeout(() => setScreen('experience_intro'), 100)
+        // Jump to paid filter if stage 5 results exist in localStorage
+        const s = loadSession()
+        if (s?.stage5Results) {
+          setStage5Results(s.stage5Results)
+          stage5ResultsRef.current = s.stage5Results
+          setTimeout(() => setScreen('paid_intro'), 100)
+        } else {
+          setTimeout(() => setScreen('experience_intro'), 100)
+        }
         return
       }
       const stageIdx = n - 1
@@ -1336,8 +1345,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       } else if (stageIndex === 1 && layerIndex === 0) {
         // Stage 2 layer 2 — extract prediction
         const results = await processStage(2, transcripts, { selectedExpression })
-        // Temporarily store partial results for prediction selection
         setStage2Results(results)
+        saveSession({ stage2Transcripts: transcriptsRef.current, stage2Results: results })
         const predictions = results?.predictions || results?.dominantPredictions || []
         const singlePrediction = results?.dominantPrediction || results?.prediction
         if (predictions.length > 0) {
@@ -1486,9 +1495,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     setConfirmedPrediction(null)
     setPosition({ stageIndex: 0, layerIndex: null, stemIndex: 0 })
     setFlowError(null)
-    expBatchRef.current = 0
-    paidBatchRef.current = 0
-    paidBatchesRef.current = []
     stage5ResultsRef.current = null
     setScreen('landing')
   }
@@ -1497,6 +1503,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const handleSelection2 = (option) => {
     const label = typeof option === 'string' ? option : option.label || option.text || String(option)
     setConfirmedPrediction(label)
+    saveSession({ confirmedPrediction: label })
     // Start layer 3
     setTimeout(() => beginStage({ stageIndex: 1, layerIndex: 1 }), 400)
   }
@@ -1505,193 +1512,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const handleRetryProcessing = () => {
     setFlowError(null)
     triggerProcessing(position.stageIndex, position.layerIndex)
-  }
-
-  // ── Experience Game (Stage 5) ─────────────────────────────────
-
-  const startExpBatch = useCallback((batchIdx) => {
-    expBatchRef.current = batchIdx
-    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
-    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
-
-    setCountdownNum(3)
-    setScreen('exp_countdown')
-
-    let count = 3
-    countdownRef.current = setInterval(() => {
-      count -= 1
-      if (count <= 0) {
-        clearInterval(countdownRef.current)
-        countdownRef.current = null
-        currentStemIdRef.current = `exp_batch_${batchIdx}`
-        setStemSeconds(EXP_RECORD_SECONDS)
-        setScreen('exp_recording')
-        start()
-
-        let secs = EXP_RECORD_SECONDS
-        stemTimerRef.current = setInterval(() => {
-          secs -= 1
-          setStemSeconds(secs)
-          if (secs <= 0) {
-            clearInterval(stemTimerRef.current)
-            stemTimerRef.current = null
-            handleExpBatchDone()
-          }
-        }, 1000)
-      } else {
-        setCountdownNum(count)
-      }
-    }, 1000)
-  }, [start]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleExpBatchDone = useCallback(() => {
-    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
-    stop()
-    setScreen('exp_transition')
-
-    setTimeout(() => {
-      const nextBatch = expBatchRef.current + 1
-      if (nextBatch < EXP_BATCHES.length) {
-        startExpBatch(nextBatch)
-      } else {
-        processExperienceGame()
-      }
-    }, 1000)
-  }, [stop]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const processExperienceGame = useCallback(async () => {
-    setScreen('processing')
-    setProcessingStageKey(5)
-    setFlowError(null)
-
-    const pending = [...pendingTranscriptionsRef.current]
-    pendingTranscriptionsRef.current = []
-    await Promise.allSettled(pending)
-
-    const transcripts = EXP_BATCHES.map((batch, i) => ({
-      stemId: `exp_batch_${i}`,
-      stemText: `Round ${i + 1}: ${batch.map(a => a.label).join(', ')}`,
-      transcript: transcriptsRef.current[`exp_batch_${i}`] || '',
-    }))
-
-    saveSession({ stage5Transcripts: transcripts })
-
-    try {
-      const results = await processStage(5, transcripts, { activities: EXPERIENCE_ACTIVITIES })
-      setStage5Results(results)
-      stage5ResultsRef.current = results
-      saveSession({ stage5Results: results })
-      setScreen('experience_results')
-    } catch (err) {
-      console.error('Stage 5 error:', err)
-      setFlowError('Something went wrong mapping your experiences. Tap to retry.')
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const retryExpProcessing = () => {
-    setFlowError(null)
-    processExperienceGame()
-  }
-
-  // ── Paid Filter (Stage 6) ─────────────────────────────────────
-
-  const startPaidFilter = useCallback(() => {
-    const funList = stage5Results?.fun || []
-    const batches = []
-    for (let i = 0; i < funList.length; i += EXP_BATCH_SIZE) {
-      batches.push(funList.slice(i, i + EXP_BATCH_SIZE))
-    }
-    paidBatchesRef.current = batches
-    if (batches.length === 0) {
-      // No fun activities, skip to signup gate
-      setScreen('signup_gate')
-      return
-    }
-    startPaidBatch(0)
-  }, [stage5Results]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const startPaidBatch = useCallback((batchIdx) => {
-    paidBatchRef.current = batchIdx
-    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
-    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
-
-    setCountdownNum(3)
-    setScreen('paid_countdown')
-
-    let count = 3
-    countdownRef.current = setInterval(() => {
-      count -= 1
-      if (count <= 0) {
-        clearInterval(countdownRef.current)
-        countdownRef.current = null
-        currentStemIdRef.current = `paid_batch_${batchIdx}`
-        setStemSeconds(EXP_RECORD_SECONDS)
-        setScreen('paid_recording')
-        start()
-
-        let secs = EXP_RECORD_SECONDS
-        stemTimerRef.current = setInterval(() => {
-          secs -= 1
-          setStemSeconds(secs)
-          if (secs <= 0) {
-            clearInterval(stemTimerRef.current)
-            stemTimerRef.current = null
-            handlePaidBatchDone()
-          }
-        }, 1000)
-      } else {
-        setCountdownNum(count)
-      }
-    }, 1000)
-  }, [start]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handlePaidBatchDone = useCallback(() => {
-    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
-    stop()
-    setScreen('paid_transition')
-
-    setTimeout(() => {
-      const nextBatch = paidBatchRef.current + 1
-      if (nextBatch < paidBatchesRef.current.length) {
-        startPaidBatch(nextBatch)
-      } else {
-        processPaidFilter()
-      }
-    }, 1000)
-  }, [stop]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const processPaidFilter = useCallback(async () => {
-    setScreen('processing')
-    setProcessingStageKey(6)
-    setFlowError(null)
-
-    const pending = [...pendingTranscriptionsRef.current]
-    pendingTranscriptionsRef.current = []
-    await Promise.allSettled(pending)
-
-    const funList = stage5ResultsRef.current?.fun || []
-    const transcripts = paidBatchesRef.current.map((batch, i) => ({
-      stemId: `paid_batch_${i}`,
-      stemText: batch.map(a => a.label).join(', '),
-      transcript: transcriptsRef.current[`paid_batch_${i}`] || '',
-    }))
-
-    saveSession({ stage6Transcripts: transcripts })
-
-    try {
-      const results = await processStage(6, transcripts, { funActivities: funList })
-      setStage6Results(results)
-      saveSession({ stage6Results: results })
-      setScreen('signup_gate')
-    } catch (err) {
-      console.error('Stage 6 error:', err)
-      setFlowError('Something went wrong. Tap to retry.')
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const retryPaidProcessing = () => {
-    setFlowError(null)
-    processPaidFilter()
   }
 
   // ── Save essence profile to DB (any mode, if authenticated) ──
@@ -1769,11 +1589,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: true, updated_at: now })
     })
     // Stage 6 passion activities = fun + doesn't want to get paid
-    ;(s6?.passion || []).forEach(a => {
+    ;(s6?.hobby || []).forEach(a => {
       rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: false, updated_at: now })
     })
     // Fun activities not in stage 6 results (skipped paid filter or zero batches)
-    const s6Ids = new Set([...(s6?.path || []).map(a => a.id), ...(s6?.passion || []).map(a => a.id)])
+    const s6Ids = new Set([...(s6?.path || []).map(a => a.id), ...(s6?.hobby || []).map(a => a.id)])
     ;(s5.fun || []).forEach(a => {
       if (!s6Ids.has(a.id)) {
         rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: false, updated_at: now })
@@ -1899,7 +1719,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         )}
 
         {/* PROCESSING ERROR (stages 1-4 only) */}
-        {screen === 'processing' && flowError && processingStageKey !== 5 && processingStageKey !== 6 && (
+        {screen === 'processing' && flowError && (
           <div className="vs-processing">
             <div className="vs-error-msg" style={{ maxWidth: 360 }}>{flowError}</div>
             <button className="vs-btn-primary" onClick={handleRetryProcessing} style={{ marginTop: 16 }}>
@@ -1908,13 +1728,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           </div>
         )}
 
-        {/* PROCESSING ERROR (stage 5) */}
-        {screen === 'processing' && flowError && processingStageKey === 5 && (
-          <div className="vs-processing">
-            <div className="vs-error-msg" style={{ maxWidth: 360 }}>{flowError}</div>
-            <button className="vs-btn-primary" onClick={retryExpProcessing} style={{ marginTop: 16 }}>Retry</button>
-          </div>
-        )}
 
         {/* SELECTION 1 — pick essence theme */}
         {screen === 'selection_1' && stage1Results && (
@@ -1984,7 +1797,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             }}
             onContinue={() => {
               saveEssenceProfile(essenceName)
-              setScreen(isOnboarding ? 'experience_intro' : 'avatar')
+              setScreen('avatar')
             }}
           />
         )}
@@ -1998,10 +1811,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               <div className="vs-results-label">Stage 5</div>
               <h2 className="vs-results-title">The Experience Game</h2>
               <p className="vs-exp-intro-desc">
-                Activities will appear one at a time. For each one, say <strong>&quot;fun&quot;</strong> or <strong>&quot;not fun&quot;</strong>. Go fast. Trust your gut.
+                Activities will appear one at a time. For each one, say <strong>&quot;fun&quot;</strong> or <strong>&quot;not fun&quot;</strong> (or yes/no). Go fast. Trust your gut.
               </p>
               <p className="vs-exp-intro-sub">
-                {EXPERIENCE_ACTIVITIES.length} activities. About 2 minutes.
+                {EXPERIENCE_ACTIVITIES.length} activities. About 4 minutes.
               </p>
             </div>
             <div className="vs-bottom-action">
@@ -2052,76 +1865,56 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 </div>
               </div>
             )}
-            <p style={{ fontSize: '0.9rem', color: 'var(--vs-muted)', marginTop: 12 }}>
-              Now, for each &quot;fun&quot; activity, we will ask: could you get paid for it?
-            </p>
             <DoubleConfirmButton
-              onConfirm={startPaidFilter}
-              label="Continue to paid filter"
-              confirmLabel="Ready? Tap to begin"
+              onConfirm={() => setScreen('paid_intro')}
+              label="Continue"
+              confirmLabel="Ready? Tap to continue"
             />
           </div>
         )}
 
         {/* ── PAID FILTER (Stage 6) ──────────────────────────────── */}
 
-        {/* PAID COUNTDOWN */}
-        {screen === 'paid_countdown' && (
-          <div className="vs-stem-screen">
-            <ProgressBar
-              label={`Paid Filter  ·  Round ${paidBatchRef.current + 1} of ${paidBatchesRef.current.length}`}
-              percent={Math.round((paidBatchRef.current / Math.max(paidBatchesRef.current.length, 1)) * 100)}
-            />
-            <div className="vs-exp-batch-list">
-              {(paidBatchesRef.current[paidBatchRef.current] || []).map((a, i) => (
-                <div key={a.id} className="vs-exp-batch-item">
-                  <span className="vs-exp-batch-num">{i + 1}.</span>
-                  <span>{a.label}</span>
-                </div>
-              ))}
+        {/* PAID INTRO */}
+        {screen === 'paid_intro' && (
+          <div className="vs-exp-intro">
+            <div className="vs-results-card">
+              <div className="vs-results-label">Stage 6</div>
+              <h2 className="vs-results-title">The Paid Filter</h2>
+              <p className="vs-exp-intro-desc">
+                For each activity you said was fun, we will ask: <strong>would you want to get paid for this?</strong>
+              </p>
+              <p className="vs-exp-intro-desc" style={{ marginTop: 12 }}>
+                Say <strong>&quot;yes&quot;</strong> or <strong>&quot;no&quot;</strong> (or tap the buttons). No wrong answers.
+              </p>
+              <p className="vs-exp-intro-sub">
+                {(stage5Results?.fun || []).length} activities. About {Math.ceil((stage5Results?.fun || []).length * 2 / 60)} minutes.
+              </p>
             </div>
-            <div className="vs-countdown-overlay vs-countdown-overlay-bottom">
-              <div className="vs-countdown-num" key={countdownNum}>{countdownNum}</div>
-              <div className="vs-countdown-label">Say &quot;yes&quot; (could get paid) or &quot;no&quot; (just passion)...</div>
-            </div>
-          </div>
-        )}
-
-        {/* PAID RECORDING */}
-        {screen === 'paid_recording' && (
-          <div className="vs-stem-screen">
-            <ProgressBar
-              label={`Paid Filter  ·  Round ${paidBatchRef.current + 1} of ${paidBatchesRef.current.length}`}
-              percent={Math.round(((paidBatchRef.current + 0.5) / Math.max(paidBatchesRef.current.length, 1)) * 100)}
-            />
-            <div className="vs-exp-batch-list">
-              {(paidBatchesRef.current[paidBatchRef.current] || []).map((a, i) => (
-                <div key={a.id} className="vs-exp-batch-item">
-                  <span className="vs-exp-batch-num">{i + 1}.</span>
-                  <span>{a.label}</span>
-                </div>
-              ))}
-            </div>
-            <RecordingZone secondsLeft={stemSeconds} onDone={handlePaidBatchDone} />
-          </div>
-        )}
-
-        {/* PAID TRANSITION */}
-        {screen === 'paid_transition' && (
-          <div className="vs-stem-screen">
-            <div className="vs-transition">
-              <div className="vs-got-it">Got it.</div>
-              <div className="vs-transcribing-label">Transcribing...</div>
+            <div className="vs-bottom-action">
+              <DoubleConfirmButton
+                onConfirm={() => setScreen('paid_live')}
+                label="Start"
+                confirmLabel="Ready? Tap to begin"
+              />
             </div>
           </div>
         )}
 
-        {/* PROCESSING ERROR (stage 6) */}
-        {screen === 'processing' && flowError && processingStageKey === 6 && (
-          <div className="vs-processing">
-            <div className="vs-error-msg" style={{ maxWidth: 360 }}>{flowError}</div>
-            <button className="vs-btn-primary" onClick={retryPaidProcessing} style={{ marginTop: 16 }}>Retry</button>
-          </div>
+        {/* PAID GAME LIVE */}
+        {screen === 'paid_live' && (
+          <ExperienceGameLive
+            activities={stage5Results?.fun || []}
+            mode="paid"
+            onComplete={(results) => {
+              const path = (results.fun || [])       // yes = would get paid
+              const hobby = (results.notFun || [])    // no = just a hobby
+              const s6 = { path, hobby }
+              setStage6Results(s6)
+              saveSession({ stage6Results: s6 })
+              setScreen('signup_gate')
+            }}
+          />
         )}
 
         {/* SIGNUP GATE (after Stage 6, before download) */}
@@ -2159,7 +1952,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'avatar' && (
           <AvatarScreen
             stage4Results={stage4Results}
-            onSkip={() => setScreen('final_results')}
+            onSkip={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
           />
         )}
 

@@ -1,232 +1,316 @@
 /**
- * ExperienceGameLive — One-at-a-time voice experience game.
+ * ExperienceGameLive — Voice-driven experience game with tap fallback.
  *
- * Shows a single activity on screen. User says "fun" or "not fun".
- * Short audio clip → transcribe → classify → advance to next.
- * After all activities: returns { fun, notFun, uncertain } arrays.
+ * Architecture: single async for-loop inside a useEffect.
+ *   open mic → for each activity: show → listen OR tap → flash → next
+ *
+ * Mic opens once. Each activity shows instantly (zero lag).
+ * Records 1.5s clips, pipelines recording + transcription, advances when classified.
+ * Tap buttons always visible as fallback. Back button to re-answer previous.
+ * Per-run cancellation token — StrictMode safe, no shared refs.
  */
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { useAudioRecorder } from '../hooks/useAudioRecorder'
+import { useState, useEffect, useRef } from 'react'
 import { transcribeAudio } from '../lib/deepgramClient'
 
-const SILENCE_TIMEOUT_MS = 5000 // show skip hint after 5s
-const MAX_UTTERANCE_MS = 5000 // max recording per activity
+const CLIP_MS = 1500
+const MAX_LISTEN_MS = 12000
+const FLASH_MS = 200
 
 function classifyResponse(transcript) {
   const t = (transcript || '').toLowerCase().trim()
   if (!t) return 'uncertain'
-  // Check for "not" before "fun"
-  const notIdx = t.lastIndexOf('not')
-  const funIdx = t.lastIndexOf('fun')
+  const notIdx = Math.max(t.lastIndexOf('not'), t.lastIndexOf('nah'), t.lastIndexOf('no '))
+  const funIdx = Math.max(t.lastIndexOf('fun'), t.lastIndexOf('phone'), t.lastIndexOf('done'), t.lastIndexOf('one'))
   if (funIdx >= 0 && notIdx >= 0 && notIdx < funIdx) return 'not_fun'
-  if (funIdx >= 0) return 'fun'
-  // Alternative words
-  if (/\b(no|nah|nope|nuh|hate|boring|meh)\b/.test(t)) return 'not_fun'
+  if (/\b(fun|phone|phon|fon|done|one|run)\b/.test(t) && notIdx < 0) return 'fun'
+  if (/\b(no|nah|nope|nuh|hate|boring|meh|not)\b/.test(t)) return 'not_fun'
   if (/\b(yes|yeah|yep|yay|love|hell yeah)\b/.test(t)) return 'fun'
   return 'uncertain'
 }
 
-export default function ExperienceGameLive({ activities, onComplete }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [responses, setResponses] = useState([]) // { id, label, response, branch }
-  const [flash, setFlash] = useState(null) // 'fun' | 'not_fun' | null
-  const [transcribing, setTranscribing] = useState(false)
-  const [showSkip, setShowSkip] = useState(false)
-  const [error, setError] = useState(null)
+function getMimeType() {
+  if (typeof MediaRecorder === 'undefined') return ''
+  for (const t of ['audio/webm;codecs=opus', 'audio/mp4;codecs=aac', 'audio/mp4', '']) {
+    if (t === '' || MediaRecorder.isTypeSupported(t)) return t
+  }
+  return ''
+}
 
-  const skipTimerRef = useRef(null)
-  const maxTimerRef = useRef(null)
-  const processingRef = useRef(false)
-  const responsesRef = useRef([])
-  const currentIndexRef = useRef(0)
+function recordClip(stream, ms) {
+  return new Promise((resolve) => {
+    try {
+      const mime = getMimeType()
+      const chunks = []
+      const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : {})
+      rec.ondataavailable = (e) => { if (e.data?.size > 0) chunks.push(e.data) }
+      rec.onerror = () => resolve(new Blob([], { type: mime || 'audio/webm' }))
+      rec.onstop = () => resolve(new Blob(chunks, { type: mime || 'audio/webm' }))
+      rec.start(200)
+      setTimeout(() => { if (rec.state === 'recording') rec.stop() }, ms)
+    } catch {
+      resolve(new Blob([], { type: 'audio/webm' }))
+    }
+  })
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
+
+/**
+ * @param {string} mode - 'fun' (default) or 'paid'
+ */
+export default function ExperienceGameLive({ activities, onComplete, mode = 'fun' }) {
+  const [currentIndex, setCurrentIndex] = useState(-1)
+  const [flash, setFlash] = useState(null)
+  const [phase, setPhase] = useState('init')
+  const [micError, setMicError] = useState(null)
+  const [retrying, setRetrying] = useState(false)
+
+  const onCompleteRef = useRef(onComplete)
+  onCompleteRef.current = onComplete
+
+  // Action ref: buttons resolve the pending recording promise
+  const actionRef = useRef(null)
+
+  const emitAction = (action) => {
+    if (actionRef.current) {
+      actionRef.current(action)
+      actionRef.current = null
+    }
+  }
+
+  useEffect(() => {
+    const token = { cancelled: false }
+
+    async function run() {
+      let stream
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      } catch {
+        setMicError('Microphone access denied. Please allow microphone access and refresh.')
+        return
+      }
+
+      if (token.cancelled) { stream.getTracks().forEach(t => t.stop()); return }
+
+      const results = []
+      const maxAttempts = Math.ceil(MAX_LISTEN_MS / CLIP_MS)
+
+      for (let i = 0; i < activities.length; i++) {
+        if (token.cancelled) break
+
+        setCurrentIndex(i)
+        setFlash(null)
+        setRetrying(false)
+        setPhase('listening')
+
+        let result = 'uncertain'
+        let goBack = false
+
+        // First clip
+        let clipResult = await Promise.race([
+          recordClip(stream, CLIP_MS).then(blob => ({ blob })),
+          new Promise(resolve => { actionRef.current = resolve }),
+        ])
+
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          if (token.cancelled) break
+
+          // Handle tap/back/skip actions
+          if (clipResult === 'back') { goBack = true; break }
+          if (clipResult === 'skip') { result = 'uncertain'; break }
+          if (clipResult?.tap) { result = clipResult.tap; break }
+
+          const { blob } = clipResult
+
+          // Pipeline: record next while transcribing current
+          const nextClipPromise = (attempt < maxAttempts - 1)
+            ? Promise.race([
+                recordClip(stream, CLIP_MS).then(b => ({ blob: b })),
+                new Promise(resolve => { actionRef.current = resolve }),
+              ])
+            : null
+
+          try {
+            const { transcript } = await transcribeAudio(blob)
+            const classified = classifyResponse(transcript)
+            console.log(`[exp-game] ${i + 1}/${activities.length} "${activities[i].label}" attempt ${attempt + 1}: "${transcript}" → ${classified}`)
+            if (classified !== 'uncertain') {
+              result = classified
+              break
+            }
+          } catch (err) {
+            console.warn('[exp-game] Transcription error:', err)
+          }
+
+          actionRef.current = null
+          if (attempt >= 1) setRetrying(true)
+
+          if (!nextClipPromise) break
+          clipResult = await nextClipPromise
+        }
+
+        if (token.cancelled) break
+
+        // Back: pop last result, rewind
+        if (goBack) {
+          if (results.length > 0) results.pop()
+          i = Math.max(-1, i - 2) // i++ will make it i-1
+          actionRef.current = null
+          continue
+        }
+
+        // Flash result
+        actionRef.current = null
+        setRetrying(false)
+        const flashType = result === 'fun' ? 'fun' : result === 'not_fun' ? 'not_fun' : 'skip'
+        setFlash(flashType)
+        setPhase('flash')
+        results.push({ id: activities[i].id, label: activities[i].label, response: result, branch: activities[i].branch })
+
+        await sleep(FLASH_MS)
+      }
+
+      stream.getTracks().forEach(t => t.stop())
+      if (token.cancelled) return
+
+      setPhase('done')
+      const fun = results.filter(r => r.response === 'fun').map(({ id, label, branch }) => ({ id, label, branch }))
+      const notFun = results.filter(r => r.response === 'not_fun').map(({ id, label, branch }) => ({ id, label, branch }))
+      const uncertain = results.filter(r => r.response === 'uncertain').map(({ id, label, branch }) => ({ id, label, branch }))
+      onCompleteRef.current({ fun, notFun, uncertain })
+    }
+
+    run()
+    return () => {
+      token.cancelled = true
+      if (actionRef.current) { actionRef.current('skip'); actionRef.current = null }
+    }
+  }, [activities])
+
+  // ── Render ──────────────────────────────────────────────────────
+
+  if (micError) {
+    return (
+      <div className="vs-exp-live">
+        <div className="vs-error-msg">{micError}</div>
+      </div>
+    )
+  }
+
+  if (phase === 'init') {
+    return (
+      <div className="vs-exp-live">
+        <p style={{ color: 'var(--vs-muted)' }}>Starting microphone...</p>
+      </div>
+    )
+  }
+
+  if (phase === 'done' || currentIndex < 0 || currentIndex >= activities.length) {
+    return (
+      <div className="vs-exp-live">
+        <div className="vs-exp-live-processing">
+          {mode === 'paid' ? 'Finding your paths...' : 'Mapping your experiences...'}
+        </div>
+      </div>
+    )
+  }
 
   const activity = activities[currentIndex]
-  const isFinished = currentIndex >= activities.length
-
-  // Keep ref in sync with state to avoid stale closures in async callbacks
-  useEffect(() => { currentIndexRef.current = currentIndex }, [currentIndex])
-
-  const handleSilenceStop = useCallback(() => {
-    // Silence detected — audio blob will be set via the hook
-  }, [])
-
-  const { start, stop, isRecording, audioBlob, permissionGranted, requestPermission } = useAudioRecorder({
-    onSilenceStop: handleSilenceStop,
-  })
-
-  // Start recording for current activity
-  const startListening = useCallback(() => {
-    if (isFinished) return
-    setFlash(null)
-    setShowSkip(false)
-    setError(null)
-    setTranscribing(false)
-    // processingRef is reset in handleResultForIndex after advance, not here
-
-    start()
-
-    // Show skip hint after timeout
-    skipTimerRef.current = setTimeout(() => setShowSkip(true), SILENCE_TIMEOUT_MS)
-    // Max recording safety
-    maxTimerRef.current = setTimeout(() => {
-      stop()
-    }, MAX_UTTERANCE_MS)
-  }, [start, stop, isFinished])
-
-  // When recording starts for first time or advances
-  useEffect(() => {
-    if (permissionGranted && !isFinished && !isRecording && !transcribing && flash === null) {
-      // Small delay for visual breathing room
-      const t = setTimeout(startListening, currentIndex === 0 ? 100 : 600)
-      return () => clearTimeout(t)
-    }
-  }, [currentIndex, permissionGranted, isFinished, isRecording, transcribing, flash, startListening])
-
-  // Process audio when blob is ready
-  useEffect(() => {
-    if (!audioBlob || processingRef.current || isFinished) return
-    processingRef.current = true
-
-    // Capture index at moment of processing — prevents stale closure
-    const capturedIndex = currentIndexRef.current
-
-    if (skipTimerRef.current) clearTimeout(skipTimerRef.current)
-    if (maxTimerRef.current) clearTimeout(maxTimerRef.current)
-
-    setTranscribing(true)
-    setShowSkip(false)
-
-    transcribeAudio(audioBlob)
-      .then(({ transcript }) => {
-        const result = classifyResponse(transcript)
-        handleResultForIndex(result, capturedIndex)
-      })
-      .catch(() => {
-        handleResultForIndex('uncertain', capturedIndex)
-      })
-  }, [audioBlob]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handledRef = useRef(new Set())
-
-  const handleResultForIndex = (result, idx) => {
-    const act = activities[idx]
-    if (!act) return
-
-    // Ignore if already handled (prevents double-call from skip + transcription)
-    if (handledRef.current.has(idx)) return
-    handledRef.current.add(idx)
-
-    // Ignore if we've already moved past this index (late-arriving transcription)
-    if (idx !== currentIndexRef.current) return
-
-    // Always set a visible flash — 'uncertain' shows as dim skip
-    const flashType = result === 'not_fun' ? 'not_fun' : result === 'fun' ? 'fun' : 'skip'
-    setFlash(flashType)
-    setTranscribing(false)
-
-    const entry = { id: act.id, label: act.label, response: result, branch: act.branch }
-    const updated = [...responsesRef.current, entry]
-    responsesRef.current = updated
-    setResponses(updated)
-
-    // Advance after flash
-    setTimeout(() => {
-      processingRef.current = false
-      const nextIdx = idx + 1
-      if (nextIdx >= activities.length) {
-        finishGame(updated)
-      } else {
-        setCurrentIndex(nextIdx)
-        setFlash(null)
-      }
-    }, 500)
-  }
-
-  const handleSkip = () => {
-    stop()
-    if (skipTimerRef.current) clearTimeout(skipTimerRef.current)
-    if (maxTimerRef.current) clearTimeout(maxTimerRef.current)
-    handleResultForIndex('uncertain', currentIndexRef.current)
-  }
-
-  const finishGame = (allResponses) => {
-    const fun = allResponses.filter(r => r.response === 'fun').map(({ id, label, branch }) => ({ id, label, branch }))
-    const notFun = allResponses.filter(r => r.response === 'not_fun').map(({ id, label, branch }) => ({ id, label, branch }))
-    const uncertain = allResponses.filter(r => r.response === 'uncertain').map(({ id, label, branch }) => ({ id, label, branch }))
-    onComplete({ fun, notFun, uncertain })
-  }
-
-  // Request permission on mount if needed
-  useEffect(() => {
-    if (!permissionGranted) requestPermission()
-  }, [permissionGranted, requestPermission])
-
-  // Cleanup timers
-  useEffect(() => {
-    return () => {
-      if (skipTimerRef.current) clearTimeout(skipTimerRef.current)
-      if (maxTimerRef.current) clearTimeout(maxTimerRef.current)
-    }
-  }, [])
-
-  if (!permissionGranted) {
-    return (
-      <div className="vs-exp-live">
-        <p style={{ color: 'var(--vs-muted)' }}>Requesting microphone access...</p>
-      </div>
-    )
-  }
-
-  if (isFinished) {
-    return (
-      <div className="vs-exp-live">
-        <div className="vs-exp-live-processing">Mapping your experiences...</div>
-      </div>
-    )
-  }
+  const posLabel = mode === 'paid' ? 'Yes' : 'Fun'
+  const negLabel = mode === 'paid' ? 'No' : 'Not fun'
 
   return (
     <div className="vs-exp-live">
-      {/* Progress */}
       <div className="vs-exp-live-progress">
         <span className="vs-exp-live-count">{currentIndex + 1} / {activities.length}</span>
         <div className="vs-exp-live-bar">
           <div
             className="vs-exp-live-bar-fill"
-            style={{ width: `${((currentIndex) / activities.length) * 100}%` }}
+            style={{ width: `${(currentIndex / activities.length) * 100}%` }}
           />
         </div>
       </div>
 
-      {/* Activity card */}
-      <div className={`vs-exp-live-card ${flash === 'fun' ? 'vs-flash-fun' : (flash === 'not_fun' || flash === 'skip') ? 'vs-flash-notfun' : ''}`} key={currentIndex}>
+      <div className={`vs-exp-live-card ${flash === 'fun' ? 'vs-flash-fun' : flash === 'not_fun' || flash === 'skip' ? 'vs-flash-notfun' : ''}`} key={currentIndex}>
         <h2 className="vs-exp-live-label">{activity.label}</h2>
       </div>
 
-      {/* Recording indicator */}
       <div className="vs-exp-live-mic">
-        {transcribing ? (
-          <div className="vs-exp-live-status">Listening...</div>
-        ) : isRecording ? (
+        {phase === 'listening' && (
           <>
             <div className="vs-exp-live-dot" />
-            <div className="vs-exp-live-status">Say &quot;fun&quot; or &quot;not fun&quot;</div>
+            {retrying ? (
+              <div className="vs-exp-live-status" style={{ opacity: 0.7 }}>
+                Didn&apos;t catch that. Tap or say it louder.
+              </div>
+            ) : (
+              <div className="vs-exp-live-status">
+                {mode === 'paid' ? 'Would you want to get paid for this?' : 'Say or tap'}
+              </div>
+            )}
+
+            {/* Tap buttons — always visible */}
+            <div style={{ display: 'flex', gap: 12, marginTop: 14, justifyContent: 'center' }}>
+              <button
+                onClick={() => emitAction({ tap: 'fun' })}
+                style={{
+                  padding: '10px 24px',
+                  borderRadius: 10,
+                  border: '1px solid rgba(16, 185, 129, 0.4)',
+                  background: 'rgba(16, 185, 129, 0.12)',
+                  color: '#10b981',
+                  fontSize: '0.95rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                {posLabel}
+              </button>
+              <button
+                onClick={() => emitAction({ tap: 'not_fun' })}
+                style={{
+                  padding: '10px 24px',
+                  borderRadius: 10,
+                  border: '1px solid rgba(239, 68, 68, 0.4)',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  color: '#ef4444',
+                  fontSize: '0.95rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                {negLabel}
+              </button>
+            </div>
+
+            {/* Back button */}
+            {currentIndex > 0 && (
+              <button
+                onClick={() => emitAction('back')}
+                style={{
+                  marginTop: 16,
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(255,255,255,0.35)',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  padding: '4px 12px',
+                }}
+              >
+                ← Back
+              </button>
+            )}
           </>
-        ) : flash ? (
+        )}
+        {phase === 'flash' && flash && (
           <div className="vs-exp-live-status vs-exp-live-response">
-            {flash === 'fun' ? 'Fun!' : flash === 'not_fun' ? 'Not fun' : 'Skipped'}
+            {mode === 'paid'
+              ? (flash === 'fun' ? 'Path!' : flash === 'not_fun' ? 'Hobby' : 'Skipped')
+              : (flash === 'fun' ? 'Fun!' : flash === 'not_fun' ? 'Not fun' : 'Skipped')
+            }
           </div>
-        ) : null}
+        )}
       </div>
-
-      {/* Skip hint */}
-      {showSkip && (
-        <button className="vs-exp-live-skip" onClick={handleSkip}>
-          Tap to skip
-        </button>
-      )}
-
-      {error && <div className="vs-error-msg">{error}</div>}
     </div>
   )
 }
