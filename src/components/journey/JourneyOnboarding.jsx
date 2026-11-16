@@ -132,7 +132,7 @@ export default function JourneyOnboarding({ userId }) {
 
           {/* 1. Curiosity Map */}
           {!hasCuriosityMap && (
-            <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Map Your Curiosities', route: '/curiosity-map', narrative: 'What can\'t you stop reading, watching, and learning about?', icon: '✨' }} isCompleted={false} />
+            <DeepDiveCard deepDive={{ id: 'curiosity_map', name: 'Define Your Category', route: '/curiosity-map', narrative: 'What problem do you solve? What makes your approach different?', icon: '✨' }} isCompleted={false} />
           )}
 
           {/* 2. Life Map (locked until Curiosity Map) */}
@@ -144,7 +144,7 @@ export default function JourneyOnboarding({ userId }) {
                 <div className="level-dd-icon">🔒</div>
                 <div className="level-dd-info">
                   <div className="level-dd-name">Life Map</div>
-                  <div className="level-dd-narrative">Complete Curiosity Map first.</div>
+                  <div className="level-dd-narrative">Define your category first.</div>
                 </div>
                 <span className="level-dd-status locked">Locked</span>
               </div>

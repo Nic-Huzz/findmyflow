@@ -82,7 +82,7 @@ export default function JourneyCompleted({ userId }) {
   if (!hasAnything) return null
 
   const items = [
-    ...(hasCuriosityMap ? [{ icon: '✨', label: 'Your Curiosities', route: '/curiosity-map' }] : []),
+    ...(hasCuriosityMap ? [{ icon: '✨', label: 'Your Category', route: '/curiosity-map' }] : []),
     ...(hasLifeMap ? [{ icon: '📖', label: 'Life Map', route: '/life-map' }] : []),
     ...(hasLifePaths ? [{ icon: '🗺️', label: 'Life Paths', route: '/life-paths' }] : []),
     ...closedQuests.map(q => ({

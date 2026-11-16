@@ -119,9 +119,9 @@ export default function CareerAlignmentFlow() {
           <div className="cmf-welcome">
             <div className="cmf-welcome-content">
               <div className="cmf-greeting">Career Alignment</div>
-              <p>You need to map your curiosities first before we can check how aligned your career is.</p>
+              <p>You need to define your category first before we can check how aligned your career is.</p>
             </div>
-            <button className="cmf-primary-btn" onClick={() => navigate('/curiosity-map')}>Map my curiosities first</button>
+            <button className="cmf-primary-btn" onClick={() => navigate('/curiosity-map')}>Define my category first</button>
             <button className="cmf-back-btn" style={{ width: '100%', textAlign: 'center', marginTop: 8 }} onClick={() => navigate(-1)}>Back</button>
           </div>
         </div>
