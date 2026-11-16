@@ -15,17 +15,14 @@ import { compressImage } from '../lib/screenshotAnalysis'
 import './CuriosityMapFlow.css'
 
 const STEPS = {
-  WELCOME: 'welcome',
+  QUEST_SELECT: 'quest_select',
+  CATEGORY_QUESTIONS: 'category_questions',
   ADD_CONTENT: 'add_content',
   EPISODES: 'episodes',
   PROCESSING: 'processing',
   RESULTS: 'results',
   CONNECT_QUEST: 'connect_quest',
   FLOW_DRAFT: 'flow_draft',
-  SHARPEN_1: 'sharpen_1',
-  SHARPEN_2: 'sharpen_2',
-  SHARPEN_3: 'sharpen_3',
-  SHARPEN_4: 'sharpen_4',
   FLOW_SAVED: 'flow_saved',
 }
 
@@ -63,9 +60,10 @@ const CLUSTER_ICONS = {
 export default function CuriosityMapFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [step, setStep] = useState(STEPS.WELCOME)
+  const [step, setStep] = useState(STEPS.QUEST_SELECT)
   const inputRef = useRef(null)
   const fileInputRef = useRef(null)
+  const addContentSourceRef = useRef(STEPS.CATEGORY_QUESTIONS) // tracks where ADD_CONTENT was entered from
 
   // Hide bottom toolbar
   useEffect(() => {
@@ -102,10 +100,54 @@ export default function CuriosityMapFlow() {
   const [editedFlow, setEditedFlow] = useState('')
   const [flowProcessing, setFlowProcessing] = useState(false)
   const [flowProcessingText, setFlowProcessingText] = useState('Finding your flow...')
+  const [savingCategory, setSavingCategory] = useState(false)
   const [sharpen1, setSharpen1] = useState('')
   const [sharpen2, setSharpen2] = useState('')
   const [sharpen3, setSharpen3] = useState('')
   const [sharpen4, setSharpen4] = useState('')
+
+  const handleQuestSelect = (quest) => {
+    hapticLight()
+    setSelectedQuest(quest)
+    // Pre-fill sharpen answers if quest already has them
+    const existing = quest.flow_sharpening
+    if (existing) {
+      setSharpen1(existing.q1 || '')
+      setSharpen2(existing.q2 || '')
+      setSharpen3(existing.q3 || '')
+      setSharpen4(existing.q4 || '')
+    } else {
+      setSharpen1('')
+      setSharpen2('')
+      setSharpen3('')
+      setSharpen4('')
+    }
+    if (quest.flow_statement) {
+      setFlowStatement(quest.flow_statement)
+      setEditedFlow(quest.flow_statement)
+    } else {
+      setFlowStatement('')
+      setEditedFlow('')
+    }
+    if (quest.flow_themes?.length) {
+      setSelectedClusterNames(quest.flow_themes)
+    } else {
+      setSelectedClusterNames([])
+    }
+  }
+
+  const resetPerQuestState = () => {
+    setSharpen1('')
+    setSharpen2('')
+    setSharpen3('')
+    setSharpen4('')
+    setFlowStatement('')
+    setEditedFlow('')
+    setFlowProcessing(false)
+    setSelectedClusterNames([])
+    setSelectedQuest(null)
+    // DO NOT clear clusters, items, or existingInputs — those are user-level
+  }
 
   // Load existing data
   useEffect(() => {
@@ -123,8 +165,6 @@ export default function CuriosityMapFlow() {
         }
         if (clusterData?.length) {
           setClusters(clusterData)
-          // If they already have results, show them
-          if (inputs?.length >= 3) setStep(STEPS.RESULTS)
         }
         if (questData?.length) {
           setQuests(questData)
@@ -378,49 +418,188 @@ export default function CuriosityMapFlow() {
   }
 
   // ═══════════════════════════════════════════════
-  // SCREEN 1: WELCOME
+  // SCREEN 1: QUEST SELECT
   // ═══════════════════════════════════════════════
-  if (step === STEPS.WELCOME) {
+  if (step === STEPS.QUEST_SELECT) {
+    const hasQuests = quests.length > 0
+
     return (
       <div className="cmf">
         <div className="cmf-container">
           <div className="cmf-welcome">
             <div className="cmf-welcome-content">
-              <div className="cmf-greeting">Your Curiosities</div>
-              <p><strong>Your curiosity is a compass.</strong></p>
-              <p>The books you can't put down, the podcasts you binge, the rabbit holes you fall into at 2am. They're not random. They're your essence guiding you towards a life you love.</p>
-              <p>Most people ignore these signals. You're about to map them.</p>
-
-              {/* Collect → Connect → Emerge */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 0, margin: '20px auto 16px', maxWidth: 320 }}>
-                <div style={{ flex: 1, textAlign: 'center' }}>
-                  <div style={{ fontSize: 22 }}>🔍</div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24', marginTop: 4 }}>Collect dots</div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)' }}>Add what you love</div>
-                </div>
-                <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 16, marginTop: 8 }}>→</div>
-                <div style={{ flex: 1, textAlign: 'center' }}>
-                  <div style={{ fontSize: 22 }}>🧩</div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>Connect dots</div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>Find the patterns</div>
-                </div>
-                <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 16, marginTop: 8 }}>→</div>
-                <div style={{ flex: 1, textAlign: 'center' }}>
-                  <div style={{ fontSize: 22 }}>🚀</div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Emerge</div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>See what's forming</div>
-                </div>
-              </div>
-
-              <p style={{ fontSize: '0.85rem', opacity: 0.55 }}>Add at least 5 and we'll map your curiosity landscape.</p>
+              <div className="cmf-greeting">Define Your Category</div>
+              <p><strong>Every great path needs a clear position.</strong></p>
+              <p>Who do you help? What problem do you solve? What makes your approach different? Pick a path and let&apos;s find out.</p>
             </div>
-            <button className="cmf-primary-btn" onClick={() => { hapticLight(); setStep(STEPS.ADD_CONTENT) }}>
-              Map my curiosities
-            </button>
+
+            {hasQuests ? (
+              <div className="cmf-quest-list">
+                {quests.map(q => (
+                  <button
+                    key={q.id}
+                    className={`cmf-quest-card${selectedQuest?.id === q.id ? ' selected' : ''}`}
+                    onClick={() => handleQuestSelect(q)}
+                  >
+                    <div className="cmf-quest-card-color" style={{ background: q.color || '#6b7280' }} />
+                    <div className="cmf-quest-card-label">{q.label}</div>
+                    <div className="cmf-quest-card-check">
+                      {selectedQuest?.id === q.id ? '\u2713' : ''}
+                    </div>
+                    {q.flow_sharpening?.q1 && (
+                      <div className="cmf-quest-card-badge">Category defined</div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="cmf-empty-state">
+                <p>You need at least one life path first.</p>
+                <button className="cmf-primary-btn" onClick={() => navigate('/choose-quests')}>
+                  Create your paths
+                </button>
+              </div>
+            )}
+
+            {hasQuests && (
+              <button
+                className="cmf-primary-btn"
+                disabled={!selectedQuest}
+                onClick={() => { hapticMedium(); setStep(STEPS.CATEGORY_QUESTIONS) }}
+              >
+                {selectedQuest ? `Define ${selectedQuest.label} \u2192` : 'Pick a path first'}
+              </button>
+            )}
             <button className="cmf-back-btn" style={{ width: '100%', textAlign: 'center', marginTop: 8 }} onClick={() => navigate(-1)}>
               Back
             </button>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ═══════════════════════════════════════════════
+  // SCREEN 2: CATEGORY QUESTIONS
+  // ═══════════════════════════════════════════════
+  if (step === STEPS.CATEGORY_QUESTIONS) {
+    const answeredCount = [sharpen1, sharpen2, sharpen3, sharpen4].filter(s => s.trim().length >= 10).length
+    const canSave = answeredCount >= 2
+
+    const handleSaveCategory = async () => {
+      if (savingCategory) return
+      setSavingCategory(true)
+      try {
+        const { error } = await supabase.from('quests').update({
+          flow_sharpening: { q1: sharpen1, q2: sharpen2, q3: sharpen3, q4: sharpen4 },
+          flow_statement: flowStatement || null,
+          flow_themes: selectedClusterNames.length > 0 ? selectedClusterNames : null,
+        }).eq('id', selectedQuest.id)
+        if (error) throw error
+        hapticSuccess()
+        setStep(STEPS.FLOW_SAVED)
+      } catch (err) {
+        console.error('Failed to save category:', err)
+      } finally {
+        setSavingCategory(false)
+      }
+    }
+
+    return (
+      <div className="cmf">
+        <div className="cmf-container">
+          <div className="cmf-step-label">{selectedQuest.label}</div>
+          <div className="cmf-heading">Your <span className="cmf-gold">category</span></div>
+          <div className="cmf-subtext">
+            Answer what you can. Skip what you can&apos;t.
+          </div>
+
+          {/* Flow statement context shown when returning from explore path */}
+          {flowStatement && (
+            <div className="cmf-flow-context">
+              <div className="cmf-flow-context-label">Your flow</div>
+              <div className="cmf-flow-context-text">{flowStatement}</div>
+            </div>
+          )}
+
+          <div className="cmf-category-questions">
+            <div className="cmf-cat-q">
+              <label className="cmf-cat-label">
+                What problem does {selectedQuest.label} solve that nobody else is solving right?
+              </label>
+              <textarea
+                className="cmf-sharpen-textarea"
+                value={sharpen1}
+                onChange={e => setSharpen1(e.target.value)}
+                placeholder="e.g. Real transformation is paywalled. People spend thousands and are still stuck."
+                rows={3}
+              />
+            </div>
+
+            <div className="cmf-cat-q">
+              <label className="cmf-cat-label">
+                What does everyone assume is needed to solve it, that you think is wrong?
+              </label>
+              <textarea
+                className="cmf-sharpen-textarea"
+                value={sharpen2}
+                onChange={e => setSharpen2(e.target.value)}
+                placeholder="e.g. Everyone assumes healing must be serious, clinical, and expensive"
+                rows={3}
+              />
+            </div>
+
+            <div className="cmf-cat-q">
+              <label className="cmf-cat-label">
+                What experience showed you that assumption is wrong?
+              </label>
+              <textarea
+                className="cmf-sharpen-textarea"
+                value={sharpen3}
+                onChange={e => setSharpen3(e.target.value)}
+                placeholder="e.g. I did a year-long fear challenge that changed my life more in 3 months than 3 years of online courses"
+                rows={3}
+              />
+            </div>
+
+            <div className="cmf-cat-q">
+              <label className="cmf-cat-label">
+                Remove that assumption. How does your approach solve it differently?
+              </label>
+              <textarea
+                className="cmf-sharpen-textarea"
+                value={sharpen4}
+                onChange={e => setSharpen4(e.target.value)}
+                placeholder="e.g. Instead of talking about fear, we do the scary thing together, safely, and track what changes"
+                rows={3}
+              />
+            </div>
+          </div>
+
+          <button
+            className="cmf-primary-btn"
+            disabled={!canSave || savingCategory}
+            onClick={handleSaveCategory}
+          >
+            {savingCategory ? 'Saving...' : canSave ? 'Save my category \u2192' : 'Answer at least 2 questions'}
+          </button>
+
+          {/* Explore path nudge */}
+          <div className="cmf-explore-nudge">
+            <p>Not sure yet? Your curiosities hold the clues.</p>
+            <button
+              className="cmf-secondary-btn"
+              onClick={() => { hapticLight(); addContentSourceRef.current = STEPS.CATEGORY_QUESTIONS; setStep(STEPS.ADD_CONTENT) }}
+            >
+              Explore my curiosities first
+            </button>
+          </div>
+
+          <button className="cmf-back-btn" style={{ width: '100%', textAlign: 'center', marginTop: 8 }} onClick={() => {
+            setStep(STEPS.QUEST_SELECT)
+          }}>
+            \u2190 Pick a different path
+          </button>
         </div>
       </div>
     )
@@ -511,7 +690,7 @@ export default function CuriosityMapFlow() {
           )}
 
           <div className="cmf-nav">
-            <button className="cmf-back-btn" onClick={() => setStep(STEPS.WELCOME)}>Back</button>
+            <button className="cmf-back-btn" onClick={() => setStep(addContentSourceRef.current)}>Back</button>
             <button
               className="cmf-primary-btn"
               disabled={items.length < 3}
@@ -660,9 +839,9 @@ export default function CuriosityMapFlow() {
             {quests.length > 0 ? (
               <>
                 <button className="cmf-primary-btn" onClick={() => { hapticMedium(); setStep(STEPS.CONNECT_QUEST) }}>
-                  Connect to a path &rarr;
+                  Connect themes to {selectedQuest?.label || 'a path'} &rarr;
                 </button>
-                <button className="cmf-secondary-btn" onClick={() => { setStep(STEPS.ADD_CONTENT) }}>
+                <button className="cmf-secondary-btn" onClick={() => { addContentSourceRef.current = STEPS.RESULTS; setStep(STEPS.ADD_CONTENT) }}>
                   Feel like some curiosities are missing? Add more content
                 </button>
               </>
@@ -671,7 +850,7 @@ export default function CuriosityMapFlow() {
                 <button className="cmf-primary-btn" onClick={() => navigate('/life-map')}>
                   Next step: Your Life Map
                 </button>
-                <button className="cmf-secondary-btn" onClick={() => { setStep(STEPS.ADD_CONTENT) }}>
+                <button className="cmf-secondary-btn" onClick={() => { addContentSourceRef.current = STEPS.RESULTS; setStep(STEPS.ADD_CONTENT) }}>
                   Feel like some curiosities are missing? Add more content
                 </button>
                 <button className="cmf-secondary-btn" onClick={() => navigate('/7-day-challenge')}>
@@ -701,50 +880,28 @@ export default function CuriosityMapFlow() {
       <div className="cmf">
         <FlowProgressIndicator step="connect" />
         <div className="cmf-container">
-          <div className="cmf-heading">Which path do these <span className="cmf-gold">connect</span> to?</div>
-          <div className="cmf-subtext">Pick a path, then select the themes that feel connected to it.</div>
+          <div className="cmf-step-label">{selectedQuest?.label}</div>
+          <div className="cmf-heading">Which themes <span className="cmf-gold">connect</span> to this path?</div>
+          <div className="cmf-subtext">Select 1-3 themes that feel most connected to {selectedQuest?.label}.</div>
 
-          <div className="cmf-quest-list">
-            {quests.map(q => (
-              <button
-                key={q.id}
-                className={`cmf-quest-card${selectedQuest?.id === q.id ? ' selected' : ''}`}
-                onClick={() => { hapticLight(); setSelectedQuest(q); setSelectedClusterNames([]) }}
-              >
-                <div className="cmf-quest-card-color" style={{ background: q.color || '#6b7280' }} />
-                <div className="cmf-quest-card-label">{q.label}</div>
-                <div className="cmf-quest-card-check">
-                  {selectedQuest?.id === q.id ? '\u2713' : ''}
-                </div>
-              </button>
-            ))}
+          <div className="cmf-theme-chips">
+            {clusters.map((c, i) => {
+              const name = c.name || c.cluster_name
+              const isSelected = selectedClusterNames.includes(name)
+              return (
+                <button
+                  key={i}
+                  className={`cmf-theme-chip${isSelected ? ' selected' : ''}`}
+                  onClick={() => { hapticLight(); toggleCluster(name) }}
+                >
+                  <div className="cmf-theme-chip-check">
+                    {isSelected ? '\u2713' : ''}
+                  </div>
+                  {name}
+                </button>
+              )
+            })}
           </div>
-
-          {selectedQuest && (
-            <>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>
-                Select 1-3 themes connected to {selectedQuest.label}
-              </div>
-              <div className="cmf-theme-chips">
-                {clusters.map((c, i) => {
-                  const name = c.name || c.cluster_name
-                  const isSelected = selectedClusterNames.includes(name)
-                  return (
-                    <button
-                      key={i}
-                      className={`cmf-theme-chip${isSelected ? ' selected' : ''}`}
-                      onClick={() => { hapticLight(); toggleCluster(name) }}
-                    >
-                      <div className="cmf-theme-chip-check">
-                        {isSelected ? '\u2713' : ''}
-                      </div>
-                      {name}
-                    </button>
-                  )
-                })}
-              </div>
-            </>
-          )}
 
           <div className="cmf-nav">
             <button className="cmf-back-btn" onClick={() => setStep(STEPS.RESULTS)}>Back</button>
@@ -821,7 +978,7 @@ export default function CuriosityMapFlow() {
               className="cmf-primary-btn"
               style={{ flex: 1, marginTop: 0 }}
               disabled={isEditingFlow}
-              onClick={() => { hapticSuccess(); setStep(STEPS.SHARPEN_1) }}
+              onClick={() => { hapticSuccess(); setStep(STEPS.CATEGORY_QUESTIONS) }}
             >
               That's my flow
             </button>
@@ -841,138 +998,7 @@ export default function CuriosityMapFlow() {
   }
 
   // ═══════════════════════════════════════════════
-  // SCREENS 8-11: SHARPEN 1-4
-  // ═══════════════════════════════════════════════
-  const SHARPEN_CONFIG = [
-    {
-      step: STEPS.SHARPEN_1,
-      question: (name) => `What problem does ${name} solve that nobody else is solving right?`,
-      placeholder: 'e.g. Real transformation is paywalled. People spend thousands and are still stuck.',
-      value: sharpen1,
-      setter: setSharpen1,
-      prev: STEPS.FLOW_DRAFT,
-      next: STEPS.SHARPEN_2,
-      num: 1,
-    },
-    {
-      step: STEPS.SHARPEN_2,
-      question: () => 'What does everyone assume is required to solve it, that you think is wrong?',
-      placeholder: 'e.g. Everyone assumes healing must be serious, clinical, and expensive',
-      value: sharpen2,
-      setter: setSharpen2,
-      prev: STEPS.SHARPEN_1,
-      next: STEPS.SHARPEN_3,
-      num: 2,
-    },
-    {
-      step: STEPS.SHARPEN_3,
-      question: () => 'What experience or background showed you that assumption is wrong?',
-      placeholder: 'e.g. I did a year-long fear challenge that changed my life more in 3 months than 3 years of online courses',
-      value: sharpen3,
-      setter: setSharpen3,
-      prev: STEPS.SHARPEN_2,
-      next: STEPS.SHARPEN_4,
-      num: 3,
-    },
-    {
-      step: STEPS.SHARPEN_4,
-      question: () => 'Remove that assumption. How does your approach solve it differently?',
-      placeholder: 'e.g. Instead of talking about fear, we do the scary thing together, safely, and track what changes',
-      value: sharpen4,
-      setter: setSharpen4,
-      prev: STEPS.SHARPEN_3,
-      next: STEPS.FLOW_SAVED,
-      num: 4,
-    },
-  ]
-
-  const sharpenConfig = SHARPEN_CONFIG.find(s => s.step === step)
-  if (sharpenConfig) {
-    const { question, placeholder, value, setter, prev, next, num } = sharpenConfig
-    const canProceed = value.trim().length >= 10
-
-    const handleSave = async () => {
-      hapticMedium()
-      // If this is the last sharpen screen, save everything
-      if (next === STEPS.FLOW_SAVED) {
-        try {
-          await supabase.from('quests').update({
-            flow_statement: flowStatement,
-            flow_themes: selectedClusterNames,
-            flow_sharpening: { q1: sharpen1, q2: sharpen2, q3: sharpen3, q4: sharpen4 },
-          }).eq('id', selectedQuest.id)
-        } catch (err) {
-          console.error('Failed to save flow data:', err)
-        }
-      }
-      setStep(next)
-    }
-
-    const handleSkip = async () => {
-      hapticLight()
-      setter('')
-      // If this is the last sharpen screen, save everything
-      if (next === STEPS.FLOW_SAVED) {
-        try {
-          await supabase.from('quests').update({
-            flow_statement: flowStatement,
-            flow_themes: selectedClusterNames,
-            flow_sharpening: {
-              q1: num >= 2 ? sharpen1 : '',
-              q2: num >= 3 ? sharpen2 : '',
-              q3: num >= 4 ? sharpen3 : '',
-              q4: '',
-            },
-          }).eq('id', selectedQuest.id)
-        } catch (err) {
-          console.error('Failed to save flow data:', err)
-        }
-      }
-      setStep(next)
-    }
-
-    return (
-      <div className="cmf">
-        <FlowProgressIndicator step="sharpen" />
-        <div className="cmf-container">
-          <div className="cmf-step-label">Sharpen {num} of 4</div>
-
-          <div className="cmf-sharpen-context">
-            <div className="cmf-sharpen-context-label">Your flow</div>
-            <div className="cmf-sharpen-context-text">{flowStatement}</div>
-          </div>
-
-          <div className="cmf-heading" style={{ fontSize: 20 }}>{question(selectedQuest?.label)}</div>
-
-          <textarea
-            className="cmf-sharpen-textarea"
-            value={value}
-            onChange={e => setter(e.target.value)}
-            placeholder={placeholder}
-            autoFocus
-          />
-
-          <div className="cmf-nav">
-            <button className="cmf-back-btn" onClick={() => setStep(prev)}>Back</button>
-            <button
-              className="cmf-primary-btn"
-              disabled={!canProceed}
-              onClick={handleSave}
-            >
-              Next
-            </button>
-          </div>
-
-          <div className="cmf-skip">
-            <button onClick={handleSkip}>Skip this one</button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // ═══════════════════════════════════════════════
-  // SCREEN 12: FLOW SAVED (Celebration)
+  // SCREEN 8: FLOW SAVED (Celebration)
   // ═══════════════════════════════════════════════
   if (step === STEPS.FLOW_SAVED) {
     return (
@@ -980,12 +1006,27 @@ export default function CuriosityMapFlow() {
         <div className="cmf-container">
           <div className="cmf-celebration">
             <div className="cmf-celebration-emoji">{'\u2728'}</div>
-            <div className="cmf-celebration-title">Flow found</div>
-            <div className="cmf-flow-quote" style={{ marginTop: 0 }}>
-              <div className="cmf-flow-quote-text">{flowStatement}</div>
+            <div className="cmf-celebration-title">
+              {flowStatement ? 'Flow found' : 'Category saved'}
             </div>
+            {flowStatement ? (
+              <div className="cmf-flow-quote" style={{ marginTop: 0 }}>
+                <div className="cmf-flow-quote-text">{flowStatement}</div>
+              </div>
+            ) : (
+              <div className="cmf-subtext" style={{ marginBottom: 16 }}>
+                Your answers for {selectedQuest?.label} are saved. Come back and add more when you are ready.
+              </div>
+            )}
             <button className="cmf-primary-btn" onClick={() => { hapticSuccess(); navigate('/7-day-challenge') }}>
               Back to your paths
+            </button>
+            <button
+              className="cmf-secondary-btn"
+              style={{ marginTop: 10 }}
+              onClick={() => { hapticLight(); resetPerQuestState(); setStep(STEPS.QUEST_SELECT) }}
+            >
+              Define another path
             </button>
           </div>
         </div>
@@ -1001,7 +1042,6 @@ function FlowProgressIndicator({ step }) {
   const steps = [
     { key: 'connect', label: 'Connect' },
     { key: 'find', label: 'Find' },
-    { key: 'sharpen', label: 'Sharpen' },
   ]
   const currentIndex = steps.findIndex(s => s.key === step)
 

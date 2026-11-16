@@ -26,15 +26,13 @@ export default function JourneyCompleted({ userId }) {
   useEffect(() => {
     if (!userId) { setLoaded(true); return }
 
-    // Check curiosity map
-    supabase
-      .from('curiosity_clusters')
-      .select('id')
-      .eq('user_id', userId)
-      .limit(1)
-      .then(({ data }) => {
-        if (data?.length > 0) setHasCuriosityMap(true)
-      })
+    // Check category defined (curiosity clusters OR flow_sharpening on any quest)
+    Promise.all([
+      supabase.from('curiosity_clusters').select('id').eq('user_id', userId).limit(1),
+      supabase.from('quests').select('id').eq('user_id', userId).not('flow_sharpening', 'is', null).limit(1),
+    ]).then(([clusters, quests]) => {
+      if (clusters.data?.length > 0 || quests.data?.length > 0) setHasCuriosityMap(true)
+    })
 
     // Check life map
     supabase

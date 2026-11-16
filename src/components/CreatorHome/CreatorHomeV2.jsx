@@ -642,7 +642,7 @@ export default function CreatorHomeV2({ defaultTab = 'identity' }) {
                     <div className="ch2-biz-row" style={{ cursor: 'pointer' }} onClick={() => { hapticLight(); navigate('/curiosity-map') }}>
                       <div className="ch2-biz-icon">🔍</div>
                       <div className="ch2-biz-info">
-                        <div className="ch2-biz-label">Your Industry Branches</div>
+                        <div className="ch2-biz-label">Your Category</div>
                         <div className="ch2-biz-val">Define your category to see your frontier</div>
                       </div>
                       <div className="ch2-row-chevron">›</div>
