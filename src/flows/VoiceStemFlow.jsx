@@ -1694,6 +1694,61 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     processPaidFilter()
   }
 
+  // ── Save essence profile to DB (any mode, if authenticated) ──
+
+  const saveEssenceProfile = useCallback(async (finalName) => {
+    if (!user?.id) return
+    const s4 = stage4Results
+    if (!s4?.primaryArchetype?.id) return
+    const primaryData = getArchetype(s4.primaryArchetype.id)
+    const secondaryData = getArchetype(s4.secondaryArchetype?.id)
+
+    // essence_profiles upsert
+    supabase.from('essence_profiles').upsert({
+      user_id: user.id,
+      primary_archetype: s4.primaryArchetype.id,
+      secondary_archetype: s4.secondaryArchetype?.id || null,
+      blended_name: finalName,
+      blended_narrative: blendResult?.blended_essence || null,
+      blended_superpower: blendResult?.blended_superpower || null,
+      blended_wound: blendResult?.blended_wound || null,
+      question_responses: {
+        source: 'voice_stems',
+        stage1: stage1Results ? { expression: selectedExpression } : null,
+        stage2: stage2Results ? { prediction: confirmedPrediction } : null,
+      },
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' }).then(({ error }) => {
+      if (error) console.error('essence_profiles upsert error:', error)
+    })
+
+    // lead_flow_profiles insert (latest row wins on read side)
+    const displayName = user.user_metadata?.display_name || user.user_metadata?.name || null
+    supabase.from('lead_flow_profiles').insert({
+      user_id: user.id,
+      email: user.email,
+      user_name: displayName,
+      essence_archetype: primaryData?.name || s4.primaryArchetype.name,
+      custom_essence_name: finalName,
+      custom_essence_fields: {
+        tagline: blendResult?.blended_essence || primaryData?.essence,
+        essence: blendResult?.blended_essence || primaryData?.poetic_line,
+        superpower: blendResult?.blended_superpower || primaryData?.superpower,
+        wound: blendResult?.blended_wound || primaryData?.essence_wound,
+        vision: blendResult?.blended_vision || primaryData?.poetic_vision,
+        north_star: primaryData?.north_star,
+        energetic_transmission: primaryData?.energetic_transmission,
+        recognition_pattern: primaryData?.recognition_pattern,
+        vision_in_action: primaryData?.vision_in_action,
+        inner_child: primaryData?.inner_child_desire,
+        characters: primaryData?.characters?.join(', '),
+        secondary_archetype: secondaryData?.name || null,
+      },
+    }).then(({ error }) => {
+      if (error) console.error('lead_flow_profiles insert error:', error)
+    })
+  }, [user, stage4Results, blendResult, stage1Results, stage2Results, selectedExpression, confirmedPrediction])
+
   // ── Signup + Dome Ratings Bridge ──────────────────────────────
 
   const handleSignupComplete = useCallback(async (authedUser) => {
@@ -1927,7 +1982,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               setEssenceName(name)
               saveSession({ essenceName: name })
             }}
-            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'avatar')}
+            onContinue={() => {
+              saveEssenceProfile(essenceName)
+              setScreen(isOnboarding ? 'experience_intro' : 'avatar')
+            }}
           />
         )}
 
