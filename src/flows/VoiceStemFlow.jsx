@@ -24,6 +24,7 @@ import './VoiceStemFlow.css'
 
 const STORAGE_KEY = 'voice_stems_session'
 const MAX_STEM_SECONDS = 30
+const MAX_CATEGORY_SECONDS = 60
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -338,6 +339,7 @@ function ProcessingScreen({ stage }) {
     4: 'Finding your essence archetype...',
     5: 'Mapping your experiences...',
     6: 'Finding your paths...',
+    7: 'Discovering your category...',
   }
   return (
     <div className="vs-processing">
@@ -369,8 +371,10 @@ function SelectionBridge({ type, options, onSelect }) {
 
   const handlePick = (opt) => {
     setSelected(opt)
-    // Brief delay so user sees selection before advancing
-    setTimeout(() => onSelect(opt), 300)
+  }
+
+  const handleConfirm = () => {
+    if (selected) onSelect(selected)
   }
 
   return (
@@ -397,6 +401,11 @@ function SelectionBridge({ type, options, onSelect }) {
           )
         })}
       </div>
+      {selected && (
+        <button className="vs-btn-primary" onClick={handleConfirm} style={{ marginTop: 16 }}>
+          Continue
+        </button>
+      )}
     </div>
   )
 }
@@ -411,6 +420,11 @@ function Stage1Results({ results, onContinue }) {
   return (
     <div className="vs-results-card">
       <h2 className="vs-results-title">The kid in you was <span className="vs-gold-text">{energy}</span></h2>
+      {results.essenceSummary && (
+        <p style={{ color: 'var(--vs-muted)', fontSize: '0.95rem', margin: '4px 0 16px', lineHeight: 1.5 }}>
+          {results.essenceSummary}
+        </p>
+      )}
       <p className="vs-results-mirror">{mirror}</p>
       <div className="vs-results-patterns">
         {patterns.map((p, i) => (
@@ -1072,9 +1086,13 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const [stage6Results, setStage6Results] = useState(null)
   const [blendResult, setBlendResult] = useState(null)
   const [essenceName, setEssenceName] = useState('')
+  const [categoryResults, setCategoryResults] = useState(null)
 
   // ── Stage 5 results ref (used by handleSignupComplete) ─────────────
   const stage5ResultsRef = useRef(null)
+
+  // ── Paused state ────────────────────────────────────────────────
+  const [paused, setPaused] = useState(false)
 
   // ── Countdown state ────────────────────────────────────────────────
   const [countdownNum, setCountdownNum] = useState(3)
@@ -1086,6 +1104,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Processing stage label ────────────────────────────────────────
   const [processingStageKey, setProcessingStageKey] = useState(1)
+
+  // ── Position ref (always-current, used by advanceStem from setTimeout) ──
+  const positionRef = useRef(position)
+  positionRef.current = position
 
   // ── Error state ───────────────────────────────────────────────────
   const [flowError, setFlowError] = useState(null)
@@ -1100,7 +1122,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const currentStem = currentStems[position.stemIndex] || null
 
   // ── Progress percent for progress bar ────────────────────────────
-  const totalStems = 35 // 6 + 13 + 10 + 6
+  const totalStems = 39 // 6 + 13 + 10 + 6 + 4(category)
   const stemsCompleted = (() => {
     if (position.stageIndex === 0) return position.stemIndex
     if (position.stageIndex === 1) {
@@ -1109,18 +1131,22 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       return layer1done + 7 + position.stemIndex
     }
     if (position.stageIndex === 2) return 6 + 13 + position.stemIndex
-    return 6 + 13 + 10 + position.stemIndex // stageIndex === 3
+    if (position.stageIndex === 3) return 6 + 13 + 10 + position.stemIndex
+    return 6 + 13 + 10 + 6 + position.stemIndex // stageIndex === 4 (category)
   })()
   const progressPercent = Math.round((stemsCompleted / totalStems) * 100)
 
   // ── Progress label ────────────────────────────────────────────────
   const stageLabel = (() => {
-    if (position.stageIndex === 0) return `Stage 1 of 4  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    const total = 5
+    if (position.stageIndex === 0) return `Stage 1 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     if (position.stageIndex === 1) {
       const layer = position.layerIndex === 0 ? 'Layer 2' : 'Layer 3'
-      return `Stage 2 of 4 (${layer})  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+      return `Stage 2 of ${total} (${layer})  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     }
-    if (position.stageIndex === 2) return `Stage 3 of 4  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 2) return `Stage 3 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 3) return `Stage 4 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    return `Your Category  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
   })()
 
   // ── Restore from localStorage / skip to stage on mount ───────────
@@ -1143,6 +1169,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       if (saved.stage6Results) setStage6Results(saved.stage6Results)
       if (saved.blendResult) setBlendResult(saved.blendResult)
       if (saved.essenceName) setEssenceName(saved.essenceName)
+      if (saved.categoryResults) setCategoryResults(saved.categoryResults)
     }
 
     // ?skip=N jumps directly to that stage's recording
@@ -1239,6 +1266,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     setCountdownNum(3)
     setScreen('countdown')
 
+    const maxSecs = stemId.startsWith('sc_') ? MAX_CATEGORY_SECONDS : MAX_STEM_SECONDS
+
     let count = 3
     countdownRef.current = setInterval(() => {
       count -= 1
@@ -1246,12 +1275,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         clearInterval(countdownRef.current)
         countdownRef.current = null
         currentStemIdRef.current = stemId
-        setStemSeconds(MAX_STEM_SECONDS)
+        setStemSeconds(maxSecs)
         setScreen('stem')
         start()
 
-        // 30-second visible countdown
-        let secs = MAX_STEM_SECONDS
+        // visible countdown (30s or 60s depending on stem type)
+        let secs = maxSecs
         stemTimerRef.current = setInterval(() => {
           secs -= 1
           setStemSeconds(secs)
@@ -1284,21 +1313,16 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Advance to next stem in the current stage/layer ───────────
   const advanceStem = useCallback(() => {
-    setPosition(prev => {
-      const nextIndex = prev.stemIndex + 1
-      const stems = getStemsForStage(prev.stageIndex, prev.layerIndex, { selectedExpression, confirmedPrediction })
+    const pos = positionRef.current
+    const stems = getStemsForStage(pos.stageIndex, pos.layerIndex, { selectedExpression, confirmedPrediction })
+    const nextIndex = pos.stemIndex + 1
 
-      if (nextIndex < stems.length) {
-        // More stems in this group
-        const nextStem = stems[nextIndex]
-        startCountdownThenRecord(nextStem.id)
-        return { ...prev, stemIndex: nextIndex }
-      } else {
-        // All stems in this group done — go to processing
-        triggerProcessing(prev.stageIndex, prev.layerIndex)
-        return prev
-      }
-    })
+    if (nextIndex < stems.length) {
+      setPosition({ ...pos, stemIndex: nextIndex })
+      startCountdownThenRecord(stems[nextIndex].id)
+    } else {
+      triggerProcessing(pos.stageIndex, pos.layerIndex)
+    }
   }, [selectedExpression, confirmedPrediction, startCountdownThenRecord]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Trigger AI processing for a stage/layer ───────────────────
@@ -1310,7 +1334,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     else if (stageIndex === 1 && layerIndex === 0) setProcessingStageKey('2a')
     else if (stageIndex === 1 && layerIndex === 1) setProcessingStageKey('2b')
     else if (stageIndex === 2) setProcessingStageKey(3)
-    else setProcessingStageKey(4)
+    else if (stageIndex === 3) setProcessingStageKey(4)
+    else if (stageIndex === 4) setProcessingStageKey(7)
 
     // Wait for all in-flight transcriptions to complete
     const pending = [...pendingTranscriptionsRef.current]
@@ -1329,7 +1354,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     const stageKey = stageIndex === 0 ? 'stage1Transcripts'
       : stageIndex === 1 ? 'stage2Transcripts'
       : stageIndex === 2 ? 'stage3Transcripts'
-      : 'stage4Transcripts'
+      : stageIndex === 3 ? 'stage4Transcripts'
+      : 'stage5Transcripts'
     saveSession({ [stageKey]: transcriptsRef.current })
 
     try {
@@ -1339,9 +1365,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         setStage1Results(results)
         // Save to localStorage
         // Auto-select the energy as the expression (no manual selection needed)
+        // Use essenceSummary (broader context) for Stage 2 stems if available
         const energy = results?.energy || 'your essence'
-        setSelectedExpression(energy)
-        saveSession({ stage1Transcripts: transcriptsRef.current, stage1Results: results, selectedExpression: energy })
+        const expression = results?.essenceSummary || energy
+        setSelectedExpression(expression)
+        saveSession({ stage1Transcripts: transcriptsRef.current, stage1Results: results, selectedExpression: expression })
         setScreen('results_1')
 
       } else if (stageIndex === 1 && layerIndex === 0) {
@@ -1457,12 +1485,31 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           setEssenceName(results.primaryArchetype?.name || 'Your True Self')
         }
         setScreen('essence_reveal')
+      } else if (stageIndex === 4) {
+        // Category synthesis — send all prior data + category transcripts
+        const results = await processStage(7, transcripts, {
+          stage1Energy: stage1Results?.energy || '',
+          stage1Summary: stage1Results?.essenceSummary || stage1Results?.energy || '',
+          confirmedPrediction: confirmedPrediction || '',
+          rule: stage2Results?.rule || stage2Results?.protectiveRule || '',
+          protectivePattern: stage2Results?.protectivePattern || '',
+          woundStage: stage2Results?.woundStage || '',
+          woundScene: stage2Results?.woundScene || '',
+          nsLabel: stage2Results?.nsLabel || '',
+          lowestDimension: stage3Results?.lowestDimension || '',
+          primaryArchetype: stage4Results?.primaryArchetype?.name || '',
+          secondaryArchetype: stage4Results?.secondaryArchetype?.name || '',
+          essenceBlend: stage4Results?.essenceBlend || '',
+        })
+        setCategoryResults(results)
+        saveSession({ categoryResults: results })
+        setScreen('category_reveal')
       }
     } catch (err) {
       console.error('processStage error:', err)
       setFlowError('Something went wrong analysing your responses. Tap to retry.')
     }
-  }, [selectedExpression, confirmedPrediction, stage1Results, stage2Results, stage3Results]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedExpression, confirmedPrediction, stage1Results, stage2Results, stage3Results, stage4Results]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Begin a new stage/layer ────────────────────────────────────
   const beginStage = useCallback(({ stageIndex, layerIndex = null }) => {
@@ -1495,6 +1542,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     setStage6Results(null)
     setSelectedExpression(null)
     setConfirmedPrediction(null)
+    setCategoryResults(null)
     setPosition({ stageIndex: 0, layerIndex: null, stemIndex: 0 })
     setFlowError(null)
     stage5ResultsRef.current = null
@@ -1514,6 +1562,30 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const handleRetryProcessing = () => {
     setFlowError(null)
     triggerProcessing(position.stageIndex, position.layerIndex)
+  }
+
+  // ── Pause / Resume / Start Over ──────────────────────────────
+  const handlePause = useCallback(() => {
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
+    currentStemIdRef.current = null // prevent partial blob from being transcribed
+    stop()
+    setPaused(true)
+  }, [stop])
+
+  const handleResume = useCallback(() => {
+    setPaused(false)
+    if (currentStem) {
+      startCountdownThenRecord(currentStem.id)
+    }
+  }, [currentStem, startCountdownThenRecord])
+
+  const handleStartOver = () => {
+    setPaused(false)
+    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null }
+    if (stemTimerRef.current) { clearInterval(stemTimerRef.current); stemTimerRef.current = null }
+    stop()
+    setScreen('landing')
   }
 
   // ── Save essence profile to DB (any mode, if authenticated) ──
@@ -1630,8 +1702,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <h1>Find Your Thread</h1>
             <p className="vs-landing-desc">
               {isOnboarding
-                ? 'Speak fast. Don\'t think. First thing that comes. 6 stages, about 30 minutes.'
-                : 'You\'ll complete sentences out loud. Speak fast. Don\'t think. First thing that comes. 35 stems, 4 stages, about 20 minutes.'
+                ? "Speak fast. Don't think. First thing that comes. 7 stages, about 35 minutes."
+                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 39 stems, 5 stages, about 25 minutes."
               }
             </p>
 
@@ -1647,9 +1719,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
                 { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
                 { n: 4, label: 'The Search', desc: '6 stems — who you are underneath it all' },
+                { n: 5, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
                 ...(isOnboarding ? [
-                  { n: 5, label: 'The Experience Game', desc: '105 activities — what lights you up' },
-                  { n: 6, label: 'The Paid Filter', desc: 'your fun activities — path or hobby' },
+                  { n: 6, label: 'The Experience Game', desc: '105 activities — what lights you up' },
+                  { n: 7, label: 'The Paid Filter', desc: 'your fun activities — path or hobby' },
                 ] : []),
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
@@ -1693,16 +1766,41 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           </div>
         )}
 
+        {/* PAUSED OVERLAY */}
+        {paused && (
+          <div className="vs-stem-screen">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 16, padding: 24 }}>
+              <h2 style={{ color: 'var(--vs-text)', margin: 0 }}>Paused</h2>
+              <p style={{ color: 'var(--vs-muted)', margin: 0, textAlign: 'center' }}>
+                Take your time. When you are ready, pick up where you left off.
+              </p>
+              <button className="vs-btn-primary" onClick={handleResume} style={{ marginTop: 12 }}>
+                Resume
+              </button>
+              <button className="vs-btn-ghost" onClick={handleStartOver}>
+                Start over
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* COUNTDOWN */}
-        {screen === 'countdown' && currentStem && (
+        {screen === 'countdown' && !paused && currentStem && (
           <div className="vs-stem-screen">
             <ProgressBar label={stageLabel} percent={progressPercent} />
             <CountdownOverlay count={countdownNum} stemText={currentStem.text} />
+            <button
+              className="vs-btn-ghost"
+              onClick={handlePause}
+              style={{ position: 'absolute', top: 16, right: 16, fontSize: '0.85rem' }}
+            >
+              Pause
+            </button>
           </div>
         )}
 
         {/* STEM (recording active) */}
-        {screen === 'stem' && currentStem && (
+        {screen === 'stem' && !paused && currentStem && (
           <div className="vs-stem-screen">
             <ProgressBar label={stageLabel} percent={progressPercent} />
             <div className="vs-stem-text">{currentStem.text}</div>
@@ -1710,11 +1808,18 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               secondsLeft={stemSeconds}
               onDone={handleStemDone}
             />
+            <button
+              className="vs-btn-ghost"
+              onClick={handlePause}
+              style={{ position: 'absolute', top: 16, right: 16, fontSize: '0.85rem' }}
+            >
+              Pause
+            </button>
           </div>
         )}
 
         {/* TRANSITION (brief "got it") */}
-        {screen === 'transition' && (
+        {screen === 'transition' && !paused && (
           <div className="vs-stem-screen">
             <div className="vs-transition">
               <div className="vs-got-it">Got it.</div>
@@ -1944,6 +2049,46 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           />
         )}
 
+        {/* CATEGORY INTRO */}
+        {screen === 'category_intro' && (
+          <div className="vs-exp-intro">
+            <div className="vs-results-card">
+              <div className="vs-results-label">Stage 5</div>
+              <h2 className="vs-results-title">Your Category</h2>
+              <p className="vs-exp-intro-desc">
+                4 more stems. These find the problem you were made to solve. Speak fast, first thing that comes.
+              </p>
+              <p className="vs-exp-intro-sub">4 stems. About 4 minutes.</p>
+            </div>
+            <div className="vs-bottom-action">
+              <DoubleConfirmButton
+                onConfirm={() => beginStage({ stageIndex: 4 })}
+                label="Start"
+                confirmLabel="Ready? Tap to begin"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* CATEGORY REVEAL — built in Task 4 */}
+        {screen === 'category_reveal' && (
+          <div className="vs-results">
+            <div className="vs-results-header">
+              <div className="vs-results-label">Stage 5 Complete</div>
+              <h2>Your Category</h2>
+            </div>
+            <div className="vs-results-card">
+              <p>{categoryResults?.category || categoryResults?.categoryStatement || 'Processing complete.'}</p>
+            </div>
+            <button
+              className="vs-btn-primary"
+              onClick={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
         {/* FINAL RESULTS */}
         {screen === 'final_results' && (
           <FinalResults
@@ -1962,7 +2107,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'avatar' && (
           <AvatarScreen
             stage4Results={stage4Results}
-            onSkip={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
+            onSkip={() => setScreen('category_intro')}
           />
         )}
 
