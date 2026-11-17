@@ -20,6 +20,7 @@ import { processStage } from '../lib/stemProcessing'
 import { getStemsForStage, EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
 import { getArchetype } from '../data/essenceArchetypes'
 import ExperienceGameLive from '../components/ExperienceGameLive'
+import ChooseQuestsFlow from './ChooseQuestsFlow'
 import './VoiceStemFlow.css'
 
 const STORAGE_KEY = 'voice_stems_session'
@@ -1711,7 +1712,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     const s5 = stage5ResultsRef.current
     const s6 = stage6Results
     if (!s5) {
-      setScreen('download_app')
+      setScreen(isOnboarding ? 'choose_quests' : 'download_app')
       return
     }
 
@@ -1746,8 +1747,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       }
     }
 
-    setScreen('download_app')
-  }, [stage6Results]) // eslint-disable-line react-hooks/exhaustive-deps
+    setScreen(isOnboarding ? 'choose_quests' : 'download_app')
+  }, [stage6Results, isOnboarding]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Render ─────────────────────────────────────────────────────
   return (
@@ -2097,6 +2098,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             prefillEmail={(() => { try { const s = JSON.parse(localStorage.getItem(STORAGE_KEY)); return s?.email || '' } catch { return '' } })()}
             onComplete={handleSignupComplete}
           />
+        )}
+
+        {/* CHOOSE QUESTS (onboarding only, after signup) */}
+        {screen === 'choose_quests' && (
+          <ChooseQuestsFlow onComplete={() => setScreen('download_app')} />
         )}
 
         {/* DOWNLOAD APP (after signup, user picks up in-app) */}
