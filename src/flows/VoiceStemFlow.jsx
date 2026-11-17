@@ -1623,8 +1623,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <div className="vs-landing-label">Essence Journey</div>
             <h1>Find Your Thread</h1>
             <p className="vs-landing-desc">
-              You&apos;ll complete sentences out loud. Speak fast. Don&apos;t think.
-              First thing that comes. 35 stems, 4 stages, about 20 minutes.
+              {isOnboarding
+                ? 'Speak fast. Don\'t think. First thing that comes. 6 stages, about 30 minutes.'
+                : 'You\'ll complete sentences out loud. Speak fast. Don\'t think. First thing that comes. 35 stems, 4 stages, about 20 minutes.'
+              }
             </p>
 
             {isInApp && (
@@ -1639,6 +1641,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
                 { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
                 { n: 4, label: 'The Search', desc: '6 stems — who you are underneath it all' },
+                ...(isOnboarding ? [
+                  { n: 5, label: 'The Experience Game', desc: '105 activities — what lights you up' },
+                  { n: 6, label: 'The Paid Filter', desc: 'your fun activities — path or hobby' },
+                ] : []),
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
                   <div className="vs-stage-pill-num">{s.n}</div>
@@ -1650,29 +1656,31 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               ))}
             </div>
 
-            <div className="vs-landing-form">
-              <input
-                type="text"
-                placeholder="Your name"
-                value={participantName}
-                onChange={(e) => setParticipantName(e.target.value)}
-                className="vs-input"
-              />
-              <input
-                type="email"
-                placeholder="Your email"
-                value={participantEmail}
-                onChange={(e) => setParticipantEmail(e.target.value)}
-                className="vs-input"
-              />
-            </div>
+            {!isOnboarding && (
+              <div className="vs-landing-form">
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={participantName}
+                  onChange={(e) => setParticipantName(e.target.value)}
+                  className="vs-input"
+                />
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  value={participantEmail}
+                  onChange={(e) => setParticipantEmail(e.target.value)}
+                  className="vs-input"
+                />
+              </div>
+            )}
 
             {recError && <div className="vs-error-msg">{recError}</div>}
 
             <button
               className="vs-btn-primary"
               onClick={handleStart}
-              disabled={isInApp || !participantName.trim() || !participantEmail.trim()}
+              disabled={isInApp || (!isOnboarding && (!participantName.trim() || !participantEmail.trim()))}
             >
               {permissionGranted ? 'Begin' : 'Allow microphone and begin'}
             </button>
