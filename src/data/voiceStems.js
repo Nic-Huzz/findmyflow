@@ -79,6 +79,17 @@ export const STAGES = [
       { id: 's4_6', text: "When I'm alone and being honest, I am..." },
     ],
   },
+  {
+    id: 'category',
+    label: 'Your Category',
+    description: 'The problem you were made to solve.',
+    stems: [
+      { id: 'sc_1', text: 'The problem I see that nobody else is solving right is...' },
+      { id: 'sc_2', text: 'Everyone assumes the answer is... but I think that\'s wrong because...' },
+      { id: 'sc_3', text: 'The experience that showed me a different way was...' },
+      { id: 'sc_4', text: 'If I could solve it my way, I would...' },
+    ],
+  },
 ]
 
 /**
