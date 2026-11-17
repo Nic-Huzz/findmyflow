@@ -106,7 +106,7 @@ export const EXPERIENCE_ACTIVITIES = [
   { id: 'exp-skiing', label: 'Skiing / snowboarding', branch: 'movement' },
   { id: 'exp-fishing', label: 'Fishing', branch: 'movement' },
   { id: 'exp-horse-riding', label: 'Horse riding', branch: 'movement' },
-  { id: 'exp-club-dancing', label: 'Going out dancing / clubbing', branch: 'movement' },
+  { id: 'exp-club-dancing', label: 'Dancing', branch: 'movement' },
   { id: 'sub-endurance-1962', label: 'Running / jogging / marathons', branch: 'movement' },
   { id: 'sub-strength-2000', label: 'CrossFit / HIIT / bootcamp', branch: 'movement' },
   { id: 'sub-strength-2010', label: 'Day hikes / nature walks', branch: 'movement' },
@@ -114,27 +114,19 @@ export const EXPERIENCE_ACTIVITIES = [
   { id: 'sub-flexibility-1920', label: 'Pilates / barre / spin class', branch: 'movement' },
   { id: 'sub-temperature-2018', label: 'Ice baths / cold plunges', branch: 'movement' },
   { id: 'sub-outdoor-1907', label: 'Camping / hiking / bushcraft', branch: 'movement' },
-  { id: 'sub-dance-1975', label: 'Free-form dancing', branch: 'movement' },
   { id: 'sub-martial-1900', label: 'Martial arts / combat sports', branch: 'movement' },
-  { id: 'sub-safety-1993', label: 'BJJ / MMA / grappling', branch: 'movement' },
-  { id: 'sub-safety-1400b', label: 'Karate / taekwondo / kung fu', branch: 'movement' },
   { id: 'car-1886', label: 'Road trips / scenic drives', branch: 'movement' },
 
   // ── Nourishment (6) ────────────────────────────────────────────
   { id: 'exp-gardening', label: 'Gardening / growing food', branch: 'nourishment' },
   { id: 'exp-farmers-market', label: 'Visiting a farmers market', branch: 'nourishment' },
-  { id: 'exp-new-cuisine', label: 'Trying a cuisine you\'ve never had', branch: 'nourishment' },
-  { id: 'exp-baking', label: 'Baking', branch: 'nourishment' },
-  { id: 'sub-regen-1971', label: 'Farm-to-table / slow food', branch: 'nourishment' },
-  { id: 'sub-regen-1994', label: 'Cooking for friends / dinner parties', branch: 'nourishment' },
+  { id: 'exp-new-cuisine', label: 'Food you eat', branch: 'nourishment' },
+  { id: 'exp-baking', label: 'Cooking / baking', branch: 'nourishment' },
 
   // ── Status (6) ─────────────────────────────────────────────────
-  { id: 'exp-choosing-style', label: 'Dressing as the version of you that feels most alive', branch: 'status' },
+  { id: 'exp-choosing-style', label: 'Dressing in a style you love', branch: 'status' },
   { id: 'exp-tattoo', label: 'Marking your body with something meaningful', branch: 'status' },
   { id: 'exp-fashion-design', label: 'Creating something others wear or use', branch: 'status' },
-  { id: 'exp-style-turning-heads', label: 'Dressing in a way that turns heads', branch: 'status' },
-  { id: 'exp-style-scary', label: 'Wearing something that scares you a little', branch: 'status' },
-  { id: 'exp-style-becoming', label: 'Changing your look to match who you\'re becoming', branch: 'status' },
 
   // ── Bonds (8) ──────────────────────────────────────────────────
   { id: 'exp-volunteering', label: 'Volunteering / giving back', branch: 'bonds' },
@@ -164,7 +156,6 @@ export const EXPERIENCE_ACTIVITIES = [
   { id: 'exp-singing', label: 'Singing', branch: 'story' },
   { id: 'exp-rapping', label: 'Rapping / freestyle', branch: 'story' },
   { id: 'exp-teaching', label: 'Teaching / facilitating a workshop', branch: 'story' },
-  { id: 'exp-dance-expression', label: 'Dancing (creative / performance)', branch: 'story' },
   { id: 'exp-acting', label: 'Acting / improv / theatre', branch: 'story' },
   { id: 'exp-creative-writing', label: 'Creative writing', branch: 'story' },
   { id: 'media-1826', label: 'Photography / visual storytelling', branch: 'story' },
@@ -191,32 +182,23 @@ export const EXPERIENCE_ACTIVITIES = [
   { id: 'sub-toy-1932', label: 'LEGO / model kits / building', branch: 'play' },
   { id: 'car-1952', label: 'Backpacking / gap years / exploring', branch: 'play' },
 
-  // ── Fire (3) ───────────────────────────────────────────────────
-  { id: 'sub-combustion-1400', label: 'Campfire stories', branch: 'fire' },
-  { id: 'sub-combustion-2019', label: 'Fire dancing / fire spinning', branch: 'fire' },
-  { id: 'sub-ritual-fire-2015b', label: 'Fire circles / fire walking', branch: 'fire' },
-  { id: 'sub-light-2020', label: 'Candlelit evenings / hygge', branch: 'fire' },
+  // ── Fire (1) ───────────────────────────────────────────────────
+  { id: 'sub-combustion-1400', label: 'Fire rituals / gathering', branch: 'fire' },
 
   // ── Healing (12) ───────────────────────────────────────────────
   { id: 'exp-spiritual', label: 'Spiritual practice', branch: 'healing' },
-  { id: 'sub-breathwork-2015', label: 'Breathwork / pranayama', branch: 'healing' },
-  { id: 'sub-psychedelic-2018', label: 'Plant medicine ceremonies', branch: 'healing' },
-  { id: 'sub-psychedelic-2016', label: 'Guided psychedelic experiences', branch: 'healing' },
+  { id: 'sub-breathwork-2015', label: 'Meditation / breathwork', branch: 'healing' },
+  { id: 'sub-psychedelic-2018', label: 'Plant medicine / ceremony', branch: 'healing' },
   { id: 'sub-somatic-2010', label: 'Somatic experiencing / body-based healing', branch: 'healing' },
-  { id: 'sub-meditation-1950', label: 'Meditation retreats', branch: 'healing' },
   { id: 'sub-bodywork-1960', label: 'Massage / acupuncture / bodywork', branch: 'healing' },
   { id: 'sub-mental-1964', label: 'Talk therapy / counselling', branch: 'healing' },
-  { id: 'sub-traditional-2023', label: 'Cacao ceremony / ritual', branch: 'healing' },
   { id: 'sub-energy-2015', label: 'Sound healing / gong baths', branch: 'healing' },
   { id: 'sub-temperature-2019', label: 'Sauna / steam rooms / hot springs', branch: 'healing' },
-  { id: 'sub-mindbody-1979', label: 'Seated meditation / mindfulness apps', branch: 'healing' },
 
   // ── Sleep (5) ──────────────────────────────────────────────────
   { id: 'exp-nature-stillness', label: 'Being in nature without an activity', branch: 'sleep' },
-  { id: 'sub-sleep-2017', label: 'Sleep optimization', branch: 'sleep' },
-  { id: 'sub-nap-2019', label: 'Power naps / rest as practice', branch: 'sleep' },
+  { id: 'sub-sleep-2017', label: 'Rest / sleep', branch: 'sleep' },
   { id: 'sub-dream-1975', label: 'Lucid dreaming / dream journaling', branch: 'sleep' },
-  { id: 'sub-rest-1999', label: 'Deliberate rest / siesta culture', branch: 'sleep' },
   { id: 'sub-states-1954', label: 'Float tanks / sensory deprivation', branch: 'sleep' },
 
   // ── Tools (4) ──────────────────────────────────────────────────

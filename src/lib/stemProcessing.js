@@ -12,18 +12,7 @@ import { supabase } from './supabaseClient'
  */
 export async function processStage(stage, transcripts, context = {}) {
   const { data, error } = await supabase.functions.invoke('process-stems', {
-    body: {
-      stage,
-      transcripts,
-      selectedExpression: context.selectedExpression || null,
-      confirmedPrediction: context.confirmedPrediction || null,
-      stage1Mirror: context.stage1Mirror || null,
-      woundScene: context.woundScene || null,
-      nsLabel: context.nsLabel || null,
-      lowestDimension: context.lowestDimension || null,
-      activities: context.activities || null,
-      funActivities: context.funActivities || null,
-    },
+    body: { stage, transcripts, ...context },
   })
 
   if (error) {

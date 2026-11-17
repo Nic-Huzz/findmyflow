@@ -86,7 +86,11 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
   }, [domeLoading, domeStates, navigate])
 
   // Build experience lists — split by want_paid (path activities vs passions)
-  const { pathActivities, passions } = getDomeExperiencesForBridge(domeStates, wantPaidStates)
+  // If no paid data (onboarding skips paid filter), treat all fun activities as path activities
+  const { pathActivities: rawPath, passions: rawPassions } = getDomeExperiencesForBridge(domeStates, wantPaidStates)
+  const noPaidData = Object.keys(wantPaidStates).length === 0
+  const pathActivities = noPaidData ? [...rawPath, ...rawPassions] : rawPath
+  const passions = noPaidData ? [] : rawPassions
   const pathGroups = groupByPrimal(pathActivities)
   const passionGroups = groupByPrimal(passions)
 

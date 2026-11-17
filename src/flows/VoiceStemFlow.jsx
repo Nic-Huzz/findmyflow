@@ -1281,7 +1281,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         }
       }, 100)
     } else if (saved.completed) {
-      setScreen(saved.categoryResults ? 'final_results' : 'category_intro')
+      setScreen(saved.categoryResults ? 'final_results' : isOnboarding ? 'experience_intro' : 'category_intro')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -1726,11 +1726,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     ;(s6?.hobby || []).forEach(a => {
       rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: false, updated_at: now })
     })
-    // Fun activities not in stage 6 results (skipped paid filter or zero batches)
+    // Fun activities not in stage 6 results (skipped paid filter or no paid filter in onboarding)
     const s6Ids = new Set([...(s6?.path || []).map(a => a.id), ...(s6?.hobby || []).map(a => a.id)])
     ;(s5.fun || []).forEach(a => {
       if (!s6Ids.has(a.id)) {
-        rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: false, updated_at: now })
+        rows.push({ user_id: authedUser.id, node_id: a.id, ns_state: 'fun', want_paid: null, updated_at: now })
       }
     })
     // Not fun = bored
@@ -1762,7 +1762,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <h1>Find Your Thread</h1>
             <p className="vs-landing-desc">
               {isOnboarding
-                ? "Speak fast. Don't think. First thing that comes. 7 stages, about 35 minutes."
+                ? "Speak fast. Don't think. First thing that comes. 5 stages, about 25 minutes."
                 : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 39 stems, 5 stages, about 25 minutes."
               }
             </p>
@@ -1779,10 +1779,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
                 { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
                 { n: 4, label: 'The Search', desc: '6 stems — who you are underneath it all' },
-                { n: 5, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
+                ...(!isOnboarding ? [
+                  { n: 5, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
+                ] : []),
                 ...(isOnboarding ? [
-                  { n: 6, label: 'The Experience Game', desc: '105 activities — what lights you up' },
-                  { n: 7, label: 'The Paid Filter', desc: 'your fun activities — path or hobby' },
+                  { n: 5, label: 'The Experience Game', desc: '87 activities — what lights you up' },
                 ] : []),
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
@@ -2010,7 +2011,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               setStage5Results(results)
               stage5ResultsRef.current = results
               saveSession({ stage5Results: results })
-              setScreen('experience_results')
+              setScreen(isOnboarding ? 'signup_gate' : 'experience_results')
             }}
           />
         )}
@@ -2172,7 +2173,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'avatar' && (
           <AvatarScreen
             stage4Results={stage4Results}
-            onSkip={() => setScreen('category_intro')}
+            onSkip={() => setScreen(isOnboarding ? 'experience_intro' : 'category_intro')}
           />
         )}
 

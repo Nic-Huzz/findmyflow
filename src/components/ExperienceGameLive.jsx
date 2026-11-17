@@ -69,12 +69,16 @@ export default function ExperienceGameLive({ activities, onComplete, mode = 'fun
   onCompleteRef.current = onComplete
 
   // Action ref: buttons resolve the pending recording promise
+  // Queued action: if no promise is waiting, store for next loop iteration
   const actionRef = useRef(null)
+  const queuedActionRef = useRef(null)
 
   const emitAction = (action) => {
     if (actionRef.current) {
       actionRef.current(action)
       actionRef.current = null
+    } else {
+      queuedActionRef.current = action
     }
   }
 
@@ -106,47 +110,61 @@ export default function ExperienceGameLive({ activities, onComplete, mode = 'fun
         let result = 'uncertain'
         let goBack = false
 
-        // First clip
-        let clipResult = await Promise.race([
-          recordClip(stream, CLIP_MS).then(blob => ({ blob })),
-          new Promise(resolve => { actionRef.current = resolve }),
-        ])
+        // Check if user tapped while previous activity was flashing
+        const queued = queuedActionRef.current
+        queuedActionRef.current = null
+        if (queued === 'back') { goBack = true }
+        else if (queued === 'skip') { /* result stays uncertain */ }
+        else if (queued?.tap) { result = queued.tap }
 
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-          if (token.cancelled) break
+        // Only record if no queued action resolved it
+        if (!goBack && result === 'uncertain' && queued !== 'skip') {
+          let clipResult = await Promise.race([
+            recordClip(stream, CLIP_MS).then(blob => ({ blob })),
+            new Promise(resolve => { actionRef.current = resolve }),
+          ])
 
-          // Handle tap/back/skip actions
-          if (clipResult === 'back') { goBack = true; break }
-          if (clipResult === 'skip') { result = 'uncertain'; break }
-          if (clipResult?.tap) { result = clipResult.tap; break }
+          for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            if (token.cancelled) break
 
-          const { blob } = clipResult
-
-          // Pipeline: record next while transcribing current
-          const nextClipPromise = (attempt < maxAttempts - 1)
-            ? Promise.race([
-                recordClip(stream, CLIP_MS).then(b => ({ blob: b })),
-                new Promise(resolve => { actionRef.current = resolve }),
-              ])
-            : null
-
-          try {
-            const { transcript } = await transcribeAudio(blob)
-            const classified = classifyResponse(transcript)
-            console.log(`[exp-game] ${i + 1}/${activities.length} "${activities[i].label}" attempt ${attempt + 1}: "${transcript}" → ${classified}`)
-            if (classified !== 'uncertain') {
-              result = classified
-              break
+            // Check queued action (tapped during transcription)
+            if (queuedActionRef.current) {
+              clipResult = queuedActionRef.current
+              queuedActionRef.current = null
             }
-          } catch (err) {
-            console.warn('[exp-game] Transcription error:', err)
+
+            if (clipResult === 'back') { goBack = true; break }
+            if (clipResult === 'skip') { result = 'uncertain'; break }
+            if (clipResult?.tap) { result = clipResult.tap; break }
+
+            const { blob } = clipResult
+
+            // Pipeline: record next while transcribing current
+            const nextClipPromise = (attempt < maxAttempts - 1)
+              ? Promise.race([
+                  recordClip(stream, CLIP_MS).then(b => ({ blob: b })),
+                  new Promise(resolve => { actionRef.current = resolve }),
+                ])
+              : null
+
+            try {
+              const { transcript } = await transcribeAudio(blob)
+              const classified = classifyResponse(transcript)
+              console.log(`[exp-game] ${i + 1}/${activities.length} "${activities[i].label}" attempt ${attempt + 1}: "${transcript}" → ${classified}`)
+              if (classified !== 'uncertain') {
+                result = classified
+                break
+              }
+            } catch (err) {
+              console.warn('[exp-game] Transcription error:', err)
+            }
+
+            actionRef.current = null
+            if (attempt >= 1) setRetrying(true)
+
+            if (!nextClipPromise) break
+            clipResult = await nextClipPromise
           }
-
-          actionRef.current = null
-          if (attempt >= 1) setRetrying(true)
-
-          if (!nextClipPromise) break
-          clipResult = await nextClipPromise
         }
 
         if (token.cancelled) break
@@ -250,7 +268,7 @@ export default function ExperienceGameLive({ activities, onComplete, mode = 'fun
             )}
 
             {/* Tap buttons — always visible */}
-            <div style={{ display: 'flex', gap: 12, marginTop: 14, justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: 10, marginTop: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
               <button
                 onClick={() => emitAction({ tap: 'fun' })}
                 style={{
@@ -266,6 +284,23 @@ export default function ExperienceGameLive({ activities, onComplete, mode = 'fun
               >
                 {posLabel}
               </button>
+              {mode !== 'paid' && (
+                <button
+                  onClick={() => emitAction('skip')}
+                  style={{
+                    padding: '10px 16px',
+                    borderRadius: 10,
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    color: 'rgba(255, 255, 255, 0.4)',
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Not tried
+                </button>
+              )}
               <button
                 onClick={() => emitAction({ tap: 'not_fun' })}
                 style={{

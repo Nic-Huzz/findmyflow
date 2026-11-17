@@ -175,25 +175,19 @@ serve(async (req) => {
   }
 
   try {
-    // Validate auth
+    // Auth: try to get user, but allow anon for onboarding flow
     const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return jsonResponse({ error: 'Missing authorization header' }, 401)
+    let userId = 'anon'
+
+    if (authHeader) {
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+      )
+      const token = authHeader.replace('Bearer ', '')
+      const { data: { user } } = await supabase.auth.getUser(token)
+      if (user) userId = user.id
     }
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    )
-
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-    if (authError || !user) {
-      return jsonResponse({ error: 'Invalid or expired token' }, 401)
-    }
-
-    const userId = user.id
 
     // Parse request
     let photo_base64: string

@@ -731,22 +731,25 @@ const CORE_NODE_IDS = new Set([
   'exp-puzzles',             // Puzzles / escape rooms
   'exp-thrill',              // Adrenaline / thrill ride (skydiving, bungee, roller coaster)
 
-  // Fire (3)
+  // Fire (4)
   'sub-combustion-1400',     // Campfire / fire pit gathering
+  'sub-combustion-2019',     // Fire dancing / fire spinning
   'sub-light-2020',          // Candle ritual / hygge
   'sub-ritual-fire-2015b',   // Fire ceremony / cacao circle
 
-  // Healing (6)
+  // Healing (7)
   'sub-traditional-2023',    // Cacao ceremony
   'sub-psychedelic-2016',    // Psilocybin therapy
   'sub-somatic-1400',        // Pranayama / breathwork
+  'sub-meditation-1950',     // Meditation retreats
   'sub-mindbody-1979',       // Mindfulness meditation
   'sub-mental-1964',         // Therapy / counselling
   'sub-energy-2015',         // Sound bath
   'sub-temperature-2019',    // Sauna / deliberate heat
   'exp-spiritual',           // Spiritual practice / prayer / connection to something larger
 
-  // Sleep (4) — added passive nature
+  // Sleep (5) — added passive nature
+  'sub-nap-2019',            // Power naps / rest as practice
   'sub-dream-1975',          // Lucid dreaming
   'sub-rest-1999',           // Intentional napping
   'sub-states-1954',         // Float tank / sensory deprivation
