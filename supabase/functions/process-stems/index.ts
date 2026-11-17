@@ -32,6 +32,7 @@ Return ONLY valid JSON (no markdown, no explanation):
 
 {
   "energy": "One or two words describing their overall childhood energy (e.g. 'electric', 'quietly intense', 'wildly curious', 'gentle but fierce')",
+  "essenceSummary": "One sentence broadening what the energy label means. Not about specific memories, but the general quality. E.g. if energy is 'roaming and restless', the summary might be 'You needed to explore, move, and discover what was around every corner.' Written in second person. Max 20 words.",
   "patterns": [
     {
       "label": "Short pattern label, 3-5 words, starts with 'You' + past tense verb (e.g. 'You built entire worlds', 'You performed for everyone', 'You moved constantly')",
@@ -46,6 +47,7 @@ Rules:
 - Pattern labels must be vivid and specific, not generic. Not 'creativity' but 'You built entire worlds'.
 - The mirror paragraph should feel like someone who KNOWS them is describing them, using their actual words.
 - The energy should be 1-2 words maximum that capture the kid's vibe.
+- The essenceSummary should BROADEN the energy label beyond specific memories. It is the general quality, not the specific story.
 - Use their actual spoken words as evidence wherever possible.
 - NEVER use em dashes (—). Use periods, commas, or restructure the sentence instead.`
 }
@@ -250,6 +252,86 @@ Rules:
 - Write all text in second person (you/your).`
 }
 
+function buildStage7Prompt(transcripts: any[], context: any): string {
+  const stemLines = transcripts.map(t =>
+    `"${t.stemText}"\nResponse: ${t.transcript || '(no response)'}`
+  ).join('\n\n')
+
+  // Check if category stems are mostly empty
+  const hasContent = transcripts.some(t => (t.transcript || '').trim().length > 5)
+
+  if (!hasContent) {
+    // Fallback: generate nudges from essence data only, skip category
+    return `You are generating 3 weekly dares for someone based on their self-discovery results.
+
+They discovered:
+- Childhood essence: ${context.stage1Energy || 'unknown'} - ${context.stage1Summary || ''}
+- Their archetype: ${context.primaryArchetype || 'unknown'}
+- Their essence blend: ${context.essenceBlend || ''}
+- Their wound prediction: "${context.confirmedPrediction || ''}"
+- Their protective rule: "${context.rule || ''}"
+
+They could not articulate a problem they want to solve yet. That is okay. Focus on reconnecting them with their essence through action.
+
+Return ONLY valid JSON:
+
+{
+  "categoryName": null,
+  "categoryStatement": null,
+  "connectionThread": null,
+  "nudgeSuggestions": [
+    "A specific action they could take this week to reconnect with their childhood essence. Concrete, doable, slightly scary. Max 20 words.",
+    "A second nudge that tests their prediction/rule. Max 20 words.",
+    "A third nudge from a different angle. Max 20 words."
+  ]
+}
+
+Rules:
+- The nudges should feel like dares, not homework. Slightly scary, deeply meaningful.
+- Reference their specific essence energy and archetype.
+- NEVER use em dashes. Use periods, commas, or restructure.`
+  }
+
+  return `You are synthesizing a Category Statement for someone who just completed a deep self-discovery exercise.
+
+They discovered:
+- Childhood essence: ${context.stage1Energy || 'unknown'} - ${context.stage1Summary || ''}
+- What shut it down: "${context.confirmedPrediction || ''}", installed at ${context.woundStage || 'unknown'} (${context.woundScene || ''})
+- The rule they made: "${context.rule || ''}"
+- Their protective pattern: ${context.protectivePattern || 'unknown'}
+- Their nervous system response: ${context.nsLabel || 'unknown'}
+- Their archetype: ${context.primaryArchetype || 'unknown'} + ${context.secondaryArchetype || 'unknown'}
+- Their essence blend: ${context.essenceBlend || ''}
+- Their lowest dimension: ${context.lowestDimension || 'unknown'}
+
+They then answered 4 category stems (spoken, raw, unfiltered):
+
+${stemLines}
+
+Synthesize a Category Statement that connects their essence to their category. This should feel like a revelation, not a business plan.
+
+Return ONLY valid JSON:
+
+{
+  "categoryName": "2-4 words. The name of their category. Not a job title. A movement. E.g. 'Courage as Medicine', 'Play as Therapy', 'Movement as Freedom'. Something they would put on a flag.",
+  "categoryStatement": "3-4 sentences in second person. First: connect their wound to the problem they see. Second: name the wrong assumption and why they see through it. Third: how their archetype essence solves it differently. Fourth: one sentence that makes them feel like they were MADE for this. Max 80 words total.",
+  "connectionThread": "One sentence connecting their childhood essence to their category. E.g. 'The kid who could not stop moving became the person who teaches others that the body knows before the mind does.' Max 30 words.",
+  "nudgeSuggestions": [
+    "A specific action they could take this week based on their category and essence. Concrete, doable, slightly scary. Max 20 words.",
+    "A second nudge from a different angle. Max 20 words.",
+    "A third nudge from a different angle. Max 20 words."
+  ]
+}
+
+Rules:
+- The categoryName should feel like something they would put on a flag, not a LinkedIn headline.
+- The categoryStatement should make them emotional. This is the moment it all clicks together.
+- Use their actual words from ALL stages wherever possible.
+- The nudgeSuggestions should feel like dares, not homework. Slightly scary, deeply meaningful.
+- The connectionThread should read like a movie tagline about their life.
+- NEVER use em dashes. Use periods, commas, or restructure the sentence instead.`
+}
+
 function buildStage6Prompt(transcripts: any[], funActivities: any[]): string {
   const activityList = funActivities.map((a: any, i: number) =>
     `${i + 1}. [${a.id}] ${a.label}`
@@ -294,9 +376,9 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
-    if (![1, 2, 3, 4, 5, 6].includes(stage)) {
+    if (![1, 2, 3, 4, 5, 6, 7].includes(stage)) {
       return new Response(
-        JSON.stringify({ error: 'Invalid stage: must be 1, 2, 3, 4, 5, or 6' }),
+        JSON.stringify({ error: 'Invalid stage: must be 1, 2, 3, 4, 5, 6, or 7' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -340,6 +422,10 @@ serve(async (req) => {
         prompt = buildStage6Prompt(transcripts, funActivities)
         break
       }
+      case 7: {
+        prompt = buildStage7Prompt(transcripts, body)
+        break
+      }
       default:
         return new Response(
           JSON.stringify({ error: `Invalid stage: ${stage}` }),
@@ -349,7 +435,7 @@ serve(async (req) => {
 
     const message = await client.messages.create({
       model: 'claude-haiku-4-5-20251001', // Sonnet 4 unavailable, using Haiku for all stages
-      max_tokens: stage === 4 ? 1500 : 1024,
+      max_tokens: (stage === 4 || stage === 7) ? 1500 : 1024,
       messages: [{ role: 'user', content: prompt }],
     })
 
