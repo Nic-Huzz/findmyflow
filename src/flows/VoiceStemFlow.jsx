@@ -643,6 +643,65 @@ function Stage3Results({ results, onContinue }) {
   )
 }
 
+function CategoryReveal({ results, onContinue }) {
+  if (!results) return null
+  const hasCategory = results.categoryName && results.categoryStatement
+
+  return (
+    <div className="vs-results">
+      <div className="vs-results-header">
+        <div className="vs-results-label">{hasCategory ? 'Your Category' : 'Your Essence'}</div>
+        {hasCategory && <h2 className="vs-gold-text">{results.categoryName}</h2>}
+      </div>
+
+      {results.connectionThread && (
+        <p style={{ color: 'var(--vs-muted)', fontSize: '0.95rem', textAlign: 'center', margin: '0 0 20px', lineHeight: 1.6, fontStyle: 'italic' }}>
+          {results.connectionThread}
+        </p>
+      )}
+
+      {results.categoryStatement && (
+        <div className="vs-results-card">
+          <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0, color: 'var(--vs-text)' }}>
+            {results.categoryStatement}
+          </p>
+        </div>
+      )}
+
+      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 16 }}>
+        {hasCategory ? 'See your dares' : 'See your dares for this week'}
+      </button>
+    </div>
+  )
+}
+
+function NudgeCards({ nudges, categoryName, onContinue }) {
+  return (
+    <div className="vs-results">
+      <div className="vs-results-header">
+        {categoryName && <div className="vs-results-label">{categoryName}</div>}
+        <h2>Three dares for this week</h2>
+      </div>
+      <p style={{ color: 'var(--vs-muted)', fontSize: '0.9rem', textAlign: 'center', margin: '0 0 16px' }}>
+        Small actions that honour your essence. Pick at least one.
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {(nudges || []).map((nudge, i) => (
+          <div key={i} className="vs-results-card" style={{ padding: '14px 16px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+            <span style={{ color: 'var(--vs-gold)', fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
+            <span style={{ color: 'var(--vs-text)', lineHeight: 1.5 }}>{nudge}</span>
+          </div>
+        ))}
+      </div>
+
+      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 20 }}>
+        Continue
+      </button>
+    </div>
+  )
+}
+
 // Avatar generation screen
 function AvatarScreen({ stage4Results, onSkip }) {
   const [photo, setPhoto] = useState(null)
@@ -2056,9 +2115,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
               <div className="vs-results-label">Stage 5</div>
               <h2 className="vs-results-title">Your Category</h2>
               <p className="vs-exp-intro-desc">
-                4 more stems. These find the problem you were made to solve. Speak fast, first thing that comes.
+                You just met yourself. Now let&apos;s find out what you&apos;re here to do.
               </p>
-              <p className="vs-exp-intro-sub">4 stems. About 4 minutes.</p>
+              <p className="vs-exp-intro-desc" style={{ marginTop: 12 }}>
+                4 stems. Take your time on these. There&apos;s no wrong answer.
+              </p>
             </div>
             <div className="vs-bottom-action">
               <DoubleConfirmButton
@@ -2070,23 +2131,21 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           </div>
         )}
 
-        {/* CATEGORY REVEAL — built in Task 4 */}
-        {screen === 'category_reveal' && (
-          <div className="vs-results">
-            <div className="vs-results-header">
-              <div className="vs-results-label">Stage 5 Complete</div>
-              <h2>Your Category</h2>
-            </div>
-            <div className="vs-results-card">
-              <p>{categoryResults?.category || categoryResults?.categoryStatement || 'Processing complete.'}</p>
-            </div>
-            <button
-              className="vs-btn-primary"
-              onClick={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
-            >
-              Continue
-            </button>
-          </div>
+        {/* CATEGORY REVEAL */}
+        {screen === 'category_reveal' && categoryResults && (
+          <CategoryReveal
+            results={categoryResults}
+            onContinue={() => setScreen('nudges')}
+          />
+        )}
+
+        {/* NUDGE DARES */}
+        {screen === 'nudges' && categoryResults && (
+          <NudgeCards
+            nudges={categoryResults.nudgeSuggestions}
+            categoryName={categoryResults.categoryName}
+            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
+          />
         )}
 
         {/* FINAL RESULTS */}
