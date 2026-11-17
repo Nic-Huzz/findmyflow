@@ -1177,14 +1177,20 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     // ?resume=N requires saved data from prior stages
     if (resumeStage) {
       setTimeout(() => {
-        if (resumeStage === '3' && saved.stage2Results) {
-          beginStage({ stageIndex: 2 })
-        } else if (resumeStage === '4' && saved.stage3Results) {
-          beginStage({ stageIndex: 3 })
+        if (resumeStage === '2' && saved.stage1Results) {
+          beginStage({ stageIndex: 1, layerIndex: 0 })
+        } else if (resumeStage === 'selection_2' && saved.stage2Results) {
+          setScreen('selection_2')
+        } else if (resumeStage === 'results_1' && saved.stage1Results) {
+          setScreen('results_1')
         } else if (resumeStage === 'results_2' && saved.stage2Results) {
           setScreen('results_2')
+        } else if (resumeStage === '3' && saved.stage2Results) {
+          beginStage({ stageIndex: 2 })
         } else if (resumeStage === 'results_3' && saved.stage3Results) {
           setScreen('results_3')
+        } else if (resumeStage === '4' && saved.stage3Results) {
+          beginStage({ stageIndex: 3 })
         }
       }, 100)
     } else if (saved.completed) {
