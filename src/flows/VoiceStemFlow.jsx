@@ -1280,7 +1280,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         }
       }, 100)
     } else if (saved.completed) {
-      setScreen('final_results')
+      setScreen(saved.categoryResults ? 'final_results' : 'category_intro')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -1414,7 +1414,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       : stageIndex === 1 ? 'stage2Transcripts'
       : stageIndex === 2 ? 'stage3Transcripts'
       : stageIndex === 3 ? 'stage4Transcripts'
-      : 'stage5Transcripts'
+      : 'categoryTranscripts'
     saveSession({ [stageKey]: transcriptsRef.current })
 
     try {
