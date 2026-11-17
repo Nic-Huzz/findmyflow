@@ -1,6 +1,6 @@
 /* ChooseQuestsFlow.css — /choose-quests bridge flow */
 
-.cqf { min-height: 100dvh; background: #f5f5f0; color: #1a1a2e; }
+.cqf { min-height: 100dvh; background: #f5f5f0; color: #1a1a2e; position: relative; z-index: 1; }
 .cqf-container { max-width: 480px; margin: 0 auto; padding: 20px 20px 120px; }
 
 /* ── Intro ── */

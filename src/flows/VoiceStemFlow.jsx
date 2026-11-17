@@ -2103,7 +2103,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
         {/* CHOOSE QUESTS (onboarding only, after signup) */}
         {screen === 'choose_quests' && (
-          <ChooseQuestsFlow onComplete={() => setScreen('download_app')} />
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: '#f5f5f0', overflowY: 'auto', zIndex: 10,
+          }}>
+            <ChooseQuestsFlow onComplete={() => setScreen('download_app')} />
+          </div>
         )}
 
         {/* DOWNLOAD APP (after signup, user picks up in-app) */}
