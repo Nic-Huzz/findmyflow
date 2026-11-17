@@ -302,16 +302,9 @@ function DownloadApp({ userEmail, essenceArchetype, pathActivities }) {
         <p className="vs-download-archetype">{essenceArchetype}</p>
       )}
 
-      {hasPaths ? (
-        <p className="vs-signup-desc">
-          You said you'd love to get paid for <strong>{pathLabels.join(', ')}</strong>.
-          Open the app to discover the paths that combine them.
-        </p>
-      ) : (
-        <p className="vs-signup-desc">
-          Your results are saved. Open the app to find your path.
-        </p>
-      )}
+      <p className="vs-signup-desc">
+        Open the app to find unique paths based on your answers.
+      </p>
 
       <div className="vs-download-buttons">
         <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer" className="vs-btn-primary">
@@ -1160,9 +1153,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         return
       }
       if (n === 6) {
-        // Jump to paid filter if stage 5 results exist in localStorage
         const s = loadSession()
-        if (s?.stage5Results) {
+        if (s?.stage6Results) {
+          // Stage 6 already done — go to signup gate
+          setTimeout(() => setScreen('signup_gate'), 100)
+        } else if (s?.stage5Results) {
+          // Stage 5 done — go to paid filter
           setStage5Results(s.stage5Results)
           stage5ResultsRef.current = s.stage5Results
           setTimeout(() => setScreen('paid_intro'), 100)
