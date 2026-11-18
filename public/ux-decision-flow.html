@@ -151,7 +151,7 @@ body {
 <body>
 
 <div class="hdr">
-  <h1>Vibe Rise — Decision Flow <span class="hdr-date">Updated Nov 10, 2026</span></h1>
+  <h1>Vibe Rise — Decision Flow <span class="hdr-date">Updated Nov 17, 2026</span></h1>
   <div class="hdr-legend">
     <span>◇ = Decision</span>
     <span>▢ = Action</span>
@@ -178,35 +178,35 @@ body {
   </div>
 
   <div class="branch">
-    <div class="branch-arm" style="margin-right: 30px; min-width: 220px;">
-      <div class="branch-label" style="background:#ede9fe; color:var(--purple);">Voice Call (Primary)</div>
+    <div class="branch-arm" style="margin-right: 30px; min-width: 260px;">
+      <div class="branch-label" style="background:#ede9fe; color:var(--purple);">Onboarding (Primary)</div>
       <div class="vline short"></div>
-      <div class="proc new-feat" style="min-width: 200px;">
+      <div class="proc new-feat" style="min-width: 240px;">
         <div class="proc-name">Voice Stems</div>
-        <div class="proc-sub">/try/voice-stems</div>
-        <div class="proc-note">35 min. 6 stages: Recognition → Wounds → Aliveness → Essence → Experiences → Paid Filter</div>
+        <div class="proc-sub">/try/onboarding</div>
+        <div class="proc-note">~25 min. No email gate.</div>
       </div>
       <div class="vline short"></div>
       <div class="arrow-down"></div>
-      <div class="diamond-wrap">
-        <div class="diamond" style="width: 120px; height: 60px;"><div class="diamond-bg"></div><div class="diamond-text" style="font-size:10px;">Workshop?</div></div>
-      </div>
-      <div class="branch" style="gap: 4px;">
-        <div class="branch-arm" style="min-width: 100px;">
-          <div class="branch-label yes" style="font-size:9px;">Yes</div>
-          <div class="vline short"></div>
-          <div class="proc step-box"><div class="proc-name">Results + Avatar</div><div class="proc-sub">Workshop ends</div></div>
-        </div>
-        <div class="branch-arm" style="min-width: 120px;">
-          <div class="branch-label" style="font-size:9px; background:#ede9fe; color:var(--purple);">Solo</div>
-          <div class="vline short"></div>
-          <div class="proc step-box"><div class="proc-name">Signup Gate</div><div class="proc-sub">→ Download App</div></div>
-        </div>
-      </div>
-      <div class="vline short"></div>
-      <div class="proc" style="border: 2px solid var(--green); background: #f0fdf4; min-width: 200px;">
-        <div class="proc-name" style="color: var(--green);">App opens with profile populated</div>
-        <div class="proc-note">Lands on Progress tab</div>
+
+      <div class="steps-row" style="flex-direction: column; gap: 6px; max-width: 240px;">
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Stage 1: Essence</div><div class="proc-sub">6 stems — who you were</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Stage 2: Suppressed</div><div class="proc-sub">13 stems — what got shut down</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Stage 3: Consequences</div><div class="proc-sub">10 stems — the cost now</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Stage 4: The Search</div><div class="proc-sub">6 stems — who you really are</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%; border-left: 3px solid var(--gold);"><div class="proc-name">Essence Reveal + Avatar</div><div class="proc-sub">archetype + Pixar selfie</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%; border-left: 3px solid var(--green);"><div class="proc-name">Experience Game</div><div class="proc-sub">87 activities — fun / not fun / not tried</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%;"><div class="proc-name">Signup Gate</div><div class="proc-sub">create account</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc step-box" style="width: 100%; border-left: 3px solid var(--green);"><div class="proc-name">Choose Quests</div><div class="proc-sub">pick life paths from fun activities</div></div>
+        <span class="step-arrow" style="transform: rotate(90deg);">→</span>
+        <div class="proc end" style="width: 100%;"><div class="proc-name">Download App</div><div class="proc-sub" style="color:rgba(255,255,255,0.7);">quests ready, profile populated</div></div>
       </div>
     </div>
 
@@ -263,27 +263,19 @@ body {
 
   <div class="branch" style="gap: 8px;">
     <div class="branch-arm">
-      <div class="branch-label yes">All done</div>
+      <div class="branch-label yes">From onboarding</div>
       <div class="vline short"></div>
-      <div class="proc new-feat" style="min-width: 150px;">
-        <div class="proc-name">Land on Daily</div>
-        <div class="proc-note">Maintenance mode</div>
-      </div>
-    </div>
-    <div class="branch-arm">
-      <div class="branch-label" style="background:#fef3c7; color:#92400e;">Dome, no quests</div>
-      <div class="vline short"></div>
-      <div class="proc new-feat" style="min-width: 150px;">
+      <div class="proc new-feat" style="min-width: 170px;">
         <div class="proc-name">Land on Weekly</div>
-        <div class="proc-note">Post-onboarding: choose quests</div>
+        <div class="proc-note">Quests ready, dome populated. Game is set up.</div>
       </div>
     </div>
     <div class="branch-arm">
-      <div class="branch-label no">Nothing yet</div>
+      <div class="branch-label no">Skipped onboarding</div>
       <div class="vline short"></div>
-      <div class="proc new-feat" style="min-width: 150px;">
+      <div class="proc new-feat" style="min-width: 170px;">
         <div class="proc-name">Land on Progress</div>
-        <div class="proc-note">Onboarding banner</div>
+        <div class="proc-note">Banner: "Book a call" or "Do it yourself"</div>
       </div>
     </div>
   </div>
@@ -332,36 +324,20 @@ body {
 
   <div class="branch">
     <div class="branch-arm" style="margin-right: 40px;">
-      <div class="branch-label no">No (locked)</div>
+      <div class="branch-label no">No dome data</div>
       <div class="vline short"></div>
       <div class="proc" style="border-left: 3px solid var(--red); min-width: 180px;">
         <div class="proc-name">Weekly Locked</div>
-        <div class="proc-note">Lock icon. Tap → redirects to Progress.</div>
+        <div class="proc-note">Tap → redirects to Progress / onboarding.</div>
       </div>
     </div>
     <div class="branch-arm" style="margin-left: 40px;">
-      <div class="branch-label yes">Yes (unlocked)</div>
+      <div class="branch-label yes">From onboarding</div>
       <div class="vline short"></div>
-      <div class="diamond-wrap">
-        <div class="diamond" style="width: 140px; height: 65px;"><div class="diamond-bg"></div><div class="diamond-text" style="font-size:10px;">Has quests?</div></div>
-      </div>
-      <div class="branch" style="gap: 4px;">
-        <div class="branch-arm" style="min-width: 120px;">
-          <div class="branch-label no" style="font-size:9px;">No</div>
-          <div class="vline short"></div>
-          <div class="proc new-feat" style="min-width: 140px;">
-            <div class="proc-name">"Find Your Path"</div>
-            <div class="proc-sub">→ /choose-quests</div>
-          </div>
-        </div>
-        <div class="branch-arm" style="min-width: 140px;">
-          <div class="branch-label yes" style="font-size:9px;">Yes</div>
-          <div class="vline short"></div>
-          <div class="proc essential" style="min-width: 160px;">
-            <div class="proc-name">Quest Cards</div>
-            <div class="proc-sub">Next Move UI</div>
-          </div>
-        </div>
+      <div class="proc essential" style="min-width: 180px;">
+        <div class="proc-name">Quest Cards</div>
+        <div class="proc-sub">Quests created in onboarding</div>
+        <div class="proc-note">Next Move UI</div>
       </div>
     </div>
   </div>
@@ -476,17 +452,17 @@ body {
 <!-- ═══ SIMPLIFIED ═══ -->
 <div class="simple-section">
   <h2>What It Feels Like</h2>
-  <p>Discovery happens on the call. The app is where you maintain, challenge, and earn.</p>
+  <p>Discovery happens in onboarding. The app is where you maintain, challenge, and earn.</p>
 
   <div class="simple-flow">
     <div class="simple-node">
       <span class="simple-emoji">🎙️</span>
       <div class="simple-label">Discover</div>
-      <div class="simple-sub">35-min voice call</div>
+      <div class="simple-sub">25-min voice flow</div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;">
       <div class="simple-arrow">→</div>
-      <div class="simple-decision">profile populated</div>
+      <div class="simple-decision">quests chosen</div>
     </div>
     <div class="simple-node">
       <span class="simple-emoji">⚡</span>
