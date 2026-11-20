@@ -45,7 +45,7 @@ docs/               # Specs, handoffs, research
 
 **Core**: `/` | `/log-in` | `/me` | `/7-day-challenge` | `/library` | `/flow-compass` | `/feedback` | `/hero-profile` | `/guidebook`
 
-**Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`
+**Onboarding**: `/get-started`, `/essence-mirror`, `/essence-identify`, `/protective-identify`, `/dome-onboarding`, `/experience-game`
 
 **Levels**: `/zone-diagnosis/:levelNumber`, `/tension-assessment`
 
@@ -56,6 +56,8 @@ docs/               # Specs, handoffs, research
 **Self-Knowledge**: `/curiosity-map`, `/life-paths`, `/career-alignment`, `/life-map`, `/mirror` (hidden)
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
+
+**Flows**: `/discovery`, `/direction`, `/money-map`, `/path-definition/:questId`, `/quest-map`, `/try/voice-stems`, `/try/aliveness`
 
 **Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
 
@@ -95,7 +97,7 @@ Key files: `LevelTab.jsx`, `QuestBoardCard.jsx`, `SweetSpotGraph.jsx`. DB: `ques
 
 ### 4. 7-Day Challenge System (Maintenance Engine)
 
-**Tabs**: Discover → Paths → Tune → Progress. Paths tab unlocks when current job flow OR choose-quests completed.
+**Tabs**: Daily → Weekly → Progress. Weekly tab unlocks when onboarding complete.
 
 **Experience Dome**: ~94 core nodes across 11 primals (Movement 18, Nourishment 6, Style 3, Tools 6, Bonds 9, Shelter 6, Story 21, Play 10, Fire 3, Healing 8, Sleep 4). Each node has format sub-nodes in `experienceDomeSubNodes.js`. Node registry + branch lists + virtual nodes in `experienceDomeConfig.js`. Skill inferences in `domeSkillInference.json`. Dome tick descriptions in `ExperienceGameFlow.jsx`.
 
@@ -214,7 +216,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `groan_challenges` additions: `dimension_values` jsonb, `predicted_difficulty` smallint (1-5, write-once trigger), `predicted_at`, `preaction_difficulty` smallint (1-5), `experienced_difficulty` smallint (1-5), `experienced_at`, `gap_voice` text | `voice_pattern_prompts` (user_id, voice, primary_dimensions, UNIQUE user_id+voice+dims) | `pattern_healing_responses` (user_id, voice, primary_dimensions, fear/origin/insight/rewire/expectation text, UNIQUE user_id+voice)
 
 ### Quests + Courage
-`quests` (skill_tags text[], branch text, is_current_job bool, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
+`quests` (skill_tags text[], branch text, is_current_job bool, life_fuel_baseline jsonb, current_dimensions jsonb, career_vector text, format_picks text[], precursor_level text, dream_dimensions jsonb, staying_fuels text[], path_fuels text[], buts text[], fear_outcome text, identity_declaration text, protective_voice text) | `quest_tasks` (task_signal text, node_id text) | `groan_challenges` | `healing_intentions` (quest_task_id FK, pattern, fear/origin/insight/rewire/expectation text, healing_stage)
 
 ### Clusters + Skills
 `nikigai_clusters` (resonance_state, behavioral_evidence, skill_tags, problem_tags) | `user_skill_progress` (user_id, skill_id, xp, level) | `curiosity_clusters`
@@ -226,7 +228,7 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
 
 ### Other
-`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
+`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations` | `path_fuel_reviews` (user_id, quest_id FK, week_of date, choice/connection/mastery/meaning bool, UNIQUE user_id+quest_id+week_of)
 
 RPCs: `increment_skill_xp`, `increment_behavioral_evidence`, `get_user_id_by_email`
 
