@@ -112,6 +112,75 @@ Landing → Stages 1-3 stems → Archetype reveal (from Stage 1) → Experience 
 
 8. **ChooseQuestsFlow embedded in dark theme needs fixed-position wrapper** — `.cqf` has light background, `.vs` has dark. Without a full-viewport wrapper with `z-index: 10`, dark bleeds through on scroll.
 
+## Two Modes, One Component — How /onboarding and /voice-stems Work
+
+Both routes render `VoiceStemFlow` with a different `mode` prop:
+- `/try/onboarding` → `<VoiceStemFlow mode="onboarding" />`
+- `/try/voice-stems` → `<VoiceStemFlow mode="workshop" />`
+
+`const isOnboarding = mode === 'onboarding'` controls all branching.
+
+### What they share
+- Same `VoiceStemFlow.jsx` component (2200+ lines)
+- Same voice stem recording pipeline (useAudioRecorder → countdown → record → transcribe → process)
+- Same Stages 1-3 (essence, suppressed, consequences)
+- Same archetype processing (will use Stage 1 answers for both)
+- Same essence reveal + blend name
+- Same `saveSession()` → localStorage + Supabase `public_leads`
+- Same pause/resume/back controls
+
+### Where they diverge
+
+| Feature | Onboarding | Workshop |
+|---|---|---|
+| Landing page | No name/email gate, just "Begin" | Name + email required |
+| Landing pills | Stages 1-3 + Experience Game | Stages 1-4 (includes Category) |
+| After avatar | → Experience Game (87 activities) | → Category Intro (4 stems, 60s) |
+| Category stems | Skipped | 4 stems → CategoryReveal → NudgeCards |
+| Paid filter | Skipped (limiting mindset) | Available via experience_results screen |
+| After experience game | → Signup gate | → experience_results (shows fun list) |
+| After signup | → Choose Quests → Download App | → Download App |
+| Choose Quests | Embedded (ChooseQuestsFlow with onComplete prop) | Not included |
+| Dome ratings `want_paid` | Written as `null` (no paid data) | Written as `true`/`false` if paid filter used |
+| Session restore (completed) | Routes to `experience_intro` if no categoryResults | Routes to `category_intro` if no categoryResults |
+
+### Key routing code (search terms for the next agent)
+- `isOnboarding ? 'experience_intro' : 'category_intro'` — avatar onSkip (line ~2176)
+- `isOnboarding ? 'signup_gate' : 'experience_results'` — exp_live onComplete (line ~2014)
+- `isOnboarding ? 'choose_quests' : 'download_app'` — handleSignupComplete (lines ~1715, ~1750)
+- Stage pills: `isOnboarding ? [Experience Game] : [Category]` (line ~1785)
+
+### Data flow for onboarding (what gets saved where)
+1. **During flow:** `saveSession()` → localStorage (`voice_stems_session` key) + Supabase `public_leads` (upserted on email, raw fetch with anon key)
+2. **After signup:** `handleSignupComplete` → `experience_dome_ratings` table (fun=fun, notFun=bored, want_paid=null)
+3. **During choose-quests:** `ChooseQuestsFlow` → `quests` table + `quest_tasks` table (via existing flow)
+4. **Path definition (TODO):** Would write to `quests` table (dimensions, fuels, fears, identity declarations)
+5. **Avatar:** `generate-avatar-gemini` edge function → Supabase storage `deal-screenshots/{userId}/`
+
+### Why the target flow order matters
+```
+Stages 1-3 → Archetype reveal → Experience Game → Signup → Choose Quests → Path Definition → Avatar → Download
+```
+
+- **Stages 1-3 first:** Discover who you were, what happened, and the cost. This is the emotional foundation.
+- **Archetype reveal after Stage 1 (planned):** Currently after Stage 3. Moving it up because the archetype is generated from Stage 1 answers anyway. User gets their identity early. Stages 2-3 then show "here's what happened to that person."
+- **Experience Game before signup:** Low commitment, fun, fast. Gets dome ratings without asking for an account.
+- **Signup gate:** Only asked AFTER they've invested ~20 min and have results worth saving.
+- **Choose Quests after signup:** Needs auth (writes to quests table). User picks life paths from their fun activities.
+- **Path Definition after quests:** Deeper commitment per quest — dimensions, fears, identity declaration. Sets up the game.
+- **Avatar LAST:** The grand finale. Pixar selfie as the closing celebration. User screenshots and shares. Emotional high note.
+
+### Edge function mapping (confusing, document it)
+| Edge fn stage | What it does | Called from |
+|---|---|---|
+| 1 | Stage 1 essence themes | triggerProcessing stageIndex 0 |
+| 2 | Stage 2 prediction + source | triggerProcessing stageIndex 1 |
+| 3 | Stage 3 dimension scoring | triggerProcessing stageIndex 2 |
+| 4 | Archetype matching | Currently triggerProcessing stageIndex 3, moving to processArchetypeFromStage1 |
+| 5 | (DEAD) Old batch experience game | Not called |
+| 6 | (DEAD) Old batch paid filter | Not called |
+| 7 | Category synthesis | triggerProcessing stageIndex 3 (was 4, shifted after archetype removal) |
+
 ## Recommendations
 
 1. **Execute the Stage 1 archetype plan first** — It's the highest-impact change. Users get their identity in the first 5 minutes instead of after 25 minutes. Plan is written and ready.
