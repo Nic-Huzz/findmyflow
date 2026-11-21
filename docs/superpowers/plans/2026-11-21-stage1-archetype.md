@@ -2,9 +2,22 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Remove Stage 4 voice stems (The Search, 6 questions). Instead, after Stage 3 results, run the archetype AI using Stage 1 transcripts + all prior context. This generates a more authentic archetype from childhood memories rather than abstract self-reflection.
+**Goal:** Remove Stage 4 voice stems (The Search, 6 questions). Generate archetype from Stage 1 childhood transcripts instead. Move archetype reveal + avatar to new positions in the flow. Bolt path definition into onboarding after choose-quests.
 
-**Architecture:** After Stage 3 processing completes and shows results, the "Continue" button triggers archetype processing immediately (no more recording). The archetype AI (edge function stage 4) receives Stage 1 transcripts + stages 1-3 context. The essence-mirror-blend call stays unchanged. The flow skips from Stage 3 results straight to essence reveal.
+**Architecture:** After Stage 1 processing, run the archetype AI immediately using Stage 1 transcripts. Show archetype reveal (primary + secondary + blend name + essence + mirror) on the Stage 1 results page. Stages 2-3 follow (wound + consequences). Avatar moves to the END of the flow (after path definition) as the grand finale.
+
+**IMPORTANT: This plan supersedes the original version. Key changes from the earlier draft:**
+- Archetype processes after Stage 1 (not after Stage 3)
+- Stage 1 results page shows archetype + essence (combined screen)
+- Avatar moves to END of flow (after path definition, before download)
+- Path definition bolted into onboarding (after choose-quests)
+- Stage 2 stem s2a_2 rewritten for clarity
+
+**Target onboarding flow:**
+Landing → Stage 1 stems → Archetype reveal (from Stage 1) → Stage 2 stems → Stage 3 stems → Experience Game → Signup → Choose Quests → Path Definition → Avatar Creation → Download App
+
+**Target workshop flow:**
+Landing → Stage 1 stems → Archetype reveal → Stage 2 stems → Stage 3 stems → Category Stems → Category Reveal → Nudges → Avatar Creation → Final Results
 
 **Tech Stack:** React (VoiceStemFlow.jsx), voiceStems.js (STAGES array), process-stems edge function (no prompt change needed, Stage 1 answers work with existing Stage 4 prompt)
 
