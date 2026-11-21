@@ -1,294 +1,396 @@
-# Stage 1 Archetype — Remove Stage 4 Stems Implementation Plan
+# Stage 1 Archetype + Flow Restructure Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Remove Stage 4 voice stems (The Search, 6 questions). Generate archetype from Stage 1 childhood transcripts instead. Move archetype reveal + avatar to new positions in the flow. Bolt path definition into onboarding after choose-quests.
+**Goal:** Generate archetype from Stage 1 childhood answers (not Stage 4 abstract stems). Restructure the entire onboarding + workshop flow: archetype reveal after Stage 1, avatar at the end, path definition bolted in.
 
-**Architecture:** After Stage 1 processing, run the archetype AI immediately using Stage 1 transcripts. Show archetype reveal (primary + secondary + blend name + essence + mirror) on the Stage 1 results page. Stages 2-3 follow (wound + consequences). Avatar moves to the END of the flow (after path definition) as the grand finale.
+**Architecture:** Stage 1 processing runs the archetype AI immediately after stems complete, using Stage 1 transcripts. The Stage 1 results page becomes the identity reveal (energy + patterns + mirror + archetype + blend name). Stage 4 "Search" stems are deleted. Avatar moves to the end of the flow as the grand finale. Path definition is embedded after choose-quests in onboarding.
 
-**IMPORTANT: This plan supersedes the original version. Key changes from the earlier draft:**
-- Archetype processes after Stage 1 (not after Stage 3)
-- Stage 1 results page shows archetype + essence (combined screen)
-- Avatar moves to END of flow (after path definition, before download)
-- Path definition bolted into onboarding (after choose-quests)
-- Stage 2 stem s2a_2 rewritten for clarity
+**Tech Stack:** React (VoiceStemFlow.jsx), voiceStems.js, ChooseQuestsFlow.jsx, PathDefinitionFlow (existing, needs embedding)
+
+**Evidence:** Tested with real user data. Stage 1 answers → "Playful Creator + Heart Alchemist → Joy Alchemist". Stage 4 answers → "Truth-Teller + Heart Alchemist → Honest Heart". Stage 1 version is more resonant because childhood memories are richer than abstract self-reflection.
 
 **Target onboarding flow:**
-Landing → Stage 1 stems → Archetype reveal (from Stage 1) → Stage 2 stems → Stage 3 stems → Experience Game → Signup → Choose Quests → Path Definition → Avatar Creation → Download App
+```
+Landing → Stage 1 stems → [Archetype AI processes] → Archetype Reveal → Stage 2 stems → Stage 3 stems → Experience Game (87 activities) → Signup → Choose Quests → Path Definition → Avatar Creation → Download App
+```
 
 **Target workshop flow:**
-Landing → Stage 1 stems → Archetype reveal → Stage 2 stems → Stage 3 stems → Category Stems → Category Reveal → Nudges → Avatar Creation → Final Results
+```
+Landing → Stage 1 stems → [Archetype AI processes] → Archetype Reveal → Stage 2 stems → Stage 3 stems → Category Stems (4, 60s) → Category Reveal → Nudges → Avatar Creation → Final Results
+```
 
-**Tech Stack:** React (VoiceStemFlow.jsx), voiceStems.js (STAGES array), process-stems edge function (no prompt change needed, Stage 1 answers work with existing Stage 4 prompt)
-
-**Spec:** Tested with dad's Stage 1 answers — produced "Playful Creator + Heart Alchemist → Joy Alchemist" vs original "Truth-Teller + Heart Alchemist → Honest Heart". Stage 1 answers are richer and more resonant.
+**Read first:** `docs/session-handoff-2026-11-17-voice-stems-rewrite.md` — full context on how `/try/onboarding` and `/try/voice-stems` share one component with `isOnboarding` branching, data flow, edge function mapping, and gotchas.
 
 ## Global Constraints
 
 - Never use em dashes in user-facing copy
-- Never hardcode CSS colors
-- Stage 4 edge function prompt stays unchanged (it works with any transcript content)
-- Stage 4 archetype state (`stage4Results`) stays — it stores the archetype results regardless of which transcripts generated them
-- The `completed: true` flag must still be set after archetype processing
-- Onboarding and workshop both get this change
+- Never hardcode CSS colors, use `var()` tokens
+- Edge function stage 4 prompt unchanged (works with any transcript content)
+- `stage4Results` state stays (stores archetype regardless of which transcripts generated it)
+- `stemProcessing.js` already spreads context (`{ stage, transcripts, ...context }`)
+- Category stems use `sc_` prefix, 60s timer (checked via `stemId.startsWith('sc_')`)
 
 ## File Map
 
 | File | Action | Responsibility |
 |---|---|---|
-| `src/flows/VoiceStemFlow.jsx` | Modify | Remove Stage 4 recording trigger, run archetype AI after Stage 3 results |
-| `src/data/voiceStems.js` | Modify | Remove STAGES[3] (archetype stems), shift STAGES[4] (category) to STAGES[3] |
-
-**NOT modified:**
-- `supabase/functions/process-stems/index.ts` — Stage 4 prompt works with any transcripts
-- `src/lib/stemProcessing.js` — already spreads context
-- `src/data/essenceArchetypes.js` — archetype data unchanged
-- `src/components/ExperienceGameLive.jsx` — not affected
+| `src/data/voiceStems.js` | Modify | Remove STAGES[3] (archetype stems). Category shifts from index 4 to 3. |
+| `src/flows/VoiceStemFlow.jsx` | Modify | Archetype after Stage 1, avatar at end, Stage 2 stem rewrite, stageIndex shifts, progress updates |
+| `src/flows/ChooseQuestsFlow.jsx` | No change | Already embedded with `onComplete` prop |
+| `supabase/functions/process-stems/index.ts` | No change | Stage 4 prompt works with Stage 1 transcripts |
 
 ---
 
-## !! WARNING — TASKS BELOW ARE OUTDATED !!
-
-**The tasks below were written for the ORIGINAL plan (archetype after Stage 3).** The decisions have changed:
-
-1. **Archetype processes after Stage 1, not Stage 3.** The `processArchetypeFromStage1` function should trigger after Stage 1 processing, not after Stage 3 results "Continue" button. The Stage 1 results page becomes the archetype reveal page (shows energy + patterns + mirror + primary/secondary archetype + blend name + essence).
-
-2. **Avatar moves to END of flow.** Tasks below put avatar after essence reveal. It should come after path definition, as the grand finale before download.
-
-3. **Path definition needs bolting in.** Not covered in tasks below. Needs to be added after choose-quests: `Signup → Choose Quests → Path Definition → Avatar → Download`.
-
-4. **Stage 2 stem s2a_2 needs rewriting.** Currently "When I think about doing {selectedExpression}..." — confusing because selectedExpression is auto-set. Needs clearer framing. New wording TBD with user.
-
-**Recommendation:** Re-plan these tasks from scratch using the target flows in the header above. The file changes are correct (remove STAGES[3], shift category) but the VoiceStemFlow wiring needs to be redesigned for the new flow order.
-
----
-
-### Task 1: Remove archetype stage from voiceStems.js, shift category
+### Task 1: Remove archetype stems, shift category
 
 **Files:**
 - Modify: `src/data/voiceStems.js`
 
 **Interfaces:**
-- Produces: `STAGES` array with 4 entries (was 5). Index 0=essence, 1=suppressed, 2=consequences, 3=category. Archetype stage removed entirely.
-- Consumers: `getStemsForStage(stageIndex)` — stageIndex 3 now returns category stems (was archetype). stageIndex 4 no longer exists.
+- Produces: `STAGES` with 4 entries: 0=essence, 1=suppressed, 2=consequences, 3=category
+- `getStemsForStage(3)` now returns category stems (sc_1 through sc_4)
 
-- [ ] **Step 1: Remove the archetype stage**
+- [ ] **Step 1: Delete the archetype stage**
 
-In `voiceStems.js`, remove the entire stage object at index 3 (id: 'archetype', label: 'The Search'). This is lines 69-80:
+Remove the entire STAGES[3] object (id: 'archetype', label: 'The Search', 6 stems s4_1 through s4_6). The category stage at index 4 automatically becomes index 3.
 
-```js
-  {
-    id: 'archetype',
-    label: 'The Search',
-    description: 'Who are you underneath all of this.',
-    stems: [
-      { id: 's4_1', text: "The version of me I'd be if nobody was judging is..." },
-      { id: 's4_2', text: 'The energy I bring when I stop performing is...' },
-      { id: 's4_3', text: "The thing people don't realise about me is..." },
-      { id: 's4_4', text: "The way I act when I'm at my most free is..." },
-      { id: 's4_5', text: 'The word that describes who I really am is...' },
-      { id: 's4_6', text: "When I'm alone and being honest, I am..." },
-    ],
-  },
-```
-
-Delete those lines. The category stage (previously index 4) becomes index 3 automatically.
-
-- [ ] **Step 2: Verify getStemsForStage**
-
-After removal:
-- `getStemsForStage(0)` = essence (6 stems) ✓
-- `getStemsForStage(1, 0)` = suppressed layer 1 (7 stems) ✓
-- `getStemsForStage(1, 1)` = suppressed layer 2 (6 stems) ✓
-- `getStemsForStage(2)` = consequences (10 stems) ✓
-- `getStemsForStage(3)` = category (4 stems, was index 4) ✓
-- `getStemsForStage(4)` = undefined (no more) ✓
-
-- [ ] **Step 3: Run build**
+- [ ] **Step 2: Run build**
 
 ```bash
 npm run build
 ```
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
 git add src/data/voiceStems.js
-git commit -m "feat: remove archetype stems (Stage 4), shift category to index 3"
+git commit -m "feat: remove archetype stems, shift category to STAGES[3]"
 ```
 
 ---
 
-### Task 2: Rewire VoiceStemFlow — archetype from Stage 1 transcripts
+### Task 2: Archetype processing after Stage 1
 
 **Files:**
 - Modify: `src/flows/VoiceStemFlow.jsx`
 
 **Interfaces:**
-- Consumes: `stage1Results` (transcripts from Stage 1), `stage2Results` (wound context), `stage3Results` (dimensions)
-- Produces: `stage4Results` (archetype, same shape as before), `blendResult`, `essenceName`
+- Consumes: Stage 1 transcripts (s1_1 through s1_6 from `transcriptsRef.current`)
+- Produces: `stage4Results`, `blendResult`, `essenceName` — set during Stage 1 processing, before Stage 2 begins
 
-This is the main task. Multiple changes in VoiceStemFlow.jsx:
+The archetype AI currently runs after Stage 4 stems complete (stageIndex 3 branch in `triggerProcessing`). Move it into the Stage 1 processing block so it runs right after Stage 1 results come back.
 
-- [ ] **Step 1: Change Stage 3 results "Continue" button**
+- [ ] **Step 1: Modify Stage 1 processing to include archetype**
 
-Currently `results_3` onContinue triggers `beginStage({ stageIndex: 3 })` which starts Stage 4 recording. Change it to trigger archetype processing directly.
+In `triggerProcessing`, find the `stageIndex === 0` block (around line 1424). Currently it:
+1. Calls `processStage(1, transcripts, {})`
+2. Sets `stage1Results`, `selectedExpression`
+3. Shows `results_1`
 
-Find (around line 1960):
-```jsx
-<Stage3Results
-  results={stage3Results}
-  onContinue={() => beginStage({ stageIndex: 3 })}
-/>
-```
+Change it to also:
+4. Call `processStage(4, stage1Transcripts, context)` using the same Stage 1 transcripts
+5. Call `essence-mirror-blend` for the custom name
+6. Set `stage4Results`, `blendResult`, `essenceName`
+7. Save all to session
 
-Replace with:
-```jsx
-<Stage3Results
-  results={stage3Results}
-  onContinue={() => processArchetypeFromStage1()}
-/>
-```
-
-- [ ] **Step 2: Create processArchetypeFromStage1 function**
-
-Add this function after `triggerProcessing` (around line 1572). This replaces the `stageIndex === 3` branch in triggerProcessing. It:
-1. Shows processing screen
-2. Builds Stage 1 transcripts (from transcriptsRef, using s1_ stem IDs)
-3. Calls processStage(4) with Stage 1 transcripts + all context
-4. Calls essence-mirror-blend
-5. Sets stage4Results, blendResult, essenceName
-6. Shows essence_reveal
+The archetype AI needs context from stages 2-3 (wound, dimensions) but those don't exist yet at Stage 1. Pass empty strings for those fields — the AI prompt handles missing context gracefully (it uses `|| 'unknown'` fallbacks). The archetype will be based purely on childhood essence, which is what we want.
 
 ```js
-const processArchetypeFromStage1 = useCallback(async () => {
-  setScreen('processing')
+if (stageIndex === 0) {
+  // Stage 1 — cluster essence themes
+  const results = await processStage(1, transcripts, {})
+  setStage1Results(results)
+  const energy = results?.energy || 'your essence'
+  const expression = results?.essenceSummary || energy
+  setSelectedExpression(expression)
+
+  // Run archetype AI using Stage 1 transcripts
   setProcessingStageKey(4)
-  setFlowError(null)
+  const archetypeResults = await processStage(4, transcripts, {
+    selectedExpression: expression,
+    stage1Mirror: results?.mirror || '',
+    woundScene: '',
+    nsLabel: '',
+    lowestDimension: '',
+  })
+  setStage4Results(archetypeResults)
 
-  // Build transcripts from Stage 1 stems (s1_1 through s1_6)
-  const stage1Stems = getStemsForStage(0, null, { selectedExpression, confirmedPrediction })
-  const transcripts = stage1Stems.map(stem => ({
-    stemId: stem.id,
-    stemText: stem.text,
-    transcript: transcriptsRef.current[stem.id] || '',
-  }))
-
-  const lowestDim = stage3Results?.dimensions
-    ? Object.entries(stage3Results.dimensions).reduce((low, [k, v]) =>
-        (v?.score || 5) < (low.score || 5) ? { key: k, score: v?.score } : low, { key: '', score: 5 }
-      ).key
-    : ''
-
-  try {
-    const results = await processStage(4, transcripts, {
-      selectedExpression,
-      confirmedPrediction,
-      stage1Mirror: stage1Results?.mirror || '',
-      woundScene: stage2Results?.woundScene || '',
-      nsLabel: stage2Results?.nsLabel || '',
-      lowestDimension: lowestDim,
-    })
-    setStage4Results(results)
-    saveSession({
-      stage4Results: results,
-      completed: true,
-    })
-
-    // Call essence-mirror-blend for custom name
-    const primaryData = getArchetype(results.primaryArchetype?.id)
-    const secondaryData = getArchetype(results.secondaryArchetype?.id)
-    if (primaryData && secondaryData) {
-      try {
-        const { data: blendData } = await supabase.functions.invoke('essence-mirror-blend', {
-          body: {
-            primary: {
-              name: primaryData.name,
-              poetic_line: primaryData.poetic_line,
-              superpower: primaryData.superpower,
-              essence_wound: primaryData.essence_wound,
-              poetic_vision: primaryData.poetic_vision,
-              energetic_transmission: primaryData.energetic_transmission,
-              north_star: primaryData.north_star,
-              vision_in_action: primaryData.vision_in_action,
-            },
-            secondary: {
-              name: secondaryData.name,
-              poetic_line: secondaryData.poetic_line,
-              superpower: secondaryData.superpower,
-              essence_wound: secondaryData.essence_wound,
-              poetic_vision: secondaryData.poetic_vision,
-              energetic_transmission: secondaryData.energetic_transmission,
-              north_star: secondaryData.north_star,
-              vision_in_action: secondaryData.vision_in_action,
-            },
+  // Get custom blend name
+  const primaryData = getArchetype(archetypeResults.primaryArchetype?.id)
+  const secondaryData = getArchetype(archetypeResults.secondaryArchetype?.id)
+  if (primaryData && secondaryData) {
+    try {
+      const { data: blendData } = await supabase.functions.invoke('essence-mirror-blend', {
+        body: {
+          primary: {
+            name: primaryData.name,
+            poetic_line: primaryData.poetic_line,
+            superpower: primaryData.superpower,
+            essence_wound: primaryData.essence_wound,
+            poetic_vision: primaryData.poetic_vision,
+            energetic_transmission: primaryData.energetic_transmission,
+            north_star: primaryData.north_star,
+            vision_in_action: primaryData.vision_in_action,
           },
-        })
-        if (blendData?.blended_name) {
-          setBlendResult(blendData)
-          setEssenceName(blendData.blended_name.replace(/^The\s+/i, ''))
-          saveSession({ blendResult: blendData, essenceName: blendData.blended_name.replace(/^The\s+/i, '') })
-        } else {
-          setEssenceName(primaryData.name)
-        }
-      } catch (blendErr) {
-        console.warn('Blend API error:', blendErr)
+          secondary: {
+            name: secondaryData.name,
+            poetic_line: secondaryData.poetic_line,
+            superpower: secondaryData.superpower,
+            essence_wound: secondaryData.essence_wound,
+            poetic_vision: secondaryData.poetic_vision,
+            energetic_transmission: secondaryData.energetic_transmission,
+            north_star: secondaryData.north_star,
+            vision_in_action: secondaryData.vision_in_action,
+          },
+        },
+      })
+      if (blendData?.blended_name) {
+        setBlendResult(blendData)
+        setEssenceName(blendData.blended_name.replace(/^The\s+/i, ''))
+        saveSession({ blendResult: blendData, essenceName: blendData.blended_name.replace(/^The\s+/i, '') })
+      } else {
         setEssenceName(primaryData.name)
       }
-    } else {
-      setEssenceName(results.primaryArchetype?.name || 'Your True Self')
+    } catch (blendErr) {
+      console.warn('Blend API error:', blendErr)
+      setEssenceName(primaryData.name)
     }
-    setScreen('essence_reveal')
-  } catch (err) {
-    console.error('Archetype processing error:', err)
-    setFlowError('Something went wrong analysing your responses. Tap to retry.')
+  } else {
+    setEssenceName(archetypeResults.primaryArchetype?.name || 'Your True Self')
   }
-}, [selectedExpression, confirmedPrediction, stage1Results, stage2Results, stage3Results])
+
+  saveSession({
+    stage1Transcripts: transcriptsRef.current,
+    stage1Results: results,
+    selectedExpression: expression,
+    stage4Results: archetypeResults,
+    completed: true,
+  })
+  setScreen('results_1')
+}
 ```
 
-- [ ] **Step 3: Remove stageIndex === 3 branch from triggerProcessing**
+- [ ] **Step 2: Update Stage1Results component to show archetype**
 
-In `triggerProcessing`, delete the entire `else if (stageIndex === 3)` block (lines 1484-1547). This was the old Stage 4 recording → processing path. It is replaced by `processArchetypeFromStage1`.
+The `Stage1Results` component (around line 410) currently shows energy + patterns + mirror. Add archetype display: primary name, secondary name, blend name, essenceBlend, mirrorReveal.
 
-- [ ] **Step 4: Shift category from stageIndex 4 to stageIndex 3**
+Pass the new props:
+```jsx
+<Stage1Results
+  results={stage1Results}
+  archetypeResults={stage4Results}
+  blendResult={blendResult}
+  essenceName={essenceName}
+  onEssenceNameChange={(name) => {
+    setEssenceName(name)
+    saveSession({ essenceName: name })
+  }}
+  onContinue={() => beginStage({ stageIndex: 1, layerIndex: 0 })}
+/>
+```
 
-In `triggerProcessing`, the category processing block is currently:
+Update the component to render the archetype section below the existing patterns. Include the editable essence name input (move from EssenceReveal to here). Show:
+- Energy label ("Roaming and restless") as headline
+- essenceSummary as subtitle
+- Patterns (existing)
+- Mirror (existing)
+- Divider
+- Blend name (editable input, gold text)
+- Primary + secondary archetype names
+- essenceBlend text
+- mirrorReveal text
+- "This is me" continue button
+
+- [ ] **Step 3: Remove the old stageIndex === 3 archetype branch from triggerProcessing**
+
+Delete the entire `else if (stageIndex === 3)` block that was the old archetype processing path (the one with `processStage(4, ...)`, essence-mirror-blend call, etc.). This code is now in the stageIndex === 0 block.
+
+- [ ] **Step 4: Remove the separate EssenceReveal screen**
+
+The essence reveal is now part of the Stage 1 results page. Remove:
+- The `EssenceReveal` component definition
+- The `{screen === 'essence_reveal' && ...}` JSX block
+- Any routing that goes to `'essence_reveal'`
+
+The `saveEssenceProfile` call that was in essence_reveal's `onContinue` should move to the Stage 1 results `onContinue` or be called after archetype processing.
+
+- [ ] **Step 5: Rewrite Stage 2 stem s2a_2**
+
+Currently: `"When I think about doing {selectedExpression}, the first thing I feel is..."`
+
+The `{selectedExpression}` is auto-set to `essenceSummary` (e.g. "exploring and discovering what's around every corner"). This is confusing because the user didn't choose it and may not recognise it.
+
+Change to reference what the user actually saw — their energy label:
 ```js
-} else if (stageIndex === 4) {
+{ id: 's2a_2', text: 'When I think about being {selectedExpression} again, the first thing I feel is...', dynamic: true },
 ```
-Change to:
+
+Or even simpler, remove the dynamic part entirely and make it universal:
 ```js
-} else if (stageIndex === 3) {
+{ id: 's2a_2', text: 'When I think about being that kid again, the first thing I feel is...' },
 ```
 
-Also update the processingStageKey mapping. Currently:
+**Decision needed from user:** Which wording? Flag this for the user before implementing. Use the simpler version ("being that kid again") as default if no response.
+
+- [ ] **Step 6: Run build**
+
+```bash
+npm run build
+```
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add src/flows/VoiceStemFlow.jsx src/data/voiceStems.js
+git commit -m "feat: archetype from Stage 1 answers, combined reveal page"
+```
+
+---
+
+### Task 3: Move avatar to end of flow
+
+**Files:**
+- Modify: `src/flows/VoiceStemFlow.jsx`
+
+Currently avatar comes after essence reveal. Move it to after path definition (onboarding) or after nudges (workshop).
+
+- [ ] **Step 1: Update routing — avatar no longer after essence reveal**
+
+The Stage 1 results `onContinue` should go straight to Stage 2 (not avatar):
+```jsx
+onContinue={() => beginStage({ stageIndex: 1, layerIndex: 0 })}
+```
+This is already the case if we removed EssenceReveal in Task 2.
+
+- [ ] **Step 2: Move avatar to after path definition (onboarding)**
+
+Current onboarding end: `Choose Quests → Download App`
+New: `Choose Quests → Path Definition → Avatar → Download App`
+
+Change ChooseQuestsFlow onComplete:
+```jsx
+<ChooseQuestsFlow onComplete={() => setScreen('avatar')} />
+```
+
+Change avatar onSkip for onboarding:
+```jsx
+onSkip={() => setScreen('download_app')}
+```
+
+Note: Path definition is Task 4. For now, wire avatar after choose-quests. Task 4 will insert path definition between them.
+
+- [ ] **Step 3: Move avatar to after nudges (workshop)**
+
+Current workshop end: `Nudges → Final Results`
+New: `Nudges → Avatar → Final Results`
+
+Change NudgeCards onContinue for workshop:
+```jsx
+onContinue={() => setScreen(isOnboarding ? 'avatar' : 'avatar')}
+```
+
+Actually both modes go to avatar now. Simplify:
+```jsx
+onContinue={() => setScreen('avatar')}
+```
+
+Change avatar onSkip:
+```jsx
+onSkip={() => setScreen(isOnboarding ? 'download_app' : 'final_results')}
+```
+
+- [ ] **Step 4: Remove old avatar routing from category_intro**
+
+Currently avatar onSkip routes to `category_intro` (workshop) or `experience_intro` (onboarding). Both of these are wrong now — avatar is at the END, not in the middle. Remove these routes since avatar is now only reached from nudges/choose-quests.
+
+- [ ] **Step 5: Run build**
+
+```bash
+npm run build
+```
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add src/flows/VoiceStemFlow.jsx
+git commit -m "feat: move avatar to end of flow (after path def / nudges)"
+```
+
+---
+
+### Task 4: Bolt path definition into onboarding
+
+**Files:**
+- Modify: `src/flows/VoiceStemFlow.jsx`
+- Read: `src/flows/PathDefinitionFlow.jsx` (or wherever path definition lives — search for `path-definition` route in AppRouter.jsx)
+
+Path definition is the per-quest setup: dimensions, fuels, fears, identity declarations, commitment. Currently a separate in-app flow at `/path-definition/:questId`. Needs to run after choose-quests in onboarding.
+
+- [ ] **Step 1: Find the path definition component**
+
+```bash
+grep -r "path-definition\|PathDefinition" src/AppRouter.jsx src/flows/
+```
+
+Determine: can it be imported and rendered with an `onComplete` prop like ChooseQuestsFlow? Or does it need quest IDs from the choose-quests step?
+
+- [ ] **Step 2: Wire it into the onboarding flow**
+
+After choose-quests completes, the user has created quests. Route to path definition for each quest, then to avatar:
+
+```
+Choose Quests → Path Definition (per quest) → Avatar → Download
+```
+
+If path definition handles multiple quests internally, embed it like ChooseQuestsFlow:
+```jsx
+{screen === 'path_definition' && (
+  <PathDefinitionFlow onComplete={() => setScreen('avatar')} />
+)}
+```
+
+If it only handles one quest at a time, may need a wrapper that iterates through created quests.
+
+- [ ] **Step 3: Update ChooseQuestsFlow onComplete routing**
+
+Change from going to avatar:
+```jsx
+<ChooseQuestsFlow onComplete={() => setScreen('path_definition')} />
+```
+
+- [ ] **Step 4: Run build + test**
+
+```bash
+npm run build
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/flows/VoiceStemFlow.jsx
+git commit -m "feat: bolt path definition into onboarding after choose-quests"
+```
+
+---
+
+### Task 5: Update progress tracking, landing page, session restore
+
+**Files:**
+- Modify: `src/flows/VoiceStemFlow.jsx`
+
+- [ ] **Step 1: Update totalStems**
+
+Onboarding: 29 stems (6 + 13 + 10, no category, no archetype)
+Workshop: 33 stems (6 + 13 + 10 + 4 category)
+
 ```js
-if (stageIndex === 0) setProcessingStageKey(1)
-else if (stageIndex === 1 && layerIndex === 0) setProcessingStageKey('2a')
-else if (stageIndex === 1 && layerIndex === 1) setProcessingStageKey('2b')
-else if (stageIndex === 2) setProcessingStageKey(3)
-else if (stageIndex === 3) setProcessingStageKey(4)
-else if (stageIndex === 4) setProcessingStageKey(7)
+const totalStems = isOnboarding ? 29 : 33
 ```
 
-Remove the `stageIndex === 3 → 4` line (archetype no longer goes through triggerProcessing) and change `stageIndex === 4 → 7` to `stageIndex === 3 → 7`:
+- [ ] **Step 2: Update stemsCompleted**
 
-```js
-if (stageIndex === 0) setProcessingStageKey(1)
-else if (stageIndex === 1 && layerIndex === 0) setProcessingStageKey('2a')
-else if (stageIndex === 1 && layerIndex === 1) setProcessingStageKey('2b')
-else if (stageIndex === 2) setProcessingStageKey(3)
-else if (stageIndex === 3) setProcessingStageKey(7)
-```
-
-- [ ] **Step 5: Update progress tracking**
-
-**5a. totalStems:** Change `39` to `33` (removed 6 archetype stems):
-```js
-const totalStems = 33 // 6 + 13 + 10 + 4(category)
-```
-
-**5b. stemsCompleted:** Remove the stageIndex 3 archetype line, shift category:
+Remove stageIndex 3 archetype case. Category is now stageIndex 3:
 ```js
 const stemsCompleted = (() => {
   if (position.stageIndex === 0) return position.stemIndex
@@ -298,11 +400,12 @@ const stemsCompleted = (() => {
     return layer1done + 7 + position.stemIndex
   }
   if (position.stageIndex === 2) return 6 + 13 + position.stemIndex
-  return 6 + 13 + 10 + position.stemIndex // stageIndex === 3 (category)
+  return 6 + 13 + 10 + position.stemIndex // stageIndex === 3 (category, workshop only)
 })()
 ```
 
-**5c. stageLabel:** Remove archetype label, update totals. Category is now stage 4 of 4 (for workshop). For onboarding, category is skipped so it only shows stages 1-3:
+- [ ] **Step 3: Update stageLabel**
+
 ```js
 const stageLabel = (() => {
   const total = isOnboarding ? 3 : 4
@@ -316,33 +419,23 @@ const stageLabel = (() => {
 })()
 ```
 
-Note: `isOnboarding` is not in scope inside the IIFE. It is available in the component scope since `const isOnboarding = mode === 'onboarding'` is at the top. IIFEs in JSX still close over component variables, so this works.
+- [ ] **Step 4: Update processingStageKey mapping in triggerProcessing**
 
-- [ ] **Step 6: Update category stem timer check**
-
-The `startCountdownThenRecord` uses `stemId.startsWith('sc_')` for the 60s timer. Category stems still use `sc_` prefix. No change needed here.
-
-- [ ] **Step 7: Update avatar onSkip routing for workshop**
-
-Currently workshop routes avatar → `category_intro`. Category is now stageIndex 3 (was 4). Find:
-```jsx
-onSkip={() => setScreen(isOnboarding ? 'experience_intro' : 'category_intro')}
+```js
+if (stageIndex === 0) setProcessingStageKey(1)
+else if (stageIndex === 1 && layerIndex === 0) setProcessingStageKey('2a')
+else if (stageIndex === 1 && layerIndex === 1) setProcessingStageKey('2b')
+else if (stageIndex === 2) setProcessingStageKey(3)
+else if (stageIndex === 3) setProcessingStageKey(7)
 ```
 
-The `beginStage` call in `category_intro` currently does `beginStage({ stageIndex: 4 })`. Change to `beginStage({ stageIndex: 3 })`:
+Note: processingStageKey 4 (archetype) is now set inside the stageIndex 0 block, not here.
 
-Find the category_intro JSX block and change:
-```jsx
-onConfirm={() => beginStage({ stageIndex: 4 })}
-```
-To:
-```jsx
-onConfirm={() => beginStage({ stageIndex: 3 })}
-```
+- [ ] **Step 5: Update category stageIndex in triggerProcessing**
 
-- [ ] **Step 8: Update transcript key mapping**
+The category processing branch changes from `stageIndex === 4` to `stageIndex === 3`.
 
-In `triggerProcessing`, the stageKey mapping for category was using stageIndex === 4. Now it's stageIndex === 3. But stageIndex === 3 previously mapped to `'stage4Transcripts'`. With archetype removed, we need:
+- [ ] **Step 6: Update transcript key mapping**
 
 ```js
 const stageKey = stageIndex === 0 ? 'stage1Transcripts'
@@ -351,76 +444,57 @@ const stageKey = stageIndex === 0 ? 'stage1Transcripts'
   : 'categoryTranscripts'
 ```
 
-This was already set to `'categoryTranscripts'` for the old stageIndex 4 catch-all. With the shift, stageIndex 3 hits the catch-all. Verify this is correct after changes.
+- [ ] **Step 7: Update category_intro beginStage call**
 
-- [ ] **Step 9: Update landing page stage pills**
-
-Workshop shows "Stage 4: The Search" — remove it. Category becomes stage 4. Update counts:
-
-Workshop pills:
-```js
-{ n: 1, label: 'Living from Essence', desc: '6 stems — who you were as a kid' },
-{ n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
-{ n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
-...(!isOnboarding ? [
-  { n: 4, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
-] : []),
+```jsx
+onConfirm={() => beginStage({ stageIndex: 3 })}
 ```
 
-Remove the old "The Search" pill entirely.
+- [ ] **Step 8: Update landing page pills**
 
-Update workshop description: "33 stems, 4 stages, about 20 minutes"
-Update onboarding description: "29 stems, 3 stages, about 20 minutes" (no category, no archetype stems)
+Onboarding: 3 stages + Experience Game (no category, no archetype)
+Workshop: 4 stages (includes category, no archetype)
 
-Wait — onboarding has stages 1-3 (29 stems) + experience game. So "3 voice stages + experience game, about 25 minutes".
+Update descriptions to match new stem counts and time estimates.
 
-- [ ] **Step 10: Update session restore resume options**
-
-The `resume=4` option currently calls `beginStage({ stageIndex: 3 })` for archetype. With archetype removed, `resume=4` should either be removed or mapped to category. Update:
-
-```js
-} else if (resumeStage === '4' && saved.stage3Results) {
-  beginStage({ stageIndex: 3 }) // now category, not archetype
-}
-```
-
-This is fine — stageIndex 3 is now category.
-
-- [ ] **Step 11: Update handleRetryProcessing**
-
-The error retry for processing currently calls `triggerProcessing(position.stageIndex, position.layerIndex)`. Since archetype no longer goes through triggerProcessing, if the archetype processing fails, the retry needs to call `processArchetypeFromStage1` instead. Check if the retry button's screen state could be `processing` with `processingStageKey === 4`:
-
-The processing error screen shows a Retry button that calls `handleRetryProcessing`. If archetype processing fails (processingStageKey is 4), it would call triggerProcessing which no longer has a stageIndex 3 → archetype branch.
-
-Fix: in `handleRetryProcessing`, check if processingStageKey is 4 and call `processArchetypeFromStage1`:
+- [ ] **Step 9: Update handleRetryProcessing**
 
 ```js
 const handleRetryProcessing = () => {
   setFlowError(null)
   if (processingStageKey === 4) {
-    processArchetypeFromStage1()
+    // Archetype retry — re-run Stage 1 processing which includes archetype
+    triggerProcessing(0, null)
   } else {
     triggerProcessing(position.stageIndex, position.layerIndex)
   }
 }
 ```
 
-- [ ] **Step 12: Run build**
+Note: Since archetype is now part of stageIndex 0 processing, retrying with stageIndex 0 re-runs both Stage 1 + archetype. This means Stage 1 results also regenerate, which is acceptable.
+
+- [ ] **Step 10: Update session restore**
+
+The `completed: true` flag is now set after Stage 1 (not after Stage 4). Session restore with `completed: true` should route appropriately:
+- If `stage3Results` exists → user finished everything, go to appropriate end screen
+- If only `stage1Results` exists → user got archetype but hasn't done stages 2-3 yet
+
+- [ ] **Step 11: Run build**
 
 ```bash
 npm run build
 ```
 
-- [ ] **Step 13: Commit**
+- [ ] **Step 12: Commit**
 
 ```bash
 git add src/flows/VoiceStemFlow.jsx
-git commit -m "feat: generate archetype from Stage 1 answers, remove Stage 4 stems"
+git commit -m "feat: update progress, landing, routing for new flow order"
 ```
 
 ---
 
-### Task 3: Test + deploy
+### Task 6: Final integration test + push
 
 - [ ] **Step 1: Full build**
 
@@ -428,26 +502,29 @@ git commit -m "feat: generate archetype from Stage 1 answers, remove Stage 4 ste
 npm run build
 ```
 
-- [ ] **Step 2: Verify flow order**
+- [ ] **Step 2: Verify both flows end-to-end**
 
 **Onboarding:**
-Landing → Stages 1-3 stems → Stage 3 results → Processing (archetype from Stage 1) → Essence Reveal → Avatar → Experience Game → Signup → Choose Quests → Download
+Landing → Stage 1 (6 stems) → Archetype reveal on results page → Stage 2 (13 stems) → Stage 3 (10 stems) → Experience Game → Signup → Choose Quests → Path Definition → Avatar → Download
 
 **Workshop:**
-Landing → Stages 1-3 stems → Stage 3 results → Processing (archetype from Stage 1) → Essence Reveal → Avatar → Category Intro → Category Stems (stageIndex 3, 60s) → Category Reveal → Nudges → Final Results
+Landing → Stage 1 (6 stems) → Archetype reveal on results page → Stage 2 (13 stems) → Stage 3 (10 stems) → Category (4 stems, 60s) → Category Reveal → Nudges → Avatar → Final Results
 
 - [ ] **Step 3: Verify stageIndex mapping**
 
 | stageIndex | Stage | Stems | Edge fn stage |
 |---|---|---|---|
-| 0 | Essence | 6 | 1 |
+| 0 | Essence + Archetype | 6 (archetype uses same transcripts) | 1 + 4 |
 | 1 (layer 0) | Suppressed L2 | 7 | 2 |
 | 1 (layer 1) | Suppressed L3 | 6 | 2 |
 | 2 | Consequences | 10 | 3 |
-| — | Archetype (no stems) | 0 | 4 (uses Stage 1 transcripts) |
 | 3 | Category (workshop only) | 4 | 7 |
 
-- [ ] **Step 4: Push**
+- [ ] **Step 4: Deploy edge function if changed**
+
+Only needed if process-stems was modified (it shouldn't be).
+
+- [ ] **Step 5: Push**
 
 ```bash
 git push origin main
