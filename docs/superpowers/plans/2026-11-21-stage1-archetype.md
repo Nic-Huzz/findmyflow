@@ -47,6 +47,22 @@ Landing → Stage 1 stems → Archetype reveal → Stage 2 stems → Stage 3 ste
 
 ---
 
+## !! WARNING — TASKS BELOW ARE OUTDATED !!
+
+**The tasks below were written for the ORIGINAL plan (archetype after Stage 3).** The decisions have changed:
+
+1. **Archetype processes after Stage 1, not Stage 3.** The `processArchetypeFromStage1` function should trigger after Stage 1 processing, not after Stage 3 results "Continue" button. The Stage 1 results page becomes the archetype reveal page (shows energy + patterns + mirror + primary/secondary archetype + blend name + essence).
+
+2. **Avatar moves to END of flow.** Tasks below put avatar after essence reveal. It should come after path definition, as the grand finale before download.
+
+3. **Path definition needs bolting in.** Not covered in tasks below. Needs to be added after choose-quests: `Signup → Choose Quests → Path Definition → Avatar → Download`.
+
+4. **Stage 2 stem s2a_2 needs rewriting.** Currently "When I think about doing {selectedExpression}..." — confusing because selectedExpression is auto-set. Needs clearer framing. New wording TBD with user.
+
+**Recommendation:** Re-plan these tasks from scratch using the target flows in the header above. The file changes are correct (remove STAGES[3], shift category) but the VoiceStemFlow wiring needs to be redesigned for the new flow order.
+
+---
+
 ### Task 1: Remove archetype stage from voiceStems.js, shift category
 
 **Files:**
