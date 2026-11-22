@@ -1,6 +1,7 @@
 /**
- * voiceStems.js — All 35 sentence completion stems for the Essence Journey.
- * 4 stages, with Stage 2 split into Layer 2 (7 stems) and Layer 3 (6 stems).
+ * voiceStems.js — All 29 sentence completion stems for the Essence Journey.
+ * 3 stages + category, with Stage 2 split into Layer 2 (7 stems) and Layer 3 (6 stems).
+ * Archetype is generated from Stage 1 transcripts (not separate stems).
  */
 
 export const STAGES = [
@@ -27,7 +28,7 @@ export const STAGES = [
         label: 'Layer 2: Prediction',
         stems: [
           { id: 's2a_1', text: 'As a kid I struggled with...' },
-          { id: 's2a_2', text: 'When I think about doing {selectedExpression}, the first thing I feel is...', dynamic: true },
+          { id: 's2a_2', text: 'When I think about being that kid again, the first thing I feel is...' },
           { id: 's2a_3', text: 'If I did that in front of people, I expect...' },
           { id: 's2a_4', text: 'The last time I almost did something like that...' },
           { id: 's2a_5', text: 'The voice in my head when I consider it says...' },
@@ -64,19 +65,6 @@ export const STAGES = [
       { id: 's3_8', text: 'When I think about whether what I do matters, I feel...', dimension: 'meaning' },
       { id: 's3_9', text: 'When people see the real me, I feel...', dimension: 'safety' },
       { id: 's3_10', text: 'The parts of myself I hide are...', dimension: 'safety' },
-    ],
-  },
-  {
-    id: 'archetype',
-    label: 'The Search',
-    description: 'Who are you underneath all of this.',
-    stems: [
-      { id: 's4_1', text: "The version of me I'd be if nobody was judging is..." },
-      { id: 's4_2', text: 'The energy I bring when I stop performing is...' },
-      { id: 's4_3', text: "The thing people don't realise about me is..." },
-      { id: 's4_4', text: "The way I act when I'm at my most free is..." },
-      { id: 's4_5', text: 'The word that describes who I really am is...' },
-      { id: 's4_6', text: "When I'm alone and being honest, I am..." },
     ],
   },
   {

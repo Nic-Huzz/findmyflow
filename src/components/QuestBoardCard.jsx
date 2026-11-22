@@ -636,6 +636,17 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
       {expanded && (
         <div className="qbc-body">
 
+          {/* Path definition banner — shown when quest has no dimensions set */}
+          {(!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && !(quest.is_current_job && quest.status === 'reference') && (
+            <div className="qbc-define-banner" onClick={() => navigate(`/path-definition/${quest.id}`)}>
+              <div className="qbc-define-banner-text">
+                <strong>Define your path</strong>
+                <span>Set your dimensions, identity, and first step</span>
+              </div>
+              <span className="qbc-define-banner-arrow">→</span>
+            </div>
+          )}
+
           {/* Current job reference — show life fuels instead of define CTA */}
           {quest.is_current_job && quest.life_fuel_baseline && (
             <div className="qbc-fuel-summary">
@@ -651,13 +662,6 @@ export default function QuestBoardCard({ quest, tasks, experiences = [], userId,
                 )
               })}
             </div>
-          )}
-
-          {/* Define path CTA — hidden in swipe mode */}
-          {!alwaysExpanded && (!quest.current_dimensions || Object.keys(quest.current_dimensions).length === 0) && !(quest.is_current_job && quest.status === 'reference') && (
-            <button className="qbc-define-cta" onClick={() => navigate(`/path-definition/${quest.id}`)}>
-              Define this path →
-            </button>
           )}
 
           {/* Next Move — hidden in swipe mode (weekly focus handles picking) */}

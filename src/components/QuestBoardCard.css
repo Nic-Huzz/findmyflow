@@ -118,6 +118,42 @@
 }
 .qbc-define-cta:active { transform: scale(0.98); background: rgba(94, 23, 235, 0.1); }
 
+/* ── Path definition banner (shown in swipe mode too) ── */
+.qbc-define-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: var(--accent-primary-light, rgba(94, 23, 235, 0.06));
+  border: 1px dashed var(--accent-primary, #5e17eb);
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.qbc-define-banner:active { transform: scale(0.98); }
+.qbc-define-banner-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.qbc-define-banner-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-primary, #5e17eb);
+}
+.qbc-define-banner-text span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.qbc-define-banner-arrow {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent-primary, #5e17eb);
+}
+
 /* ── Experience sections ── */
 .qbc-exp {
   border-top: 1px solid rgba(0, 0, 0, 0.04);

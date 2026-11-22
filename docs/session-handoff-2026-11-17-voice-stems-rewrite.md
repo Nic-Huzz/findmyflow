@@ -129,20 +129,24 @@ Both routes render `VoiceStemFlow` with a different `mode` prop:
 - Same `saveSession()` → localStorage + Supabase `public_leads`
 - Same pause/resume/back controls
 
-### Where they diverge
+### Where they diverge (updated Nov 22)
 
 | Feature | Onboarding | Workshop |
 |---|---|---|
 | Landing page | No name/email gate, just "Begin" | Name + email required |
 | Landing pills | Stages 1-3 + Experience Game | Stages 1-4 (includes Category) |
-| After avatar | → Experience Game (87 activities) | → Category Intro (4 stems, 60s) |
+| Archetype | Generated from Stage 1 transcripts, shown on separate reveal screen | Same |
+| After Stage 3 | → Experience Game (87 activities) | → Category Intro (4 stems, 60s) |
 | Category stems | Skipped | 4 stems → CategoryReveal → NudgeCards |
 | Paid filter | Skipped (limiting mindset) | Available via experience_results screen |
 | After experience game | → Signup gate | → experience_results (shows fun list) |
-| After signup | → Choose Quests → Download App | → Download App |
+| After signup | → Choose Quests → Path Def (pick 1) → Avatar → Download | → Download App |
+| After nudges (workshop) | N/A | → Avatar → Final Results |
 | Choose Quests | Embedded (ChooseQuestsFlow with onComplete prop) | Not included |
+| Path Definition | Embedded (pick 1 quest, rest via in-app banner) | Not included |
+| Avatar | At end (after path def / after nudges) | At end (after nudges) |
 | Dome ratings `want_paid` | Written as `null` (no paid data) | Written as `true`/`false` if paid filter used |
-| Session restore (completed) | Routes to `experience_intro` if no categoryResults | Routes to `category_intro` if no categoryResults |
+| Session restore | Checks `archetype_generated` / `avatar_generated` flags | Same |
 
 ### Key routing code (search terms for the next agent)
 - `isOnboarding ? 'experience_intro' : 'category_intro'` — avatar onSkip (line ~2176)

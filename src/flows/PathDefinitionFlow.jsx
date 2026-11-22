@@ -68,10 +68,12 @@ const IDENTITY_EXAMPLES = [
   '...proves it\'s never too late',
 ]
 
-export default function PathDefinitionFlow() {
-  const { questId } = useParams()
+export default function PathDefinitionFlow({ questId: questIdProp, onComplete: onCompleteProp }) {
+  const params = useParams()
+  const questId = questIdProp || params.questId
   const { user } = useAuth()
   const navigate = useNavigate()
+  const handleDone = onCompleteProp || (() => navigate('/7-day-challenge?tab=weekly'))
 
   // Loading + quest data
   const [loading, setLoading] = useState(true)
@@ -361,7 +363,7 @@ export default function PathDefinitionFlow() {
       <div className="pdf"><div className="pdf-container">
         <div className="pdf-error">
           {error || 'Path not found.'}
-          <button onClick={() => navigate('/7-day-challenge?tab=weekly')}>Go to Paths</button>
+          <button onClick={() => handleDone()}>Go to Paths</button>
         </div>
       </div></div>
     )
@@ -649,7 +651,7 @@ export default function PathDefinitionFlow() {
               onClick={() => goScreen(2)}>
               {!precursor ? 'Pick where you are' : !hasAspiration ? 'Set aspirations for 4+ dimensions' : 'Next →'}
             </button>
-            <button className="pdf-cta pdf-cta-secondary" onClick={() => baselineExists ? navigate('/7-day-challenge?tab=weekly') : goScreen(0)}>
+            <button className="pdf-cta pdf-cta-secondary" onClick={() => baselineExists ? handleDone() : goScreen(0)}>
               {baselineExists ? '← Back to paths' : '← Back'}
             </button>
           </div>
@@ -1092,7 +1094,7 @@ export default function PathDefinitionFlow() {
             <h2>Path defined</h2>
             <p>Your first courage challenge is ready. Head to your paths to start.</p>
             <div className="pdf-fixed">
-              <button className="pdf-cta pdf-cta-gold" onClick={() => navigate('/7-day-challenge?tab=weekly')}>
+              <button className="pdf-cta pdf-cta-gold" onClick={() => handleDone()}>
                 Go to my paths →
               </button>
             </div>

@@ -1,13 +1,11 @@
 /**
  * VoiceStemFlow.jsx
- * Voice Stem Engine — /try/voice-stems
+ * Voice Stem Engine — /try/voice-stems (workshop) + /try/onboarding
  *
- * State machine:
- * landing → stem → processing → selection_1 (pick theme)
- * → stem (stage 2 layer 2) → processing → selection_2 (confirm prediction)
- * → stem (stage 2 layer 3) → processing → results_2
- * → stem (stage 3) → processing → results_3
- * → final_results
+ * Onboarding: landing → Stage 1 stems → Archetype Reveal → Stage 2 → Stage 3 → Experience Game → Signup → Choose Quests → Path Definition → Avatar → Download
+ * Workshop:   landing → Stage 1 stems → Archetype Reveal → Stage 2 → Stage 3 → Category (4 stems) → Category Reveal → Nudges → Avatar → Final Results
+ *
+ * Archetype is generated from Stage 1 transcripts (childhood memories).
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -21,6 +19,7 @@ import { getStemsForStage, EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
 import { getArchetype } from '../data/essenceArchetypes'
 import ExperienceGameLive from '../components/ExperienceGameLive'
 import ChooseQuestsFlow from './ChooseQuestsFlow'
+import PathDefinitionFlow from './PathDefinitionFlow'
 import './VoiceStemFlow.css'
 
 const STORAGE_KEY = 'voice_stems_session'
@@ -411,7 +410,7 @@ function SelectionBridge({ type, options, onSelect }) {
   )
 }
 
-// Stage 1 results card (themes + summary)
+// Stage 1 results card (themes + summary — lean, archetype is a separate screen)
 function Stage1Results({ results, onContinue }) {
   if (!results) return null
   const energy = results.energy || 'alive'
@@ -435,7 +434,6 @@ function Stage1Results({ results, onContinue }) {
           </div>
         ))}
       </div>
-      <p className="vs-results-prompt">Which of these feels most alive right now? Which one do you miss most?</p>
       <button className="vs-cta" onClick={onContinue}>Continue</button>
     </div>
   )
@@ -772,6 +770,7 @@ Create a dynamic pose and scene background that embodies this essence. The chara
         return
       }
       setGeneratedUrl(data.url)
+      saveSession({ avatar_generated: true, avatar_url: data.url })
       setGenerating(false)
     } catch (err) {
       clearInterval(interval)
@@ -1035,6 +1034,7 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
+// Archetype reveal — separate screen after Stage 1 results for emotional impact
 function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange, onContinue }) {
   if (!results) return null
   const primary = results.primaryArchetype || {}
@@ -1089,7 +1089,7 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
           <p className="vs-essence-naming-hint">This becomes your identity. Edit it to make it yours.</p>
         </div>
 
-        <button className="vs-cta vs-cta-gold" onClick={onContinue} disabled={!essenceName.trim()}>
+        <button className="vs-cta vs-cta-gold" onClick={onContinue} disabled={!essenceName?.trim()}>
           This is me
         </button>
       </div>
@@ -1105,12 +1105,20 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
  * 'stem'            — recording active
  * 'transition'      — brief "got it" between stems
  * 'processing'      — AI processing screen
- * 'selection_1'     — pick essence theme (after stage 1)
+ * 'results_1'       — stage 1 results (energy + patterns + mirror)
+ * 'archetype_reveal' — essence archetype + blend name + naming
  * 'selection_2'     — confirm prediction (after stage 2 layer 2)
- * 'results_1'       — stage 1 results
  * 'results_2'       — stage 2 full thread
  * 'results_3'       — stage 3 radar
- * 'final_results'
+ * 'experience_intro' / 'exp_live' — experience game (onboarding)
+ * 'category_intro'  — category stems (workshop)
+ * 'category_reveal' / 'nudges' — category results (workshop)
+ * 'signup_gate'     — auth gate (onboarding)
+ * 'choose_quests'   — quest selection (onboarding)
+ * 'path_definition' — per-quest path definition (onboarding)
+ * 'avatar'          — Pixar avatar generation (both modes, at end)
+ * 'download_app'    — app download links (onboarding)
+ * 'final_results'   — summary (workshop)
  */
 
 export default function VoiceStemFlow({ mode = 'workshop' }) {
@@ -1148,6 +1156,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const [essenceName, setEssenceName] = useState('')
   const [categoryResults, setCategoryResults] = useState(null)
 
+  // ── Path definition (onboarding) ──────────────────────────────
+  const [pathDefQuests, setPathDefQuests] = useState([])
+  const [pathDefIndex, setPathDefIndex] = useState(0)
+
   // ── Stage 5 results ref (used by handleSignupComplete) ─────────────
   const stage5ResultsRef = useRef(null)
 
@@ -1182,7 +1194,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const currentStem = currentStems[position.stemIndex] || null
 
   // ── Progress percent for progress bar ────────────────────────────
-  const totalStems = 39 // 6 + 13 + 10 + 6 + 4(category)
+  // Onboarding: 29 stems (6 + 13 + 10, no category). Workshop: 33 stems (6 + 13 + 10 + 4 category).
+  const totalStems = isOnboarding ? 29 : 33
   const stemsCompleted = (() => {
     if (position.stageIndex === 0) return position.stemIndex
     if (position.stageIndex === 1) {
@@ -1191,21 +1204,19 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       return layer1done + 7 + position.stemIndex
     }
     if (position.stageIndex === 2) return 6 + 13 + position.stemIndex
-    if (position.stageIndex === 3) return 6 + 13 + 10 + position.stemIndex
-    return 6 + 13 + 10 + 6 + position.stemIndex // stageIndex === 4 (category)
+    return 6 + 13 + 10 + position.stemIndex // stageIndex === 3 (category, workshop only)
   })()
   const progressPercent = Math.round((stemsCompleted / totalStems) * 100)
 
   // ── Progress label ────────────────────────────────────────────────
   const stageLabel = (() => {
-    const total = 5
+    const total = isOnboarding ? 3 : 4
     if (position.stageIndex === 0) return `Stage 1 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     if (position.stageIndex === 1) {
       const layer = position.layerIndex === 0 ? 'Layer 2' : 'Layer 3'
       return `Stage 2 of ${total} (${layer})  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     }
     if (position.stageIndex === 2) return `Stage 3 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
-    if (position.stageIndex === 3) return `Stage 4 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     return `Your Category  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
   })()
 
@@ -1277,11 +1288,26 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         } else if (resumeStage === 'results_3' && saved.stage3Results) {
           setScreen('results_3')
         } else if (resumeStage === '4' && saved.stage3Results) {
-          beginStage({ stageIndex: 3 })
+          setScreen('category_intro')
         }
       }, 100)
-    } else if (saved.completed) {
-      setScreen(saved.categoryResults ? 'final_results' : isOnboarding ? 'experience_intro' : 'category_intro')
+    } else if (saved.archetype_generated || saved.completed) {
+      // archetype_generated = true is set after Stage 1 (which includes archetype)
+      if (saved.avatar_generated) {
+        // Avatar done — go to final destination
+        setScreen(isOnboarding ? 'download_app' : 'final_results')
+      } else if (saved.categoryResults) {
+        setScreen('final_results')
+      } else if (saved.stage3Results) {
+        // All stems done, route to next phase
+        setScreen(isOnboarding ? 'experience_intro' : 'category_intro')
+      } else if (saved.stage2Results) {
+        // Stage 2 done, need Stage 3
+        setScreen('results_2')
+      } else {
+        // Only Stage 1 done (archetype generated), need Stage 2
+        setScreen('results_1')
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -1390,12 +1416,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     setScreen('processing')
     setFlowError(null)
 
+    // processingStageKey 4 (archetype) is set inside the stageIndex === 0 block
     if (stageIndex === 0) setProcessingStageKey(1)
     else if (stageIndex === 1 && layerIndex === 0) setProcessingStageKey('2a')
     else if (stageIndex === 1 && layerIndex === 1) setProcessingStageKey('2b')
     else if (stageIndex === 2) setProcessingStageKey(3)
-    else if (stageIndex === 3) setProcessingStageKey(4)
-    else if (stageIndex === 4) setProcessingStageKey(7)
+    else if (stageIndex === 3) setProcessingStageKey(7)
 
     // Wait for all in-flight transcriptions to complete
     const pending = [...pendingTranscriptionsRef.current]
@@ -1414,7 +1440,6 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     const stageKey = stageIndex === 0 ? 'stage1Transcripts'
       : stageIndex === 1 ? 'stage2Transcripts'
       : stageIndex === 2 ? 'stage3Transcripts'
-      : stageIndex === 3 ? 'stage4Transcripts'
       : 'categoryTranscripts'
     saveSession({ [stageKey]: transcriptsRef.current })
 
@@ -1423,14 +1448,73 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         // Stage 1 — cluster essence themes
         const results = await processStage(1, transcripts, {})
         setStage1Results(results)
-        // Save to localStorage
-        // Auto-select the energy as the expression (no manual selection needed)
-        // Use essenceSummary (broader context) for Stage 2 stems if available
         const energy = results?.energy || 'your essence'
         const expression = results?.essenceSummary || energy
         setSelectedExpression(expression)
-        saveSession({ stage1Transcripts: transcriptsRef.current, stage1Results: results, selectedExpression: expression })
+
+        // Run archetype AI using Stage 1 transcripts (childhood memories = most resonant)
+        setProcessingStageKey(4)
+        const archetypeResults = await processStage(4, transcripts, {
+          selectedExpression: expression,
+          stage1Mirror: results?.mirror || '',
+          woundScene: '',
+          nsLabel: '',
+          lowestDimension: '',
+        })
+        setStage4Results(archetypeResults)
+
+        // Save + show results immediately — user reads their energy/patterns
+        // while the blend name generates in the background
+        const primaryData = getArchetype(archetypeResults.primaryArchetype?.id)
+        const secondaryData = getArchetype(archetypeResults.secondaryArchetype?.id)
+
+        // Set fallback essence name immediately (overwritten when blend completes)
+        setEssenceName(primaryData?.name || archetypeResults.primaryArchetype?.name || 'Your True Self')
+
+        saveSession({
+          stage1Transcripts: transcriptsRef.current,
+          stage1Results: results,
+          selectedExpression: expression,
+          stage4Results: archetypeResults,
+          archetype_generated: true,
+        })
         setScreen('results_1')
+
+        // Fire blend name in background — user is reading results_1
+        if (primaryData && secondaryData) {
+          supabase.functions.invoke('essence-mirror-blend', {
+            body: {
+              primary: {
+                name: primaryData.name,
+                poetic_line: primaryData.poetic_line,
+                superpower: primaryData.superpower,
+                essence_wound: primaryData.essence_wound,
+                poetic_vision: primaryData.poetic_vision,
+                energetic_transmission: primaryData.energetic_transmission,
+                north_star: primaryData.north_star,
+                vision_in_action: primaryData.vision_in_action,
+              },
+              secondary: {
+                name: secondaryData.name,
+                poetic_line: secondaryData.poetic_line,
+                superpower: secondaryData.superpower,
+                essence_wound: secondaryData.essence_wound,
+                poetic_vision: secondaryData.poetic_vision,
+                energetic_transmission: secondaryData.energetic_transmission,
+                north_star: secondaryData.north_star,
+                vision_in_action: secondaryData.vision_in_action,
+              },
+            },
+          }).then(({ data: blendData }) => {
+            if (blendData?.blended_name) {
+              setBlendResult(blendData)
+              setEssenceName(blendData.blended_name.replace(/^The\s+/i, ''))
+              saveSession({ blendResult: blendData, essenceName: blendData.blended_name.replace(/^The\s+/i, '') })
+            }
+          }).catch(blendErr => {
+            console.warn('Blend API error:', blendErr)
+          })
+        }
 
       } else if (stageIndex === 1 && layerIndex === 0) {
         // Stage 2 layer 2 — extract prediction
@@ -1482,71 +1566,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         })
         setScreen('results_3')
       } else if (stageIndex === 3) {
-        // Stage 4 — Essence archetype
-        const lowestDim = stage3Results?.dimensions
-          ? Object.entries(stage3Results.dimensions).reduce((low, [k, v]) =>
-              (v?.score || 5) < (low.score || 5) ? { key: k, score: v?.score } : low, { key: '', score: 5 }
-            ).key
-          : ''
-        const results = await processStage(4, transcripts, {
-          selectedExpression,
-          confirmedPrediction,
-          stage1Mirror: stage1Results?.mirror || '',
-          woundScene: stage2Results?.woundScene || '',
-          nsLabel: stage2Results?.nsLabel || '',
-          lowestDimension: lowestDim,
-        })
-        setStage4Results(results)
-        saveSession({
-          stage4Results: results,
-          completed: true,
-        })
-        // Call essence-mirror-blend to get custom name before showing reveal
-        const primaryData = getArchetype(results.primaryArchetype?.id)
-        const secondaryData = getArchetype(results.secondaryArchetype?.id)
-        if (primaryData && secondaryData) {
-          try {
-            const { data: blendData } = await supabase.functions.invoke('essence-mirror-blend', {
-              body: {
-                primary: {
-                  name: primaryData.name,
-                  poetic_line: primaryData.poetic_line,
-                  superpower: primaryData.superpower,
-                  essence_wound: primaryData.essence_wound,
-                  poetic_vision: primaryData.poetic_vision,
-                  energetic_transmission: primaryData.energetic_transmission,
-                  north_star: primaryData.north_star,
-                  vision_in_action: primaryData.vision_in_action,
-                },
-                secondary: {
-                  name: secondaryData.name,
-                  poetic_line: secondaryData.poetic_line,
-                  superpower: secondaryData.superpower,
-                  essence_wound: secondaryData.essence_wound,
-                  poetic_vision: secondaryData.poetic_vision,
-                  energetic_transmission: secondaryData.energetic_transmission,
-                  north_star: secondaryData.north_star,
-                  vision_in_action: secondaryData.vision_in_action,
-                },
-              },
-            })
-            if (blendData?.blended_name) {
-              setBlendResult(blendData)
-              setEssenceName(blendData.blended_name.replace(/^The\s+/i, ''))
-              saveSession({ blendResult: blendData, essenceName: blendData.blended_name.replace(/^The\s+/i, '') })
-            } else {
-              setEssenceName(primaryData.name)
-            }
-          } catch (blendErr) {
-            console.warn('Blend API error:', blendErr)
-            setEssenceName(primaryData.name)
-          }
-        } else {
-          setEssenceName(results.primaryArchetype?.name || 'Your True Self')
-        }
-        setScreen('essence_reveal')
-      } else if (stageIndex === 4) {
-        // Category synthesis — send all prior data + category transcripts
+        // Category synthesis (workshop only) — send all prior data + category transcripts
         const results = await processStage(7, transcripts, {
           stage1Energy: stage1Results?.energy || '',
           stage1Summary: stage1Results?.essenceSummary || stage1Results?.energy || '',
@@ -1621,7 +1641,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   // ── Error retry ────────────────────────────────────────────────
   const handleRetryProcessing = () => {
     setFlowError(null)
-    triggerProcessing(position.stageIndex, position.layerIndex)
+    if (processingStageKey === 4) {
+      // Archetype retry — re-run Stage 1 processing which includes archetype
+      triggerProcessing(0, null)
+    } else {
+      triggerProcessing(position.stageIndex, position.layerIndex)
+    }
   }
 
   // ── Pause / Resume / Start Over ──────────────────────────────
@@ -1762,8 +1787,8 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <h1>Find Your Thread</h1>
             <p className="vs-landing-desc">
               {isOnboarding
-                ? "Speak fast. Don't think. First thing that comes. 5 stages, about 25 minutes."
-                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 39 stems, 5 stages, about 25 minutes."
+                ? "Speak fast. Don't think. First thing that comes. 3 stages, about 15 minutes."
+                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 33 stems, 4 stages, about 20 minutes."
               }
             </p>
 
@@ -1778,12 +1803,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 { n: 1, label: 'Living from Essence', desc: '6 stems — who you were as a kid' },
                 { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
                 { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
-                { n: 4, label: 'The Search', desc: '6 stems — who you are underneath it all' },
                 ...(!isOnboarding ? [
-                  { n: 5, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
+                  { n: 4, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
                 ] : []),
                 ...(isOnboarding ? [
-                  { n: 5, label: 'The Experience Game', desc: '87 activities — what lights you up' },
+                  { n: 4, label: 'The Experience Game', desc: '87 activities — what lights you up' },
                 ] : []),
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
@@ -1922,11 +1946,28 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           />
         )}
 
-        {/* RESULTS 1 — stage 1 summary */}
+        {/* RESULTS 1 — stage 1 summary (lean: energy + patterns + mirror) */}
         {screen === 'results_1' && stage1Results && (
           <Stage1Results
             results={stage1Results}
-            onContinue={() => beginStage({ stageIndex: 1, layerIndex: 0 })}
+            onContinue={() => setScreen('archetype_reveal')}
+          />
+        )}
+
+        {/* ARCHETYPE REVEAL — separate emotional moment after results_1 */}
+        {screen === 'archetype_reveal' && stage4Results && (
+          <EssenceReveal
+            results={stage4Results}
+            blendResult={blendResult}
+            essenceName={essenceName}
+            onEssenceNameChange={(name) => {
+              setEssenceName(name)
+              saveSession({ essenceName: name })
+            }}
+            onContinue={() => {
+              saveEssenceProfile(essenceName)
+              beginStage({ stageIndex: 1, layerIndex: 0 })
+            }}
           />
         )}
 
@@ -1957,26 +1998,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'results_3' && stage3Results && (
           <Stage3Results
             results={stage3Results}
-            onContinue={() => beginStage({ stageIndex: 3 })}
+            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'category_intro')}
           />
         )}
 
-        {/* ESSENCE REVEAL */}
-        {screen === 'essence_reveal' && stage4Results && (
-          <EssenceReveal
-            results={stage4Results}
-            blendResult={blendResult}
-            essenceName={essenceName}
-            onEssenceNameChange={(name) => {
-              setEssenceName(name)
-              saveSession({ essenceName: name })
-            }}
-            onContinue={() => {
-              saveEssenceProfile(essenceName)
-              setScreen('avatar')
-            }}
-          />
-        )}
 
         {/* ── EXPERIENCE GAME (Stage 5) ─────────────────────────── */}
 
@@ -1984,7 +2009,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'experience_intro' && (
           <div className="vs-exp-intro">
             <div className="vs-results-card">
-              <div className="vs-results-label">Stage 5</div>
+              <div className="vs-results-label">Stage 4</div>
               <h2 className="vs-results-title">The Experience Game</h2>
               <p className="vs-exp-intro-desc">
                 Activities will appear one at a time. For each one, say <strong>&quot;fun&quot;</strong> or <strong>&quot;not fun&quot;</strong> (or yes/no). Go fast. Trust your gut.
@@ -2020,7 +2045,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'experience_results' && stage5Results && (
           <div className="vs-results">
             <div className="vs-results-header">
-              <div className="vs-results-label">Stage 5 Complete</div>
+              <div className="vs-results-label">Stage 4 Complete</div>
               <h2>Your Experiences</h2>
             </div>
             <div className="vs-results-card">
@@ -2055,7 +2080,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'paid_intro' && (
           <div className="vs-exp-intro">
             <div className="vs-results-card">
-              <div className="vs-results-label">Stage 6</div>
+              <div className="vs-results-label">Stage 5</div>
               <h2 className="vs-results-title">The Paid Filter</h2>
               <p className="vs-exp-intro-desc">
                 For each activity you said was fun, we will ask: <strong>would you want to get paid for this?</strong>
@@ -2107,7 +2132,91 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
             background: '#f5f5f0', overflowY: 'auto', zIndex: 10,
           }}>
-            <ChooseQuestsFlow onComplete={() => setScreen('download_app')} />
+            <ChooseQuestsFlow onComplete={async () => {
+              // Fetch user's quests for path definition
+              if (user?.id) {
+                const { data: quests } = await supabase
+                  .from('quests')
+                  .select('id, label')
+                  .eq('user_id', user.id)
+                  .is('precursor_level', null)
+                  .order('created_at', { ascending: true })
+                if (quests?.length > 0) {
+                  setPathDefQuests(quests)
+                  setPathDefIndex(quests.length === 1 ? 0 : -1)
+                  setScreen('path_definition')
+                  return
+                }
+              }
+              setScreen('avatar')
+            }} />
+          </div>
+        )}
+
+        {/* PATH DEFINITION — fallback if quests not loaded (e.g. session resume) */}
+        {screen === 'path_definition' && pathDefQuests.length === 0 && (
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#f5f5f0', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+            <button
+              style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', fontSize: '1rem', cursor: 'pointer', fontFamily: 'inherit' }}
+              onClick={() => setScreen('avatar')}
+            >
+              Continue to avatar →
+            </button>
+          </div>
+        )}
+
+        {/* PATH DEFINITION PICKER (onboarding only, pick one quest to set up) */}
+        {screen === 'path_definition' && pathDefQuests.length > 0 && pathDefIndex === -1 && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: '#f5f5f0', overflowY: 'auto', zIndex: 10,
+          }}>
+            <div style={{ padding: '60px 24px 24px', maxWidth: 480, margin: '0 auto' }}>
+              <h2 style={{ color: '#1a1a2e', margin: '0 0 8px' }}>Which path do you want to set up first?</h2>
+              <p style={{ color: '#666', fontSize: '0.95rem', margin: '0 0 24px' }}>
+                Pick one to define now. You can set up the rest in the app.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {pathDefQuests.map((q, i) => (
+                  <button
+                    key={q.id}
+                    onClick={() => setPathDefIndex(i)}
+                    style={{
+                      background: '#fff', border: '2px solid #e0e0e0', borderRadius: 14,
+                      padding: '16px 18px', cursor: 'pointer', textAlign: 'left',
+                      display: 'flex', alignItems: 'center', gap: 14, fontFamily: 'inherit',
+                      transition: 'border-color 0.2s',
+                    }}
+                  >
+                    <span style={{ fontSize: '1.4rem' }}>{THEME_EMOJIS[i % THEME_EMOJIS.length]}</span>
+                    <strong style={{ color: '#1a1a2e', fontSize: '0.95rem' }}>{q.label || `Path ${i + 1}`}</strong>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setScreen('avatar')}
+                style={{
+                  marginTop: 16, background: 'none', border: 'none', color: '#888',
+                  fontSize: '0.9rem', cursor: 'pointer', fontFamily: 'inherit',
+                }}
+              >
+                Skip for now
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* PATH DEFINITION FLOW (onboarding only, single quest) */}
+        {screen === 'path_definition' && pathDefQuests.length > 0 && pathDefIndex >= 0 && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: '#f5f5f0', overflowY: 'auto', zIndex: 10,
+          }}>
+            <PathDefinitionFlow
+              key={pathDefQuests[pathDefIndex]?.id}
+              questId={pathDefQuests[pathDefIndex]?.id}
+              onComplete={() => setScreen('avatar')}
+            />
           </div>
         )}
 
@@ -2124,7 +2233,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'category_intro' && (
           <div className="vs-exp-intro">
             <div className="vs-results-card">
-              <div className="vs-results-label">Stage 5</div>
+              <div className="vs-results-label">Stage 4</div>
               <h2 className="vs-results-title">Your Category</h2>
               <p className="vs-exp-intro-desc">
                 You just met yourself. Now let&apos;s find out what you&apos;re here to do.
@@ -2135,7 +2244,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             </div>
             <div className="vs-bottom-action">
               <DoubleConfirmButton
-                onConfirm={() => beginStage({ stageIndex: 4 })}
+                onConfirm={() => beginStage({ stageIndex: 3 })}
                 label="Start"
                 confirmLabel="Ready? Tap to begin"
               />
@@ -2156,7 +2265,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           <NudgeCards
             nudges={categoryResults.nudgeSuggestions}
             categoryName={categoryResults.categoryName}
-            onContinue={() => setScreen(isOnboarding ? 'experience_intro' : 'final_results')}
+            onContinue={() => setScreen('avatar')}
           />
         )}
 
@@ -2178,7 +2287,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'avatar' && (
           <AvatarScreen
             stage4Results={stage4Results}
-            onSkip={() => setScreen(isOnboarding ? 'experience_intro' : 'category_intro')}
+            onSkip={() => setScreen(isOnboarding ? 'download_app' : 'final_results')}
           />
         )}
 
