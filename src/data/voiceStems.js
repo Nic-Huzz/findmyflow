@@ -72,10 +72,10 @@ export const STAGES = [
     label: 'Your Category',
     description: 'The problem you were made to solve.',
     stems: [
-      { id: 'sc_1', text: 'The problem I see that nobody else is solving right is...' },
-      { id: 'sc_2', text: 'Everyone assumes the answer is... but I think that\'s wrong because...' },
-      { id: 'sc_3', text: 'The experience that showed me a different way was...' },
-      { id: 'sc_4', text: 'If I could solve it my way, I would...' },
+      { id: 'sc_1', text: 'The problem I see that nobody else is solving right is...', questText: 'When it comes to {questLabel}, the problem nobody else is solving is...', dynamic: true },
+      { id: 'sc_2', text: 'Everyone assumes the answer is... but I think that\'s wrong because...', questText: 'Everyone assumes the right way to do {questLabel} is... but I think that\'s wrong because...', dynamic: true },
+      { id: 'sc_3', text: 'The experience that showed me a different way was...', questText: 'The experience that showed me a different approach to {questLabel} was...', dynamic: true },
+      { id: 'sc_4', text: 'If I could solve it my way, I would...', questText: 'If I could do {questLabel} my way, I would...', dynamic: true },
     ],
   },
 ]
@@ -200,7 +200,7 @@ export const EXPERIENCE_ACTIVITIES = [
  * Get stems for a stage, resolving dynamic text.
  * @param {number} stageIndex - 0, 1, 2, or 3
  * @param {number|null} layerIndex - for stage 1 (suppressed): 0 = prediction, 1 = source. null for other stages.
- * @param {object} context - { selectedExpression, confirmedPrediction }
+ * @param {object} context - { selectedExpression, confirmedPrediction, questLabel }
  * @returns {Array<{ id, text, dimension? }>}
  */
 export function getStemsForStage(stageIndex, layerIndex = null, context = {}) {
@@ -214,12 +214,17 @@ export function getStemsForStage(stageIndex, layerIndex = null, context = {}) {
     stems = stage.stems || []
   }
 
-  return stems.map(stem => ({
-    ...stem,
-    text: stem.dynamic
-      ? stem.text
-          .replace('{selectedExpression}', context.selectedExpression || '______')
-          .replace('{confirmedPrediction}', context.confirmedPrediction || 'that feeling')
-      : stem.text,
-  }))
+  return stems.map(stem => {
+    // Pick quest-specific text if questLabel is provided and questText exists
+    const rawText = (context.questLabel && stem.questText) ? stem.questText : stem.text
+    return {
+      ...stem,
+      text: stem.dynamic
+        ? rawText
+            .replace('{selectedExpression}', context.selectedExpression || '______')
+            .replace('{confirmedPrediction}', context.confirmedPrediction || 'that feeling')
+            .replace('{questLabel}', context.questLabel || '')
+        : rawText,
+    }
+  })
 }

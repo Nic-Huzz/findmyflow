@@ -2,7 +2,7 @@
  * VoiceStemFlow.jsx
  * Voice Stem Engine — /try/voice-stems (workshop) + /try/onboarding
  *
- * Onboarding: landing → Stage 1 stems → Archetype Reveal → Stage 2 → Stage 3 → Experience Game → Signup → Choose Quests → Path Definition → Avatar → Download
+ * Onboarding: landing → Stage 1 stems → Archetype Reveal → Stage 2 → Stage 3 → Experience Game → Signup → Choose Quests → [Quest Picker] → Category (4 quest-specific stems) → Category Reveal → Path Definition → Avatar → Download
  * Workshop:   landing → Stage 1 stems → Archetype Reveal → Stage 2 → Stage 3 → Category (4 stems) → Category Reveal → Nudges → Avatar → Final Results
  *
  * Archetype is generated from Stage 1 transcripts (childhood memories).
@@ -1138,6 +1138,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   // ── Context carried between stages ────────────────────────────────────
   const [selectedExpression, setSelectedExpression] = useState(null) // from selection_1
   const [confirmedPrediction, setConfirmedPrediction] = useState(null) // from selection_2
+  const [selectedQuestLabel, setSelectedQuestLabel] = useState(null) // from quest picker (onboarding)
 
   // ── Transcripts accumulated per stage/layer ─────────────────────────
   // Map of stemId → transcript
@@ -1189,13 +1190,13 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     useAudioRecorder({ onSilenceStop: () => handleStemDone() })
 
   // ── Computed: current stems list ─────────────────────────────────
-  const context = { selectedExpression, confirmedPrediction }
+  const context = { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel }
   const currentStems = getStemsForStage(position.stageIndex, position.layerIndex, context)
   const currentStem = currentStems[position.stemIndex] || null
 
   // ── Progress percent for progress bar ────────────────────────────
-  // Onboarding: 29 stems (6 + 13 + 10, no category). Workshop: 33 stems (6 + 13 + 10 + 4 category).
-  const totalStems = isOnboarding ? 29 : 33
+  // Both modes: 33 stems (6 + 13 + 10 + 4 category)
+  const totalStems = 33
   const stemsCompleted = (() => {
     if (position.stageIndex === 0) return position.stemIndex
     if (position.stageIndex === 1) {
@@ -1210,7 +1211,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Progress label ────────────────────────────────────────────────
   const stageLabel = (() => {
-    const total = isOnboarding ? 3 : 4
+    const total = 4
     if (position.stageIndex === 0) return `Stage 1 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
     if (position.stageIndex === 1) {
       const layer = position.layerIndex === 0 ? 'Layer 2' : 'Layer 3'
@@ -1241,6 +1242,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       if (saved.blendResult) setBlendResult(saved.blendResult)
       if (saved.essenceName) setEssenceName(saved.essenceName)
       if (saved.categoryResults) setCategoryResults(saved.categoryResults)
+      if (saved.selectedQuestLabel) setSelectedQuestLabel(saved.selectedQuestLabel)
     }
 
     // ?skip=N jumps directly to that stage's recording
@@ -1297,7 +1299,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         // Avatar done — go to final destination
         setScreen(isOnboarding ? 'download_app' : 'final_results')
       } else if (saved.categoryResults) {
-        setScreen('final_results')
+        setScreen(isOnboarding ? 'path_definition' : 'final_results')
       } else if (saved.stage3Results) {
         // All stems done, route to next phase
         setScreen(isOnboarding ? 'experience_intro' : 'category_intro')
@@ -1400,7 +1402,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   // ── Advance to next stem in the current stage/layer ───────────
   const advanceStem = useCallback(() => {
     const pos = positionRef.current
-    const stems = getStemsForStage(pos.stageIndex, pos.layerIndex, { selectedExpression, confirmedPrediction })
+    const stems = getStemsForStage(pos.stageIndex, pos.layerIndex, { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel })
     const nextIndex = pos.stemIndex + 1
 
     if (nextIndex < stems.length) {
@@ -1429,7 +1431,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
     await Promise.allSettled(pending)
 
     // Build transcript array for this stage/layer
-    const stems = getStemsForStage(stageIndex, layerIndex, { selectedExpression, confirmedPrediction })
+    const stems = getStemsForStage(stageIndex, layerIndex, { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel })
     const transcripts = stems.map(stem => ({
       stemId: stem.id,
       stemText: stem.text,
@@ -1537,14 +1539,14 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       } else if (stageIndex === 1 && layerIndex === 1) {
         // Stage 2 layer 3 — extract source
         // Merge layer 2 transcripts with layer 3 for final processing
-        const layer2Stems = getStemsForStage(1, 0, { selectedExpression, confirmedPrediction })
+        const layer2Stems = getStemsForStage(1, 0, { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel })
         const layer2Transcripts = layer2Stems.map(stem => ({
           stemId: stem.id,
           stemText: stem.text,
           transcript: transcriptsRef.current[stem.id] || '',
         }))
         const allLayer2And3 = [...layer2Transcripts, ...transcripts]
-        const results = await processStage(2, allLayer2And3, { selectedExpression, confirmedPrediction })
+        const results = await processStage(2, allLayer2And3, { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel })
         setStage2Results(results)
         saveSession({
           stage1Results: stage1Results,
@@ -1555,7 +1557,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
       } else if (stageIndex === 2) {
         // Stage 3 — dimension scoring
-        const results = await processStage(3, transcripts, { selectedExpression, confirmedPrediction })
+        const results = await processStage(3, transcripts, { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel })
         setStage3Results(results)
         const s2Results = stage2Results
         saveSession({
@@ -1566,7 +1568,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         })
         setScreen('results_3')
       } else if (stageIndex === 3) {
-        // Category synthesis (workshop only) — send all prior data + category transcripts
+        // Category synthesis — send all prior data + category transcripts + quest context
         const results = await processStage(7, transcripts, {
           stage1Energy: stage1Results?.energy || '',
           stage1Summary: stage1Results?.essenceSummary || stage1Results?.energy || '',
@@ -1580,6 +1582,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           primaryArchetype: stage4Results?.primaryArchetype?.name || '',
           secondaryArchetype: stage4Results?.secondaryArchetype?.name || '',
           essenceBlend: stage4Results?.essenceBlend || '',
+          questLabel: selectedQuestLabel || '',
         })
         setCategoryResults(results)
         saveSession({ categoryResults: results })
@@ -1593,7 +1596,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Begin a new stage/layer ────────────────────────────────────
   const beginStage = useCallback(({ stageIndex, layerIndex = null }) => {
-    const stems = getStemsForStage(stageIndex, layerIndex, { selectedExpression, confirmedPrediction })
+    const stems = getStemsForStage(stageIndex, layerIndex, { selectedExpression, confirmedPrediction, questLabel: selectedQuestLabel })
     if (!stems.length) return
     setPosition({ stageIndex, layerIndex, stemIndex: 0 })
     startCountdownThenRecord(stems[0].id)
@@ -1787,7 +1790,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <h1>Find Your Thread</h1>
             <p className="vs-landing-desc">
               {isOnboarding
-                ? "Speak fast. Don't think. First thing that comes. 3 stages, about 15 minutes."
+                ? "Speak fast. Don't think. First thing that comes. 4 stages, about 20 minutes."
                 : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 33 stems, 4 stages, about 20 minutes."
               }
             </p>
@@ -1803,11 +1806,9 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 { n: 1, label: 'Living from Essence', desc: '6 stems — who you were as a kid' },
                 { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
                 { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
-                ...(!isOnboarding ? [
-                  { n: 4, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
-                ] : []),
+                { n: 4, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
                 ...(isOnboarding ? [
-                  { n: 4, label: 'The Experience Game', desc: '87 activities — what lights you up' },
+                  { n: 5, label: 'The Experience Game', desc: '87 activities — what lights you up' },
                 ] : []),
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
@@ -2133,7 +2134,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             background: '#f5f5f0', overflowY: 'auto', zIndex: 10,
           }}>
             <ChooseQuestsFlow onComplete={async () => {
-              // Fetch user's quests for path definition
+              // Fetch user's quests for category stems + path definition
               if (user?.id) {
                 const { data: quests } = await supabase
                   .from('quests')
@@ -2143,8 +2144,17 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                   .order('created_at', { ascending: true })
                 if (quests?.length > 0) {
                   setPathDefQuests(quests)
-                  setPathDefIndex(quests.length === 1 ? 0 : -1)
-                  setScreen('path_definition')
+                  if (quests.length === 1) {
+                    // Single quest — skip picker, go straight to category stems
+                    setPathDefIndex(0)
+                    setSelectedQuestLabel(quests[0].label)
+                    saveSession({ selectedQuestLabel: quests[0].label })
+                    setScreen('category_intro')
+                  } else {
+                    // Multiple quests — show picker first
+                    setPathDefIndex(-1)
+                    setScreen('path_definition')
+                  }
                   return
                 }
               }
@@ -2180,7 +2190,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 {pathDefQuests.map((q, i) => (
                   <button
                     key={q.id}
-                    onClick={() => setPathDefIndex(i)}
+                    onClick={() => { setPathDefIndex(i); setSelectedQuestLabel(q.label); saveSession({ selectedQuestLabel: q.label }); setScreen('category_intro') }}
                     style={{
                       background: '#fff', border: '2px solid #e0e0e0', borderRadius: 14,
                       padding: '16px 18px', cursor: 'pointer', textAlign: 'left',
@@ -2233,10 +2243,13 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'category_intro' && (
           <div className="vs-exp-intro">
             <div className="vs-results-card">
-              <div className="vs-results-label">Stage 4</div>
+              <div className="vs-results-label">{isOnboarding && selectedQuestLabel ? selectedQuestLabel : 'Stage 4'}</div>
               <h2 className="vs-results-title">Your Category</h2>
               <p className="vs-exp-intro-desc">
-                You just met yourself. Now let&apos;s find out what you&apos;re here to do.
+                {isOnboarding && selectedQuestLabel
+                  ? <>Let&apos;s find out what makes your approach to <strong>{selectedQuestLabel}</strong> different.</>
+                  : <>You just met yourself. Now let&apos;s find out what you&apos;re here to do.</>
+                }
               </p>
               <p className="vs-exp-intro-desc" style={{ marginTop: 12 }}>
                 4 stems. Take your time on these. There&apos;s no wrong answer.
@@ -2256,11 +2269,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'category_reveal' && categoryResults && (
           <CategoryReveal
             results={categoryResults}
-            onContinue={() => setScreen('nudges')}
+            onContinue={() => setScreen(isOnboarding ? 'path_definition' : 'nudges')}
           />
         )}
 
-        {/* NUDGE DARES */}
+        {/* NUDGE DARES (workshop only) */}
         {screen === 'nudges' && categoryResults && (
           <NudgeCards
             nudges={categoryResults.nudgeSuggestions}
