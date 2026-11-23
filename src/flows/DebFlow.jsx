@@ -5,7 +5,7 @@
  * Flow: Landing → Experience Game → Select → Deep Dive → AI Paths → CTA
  * No auth required. All state in-memory.
  */
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import ExperienceGameLive from '../components/ExperienceGameLive'
 import { EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
 import { getSubNodes, CAREER_VECTORS } from '../data/experienceDomeSubNodes'
@@ -60,9 +60,37 @@ function groupByBranch(activities) {
     }))
 }
 
+// Dev mode mock data — last test run's fun activities
+const DEV_RESULTS = {
+  fun: [
+    { id: 'exp-swimming', label: 'Swimming / ocean', branch: 'movement' },
+    { id: 'exp-club-dancing', label: 'Dancing', branch: 'movement' },
+    { id: 'sub-strength-2010', label: 'Day hikes / nature walks', branch: 'movement' },
+    { id: 'sub-flexibility-1893', label: 'Yoga / stretching', branch: 'movement' },
+    { id: 'car-1886', label: 'Road trips / scenic drives', branch: 'movement' },
+    { id: 'exp-gardening', label: 'Gardening / growing food', branch: 'nourishment' },
+    { id: 'exp-baking', label: 'Cooking / baking', branch: 'nourishment' },
+    { id: 'exp-choosing-style', label: 'Dressing in a style you love', branch: 'status' },
+    { id: 'exp-volunteering', label: 'Volunteering / giving back', branch: 'bonds' },
+    { id: 'exp-pets', label: 'Pet ownership / caring for animals', branch: 'bonds' },
+    { id: 'exp-drinks-friends', label: 'Drinks with friends / hanging out', branch: 'bonds' },
+    { id: 'exp-caring-kids', label: 'Caring for kids', branch: 'bonds' },
+    { id: 'exp-interior-design', label: 'Interior / spatial design', branch: 'shelter' },
+    { id: 'exp-coaching', label: 'Coaching / mentoring someone', branch: 'story' },
+    { id: 'sub-craft-1880', label: 'Painting / pottery / art workshops', branch: 'story' },
+    { id: 'sub-oral-2015', label: 'Live music / concerts / festivals', branch: 'story' },
+    { id: 'sub-written-1999', label: 'Journaling / personal writing', branch: 'story' },
+    { id: 'exp-travel', label: 'Travel / exploring a new place', branch: 'play' },
+    { id: 'exp-nature-stillness', label: 'Being in nature without an activity', branch: 'sleep' },
+  ],
+  notFun: [],
+  uncertain: [],
+}
+
 export default function DebFlow() {
-  const [screen, setScreen] = useState('landing')
-  const [gameResults, setGameResults] = useState(null)
+  const isDevMode = new URLSearchParams(window.location.search).has('dev')
+  const [screen, setScreen] = useState(isDevMode ? 'select' : 'landing')
+  const [gameResults, setGameResults] = useState(isDevMode ? DEV_RESULTS : null)
 
   // Select step
   const [selectedIds, setSelectedIds] = useState(new Set())
