@@ -21,7 +21,7 @@ export const STAGES = [
   {
     id: 'suppressed',
     label: 'Essence Suppressed',
-    description: 'What happened to the kid.',
+    description: 'What suppressed that voice.',
     layers: [
       {
         id: 'prediction',
@@ -69,8 +69,8 @@ export const STAGES = [
   },
   {
     id: 'category',
-    label: 'Your Category',
-    description: 'The problem you were made to solve.',
+    label: 'What Makes You Different',
+    description: 'Your unique angle on this path.',
     stems: [
       { id: 'sc_1', text: 'The problem I see that nobody else is solving right is...', questText: 'When it comes to {questLabel}, the problem nobody else is solving is...', dynamic: true },
       { id: 'sc_2', text: 'Everyone assumes the answer is... but I think that\'s wrong because...', questText: 'Everyone assumes the right way to do {questLabel} is... but I think that\'s wrong because...', dynamic: true },

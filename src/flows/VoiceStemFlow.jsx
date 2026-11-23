@@ -649,7 +649,7 @@ function CategoryReveal({ results, onContinue }) {
   return (
     <div className="vs-results">
       <div className="vs-results-header">
-        <div className="vs-results-label">{hasCategory ? 'Your Category' : 'Your Essence'}</div>
+        <div className="vs-results-label">{hasCategory ? 'What Makes You Different' : 'Your Essence'}</div>
         {hasCategory && <h2 className="vs-gold-text">{results.categoryName}</h2>}
       </div>
 
@@ -1212,13 +1212,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   // ── Progress label ────────────────────────────────────────────────
   const stageLabel = (() => {
     const total = 4
-    if (position.stageIndex === 0) return `Stage 1 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
-    if (position.stageIndex === 1) {
-      const layer = position.layerIndex === 0 ? 'Layer 2' : 'Layer 3'
-      return `Stage 2 of ${total} (${layer})  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
-    }
-    if (position.stageIndex === 2) return `Stage 3 of ${total}  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
-    return `Your Category  ·  Stem ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 0) return `Stage 1 of ${total}  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 1) return `Stage 2 of ${total}  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
+    if (position.stageIndex === 2) return `Stage 3 of ${total}  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
+    return `What Makes You Different  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
   })()
 
   // ── Restore from localStorage / skip to stage on mount ───────────
@@ -1791,7 +1788,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <p className="vs-landing-desc">
               {isOnboarding
                 ? "Speak fast. Don't think. First thing that comes. 4 stages, about 20 minutes."
-                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 33 stems, 4 stages, about 20 minutes."
+                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 33 questions, 4 stages, about 20 minutes."
               }
             </p>
 
@@ -1803,10 +1800,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
             <div className="vs-landing-stages">
               {[
-                { n: 1, label: 'Living from Essence', desc: '6 stems — who you were as a kid' },
-                { n: 2, label: 'Essence Suppressed', desc: '13 stems — what got shut down and why' },
-                { n: 3, label: 'Consequences', desc: '10 stems — the cost of suppression now' },
-                { n: 4, label: 'Your Category', desc: '4 stems — the problem you were made to solve' },
+                { n: 1, label: 'Living from Essence', desc: '6 questions — who you were as a kid' },
+                { n: 2, label: 'Essence Suppressed', desc: '13 questions — what shut it down and why' },
+                { n: 3, label: 'Consequences', desc: '10 questions — the cost of suppression now' },
+                { n: 4, label: 'What Makes You Different', desc: '4 questions — your unique angle' },
                 ...(isOnboarding ? [
                   { n: 5, label: 'The Experience Game', desc: '87 activities — what lights you up' },
                 ] : []),
@@ -2244,7 +2241,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           <div className="vs-exp-intro">
             <div className="vs-results-card">
               <div className="vs-results-label">{isOnboarding && selectedQuestLabel ? selectedQuestLabel : 'Stage 4'}</div>
-              <h2 className="vs-results-title">Your Category</h2>
+              <h2 className="vs-results-title">What Makes You Different</h2>
               <p className="vs-exp-intro-desc">
                 {isOnboarding && selectedQuestLabel
                   ? <>Let&apos;s find out what makes your approach to <strong>{selectedQuestLabel}</strong> different.</>
@@ -2252,7 +2249,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 }
               </p>
               <p className="vs-exp-intro-desc" style={{ marginTop: 12 }}>
-                4 stems. Take your time on these. There&apos;s no wrong answer.
+                4 questions. Take your time on these. There&apos;s no wrong answer.
               </p>
             </div>
             <div className="vs-bottom-action">
