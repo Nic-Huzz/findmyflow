@@ -56,7 +56,7 @@ export default function DebFlow() {
   const [aiError, setAiError] = useState(null)
 
   // ── AI call ──
-  const fetchPaths = async (funActivities) => {
+  const fetchPaths = async (funActivities, fullResults) => {
     setAiLoading(true)
     setAiError(null)
     try {
@@ -73,6 +73,8 @@ export default function DebFlow() {
       if (data?.paths) {
         setAiPaths(data.paths)
         setAiPattern(data.pattern || null)
+        // Save lead as soon as paths arrive (users may close before CTA)
+        saveToLeads(fullResults, data.paths)
       } else {
         throw new Error('No paths returned')
       }
@@ -121,7 +123,7 @@ export default function DebFlow() {
     setScreen('results')
     // Fire AI call immediately
     if (results.fun?.length > 0) {
-      fetchPaths(results.fun)
+      fetchPaths(results.fun, results)
     }
   }
 
@@ -200,7 +202,7 @@ export default function DebFlow() {
                 <button
                   className="vs-btn-primary"
                   style={{ marginTop: 12 }}
-                  onClick={() => fetchPaths(gameResults.fun)}
+                  onClick={() => fetchPaths(gameResults.fun, gameResults)}
                 >
                   Try again
                 </button>
@@ -241,10 +243,7 @@ export default function DebFlow() {
                 <div className="vs-bottom-action">
                   <button
                     className="vs-btn-primary"
-                    onClick={() => {
-                      saveToLeads(gameResults, aiPaths)
-                      setScreen('cta')
-                    }}
+                    onClick={() => setScreen('cta')}
                   >
                     See what's next
                   </button>
