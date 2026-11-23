@@ -103,6 +103,7 @@ export default function DebFlow() {
   const [aiProjects, setAiProjects] = useState(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState(null)
+  const [chosenProjects, setChosenProjects] = useState(new Set())
 
   // ── Toggle experience selection ──
   const toggleExp = useCallback((id) => {
@@ -454,17 +455,35 @@ export default function DebFlow() {
             <>
               <div className="cqf-select-header" style={{ marginTop: 20 }}>
                 <h2>Your Life Path Ideas</h2>
-                <p>Based on what lights you up, here are directions you could explore.</p>
+                <p>Pick the ones that excite you most.</p>
+              </div>
+              <div className="cqf-count">
+                {chosenProjects.size === 0 ? 'Tap to select' : `${chosenProjects.size} selected`}
               </div>
 
               {aiProjects.map((project, i) => (
-                <div key={i} className="cqf-exp selected" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6, cursor: 'default' }}>
-                  <span className="cqf-exp-name" style={{ fontWeight: 700 }}>{project.name}</span>
-                  <span style={{ fontSize: '0.85rem', color: 'rgba(0,0,0,0.5)', lineHeight: 1.4 }}>
+                <div
+                  key={i}
+                  className={`cqf-exp ${chosenProjects.has(i) ? 'selected' : ''}`}
+                  style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}
+                  onClick={() => {
+                    setChosenProjects(prev => {
+                      const next = new Set(prev)
+                      if (next.has(i)) next.delete(i)
+                      else next.add(i)
+                      return next
+                    })
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
+                    <div className="cqf-exp-check">✓</div>
+                    <span className="cqf-exp-name" style={{ fontWeight: 700 }}>{project.name}</span>
+                  </div>
+                  <span style={{ fontSize: '0.85rem', color: 'rgba(0,0,0,0.5)', lineHeight: 1.4, paddingLeft: 34 }}>
                     {project.description}
                   </span>
                   {project.draws_from && (
-                    <span style={{ fontSize: '0.75rem', color: 'rgba(0,0,0,0.3)', marginTop: 2 }}>
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(0,0,0,0.3)', marginTop: 2, paddingLeft: 34 }}>
                       Draws from: {project.draws_from}
                     </span>
                   )}
@@ -472,8 +491,12 @@ export default function DebFlow() {
               ))}
 
               <div className="cqf-fixed">
-                <button className="cqf-cta cqf-cta-gold" onClick={() => setScreen('cta')}>
-                  See what's next →
+                <button
+                  className="cqf-cta cqf-cta-gold"
+                  disabled={chosenProjects.size === 0}
+                  onClick={() => setScreen('cta')}
+                >
+                  {chosenProjects.size === 0 ? 'Pick at least 1 →' : `These are my paths (${chosenProjects.size}) →`}
                 </button>
               </div>
             </>
