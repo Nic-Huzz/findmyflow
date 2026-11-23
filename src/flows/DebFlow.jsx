@@ -11,22 +11,33 @@ import { EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
 import { supabase } from '../lib/supabaseClient'
 import './VoiceStemFlow.css'
 
-// IDs to exclude — confirmed cuts for 50+ women audience
-const EXCLUDED_IDS = new Set([
-  'sub-martial-1900',      // Martial arts / combat sports
-  'exp-rapping',           // Rapping / freestyle
-  'exp-thrill',            // Adrenaline / thrill ride
-  'car-1952',              // Backpacking / gap years / exploring
+// Curated 22 activities — highest hit-rate for women 50+
+const DEB_IDS = new Set([
+  'exp-baking',            // Cooking / baking
+  'exp-gardening',         // Gardening / growing food
+  'sub-strength-2010',     // Day hikes / nature walks
+  'sub-flexibility-1893',  // Yoga / stretching
+  'exp-travel',            // Travel / exploring a new place
+  'sub-written-1719',      // Reading novels
+  'exp-drinks-friends',    // Drinks with friends / hanging out
+  'exp-volunteering',      // Volunteering / giving back
+  'sub-craft-1880',        // Painting / pottery / art workshops
+  'exp-pets',              // Pet ownership / caring for animals
+  'media-1826',            // Photography / visual storytelling
+  'car-1886',              // Road trips / scenic drives
+  'exp-swimming',          // Swimming / ocean
+  'exp-hosting-home',      // Hosting people in your home
+  'exp-coaching',          // Coaching / mentoring someone
+  'exp-caring-kids',       // Caring for kids
+  'sub-written-1999',      // Journaling / personal writing
+  'exp-choosing-style',    // Dressing in a style you love
+  'exp-nature-stillness',  // Being in nature without an activity
+  'sub-oral-2015',         // Live music / concerts / festivals
+  'exp-club-dancing',      // Dancing
+  'exp-interior-design',   // Interior / spatial design
 ])
 
-// Label overrides — same activity, better framing for this audience
-const LABEL_OVERRIDES = {
-  'sub-alt-2011': 'Caravan life',
-}
-
-const DEB_ACTIVITIES = EXPERIENCE_ACTIVITIES
-  .filter(a => !EXCLUDED_IDS.has(a.id))
-  .map(a => LABEL_OVERRIDES[a.id] ? { ...a, label: LABEL_OVERRIDES[a.id] } : a)
+const DEB_ACTIVITIES = EXPERIENCE_ACTIVITIES.filter(a => DEB_IDS.has(a.id))
 
 const DEB_CONTEXT = 'This person is a woman over 50 exploring what experiences bring her joy and purpose in this stage of life. Suggest life path directions that feel achievable, exciting, and meaningful for someone with decades of life experience. Avoid suggesting paths that assume youth, extreme fitness, or starting from scratch. Celebrate wisdom, depth, and the freedom that comes with this life stage.'
 
@@ -144,7 +155,7 @@ export default function DebFlow() {
               You'll see activities one at a time. For each one, tap <strong>"fun"</strong> or <strong>"not fun."</strong> Go fast. Trust your gut. No wrong answers.
             </p>
             <p className="vs-landing-desc" style={{ marginTop: 12, opacity: 0.7 }}>
-              {DEB_ACTIVITIES.length} activities. About 3 minutes.
+              {DEB_ACTIVITIES.length} activities. About 1 minute.
             </p>
             <div className="vs-bottom-action">
               <button
