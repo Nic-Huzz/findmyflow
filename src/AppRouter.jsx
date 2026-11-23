@@ -195,6 +195,7 @@ const ZoneCalRadar = lazyRetry(() => import('./flows/ZoneCalRadar'))
 const EventRadar = lazyRetry(() => import('./flows/EventRadar'))
 const PathDefinitionFlow = lazyRetry(() => import('./flows/PathDefinitionFlow'))
 const TryPlayProfile = lazyRetry(() => import('./flows/TryPlayProfile'))
+const DebFlow = lazyRetry(() => import('./flows/DebFlow'))
 const TryEssenceMirror = lazyRetry(() => import('./flows/TryEssenceMirror'))
 const ShiftScorecard = lazyRetry(() => import('./flows/ShiftScorecard'))
 const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
@@ -768,6 +769,7 @@ function AppRouter() {
             <Route path="/try/ai-diagnostic" element={<Suspense fallback={<LoadingSpinner />}><AIDiagnostic /></Suspense>} />
             <Route path="/try/voice-stems" element={<Suspense fallback={<LoadingSpinner />}><VoiceStemFlow mode="workshop" /></Suspense>} />
             <Route path="/try/onboarding" element={<Suspense fallback={<LoadingSpinner />}><VoiceStemFlow mode="onboarding" /></Suspense>} />
+            <Route path="/try/deb" element={<Suspense fallback={<LoadingSpinner />}><DebFlow /></Suspense>} />
             <Route path="/try/life-paths-test" element={<LifePathTest />} />
             <Route path="/try/life-paths" element={<TryLifePaths />} />
             <Route path="/life-paths" element={<AuthGate><LifePathWidgetTest /></AuthGate>} />
