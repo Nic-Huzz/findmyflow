@@ -567,12 +567,15 @@ export const DOME_SUB_NODES = {
   ],
 
   'exp-baking': [
-    // Baking — what you bake
+    // Cooking & baking — what you make
+    { id: 'fmt-cook-meals', label: 'Cooking meals from scratch' },
+    { id: 'fmt-cook-cuisine', label: 'Trying new cuisines / recipes' },
+    { id: 'fmt-cook-entertaining', label: 'Cooking for friends / family' },
     { id: 'fmt-bake-bread', label: 'Bread / sourdough' },
     { id: 'fmt-bake-pastry', label: 'Pastries / croissants / pies' },
     { id: 'fmt-bake-cakes', label: 'Cakes / cake decorating' },
     { id: 'fmt-bake-cookies', label: 'Cookies / biscuits / brownies' },
-    { id: 'fmt-bake-sharing', label: 'Baking for others / special occasions' },
+    { id: 'fmt-cook-preserving', label: 'Preserving / fermenting / pickling' },
   ],
 
   'exp-travel': [
