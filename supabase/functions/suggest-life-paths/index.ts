@@ -141,9 +141,13 @@ Respond ONLY as JSON:
         ? `\nTheir essence archetype is "${domeProfile.essence}" (this shapes their energy/style, not what they do).`
         : ''
 
+      const contextLine = domeProfile.context
+        ? `\nContext: ${domeProfile.context}`
+        : ''
+
       const miniPrompt = `A person just finished mapping their life experiences. These are the ones that make them feel most alive:
 
-${experienceList}${essenceLine}
+${experienceList}${essenceLine}${contextLine}
 
 YOUR TASK: Look at these experiences as a whole and identify 2-4 distinct LIFE PATH DIRECTIONS this person could explore. A life path is a broad direction, not a specific project. Think "Movement & Wellness" or "Creative Technology" or "Teaching & Facilitation", not "Run a yoga studio."
 
