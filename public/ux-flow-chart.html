@@ -214,7 +214,7 @@ body {
 <body>
 
 <div class="header">
-  <h1>Vibe Rise — UX Flow Chart <span class="header-date">Updated Nov 23, 2026</span></h1>
+  <h1>Vibe Rise — UX Flow Chart <span class="header-date">Updated Nov 10, 2026</span></h1>
   <div class="legend">
     <div class="legend-item"><div class="legend-dot essential"></div>Essential</div>
     <div class="legend-item"><div class="legend-dot useful"></div>Useful</div>
@@ -228,7 +228,7 @@ body {
     <div class="paradigm-title">The Shift</div>
     <div class="paradigm-text">
       <strong>Before:</strong> User signs up → works through 10+ solo flows in the app via a Discover tab → app is both onboarding AND daily tool.<br>
-      <strong>After:</strong> User completes a ~25-min voice-first onboarding → archetype + category + quests + path all defined before the app → app opens fully configured → app is the <strong>daily maintenance tool only</strong>.
+      <strong>After:</strong> User joins a 35-min guided voice call → all discovery data captured via AI → app opens with profile already populated → app is the <strong>daily maintenance tool only</strong>.
     </div>
     <div class="paradigm-cols">
       <div class="paradigm-col">
@@ -268,7 +268,7 @@ body {
         <div class="core-step-node"><span>💰</span> Earn</div>
       </div>
     </div>
-    <div class="core-loop-sub">Discovery + identity + category all happen in onboarding. The app is where you maintain, challenge, and earn.</div>
+    <div class="core-loop-sub">Discovery happens on the call. The app is where you maintain, challenge, and earn.</div>
   </div>
 </div>
 
@@ -289,85 +289,21 @@ body {
           <div class="node-top">
             <span class="node-emoji">🎙️</span>
             <div class="node-info">
-              <div class="node-name">Voice Stems (33 stems)<span class="new-badge">Updated</span></div>
-              <div class="node-route">/try/onboarding (solo) or /try/voice-stems (workshop)</div>
+              <div class="node-name">Voice Stems (Guided Call)<span class="new-badge">Primary</span></div>
+              <div class="node-route">/try/voice-stems</div>
             </div>
             <span class="node-verdict">Essential</span>
             <span class="node-expand">▾</span>
           </div>
-          <div class="node-desc">~20 min voice recording. Spoken sentence completions bypass the cognitive editor. Archetype generated from childhood memories (Stage 1). Two modes: solo onboarding or facilitator-led workshop.</div>
+          <div class="node-desc">35-min guided voice call. Spoken sentence completions bypass the cognitive editor. Workshop mode (facilitator-led) or solo. All discovery data captured by AI.</div>
           <div class="node-details">
             <div class="node-substeps">
-              <div class="substep"><span class="substep-num">S1</span><span class="substep-text"><strong>Living from Essence</strong> (6 stems) — "As a kid I felt most alive when..." AI clusters themes + generates archetype</span></div>
-              <div class="substep"><span class="substep-num">→</span><span class="substep-text"><strong>Archetype Reveal</strong> — Primary + secondary archetype, blend name, editable identity. "This is me" moment.</span></div>
-              <div class="substep"><span class="substep-num">S2</span><span class="substep-text"><strong>Essence Suppressed</strong> (13 stems, 2 layers) — Prediction mapping + source tracing. "When I think about being that kid again..."</span></div>
-              <div class="substep"><span class="substep-num">S3</span><span class="substep-text"><strong>Consequences</strong> (10 stems) — 5 aliveness dimensions scored (Choice, Connection, Growth, Meaning, Safety)</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="node essential" onclick="toggleNode(this)">
-        <div class="node-dot"></div>
-        <div class="node-card">
-          <div class="node-top">
-            <span class="node-emoji">🎮</span>
-            <div class="node-info">
-              <div class="node-name">Experience Game + Signup<span class="new-badge">Updated</span></div>
-            </div>
-            <span class="node-verdict">Essential</span>
-            <span class="node-expand">▾</span>
-          </div>
-          <div class="node-desc">87 activities, fun/not-fun rapid fire. Builds dome ratings. Signup gate after (not before). Workshop mode includes paid filter.</div>
-          <div class="node-details">
-            <div class="node-substeps">
-              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Experience Game</strong> — Voice or tap. 87 activities across 11 primals. ~4 min.</span></div>
-              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Signup Gate</strong> — Email + OTP code. Only asked after ~20 min investment.</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="node essential" onclick="toggleNode(this)">
-        <div class="node-dot"></div>
-        <div class="node-card">
-          <div class="node-top">
-            <span class="node-emoji">🗺️</span>
-            <div class="node-info">
-              <div class="node-name">Choose Quests + Category<span class="new-badge">Updated</span></div>
-            </div>
-            <span class="node-verdict">Essential</span>
-            <span class="node-expand">▾</span>
-          </div>
-          <div class="node-desc">Pick life paths from dome data, then answer 4 quest-specific category stems for the chosen path.</div>
-          <div class="node-details">
-            <div class="node-substeps">
-              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Choose Quests</strong> — AI suggests paths from fun activities. User picks 1-3 quests.</span></div>
-              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Quest Picker</strong> — "Which path to set up first?" (skipped if only 1 quest)</span></div>
-              <div class="substep"><span class="substep-num">S4</span><span class="substep-text"><strong>Category Stems</strong> (4 stems, quest-specific) — "When it comes to [quest], the problem nobody else is solving is..."</span></div>
-              <div class="substep"><span class="substep-num">→</span><span class="substep-text"><strong>Category Reveal</strong> — AI-synthesized category statement for the quest</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="node essential" onclick="toggleNode(this)">
-        <div class="node-dot"></div>
-        <div class="node-card">
-          <div class="node-top">
-            <span class="node-emoji">🎯</span>
-            <div class="node-info">
-              <div class="node-name">Path Definition + Avatar<span class="new-badge">New</span></div>
-            </div>
-            <span class="node-verdict">Essential</span>
-            <span class="node-expand">▾</span>
-          </div>
-          <div class="node-desc">Define one quest fully, then create a Pixar avatar as the grand finale. Remaining quests show "Define your path" banner in-app.</div>
-          <div class="node-details">
-            <div class="node-substeps">
-              <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Path Definition</strong> — Aliveness baseline, 8 dome dimensions, life fuels, fears, identity declaration, first step</span></div>
-              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>Avatar Creation</strong> — Upload selfie, Gemini transforms into Pixar archetype character. Grand finale.</span></div>
-              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Download App</strong> — App store links + email send. App opens fully configured.</span></div>
+              <div class="substep"><span class="substep-num">S1</span><span class="substep-text"><strong>Recognition</strong> — "I've always been good at..." Level 4 output: what you DID, not who you ARE</span></div>
+              <div class="substep"><span class="substep-num">S2</span><span class="substep-text"><strong>Wound Mapping</strong> — "The moment I learned to hide..." AI extracts wound stage + NS archetype</span></div>
+              <div class="substep"><span class="substep-num">S3</span><span class="substep-text"><strong>Aliveness Scoring</strong> — 5 unified dimensions (Choice, Connection, Growth, Meaning, Safety)</span></div>
+              <div class="substep"><span class="substep-num">S4</span><span class="substep-text"><strong>Essence Archetype</strong> — AI matches to 12 archetypes from spoken content</span></div>
+              <div class="substep"><span class="substep-num">S5</span><span class="substep-text"><strong>Experience Game</strong> — Fun/not fun rapid fire on activities</span></div>
+              <div class="substep"><span class="substep-num">S6</span><span class="substep-text"><strong>Paid Filter</strong> — "Could you get paid for this?" on positive experiences → signup gate → download app</span></div>
             </div>
           </div>
         </div>
@@ -379,11 +315,11 @@ body {
           <div class="node-top">
             <span class="node-emoji">📱</span>
             <div class="node-info">
-              <div class="node-name">App Opens — Fully Configured</div>
+              <div class="node-name">App Opens — Profile Populated</div>
             </div>
             <span class="node-verdict">Essential</span>
           </div>
-          <div class="node-desc">Archetype, dome ratings, quests, path definition, and avatar all in place. App is pure daily maintenance. No guided flows needed.</div>
+          <div class="node-desc">User opens app for the first time. Essence, dome, and quest data already in place from call. Lands on Progress tab to see their populated profile.</div>
         </div>
       </div>
 
@@ -399,12 +335,12 @@ body {
             <span class="node-verdict">Useful</span>
             <span class="node-expand">▾</span>
           </div>
-          <div class="node-desc">For users who skip the onboarding. Progress tab shows persistent onboarding banner.</div>
+          <div class="node-desc">For users who skip the call. Progress tab shows persistent onboarding banner.</div>
           <div class="node-details">
             <div class="node-substeps">
               <div class="substep"><span class="substep-num">1</span><span class="substep-text"><strong>Progress tab banner</strong> — "Book your onboarding call" (primary) + "Do it yourself?" (secondary link to /discovery)</span></div>
-              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>/discovery page</strong> — Standalone version of old Discover tab: Experience Game → Essence Mirror → Choose Quests</span></div>
-              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Banner disappears</strong> when all setup checks pass (dome + essence + quests)</span></div>
+              <div class="substep"><span class="substep-num">2</span><span class="substep-text"><strong>/discovery page</strong> — Standalone version of old Discover tab: Experience Game → Essence Mirror → Money Map → Choose Quests</span></div>
+              <div class="substep"><span class="substep-num">3</span><span class="substep-text"><strong>Banner disappears</strong> when all setup checks pass (dome + essence + money_map + quests)</span></div>
             </div>
           </div>
         </div>
@@ -483,7 +419,6 @@ body {
               <div class="substep"><span class="substep-num">NEW</span><span class="substep-text"><strong>Find Your Flow CTA</strong> — Appears on quests with curiosity data but no flow statement. Tap to define your category.</span></div>
               <div class="substep"><span class="substep-num">NEW</span><span class="substep-text"><strong>"Find something new"</strong> — Link below paths list. Navigates to Experience Game with returnTo=weekly.</span></div>
               <div class="substep"><span class="substep-num">NEW</span><span class="substep-text"><strong>Tier 1 skill tags</strong> — Quests tagged with 4 job-oriented skills: Coding (Apps/Tools), Graphic Design (Web/Content), Spreadsheets (Modelling), Selling (Meta/Amazon/Google/Cold Call/Setter)</span></div>
-              <div class="substep"><span class="substep-num">NEW</span><span class="substep-text"><strong>"Define your path" banner</strong> — Shows on quests without path definition. Links to /path-definition/:questId.</span></div>
               <div class="substep"><span class="substep-num">EMPTY</span><span class="substep-text"><strong>No quests yet:</strong> "Find Your Path" → /choose-quests (lock guarantees dome data exists)</span></div>
             </div>
           </div>
@@ -865,7 +800,7 @@ body {
 <div class="stats">
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-num essential">19</div>
+      <div class="stat-num essential">16</div>
       <div class="stat-label">Essential</div>
     </div>
     <div class="stat-card">
