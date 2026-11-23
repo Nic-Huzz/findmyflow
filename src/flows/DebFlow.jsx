@@ -276,8 +276,7 @@ export default function DebFlow() {
     const currentExp = selectedExps[ddIndex]
 
     if (!currentExp) {
-      // All done — trigger AI
-      fetchPaths()
+      // Safety fallback — goNext should have already triggered fetchPaths
       return (
         <div className="cqf">
           <div className="cqf-container">

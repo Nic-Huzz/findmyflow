@@ -181,11 +181,15 @@ Respond ONLY as JSON:
 
     const dataSection = buildExperienceLines(domeProfile)
 
+    const suggestContextLine = domeProfile.context
+      ? `\nContext: ${domeProfile.context}\n`
+      : ''
+
     const prompt = `A person has completed an experience mapping exercise. They ticked real-world experiences they've done, rated each with their nervous system response, then selected the ones that make them come ALIVE. For each selected experience, they chose specific formats they love and whether they want to DO it, FACILITATE it, or BUILD around it.
 
 This is the ONLY data you have. Do not invent experiences, modalities, or interests not listed below.
 
-${dataSection}
+${dataSection}${suggestContextLine}
 
 YOUR TASK: Suggest 5-7 exciting project ideas this person could start pursuing. Each project is a concrete thing they could do or build, like "Silent Disco Events" or "Breathwork Retreats" or "Dance Workshop Series." Think big but specific.
 
