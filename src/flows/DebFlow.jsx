@@ -97,24 +97,19 @@ export default function DebFlow() {
     }
   }
 
-  // ── Save to public_leads (fire and forget) ──
+  // ── Save to deb_leads (fire and forget) ──
   const saveToLeads = (results, paths) => {
     try {
-      const sessionId = crypto.randomUUID()
       const url = import.meta.env.VITE_SUPABASE_URL
       const key = import.meta.env.VITE_SUPABASE_ANON_KEY
-      fetch(`${url}/rest/v1/public_leads?on_conflict=email`, {
+      fetch(`${url}/rest/v1/deb_leads`, {
         method: 'POST',
         headers: {
           'apikey': key,
           'Authorization': `Bearer ${key}`,
           'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates',
         },
         body: JSON.stringify({
-          id: sessionId,
-          email: `anon-${sessionId}@deb-flow.local`,
-          source_flow: 'deb_experience_discovery',
           flow_results: {
             fun: results.fun,
             notFun: results.notFun,
