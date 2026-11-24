@@ -1288,6 +1288,12 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
           setScreen('results_3')
         } else if (resumeStage === '4' && saved.stage3Results) {
           setScreen('category_intro')
+        } else if (resumeStage === 'nudges' && saved.categoryResults) {
+          setScreen('nudges')
+        } else if (resumeStage === 'avatar') {
+          setScreen('avatar')
+        } else if (resumeStage === 'final' && saved.stage4Results) {
+          setScreen('final_results')
         }
       }, 100)
     } else if (saved.archetype_generated || saved.completed) {
