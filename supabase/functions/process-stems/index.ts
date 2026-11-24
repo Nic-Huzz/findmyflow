@@ -90,6 +90,18 @@ NERVOUS SYSTEM ARCHETYPES:
 - Dorsal (freeze/withdraw): responses about shutting down, hiding, going quiet, conforming, people-pleasing
 - Ventral (safe/connected): responses about staying grounded, navigating safely (rare in suppression context)
 
+PROTECTIVE VOICES. Pick the ONE dominant voice based on all 13 responses.
+The voice is identified by HOW they cope, not just what they fear.
+Focus on s2a_5 (what the voice says), s2b_4 (what they decided), s2b_5 (coping mechanism), s2b_6 (the rule).
+
+| Voice | ID | Polyvagal | Safety Contract (lie) | Coping signal |
+| Controller | controller | Fight (sympathetic + toward) | "I want to know how this ends before I do it." | Over-planning, controlling outcomes, managing image, rest = laziness |
+| Ghost | ghost | Flight (sympathetic + away) | "I want to disappear. Hide. Go quiet." | Withdrawing, hiding work, avoiding visibility, leaving before intensity |
+| Perfectionist | perfectionist | Freeze (dorsal + toward) | "It's not good enough yet. I need more time." | Endless preparation, moving goalposts, can't launch, one more revision |
+| Auto-Pilot | auto_pilot | Collapse (dorsal + away) | "I'm going through the motions. I've checked out." | Numbing, scrolling, "I'm fine", no strong feelings, going through motions |
+| People Pleaser | people_pleaser | Fawn (behavioural) | "I'd rather say yes than deal with their reaction." | Chronic agreement, can't say no, fear of disappointing, changing to fit in |
+| Chameleon | chameleon | Fawn (identity) | "I need to be what they need me to be." | Different personality per group, not knowing own preferences, mirroring |
+
 Return ONLY valid JSON:
 
 {
@@ -100,7 +112,12 @@ Return ONLY valid JSON:
     "approximateAge": "Best guess at age"
   },
   "rule": "The rule they made (e.g. 'To stay safe, I stopped being loud')",
-  "protectivePattern": "One of: Ghost, Perfectionist, People Pleaser, Controller, Auto-Pilot",
+  "protectivePattern": "The voice display name (e.g. Ghost, Controller, People Pleaser, Chameleon)",
+  "protectiveVoice": {
+    "id": "EXACTLY one of: controller, ghost, perfectionist, auto_pilot, people_pleaser, chameleon",
+    "confidence": "high or medium (high = clear match across multiple stems, medium = mixed signals)",
+    "personalLie": "The voice's lie rephrased in the user's own words from their transcripts"
+  },
   "woundStage": "One of: You Arrive, You Learn What Works, School Installs the OS, Your Friend Group Decides",
   "woundScene": "The specific scene name (e.g. The Good Student, The Chameleon, The Adapted Self)",
   "nsArchetype": "One of: sympathetic, dorsal, ventral",

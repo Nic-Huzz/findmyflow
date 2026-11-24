@@ -17,6 +17,7 @@ import { transcribeAudio } from '../lib/deepgramClient'
 import { processStage } from '../lib/stemProcessing'
 import { getStemsForStage, EXPERIENCE_ACTIVITIES } from '../data/voiceStems'
 import { getArchetype } from '../data/essenceArchetypes'
+import { getVoice } from '../data/protectiveVoices'
 import ExperienceGameLive from '../components/ExperienceGameLive'
 import ChooseQuestsFlow from './ChooseQuestsFlow'
 import PathDefinitionFlow from './PathDefinitionFlow'
@@ -536,6 +537,41 @@ function Stage2Results({ results, selectedExpression, confirmedPrediction, onCon
           )}
         </div>
       )}
+
+      {results.protectiveVoice && (() => {
+        const voice = getVoice(results.protectiveVoice.id)
+        if (!voice) return null
+        const isMedium = results.protectiveVoice.confidence === 'medium'
+        const nsLabels = {
+          controller: 'Fight response',
+          ghost: 'Flight response',
+          perfectionist: 'Freeze response',
+          auto_pilot: 'Collapse response',
+          people_pleaser: 'Fawn response',
+          chameleon: 'Fawn response',
+        }
+        return (
+          <div className="vs-results-card" style={{ marginTop: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <span style={{ fontSize: '1.4rem' }}>{voice.icon}</span>
+              <h4 style={{ margin: 0 }}>{isMedium ? 'We think this is your voice' : voice.name}</h4>
+            </div>
+            <p style={{ color: 'var(--vs-pink)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 10px' }}>
+              {nsLabels[results.protectiveVoice.id] || ''}
+            </p>
+            <p style={{ color: 'var(--vs-text)', fontStyle: 'italic', fontSize: '1.05rem', margin: '0 0 12px', lineHeight: 1.6 }}>
+              &ldquo;{results.protectiveVoice.personalLie || voice.lie}&rdquo;
+            </p>
+            <p style={{ color: 'var(--vs-muted)', fontSize: '0.9rem', margin: '0 0 8px', lineHeight: 1.5 }}>
+              {voice.howItProtects}
+            </p>
+            <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.5 }}>
+              <strong style={{ color: 'var(--vs-gold)' }}>Kryptonite:</strong>{' '}
+              <span style={{ color: 'var(--vs-muted)' }}>{voice.kryptonite}</span>
+            </p>
+          </div>
+        )
+      })()}
 
       <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
         Continue to Stage 3

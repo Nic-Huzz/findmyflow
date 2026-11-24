@@ -238,6 +238,13 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
       const allExps = [...pathActivities, ...passions].filter(e => selectedIds.has(e.id))
       const chosenArr = paths.filter((_, i) => selectedPaths.has(i))
 
+      // Read detected protective voice from onboarding session (if available)
+      let detectedVoice = null
+      try {
+        const session = JSON.parse(localStorage.getItem('voice_stems_session') || '{}')
+        detectedVoice = session?.stage2Results?.protectiveVoice?.id || null
+      } catch { /* ignore */ }
+
       for (let idx = 0; idx < chosenArr.length; idx++) {
         const path = chosenArr[idx]
         if (!path) continue
@@ -279,6 +286,7 @@ export default function ChooseQuestsFlow({ onComplete } = {}) {
           status: 'active',
           career_vector: questVector,
           format_picks: questFormats.length ? questFormats : null,
+          protective_voice: detectedVoice,
         }).select('id').single()
 
         const questId = newQuest?.id
