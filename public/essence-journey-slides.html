@@ -205,28 +205,75 @@ body {
   <!-- 1: TITLE -->
   <div class="slide active">
     <div class="label">Essence Journey</div>
-    <h1>Find Your Thread</h1>
+    <h1>Suppression → Essence</h1>
     <p>Welcome. My name is Huzz.</p>
   </div>
 
-  <!-- 2: KNOWLEDGE STACK -->
+  <!-- 2: THE JOURNEY -->
   <div class="slide">
-    <div class="big-emoji">📚</div>
-    <h2>The Knowledge Stack</h2>
-    <blockquote>This is over 6 years of knowledge poured into this session. It's the only way getting clarity in the next 90 minutes is possible. Most people would sell this as a 6-week coaching container.</blockquote>
+    <h2>The Journey We're On</h2>
+    <svg viewBox="0 0 600 600" width="520" height="520" style="margin: 8px 0;">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="rgba(217,70,239,0.6)"/>
+        </marker>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#D946EF"/>
+          <stop offset="100%" style="stop-color:#FFB800"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Arrow arcs between nodes -->
+      <path d="M 300,78 A 220,220 0 0,1 490,188" fill="none" stroke="rgba(217,70,239,0.35)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+      <path d="M 502,212 A 220,220 0 0,1 502,388" fill="none" stroke="rgba(217,70,239,0.35)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+      <path d="M 490,412 A 220,220 0 0,1 300,522" fill="none" stroke="rgba(217,70,239,0.35)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+      <path d="M 300,522 A 220,220 0 0,1 110,412" fill="none" stroke="rgba(217,70,239,0.35)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+      <path d="M 98,388 A 220,220 0 0,1 98,212" fill="none" stroke="rgba(217,70,239,0.35)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+      <path d="M 110,188 A 220,220 0 0,1 300,78" fill="none" stroke="rgba(217,70,239,0.35)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+
+      <!-- 1: Essence (top) -->
+      <circle cx="300" cy="60" r="52" fill="#111118" stroke="url(#grad)" stroke-width="2.5"/>
+      <text x="300" y="57" text-anchor="middle" fill="#F0ECF5" font-size="15" font-weight="700" font-family="-apple-system, sans-serif">Essence</text>
+      <text x="300" y="74" text-anchor="middle" fill="rgba(240,236,245,0.5)" font-size="10" font-family="-apple-system, sans-serif">who you were</text>
+
+      <!-- 2: Suppression (top-right) -->
+      <circle cx="500" cy="200" r="52" fill="#111118" stroke="url(#grad)" stroke-width="2.5"/>
+      <text x="500" y="195" text-anchor="middle" fill="#F0ECF5" font-size="13" font-weight="700" font-family="-apple-system, sans-serif">Suppression</text>
+      <text x="500" y="212" text-anchor="middle" fill="rgba(240,236,245,0.5)" font-size="10" font-family="-apple-system, sans-serif">what shut it down</text>
+
+      <!-- 3: Consequences (bottom-right) -->
+      <circle cx="500" cy="400" r="52" fill="#111118" stroke="url(#grad)" stroke-width="2.5"/>
+      <text x="500" y="395" text-anchor="middle" fill="#F0ECF5" font-size="12" font-weight="700" font-family="-apple-system, sans-serif">Consequences</text>
+      <text x="500" y="412" text-anchor="middle" fill="rgba(240,236,245,0.5)" font-size="10" font-family="-apple-system, sans-serif">the cost now</text>
+
+      <!-- 4: Search (bottom) -->
+      <circle cx="300" cy="540" r="52" fill="#111118" stroke="url(#grad)" stroke-width="2.5"/>
+      <text x="300" y="537" text-anchor="middle" fill="#F0ECF5" font-size="15" font-weight="700" font-family="-apple-system, sans-serif">Search</text>
+      <text x="300" y="554" text-anchor="middle" fill="rgba(240,236,245,0.5)" font-size="10" font-family="-apple-system, sans-serif">what makes you, you</text>
+
+      <!-- 5: Challenge (bottom-left) -->
+      <circle cx="100" cy="400" r="52" fill="#111118" stroke="url(#grad)" stroke-width="2.5"/>
+      <text x="100" y="397" text-anchor="middle" fill="#F0ECF5" font-size="14" font-weight="700" font-family="-apple-system, sans-serif">Challenge</text>
+      <text x="100" y="414" text-anchor="middle" fill="rgba(240,236,245,0.5)" font-size="10" font-family="-apple-system, sans-serif">test the prediction</text>
+
+      <!-- 6: Flow (top-left) -->
+      <circle cx="100" cy="200" r="52" fill="#111118" stroke="url(#grad)" stroke-width="2.5"/>
+      <text x="100" y="197" text-anchor="middle" fill="#F0ECF5" font-size="15" font-weight="700" font-family="-apple-system, sans-serif">Flow</text>
+      <text x="100" y="214" text-anchor="middle" fill="rgba(240,236,245,0.5)" font-size="10" font-family="-apple-system, sans-serif">living from essence</text>
+    </svg>
   </div>
 
-  <!-- 3: CHICKEN + EGG -->
+  <!-- 3: SUPPRESSION = PREDICTION ERROR -->
   <div class="slide">
-    <div class="big-emoji">🐣</div>
-    <h2>The Chicken + Egg Problem</h2>
-    <blockquote>How do we know our answers are essence vs suppression? We have 14,000 hours of school in our system creating the suppression. So this exercise is designed to bypass this.</blockquote>
-    <p style="margin-top: 16px">The speed is the point. You speak before you can filter. Your CEO doesn't have time to intercept.</p>
+    <p style="color: var(--muted); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;">What creates our fear</p>
+    <h1><span class="gradient-text">Suppression / Trauma</span></h1>
+    <h1 style="margin-top: -8px;">=</h1>
+    <h1><span class="gradient-text">Prediction Error</span></h1>
   </div>
 
-  <!-- 4: FOUR STAGES -->
+  <!-- 4: FIVE STAGES -->
   <div class="slide">
-    <h2>Four Stages</h2>
+    <h2>Five Stages</h2>
     <div class="stage-pills">
       <div class="stage-pill">
         <div class="stage-pill-num">1</div>
@@ -256,8 +303,14 @@ body {
           <span>4 questions. Your unique angle.</span>
         </div>
       </div>
+      <div class="stage-pill">
+        <div class="stage-pill-num">5</div>
+        <div class="stage-pill-info">
+          <strong>Essence Challenge</strong>
+          <span>Test your prediction this week.</span>
+        </div>
+      </div>
     </div>
-    <p>After Stage 1, you'll meet yourself. After Stage 4, you'll know what makes you different.</p>
   </div>
 
   <!-- 5: RULES -->
@@ -270,6 +323,14 @@ body {
       <li><span class="rule-num">4</span> Don't think. Don't edit. First thing that comes out.</li>
       <li><span class="rule-num">5</span> If it sounds messy, you're doing it right.</li>
     </ul>
+  </div>
+
+  <!-- 6: CHICKEN + EGG -->
+  <div class="slide">
+    <div class="big-emoji">🐣</div>
+    <h2>The Chicken + Egg Problem</h2>
+    <blockquote>How do we know our answers are essence vs suppression? We have 14,000 hours of school in our system creating the suppression. So this exercise is designed to bypass this.</blockquote>
+    <p style="margin-top: 16px">The speed is the point. You speak before you can filter. Your CEO doesn't have time to intercept.</p>
   </div>
 
   <!-- 6: OPEN LINK -->
@@ -300,17 +361,6 @@ body {
     </div>
   </div>
 
-  <!-- 9: ARCHETYPE REVEAL -->
-  <div class="slide">
-    <div class="label">Your Essence</div>
-    <h1 class="gradient-text">Meet yourself.</h1>
-    <blockquote>Take a moment. Read it. That's you. Not who you perform. Not the mask. The kid is still in there.</blockquote>
-    <p style="margin-top: 24px">Edit the name if you want. Then tap <strong style="color: var(--gold)">"This is me."</strong></p>
-    <div class="share-prompt" style="margin-top: 24px">
-      <strong>Ask:</strong> Who feels like they just met themselves for the first time?
-    </div>
-  </div>
-
   <!-- 10: STAGE 2 INTRO -->
   <div class="slide">
     <div class="stage-badge s2">Stage 2 of 4</div>
@@ -319,19 +369,11 @@ body {
     <p style="margin-top: 16px">13 questions, 2 layers. ~7 minutes.</p>
   </div>
 
-  <!-- 11: STAGE 2 MIDPOINT -->
-  <div class="slide">
-    <div class="stage-badge s2">Layer 2 Complete</div>
-    <h2>You've named the fear.</h2>
-    <blockquote>Now we're going to trace it back to where it started.</blockquote>
-    <p style="margin-top: 16px">6 more questions. The source.</p>
-  </div>
-
-  <!-- 12: STAGE 2 SHARE -->
+  <!-- 11: STAGE 2 SHARE -->
   <div class="slide">
     <div class="stage-badge s2">Stage 2 Complete</div>
     <h2>The Thread</h2>
-    <blockquote>You just traced a line from what you loved, through what scared you, back to where it started. That's the whole story. You've probably never seen it written down before.</blockquote>
+    <blockquote>You named the fear, then traced it back to where it started. That's the whole story. You've probably never seen it written down before.</blockquote>
     <div class="share-prompt">
       <strong>Share:</strong> What came up that you didn't expect? Who was the person? What was the rule you made?
     </div>
@@ -341,7 +383,7 @@ body {
   <div class="slide">
     <div class="stage-badge s3">Stage 3 of 4</div>
     <h1 class="gradient-text">Consequences</h1>
-    <blockquote>That prediction has been running your life. These next 10 questions are about right now. What your life actually feels like today. Five dimensions: Choice, Connection, Growth, Meaning, Safety.</blockquote>
+    <blockquote>That prediction has been running your life. These next 10 questions are about right now. What your life actually feels like today. Five dimensions: Choice, Connection, Mastery, Meaning, Expression.</blockquote>
     <p style="margin-top: 16px">10 questions. ~5 minutes.</p>
   </div>
 

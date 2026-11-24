@@ -100,9 +100,9 @@ const THEME_EMOJIS = ['🎭', '🌿', '🎨', '⚡', '🏆', '🎵', '🌊', '�
 const RADAR_DIMENSIONS = [
   { id: 'choice',     name: 'Choice',     emoji: '🎯' },
   { id: 'connection', name: 'Connection', emoji: '🤝' },
-  { id: 'growth',     name: 'Growth',     emoji: '🌱' },
+  { id: 'growth',     name: 'Mastery',    emoji: '🌱' },
   { id: 'meaning',    name: 'Meaning',    emoji: '✨' },
-  { id: 'safety',     name: 'Safety',     emoji: '🛡️' },
+  { id: 'safety',     name: 'Expression', emoji: '🛡️' },
 ]
 
 // ── Sub-screen components ────────────────────────────────────────────────────
