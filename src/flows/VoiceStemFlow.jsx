@@ -668,7 +668,7 @@ function CategoryReveal({ results, onContinue }) {
       )}
 
       <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 16 }}>
-        {hasCategory ? 'See your dares' : 'See your dares for this week'}
+        {hasCategory ? 'See your Essence Challenges' : 'See your Essence Challenges'}
       </button>
     </div>
   )
@@ -679,10 +679,10 @@ function NudgeCards({ nudges, categoryName, onContinue }) {
     <div className="vs-results">
       <div className="vs-results-header">
         {categoryName && <div className="vs-results-label">{categoryName}</div>}
-        <h2>Three dares for this week</h2>
+        <h2>Three Essence Challenges</h2>
       </div>
       <p style={{ color: 'var(--vs-muted)', fontSize: '0.9rem', textAlign: 'center', margin: '0 0 16px' }}>
-        Small actions that honour your essence. Pick at least one.
+        Small actions that honour your essence this week. Pick at least one.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
