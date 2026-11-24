@@ -1211,7 +1211,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
 
   // ── Progress label ────────────────────────────────────────────────
   const stageLabel = (() => {
-    const total = 4
+    const total = 5
     if (position.stageIndex === 0) return `Stage 1 of ${total}  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
     if (position.stageIndex === 1) return `Stage 2 of ${total}  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
     if (position.stageIndex === 2) return `Stage 3 of ${total}  ·  Question ${position.stemIndex + 1} of ${currentStems.length}`
@@ -1784,11 +1784,11 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         {screen === 'landing' && (
           <div className="vs-landing">
             <div className="vs-landing-label">Essence Journey</div>
-            <h1>Find Your Thread</h1>
+            <h1>Suppression → Essence</h1>
             <p className="vs-landing-desc">
               {isOnboarding
-                ? "Speak fast. Don't think. First thing that comes. 4 stages, about 20 minutes."
-                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 33 questions, 4 stages, about 20 minutes."
+                ? "Speak fast. Don't think. First thing that comes. 5 stages, about 20 minutes."
+                : "You'll complete sentences out loud. Speak fast. Don't think. First thing that comes. 33 questions, 5 stages, about 20 minutes."
               }
             </p>
 
@@ -1804,8 +1804,9 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                 { n: 2, label: 'Essence Suppressed', desc: '13 questions — what shut it down and why' },
                 { n: 3, label: 'Consequences', desc: '10 questions — the cost of suppression now' },
                 { n: 4, label: 'What Makes You Different', desc: '4 questions — your unique angle' },
+                { n: 5, label: 'Essence Challenge', desc: 'test your prediction this week' },
                 ...(isOnboarding ? [
-                  { n: 5, label: 'The Experience Game', desc: '87 activities — what lights you up' },
+                  { n: 6, label: 'The Experience Game', desc: '87 activities — what lights you up' },
                 ] : []),
               ].map(s => (
                 <div key={s.n} className="vs-stage-pill">
