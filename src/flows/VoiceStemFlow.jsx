@@ -148,17 +148,38 @@ function AudioLevelDots({ level }) {
   )
 }
 
-function RecordingZone({ secondsLeft, onDone, audioLevel = 0 }) {
+function RecordingZone({ secondsLeft, onDone, audioLevel = 0, maxSeconds = 30 }) {
+  const [micWarning, setMicWarning] = useState(false)
+  const silentSinceRef = useRef(null)
   const isLow = secondsLeft <= 8
   const mins = Math.floor(secondsLeft / 60)
   const secs = secondsLeft % 60
   const timeStr = `${mins}:${secs.toString().padStart(2, '0')}`
+
+  // Show warning if no audio detected for 5+ seconds
+  useEffect(() => {
+    if (audioLevel > 0.05) {
+      silentSinceRef.current = null
+      setMicWarning(false)
+    } else {
+      if (!silentSinceRef.current) silentSinceRef.current = Date.now()
+      else if (Date.now() - silentSinceRef.current > 5000) setMicWarning(true)
+    }
+  }, [audioLevel])
+
+  // Reset on mount
+  useEffect(() => { silentSinceRef.current = null; setMicWarning(false) }, [maxSeconds])
 
   return (
     <div className="vs-recording-zone">
       <div className="vs-recording-dot" />
       <div className="vs-recording-label">Recording</div>
       <AudioLevelDots level={audioLevel} />
+      {micWarning && (
+        <div style={{ color: 'var(--vs-gold)', fontSize: '0.8rem', fontWeight: 600, margin: '4px 0', textAlign: 'center' }}>
+          We can't hear you. Check your mic is on.
+        </div>
+      )}
       <div className={`vs-timer${isLow ? ' vs-timer-low' : ''}`}>{timeStr}</div>
       <button className="vs-done-btn" onClick={onDone}>Done early</button>
     </div>

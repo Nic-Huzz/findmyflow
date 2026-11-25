@@ -108,12 +108,18 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
 
       const dataArray = new Float32Array(analyser.fftSize)
       let silenceStart = null
+      let lastLevelUpdate = 0
 
       const checkSilence = () => {
         if (!analyserRef.current || stoppedRef.current) return
         analyserRef.current.getFloatTimeDomainData(dataArray)
         const rms = Math.sqrt(dataArray.reduce((sum, v) => sum + v * v, 0) / dataArray.length)
-        setAudioLevel(Math.min(rms * 5, 1)) // scale up for visibility, cap at 1
+        // Throttle state updates to ~10fps to avoid jank on low-end devices
+        const now = Date.now()
+        if (!lastLevelUpdate || now - lastLevelUpdate > 100) {
+          lastLevelUpdate = now
+          setAudioLevel(Math.min(rms * 5, 1))
+        }
 
         if (rms > SILENCE_THRESHOLD) {
           hasSpokenRef.current = true
