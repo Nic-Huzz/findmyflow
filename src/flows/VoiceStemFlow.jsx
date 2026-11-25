@@ -1353,6 +1353,10 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
         // Avatar done — go to final destination
         setScreen(isOnboarding ? 'download_app' : 'final_results')
       } else if (saved.categoryResults) {
+        if (isOnboarding && saved.pathDefQuests?.length > 0) {
+          setPathDefQuests(saved.pathDefQuests)
+          setPathDefIndex(saved.pathDefQuests.length === 1 ? 0 : -1)
+        }
         setScreen(isOnboarding ? 'path_definition' : 'final_results')
       } else if (saved.stage3Results) {
         // All stems done, route to next phase
@@ -2199,6 +2203,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
                   .order('created_at', { ascending: true })
                 if (quests?.length > 0) {
                   setPathDefQuests(quests)
+                  saveSession({ pathDefQuests: quests })
                   if (quests.length === 1) {
                     // Single quest — skip picker, go straight to category stems
                     setPathDefIndex(0)
