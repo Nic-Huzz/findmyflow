@@ -129,7 +129,26 @@ function CountdownOverlay({ count, stemText }) {
   )
 }
 
-function RecordingZone({ secondsLeft, onDone }) {
+function AudioLevelDots({ level }) {
+  const dotCount = 7
+  const activeDots = Math.round(level * dotCount)
+  return (
+    <div style={{ display: 'flex', gap: 4, justifyContent: 'center', margin: '8px 0' }}>
+      {Array.from({ length: dotCount }, (_, i) => (
+        <div
+          key={i}
+          style={{
+            width: 8, height: 8, borderRadius: '50%',
+            background: i < activeDots ? '#2CB5F5' : 'rgba(255,255,255,0.15)',
+            transition: 'background 0.1s',
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function RecordingZone({ secondsLeft, onDone, audioLevel = 0 }) {
   const isLow = secondsLeft <= 8
   const mins = Math.floor(secondsLeft / 60)
   const secs = secondsLeft % 60
@@ -139,6 +158,7 @@ function RecordingZone({ secondsLeft, onDone }) {
     <div className="vs-recording-zone">
       <div className="vs-recording-dot" />
       <div className="vs-recording-label">Recording</div>
+      <AudioLevelDots level={audioLevel} />
       <div className={`vs-timer${isLow ? ' vs-timer-low' : ''}`}>{timeStr}</div>
       <button className="vs-done-btn" onClick={onDone}>Done early</button>
     </div>
@@ -1237,7 +1257,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
   const [flowError, setFlowError] = useState(null)
 
   // ── Audio recorder ────────────────────────────────────────────────
-  const { start, stop, audioBlob, error: recError, permissionGranted, requestPermission, isInApp } =
+  const { start, stop, audioBlob, error: recError, permissionGranted, requestPermission, isInApp, audioLevel } =
     useAudioRecorder({ onSilenceStop: () => handleStemDone() })
 
   // ── Computed: current stems list ─────────────────────────────────
@@ -1495,6 +1515,13 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
       stemText: stem.text,
       transcript: transcriptsRef.current[stem.id] || '',
     }))
+
+    // Guard: if no transcripts captured, don't process
+    const hasContent = transcripts.some(t => t.transcript.trim().length > 0)
+    if (!hasContent) {
+      setFlowError('We didn\'t catch your answers. Check your mic is working and try again.')
+      return
+    }
 
     // Save transcripts immediately BEFORE AI processing (survives processing failures)
     const stageKey = stageIndex === 0 ? 'stage1Transcripts'
@@ -1952,6 +1979,7 @@ export default function VoiceStemFlow({ mode = 'workshop' }) {
             <RecordingZone
               secondsLeft={stemSeconds}
               onDone={handleStemDone}
+              audioLevel={audioLevel}
             />
             <button
               className="vs-btn-ghost"

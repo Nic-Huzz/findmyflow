@@ -36,6 +36,7 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
   const [permissionGranted, setPermissionGranted] = useState(false)
   const [silenceDetected, setSilenceDetected] = useState(false)
   const [isInApp, setIsInApp] = useState(false)
+  const [audioLevel, setAudioLevel] = useState(0) // 0-1 RMS level for visualizer
 
   const mediaRecorderRef = useRef(null)
   const streamRef = useRef(null)
@@ -112,6 +113,7 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
         if (!analyserRef.current || stoppedRef.current) return
         analyserRef.current.getFloatTimeDomainData(dataArray)
         const rms = Math.sqrt(dataArray.reduce((sum, v) => sum + v * v, 0) / dataArray.length)
+        setAudioLevel(Math.min(rms * 5, 1)) // scale up for visibility, cap at 1
 
         if (rms > SILENCE_THRESHOLD) {
           hasSpokenRef.current = true
@@ -185,6 +187,7 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
 
   const stop = useCallback(() => {
     stoppedRef.current = true
+    setAudioLevel(0)
     if (mediaRecorderRef.current?.state === 'recording') {
       mediaRecorderRef.current.stop()
     }
@@ -218,6 +221,7 @@ export function useAudioRecorder({ onSilenceStop } = {}) {
     requestPermission,
     silenceDetected,
     isInApp,
+    audioLevel,
     mimeType: mimeTypeRef.current,
   }
 }
