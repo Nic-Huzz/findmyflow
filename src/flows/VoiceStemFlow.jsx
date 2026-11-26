@@ -483,6 +483,7 @@ function Stage1Results({ results, onContinue }) {
 
 // Stage 2 results card (full thread: essence → prediction → source → rule)
 function Stage2Results({ results, selectedExpression, confirmedPrediction, onContinue }) {
+  const [voiceRating, setVoiceRating] = useState(null)
   const thread = results?.thread || results?.fullThread || null
   const rawSource = results?.sourceEvent || results?.source || {}
   const source = typeof rawSource === 'string' ? { description: rawSource }
@@ -614,7 +615,19 @@ function Stage2Results({ results, selectedExpression, confirmedPrediction, onCon
         )
       })()}
 
-      <button className="vs-btn-primary" onClick={onContinue} style={{ marginTop: 8 }}>
+      {results.protectiveVoice && (
+        <BandRating
+          label="How loud is your protective voice?"
+          bands={VOICE_BANDS}
+          value={voiceRating}
+          onChange={setVoiceRating}
+        />
+      )}
+
+      <button className="vs-btn-primary" onClick={() => {
+        if (voiceRating !== null) saveSession({ voiceRating })
+        onContinue()
+      }} style={{ marginTop: 8 }}>
         Continue to Stage 3
       </button>
     </div>
@@ -1126,8 +1139,50 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
+// Band rating — horizontal button strip for self-assessment
+function BandRating({ label, bands, value, onChange }) {
+  return (
+    <div style={{ margin: '20px 0' }}>
+      <p style={{ color: 'var(--vs-muted)', fontSize: '0.85rem', margin: '0 0 10px', textAlign: 'center' }}>{label}</p>
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
+        {bands.map((band) => (
+          <button
+            key={band.value}
+            onClick={() => onChange(band.value)}
+            style={{
+              padding: '8px 14px', borderRadius: 10, border: '1.5px solid',
+              borderColor: value === band.value ? 'var(--vs-pink)' : 'var(--vs-glass-border)',
+              background: value === band.value ? 'rgba(217, 70, 239, 0.15)' : 'var(--vs-glass)',
+              color: value === band.value ? 'var(--vs-pink)' : 'var(--vs-text)',
+              fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+              transition: 'all 0.15s',
+            }}
+          >
+            {band.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const ESSENCE_BANDS = [
+  { value: 0, label: "Can't even hear it anymore" },
+  { value: 1, label: "I hear it but don't follow it" },
+  { value: 2, label: 'I follow it sometimes' },
+  { value: 3, label: 'I live from it every day' },
+]
+
+const VOICE_BANDS = [
+  { value: 0, label: "Can't even hear it anymore" },
+  { value: 1, label: "I hear it but I don't listen" },
+  { value: 2, label: 'I listen to it sometimes' },
+  { value: 3, label: 'It runs everything' },
+]
+
 // Archetype reveal — separate screen after Stage 1 results for emotional impact
 function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange, onContinue }) {
+  const [essenceRating, setEssenceRating] = useState(null)
   if (!results) return null
   const primary = results.primaryArchetype || {}
   const secondary = results.secondaryArchetype || {}
@@ -1135,6 +1190,11 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
   const secondaryFull = getArchetype(secondary.id) || secondary
   const blend = blendResult?.blended_essence || results.essenceBlend || ''
   const reveal = results.mirrorReveal || ''
+
+  const handleContinue = () => {
+    if (essenceRating) saveSession({ essenceRating })
+    onContinue()
+  }
 
   return (
     <div className="vs-essence-reveal">
@@ -1168,6 +1228,13 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
           </div>
         )}
 
+        <BandRating
+          label="How connected to your essence voice do you feel?"
+          bands={ESSENCE_BANDS}
+          value={essenceRating}
+          onChange={setEssenceRating}
+        />
+
         <div className="vs-essence-naming">
           <label className="vs-essence-naming-label">Name your essence</label>
           <input
@@ -1181,7 +1248,7 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
           <p className="vs-essence-naming-hint">This becomes your identity. Edit it to make it yours.</p>
         </div>
 
-        <button className="vs-cta vs-cta-gold" onClick={onContinue} disabled={!essenceName?.trim()}>
+        <button className="vs-cta vs-cta-gold" onClick={handleContinue} disabled={!essenceName?.trim()}>
           This is me
         </button>
       </div>
