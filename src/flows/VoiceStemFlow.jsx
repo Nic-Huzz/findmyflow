@@ -1142,22 +1142,33 @@ function FinalResults({ stage1, stage2, stage3, stage4, selectedExpression, conf
 // Band rating — horizontal button strip for self-assessment
 function BandRating({ label, bands, value, onChange }) {
   return (
-    <div style={{ margin: '20px 0' }}>
+    <div style={{ margin: '20px 0', width: '100%' }}>
       <p style={{ color: 'var(--vs-muted)', fontSize: '0.85rem', margin: '0 0 10px', textAlign: 'center' }}>{label}</p>
-      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {bands.map((band) => (
           <button
             key={band.value}
             onClick={() => onChange(band.value)}
             style={{
-              padding: '8px 14px', borderRadius: 10, border: '1.5px solid',
+              padding: '12px 16px', borderRadius: 12, border: '1.5px solid',
               borderColor: value === band.value ? 'var(--vs-pink)' : 'var(--vs-glass-border)',
               background: value === band.value ? 'rgba(217, 70, 239, 0.15)' : 'var(--vs-glass)',
               color: value === band.value ? 'var(--vs-pink)' : 'var(--vs-text)',
-              fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
-              transition: 'all 0.15s',
+              fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+              transition: 'all 0.15s', textAlign: 'left',
+              display: 'flex', alignItems: 'center', gap: 12,
             }}
           >
+            <span style={{
+              width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '0.7rem', fontWeight: 800,
+              background: value === band.value ? 'var(--vs-pink)' : 'var(--vs-glass)',
+              color: value === band.value ? '#000' : 'var(--vs-muted)',
+              border: value === band.value ? 'none' : '1px solid var(--vs-glass-border)',
+            }}>
+              {band.value}
+            </span>
             {band.label}
           </button>
         ))}
@@ -1192,7 +1203,7 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
   const reveal = results.mirrorReveal || ''
 
   const handleContinue = () => {
-    if (essenceRating) saveSession({ essenceRating })
+    if (essenceRating !== null) saveSession({ essenceRating })
     onContinue()
   }
 
@@ -1228,13 +1239,6 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
           </div>
         )}
 
-        <BandRating
-          label="How connected to your essence voice do you feel?"
-          bands={ESSENCE_BANDS}
-          value={essenceRating}
-          onChange={setEssenceRating}
-        />
-
         <div className="vs-essence-naming">
           <label className="vs-essence-naming-label">Name your essence</label>
           <input
@@ -1247,6 +1251,13 @@ function EssenceReveal({ results, blendResult, essenceName, onEssenceNameChange,
           />
           <p className="vs-essence-naming-hint">This becomes your identity. Edit it to make it yours.</p>
         </div>
+
+        <BandRating
+          label="How connected to your essence voice do you feel?"
+          bands={ESSENCE_BANDS}
+          value={essenceRating}
+          onChange={setEssenceRating}
+        />
 
         <button className="vs-cta vs-cta-gold" onClick={handleContinue} disabled={!essenceName?.trim()}>
           This is me
