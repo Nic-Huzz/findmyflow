@@ -57,7 +57,7 @@ docs/               # Specs, handoffs, research
 
 **Money Model**: `/attraction-offer`, `/upsell-offer`, `/downsell-offer`, `/continuity-offer`, `/leads-strategy`, `/offer-builder`, `/funnel-builder`, `/funnel-calculator`
 
-**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`
+**Other**: `/play-profile`, `/league/*`, `/archetypes/*`, `/community`, `/play-list-feed`, `/nervous-system`, `/healing-compass`, `/v/:shareToken`, `/add-current-job`, `/choose-quests`, `/try/voice-stems`, `/try/onboarding`
 
 **CRM**: `/crm/*` (Dashboard, Attract/Nurture/Tools towers, contacts, email-sequences, content, marketing, sales)
 
@@ -226,9 +226,9 @@ Gemini 3.1 Flash. Include in ALL prompts: "Pixar 3D cinematic animation style" w
 `direction_reveals` (user_id, reveal_type UNIQUE, reveal_data JSONB) | `income_self_reports` (user_id, month_year UNIQUE, amount_cents, currency, source)
 
 ### Other
-`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations`
+`nervous_system_checkins` (before_state, after_state, source_challenge_id) | `experience_checkins` | `weekly_reviews` | `founder_dna_results` | `scope_map_results` | `remarkable_angles` | `narrative_builders` | `access_architectures` | `scale_diagnostics` | `lead_captures` | `user_subscriptions` | `pending_subscriptions` | `push_subscriptions` | `zarlo_conversations` | `challenge_weekly_scores` (weekly business/healing/courage scores, resets Monday, per user/project/week) | `user_lifetime_scores` (cumulative lifetime scores + weeks_completed + best_week tracking, per user/project)
 
-RPCs: `increment_skill_xp`, `increment_behavioral_evidence`, `get_user_id_by_email`
+RPCs: `increment_skill_xp`, `increment_behavioral_evidence`, `get_user_id_by_email`, `increment_scores`
 
 ## Environment Variables
 
